@@ -411,6 +411,7 @@
     <ClInclude Include="..\..\base\value_conversions.h" />
     <ClInclude Include="..\..\base\version.h" />
     <ClInclude Include="..\..\base\vlog.h" />
+    <ClInclude Include="..\..\base\WindowsVersion.h" />
     <ClInclude Include="..\..\base\win\enum_variant.h" />
     <ClInclude Include="..\..\base\win\event_trace_consumer.h" />
     <ClInclude Include="..\..\base\win\event_trace_controller.h" />
@@ -1056,6 +1057,7 @@
     <ClCompile Include="..\..\base\value_conversions.cc" />
     <ClCompile Include="..\..\base\version.cc" />
     <ClCompile Include="..\..\base\vlog.cc" />
+    <ClCompile Include="..\..\base\WindowsVersion.cpp" />
     <ClCompile Include="..\..\base\win\enum_variant.cc" />
     <ClCompile Include="..\..\base\win\event_trace_controller.cc" />
     <ClCompile Include="..\..\base\win\event_trace_provider.cc" />

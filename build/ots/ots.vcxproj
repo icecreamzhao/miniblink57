@@ -54,10 +54,10 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -94,6 +94,23 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\third_party\libjpeg\iccjpeg.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jconfig.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jdct.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jerror.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jinclude.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jmemsys.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jmorecfg.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jpegint.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jpeglib.h" />
+    <ClInclude Include="..\..\third_party\libjpeg\jversion.h" />
+    <ClInclude Include="..\..\third_party\libpng\png.h" />
+    <ClInclude Include="..\..\third_party\libpng\pngconf.h" />
+    <ClInclude Include="..\..\third_party\libpng\pngdebug.h" />
+    <ClInclude Include="..\..\third_party\libpng\pnginfo.h" />
+    <ClInclude Include="..\..\third_party\libpng\pnglibconf.h" />
+    <ClInclude Include="..\..\third_party\libpng\pngpriv.h" />
+    <ClInclude Include="..\..\third_party\libpng\pngstruct.h" />
     <ClInclude Include="..\..\third_party\ots\include\opentype-sanitiser.h" />
     <ClInclude Include="..\..\third_party\ots\include\ots-memory-stream.h" />
     <ClInclude Include="..\..\third_party\ots\src\cff.h" />
@@ -131,6 +148,68 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\third_party\libjpeg\iccjpeg.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jaricom.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcapimin.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcapistd.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcarith.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jccoefct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jccolor.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcdctmgr.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jchuff.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcinit.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcmainct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcmarker.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcmaster.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcomapi.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcparam.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcprepct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jcsample.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jctrans.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdapimin.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdapistd.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdarith.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdatadst.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdatasrc.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdcoefct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdcolor.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jddctmgr.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdhuff.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdinput.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdmainct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdmarker.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdmaster.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdmerge.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdpostct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdsample.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jdtrans.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jerror.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jfdctflt.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jfdctfst.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jfdctint.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jidctflt.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jidctfst.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jidctint.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jmemmgr.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jmemnobs.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jquant1.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jquant2.c" />
+    <ClCompile Include="..\..\third_party\libjpeg\jutils.c" />
+    <ClCompile Include="..\..\third_party\libpng\libpng.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngerror.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngget.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngmem.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngpread.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngread.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngrio.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngrtran.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngrutil.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngset.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngtrans.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngwio.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngwrite.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngwtran.c" />
+    <ClCompile Include="..\..\third_party\libpng\pngwutil.c" />
     <ClCompile Include="..\..\third_party\ots\src\cff.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

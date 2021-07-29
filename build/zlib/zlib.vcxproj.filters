@@ -27,9 +27,6 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\trees.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\zlib\x86.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -63,7 +60,7 @@
     <ClInclude Include="..\..\third_party\zlib\inftrees.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\mozzconf.h">
+    <ClInclude Include="..\..\third_party\zlib\trees.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,16 +83,10 @@
     <ClCompile Include="..\..\third_party\zlib\compress.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\zlib\crc_folding.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\zlib\crc32.c">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\zlib\deflate.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\zlib\fill_window_sse.c">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\zlib\gzclose.c">
@@ -122,34 +113,8 @@
     <ClCompile Include="..\..\third_party\zlib\inftrees.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\zlib\simd_stub.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\zlib\trees.c">
       <Filter>src</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\third_party\zlib\zlib.gyp">
-      <Filter>src</Filter>
-    </None>
-    <None Include="..\..\third_party\zlib\BUILD.gn">
-      <Filter>src</Filter>
-    </None>
-    <None Include="..\..\third_party\zlib\google.patch">
-      <Filter>src</Filter>
-    </None>
-    <None Include="..\..\third_party\zlib\LICENSE">
-      <Filter>src</Filter>
-    </None>
-    <None Include="..\..\third_party\zlib\mixed-source.patch">
-      <Filter>src</Filter>
-    </None>
-    <None Include="..\..\third_party\zlib\OWNERS">
-      <Filter>src</Filter>
-    </None>
-    <None Include="..\..\third_party\zlib\README.chromium">
-      <Filter>src</Filter>
-    </None>
   </ItemGroup>
 </Project>

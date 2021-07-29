@@ -17,6 +17,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib\zlib.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "v8_5_7_1", "v8_5_7\v8_5_7_1.vcxproj", "{6DAB5E30-5F37-4A4E-AAA2-8185790A047E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wkexe", "wkexe\wkexe.vcxproj", "{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D4CF74E8-8AE3-4534-92BE-10503E556E87} = {D4CF74E8-8AE3-4534-92BE-10503E556E87}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -98,6 +103,16 @@ Global
 		{6DAB5E30-5F37-4A4E-AAA2-8185790A047E}.Release|Win32.Build.0 = Release|Win32
 		{6DAB5E30-5F37-4A4E-AAA2-8185790A047E}.Release|x64.ActiveCfg = Release|x64
 		{6DAB5E30-5F37-4A4E-AAA2-8185790A047E}.Release|x64.Build.0 = Release|x64
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Debug|Win32.Build.0 = Debug|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Debug|x64.ActiveCfg = Debug|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Release_vc6|Win32.ActiveCfg = Release|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Release_vc6|Win32.Build.0 = Release|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Release_vc6|x64.ActiveCfg = Debug|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Release_vc6|x64.Build.0 = Debug|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Release|Win32.ActiveCfg = Release|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Release|Win32.Build.0 = Release|Win32
+		{4501ABBB-FA1B-44A6-8721-9F455D0D5EA8}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

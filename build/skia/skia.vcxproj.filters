@@ -115,6 +115,18 @@
     <Filter Include="src\sfnt">
       <UniqueIdentifier>{34ba7c70-55ec-40a9-a709-0287ab40b6c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\third_party">
+      <UniqueIdentifier>{c8dba678-ed61-4e7d-b91d-4a8da59c87b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\third_party\skcms">
+      <UniqueIdentifier>{fe2e0a23-e5e3-452a-87d4-876480717e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{1dafa973-6a31-4179-92e4-cbd264c7de20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\skcms">
+      <UniqueIdentifier>{1814069b-adc6-4730-81c9-23e208fbd30c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -1685,6 +1697,12 @@
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_maxp_TT.h">
       <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\include\third_party\skcms\skcms.h">
+      <Filter>include\third_party\skcms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\third_party\skcms\skcms_internal.h">
+      <Filter>third_party\skcms</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

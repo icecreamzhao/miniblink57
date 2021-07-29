@@ -53,7 +53,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_HAS_CONSTEXPR=0;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_CONSTEXPR=0;_CRT_SECURE_NO_WARNINGS;SK_SUPPORT_LEGACY_CREATESHADER_PTR=1;SK_SUPPORT_LEGACY_PICTURE_PTR=1;SK_SUPPORT_LEGACY_XFERMODE_PTR=1;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../third_party/skia/src/utils/win;../../third_party/skia/include/codec;../../third_party/skia/include/config;../../third_party/skia/include/core;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/pipe;../../third_party/skia/include/ports;../../third_party/skia/include/utils/win;../../third_party/skia/include/utils;../../third_party/skia/include/private;../../third_party/skia/src/image;../../third_party/skia/src/core;../../third_party/skia/src/sfnt;../../third_party/skia/src/lazy;../../third_party/skia/src/utils;../../third_party/skia/src/opts;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -277,6 +277,7 @@
     <ClInclude Include="..\..\third_party\skia\include\ports\SkRemotableFontMgr.h" />
     <ClInclude Include="..\..\third_party\skia\include\ports\SkTypeface_mac.h" />
     <ClInclude Include="..\..\third_party\skia\include\ports\SkTypeface_win.h" />
+    <ClInclude Include="..\..\third_party\skia\include\third_party\skcms\skcms.h" />
     <ClInclude Include="..\..\third_party\skia\include\utils\SkBoundaryPatch.h" />
     <ClInclude Include="..\..\third_party\skia\include\utils\SkCamera.h" />
     <ClInclude Include="..\..\third_party\skia\include\utils\SkCanvasStateUtils.h" />
@@ -614,6 +615,7 @@
     <ClInclude Include="..\..\third_party\skia\src\utils\win\SkDWriteGeometrySink.h" />
     <ClInclude Include="..\..\third_party\skia\src\utils\win\SkHRESULT.h" />
     <ClInclude Include="..\..\third_party\skia\src\utils\win\SkWGL.h" />
+    <ClInclude Include="..\..\third_party\skia\third_party\skcms\skcms_internal.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

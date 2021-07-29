@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
@@ -313,9 +309,6 @@
     <Filter Include="gen\blink\platform">
       <UniqueIdentifier>{c217d0d6-b3ab-42f3-96d5-4db5c82cd04f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="v8">
-      <UniqueIdentifier>{043c37b2-7934-4f97-b3ae-21813991acdc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="gen\blink\core\animation">
       <UniqueIdentifier>{216131f0-a2ac-426f-8bf0-c981d61d3331}</UniqueIdentifier>
     </Filter>
@@ -412,9 +405,6 @@
     <Filter Include="ui\gl\GL">
       <UniqueIdentifier>{e1c18ad8-d2ce-4fdd-a206-b84bf51be832}</UniqueIdentifier>
     </Filter>
-    <Filter Include="content\browser\compositor">
-      <UniqueIdentifier>{25a61421-8d29-4fc9-a046-0c62db9beec1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="gpu\command_buffer">
       <UniqueIdentifier>{64d2ad26-3d81-4b27-befb-bf8ee2f5d4f1}</UniqueIdentifier>
     </Filter>
@@ -429,9 +419,6 @@
     </Filter>
     <Filter Include="content\common">
       <UniqueIdentifier>{3a3f0252-f73c-440a-8f06-539327b7132f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="content\web_impl_win\resources">
-      <UniqueIdentifier>{ea4bf853-63e0-4d60-a2e2-a2cce79f7405}</UniqueIdentifier>
     </Filter>
     <Filter Include="gen\blink\core\imagebitmap">
       <UniqueIdentifier>{c98d0512-a2c5-463e-ad28-8339ad9a6eb8}</UniqueIdentifier>
@@ -787,9 +774,6 @@
     <Filter Include="third_party\WebKit\Source\core\xmlhttprequest">
       <UniqueIdentifier>{5dfb450f-f35a-3283-5493-bfc2157fb7c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="third_party\WebKit\Source\core\wml">
-      <UniqueIdentifier>{3224b22b-46dd-422b-b046-722575a5445e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="third_party\WebKit\Source\devtools">
       <UniqueIdentifier>{5dfb450f-f35a-6977-6461-bfc2157fb7c4}</UniqueIdentifier>
     </Filter>
@@ -976,9 +960,6 @@
     <Filter Include="third_party\WebKit\Source\modules">
       <UniqueIdentifier>{aa06a4db-5ec2-40f9-905c-5f56f4fee694}</UniqueIdentifier>
     </Filter>
-    <Filter Include="third_party\WebKit\Source\modules\cnvas2d">
-      <UniqueIdentifier>{a4ab539f-c3c3-4967-8e62-65986ed048b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="third_party\WebKit\Source\modules\csspaint">
       <UniqueIdentifier>{23ca603a-0a64-49d4-8c08-bd39593177e8}</UniqueIdentifier>
     </Filter>
@@ -1104,6 +1085,73 @@
     </Filter>
     <Filter Include="tencent\third_party\WebKit">
       <UniqueIdentifier>{642a60ba-abd2-4863-8a8f-0f70d4d81af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\compositor">
+      <UniqueIdentifier>{25a61421-8d29-4fc9-a046-0c62db9beec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\cookies">
+      <UniqueIdentifier>{52cacc55-36ba-4924-8f21-7a912196942f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\websocket">
+      <UniqueIdentifier>{0db85685-0c8a-4856-adc0-99da491dc794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wke">
+      <UniqueIdentifier>{043c37b2-7934-4f97-b3ae-21813991acdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\ui">
+      <UniqueIdentifier>{13fce448-6a84-4d86-982b-3d754ca74944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\resources">
+      <UniqueIdentifier>{978a2081-e881-4b4c-8a0e-5cc42002db9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\web_impl_win\npapi">
+      <UniqueIdentifier>{2b02542d-efd4-424c-bba6-ca30cd2d2c09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\gpu">
+      <UniqueIdentifier>{46f25350-150f-4bd6-a0e6-5a003c99137e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mbvip">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="mbvip\core">
+      <UniqueIdentifier>{a51a9805-85a2-422b-9563-5d33be3580ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mbvip\common">
+      <UniqueIdentifier>{221f6c88-c992-4ec4-b3fd-4634d0826fd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\platform\image-decoders\ico">
+      <UniqueIdentifier>{fc5fac5e-dce5-4fb5-96bd-150362322870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\platform\image-decoders\jpeg">
+      <UniqueIdentifier>{3940fb94-4aea-4561-8b14-3242debda7da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\platform\image-decoders\png">
+      <UniqueIdentifier>{83dc9988-c9c9-4b33-a36a-cb59a34b6e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\filesystem">
+      <UniqueIdentifier>{083a8fea-f615-4efd-b100-9dfcb91042d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\cachestorage">
+      <UniqueIdentifier>{132c7031-4d93-4584-9784-8c6d1877031b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\canvas2d">
+      <UniqueIdentifier>{a4ab539f-c3c3-4967-8e62-65986ed048b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\offscreencanvas2d">
+      <UniqueIdentifier>{4857538a-469f-423a-b7f8-87bec9564f1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\canvas">
+      <UniqueIdentifier>{9bfff7db-751a-4775-bd67-33c48459cdab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\offscreencanvas">
+      <UniqueIdentifier>{c074147e-475e-4c7d-bbc7-5abcc4a68eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\imagebitmap">
+      <UniqueIdentifier>{75f7dc6e-1724-4aef-9fe7-776d9d809311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gen\blink\modules\filesystem">
+      <UniqueIdentifier>{87e5e4f1-efa2-4c6d-8a6e-ad29ff16357c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -6504,12 +6552,6 @@
     <ClCompile Include="..\..\third_party\icu\source\uchar.cpp">
       <Filter>third_party\icu\source</Filter>
     </ClCompile>
-    <ClCompile Include="miniwebkit_blink.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\browser\WebSharedBitmapManager.cpp">
-      <Filter>content\browser</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\modp_b64\modp_b64.cc">
       <Filter>third_party\modp_b64</Filter>
     </ClCompile>
@@ -9960,9 +10002,6 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\config.cpp">
       <Filter>third_party\WebKit</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\offscreencanvas\OffscreenCanvasEmpty.cpp">
-      <Filter>third_party\WebKit\Source\core\offscreencanvas</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\gen\blink\core\events\AnimationPlaybackEventInit.cpp">
       <Filter>gen\blink\core\events</Filter>
     </ClCompile>
@@ -10264,31 +10303,31 @@
       <Filter>third_party\WebKit\Source\core\dom</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\BaseRenderingContext2D.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasGradient.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasPathMethods.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasPattern.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasRenderingContext2D.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasRenderingContext2DState.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasStyle.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\ClipList.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\HitRegion.cpp">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Storage.cpp">
       <Filter>gen\blink\bindings\modules\v8</Filter>
@@ -10932,62 +10971,11 @@
     <ClCompile Include="..\..\gen\blink\core\EventFactory.cpp">
       <Filter>gen\blink\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\content\browser\RenderWidgetCompositor.cpp">
-      <Filter>content\browser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\browser\WebFrameClientImpl.cpp">
-      <Filter>content\browser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\browser\WebPage.cpp">
-      <Filter>content\browser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\browser\WebPageImpl.cpp">
-      <Filter>content\browser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\web_impl_win\BlinkPlatformImpl.cpp">
-      <Filter>content\web_impl_win</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\gen\blink\core\UserAgentStyleSheetsData.cpp">
       <Filter>gen\blink\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\content\web_impl_win\CurrentTimeImpl.cpp">
-      <Filter>content\web_impl_win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\web_impl_win\WebCookieJarImpl.cpp">
-      <Filter>content\web_impl_win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\web_impl_win\WebStorageAreaImpl.cpp">
-      <Filter>content\web_impl_win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\web_impl_win\WebStorageNamespaceImpl.cpp">
-      <Filter>content\web_impl_win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\web_impl_win\WebThemeEngineImpl.cpp">
-      <Filter>content\web_impl_win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\web_impl_win\WebURLLoaderImpl.cpp">
-      <Filter>content\web_impl_win</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\web\win\WebFontRendering.cpp">
       <Filter>third_party\WebKit\Source\web\win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\browser\compositor\BrowserCompositorOutputSurface.cc">
-      <Filter>content\browser\compositor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\browser\compositor\BrowserContextProvider.cc">
-      <Filter>content\browser\compositor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\browser\compositor\BrowserSoftwareOutputDevice.cc">
-      <Filter>content\browser\compositor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\content\renderer\raster_worker_pool.cc">
-      <Filter>content\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\net\WebURLLoaderWinINet.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\net\DataURL.cpp">
-      <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\text\IcuCharsetDetector.cpp">
       <Filter>third_party\WebKit\Source\platform\text</Filter>
@@ -11025,114 +11013,6 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\GDIPlusInit.cpp">
       <Filter>third_party\WebKit\Source\platform\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLRefreshElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLSelectElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLSetvarElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLTableElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLTaskElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLTemplateElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLTimerElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLVariables.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLAccessElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLAElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLAnchorElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLBRElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLCardElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLDocument.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLDoElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLErrorHandling.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLEventHandlingElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLFieldSetElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLFormControlElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLGoElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLImageElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLImageLoader.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLInputElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLInsertedLegendElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLIntrinsicEvent.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLIntrinsicEventHandler.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLMetaElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLNoopElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLOnEventElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLOptGroupElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLOptionElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLPageState.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLPElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLPostfieldElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\wml\WMLPrevElement.cpp">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\gen\blink\core\WMLNames.cpp">
       <Filter>gen\blink\core</Filter>
     </ClCompile>
@@ -11142,8 +11022,581 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\wbmp\WBMPImageDecoder.cpp">
       <Filter>third_party\WebKit\Source\platform\image-decoders\wbmp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\content\browser\RenderViewHost.cc">
+    <ClCompile Include="..\..\content\browser\PlatformEventHandler.cpp">
       <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\PlatformMessagePortChannel.cpp">
+      <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\PostTaskHelper.cpp">
+      <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\WebFrameClientImpl.cpp">
+      <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\WebPage.cpp">
+      <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\WebPageImpl.cpp">
+      <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\CheckReEnter.cpp">
+      <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\PageNavController.cpp">
+      <Filter>content\browser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\RenderWidgetCompositor.cpp">
+      <Filter>content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\WebSharedBitmapManager.cpp">
+      <Filter>content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\LayerTreeWrap.cpp">
+      <Filter>content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\OrigChromeMgr.cpp">
+      <Filter>content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\RasterWorkerPool.cpp">
+      <Filter>content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\wtf\RefCountedLeakCounter.cpp">
+      <Filter>third_party\WebKit\Source\wtf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\compositor\SoftwareOutputDevice.cpp">
+      <Filter>content\compositor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\compositor\SoftwareOutputSurface.cpp">
+      <Filter>content\compositor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\compositor\BrowserContextProvider.cc">
+      <Filter>content\compositor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\compositor\EmptyOutputSurface.cpp">
+      <Filter>content\compositor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\compositor\GpuOutputSurface.cpp">
+      <Filter>content\compositor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\BlinkPlatformImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebFileUtilitiesImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebMessagePortChannelImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebSchedulerImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebThemeEngineImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebThreadImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebTimerBase.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebURLLoaderImplCurl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\CurrentTimeImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebBlobRegistryImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebClipboardImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebCryptoImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\AsyncFileStream.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\BlobResourceLoader.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\CurlCacheEntry.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\CurlCacheManager.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\DataURL.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\DefaultFullPath.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\FileStream.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\FileSystem.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\FileSystemWin.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\FixedReceivedData.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\PageNetExtraData.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\PathWalker.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\SharedMemoryDataConsumerHandle.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\StorageMgr.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\WebStorageAreaImpl.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\WebStorageNamespaceImpl.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\WebURLLoaderManager.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\WebURLLoaderManagerUtil.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\ActivatingObjCheck.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\cookies\CookieJarMgr.cpp">
+      <Filter>net\cookies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\cookies\CookieMonster.cpp">
+      <Filter>net\cookies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\cookies\CookieUtil.cpp">
+      <Filter>net\cookies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\cookies\ParsedCookie.cpp">
+      <Filter>net\cookies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\cookies\WebCookieJarCurlImpl.cpp">
+      <Filter>net\cookies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\cookies\CanonicalCookie.cpp">
+      <Filter>net\cookies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\SocketStreamHandleCurl.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\WebSocketChannelImpl.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\WebSocketDeflateFramer.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\WebSocketDeflater.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\WebSocketExtensionDispatcher.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\WebSocketExtensionParser.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\WebSocketHandshake.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\WebSocketOneFrame.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\SocketStreamErrorBase.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\websocket\SocketStreamHandleBase.cpp">
+      <Filter>net\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wkeNetHook.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wkeString.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wkeWebView.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wkeWebWindow.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wke.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wke2.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wkeGlobalVar.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wke\wkeJsBind.cpp">
+      <Filter>wke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\ui\PopupMenuWin.cpp">
+      <Filter>content\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\ui\WCDataObject.cpp">
+      <Filter>content\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\ui\WebDropSource.cpp">
+      <Filter>content\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\ui\ClipboardUtil.cpp">
+      <Filter>content\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\ui\DragHandle.cpp">
+      <Filter>content\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\pickerButtonCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\pickerCommonCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\pickerCommonJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\PluginPlaceholderElementJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\PrivateScriptRunnerJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\suggestionPickerCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\suggestionPickerJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\ThemeInputMultipleFieldsCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\calendarPickerCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\calendarPickerJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\colorSuggestionPickerCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\colorSuggestionPickerJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\DebuggerScriptSourceJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\FullscreenCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\HTMLMarqueeElementJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\InjectedScriptSourceJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\InspectorOverlayPageHtml.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\listPickerCss.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\listPickerJs.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\MediaPlayerData.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\PluginDatabase.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\PluginDatabaseWin.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\PluginMainThreadScheduler.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\PluginMessageThrottlerWin.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\PluginPackage.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\PluginPackageWin.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\PluginStream.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\WebPluginImeWin.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\WebPluginImpl.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\WebPluginImplWin.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\npapi\npapi.cpp">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\web\WebStorageEventDispatcherImpl.cpp">
+      <Filter>third_party\WebKit\Source\web</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\net\MultipartHandle.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\common\CallMgr.cpp">
+      <Filter>mbvip\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\common\cJSON.cpp">
+      <Filter>mbvip\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\common\LiveIdDetect.cpp">
+      <Filter>mbvip\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\common\StringUtil.cpp">
+      <Filter>mbvip\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\common\ThreadCall.cpp">
+      <Filter>mbvip\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\common\BindJsQuery.cpp">
+      <Filter>mbvip\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\core\mb.cpp">
+      <Filter>mbvip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\core\MbWebView.cpp">
+      <Filter>mbvip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebViewSchedulerImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebFrameSchedulerImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\web_impl_win\WebTaskRunnerImpl.cpp">
+      <Filter>content\web_impl_win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\ico\ICOImageDecoder.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\ico</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\jpeg\JPEGImageDecoder.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\png\PNGImageDecoder.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\png\PNGImageReader.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8HTMLInputElementPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8HTMLVideoElementPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8HTMLCanvasElementPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\initPartialInterfacesInModules.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DataTransferItemPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DedicatedWorkerGlobalScopePartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8NavigatorPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8OffscreenCanvasPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WindowPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WorkerGlobalScopePartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WorkerNavigatorPartial.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\WorkerGlobalScopeFileSystem.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DataTransferItemFileSystem.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryEntry.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryEntrySync.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryReader.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryReaderSync.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFilePath.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFileSystem.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFileSystemBase.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFileSystemSync.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMWindowFileSystem.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DraggedIsolatedFileSystemImpl.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\Entry.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\EntryBase.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\EntrySync.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\FileEntry.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\FileEntrySync.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\FileSystemCallbacks.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriter.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriterBase.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriterSync.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\HTMLInputElementFileSystem.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\LocalFileSystem.cpp">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8EntryCallback.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileSystemCallback.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8OffscreenCanvasRenderingContext2D.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\offscreencanvas2d\OffscreenCanvasRenderingContext2D.cpp">
+      <Filter>third_party\WebKit\Source\modules\offscreencanvas2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\RenderingContext.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas\HTMLCanvasElementModule.cpp">
+      <Filter>third_party\WebKit\Source\modules\canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\offscreencanvas\OffscreenCanvasModules.cpp">
+      <Filter>third_party\WebKit\Source\modules\offscreencanvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8ImageBitmapRenderingContext.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\imagebitmap\ImageBitmapRenderingContext.cpp">
+      <Filter>third_party\WebKit\Source\modules\imagebitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntry.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntrySync.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryReaderSync.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryReader.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DOMFileSystem.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DOMFileSystemSync.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileSystemFlags.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8EntrySync.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Entry.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Metadata.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MetadataCallback.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileEntrySync.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileWriter.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileWriterSync.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileWriterCallback.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\modules\filesystem\FileSystemFlags.cpp">
+      <Filter>gen\blink\modules\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileEntry.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\offscreencanvas\OffscreenCanvas.cpp">
+      <Filter>third_party\Webkit\Source\core\offscreencanvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-encoders\JPEGImageEncoder.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-encoders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-encoders\PNGImageEncoder.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-encoders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -19256,68 +19709,8 @@
     <ClInclude Include="..\..\third_party\icu\source\common\unicode\umachine.h">
       <Filter>third_party\icu\source\common\unicode</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\content\resources\TextAreaResizeCornerData.h">
-      <Filter>content\web_impl_win\resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\browser\WebPageImpl.h">
-      <Filter>content\browser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\browser\WebFrameClientImpl.h">
-      <Filter>content\browser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\browser\WebPage.h">
-      <Filter>content\browser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\CurrentTimeImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\MissingImageData.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\NativeThemeWin.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebMimeRegistryImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebSchedulerImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebThemeEngineImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebThreadImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebTimerBase.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebURLLoaderImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\BlinkPlatformImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\net\WebURLLoaderManager.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\net\WebURLLoaderInternal.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebURLLoaderImplCurl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\net\DataURL.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebCookieJarImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\public\web\WebSecurityPolicy.h">
       <Filter>third_party\WebKit\public\web</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\browser\WebSharedBitmapManager.h">
-      <Filter>content\browser</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\modp_b64\modp_b64.h">
       <Filter>third_party\modp_b64</Filter>
@@ -19469,12 +19862,6 @@
     <ClInclude Include="..\..\ui\gl\vsync_provider_win.h">
       <Filter>ui\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\content\browser\compositor\BrowserCompositorOutputSurface.h">
-      <Filter>content\browser\compositor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\browser\compositor\BrowserContextProvider.h">
-      <Filter>content\browser\compositor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\gpu\command_buffer\common\mailbox.h">
       <Filter>gpu\command_buffer\common</Filter>
     </ClInclude>
@@ -19493,29 +19880,8 @@
     <ClInclude Include="..\..\ui\gfx\switches.h">
       <Filter>ui\gfx</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\content\browser\RenderWidgetCompositor.h">
-      <Filter>content\browser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\browser\RenderViewHost.h">
-      <Filter>content\browser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\browser\compositor\BrowserSoftwareOutputDevice.h">
-      <Filter>content\browser\compositor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\content\common\content_export.h">
       <Filter>content\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\renderer\raster_worker_pool.h">
-      <Filter>content\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\resources\MissingImageData.h">
-      <Filter>content\web_impl_win\resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\net\WebURLLoaderWinINet.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\CustomTheme.h">
-      <Filter>content\web_impl_win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\skia\ext\texture_handle.h">
       <Filter>skia\ext</Filter>
@@ -19598,15 +19964,6 @@
     <ClInclude Include="..\..\skia\ext\skia_utils_win.h">
       <Filter>skia\ext</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebTaskRunnerImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebStorageNamespaceImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebStorageAreaImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\gen\blink\core\html\AssignedNodesOptions.h">
       <Filter>gen\blink\core\html</Filter>
     </ClInclude>
@@ -19645,12 +20002,6 @@
     </ClInclude>
     <ClInclude Include="..\..\ui\events\latency_info.h">
       <Filter>ui\events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebFrameSchedulerImpl.h">
-      <Filter>content\web_impl_win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\content\web_impl_win\WebViewSchedulerImpl.h">
-      <Filter>content\web_impl_win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\animation\CompositorAnimationPlayer.h">
       <Filter>third_party\WebKit\Source\platform\animation</Filter>
@@ -24045,31 +24396,31 @@
       <Filter>gen\blink\bindings\modules\v8</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasRenderingContext2D.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasGradient.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\BaseRenderingContext2D.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasPathMethods.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasRenderingContext2DState.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\HitRegion.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\Path2D.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasStyle.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas2d\ClipList.h">
-      <Filter>third_party\WebKit\Source\modules\cnvas2d</Filter>
+      <Filter>third_party\WebKit\Source\modules\canvas2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\storage\DOMWindowStorage.h">
       <Filter>third_party\WebKit\Source\modules\storage</Filter>
@@ -24377,9 +24728,6 @@
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Plugin.h">
       <Filter>gen\blink\bindings\modules\v8</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\content\renderer\synchronous_compositor_frame_sink.h">
-      <Filter>content\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\public\platform\scheduler\child\compositor_worker_scheduler.h">
       <Filter>third_party\WebKit\public\platform\scheduler\child</Filter>
     </ClInclude>
@@ -24461,117 +24809,6 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\core\layout\LayoutFrameBase.h">
       <Filter>third_party\WebKit\Source\core\layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLPrevElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLRefreshElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLSelectElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLSetvarElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLTableElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLTaskElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLTemplateElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLTimerElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLVariables.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\SelectElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLAccessElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLAElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLAnchorElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLBRElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLCardElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLDocument.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLDoElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLErrorHandling.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLEventHandlingElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLFieldSetElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLFormControlElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLGoElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLImageElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLImageLoader.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLInputElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLInsertedLegendElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLIntrinsicEvent.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLIntrinsicEventHandler.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLMetaElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLNoopElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLOnEventElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLOptGroupElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLOptionElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLPageState.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLPElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\wml\WMLPostfieldElement.h">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\gen\blink\core\WMLElementFactory.h">
       <Filter>gen\blink\core</Filter>
     </ClInclude>
@@ -24592,6 +24829,738 @@
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\config.h">
       <Filter>third_party\WebKit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\PageNavController.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\PlatformEventHandler.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\PlatformMessagePortChannel.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\PostTaskHelper.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\SharedTimerWin.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\TouchStruct.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\WebFrameClientImpl.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\WebPage.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\WebPageImpl.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\WebPageState.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\CheckReEnter.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\RasterWorkerPool.h">
+      <Filter>content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\RenderWidgetCompositor.h">
+      <Filter>content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\WebPageOcBridge.h">
+      <Filter>content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\WebSharedBitmapManager.h">
+      <Filter>content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\LayerTreeWrap.h">
+      <Filter>content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\OrigChromeMgr.h">
+      <Filter>content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\wtf\PassOwnPtr.h">
+      <Filter>third_party\WebKit\Source\wtf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\wtf\OwnPtr.h">
+      <Filter>third_party\WebKit\Source\wtf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\wtf\RefCountedLeakCounter.h">
+      <Filter>third_party\WebKit\Source\wtf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\compositor\GpuOutputSurface.h">
+      <Filter>content\compositor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\compositor\SoftwareOutputDevice.h">
+      <Filter>content\compositor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\compositor\SoftwareOutputSurface.h">
+      <Filter>content\compositor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\compositor\BrowserContextProvider.h">
+      <Filter>content\compositor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\compositor\EmptyOutputSurface.h">
+      <Filter>content\compositor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\BlinkPlatformImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\ActivatingTimerCheck.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\BitmapColor.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebCryptoImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebFileUtilitiesImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebMediaPlayerImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebMessagePortChannelImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebSchedulerImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebThemeEngineImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebThreadImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebTimerBase.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebURLLoaderImplCurl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\CurrentTimeImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\MissingImageData.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WaitableEvent.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebBlobRegistryImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebClipboardImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebCookieJarINetImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\AsyncFileStream.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\BlinkSynchronousLoader.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\BlobResourceLoader.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\CancelledReason.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\CurlCacheEntry.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\CurlCacheManager.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\DataURL.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\DefaultFullPath.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\DownloadFileBlobCache.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\FileStream.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\FileStreamClient.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\FileSystem.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\FixedReceivedData.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\FlattenHTTPBodyElement.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\HeaderVisitor.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\InitializeHandleInfo.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\LambdaTask.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\MemBlobStream.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\MultipartHandle.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\PageNetExtraData.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\PathWalker.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\ProxyType.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\RequestExtraData.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\RequestPeer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\SharedMemoryDataConsumerHandle.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\SharedMemoryReceivedDataFactory.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\SSLHandle.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\StorageDef.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\StorageMgr.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\StreamReader.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebStorageAreaImpl.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebStorageNamespaceImpl.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebURLLoaderInternal.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebURLLoaderManager.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebURLLoaderManagerAsynTask.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebURLLoaderManagerMainTask.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebURLLoaderManagerSetupInfo.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebURLLoaderManagerUtil.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\WebURLLoaderWinINet.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\ActivatingObjCheck.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\CanonicalCookie.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\CookieConstants.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\CookieJarMgr.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\CookieMonster.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\CookieOptions.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\CookieUtil.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\EffectiveTldNamesInc.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\ParsedCookie.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\cookies\WebCookieJarCurlImpl.h">
+      <Filter>net\cookies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketChannelImpl.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketDeflateFramer.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketDeflater.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketExtensionDispatcher.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketExtensionParser.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketExtensionProcessor.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketHandshake.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\WebSocketOneFrame.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\SocketStreamError.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\SocketStreamErrorBase.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\SocketStreamHandle.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\SocketStreamHandleBase.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\net\websocket\SocketStreamHandleClient.h">
+      <Filter>net\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\wtf\StreamBuffer.h">
+      <Filter>third_party\WebKit\Source\wtf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeMediaPlayer.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeNetHook.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeString.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeUtil.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeWebView.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeWebWindow.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wke.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wke2.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkedefine.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeGlobalVar.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wke\wkeJsBind.h">
+      <Filter>wke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\DragHandle.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\NativeThemeWin.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\PlatformCursor.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\PopupMenuWin.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\PopupMenuWinClient.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\RunFileChooserImpl.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\SaveImage.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\ToolTip.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\WCDataObject.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\WebDropSource.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\ClipboardUtil.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\ContextMeun.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\ui\CustomTheme.h">
+      <Filter>content\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\MissingImageData.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\TextAreaResizeCornerData.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\ThemeInputMultipleFieldsCss.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\ViewSource.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\WebKitWebRes.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\HeaderFooterHtml.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\LocalizedString.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\resources\MediaPlayerData.h">
+      <Filter>content\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\PluginDatabase.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\PluginMainThreadScheduler.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\PluginMessageThrottlerWin.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\PluginPackage.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\PluginQuirkSet.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\PluginStream.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\WebPluginImeWin.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\npapi\WebPluginImpl.h">
+      <Filter>content\web_impl_win\npapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\gpu\CommandBufferMetrics.h">
+      <Filter>content\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\gpu\CommandBufferServiceStub.h">
+      <Filter>content\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\gpu\GrcontextForWebgraphicscontext3d.h">
+      <Filter>content\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\gpu\WgContext3dCmdBufImpl.h">
+      <Filter>content\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\gpu\ChildGpuMemoryBufferManager.h">
+      <Filter>content\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\CallbackClosure.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\CallMgr.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\cJSON.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\HeartbeatTimerWin.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\LiveIdDetect.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\PrimeNumber.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\SimpleRsa.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\StringUtil.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\ThreadCall.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\TimeUtil.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\UrlUtil.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\Util.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\common\BindJsQuery.h">
+      <Filter>mbvip\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\core\MbWebView.h">
+      <Filter>mbvip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\core\mtmb.h">
+      <Filter>mbvip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\core\PromptWnd.h">
+      <Filter>mbvip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\core\RenderInit.h">
+      <Filter>mbvip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\core\mb.h">
+      <Filter>mbvip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\core\MbCallback.h">
+      <Filter>mbvip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebFrameSchedulerImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebViewSchedulerImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\web_impl_win\WebTaskRunnerImpl.h">
+      <Filter>content\web_impl_win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\ico\ICOImageDecoder.h">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\ico</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\jpeg\JPEGImageDecoder.h">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\png\PNGImageReader.h">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\png\PNGImageDecoder.h">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\browser\PlatformEventHandlerUtil.h">
+      <Filter>content\browser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLIFrameElementPartial.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLInputElementPartial.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLMediaElementPartial.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLVideoElementPartial.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLCanvasElementPartial.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\Metadata.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\MetadataCallback.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\SyncCallbackHelper.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\WorkerGlobalScopeFileSystem.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DataTransferItemFileSystem.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DevToolsHostFileSystem.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryEntry.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryEntrySync.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryReader.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryReaderBase.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryReaderSync.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFilePath.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFileSystem.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFileSystemBase.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMFileSystemSync.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DOMWindowFileSystem.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\DraggedIsolatedFileSystemImpl.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\EntriesCallback.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\Entry.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\EntryBase.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\EntryCallback.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\EntrySync.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\ErrorCallback.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileEntry.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileEntrySync.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileSystemCallback.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileSystemCallbacks.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileSystemClient.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriter.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriterBase.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriterBaseCallback.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriterCallback.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\FileWriterSync.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\HTMLInputElementFileSystem.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\LocalFileSystem.h">
+      <Filter>third_party\WebKit\Source\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\InspectorCacheStorageAgent.h">
+      <Filter>third_party\WebKit\Source\modules\cachestorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\Cache.h">
+      <Filter>third_party\WebKit\Source\modules\cachestorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\CacheStorage.h">
+      <Filter>third_party\WebKit\Source\modules\cachestorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\CacheStorageError.h">
+      <Filter>third_party\WebKit\Source\modules\cachestorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\GlobalCacheStorage.h">
+      <Filter>third_party\WebKit\Source\modules\cachestorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FileSystemCallback.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8OffscreenCanvasRenderingContext2D.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\offscreencanvas2d\OffscreenCanvasRenderingContext2D.h">
+      <Filter>third_party\WebKit\Source\modules\offscreencanvas2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Cache.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CacheStorage.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CacheQueryOptions.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\RenderingContext.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\canvas\HTMLCanvasElementModule.h">
+      <Filter>third_party\WebKit\Source\modules\canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\offscreencanvas\OffscreenCanvasModules.h">
+      <Filter>third_party\WebKit\Source\modules\offscreencanvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8BlobEvent.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ImageBitmapRenderingContext.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\imagebitmap\ImageBitmapRenderingContext.h">
+      <Filter>third_party\WebKit\Source\modules\imagebitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntry.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntrySync.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryReaderSync.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryReader.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FileSystemFlags.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\modules\filesystem\FileSystemFlags.h">
+      <Filter>gen\blink\modules\filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-encoders\JPEGImageEncoder.h">
+      <Filter>third_party\WebKit\Source\platform\image-encoders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-encoders\PNGImageEncoder.h">
+      <Filter>third_party\WebKit\Source\platform\image-encoders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -24806,14 +25775,17 @@
     <None Include="..\..\third_party\WebKit\Source\modules\fetch\OWNERS">
       <Filter>third_party\WebKit\Source\modules\fetch</Filter>
     </None>
-    <None Include="..\..\third_party\WebKit\Source\core\wml\WMLTagNames.in">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </None>
-    <None Include="..\..\third_party\WebKit\Source\core\wml\WMLAttributeNames.in">
-      <Filter>third_party\WebKit\Source\core\wml</Filter>
-    </None>
     <None Include="..\..\tencent\third_party\WebKit\SpecialsiteInjectScript.js">
       <Filter>tencent\third_party\WebKit</Filter>
+    </None>
+    <None Include="..\..\content\resources\calendarPickerJs.js">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="..\..\content\resources\HeaderFooterHtml.htm">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="..\..\mbvip\core\RenderInit.js">
+      <Filter>mbvip\core</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

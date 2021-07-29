@@ -2373,6 +2373,9 @@
     <ClInclude Include="..\..\url\third_party\mozilla\url_parse.h">
       <Filter>url\third_party\mozilla</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\base\WindowsVersion.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -4012,6 +4015,9 @@
     </ClCompile>
     <ClCompile Include="..\..\url\third_party\mozilla\url_parse.cc">
       <Filter>url\third_party\mozilla</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\base\WindowsVersion.cpp">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
