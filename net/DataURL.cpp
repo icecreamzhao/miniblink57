@@ -24,39 +24,92 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "DataURL.h"
 #include "config.h"
+#include "net/DataURL.h"
 
-#include "third_party/WebKit/Source/platform/network/HTTPParsers.h"
-#include "third_party/WebKit/Source/platform/network/mime/MIMETypeRegistry.h"
-#include "third_party/WebKit/Source/platform/weborigin/KURL.h"
-#include "third_party/WebKit/Source/wtf/CurrentTime.h"
+#include "net/SharedMemoryDataConsumerHandle.h"
+#include "net/FixedReceivedData.h"
+#include "content/browser/PostTaskHelper.h"
+#include "third_party/WebKit/Source/wtf/text/UTF8.h"
 #include "third_party/WebKit/Source/wtf/text/Base64.h"
 #include "third_party/WebKit/Source/wtf/text/TextEncoding.h"
-#include "third_party/WebKit/Source/wtf/text/UTF8.h"
+#include "third_party/WebKit/Source/wtf/CurrentTime.h"
 #include "third_party/WebKit/public/platform/WebURLError.h"
 #include "third_party/WebKit/public/platform/WebURLLoader.h"
 #include "third_party/WebKit/public/platform/WebURLLoaderClient.h"
+#include "third_party/WebKit/Source/platform/weborigin/KURL.h"
+#include "third_party/WebKit/Source/platform/network/HTTPParsers.h"
+//#include "third_party/WebKit/Source/platform/MIMETypeRegistry.h"
 #include "third_party/WebKit/public/platform/WebURLResponse.h"
+#include "wtf/text/WTFStringUtil.h"
 
 namespace net {
 
-void handleDataURL(blink::WebURLLoader* handle, blink::WebURLLoaderClient* client, const blink::KURL& kurl)
+static void cancelBodyStreaming(SharedMemoryDataConsumerHandle::Writer* bodyStreamWriter)
 {
-    if (!handle || !client)
-        return;
+    delete bodyStreamWriter;
+}
 
-    String url = kurl.string();
-
-    int index = url.find(',');
-    if (index == -1) {
+void handleDataURL(blink::WebURLLoader* handle, blink::WebURLLoaderClient* client, const blink::KURL& kurl, bool useStreamOnResponse)
+{
+    Vector<char>* data = new Vector<char>();
+    String mimeType;
+    String charset;
+    bool ok = parseDataURL(kurl, mimeType, charset, *data);
+    if (!ok) {
         blink::WebURLError error;
-        error.domain = blink::WebString(url);
-        error.localizedDescription = blink::WebString::fromUTF8("Cannot show DataUR\n");
+        error.domain = blink::WebString(kurl);
+        error.localizedDescription = blink::WebString::fromUTF8("Cannot show DataURL\n");
         client->didFail(error, 0, 0);
         return;
     }
 
+    blink::WebURLResponse* response = new blink::WebURLResponse();
+    //response->initialize();
+    response->setMIMEType(mimeType);
+    response->setTextEncodingName(charset);
+    response->setURL(blink::WebURL(kurl));
+    response->setExpectedContentLength(data->size());
+    response->setHTTPStatusCode(200);
+    response->setHTTPStatusText(blink::WebString::fromLatin1("OK"));
+
+    if (useStreamOnResponse) {
+        OutputDebugStringA("handleDataURL, useStreamOnResponse\n");
+    }
+
+    SharedMemoryDataConsumerHandle::BackpressureMode mode = SharedMemoryDataConsumerHandle::kDoNotApplyBackpressure;
+    SharedMemoryDataConsumerHandle::Writer* bodyStreamWriter = nullptr;
+    SharedMemoryDataConsumerHandle* readHandle = new SharedMemoryDataConsumerHandle(mode, WTF::bind(&cancelBodyStreaming, WTF::unretained(bodyStreamWriter)), &bodyStreamWriter);
+
+    content::postTaskToMainThread(FROM_HERE, [handle, client, readHandle, response, data, bodyStreamWriter] {
+        client->didReceiveResponse(*response,  std::unique_ptr<blink::WebDataConsumerHandle>(readHandle));
+        client->didReceiveData(data->data(), data->size());
+
+        bodyStreamWriter->addData(std::unique_ptr<RequestPeer::ReceivedData>(new FixedReceivedData(data->data(), data->size(), 0)));
+        bodyStreamWriter->close();
+        delete bodyStreamWriter;
+
+//         content::postTaskToMainThread(FROM_HERE, [handle, client, readHandle, response, data] {
+//             client->didFinishLoading(handle, currentTime(), data->size());
+//             delete response;
+//             delete data;
+//         });
+
+        client->didFinishLoading(currentTime(), data->size(), 0);
+        delete response;
+        delete data;
+    });
+}
+
+bool parseDataURL(const blink::KURL& kurl, String& mimeType, String& charset, Vector<char>& out)
+{
+    out.clear();
+    String url = WTF::ensureStringToUTF8String(kurl.string());
+
+    int index = url.find(',');
+    if (index == -1)
+        return false;
+    
     String mediaType = url.substring(5, index - 5);
     String data = url.substring(index + 1);
 
@@ -67,42 +120,32 @@ void handleDataURL(blink::WebURLLoader* handle, blink::WebURLLoaderClient* clien
     if (mediaType.isEmpty())
         mediaType = "text/plain";
 
-    String mimeType = blink::extractMIMETypeFromMediaType(WTF::AtomicString(mediaType));
-    String charset = blink::extractCharsetFromMediaType(WTF::AtomicString(mediaType));
+    mimeType = blink::extractMIMETypeFromMediaType(WTF::AtomicString(mediaType));
+    charset = blink::extractCharsetFromMediaType(WTF::AtomicString(mediaType));
 
     if (charset.isEmpty())
         charset = "US-ASCII";
 
-    blink::WebURLResponse response;
-    //response.initialize();
-    response.setMIMEType(mimeType);
-    response.setTextEncodingName(charset);
-    response.setURL(blink::WebURL(kurl));
-
     int64_t totalEncodedDataLength = 0;
     if (base64) {
-        data = blink::decodeURLEscapeSequences(data);
-        client->didReceiveResponse(response, nullptr);
-
-        Vector<char> out;
-        if (WTF::base64Decode(data, out, WTF::isSpaceOrNewline) && out.size() > 0) {
-            response.setExpectedContentLength(out.size());
-            client->didReceiveData(out.data(), out.size());
-        }
+        data = WTF::ensureStringToUTF8String(blink::decodeURLEscapeSequences(data));
+        if (!(WTF::base64Decode(data, out, WTF::isSpaceOrNewline) && out.size() > 0))
+            return false;
+        
         totalEncodedDataLength = out.size();
     } else {
         WTF::TextEncoding encoding(charset);
-        data = blink::decodeURLEscapeSequences(data, encoding);
-        client->didReceiveResponse(response, nullptr);
+        data = WTF::ensureStringToUTF8String(blink::decodeURLEscapeSequences(data, encoding));
 
         WTF::CString encodedData = encoding.encode(data, WTF::URLEncodedEntitiesForUnencodables);
-        response.setExpectedContentLength(encodedData.length());
-        if (encodedData.length())
-            client->didReceiveData(encodedData.data(), encodedData.length());
+        if (0 == encodedData.length())
+            return false;
+        
+        out.append(encodedData.data(), encodedData.length());
         totalEncodedDataLength = encodedData.length();
     }
 
-    client->didFinishLoading(currentTime(), totalEncodedDataLength, 0);
+    return true;
 }
 
 } // namespace WebCore

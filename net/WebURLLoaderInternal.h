@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2004, 2006 Apple Computer, Inc.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,17 +26,26 @@
 #ifndef WebURLLoaderInternal_h
 #define WebURLLoaderInternal_h
 
-#include "third_party/WebKit/Source/platform/Timer.h"
-#include "third_party/WebKit/Source/platform/weborigin/KURL.h"
-#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
-#include "third_party/WebKit/Source/wtf/Noncopyable.h"
-#include "third_party/WebKit/public/platform/WebURLLoader.h"
-#include "third_party/WebKit/public/platform/WebURLResponse.h"
-
 #include "content/web_impl_win/WebURLLoaderImplCurl.h"
 
-#include <third_party/curl/curl.h>
+#include "net/MultipartHandle.h"
+#include "net/SharedMemoryDataConsumerHandle.h"
+#include "net/CancelledReason.h"
+#include "net/PageNetExtraData.h"
+#include "third_party/WebKit/public/platform/WebURLLoader.h"
+#include "third_party/WebKit/public/platform/WebURLResponse.h"
+#include "third_party/WebKit/public/platform/WebURLError.h"
+#include "third_party/WebKit/Source/platform/Timer.h"
+#include "third_party/WebKit/Source/platform/weborigin/KURL.h"
+#include "third_party/WebKit/Source/wtf/Noncopyable.h"
+//#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
+#include "third_party/WebKit/public/platform/WebURLLoaderClient.h"
+#include "third_party/WebKit/Source/wtf/OwnPtr.h"
 #include <windows.h>
+#include <memory>
+#include "third_party/libcurl/include/curl/curl.h"
+
+//#define MINIBLINK_NO_MULTITHREAD_NET 0
 
 // The allocations and releases in WebURLLoaderInternal are
 // Cocoa-exception-free (either simple Foundation classes or
@@ -50,127 +59,183 @@ namespace content {
 class WebURLLoaderImplCurl;
 }
 
+typedef struct _wkeNetJobDataBind wkeNetJobDataBind;
+
 using namespace blink;
 using namespace content;
 
 namespace net {
+    
+class WebURLLoaderManagerMainTask;
+class WebURLLoaderManager;
+class FlattenHTTPBodyElementStream;
+struct InitializeHandleInfo;
 
-class WebURLLoaderInternal {
-    //WTF_MAKE_NONCOPYABLE(WebURLLoaderInternal); WTF_MAKE_FAST_ALLOCATED;
+class JobHead {
 public:
-    WebURLLoaderInternal(WebURLLoaderImplCurl* loader, const WebURLRequest& request, WebURLLoaderClient* client, bool defersLoading, bool shouldContentSniff)
-        : m_client(client)
-        //, m_firstRequest(request)
-        , m_lastHTTPMethod(request.httpMethod())
-        , status(0)
-        , m_defersLoading(defersLoading)
-        , m_shouldContentSniff(shouldContentSniff)
-        , m_responseFired(false)
-        , m_handle(0)
-        , m_url(0)
-        , m_customHeaders(0)
-        , m_cancelled(false)
-        //, m_formDataStream(loader)
-        , m_scheduledFailureType(NoFailure)
-        , m_failureTimer(this, &WebURLLoaderInternal::fireFailure)
-    {
-        m_firstRequest = new blink::WebURLRequest(request);
-        KURL url = (KURL)m_firstRequest->url();
-        m_user = url.user();
-        m_pass = url.pass();
-        //m_firstRequest.removeCredentials();
+    enum Type {
+        kLoaderInternal,
+        kGetFaviconTask,
+        kSetCookiesTask,
+        kWkeCustomNetRequest,
+    };
+    virtual ~JobHead() {}
+    virtual int getRefCount() const { return m_ref; }
+    virtual void ref() { atomicIncrement(&m_ref); }
+    virtual void deref() { atomicDecrement(&m_ref); }
+    virtual Type getType() { return m_type; }
+    virtual void cancel() {}
+    int m_id;
+    int m_ref;
+    Type m_type;
+};
 
-        m_response.initialize();
-    }
+class WebURLLoaderInternal : public JobHead {
+public:
+    WebURLLoaderInternal(blink::WebThread* ioThread, WebURLLoaderImplCurl* loader, const WebURLRequest& request, WebURLLoaderClient* client, bool defersLoading, bool shouldContentSniff);
+    virtual ~WebURLLoaderInternal() override;
 
-    ~WebURLLoaderInternal()
-    {
-        delete m_firstRequest;
-
-        fastFree(m_url);
-        if (m_customHeaders)
-            curl_slist_free_all(m_customHeaders);
-    }
-
-    void ref() { }
-    void deref() { }
-
-    void fireFailure(blink::Timer<WebURLLoaderInternal>*)
-    {
-        if (!client())
-            return;
-
-        switch (m_scheduledFailureType) {
-        case net::WebURLLoaderInternal::NoFailure:
-            ASSERT_NOT_REACHED();
-            return;
-        case net::WebURLLoaderInternal::BlockedFailure:
-            m_scheduledFailureType = net::WebURLLoaderInternal::NoFailure;
-            //client()->wasBlocked(this);
-            return;
-        case net::WebURLLoaderInternal::InvalidURLFailure:
-            m_scheduledFailureType = net::WebURLLoaderInternal::NoFailure;
-            //client()->cannotShowURL(this);
-
-            blink::WebURLError error;
-            error.domain = firstRequest()->url().string();
-            error.localizedDescription = blink::WebString::fromUTF8("Cannot show DataUR\n");
-            if (client() && loader())
-                client()->didFail(loader(), error);
-            return;
-        }
-
-        ASSERT_NOT_REACHED();
-    }
+    static void release(int jobId);
 
     WebURLLoaderClient* client() { return m_client; }
-    WebURLLoaderClient* m_client;
 
-    void setResponseFired(bool responseFired) { m_responseFired = responseFired; };
+    void setResponseFired(bool responseFired) { m_responseFired = responseFired; }
     bool responseFired() { return m_responseFired; }
-    bool m_responseFired;
 
-    // WebURLRequest m_firstRequest;
+    WebURLLoaderImplCurl* loader() { return m_loader; }
+    void setLoader(WebURLLoaderImplCurl* loader) { m_loader = loader; }
+
+    blink::WebURLRequest* firstRequest()
+    {
+#ifndef MINIBLINK_NO_MULTITHREAD_NET
+        RELEASE_ASSERT(WTF::isMainThread());
+#endif
+        return m_firstRequest; 
+    }
+
+    void decodeUrlRequest()
+    {
+        KURL url = m_firstRequest->url();
+        String newUrl = blink::decodeURLEscapeSequences(url.getUTF8String());
+        m_firstRequest->setURL(KURL(ParsedURLString, newUrl));
+    }
+
+    void resetFirstRequest(blink::WebURLRequest* newRequest)
+    {
+#ifndef MINIBLINK_NO_MULTITHREAD_NET
+        RELEASE_ASSERT(WTF::isMainThread() && m_firstRequest);
+#endif
+        delete m_firstRequest;
+        m_firstRequest = newRequest;
+    }
+
+    bool isCancelled() const { return kNoCancelled != m_cancelledReason; }
+
+public:
+    WebURLLoaderClient* m_client;
+    bool m_isSynchronous;
+
+private:
+    blink::WebURLRequest* m_firstRequest;
+
+public:
+    blink::WebURLResponse m_response;
+    std::string m_url; // 设置给curl的地址。和request可能不同，主要是fragment
+    std::string m_fragment;
+
     String m_lastHTTPMethod;
+
+    int m_webviewId;
 
     // Suggested credentials for the current redirection step.
     String m_user;
     String m_pass;
 
+    bool m_isRedirection;
+
     //Credential m_initialCredential;
 
     int status;
+
+    size_t m_dataLength;
 
     bool m_defersLoading;
     bool m_shouldContentSniff;
 
     CURL* m_handle;
-    char* m_url;
+    
+    std::string m_effectiveUrl; // curl收到网络包后返回的最后有效地址，如果有重定向redirect，则可能和上面的变量不同
     struct curl_slist* m_customHeaders;
-    WebURLResponse m_response;
-    bool m_cancelled;
+    
+    OwnPtr<MultipartHandle> m_multipartHandle;
 
-    //FormDataStream m_formDataStream;
-    Vector<char> m_postBytes;
+    CancelledReason m_cancelledReason;
+
+    FlattenHTTPBodyElementStream* m_formDataStream;
 
     enum FailureType {
         NoFailure,
         BlockedFailure,
         InvalidURLFailure
     };
-
     FailureType m_scheduledFailureType;
-    Timer<WebURLLoaderInternal> m_failureTimer;
 
-    //////////////////////////////////////////////////////////////////////////
-    WebURLLoaderImplCurl* loader() { return m_loader; }
-    void setLoader(WebURLLoaderImplCurl* loader) { m_loader = loader; }
-
-    blink::WebURLRequest* firstRequest() { return m_firstRequest; }
+    bool m_responseFired;
 
     WebURLLoaderImplCurl* m_loader;
+    WebURLLoaderManager* m_manager;
 
-    blink::WebURLRequest* m_firstRequest;
+    WTF::Mutex m_destroingMutex;
+    enum State {
+        kNormal,
+        kDestroying,
+        kDestroyed,
+    };
+    State m_state;
+
+    Vector<WebURLLoaderManagerMainTask*> m_syncTasks;
+
+    SharedMemoryDataConsumerHandle::Writer* m_bodyStreamWriter;
+
+    String m_debugPath;
+
+    bool m_isBlackList;
+    bool m_isDataUrl;
+    bool m_isProxy;
+    bool m_isProxyConnect; // 是否使用代理的Connect请求
+    bool m_isProxyHeadRequest;
+    bool m_needParseMime; // 如果response为空的时候，是否需要在recv data的时候分析
+
+    InitializeHandleInfo* m_initializeHandleInfo;
+    bool m_isHoldJobToAsynCommit;
+
+#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
+    int m_isHookRequest; // 1表示wke接口设置的，2表示内部指定要缓存，3表示既是内部指定，又被缓存了
+    Vector<char>* m_hookBufForEndHook;
+    Vector<char>* m_asynWkeNetSetData;
+    bool m_isWkeNetSetDataBeSetted;
+
+    bool m_isWkeCanceled; // 是否调用过wkeNetCancelRequest
+
+    bool m_hasCallResponse; // 是否有head call被调用过。如果没有的话，且又有write call 提前调用了，就需要缓存数据给下载
+
+    unsigned long m_sentDataBytes;
+    unsigned long m_totalBytesToBeSent; // post的时候，记录发送进度用
+
+    enum CacheForDownloadOpt {
+        kCacheForDownloadUnknow,
+        kCacheForDownloadNot,
+        kCacheForDownloadYes,
+    };
+
+    CacheForDownloadOpt m_cacheForDownloadOpt;
+    wkeNetJobDataBind* m_dataBind;
+    Vector<char> m_dataCacheForDownload; // 下载时需要先缓存再给外部
+#endif
+
+    RefPtr<PageNetExtraData> m_pageNetExtraData;
+
+    blink::WebThread* m_ioThread;
 };
 
 } // namespace net

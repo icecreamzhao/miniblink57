@@ -5,7 +5,6 @@
 #ifndef WebURLLoaderWinINet_h
 #define WebURLLoaderWinINet_h
 
-#include "third_party/WebKit/Source/wtf/text/WTFString.h"
 #include "third_party/WebKit/public/platform/WebURLLoader.h"
 
 typedef void* HINTERNET;
@@ -16,6 +15,8 @@ class WebURLLoaderImpl;
 
 namespace net {
 
+class LoadFileAsyncTask;
+ 
 class WebURLLoaderWinINet {
 public:
     WebURLLoaderWinINet(content::WebURLLoaderImpl* loader);
@@ -36,9 +37,7 @@ public:
     void setDefersLoading(bool value);
     void didChangePriority(blink::WebURLRequest::Priority new_priority,
         int intra_priority_value);
-
-    void ref();
-    void deref();
+    bool attachThreadedDataReceiver(blink::WebThreadedDataReceiver* threaded_data_receiver);
 
     void fileLoadImpl(const blink::KURL& url);
 
@@ -46,6 +45,7 @@ public:
     blink::WebURLRequest* firstRequest() { return m_request; }
 
     void onRedirect();
+    void onTimeout();
     bool onRequestComplete();
     static void CALLBACK internetStatusCallback(HINTERNET, DWORD_PTR, DWORD, LPVOID, DWORD);
 
@@ -53,12 +53,12 @@ public:
 
     void onLoaderWillBeDelete();
 
+    double startTime() const { return m_startTime; }
+
     blink::KURL* m_debugRedirectPath;
 
 private:
     bool start(const blink::WebURLRequest& request, blink::WebURLLoaderClient* client, bool synchronously);
-
-    int m_ref;
 
     blink::WebURLRequest* m_request;
     blink::WebURLLoaderClient* m_client;
@@ -77,11 +77,17 @@ private:
     bool m_bHaveRefAtOtherThread; // 在别的线程（如internetStatusCallback）调用过ref，在onRequestComplete里需要多一次deref
 
     bool m_requestCanceled;
+    bool m_canDestroy;
+
+    Vector<unsigned char> m_gzipDecompressData;
     int64_t m_totalEncodedDataLength;
 
     bool* m_hadDestroied;
+    double m_startTime;
+
+    LoadFileAsyncTask* m_fileAsyncTask;
 };
 
-} // namespace net
+}  // namespace net
 
-#endif // WebURLLoaderWinINet_h
+#endif  // WebURLLoaderWinINet_h
