@@ -102,8 +102,7 @@ void AnimationHost::AddAnimationTimeline(
     SetNeedsPushProperties();
 }
 
-void AnimationHost::RemoveAnimationTimeline(
-    scoped_refptr<AnimationTimeline> timeline)
+void AnimationHost::RemoveAnimationTimeline(scoped_refptr<AnimationTimeline> timeline)
 {
     DCHECK(timeline->id());
     EraseTimeline(timeline);
@@ -111,24 +110,21 @@ void AnimationHost::RemoveAnimationTimeline(
     SetNeedsPushProperties();
 }
 
-void AnimationHost::RegisterElement(ElementId element_id,
-    ElementListType list_type)
+void AnimationHost::RegisterElement(ElementId element_id, ElementListType list_type)
 {
     scoped_refptr<ElementAnimations> element_animations = GetElementAnimationsForElementId(element_id);
     if (element_animations)
         element_animations->ElementRegistered(element_id, list_type);
 }
 
-void AnimationHost::UnregisterElement(ElementId element_id,
-    ElementListType list_type)
+void AnimationHost::UnregisterElement(ElementId element_id, ElementListType list_type)
 {
     scoped_refptr<ElementAnimations> element_animations = GetElementAnimationsForElementId(element_id);
     if (element_animations)
         element_animations->ElementUnregistered(element_id, list_type);
 }
 
-void AnimationHost::RegisterPlayerForElement(ElementId element_id,
-    AnimationPlayer* player)
+void AnimationHost::RegisterPlayerForElement(ElementId element_id, AnimationPlayer* player)
 {
     DCHECK(element_id);
     DCHECK(player);
@@ -148,8 +144,7 @@ void AnimationHost::RegisterPlayerForElement(ElementId element_id,
     element_animations->AddPlayer(player);
 }
 
-void AnimationHost::UnregisterPlayerForElement(ElementId element_id,
-    AnimationPlayer* player)
+void AnimationHost::UnregisterPlayerForElement(ElementId element_id, AnimationPlayer* player)
 {
     DCHECK(element_id);
     DCHECK(player);
@@ -260,12 +255,10 @@ void AnimationHost::PushPropertiesToImplThread(AnimationHost* host_impl)
     }
 
     // Update the impl-only scroll offset animations.
-    scroll_offset_animations_->PushPropertiesTo(
-        host_impl->scroll_offset_animations_impl_.get());
+    scroll_offset_animations_->PushPropertiesTo(host_impl->scroll_offset_animations_impl_.get());
 }
 
-scoped_refptr<ElementAnimations>
-AnimationHost::GetElementAnimationsForElementId(ElementId element_id) const
+scoped_refptr<ElementAnimations> AnimationHost::GetElementAnimationsForElementId(ElementId element_id) const
 {
     if (!element_id)
         return nullptr;
@@ -273,8 +266,7 @@ AnimationHost::GetElementAnimationsForElementId(ElementId element_id) const
     return iter == element_to_animations_map_.end() ? nullptr : iter->second;
 }
 
-void AnimationHost::SetSupportsScrollAnimations(
-    bool supports_scroll_animations)
+void AnimationHost::SetSupportsScrollAnimations(bool supports_scroll_animations)
 {
     supports_scroll_animations_ = supports_scroll_animations;
 }
@@ -315,8 +307,7 @@ bool AnimationHost::TickAnimations(base::TimeTicks monotonic_time)
     return true;
 }
 
-bool AnimationHost::UpdateAnimationState(bool start_ready_animations,
-    MutatorEvents* mutator_events)
+bool AnimationHost::UpdateAnimationState(bool start_ready_animations, MutatorEvents* mutator_events)
 {
     if (!NeedsTickAnimations())
         return false;

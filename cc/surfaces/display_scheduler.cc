@@ -262,23 +262,20 @@ base::TimeTicks DisplayScheduler::DesiredBeginFrameDeadlineTime()
     }
 
     if (root_surface_resources_locked_) {
-        TRACE_EVENT_INSTANT0("cc", "Root surface resources locked",
-            TRACE_EVENT_SCOPE_THREAD);
+        TRACE_EVENT_INSTANT0("cc", "Root surface resources locked", TRACE_EVENT_SCOPE_THREAD);
         return current_begin_frame_args_.frame_time + current_begin_frame_args_.interval;
     }
 
     bool root_ready_to_draw = !expect_damage_from_root_surface_ || root_surface_damaged_;
 
     if (all_active_child_surfaces_ready_to_draw_ && root_ready_to_draw) {
-        TRACE_EVENT_INSTANT0("cc", "All active surfaces ready",
-            TRACE_EVENT_SCOPE_THREAD);
+        TRACE_EVENT_INSTANT0("cc", "All active surfaces ready", TRACE_EVENT_SCOPE_THREAD);
         return base::TimeTicks();
     }
 
     // TODO(mithro): Be smarter about resize deadlines.
     if (expecting_root_surface_damage_because_of_resize_) {
-        TRACE_EVENT_INSTANT0("cc", "Entire display damaged",
-            TRACE_EVENT_SCOPE_THREAD);
+        TRACE_EVENT_INSTANT0("cc", "Entire display damaged", TRACE_EVENT_SCOPE_THREAD);
         return current_begin_frame_args_.frame_time + current_begin_frame_args_.interval;
     }
 
@@ -287,8 +284,7 @@ base::TimeTicks DisplayScheduler::DesiredBeginFrameDeadlineTime()
     // TODO(mithro): Replace this with SetNeedsBeginFrame and SwapAbort
     // logic.
     if (all_active_child_surfaces_ready_to_draw_ && expect_damage_from_root_surface_) {
-        TRACE_EVENT_INSTANT0("cc", "Waiting for damage from root surface",
-            TRACE_EVENT_SCOPE_THREAD);
+        TRACE_EVENT_INSTANT0("cc", "Waiting for damage from root surface", TRACE_EVENT_SCOPE_THREAD);
         // This adjusts the deadline by DefaultEstimatedParentDrawTime for
         // a second time. The first one represented the Surfaces draw to display
         // latency. This one represents root surface commit+raster+draw latency.
@@ -301,8 +297,7 @@ base::TimeTicks DisplayScheduler::DesiredBeginFrameDeadlineTime()
         return current_begin_frame_args_.deadline - BeginFrameArgs::DefaultEstimatedParentDrawTime();
     }
 
-    TRACE_EVENT_INSTANT0("cc", "More damage expected soon",
-        TRACE_EVENT_SCOPE_THREAD);
+    TRACE_EVENT_INSTANT0("cc", "More damage expected soon", TRACE_EVENT_SCOPE_THREAD);
     return current_begin_frame_args_.deadline;
 }
 
@@ -312,8 +307,7 @@ void DisplayScheduler::ScheduleBeginFrameDeadline()
 
     // We need to wait for the next BeginFrame before scheduling a deadline.
     if (!inside_begin_frame_deadline_interval_) {
-        TRACE_EVENT_INSTANT0("cc", "Waiting for next BeginFrame",
-            TRACE_EVENT_SCOPE_THREAD);
+        TRACE_EVENT_INSTANT0("cc", "Waiting for next BeginFrame", TRACE_EVENT_SCOPE_THREAD);
         DCHECK(begin_frame_deadline_task_.IsCancelled());
         return;
     }
@@ -323,8 +317,7 @@ void DisplayScheduler::ScheduleBeginFrameDeadline()
 
     // Avoid re-scheduling the deadline if it's already correctly scheduled.
     if (!begin_frame_deadline_task_.IsCancelled() && desired_deadline == begin_frame_deadline_task_time_) {
-        TRACE_EVENT_INSTANT0("cc", "Using existing deadline",
-            TRACE_EVENT_SCOPE_THREAD);
+        TRACE_EVENT_INSTANT0("cc", "Using existing deadline", TRACE_EVENT_SCOPE_THREAD);
         return;
     }
 
@@ -334,10 +327,9 @@ void DisplayScheduler::ScheduleBeginFrameDeadline()
     begin_frame_deadline_task_.Reset(begin_frame_deadline_closure_);
 
     base::TimeDelta delta = std::max(base::TimeDelta(), desired_deadline - base::TimeTicks::Now());
-    task_runner_->PostDelayedTask(FROM_HERE,
-        begin_frame_deadline_task_.callback(), delta);
-    TRACE_EVENT2("cc", "Using new deadline", "delta", delta.ToInternalValue(),
-        "desired_deadline", desired_deadline);
+    task_runner_->PostDelayedTask(FROM_HERE, begin_frame_deadline_task_.callback(), delta);
+
+    TRACE_EVENT2("cc", "Using new deadline", "delta", delta.ToInternalValue(), "desired_deadline", desired_deadline);
 }
 
 bool DisplayScheduler::AttemptDrawAndSwap()

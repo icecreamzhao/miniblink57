@@ -52,11 +52,12 @@ public:
 
     // Constructor for GL-based compositing.
     explicit OutputSurface(scoped_refptr<ContextProvider> context_provider);
+
     // Constructor for software compositing.
     explicit OutputSurface(std::unique_ptr<SoftwareOutputDevice> software_device);
+
     // Constructor for Vulkan-based compositing.
-    explicit OutputSurface(
-        scoped_refptr<VulkanContextProvider> vulkan_context_provider);
+    explicit OutputSurface(scoped_refptr<VulkanContextProvider> vulkan_context_provider);
 
     virtual ~OutputSurface();
 

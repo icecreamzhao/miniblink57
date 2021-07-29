@@ -653,16 +653,11 @@ TileManager::PrioritizedWorkToSchedule TileManager::AssignGpuMemoryToTiles()
     all_tiles_that_need_to_be_rasterized_are_scheduled_ = true;
     bool had_enough_memory_to_schedule_tiles_needed_now = true;
 
-    MemoryUsage hard_memory_limit(global_state_.hard_memory_limit_in_bytes,
-        global_state_.num_resources_limit);
-    MemoryUsage soft_memory_limit(global_state_.soft_memory_limit_in_bytes,
-        global_state_.num_resources_limit);
-    MemoryUsage memory_usage(resource_pool_->memory_usage_bytes(),
-        resource_pool_->resource_count());
+    MemoryUsage hard_memory_limit(global_state_.hard_memory_limit_in_bytes, global_state_.num_resources_limit);
+    MemoryUsage soft_memory_limit(global_state_.soft_memory_limit_in_bytes, global_state_.num_resources_limit);
+    MemoryUsage memory_usage(resource_pool_->memory_usage_bytes(), resource_pool_->resource_count());
 
-    std::unique_ptr<RasterTilePriorityQueue> raster_priority_queue(
-        client_->BuildRasterQueue(global_state_.tree_priority,
-            RasterTilePriorityQueue::Type::ALL));
+    std::unique_ptr<RasterTilePriorityQueue> raster_priority_queue(client_->BuildRasterQueue(global_state_.tree_priority, RasterTilePriorityQueue::Type::ALL));
     std::unique_ptr<EvictionTilePriorityQueue> eviction_priority_queue;
     PrioritizedWorkToSchedule work_to_schedule;
     for (; !raster_priority_queue->IsEmpty(); raster_priority_queue->Pop()) {
@@ -671,9 +666,7 @@ TileManager::PrioritizedWorkToSchedule TileManager::AssignGpuMemoryToTiles()
         TilePriority priority = prioritized_tile.priority();
 
         if (TilePriorityViolatesMemoryPolicy(priority)) {
-            TRACE_EVENT_INSTANT0(
-                "cc", "TileManager::AssignGpuMemory tile violates memory policy",
-                TRACE_EVENT_SCOPE_THREAD);
+            TRACE_EVENT_INSTANT0("cc", "TileManager::AssignGpuMemory tile violates memory policy", TRACE_EVENT_SCOPE_THREAD);
             break;
         }
 
@@ -685,8 +678,7 @@ TileManager::PrioritizedWorkToSchedule TileManager::AssignGpuMemoryToTiles()
             // canvas which is reset between tiles.
             tile->set_solid_color_analysis_performed(true);
             SkColor color = SK_ColorTRANSPARENT;
-            bool is_solid_color = prioritized_tile.raster_source()->PerformSolidColorAnalysis(
-                tile->content_rect(), tile->contents_scale(), &color);
+            bool is_solid_color = prioritized_tile.raster_source()->PerformSolidColorAnalysis(tile->content_rect(), tile->contents_scale(), &color);
             if (is_solid_color) {
                 tile->draw_info().set_solid_color(color);
                 tile->draw_info().set_was_ever_ready_to_draw();
@@ -728,9 +720,7 @@ TileManager::PrioritizedWorkToSchedule TileManager::AssignGpuMemoryToTiles()
         MemoryUsage& tile_memory_limit = tile_is_needed_now ? hard_memory_limit : soft_memory_limit;
 
         const MemoryUsage& scheduled_tile_memory_limit = tile_memory_limit - memory_required_by_tile_to_be_scheduled;
-        eviction_priority_queue = FreeTileResourcesWithLowerPriorityUntilUsageIsWithinLimit(
-            std::move(eviction_priority_queue), scheduled_tile_memory_limit,
-            priority, &memory_usage);
+        eviction_priority_queue = FreeTileResourcesWithLowerPriorityUntilUsageIsWithinLimit(std::move(eviction_priority_queue), scheduled_tile_memory_limit, priority, &memory_usage);
         bool memory_usage_is_within_limit = !memory_usage.Exceeds(scheduled_tile_memory_limit);
 
         // If we couldn't fit the tile into our current memory limit, then we're
@@ -772,28 +762,18 @@ TileManager::PrioritizedWorkToSchedule TileManager::AssignGpuMemoryToTiles()
             if (priority.priority_bin > highest_bin_found)
                 highest_bin_found = priority.priority_bin;
 
-            CHECK_NE(TilePriority::NOW, priority.priority_bin)
-                << "mode: " << global_state_.tree_priority
-                << " highest bin: " << highest_bin_found;
-            CHECK(!tile->required_for_activation())
-                << "mode: " << global_state_.tree_priority
-                << " bin: " << priority.priority_bin
-                << " highest bin: " << highest_bin_found;
-            CHECK(!tile->required_for_draw())
-                << "mode: " << global_state_.tree_priority
-                << " bin: " << priority.priority_bin
-                << " highest bin: " << highest_bin_found;
+            CHECK_NE(TilePriority::NOW, priority.priority_bin) << "mode: " << global_state_.tree_priority << " highest bin: " << highest_bin_found;
+            CHECK(!tile->required_for_activation()) << "mode: " << global_state_.tree_priority << " bin: " << priority.priority_bin << " highest bin: " << highest_bin_found;
+            CHECK(!tile->required_for_draw()) << "mode: " << global_state_.tree_priority << " bin: " << priority.priority_bin << " highest bin: " << highest_bin_found;
         }
     }
 
     // Note that we should try and further reduce memory in case the above loop
     // didn't reduce memory. This ensures that we always release as many resources
     // as possible to stay within the memory limit.
-    eviction_priority_queue = FreeTileResourcesUntilUsageIsWithinLimit(
-        std::move(eviction_priority_queue), hard_memory_limit, &memory_usage);
+    eviction_priority_queue = FreeTileResourcesUntilUsageIsWithinLimit(std::move(eviction_priority_queue), hard_memory_limit, &memory_usage);
 
-    UMA_HISTOGRAM_BOOLEAN("TileManager.ExceededMemoryBudget",
-        !had_enough_memory_to_schedule_tiles_needed_now);
+    UMA_HISTOGRAM_BOOLEAN("TileManager.ExceededMemoryBudget", !had_enough_memory_to_schedule_tiles_needed_now);
     did_oom_on_last_assign_ = !had_enough_memory_to_schedule_tiles_needed_now;
 
     memory_stats_from_last_assign_.total_budget_in_bytes = global_state_.hard_memory_limit_in_bytes;
@@ -801,11 +781,8 @@ TileManager::PrioritizedWorkToSchedule TileManager::AssignGpuMemoryToTiles()
     DCHECK_GE(memory_stats_from_last_assign_.total_bytes_used, 0);
     memory_stats_from_last_assign_.had_enough_memory = had_enough_memory_to_schedule_tiles_needed_now;
 
-    TRACE_EVENT_END2("cc", "TileManager::AssignGpuMemoryToTiles",
-        "all_tiles_that_need_to_be_rasterized_are_scheduled",
-        all_tiles_that_need_to_be_rasterized_are_scheduled_,
-        "had_enough_memory_to_schedule_tiles_needed_now",
-        had_enough_memory_to_schedule_tiles_needed_now);
+    TRACE_EVENT_END2("cc", "TileManager::AssignGpuMemoryToTiles", "all_tiles_that_need_to_be_rasterized_are_scheduled", all_tiles_that_need_to_be_rasterized_are_scheduled_,
+        "had_enough_memory_to_schedule_tiles_needed_now", had_enough_memory_to_schedule_tiles_needed_now);
     return work_to_schedule;
 }
 

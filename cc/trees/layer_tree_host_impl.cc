@@ -2313,8 +2313,7 @@ void LayerTreeHostImpl::ReleaseCompositorFrameSink()
     use_gpu_rasterization_ = false;
 }
 
-bool LayerTreeHostImpl::InitializeRenderer(
-    CompositorFrameSink* compositor_frame_sink)
+bool LayerTreeHostImpl::InitializeRenderer(CompositorFrameSink* compositor_frame_sink)
 {
     TRACE_EVENT0("cc", "LayerTreeHostImpl::InitializeRenderer");
 

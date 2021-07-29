@@ -132,8 +132,7 @@ public:
         const std::string& benchmark_name,
         std::unique_ptr<base::Value> value,
         const MicroBenchmark::DoneCallback& callback) override;
-    bool SendMessageToMicroBenchmark(int id,
-        std::unique_ptr<base::Value> value) override;
+    bool SendMessageToMicroBenchmark(int id, std::unique_ptr<base::Value> value) override;
     SurfaceSequenceGenerator* GetSurfaceSequenceGenerator() override;
     void SetNextCommitWaitsForActivation() override;
     void ResetGpuRasterizationTracking() override;
@@ -151,8 +150,7 @@ public:
     void RequestNewCompositorFrameSink();
     void DidInitializeCompositorFrameSink();
     void DidFailToInitializeCompositorFrameSink();
-    virtual std::unique_ptr<LayerTreeHostImpl> CreateLayerTreeHostImpl(
-        LayerTreeHostImplClient* client);
+    virtual std::unique_ptr<LayerTreeHostImpl> CreateLayerTreeHostImpl(LayerTreeHostImplClient* client);
     void DidLoseCompositorFrameSink();
     void DidCommitAndDrawFrame() { client_->DidCommitAndDrawFrame(); }
     void DidReceiveCompositorFrameAck()
@@ -164,10 +162,8 @@ public:
     void DidCompletePageScaleAnimation();
     void ApplyScrollAndScale(ScrollAndScaleSet* info);
 
-    void SetReflectedMainFrameState(
-        std::unique_ptr<ReflectedMainFrameState> reflected_main_frame_state);
-    const ReflectedMainFrameState* reflected_main_frame_state_for_testing()
-        const
+    void SetReflectedMainFrameState(std::unique_ptr<ReflectedMainFrameState> reflected_main_frame_state);
+    const ReflectedMainFrameState* reflected_main_frame_state_for_testing() const
     {
         return reflected_main_frame_state_.get();
     }

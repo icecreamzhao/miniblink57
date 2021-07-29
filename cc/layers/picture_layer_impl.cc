@@ -1343,7 +1343,12 @@ bool PictureLayerImpl::IsOnActiveOrPendingTree() const
 
 bool PictureLayerImpl::HasValidTilePriorities() const
 {
-    return IsOnActiveOrPendingTree() && is_drawn_render_surface_layer_list_member();
+    //return IsOnActiveOrPendingTree() && is_drawn_render_surface_layer_list_member();
+    bool b1 = IsOnActiveOrPendingTree();
+    bool b2 = is_drawn_render_surface_layer_list_member();
+    if (b1 && b2)
+        return true;
+    return false;
 }
 
 } // namespace cc
