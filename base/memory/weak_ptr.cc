@@ -27,8 +27,7 @@ namespace internal {
 
     bool WeakReference::Flag::IsValid() const
     {
-        DCHECK(sequence_checker_.CalledOnValidSequence());
-        //       << "WeakPtrs must be checked on the same sequenced thread.";
+        DCHECK(sequence_checker_.CalledOnValidSequence());// << "WeakPtrs must be checked on the same sequenced thread.";
         return is_valid_;
     }
 

@@ -21,6 +21,8 @@
 #undef max
 #undef min
 
+#ifndef _EVNTRACE_
+
 typedef struct  _TRACE_GUID_REGISTRATION {
     LPCGUID Guid;            // Guid of data block being registered or updated.
     HANDLE RegHandle;        // Guid Registration Handle is returned.
@@ -70,6 +72,8 @@ typedef struct _MOF_FIELD {
     ULONG       Length;     // Length of the MOF field
     ULONG       DataType;   // Type of data
 } MOF_FIELD, * PMOF_FIELD;
+
+#endif
 
 namespace base {
 namespace win {

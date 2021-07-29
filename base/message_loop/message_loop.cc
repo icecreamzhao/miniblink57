@@ -41,6 +41,8 @@
 
 namespace base {
 
+DWORD s_disableDispatchMessageReentry = 0;
+
 namespace {
 
     // A lazily created thread local storage for quick access to a thread's message
@@ -318,6 +320,21 @@ void MessageLoop::RunUntilIdle()
     DCHECK(pump_);
     RunLoop run_loop;
     run_loop.RunUntilIdle();
+}
+
+void MessageLoop::RunHandlerWithoutMsgPeek()
+{
+    DCHECK_EQ(this, current());
+
+    //pump_->RunUntilIdleWithoutMsgPeek(this);
+    pump_->Run(this);
+}
+
+void MessageLoop::RunUntilIdleWithoutMsgPeek()
+{
+    DCHECK(pump_);
+    RunLoop run_loop;
+    run_loop.RunUntilIdleWithoutMsgPeek();
 }
 
 void MessageLoop::QuitWhenIdle()

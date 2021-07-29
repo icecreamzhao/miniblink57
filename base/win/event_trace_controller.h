@@ -29,6 +29,8 @@
 #include "base/base_export.h"
 #include "base/macros.h"
 
+#ifndef _EVNTRACE_
+
 typedef ULONG64 TRACEHANDLE, *PTRACEHANDLE;
 
 typedef struct _EVENT_TRACE_PROPERTIES {
@@ -55,6 +57,8 @@ typedef struct _EVENT_TRACE_PROPERTIES {
     ULONG LogFileNameOffset;            // Offset to LogFileName
     ULONG LoggerNameOffset;             // Offset to LoggerName
 } EVENT_TRACE_PROPERTIES, * PEVENT_TRACE_PROPERTIES;
+
+#endif
 
 namespace base {
 namespace win {

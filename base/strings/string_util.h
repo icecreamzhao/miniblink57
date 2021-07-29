@@ -467,6 +467,20 @@ BASE_EXPORT string16 ReplaceStringPlaceholders(const string16& format_string,
     const string16& a,
     size_t* offset);
 
+template <class str> inline void StringToLowerASCII(str* s)
+{
+    for (typename str::iterator i = s->begin(); i != s->end(); ++i)
+        *i = ToLowerASCII(*i);
+}
+
+template <class str> inline str StringToLowerASCII(const str& s)
+{
+    // for std::string and std::wstring  
+    str output(s);
+    StringToLowerASCII(&output);
+    return output;
+}
+
 } // namespace base
 
 #if defined(OS_WIN)

@@ -30,7 +30,9 @@ namespace internal {
         const base::Closure& task,
         base::TimeDelta delay)
     {
-        DCHECK(!task.is_null()) << from_here.ToString();
+        //DCHECK(!task.is_null()) << from_here.ToString();
+        if (task.is_null())
+            DebugBreak();
         return incoming_queue_->AddToIncomingQueue(from_here, task, delay, true);
     }
 
@@ -39,7 +41,9 @@ namespace internal {
         const base::Closure& task,
         base::TimeDelta delay)
     {
-        DCHECK(!task.is_null()) << from_here.ToString();
+        //DCHECK(!task.is_null()) << from_here.ToString();
+        if (task.is_null())
+            DebugBreak();
         return incoming_queue_->AddToIncomingQueue(from_here, task, delay, false);
     }
 

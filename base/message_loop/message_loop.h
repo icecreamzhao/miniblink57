@@ -252,6 +252,8 @@ public:
     // Process all pending tasks, windows messages, etc., but don't wait/sleep.
     // Return as soon as all items that can be run are taken care of.
     void RunUntilIdle();
+    void RunHandlerWithoutMsgPeek();
+    void RunUntilIdleWithoutMsgPeek();
 
     // Deprecated: use RunLoop instead.
     //

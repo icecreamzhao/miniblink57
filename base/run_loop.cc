@@ -49,6 +49,23 @@ void RunLoop::RunUntilIdle()
     Run();
 }
 
+void RunLoop::RunUntilIdleWithoutMsgPeek()
+{
+    quit_when_idle_received_ = true;
+
+    if (!BeforeRun())
+        return;
+
+    // Use task stopwatch to exclude the loop run time from the current task, if
+    // any.
+    tracked_objects::TaskStopwatch stopwatch;
+    stopwatch.Start();
+    loop_->RunHandlerWithoutMsgPeek();
+    stopwatch.Stop();
+
+    AfterRun();
+}
+
 void RunLoop::Quit()
 {
     DCHECK(thread_checker_.CalledOnValidThread());

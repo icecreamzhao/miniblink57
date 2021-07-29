@@ -42,6 +42,7 @@ public:
     // the queue (it goes idle). WARNING: This may never return! Only use this
     // when repeating tasks such as animated web pages have been shut down.
     void RunUntilIdle();
+    void RunUntilIdleWithoutMsgPeek();
 
     bool running() const { return running_; }
 
