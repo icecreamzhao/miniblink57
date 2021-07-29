@@ -11,10 +11,20 @@
 
 namespace skia {
 
-PlatformSurface PlatformDevice::BeginPlatformPaint(const SkMatrix& transform,
-    const SkIRect& clip_bounds)
+PlatformSurface PlatformDevice::BeginPlatformPaint(const SkMatrix& transform, const SkIRect& clip_bounds)
 {
     return 0;
+}
+
+PlatformSurface PlatformDevice::BeginPlatformPaint(void* hWnd)
+{
+    return 0;
+}
+
+void PlatformDevice::EndPlatformPaint()
+{
+    // We don't clear the DC here since it will be likely to be used again.
+    // Flushing will be done in onAccessBitmap.
 }
 
 } // namespace skia

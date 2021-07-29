@@ -39,8 +39,12 @@ public:
 
     ~BitmapPlatformDevice() override;
 
-    void DrawToHDC(HDC source_dc, HDC destination_dc, int x, int y,
-        const RECT* src_rect, const SkMatrix& transform) override;
+    HDC BeginPlatformPaint(void* hWnd);
+    void EndPlatformPaint();
+
+    void DrawToHDC(HDC source_dc, HDC destination_dc, int x, int y, const RECT* src_rect, const SkMatrix& transform) override;
+
+    HDC GetBitmapDCUgly(void* hWnd); // for wke
 
 protected:
     // Flushes the Windows device context so that the pixel data can be accessed
@@ -71,6 +75,10 @@ private:
 
     // Lazily-created DC used to draw into the bitmap; see GetBitmapDC().
     HDC hdc_;
+
+#ifdef SK_DEBUG
+    int begin_paint_count_;
+#endif
 
     // Create/destroy hdc_, which is the memory DC for our bitmap data.
     HDC GetBitmapDC(const SkMatrix& transform, const SkIRect& clip_bounds);

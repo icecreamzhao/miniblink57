@@ -34,8 +34,7 @@ class ScopedPlatformPaint;
 // corresponding method on the bound PlatformDevice instance.    If no
 // PlatformDevice has been bound to the SkBaseDevice passed, then the
 // routines are NOPS.
-SK_API void SetPlatformDevice(SkBaseDevice* device,
-    PlatformDevice* platform_device);
+SK_API void SetPlatformDevice(SkBaseDevice* device, PlatformDevice* platform_device);
 SK_API PlatformDevice* GetPlatformDevice(SkBaseDevice* device);
 
 // A SkBitmapDevice is basically a wrapper around SkBitmap that provides a
@@ -58,27 +57,26 @@ public:
     // The CGContext that corresponds to the bitmap, used for CoreGraphics
     // operations drawing into the bitmap. This is possibly heavyweight, so it
     // should exist only during one pass of rendering.
-    virtual CGContextRef GetBitmapContext(const SkMatrix& transform,
-        const SkIRect& clip_bounds)
-        = 0;
+    virtual CGContextRef GetBitmapContext(const SkMatrix& transform, const SkIRect& clip_bounds) = 0;
 #endif
 
 #if defined(OS_WIN)
+    virtual PlatformSurface BeginPlatformPaint(void* hWnd);
+    virtual void EndPlatformPaint();
+
     // Draws to the given screen DC, if the bitmap DC doesn't exist, this will
     // temporarily create it. However, if you have created the bitmap DC, it will
     // be more efficient if you don't free it until after this call so it doesn't
     // have to be created twice.  If src_rect is null, then the entirety of the
     // source device will be copied.
-    virtual void DrawToHDC(HDC source_dc, HDC destination_dc, int x, int y,
-        const RECT* src_rect, const SkMatrix& transform);
+    virtual void DrawToHDC(HDC source_dc, HDC destination_dc, int x, int y, const RECT* src_rect, const SkMatrix& transform);
 #endif
 
 private:
     // The DC that corresponds to the bitmap, used for GDI operations drawing
     // into the bitmap. This is possibly heavyweight, so it should be existant
     // only during one pass of rendering.
-    virtual PlatformSurface BeginPlatformPaint(const SkMatrix& transform,
-        const SkIRect& clip_bounds);
+    virtual PlatformSurface BeginPlatformPaint(const SkMatrix& transform, const SkIRect& clip_bounds);
 
     friend class ScopedPlatformPaint;
 };

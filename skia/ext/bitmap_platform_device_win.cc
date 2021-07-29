@@ -67,9 +67,7 @@ void LoadTransformToDC(HDC dc, const SkMatrix& matrix)
     SetWorldTransform(dc, &xf);
 }
 
-void LoadClippingRegionToDC(HDC context,
-    const SkIRect& clip_bounds,
-    const SkMatrix& transformation)
+void LoadClippingRegionToDC(HDC context, const SkIRect& clip_bounds, const SkMatrix& transformation)
 {
     HRGN hrgn = CreateRectRgnIndirect(&skia::SkIRectToRECT(clip_bounds));
     int result = SelectClipRgn(context, hrgn);
@@ -82,8 +80,7 @@ void LoadClippingRegionToDC(HDC context,
 
 namespace skia {
 
-void DrawToNativeContext(SkCanvas* canvas, HDC destination_hdc, int x, int y,
-    const RECT* src_rect)
+void DrawToNativeContext(SkCanvas* canvas, HDC destination_hdc, int x, int y, const RECT* src_rect)
 {
     ScopedPlatformPaint p(canvas);
     PlatformDevice* platform_device = GetPlatformDevice(GetTopDevice(*canvas));
@@ -92,11 +89,24 @@ void DrawToNativeContext(SkCanvas* canvas, HDC destination_hdc, int x, int y,
             src_rect, canvas->getTotalMatrix());
 }
 
-void PlatformDevice::DrawToHDC(HDC, HDC, int x, int y, const RECT* src_rect,
-    const SkMatrix& transform) { }
+void PlatformDevice::DrawToHDC(HDC, HDC, int x, int y, const RECT* src_rect, const SkMatrix& transform)
+{
+}
 
-HDC BitmapPlatformDevice::GetBitmapDC(const SkMatrix& transform,
-    const SkIRect& clip_bounds)
+HDC BitmapPlatformDevice::GetBitmapDCUgly(void* hWnd) 
+{
+    if (!hdc_) {
+        HDC hWndDc = ::GetDC((HWND)hWnd);
+        hdc_ = CreateCompatibleDC(hWndDc);
+        ::ReleaseDC((HWND)hWnd, hWndDc);
+        InitializeDC(hdc_);
+        old_hbitmap_ = static_cast<HBITMAP>(SelectObject(hdc_, hbitmap_));
+    }
+
+    return hdc_;
+}
+
+HDC BitmapPlatformDevice::GetBitmapDC(const SkMatrix& transform, const SkIRect& clip_bounds)
 {
     if (!hdc_) {
         hdc_ = CreateCompatibleDC(NULL);
@@ -123,8 +133,7 @@ bool BitmapPlatformDevice::IsBitmapDCCreated()
     return hdc_ != NULL;
 }
 
-void BitmapPlatformDevice::LoadConfig(const SkMatrix& transform,
-    const SkIRect& clip_bounds)
+void BitmapPlatformDevice::LoadConfig(const SkMatrix& transform, const SkIRect& clip_bounds)
 {
     if (!hdc_)
         return; // Nothing to do.
@@ -234,6 +243,8 @@ BitmapPlatformDevice::BitmapPlatformDevice(
     , hdc_(NULL)
 {
     // The data object is already ref'ed for us by create().
+    SkDEBUGCODE(begin_paint_count_ = 0);
+    // The data object is already ref'ed for us by create().
     if (hbitmap) {
         SetPlatformDevice(this, this);
         BITMAP bitmap_data;
@@ -243,12 +254,12 @@ BitmapPlatformDevice::BitmapPlatformDevice(
 
 BitmapPlatformDevice::~BitmapPlatformDevice()
 {
+    SkASSERT(begin_paint_count_ == 0);
     if (hdc_)
         ReleaseBitmapDC();
 }
 
-HDC BitmapPlatformDevice::BeginPlatformPaint(const SkMatrix& transform,
-    const SkIRect& clip_bounds)
+HDC BitmapPlatformDevice::BeginPlatformPaint(const SkMatrix& transform, const SkIRect& clip_bounds)
 {
     return GetBitmapDC(transform, clip_bounds);
 }
@@ -327,6 +338,18 @@ SkBaseDevice* BitmapPlatformDevice::onCreateDevice(const CreateInfo& cinfo,
     return Create(info.width(), info.height(), info.isOpaque(), NULL, do_clear);
 }
 
+HDC BitmapPlatformDevice::BeginPlatformPaint(void* hWnd)
+{
+    SkDEBUGCODE(begin_paint_count_++);
+    return GetBitmapDCUgly(hWnd);
+}
+
+void BitmapPlatformDevice::EndPlatformPaint()
+{
+    SkASSERT(begin_paint_count_--);
+    PlatformDevice::EndPlatformPaint();
+}
+
 // PlatformCanvas impl
 
 SkCanvas* CreatePlatformCanvas(int width,
@@ -338,6 +361,42 @@ SkCanvas* CreatePlatformCanvas(int width,
     sk_sp<SkBaseDevice> dev(
         BitmapPlatformDevice::Create(width, height, is_opaque, shared_section));
     return CreateCanvas(dev, failureType);
+}
+
+
+// Port of PlatformBitmap to win
+
+PlatformBitmap::PlatformBitmap() : surface_(0), platform_extra_(0) {}
+
+PlatformBitmap::~PlatformBitmap()
+{
+    if (surface_) {
+        if (platform_extra_)
+            SelectObject(surface_, reinterpret_cast<HGDIOBJ>(platform_extra_));
+        DeleteDC(surface_);
+    }
+}
+
+bool PlatformBitmap::Allocate(int width, int height, bool is_opaque)
+{
+    void* data;
+    HBITMAP hbitmap = CreateHBitmap(width, height, is_opaque, 0, &data);
+    if (!hbitmap)
+        return false;
+
+    surface_ = CreateCompatibleDC(NULL);
+    InitializeDC(surface_);
+    // When the memory DC is created, its display surface is exactly one
+    // monochrome pixel wide and one monochrome pixel high. Save this object
+    // off, we'll restore it just before deleting the memory DC.
+    HGDIOBJ stock_bitmap = SelectObject(surface_, hbitmap);
+    platform_extra_ = reinterpret_cast<intptr_t>(stock_bitmap);
+
+    if (!InstallHBitmapPixels(&bitmap_, width, height, is_opaque, data, hbitmap))
+        return false;
+    bitmap_.lockPixels();
+
+    return true;
 }
 
 } // namespace skia

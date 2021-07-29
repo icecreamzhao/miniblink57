@@ -42,12 +42,14 @@ public:
     explicit BitmapPlatformDevice(const SkBitmap& other);
     ~BitmapPlatformDevice() override;
 
+    virtual PlatformSurface BeginPlatformPaint(void* hWnd);
+    virtual void EndPlatformPaint();
+
 protected:
     SkBaseDevice* onCreateDevice(const CreateInfo&, const SkPaint*) override;
 
 private:
-    PlatformSurface BeginPlatformPaint(const SkMatrix& transform,
-        const SkIRect& clip_bounds) override;
+    PlatformSurface BeginPlatformPaint(const SkMatrix& transform, const SkIRect& clip_bounds) override;
 
     DISALLOW_COPY_AND_ASSIGN(BitmapPlatformDevice);
 

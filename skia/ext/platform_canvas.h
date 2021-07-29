@@ -26,6 +26,8 @@ class SkBaseDevice;
 
 namespace skia {
 
+typedef SkCanvas PlatformCanvas;
+
 //
 //  Note about error handling.
 //
@@ -51,6 +53,15 @@ SK_API SkCanvas* CreatePlatformCanvas(int width,
     bool is_opaque,
     HANDLE shared_section,
     OnFailureType failure_type);
+
+// These calls should surround calls to platform drawing routines, the
+// surface returned here can be used with the native platform routines.
+//
+// Call EndPlatformPaint when you are done and want to use skia operations
+// after calling the platform-specific BeginPlatformPaint; this will
+// synchronize the bitmap to OS if necessary.
+SK_API PlatformSurface BeginPlatformPaint(void* hWnd, SkCanvas* canvas);
+SK_API void EndPlatformPaint(SkCanvas* canvas);
 
 // Draws the top layer of the canvas into the specified HDC. Only works
 // with a SkCanvas with a BitmapPlatformDevice.
@@ -178,6 +189,34 @@ SK_API bool IsPreviewMetafile(const SkCanvas& canvas);
 // Returns NULL if none is bound.
 SK_API CGContextRef GetBitmapContext(const SkCanvas& canvas);
 #endif
+
+// PlatformBitmap holds a PlatformSurface that can also be used as an SkBitmap.
+class SK_API PlatformBitmap {
+public:
+    PlatformBitmap();
+    ~PlatformBitmap();
+
+    // Returns true if the bitmap was able to allocate its surface.
+    bool Allocate(int width, int height, bool is_opaque);
+
+    // Returns the platform surface, or 0 if Allocate() did not return true.
+    PlatformSurface GetSurface() { return surface_; }
+
+    // Return the skia bitmap, which will be empty if Allocate() did not
+    // return true.
+    //
+    // The resulting SkBitmap holds a refcount on the underlying platform surface,
+    // so the surface will remain allocated so long as the SkBitmap or its copies
+    // stay around.
+    const SkBitmap& GetBitmap() { return bitmap_; }
+
+private:
+    SkBitmap bitmap_;
+    PlatformSurface surface_;  // initialized to 0
+    intptr_t platform_extra_;  // platform specific, initialized to 0
+
+    DISALLOW_COPY_AND_ASSIGN(PlatformBitmap);
+};
 
 } // namespace skia
 

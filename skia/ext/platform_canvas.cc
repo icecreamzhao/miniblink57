@@ -35,6 +35,23 @@ bool GetBoolMetaData(const SkCanvas& canvas, const char* key)
 
 namespace skia {
 
+PlatformSurface BeginPlatformPaint(void* hWnd, SkCanvas* canvas)
+{
+    PlatformDevice* platform_device = GetPlatformDevice(GetTopDevice(*canvas));
+    if (platform_device)
+        return platform_device->BeginPlatformPaint(hWnd);
+
+    return 0;
+}
+
+void EndPlatformPaint(SkCanvas* canvas)
+{
+    PlatformDevice* platform_device = GetPlatformDevice(GetTopDevice(*canvas));
+    if (platform_device)
+        platform_device->EndPlatformPaint();
+}
+
+
 SkBaseDevice* GetTopDevice(const SkCanvas& canvas)
 {
     return canvas.getTopDevice(true);
