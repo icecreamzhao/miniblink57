@@ -1,17 +1,25 @@
 
-#ifndef WebPage_h
-#define WebPage_h
+#ifndef content_WebPage_h
+#define content_WebPage_h
 
-#include "KdGuiApi.h"
-#include "KdGuiApiImp.h"
-#include "KdPageInfo.h"
+#include "content/browser/WebPageState.h"
+
+#include "third_party/WebKit/Source/platform/geometry/IntSize.h"
 #include "third_party/WebKit/Source/platform/geometry/IntPoint.h"
 #include "third_party/WebKit/Source/platform/geometry/IntRect.h"
-#include "third_party/WebKit/Source/platform/geometry/IntSize.h"
-#include "third_party/WebKit/Source/wtf/Allocator.h"
+//#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
 #include "third_party/WebKit/public/web/WebViewClient.h"
+#include "third_party/WebKit/public/web/WebHistoryCommitType.h"
+#include "third_party/WebKit/Source/wtf/HashSet.h"
+#include "net/PageNetExtraData.h"
 
-class CefBrowserHostImpl;
+
+#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
+namespace wke {
+class CWebView;
+struct CWebViewHandler;
+}
+#endif
 
 namespace blink {
 class Page;
@@ -26,12 +34,7 @@ class ContextMenuClient;
 class EditorClient;
 class DragClient;
 struct Referrer;
-}
-
-using namespace blink;
-
-namespace base {
-class SingleThreadTaskRunner;
+class WebHistoryItem;
 }
 
 namespace content {
@@ -39,23 +42,9 @@ namespace content {
 class WebPageImpl;
 struct AsynchronousResLoadInfo;
 class WebFrameClientImpl;
-class RenderViewHost;
-
-struct KWebApiCallbackSet {
-    PFN_KdPageCallback m_xmlHaveFinished;
-    PFN_KdPageWinMsgCallback m_msgPreCallBack;
-    PFN_KdPageWinMsgCallback m_msgPostCallBack;
-    PFN_KdPageCallback m_unintCallBack;
-    PFN_KdPageScriptInitCallback m_scriptInitCallBack;
-    PFN_KdResCallback m_resHandle;
-    PFN_KdResCallback m_resOtherNameQuery;
-    PFN_KdPagePaintCallback m_paint;
-    //NPInvokeFunctionPtr m_javascriptCallCppPtr;
-};
 
 class WebPage {
-    USING_FAST_MALLOC(WebPage);
-
+    //WTF_MAKE_FAST_ALLOCATED(WebPage);
 public:
     enum RenderLayer {
         ContentsLayer = 0x10,
@@ -64,69 +53,137 @@ public:
         AllLayers = 0xff
     };
 
-    static base::SingleThreadTaskRunner* initOnImplThread();
-    static void initOnBlinkThread();
+    static void initBlink(bool ocEnable);
+    static void shutdown();
 
-    WebPage(KdGuiObjPtr kdGuiObj, void* foreignPtr);
+    WebPage(void* foreignPtr);
     ~WebPage();
 
-    bool init(HWND hWnd, RenderViewHost* renderViewHostImpl);
+    WebPageState getState() const;
 
-    void windowCloseRequested();
+    bool init(HWND hWnd, COLORREF color);
 
-    void javaScriptAlert(String& message);
+    void close();
+    bool isValid();
+    void setWillDestroy();
+
+    int getId() const;
+
+    static void gcAll();
+    void gc();
+
+    void onDocumentReady();
+
+    void setNeedAutoDrawToHwnd(bool b);
+
+    static void connetDevTools(WebPage* frontEnd, WebPage* embedder);
+    bool isDevtoolsConneted() const;
+    void inspectElementAt(int x, int y);
 
     void loadURL(int64 frameId, const wchar_t* url, const blink::Referrer& referrer, const wchar_t* extraHeaders);
     void loadRequest(int64 frameId, const blink::WebURLRequest& request);
-    void loadHTMLString(int64 frameId, const WebData& html, const WebURL& baseURL, const WebURL& unreachableURL = WebURL(), bool replace = false);
-    void reload();
+    void loadHTMLString(int64 frameId, const blink::WebData& html, const blink::WebURL& baseURL, const blink::WebURL& unreachableURL = blink::WebURL(), bool replace = false);
 
     // system message
     void firePaintEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    void fireMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT fireMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL* bHandle);
     void fireCaptureChangedEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    void fireSetFocusEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     void fireKillFocusEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    LRESULT fireCursorEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL& bHandle);
-    LRESULT fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL& bHandle);
-    void fireKeyUpEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    void fireKeyDownEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    void fireKeyPressEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT fireCursorEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL* bHandle);
+    LRESULT fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    bool fireKeyUpEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    bool fireKeyDownEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    bool fireKeyPressEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    void fireTouchEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireTimerEvent();
-
-    void sendOrientationChangeEvent();
 
     LRESULT fireInputEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireInputEventToRichEdit(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
     void fireResizeEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-    IntSize viewportSize() const;
-    void setViewportSize(const IntSize& size);
+    int getCursorInfoType() const;
+    void setCursorInfoType(int type);
 
-    void repaintRequested(const IntRect& windowRect);
+    blink::IntSize viewportSize() const;
+    void setViewportSize(const blink::IntSize& size);
+
+    blink::IntRect caretRect();
+
+    void repaintRequested(const blink::IntRect& windowRect, bool forceRepaintIfEmptyRect);
 
     void setIsDraggableRegionNcHitTest();
 
+    void setDrawMinInterval(double drawMinInterval);
+
+    void setNeedsCommit();
+    bool needsCommit() const;
+    bool isDrawDirty() const;
+
     HWND getHWND() const;
-
-    void setFocus(bool enabel);
-
+    void setHWND(HWND hwnd);
+    void setHwndRenderOffset(const blink::IntPoint& offset);
+    blink::IntPoint getHwndRenderOffset() const;
     void setBackgroundColor(COLORREF c);
+    void setDragDropEnable(bool b);
 
-    void showDebugNodeData();
+    bool canGoBack();
+    void goBack();
+    bool canGoForward();
+    void goForward();
+    void goToOffset(int offset);
+    void goToIndex(int index);
+    int getNavigateIndex() const;
 
-    CefBrowserHostImpl* browser();
-    void setBrowser(CefBrowserHostImpl* browserImpl);
+    void didCommitProvisionalLoad(
+        blink::WebLocalFrame* frame,
+        const blink::WebHistoryItem& history, 
+        blink::WebHistoryCommitType type, 
+        bool isSameDocument
+        );
+    blink::WebHistoryItem historyItemForNewChildFrame(blink::WebFrame* frame);
 
-    WebViewImpl* webViewImpl();
-    WebFrame* mainFrame();
+    void setTransparent(bool transparent);
+
+    HDC viewDC();
+    void releaseHdc();
+    void paintToBit(void* bits, int pitch);
+
+    void disablePaint();
+    void enablePaint();
+
+    void setContextMenuEnabled(bool b);
+    bool getContextMenuEnabled() const;
+
+    void setTouchSimulateEnabled(bool b);
+    void setSystemTouchEnabled(bool b);
+
+    void willEnterDebugLoop();
+    void didExitDebugLoop();
+
+    void didStartProvisionalLoad();
+
+    void setScreenInfo(const blink::WebScreenInfo& info);
+    blink::WebScreenInfo screenInfo();
+
+    blink::WebViewImpl* webViewImpl();
+    WebPageImpl* webPageImpl();
+    blink::WebFrame* mainFrame();
+
+    static WebPage* getSelfForCurrentContext();
+
+    net::WebCookieJarImpl* getCookieJar();
+
+    PassRefPtr<net::PageNetExtraData> getPageNetExtraData();
+    void setCookieJarFullPath(const char* path);
+    void setLocalStorageFullPath(const char* path);
 
     WebFrameClientImpl* webFrameClientImpl();
 
-    WebFrame* getWebFrameFromFrameId(int64 frameId);
-
-    void beginMainFrame();
-    void layout();
+    blink::WebFrame* getWebFrameFromFrameId(int64_t frameId);
+    int64_t getFrameIdByBlinkFrame(const blink::WebFrame* frame);
+    static int64_t getFirstFrameId();
 
     // kMainFrameId must be -1 to align with renderer expectations.
     static const int64 kMainFrameId = -1;
@@ -134,10 +191,30 @@ public:
     static const int64 kUnspecifiedFrameId = -3;
     static const int64 kInvalidFrameId = -4;
 
+#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
+    void initWkeWebView(wke::CWebView* wkeWebView) 
+    {
+        ASSERT(!m_wkeWebView);/**/
+        m_wkeWebView = wkeWebView;
+    }
+    wke::CWebView* wkeWebView() const { return m_wkeWebView; }
+    wke::CWebViewHandler& wkeHandler() { return *m_wkeHandler; }
+    void* wkeClientHandler() const { return m_wkeClientHandler; }
+    void wkeSetClientHandler(void* clientHandler) { m_wkeClientHandler = clientHandler; }
+#endif
+
 protected:
+#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
+    wke::CWebView* m_wkeWebView;
+    wke::CWebViewHandler* m_wkeHandler;
+    void* m_wkeClientHandler;
+#endif
     WebPageImpl* m_pageImpl;
+    static WTF::HashSet<WebPage*>* m_webPageSet;
+
+    bool m_isContextMenuEnable;
 };
 
-} // namespace WebCore
+} // namespace content
 
-#endif // WebPage_h
+#endif // content_WebPage_h

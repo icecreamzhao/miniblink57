@@ -5,8 +5,8 @@
 #ifndef WebURLLoaderImplCurl_h
 #define WebURLLoaderImplCurl_h
 
-#include "third_party/WebKit/Source/platform/Timer.h"
 #include "third_party/WebKit/public/platform/WebURLLoader.h"
+#include "third_party/WebKit/Source/platform/Timer.h"
 
 namespace blink {
 class WebURLRequest;
@@ -15,6 +15,7 @@ class WebURLLoaderClient;
 
 namespace net {
 class WebURLLoaderInternal;
+class BlobResourceLoader;
 }
 
 using namespace blink;
@@ -41,22 +42,23 @@ public:
         blink::WebURLLoaderClient* client) override;
     virtual void cancel() override;
     virtual void setDefersLoading(bool value) override;
-    virtual void didChangePriority(blink::WebURLRequest::Priority new_priority,
-        int intra_priority_value) override;
-    //     virtual bool attachThreadedDataReceiver(
-    //         blink::WebThreadedDataReceiver* threaded_data_receiver) override;
+    virtual void didChangePriority(blink::WebURLRequest::Priority new_priority, int intra_priority_value) override;
+    //virtual bool attachThreadedDataReceiver(blink::WebThreadedDataReceiver* threaded_data_receiver) override;
 
     void fileLoadImpl(const blink::KURL& url);
 
     //void fireFailure(blink::Timer<WebURLLoaderImplCurl>*);
-
-    net::WebURLLoaderInternal* loaderInterna() { return m_webURLLoaderInternal; }
+   
+    //net::WebURLLoaderInternal* loaderInterna() { return m_webURLLoaderInternal; }
+    void setLoadingTaskRunner(base::SingleThreadTaskRunner *) override;
 
 private:
     bool* m_hadDestroied;
-    net::WebURLLoaderInternal* m_webURLLoaderInternal;
+    int m_jobIds;
+
+    net::BlobResourceLoader* m_blobLoader;
 };
 
-} // namespace content
+}  // namespace content
 
-#endif // WebURLLoaderImplCurl_h
+#endif  // WebURLLoaderImplCurl_h

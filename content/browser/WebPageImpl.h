@@ -1,210 +1,385 @@
-#ifndef WebPageImpl_h
+Ôªø#ifndef WebPageImpl_h
 #define WebPageImpl_h
+
+#include "content/browser/WebPageState.h"
+#include "content/ui/PopupMenuWinClient.h"
+#include "content/WebPageOcBridge.h"
 
 #include "base/rand_util.h"
 
-namespace cc {
+#include "third_party/WebKit/public/web/WebViewClient.h"
+#include "third_party/WebKit/public/web/WebHistoryCommitType.h"
+#include "third_party/WebKit/public/web/WebHistoryItem.h"
+#include "third_party/WebKit/public/platform/WebURLRequest.h"
+#include "third_party/WebKit/Source/platform/graphics/Color.h"
+#include "third_party/WebKit/public/platform/WebCursorInfo.h"
+
+#ifdef ENABLE_MC
+#include "mc/trees/LayerTreeHost.h"
+#include "mc/trees/LayerTreeHostClient.h"
+#endif
+#include "skia/ext/platform_canvas.h"
+#include "net/PageNetExtraData.h"
+#include "net/StorageDef.h"
+
+typedef struct HWND__ *HWND;
+
+namespace mc {
 class LayerTreeHost;
 }
 
-namespace cef {
-class BrowserHostImpl;
-}
-
 namespace blink {
-class Color;
+struct Referrer;
+class WebViewImpl;
+class WebHistoryItem;
+enum class WebCachePolicy;
+struct WebFileChooserParams;
 }
 
-using namespace blink;
+namespace net {
+class PageNetExtraData;
+}
+
+namespace wke {
+class CWebView;
+}
 
 namespace content {
 
 class WebFrameClientImpl;
 class WebPage;
+class PlatformEventHandler;
+class PageNavController;
+class PopupMenuWin;
+class ToolTip;
+class DevToolsClient;
+class DevToolsAgent;
+class DragHandle;
+class LayerTreeWrap;
 
-class WebPageImpl : public WebViewClient {
+class WebPageImpl 
+    : public blink::WebViewClient
+#ifdef ENABLE_MC
+    , public mc::LayerTreeHostUiThreadClient
+    , public mc::LayerTreeHostClent
+#endif
+    , public PopupMenuWinClient
+    , public WebPageOcBridge {
 public:
-    WebPageImpl(RenderViewHost* renderViewHost);
+    WebPageImpl(COLORREF bdColor);
     ~WebPageImpl();
 
-    static base::SingleThreadTaskRunner* initOnImplThread();
-    static void initOnBlinkThread();
+    class DestroyNotif {
+    public:
+        virtual void destroy() = 0;
+    };
+    void registerDestroyNotif(DestroyNotif* destroyNotif);
+    void unregisterDestroyNotif(DestroyNotif* destroyNotif);
 
-    virtual WebView* createView(WebLocalFrame* creator,
-        const WebURLRequest& request,
-        const WebWindowFeatures& features,
-        const WebString& name,
-        WebNavigationPolicy policy,
+    static void initBlink(bool ocEnable);
+
+    virtual blink::WebView* createView(blink::WebLocalFrame* creator,
+        const blink::WebURLRequest& request,
+        const blink::WebWindowFeatures& features,
+        const blink::WebString& name,
+        blink::WebNavigationPolicy policy,
         bool suppressOpener) override;
 
     void init(WebPage* pagePtr, HWND hWnd);
-    void windowCloseRequested();
+    void close();
+
+    void gc();
+
+    void didRunCreateDevToolsAgentTaskObserver();
+
+    DevToolsAgent* createOrGetDevToolsAgent();
+    DevToolsClient* createOrGetDevToolsClient();
+
+    // WebPageOcBridge
+    virtual void onBeginPaint(HDC hdc, const RECT& damageRect) override;
+    virtual bool onEndPaintStep1(HDC hdc, const RECT& damageRect) override;
+    virtual void onEndPaintStep2(HDC hdc, const RECT& damageRect) override;
+    virtual void onLayout() override;
+    virtual void onBeginMainFrame() override;
 
     // WebViewClient
-    virtual void didInvalidateRect(const WebRect&) override;
-    virtual void didAutoResize(const WebSize& newSize) override;
-    //virtual void didUpdateLayoutSize(const WebSize& newSize) override;
+    virtual void didInvalidateRect(const blink::WebRect&) override;
+    virtual void didAutoResize(const blink::WebSize& newSize) override;
+    virtual void didUpdateLayout() override;
+    //virtual void didUpdateLayoutSize(const blink::WebSize& newSize) override;
     virtual void scheduleAnimation() override;
-    virtual WebLayerTreeView* initializeLayerTreeView() override;
-    virtual WebStorageNamespace* createSessionStorageNamespace() override;
+
+    virtual bool allowsBrokenNullLayerTreeView() const override;
+    virtual blink::WebLayerTreeView* initializeLayerTreeView() override;
+    virtual blink::WebWidget* createPopupMenu(blink::WebPopupType) override;
+    virtual blink::WebStorageNamespace* createSessionStorageNamespace() override;
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+    virtual blink::WebStorageNamespace* createLocalStorageNamespace() override;
+#endif
+    virtual blink::WebString acceptLanguages() override;
+    void setScreenInfo(const blink::WebScreenInfo& info);
+    virtual blink::WebScreenInfo screenInfo() override;
+    virtual void setMouseOverURL(const blink::WebURL&) override;
+    virtual void setToolTipText(const blink::WebString&, blink::WebTextDirection hint) override;
+    virtual void draggableRegionsChanged() override;
+    virtual void onMouseDown(const blink::WebNode& mouseDownNode) override;
+    virtual void printPage(blink::WebLocalFrame* frame) override;
+    virtual blink::WebRect windowRect() override;
+
+    // Editing --------------------------------------------------------
+    //virtual bool handleCurrentKeyboardEvent() override;
+
+    // Called when a drag-n-drop operation should begin.
+//     virtual void startDragging(blink::WebLocalFrame* frame, const blink::WebDragData& data, 
+//         blink::WebDragOperationsMask mask, const blink::WebImage& image, const blink::WebPoint& dragImageOffset) override;
 
     // Return a compositing view used for this widget. This is owned by the
     // WebWidgetClient.
-    /*virtual*/ WebLayerTreeView* layerTreeView() /*override*/;
+    //virtual blink::WebLayerTreeView* layerTreeView() override;
+    virtual void didChangeCursor(const blink::WebCursorInfo&) override;
+    virtual void closeWidgetSoon() override;
 
-    // WebWidgetClient
-    virtual void didChangeCursor(const WebCursorInfo&) override;
+#ifdef ENABLE_MC
+    // LayerTreeHostClent --------------------------------------------------------
+    virtual void onLayerTreeDirty() override;
+    virtual void onLayerTreeInvalidateRect(const blink::IntRect& r) override;
+    virtual void onLayerTreeSetNeedsCommit() override;
+    virtual void disablePaint() override;
+    virtual void enablePaint() override;
+#endif
 
-    void clearPaintWhenLayeredWindow(SkCanvas* canvas, const IntRect& rect);
+    void didStartProvisionalLoad();
 
-    // Merge any areas that would reduce the total area
-    void mergeDirtyList()
-    {
-        while (doMergeDirtyList(true)) { };
-    }
+    // PopupMenuWinClient --------------------------------------------------------
+    virtual void onPopupMenuCreate(HWND hWnd) override;
+    virtual void onPopupMenuHide() override;
 
-    bool doMergeDirtyList(bool forceMerge);
-
-    void postPaintMessage(const IntRect* paintRect);
-
+    // Dialogs -------------------------------------------------------------
+    virtual void showValidationMessage(const blink::WebRect& anchorInViewport, const blink::WebString& mainText, blink::WebTextDirection mainTextDir, const blink::WebString& supplementalText, blink::WebTextDirection supplementalTextDir) override;
+    virtual void hideValidationMessage() override;
+    virtual void moveValidationMessage(const blink::WebRect& anchorInViewport) override;
+    
     void testPaint();
 
-    void beginMainFrame(bool force);
-    void doPaint(HDC hdc, const IntRect* paintRect);
-    void schedulePaintEvent();
+    void beginMainFrame();
+    
+    void repaintRequested(const blink::IntRect& windowRect, bool forceRepaintIfEmptyRect);
 
-    void layout();
-
-    void repaintRequested(const IntRect& windowRect);
+    void freeV8TempObejctOnOneFrameBefore();
 
     bool fireTimerEvent();
     void fireResizeEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     void fireCaptureChangedEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    void firePaintEvent(HDC hdc, const RECT* paintRect);
+    void firePaintEvent(HDC hdc, const RECT& paintRect);
+    void fireSetFocusEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     void fireKillFocusEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    void fireMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT fireMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL* bHandle);
     void fireTouchEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    LRESULT fireCursorEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL& bHandle);
-    LRESULT fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL& bHandle);
+    void fireCursorEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL* handle);
+    LRESULT fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireKeyUpEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireKeyDownEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireKeyPressEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-    void sendOrientationChangeEvent();
+    int getCursorInfoType() const;
+    void setCursorInfoType(int type);
 
-    void setViewportSize(const IntSize& size);
+    HDC viewDC();
+    void releaseHdc();
+    void paintToBit(void* bits, int pitch);
+    
+    void setViewportSize(const blink::IntSize& size);
 
-    int m_debugCount;
-
-    void drawDebugLine(SkCanvas* memoryCanvas, const IntRect& paintRect);
-
-    void updateLayers(const IntRect& dirtyRect, SkCanvas* canvas, bool needsFullTreeSync);
+    blink::IntRect caretRect() const;
+    blink::IntRect caretRectImpl() const;
 
     void setPainting(bool value) { m_painting = value; }
 
     void showDebugNodeData();
 
-    bool needsCommit() { return m_needsCommit; }
-    void setNeedsCommit() { m_needsCommit = true; }
-    void clearNeedsCommit() { m_needsCommit = false; }
-    //cc::LayerTreeHost* layerTreeHost() { return m_layerTreeHost; }
+    //bool needsCommit() const { return m_needsCommit; }
+    bool needsCommit() const { return m_commitCount > 0; }
+    void setNeedsCommit();
+    void setNeedsCommitAndNotLayout();
+    //void clearNeedsCommit();
+    bool isDrawDirty();
 
+#ifdef ENABLE_MC
+    // LayerTreeHostUiThreadClient --------------------------------------------------------
+    virtual void paintToMemoryCanvasInUiThread(SkCanvas* canvas, const blink::IntRect& paintRect) override;
+#endif
+    //cc::LayerTreeHost* layerTreeHost() { return m_layerTreeHost; }
+    void setDrawMinInterval(double drawMinInterval);
+
+    void loadHistoryItem(int64 frameId, const blink::WebHistoryItem& item, blink::WebHistoryLoadType type, blink::WebCachePolicy policy);
     void loadURL(int64 frameId, const wchar_t* url, const blink::Referrer& referrer, const wchar_t* extraHeaders);
     void loadRequest(int64 frameId, const blink::WebURLRequest& request);
-    void loadHTMLString(int64 frameId, const WebData& html, const WebURL& baseURL, const WebURL& unreachableURL, bool replace);
+    void loadHTMLString(int64 frameId, const blink::WebData& html, const blink::WebURL& baseURL, const blink::WebURL& unreachableURL, bool replace);
+
+    void setTransparent(bool transparent);
+    void setHWND(HWND hWnd);
+
+    // Session history -----------------------------------------------------
+    void didCommitProvisionalLoad(blink::WebLocalFrame* frame, const blink::WebHistoryItem& history, blink::WebHistoryCommitType type, bool isSameDocument);
+    blink::WebHistoryItem historyItemForNewChildFrame(blink::WebFrame* frame);
+    virtual void navigateBackForwardSoon(int offset) override;
+    virtual int historyBackListCount() override;
+    virtual int historyForwardListCount() override;
+    void navigateToIndex(int index);
+    int getNavigateIndex() const;
+
+    static WebPageImpl* getSelfForCurrentContext();
 
     bool initSetting();
+    blink::WebFrame* getWebFrameFromFrameId(int64_t frameId);
+    blink::WebFrame* getWebFrameFromUniqueName(const String& name);
+    static int64_t getFrameIdByBlinkFrame(const blink::WebFrame* frame);
+    static int64_t getFirstFrameId();
 
-    CefBrowserHostImpl* browser() const;
-    void setBrowser(CefBrowserHostImpl* browser);
+    blink::WebView* createWkeView(blink::WebLocalFrame* creator,
+        const blink::WebURLRequest& request,
+        const blink::WebWindowFeatures& features,
+        const blink::WebString& name,
+        blink::WebNavigationPolicy policy,
+        bool suppressOpener);
+    blink::WebView* createCefView(blink::WebLocalFrame* creator,
+        const blink::WebURLRequest& request,
+        const blink::WebWindowFeatures& features,
+        const blink::WebString& name,
+        blink::WebNavigationPolicy policy,
+        bool suppressOpener);
 
-    WebFrame* getWebFrameFromFrameId(int64 frameId);
-
-    void setFocus(bool enabel);
+    //virtual bool runFileChooser(const blink::WebFileChooserParams& params, blink::WebFileChooserCompletion* completion) override;
 
     // ----
+    bool needDrawToScreen(HWND hWnd) const;
+    void drawLayeredWindow(HWND hWnd, SkCanvas* canvas, HDC hdc, const blink::IntRect& paintRect, HDC hMemoryDC) const;
 
-    bool m_useLayeredBuffer;
+    void executeMainFrame();
+    friend class AutoRecordActions;
+    int m_autoRecordActionsCount;
+    bool m_runningInMouseMessage;
 
-    IntRect m_winodwRect;
-    IntRect m_clientRect; // ∑Ω±„WebPage–ﬁ∏ƒ
+    void copyToMemoryCanvasForUi();
 
-    bool m_hasResize;
+    void handleMouseWhenDraging(UINT message);
+    void onEnterDragSimulate();
+    void onLeaveDragSimulate();
+    void onDraggingSimulate();
+    bool m_isDragging;
+    bool m_isFirstEnterDrag;
 
-    bool m_postMouseLeave; // œµÕ≥µƒMouseLeaveªÒ»°µΩµƒ Û±ÍŒª÷√≤ªÃ´◊º»∑£¨◊‘º∫‘⁄∂® ±∆˜¿Ô‘Ÿ≈◊“ª¥Œ
+    void setTouchSimulateEnabled(bool b);
+    void setSystemTouchEnabled(bool b);
 
-    RGBA32 m_bdColor;
+    virtual COLORREF getBackgroundColor() override;
 
-    double m_lastFrameTimeMonotonic;
+    void setBackgroundColor(COLORREF c);
+    void setDragDropEnable(bool b) { m_enableDragDrop = b; }
+    void setIsMouseKeyMessageEnable(bool b) { m_enableMouseKeyMessage = b; }
+
+    void setHwndRenderOffset(const blink::IntPoint& offset);
+    blink::IntPoint getHwndRenderOffset() const;
+
+    void setCookieJarFullPath(const char* path);
+    void setLocalStorageFullPath(const char* path);
+
+    net::WebCookieJarImpl* getCookieJar();
+
+    RefPtr<net::PageNetExtraData> m_pageNetExtraData;
+
+    static int64_t m_firstFrameId;
+
+    blink::WebThread::TaskObserver* m_createDevToolsAgentTaskObserver;
+
+    ToolTip* m_toolTip;
+    ToolTip* m_validationMessageTip;
+
+    blink::IntRect m_winodwRect;
+
+    bool n_needAutoDrawToHwnd;
+
+    bool m_postMouseLeave; // Á≥ªÁªüÁöÑMouseLeaveËé∑ÂèñÂà∞ÁöÑÈº†Ê†á‰ΩçÁΩÆ‰∏çÂ§™ÂáÜÁ°ÆÔºåËá™Â∑±Âú®ÂÆöÊó∂Âô®ÈáåÂÜçÊäõ‰∏ÄÊ¨°
+    blink::RGBA32 m_bdColor;
+
     WebPage* m_pagePtr;
-    WebViewImpl* m_webViewImpl;
-
+    blink::WebViewImpl* m_webViewImpl;
     bool m_mouseInWindow;
-
     HWND m_hWnd;
-    bool m_isDraggableRegionNcHitTest;
-
-    IntSize m_viewportSize;
+    blink::IntPoint m_hwndRenderOffset;    // ÁΩëÈ°µÊ∏≤ÊüìÂùêÊ†áÁõ∏ÂØπ‰∫éÁ™óÂè£ÁöÑÂéüÁÇπ
+    blink::IntSize m_viewportSize;
 
     // May be NULL if the browser has not yet been created or if the browser has
     // been destroyed.
-    CefBrowserHostImpl* m_browser;
 
-    IntRect m_paintRect;
-    SkCanvas* m_dirtyCanvas;
-    SkCanvas* m_memoryCanvas;
-
+#if ENABLE_WKE == 1
+    wke::CWebView* wkeWebView() const;
+#endif
+    mc::LayerTreeHost* m_mcLayerTreeHost;
+    LayerTreeWrap* m_ccLayerTreeWrap;
     bool m_painting;
-    bool m_canScheduleResourceLoader;
-
-    Vector<IntRect> m_paintMessageQueue;
-    static const int m_paintMessageQueueSize = 200;
-
-    int m_postpaintMessageCount;
-    int m_scheduleMessageCount;
-
-    bool m_needsCommit;
-
-    FrameLoaderClientImpl* m_frameLoaderClient;
-    //RefPtr<LocalFrame> m_localFrame;
-
-    ChromeClient* m_chromeClient;
-    ContextMenuClient* m_contextMenuClient;
-    EditorClient* m_editorClient;
-    DragClient* m_dragClient;
-    Page* m_page;
-
-    enum WebPageState {
-        INIT,
-        UNINIT,
-        DESTROYING
-    } m_state;
+        
+    WebPageState m_state;
 
     bool m_LMouseDown;
     bool m_RMouseDown;
-
     void* m_foreignPtr;
-
-    bool m_isAlert;
-
-    IntPoint m_lastPosForDrag;
-    double m_lastMouseDownTime;
-
+    blink::IntPoint m_lastPosForDrag;
     WebFrameClientImpl* m_webFrameClient;
+    PlatformEventHandler* m_platformEventHandler;
 
-    KWebApiCallbackSet m_callbacks;
+    blink::WebCursorInfo m_cursor;
+    HICON m_platformCursor;
 
-    bool m_bMouseTrack;
+    int m_enterCount;
+    bool checkForRepeatEnter();
+    void doClose();
 
-    KdPageDebugInfo m_debugInfo;
+    bool m_postCloseWidgetSoonMessage;
 
-    BOOL* m_messageStackVar; // ∏¯œ˚œ¢¥¶¿Ì∫Ø ˝ π”√£¨±£¥Êµÿ÷∑°£¿˝»Á£¨WM_TIMER÷–µ˜”√DestroyWindow£¨
-    // ¥∞ø⁄¥›ªŸ¡À£¨œ˚œ¢∫Ø ˝ªπ‘⁄Ω¯»ÎWM_TIMERµƒ¥¶¿Ì∫Ø ˝£¨µº÷¬“∞÷∏’Î±¿¿£.
+    WTF::Vector<DestroyNotif*> m_destroyNotifs;
+    //WTF::Vector<int> m_destroyNotifIds;
+    WTF::Mutex m_destroyNotifsMutex;
 
-    WebCursorInfo::Type m_cursorType;
+    HRGN m_draggableRegion;
 
-    RenderViewHost* m_renderViewHost;
+    HWND m_popupHandle;
+    int m_debugCount;
+    //int m_needsCommit;
+    int m_commitCount;
+    int m_needsLayout;
+    int m_layerDirty;
+    int m_executeMainFrameCount;
+    double m_lastFrameTimeMonotonic;
+
+    SkCanvas* m_memoryCanvasForUi;
+    bool m_disablePaint;
+    int m_firstDrawCount;
+
+    blink::Persistent<PageNavController> m_navigationController;
+    blink::Persistent<PopupMenuWin> m_popup;
+
+    bool isDevToolsClient() const { return !!m_devToolsClient; }
+    DevToolsClient* m_devToolsClient;
+    DevToolsAgent* m_devToolsAgent;
+    void willEnterDebugLoop();
+    void didExitDebugLoop();
+    bool m_isEnterDebugLoop;
+
+    DragHandle* m_dragHandle;
+
+    blink::WebScreenInfo* m_screenInfo;
+
+    bool m_enableMouseKeyMessage;
+    bool m_enableDragDrop;
+    bool m_enableTouchSimulate;
+    net::DOMStorageMap* m_sessionStorageStorageMap;
+
+    blink::IntRect m_caretPos;
+
+    double m_lastBeginMainFrameTime;
 };
+
 } // blink
 
 #endif // WebPageImpl_h

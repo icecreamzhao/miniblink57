@@ -31,6 +31,11 @@ public:
     void enableVirtualTime() override;
     //void setAllowVirtualTimeToAdvance(bool allow_virtual_time_to_advance) override;
 
+    bool virtualTimeAllowedToAdvance() const override;
+    void setVirtualTimePolicy(blink::WebViewScheduler::VirtualTimePolicy) override;
+    void audioStateChanged(bool isAudioPlaying) override;
+    bool hasActiveConnectionForTest() const override;
+
     std::unique_ptr<WebFrameSchedulerImpl> createWebFrameSchedulerImpl();
 
 private:

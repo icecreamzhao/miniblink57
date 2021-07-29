@@ -25,9 +25,10 @@ public:
 
     // blink::WebFrameScheduler implementation:
     void setFrameVisible(bool frame_visible) override;
-    void setPageVisible(bool page_visible) override;
-    blink::WebTaskRunner* loadingTaskRunner() override;
-    blink::WebTaskRunner* timerTaskRunner() override;
+    void setPageVisible(bool page_visible) /*override*/;
+    RefPtr<blink::WebTaskRunner> loadingTaskRunner() override;
+    RefPtr<blink::WebTaskRunner> timerTaskRunner() override;
+    RefPtr<blink::WebTaskRunner> unthrottledTaskRunner() override;
 
     void OnVirtualTimeDomainChanged();
 

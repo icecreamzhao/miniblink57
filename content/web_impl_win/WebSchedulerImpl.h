@@ -2,10 +2,14 @@
 #include "base/compiler_specific.h"
 #include "third_party/WebKit/public/platform/Platform.h"
 #include "third_party/WebKit/public/platform/WebScheduler.h"
+#include "third_party/WebKit/Source/wtf/OwnPtr.h"
+#include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
 
 namespace content {
 
 class WebThreadImpl;
+class WebTaskRunnerImpl;
+class WebViewSchedulerImpl;
 
 class BLINK_PLATFORM_EXPORT WebSchedulerImpl : public blink::WebScheduler {
 public:
@@ -48,13 +52,26 @@ public:
     // task has run. This enables posting of a task which won't stop the Blink
     // main thread from sleeping, but will start running after it wakes up.
     // Takes ownership of |IdleTask|. Can be called from any thread.
-    virtual void postIdleTaskAfterWakeup(const blink::WebTraceLocation&, blink::WebThread::IdleTask*) override;
+    /*virtual*/ void postIdleTaskAfterWakeup(const blink::WebTraceLocation&, blink::WebThread::IdleTask*) /*override*/;
 
-    // Returns a WebTaskRunner for loading tasks. Can be called from any thread.
-    virtual blink::WebTaskRunner* loadingTaskRunner() override;
+    // Schedule a loading task to be run on the the associated WebThread. Loading
+    // tasks usually have the default priority, but may be deprioritised
+    // when the user is interacting with the device.
+    // Takes ownership of |WebThread::Task|. Can be called from any thread.
+    /*virtual*/ void postLoadingTask(const blink::WebTraceLocation&, blink::WebThread::Task*) /*override*/;
 
-    // Returns a WebTaskRunner for timer tasks. Can be called from any thread.
-    virtual blink::WebTaskRunner* timerTaskRunner() override;
+    // Schedule a timer task to be run on the the associated WebThread. Timer Tasks
+    // tasks usually have the default priority, but may be delayed
+    // when the user is interacting with the device.
+    // Takes ownership of |WebThread::Task|. Can be called from any thread.
+    /*virtual*/ void postTimerTask(const blink::WebTraceLocation&, blink::WebThread::Task*, long long delayMs) /*override*/;
+
+    // Schedule a timer task to be run on the the associated WebThread. Timer Tasks
+    // tasks usually have the default priority, but may be delayed
+    // when the user is interacting with the device.
+    // |monotonicTime| is in the timebase of WTF::monotonicallyIncreasingTime().
+    // Takes ownership of |WebThread::Task|. Can be called from any thread.
+    virtual void postTimerTaskAt(const blink::WebTraceLocation&, blink::WebThread::Task*, double monotonicTime);
 
     // Suspends the timer queue and increments the timer queue suspension count.
     // May only be called from the main thread.
@@ -64,29 +81,36 @@ public:
     // if the suspension count is zero and the current scheduler policy allows it.
     virtual void resumeTimerQueue() override;
 
-    virtual std::unique_ptr<blink::WebViewScheduler> createWebViewScheduler(blink::WebView*) override;
+    /*virtual*/ void cancelTimerTask(blink::WebThread::Task* task) /*override*/;
 
-    virtual void addPendingNavigation(NavigatingFrameType) override;
+    // Returns a WebTaskRunner for loading tasks. Can be called from any thread.
+    virtual blink::WebTaskRunner* loadingTaskRunner() override;
 
-    // Tells the scheduler that a navigation task is no longer pending.
-    virtual void removePendingNavigation(NavigatingFrameType) override;
+    // Returns a WebTaskRunner for timer tasks. Can be called from any thread.
+    virtual blink::WebTaskRunner* timerTaskRunner() override;
 
-    // Tells the scheduler that an expected navigation was started.
-    virtual void onNavigationStarted() override;
+    // Creates a new WebViewScheduler for a given WebView. Must be called from
+    // the associated WebThread.
+    virtual std::unique_ptr<blink::WebViewScheduler> createWebViewScheduler(blink::WebScheduler::InterventionReporter*, blink::WebViewScheduler::WebViewSchedulerSettings*) override;
+
+    virtual void addPendingNavigation(blink::WebScheduler::NavigatingFrameType) override;
+    virtual void removePendingNavigation(blink::WebScheduler::NavigatingFrameType) override;
 
 #ifdef INSIDE_BLINK
     // Helpers for posting bound functions as tasks.
     typedef Function<void(double deadlineSeconds)> IdleTask;
     typedef Function<void()> Task;
 
-    void postIdleTask(const blink::WebTraceLocation&, std::unique_ptr<IdleTask>);
-    void postNonNestableIdleTask(const blink::WebTraceLocation&, std::unique_ptr<IdleTask>);
-    void postIdleTaskAfterWakeup(const blink::WebTraceLocation&, std::unique_ptr<IdleTask>);
-    void postLoadingTask(const blink::WebTraceLocation&, std::unique_ptr<Task>);
+    void postIdleTask(const blink::WebTraceLocation&, PassOwnPtr<IdleTask>);
+    void postNonNestableIdleTask(const blink::WebTraceLocation&, PassOwnPtr<IdleTask>);
+    void postIdleTaskAfterWakeup(const blink::WebTraceLocation&, PassOwnPtr<IdleTask>);
+    void postLoadingTask(const blink::WebTraceLocation&, PassOwnPtr<Task>);
 #endif
 
 private:
     WebThreadImpl* m_thread;
+    WebTaskRunnerImpl* m_taskRunner;
+    WebViewSchedulerImpl* m_webViewSchedulerImpl;
 };
 
 } // content

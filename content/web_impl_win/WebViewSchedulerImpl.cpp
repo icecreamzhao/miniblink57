@@ -7,7 +7,7 @@
 #include "content/web_impl_win/WebFrameSchedulerImpl.h"
 #include "content/web_impl_win/WebTaskRunnerImpl.h"
 
-#include "third_party/WebKit/public/platform/WebFrameScheduler.h"
+#include "third_party/WebKit/Source/platform/WebFrameScheduler.h"
 #include "third_party/WebKit/public/web/WebConsoleMessage.h"
 #include "third_party/WebKit/public/web/WebFrame.h"
 #include "third_party/WebKit/public/web/WebView.h"
@@ -71,6 +71,28 @@ void WebViewSchedulerImpl::enableVirtualTime()
     for (WebFrameSchedulerImpl* frame_scheduler : frame_schedulers_) {
         frame_scheduler->OnVirtualTimeDomainChanged();
     }
+}
+
+bool WebViewSchedulerImpl::virtualTimeAllowedToAdvance() const
+{
+    DebugBreak();
+    return false;
+}
+
+void WebViewSchedulerImpl::setVirtualTimePolicy(blink::WebViewScheduler::VirtualTimePolicy)
+{
+    DebugBreak();
+}
+
+void WebViewSchedulerImpl::audioStateChanged(bool isAudioPlaying)
+{
+    DebugBreak();
+}
+
+bool WebViewSchedulerImpl::hasActiveConnectionForTest() const
+{
+    DebugBreak();
+    return false;
 }
 
 // void WebViewSchedulerImpl::setAllowVirtualTimeToAdvance(bool allow_virtual_time_to_advance)

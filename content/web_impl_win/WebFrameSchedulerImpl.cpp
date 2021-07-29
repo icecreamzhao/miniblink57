@@ -35,7 +35,7 @@ void WebFrameSchedulerImpl::setFrameVisible(bool frame_visible)
     // TODO(alexclarke): Do something with this flag.
 }
 
-blink::WebTaskRunner* WebFrameSchedulerImpl::loadingTaskRunner()
+RefPtr<blink::WebTaskRunner> WebFrameSchedulerImpl::loadingTaskRunner()
 {
     DCHECK(parent_web_view_scheduler_);
     //     if (!loading_web_task_runner_) {
@@ -46,13 +46,19 @@ blink::WebTaskRunner* WebFrameSchedulerImpl::loadingTaskRunner()
     return blink::Platform::current()->currentThread()->getWebTaskRunner();
 }
 
-blink::WebTaskRunner* WebFrameSchedulerImpl::timerTaskRunner()
+RefPtr<blink::WebTaskRunner> WebFrameSchedulerImpl::timerTaskRunner()
 {
     DCHECK(parent_web_view_scheduler_);
     //     if (!timer_web_task_runner_) {
     //         timer_web_task_runner_.reset(new WebTaskRunnerImpl());
     //     }
     //     return timer_web_task_runner_.get();
+    return blink::Platform::current()->currentThread()->getWebTaskRunner();
+}
+
+RefPtr<blink::WebTaskRunner> WebFrameSchedulerImpl::unthrottledTaskRunner()
+{
+    DCHECK(parent_web_view_scheduler_);
     return blink::Platform::current()->currentThread()->getWebTaskRunner();
 }
 

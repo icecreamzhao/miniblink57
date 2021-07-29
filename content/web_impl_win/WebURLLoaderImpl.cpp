@@ -1,19 +1,27 @@
 
-#include "content/web_impl_win/WebURLLoaderImpl.h"
 #include "config.h"
-#include "net/WebURLLoaderWinINet.h"
 #include <windows.h>
+#if USING_VC6RT != 1
 #include <wininet.h>
+#endif
+#include "content/web_impl_win/WebURLLoaderImpl.h"
+#include "net/WebURLLoaderWinINet.h"
 
 namespace content {
 
 WebURLLoaderImpl::WebURLLoaderImpl()
 {
+    String outString = String::format("WebURLLoaderImpl::WebURLLoaderImpl: %p\n", this);
+    OutputDebugStringW(outString.charactersWithNullTermination().data());
+
     m_loaderWinINet = nullptr;
 }
 
 WebURLLoaderImpl::~WebURLLoaderImpl()
 {
+    String outString = String::format("WebURLLoaderImpl::~WebURLLoaderImpl: %p %p\n", this, m_loaderWinINet);
+    OutputDebugStringW(outString.charactersWithNullTermination().data());
+
     if (m_loaderWinINet)
         m_loaderWinINet->onLoaderWillBeDelete();
     m_loaderWinINet = nullptr;
@@ -36,6 +44,8 @@ void WebURLLoaderImpl::loadAsynchronously(
     const blink::WebURLRequest& request,
     blink::WebURLLoaderClient* client)
 {
+    bool canLoad = false;
+
     m_loaderWinINet = new net::WebURLLoaderWinINet(this);
     m_loaderWinINet->loadAsynchronously(request, client);
 }
@@ -53,17 +63,7 @@ void WebURLLoaderImpl::setDefersLoading(bool value)
 
 void WebURLLoaderImpl::didChangePriority(blink::WebURLRequest::Priority newPriority, int intraPriorityValue)
 {
-}
 
-// bool WebURLLoaderImpl::attachThreadedDataReceiver(blink::WebThreadedDataReceiver* threadedDataReceiver)
-// {
-//     DebugBreak();
-//     return false;
-// }
-
-void WebURLLoaderImpl::setLoadingTaskRunner(base::SingleThreadTaskRunner*)
-{
-    ;
 }
 
 void WebURLLoaderImpl::onWinINetWillBeDelete()
@@ -71,4 +71,4 @@ void WebURLLoaderImpl::onWinINetWillBeDelete()
     m_loaderWinINet = nullptr;
 }
 
-} // namespace content
+}  // namespace content

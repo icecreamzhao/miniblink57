@@ -4,37 +4,67 @@
 
 #include "third_party/WebKit/public/web/WebFrameClient.h"
 #include "third_party/WebKit/public/web/WebConsoleMessage.h"
+#if ENABLE_NODEJS
+#include "third_party/WebKit/Source/wtf/HashMap.h"
+#endif
 
 namespace cef {
 class BrowserHostImpl;
 class BrowserImpl;
 }
 
+struct NodeBindingInMbCore;
+
 using namespace blink;
 
 namespace content {
 
 class WebPage;
+class ContextMenu;
+class WebGeolocationClientImpl;
 
-class WebFrameClientImpl : public blink::WebFrameClient {
+class WebFrameClientImpl : public WebFrameClient {
 public:
     WebFrameClientImpl();
+    ~WebFrameClientImpl();
 
     virtual void didAddMessageToConsole(const WebConsoleMessage& message, const WebString& sourceName, unsigned sourceLine, const WebString& stackTrace) override;
+    virtual bool shouldReportDetailedMessageForSource(const WebString& source) override { return true; };
 
-    virtual WebLocalFrame* createChildFrame(WebLocalFrame* parent,
-        WebTreeScopeType,
-        const WebString& name,
-        const WebString& uniqueName,
-        WebSandboxFlags sandboxFlags,
-        const WebFrameOwnerProperties&) override;
+    virtual WebLocalFrame* createChildFrame(WebLocalFrame* parent, WebTreeScopeType, const WebString& frameName, const WebString& uniqueName, WebSandboxFlags sandboxFlags, const WebFrameOwnerProperties&) override;
 
     virtual void frameDetached(WebLocalFrame* child, DetachType) override;
 
-    void loadURLExternally(WebLocalFrame*, const WebURLRequest&, WebNavigationPolicy, const WebString& downloadName)
-    {
-        OutputDebugStringA(__FUNCTION__);
-    }
+    virtual void loadURLExternally(const WebURLRequest&, WebNavigationPolicy, const WebString& downloadName, bool shouldReplaceCurrentEntry) override;
+
+    // Factory methods -----------------------------------------------------
+
+    // May return null.
+   // virtual WebPluginPlaceholder* createPluginPlaceholder(WebLocalFrame*, const WebPluginParams&) override;
+
+    // May return null.
+    virtual WebPlugin* createPlugin(WebLocalFrame*, const WebPluginParams&) override;
+
+    // May return null.
+    // WebContentDecryptionModule* may be null if one has not yet been set.
+    virtual WebMediaPlayer* createMediaPlayer(const WebMediaPlayerSource&,
+        WebMediaPlayerClient*,
+        WebMediaPlayerEncryptedMediaClient*,
+        WebContentDecryptionModule*,
+        const WebString& sinkId) override;
+
+    // May return null.
+    virtual WebApplicationCacheHost* createApplicationCacheHost(WebApplicationCacheHostClient*) override;
+
+    // May return null.
+    virtual WebServiceWorkerProvider* createServiceWorkerProvider() override;
+
+    // May return null.
+    virtual WebWorkerContentSettingsClientProxy* createWorkerContentSettingsClientProxy() override;
+
+    // Create a new WebPopupMenu. In the "createExternalPopupMenu" form, the
+    // client is responsible for rendering the contents of the popup menu.
+    virtual WebExternalPopupMenu* createExternalPopupMenu(const WebPopupMenuInfo&, WebExternalPopupMenuClient*) override;
 
     // Navigational notifications ------------------------------------------
     // These notifications bracket any loading that occurs in the WebFrame.
@@ -141,12 +171,16 @@ public:
     // by identifier.
     virtual void didReceiveResponse(const WebURLResponse&) override;
 
-    //virtual void didChangeResourcePriority(unsigned identifier, const WebURLRequest::Priority& priority, int) override;
+    //virtual void didChangeResourcePriority(WebLocalFrame* webFrame, unsigned identifier, const WebURLRequest::Priority& priority, int) override;
+
+    virtual void didDispatchPingLoader(const WebURL& url) override;
 
     // Navigational queries ------------------------------------------------
     virtual WebNavigationPolicy decidePolicyForNavigation(const NavigationPolicyInfo& info) override;
 
-    void setWebPage(WebPage* webPage);
+    // During a history navigation, we may choose to load new subframes from history as well.
+    // This returns such a history item if appropriate.
+    virtual WebHistoryItem historyItemForNewChildFrame() override;
 
     // Services ------------------------------------------------------------
 
@@ -154,13 +188,88 @@ public:
     // WebKitPlatformSupport::cookieJar() will be called to access cookies.
     virtual WebCookieJar* cookieJar() override;
 
-    bool isLoading() { return m_loading; }
+    // Dialogs -------------------------------------------------------------
 
-protected:
+    virtual void runModalAlertDialog(const WebString& message) override;
+
+    // Displays a modal confirmation dialog with the given message as
+    // description and OK/Cancel choices. Returns true if the user selects
+    // 'OK' or false otherwise.
+    virtual bool runModalConfirmDialog(const WebString& message) override;
+
+    // Displays a modal input dialog with the given message as description
+    // and OK/Cancel choices. The input field is pre-filled with
+    // defaultValue. Returns true if the user selects 'OK' or false
+    // otherwise. Upon returning true, actualValue contains the value of
+    // the input field.
+    virtual bool runModalPromptDialog(const WebString& message, const WebString& defaultValue, WebString* actualValue) override;
+
+    // Displays a modal confirmation dialog containing the given message as
+    // description and OK/Cancel choices, where 'OK' means that it is okay
+    // to proceed with closing the view. Returns true if the user selects
+    // 'OK' or false otherwise.
+    virtual bool runModalBeforeUnloadDialog(bool isReload) override;
+
+    // UI ------------------------------------------------------------------
+
+    // Shows a context menu with commands relevant to a specific element on
+    // the given frame. Additional context data is supplied.
+    virtual void showContextMenu(const WebContextMenuData&) override;
+
+    // Called when the data attached to the currently displayed context menu is
+    // invalidated. The context menu may be closed if possible.
+    //virtual void clearContextMenu() override;
+
+    // Script notifications ------------------------------------------------
+
+    // Notifies that a new script context has been created for this frame.
+    // This is similar to didClearWindowObject but only called once per
+    // frame context.
+    virtual void didCreateScriptContext(WebLocalFrame*, v8::Local<v8::Context>, int worldId) override;
+
+    // WebKit is about to release its reference to a v8 context for a frame.
+    virtual void willReleaseScriptContext(WebLocalFrame*, v8::Local<v8::Context>, int worldId) override;
+
+    // Geolocation ---------------------------------------------------------
+
+    // Access the embedder API for (client-based) geolocation client .
+    //virtual WebGeolocationClient* geolocationClient() override;
+
+    //////////////////////////////////////////////////////////////////////////
+    void setWebPage(WebPage* webPage);
+    WebPage* webPage();
+    //////////////////////////////////////////////////////////////////////////
+
+    bool isLoading() const { return m_loading; }
+#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
+    // for wke
+    bool isLoaded() const { return m_loaded; }
+    bool isLoadFailed() const { return m_loadFailed; }
+    bool isDocumentReady() const { return m_documentReady; }
+
+    String title() const { return m_title; }
+#endif
+private:
+    void resetLoadState();
     void onLoadingStateChange(bool isLoading, bool toDifferentDocument);
 
     WebPage* m_webPage;
     bool m_loading;
+
+    bool m_loadFailed;
+    bool m_loaded;
+    bool m_documentReady;
+    String m_title;
+    WTF::Vector<WebFrame*> m_unusedFrames;
+
+    ContextMenu* m_menu;
+    WebGeolocationClientImpl* m_webGeolocationClientImpl;
+
+    WebLocalFrame* m_frame;
+
+#if ENABLE_NODEJS
+    WTF::HashMap<WebFrame*, NodeBindingInMbCore*> m_nodebindings;
+#endif
 };
 
 } // namespace blink
