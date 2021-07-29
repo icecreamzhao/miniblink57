@@ -6,6 +6,8 @@
 
 namespace gpu {
 
+SurfaceHandle kNullSurfaceHandle = nullptr;
+
 GpuMemoryBufferManager::GpuMemoryBufferManager()
 {
 }

@@ -18,7 +18,7 @@ struct SyncToken;
 
 typedef void* SurfaceHandle;
 
-SurfaceHandle kNullSurfaceHandle = nullptr;
+extern SurfaceHandle kNullSurfaceHandle;
 
 class GPU_EXPORT GpuMemoryBufferManager {
 public:
