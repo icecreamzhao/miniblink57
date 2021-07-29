@@ -21,15 +21,15 @@
 #include "bindings/core/v8/V8ObjectConstructor.h"
 #include "bindings/core/v8/V8WorkerGlobalScope.h"
 #include "bindings/modules/v8/V8CacheStorage.h"
-#include "bindings/modules/v8/V8Crypto.h"
-#include "bindings/modules/v8/V8IDBFactory.h"
+// #include "bindings/modules/v8/V8Crypto.h"
+// #include "bindings/modules/v8/V8IDBFactory.h"
 #include "bindings/modules/v8/V8Request.h"
 #include "core/dom/Document.h"
 #include "core/frame/UseCounter.h"
 #include "modules/cachestorage/GlobalCacheStorage.h"
 #include "modules/crypto/WorkerGlobalScopeCrypto.h"
 #include "modules/fetch/GlobalFetch.h"
-#include "modules/indexeddb/GlobalIndexedDB.h"
+//#include "modules/indexeddb/GlobalIndexedDB.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/GetPtr.h"
 #include "wtf/RefPtr.h"
@@ -38,84 +38,84 @@ namespace blink {
 
 namespace WorkerGlobalScopePartialV8Internal {
 
-    static void cachesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
+//     static void cachesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+// 
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "WorkerGlobalScope", "caches");
+// 
+//         CacheStorage* cppValue(GlobalCacheStorage::caches(*impl, exceptionState));
+// 
+//         if (UNLIKELY(exceptionState.hadException()))
+//             return;
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#caches";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void cachesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GlobalCacheStorage);
+// 
+//         WorkerGlobalScopePartialV8Internal::cachesAttributeGetter(info);
+//     }
 
-        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "WorkerGlobalScope", "caches");
-
-        CacheStorage* cppValue(GlobalCacheStorage::caches(*impl, exceptionState));
-
-        if (UNLIKELY(exceptionState.hadException()))
-            return;
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#caches";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void cachesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GlobalCacheStorage);
-
-        WorkerGlobalScopePartialV8Internal::cachesAttributeGetter(info);
-    }
-
-    static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-        Crypto* cppValue(WorkerGlobalScopeCrypto::crypto(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#crypto";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        WorkerGlobalScopePartialV8Internal::cryptoAttributeGetter(info);
-    }
-
-    static void indexedDBAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-        IDBFactory* cppValue(GlobalIndexedDB::indexedDB(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#indexedDB";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void indexedDBAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetter(info);
-    }
+//     static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+// 
+//         Crypto* cppValue(WorkerGlobalScopeCrypto::crypto(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#crypto";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         WorkerGlobalScopePartialV8Internal::cryptoAttributeGetter(info);
+//     }
+//
+//     static void indexedDBAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+// 
+//         IDBFactory* cppValue(GlobalIndexedDB::indexedDB(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#indexedDB";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void indexedDBAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetter(info);
+//     }
 
     static void fetchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
@@ -166,10 +166,10 @@ namespace WorkerGlobalScopePartialV8Internal {
 
 } // namespace WorkerGlobalScopePartialV8Internal
 
-const V8DOMConfiguration::AccessorConfiguration V8WorkerGlobalScopeAccessors[] = {
-    { "crypto", WorkerGlobalScopePartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "indexedDB", WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-};
+// const V8DOMConfiguration::AccessorConfiguration V8WorkerGlobalScopeAccessors[] = {
+//     { "crypto", WorkerGlobalScopePartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+//     { "indexedDB", WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+// };
 
 const V8DOMConfiguration::MethodConfiguration V8WorkerGlobalScopeMethods[] = {
     { "fetch", WorkerGlobalScopePartialV8Internal::fetchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
@@ -191,13 +191,13 @@ void V8WorkerGlobalScopePartial::installV8WorkerGlobalScopeTemplate(v8::Isolate*
     prototypeTemplate->SetImmutableProto();
 
     // Register DOM constants, attributes and operations.
-    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeAccessors, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeAccessors));
+    //V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeAccessors, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeAccessors));
     V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeMethods, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeMethods));
 
-    if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = { "caches", WorkerGlobalScopePartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcachesConfiguration);
-    }
+//     if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = { "caches", WorkerGlobalScopePartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcachesConfiguration);
+//     }
 }
 
 void V8WorkerGlobalScopePartial::initialize()

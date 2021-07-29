@@ -25,21 +25,21 @@ namespace blink {
 
 void initPartialInterfacesInModules()
 {
-    V8AudioTrackPartial::initialize();
+    //V8AudioTrackPartial::initialize();
     V8DataTransferItemPartial::initialize();
     V8DedicatedWorkerGlobalScopePartial::initialize();
-    V8DevToolsHostPartial::initialize();
+    //V8DevToolsHostPartial::initialize();
     V8HTMLCanvasElementPartial::initialize();
-    V8HTMLIFrameElementPartial::initialize();
+    //V8HTMLIFrameElementPartial::initialize();
     V8HTMLInputElementPartial::initialize();
-    V8HTMLMediaElementPartial::initialize();
-    V8HTMLVideoElementPartial::initialize();
+    //V8HTMLMediaElementPartial::initialize();
+    //V8HTMLVideoElementPartial::initialize();
     V8NavigatorPartial::initialize();
     V8OffscreenCanvasPartial::initialize();
-    V8ScreenPartial::initialize();
-    V8SharedWorkerGlobalScopePartial::initialize();
+    //V8ScreenPartial::initialize();
+    //V8SharedWorkerGlobalScopePartial::initialize();
     V8URLPartial::initialize();
-    V8VideoTrackPartial::initialize();
+    //V8VideoTrackPartial::initialize();
     V8WindowPartial::initialize();
     V8WorkerGlobalScopePartial::initialize();
     V8WorkerNavigatorPartial::initialize();

@@ -23,60 +23,60 @@
 #include "bindings/core/v8/V8Navigator.h"
 #include "bindings/core/v8/V8ObjectConstructor.h"
 #include "bindings/modules/v8/ArrayBufferViewOrBlobOrStringOrFormData.h"
-#include "bindings/modules/v8/V8Bluetooth.h"
-#include "bindings/modules/v8/V8BudgetService.h"
-#include "bindings/modules/v8/V8CredentialsContainer.h"
-#include "bindings/modules/v8/V8DeprecatedStorageQuota.h"
-#include "bindings/modules/v8/V8GamepadList.h"
-#include "bindings/modules/v8/V8Geolocation.h"
-#include "bindings/modules/v8/V8MIDIOptions.h"
-#include "bindings/modules/v8/V8MediaDevices.h"
-#include "bindings/modules/v8/V8MediaKeySystemConfiguration.h"
-#include "bindings/modules/v8/V8MediaSession.h"
-#include "bindings/modules/v8/V8MediaStreamConstraints.h"
-#include "bindings/modules/v8/V8MimeTypeArray.h"
-#include "bindings/modules/v8/V8NFC.h"
-#include "bindings/modules/v8/V8NavigatorUserMediaErrorCallback.h"
-#include "bindings/modules/v8/V8NavigatorUserMediaSuccessCallback.h"
-#include "bindings/modules/v8/V8NetworkInformation.h"
-#include "bindings/modules/v8/V8Permissions.h"
+// #include "bindings/modules/v8/V8Bluetooth.h"
+// #include "bindings/modules/v8/V8BudgetService.h"
+// #include "bindings/modules/v8/V8CredentialsContainer.h"
+// #include "bindings/modules/v8/V8DeprecatedStorageQuota.h"
+// #include "bindings/modules/v8/V8GamepadList.h"
+// #include "bindings/modules/v8/V8Geolocation.h"
+// #include "bindings/modules/v8/V8MIDIOptions.h"
+// #include "bindings/modules/v8/V8MediaDevices.h"
+// #include "bindings/modules/v8/V8MediaKeySystemConfiguration.h"
+// #include "bindings/modules/v8/V8MediaSession.h"
+// #include "bindings/modules/v8/V8MediaStreamConstraints.h"
+// #include "bindings/modules/v8/V8MimeTypeArray.h"
+// #include "bindings/modules/v8/V8NFC.h"
+// #include "bindings/modules/v8/V8NavigatorUserMediaErrorCallback.h"
+// #include "bindings/modules/v8/V8NavigatorUserMediaSuccessCallback.h"
+// #include "bindings/modules/v8/V8NetworkInformation.h"
+// #include "bindings/modules/v8/V8Permissions.h"
 #include "bindings/modules/v8/V8PluginArray.h"
-#include "bindings/modules/v8/V8Presentation.h"
+//#include "bindings/modules/v8/V8Presentation.h"
 #include "bindings/modules/v8/V8ServiceWorkerContainer.h"
 #include "bindings/modules/v8/V8ShareData.h"
 #include "bindings/modules/v8/V8StorageManager.h"
 #include "bindings/modules/v8/V8StorageQuota.h"
-#include "bindings/modules/v8/V8USB.h"
+//#include "bindings/modules/v8/V8USB.h"
 #include "core/dom/Document.h"
 #include "core/dom/FlexibleArrayBufferView.h"
 #include "core/frame/UseCounter.h"
 #include "core/origin_trials/OriginTrials.h"
-#include "modules/battery/NavigatorBattery.h"
-#include "modules/beacon/NavigatorBeacon.h"
-#include "modules/bluetooth/NavigatorBluetooth.h"
-#include "modules/budget/NavigatorBudget.h"
-#include "modules/credentialmanager/NavigatorCredentials.h"
-#include "modules/donottrack/NavigatorDoNotTrack.h"
-#include "modules/encryptedmedia/NavigatorRequestMediaKeySystemAccess.h"
-#include "modules/gamepad/NavigatorGamepad.h"
-#include "modules/geolocation/NavigatorGeolocation.h"
-#include "modules/installedapp/NavigatorInstalledApp.h"
-#include "modules/mediasession/NavigatorMediaSession.h"
-#include "modules/mediastream/NavigatorMediaStream.h"
-#include "modules/mediastream/NavigatorUserMedia.h"
-#include "modules/navigatorcontentutils/NavigatorContentUtils.h"
-#include "modules/netinfo/NavigatorNetworkInformation.h"
-#include "modules/nfc/NavigatorNFC.h"
-#include "modules/permissions/NavigatorPermissions.h"
+// #include "modules/battery/NavigatorBattery.h"
+// #include "modules/beacon/NavigatorBeacon.h"
+// #include "modules/bluetooth/NavigatorBluetooth.h"
+// #include "modules/budget/NavigatorBudget.h"
+// #include "modules/credentialmanager/NavigatorCredentials.h"
+// #include "modules/donottrack/NavigatorDoNotTrack.h"
+// #include "modules/encryptedmedia/NavigatorRequestMediaKeySystemAccess.h"
+// #include "modules/gamepad/NavigatorGamepad.h"
+// #include "modules/geolocation/NavigatorGeolocation.h"
+// #include "modules/installedapp/NavigatorInstalledApp.h"
+// #include "modules/mediasession/NavigatorMediaSession.h"
+// #include "modules/mediastream/NavigatorMediaStream.h"
+// #include "modules/mediastream/NavigatorUserMedia.h"
+// #include "modules/navigatorcontentutils/NavigatorContentUtils.h"
+// #include "modules/netinfo/NavigatorNetworkInformation.h"
+// #include "modules/nfc/NavigatorNFC.h"
+// #include "modules/permissions/NavigatorPermissions.h"
 #include "modules/plugins/NavigatorPlugins.h"
-#include "modules/presentation/NavigatorPresentation.h"
+//#include "modules/presentation/NavigatorPresentation.h"
 #include "modules/quota/NavigatorStorageQuota.h"
 #include "modules/serviceworkers/NavigatorServiceWorker.h"
-#include "modules/vibration/NavigatorVibration.h"
-#include "modules/vr/NavigatorVR.h"
-#include "modules/webmidi/NavigatorWebMIDI.h"
-#include "modules/webshare/NavigatorShare.h"
-#include "modules/webusb/NavigatorUSB.h"
+// #include "modules/vibration/NavigatorVibration.h"
+// #include "modules/vr/NavigatorVR.h"
+// #include "modules/webmidi/NavigatorWebMIDI.h"
+// #include "modules/webshare/NavigatorShare.h"
+// #include "modules/webusb/NavigatorUSB.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/GetPtr.h"
 #include "wtf/RefPtr.h"
@@ -85,239 +85,239 @@ namespace blink {
 
 namespace NavigatorPartialV8Internal {
 
-    static void bluetoothAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        Bluetooth* cppValue(NavigatorBluetooth::bluetooth(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#bluetooth";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void bluetoothAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::bluetoothAttributeGetter(info);
-    }
-
-    static void budgetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        BudgetService* cppValue(NavigatorBudget::budget(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#budget";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void budgetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::budgetAttributeGetter(info);
-    }
-
-    static void credentialsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        CredentialsContainer* cppValue(NavigatorCredentials::credentials(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#credentials";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void credentialsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::credentialsAttributeGetter(info);
-    }
-
-    static void doNotTrackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        v8SetReturnValueStringOrNull(info, NavigatorDoNotTrack::doNotTrack(*impl), info.GetIsolate());
-    }
-
-    void doNotTrackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::doNotTrackAttributeGetter(info);
-    }
-
-    static void geolocationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        Geolocation* cppValue(NavigatorGeolocation::geolocation(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#geolocation";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void geolocationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::geolocationAttributeGetter(info);
-    }
-
-    static void mediaSessionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        MediaSession* cppValue(NavigatorMediaSession::mediaSession(scriptState, *impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#mediaSession";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void mediaSessionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::mediaSessionAttributeGetter(info);
-    }
-
-    static void mediaDevicesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        MediaDevices* cppValue(NavigatorUserMedia::mediaDevices(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#mediaDevices";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void mediaDevicesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::mediaDevicesAttributeGetter(info);
-    }
-
-    static void connectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        NetworkInformation* cppValue(NavigatorNetworkInformation::connection(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#connection";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void connectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NetInfo);
-
-        NavigatorPartialV8Internal::connectionAttributeGetter(info);
-    }
-
-    static void nfcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        NFC* cppValue(NavigatorNFC::nfc(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#nfc";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void nfcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::nfcAttributeGetter(info);
-    }
-
-    static void permissionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        Permissions* cppValue(NavigatorPermissions::permissions(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#permissions";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void permissionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::permissionsAttributeGetter(info);
-    }
+//     static void bluetoothAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         Bluetooth* cppValue(NavigatorBluetooth::bluetooth(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#bluetooth";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void bluetoothAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::bluetoothAttributeGetter(info);
+//     }
+// 
+//     static void budgetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         BudgetService* cppValue(NavigatorBudget::budget(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#budget";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void budgetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::budgetAttributeGetter(info);
+//     }
+// 
+//     static void credentialsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         CredentialsContainer* cppValue(NavigatorCredentials::credentials(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#credentials";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void credentialsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::credentialsAttributeGetter(info);
+//     }
+// 
+//     static void doNotTrackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         v8SetReturnValueStringOrNull(info, NavigatorDoNotTrack::doNotTrack(*impl), info.GetIsolate());
+//     }
+// 
+//     void doNotTrackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::doNotTrackAttributeGetter(info);
+//     }
+// 
+//     static void geolocationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         Geolocation* cppValue(NavigatorGeolocation::geolocation(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#geolocation";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void geolocationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::geolocationAttributeGetter(info);
+//     }
+// 
+//     static void mediaSessionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         MediaSession* cppValue(NavigatorMediaSession::mediaSession(scriptState, *impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#mediaSession";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void mediaSessionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::mediaSessionAttributeGetter(info);
+//     }
+// 
+//     static void mediaDevicesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         MediaDevices* cppValue(NavigatorUserMedia::mediaDevices(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#mediaDevices";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void mediaDevicesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::mediaDevicesAttributeGetter(info);
+//     }
+// 
+//     static void connectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         NetworkInformation* cppValue(NavigatorNetworkInformation::connection(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#connection";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void connectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NetInfo);
+// 
+//         NavigatorPartialV8Internal::connectionAttributeGetter(info);
+//     }
+// 
+//     static void nfcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         NFC* cppValue(NavigatorNFC::nfc(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#nfc";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void nfcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::nfcAttributeGetter(info);
+//     }
+// 
+//     static void permissionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         Permissions* cppValue(NavigatorPermissions::permissions(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#permissions";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void permissionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::permissionsAttributeGetter(info);
+//     }
 
     static void pluginsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
@@ -353,9 +353,9 @@ namespace NavigatorPartialV8Internal {
 
         // Keep the wrapper object for the return value alive as long as |this|
         // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), (ScriptWrappable*)cppValue))
             return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        v8::Local<v8::Value> v8Value(ToV8((ScriptWrappable*)cppValue, holder, info.GetIsolate()));
         const char kKeepAliveKey[] = "KeepAlive#Navigator#mimeTypes";
         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
@@ -367,29 +367,29 @@ namespace NavigatorPartialV8Internal {
         NavigatorPartialV8Internal::mimeTypesAttributeGetter(info);
     }
 
-    static void presentationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        Presentation* cppValue(NavigatorPresentation::presentation(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#presentation";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void presentationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::presentationAttributeGetter(info);
-    }
+//     static void presentationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         Presentation* cppValue(NavigatorPresentation::presentation(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#presentation";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void presentationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::presentationAttributeGetter(info);
+//     }
 
     static void webkitTemporaryStorageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
@@ -491,398 +491,398 @@ namespace NavigatorPartialV8Internal {
         NavigatorPartialV8Internal::storageAttributeGetter(info);
     }
 
-    static void serviceWorkerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Navigator", "serviceWorker");
-
-        ServiceWorkerContainer* cppValue(NavigatorServiceWorker::serviceWorker(executionContext, *impl, exceptionState));
-
-        if (UNLIKELY(exceptionState.hadException()))
-            return;
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#serviceWorker";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void serviceWorkerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::serviceWorkerAttributeGetter(info);
-    }
-
-    static void usbAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Navigator* impl = V8Navigator::toImpl(holder);
-
-        USB* cppValue(NavigatorUSB::usb(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Navigator#usb";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void usbAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::usbAttributeGetter(info);
-    }
-
-    static void getBatteryMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getBattery");
-        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-        // V8DOMConfiguration::DoNotCheckHolder
-        // Make sure that info.Holder() really points to an instance of the type.
-        if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
-            exceptionState.throwTypeError("Illegal invocation");
-            return;
-        }
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        ScriptPromise result = NavigatorBattery::getBattery(scriptState, *impl);
-        v8SetReturnValue(info, result.v8Value());
-    }
-
-    void getBatteryMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::getBatteryMethod(info);
-    }
-
-    static void sendBeaconMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "sendBeacon");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        if (UNLIKELY(info.Length() < 1)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-            return;
-        }
-
-        V8StringResource<> url;
-        ArrayBufferViewOrBlobOrStringOrFormData data;
-        url = info[0];
-        if (!url.prepare())
-            return;
-
-        if (!info[1]->IsUndefined()) {
-            V8ArrayBufferViewOrBlobOrStringOrFormData::toImpl(info.GetIsolate(), info[1], data, UnionTypeConversionMode::Nullable, exceptionState);
-            if (exceptionState.hadException())
-                return;
-        } else {
-            /* null default value */;
-        }
-
-        bool result = NavigatorBeacon::sendBeacon(scriptState, *impl, url, data, exceptionState);
-        if (exceptionState.hadException()) {
-            return;
-        }
-        v8SetReturnValueBool(info, result);
-    }
-
-    void sendBeaconMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SendBeacon);
-        NavigatorPartialV8Internal::sendBeaconMethod(info);
-    }
-
-    static void requestMediaKeySystemAccessMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "requestMediaKeySystemAccess");
-        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-        // V8DOMConfiguration::DoNotCheckHolder
-        // Make sure that info.Holder() really points to an instance of the type.
-        if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
-            exceptionState.throwTypeError("Illegal invocation");
-            return;
-        }
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        if (UNLIKELY(info.Length() < 2)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-            return;
-        }
-
-        V8StringResource<> keySystem;
-        HeapVector<MediaKeySystemConfiguration> supportedConfigurations;
-        keySystem = info[0];
-        if (!keySystem.prepare(exceptionState))
-            return;
-
-        supportedConfigurations = toImplArray<HeapVector<MediaKeySystemConfiguration>>(info[1], 2, info.GetIsolate(), exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        ScriptPromise result = NavigatorRequestMediaKeySystemAccess::requestMediaKeySystemAccess(scriptState, *impl, keySystem, supportedConfigurations);
-        v8SetReturnValue(info, result.v8Value());
-    }
-
-    void requestMediaKeySystemAccessMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::requestMediaKeySystemAccessMethod(info);
-    }
-
-    static void getGamepadsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        v8SetReturnValue(info, NavigatorGamepad::getGamepads(*impl));
-    }
-
-    void getGamepadsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::getGamepadsMethod(info);
-    }
-
-    static void getInstalledRelatedAppsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getInstalledRelatedApps");
-        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-        // V8DOMConfiguration::DoNotCheckHolder
-        // Make sure that info.Holder() really points to an instance of the type.
-        if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
-            exceptionState.throwTypeError("Illegal invocation");
-            return;
-        }
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        ScriptPromise result = NavigatorInstalledApp::getInstalledRelatedApps(scriptState, *impl);
-        v8SetReturnValue(info, result.v8Value());
-    }
-
-    void getInstalledRelatedAppsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::getInstalledRelatedAppsMethod(info);
-    }
-
-    static void getUserMediaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getUserMedia");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        if (UNLIKELY(info.Length() < 3)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-            return;
-        }
-
-        MediaStreamConstraints constraints;
-        NavigatorUserMediaSuccessCallback* successCallback;
-        NavigatorUserMediaErrorCallback* errorCallback;
-        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-            exceptionState.throwTypeError("parameter 1 ('constraints') is not an object.");
-
-            return;
-        }
-        V8MediaStreamConstraints::toImpl(info.GetIsolate(), info[0], constraints, exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        if (info.Length() <= 1 || !info[1]->IsFunction()) {
-            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-            return;
-        }
-        successCallback = V8NavigatorUserMediaSuccessCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-        if (info.Length() <= 2 || !info[2]->IsFunction()) {
-            exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-            return;
-        }
-        errorCallback = V8NavigatorUserMediaErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-
-        NavigatorMediaStream::getUserMedia(*impl, constraints, successCallback, errorCallback, exceptionState);
-        if (exceptionState.hadException()) {
-            return;
-        }
-    }
-
-    void getUserMediaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GetUserMediaLegacy);
-        NavigatorPartialV8Internal::getUserMediaMethod(info);
-    }
-
-    static void webkitGetUserMediaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "webkitGetUserMedia");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        if (UNLIKELY(info.Length() < 3)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-            return;
-        }
-
-        MediaStreamConstraints constraints;
-        NavigatorUserMediaSuccessCallback* successCallback;
-        NavigatorUserMediaErrorCallback* errorCallback;
-        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-            exceptionState.throwTypeError("parameter 1 ('constraints') is not an object.");
-
-            return;
-        }
-        V8MediaStreamConstraints::toImpl(info.GetIsolate(), info[0], constraints, exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        if (info.Length() <= 1 || !info[1]->IsFunction()) {
-            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-            return;
-        }
-        successCallback = V8NavigatorUserMediaSuccessCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-        if (info.Length() <= 2 || !info[2]->IsFunction()) {
-            exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-            return;
-        }
-        errorCallback = V8NavigatorUserMediaErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-
-        NavigatorMediaStream::getUserMedia(*impl, constraints, successCallback, errorCallback, exceptionState);
-        if (exceptionState.hadException()) {
-            return;
-        }
-    }
-
-    void webkitGetUserMediaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GetUserMediaPrefixed);
-        NavigatorPartialV8Internal::webkitGetUserMediaMethod(info);
-    }
-
-    static void registerProtocolHandlerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "registerProtocolHandler");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        if (UNLIKELY(info.Length() < 3)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-            return;
-        }
-
-        V8StringResource<> scheme;
-        V8StringResource<> url;
-        V8StringResource<> title;
-        scheme = info[0];
-        if (!scheme.prepare())
-            return;
-
-        url = info[1];
-        if (!url.prepare())
-            return;
-
-        title = info[2];
-        if (!title.prepare())
-            return;
-
-        NavigatorContentUtils::registerProtocolHandler(*impl, scheme, url, title, exceptionState);
-        if (exceptionState.hadException()) {
-            return;
-        }
-    }
-
-    void registerProtocolHandlerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::registerProtocolHandlerMethod(info);
-    }
-
-    static void isProtocolHandlerRegisteredMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "isProtocolHandlerRegistered");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        if (UNLIKELY(info.Length() < 2)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-            return;
-        }
-
-        V8StringResource<> scheme;
-        V8StringResource<> url;
-        scheme = info[0];
-        if (!scheme.prepare())
-            return;
-
-        url = info[1];
-        if (!url.prepare())
-            return;
-
-        String result = NavigatorContentUtils::isProtocolHandlerRegistered(*impl, scheme, url, exceptionState);
-        if (exceptionState.hadException()) {
-            return;
-        }
-        v8SetReturnValueString(info, result, info.GetIsolate());
-    }
-
-    void isProtocolHandlerRegisteredMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::isProtocolHandlerRegisteredMethod(info);
-    }
-
-    static void unregisterProtocolHandlerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "unregisterProtocolHandler");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        if (UNLIKELY(info.Length() < 2)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-            return;
-        }
-
-        V8StringResource<> scheme;
-        V8StringResource<> url;
-        scheme = info[0];
-        if (!scheme.prepare())
-            return;
-
-        url = info[1];
-        if (!url.prepare())
-            return;
-
-        NavigatorContentUtils::unregisterProtocolHandler(*impl, scheme, url, exceptionState);
-        if (exceptionState.hadException()) {
-            return;
-        }
-    }
-
-    void unregisterProtocolHandlerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::unregisterProtocolHandlerMethod(info);
-    }
+//     static void serviceWorkerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Navigator", "serviceWorker");
+// 
+//         ServiceWorkerContainer* cppValue(NavigatorServiceWorker::serviceWorker(executionContext, *impl, exceptionState));
+// 
+//         if (UNLIKELY(exceptionState.hadException()))
+//             return;
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#serviceWorker";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void serviceWorkerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::serviceWorkerAttributeGetter(info);
+//     }
+
+//     static void usbAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Navigator* impl = V8Navigator::toImpl(holder);
+// 
+//         USB* cppValue(NavigatorUSB::usb(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Navigator#usb";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void usbAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::usbAttributeGetter(info);
+//     }
+// 
+//     static void getBatteryMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getBattery");
+//         ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+// 
+//         // V8DOMConfiguration::DoNotCheckHolder
+//         // Make sure that info.Holder() really points to an instance of the type.
+//         if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
+//             exceptionState.throwTypeError("Illegal invocation");
+//             return;
+//         }
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         ScriptPromise result = NavigatorBattery::getBattery(scriptState, *impl);
+//         v8SetReturnValue(info, result.v8Value());
+//     }
+// 
+//     void getBatteryMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::getBatteryMethod(info);
+//     }
+// 
+//     static void sendBeaconMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "sendBeacon");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         if (UNLIKELY(info.Length() < 1)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+//             return;
+//         }
+// 
+//         V8StringResource<> url;
+//         ArrayBufferViewOrBlobOrStringOrFormData data;
+//         url = info[0];
+//         if (!url.prepare())
+//             return;
+// 
+//         if (!info[1]->IsUndefined()) {
+//             V8ArrayBufferViewOrBlobOrStringOrFormData::toImpl(info.GetIsolate(), info[1], data, UnionTypeConversionMode::Nullable, exceptionState);
+//             if (exceptionState.hadException())
+//                 return;
+//         } else {
+//             /* null default value */;
+//         }
+// 
+//         bool result = NavigatorBeacon::sendBeacon(scriptState, *impl, url, data, exceptionState);
+//         if (exceptionState.hadException()) {
+//             return;
+//         }
+//         v8SetReturnValueBool(info, result);
+//     }
+// 
+//     void sendBeaconMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SendBeacon);
+//         NavigatorPartialV8Internal::sendBeaconMethod(info);
+//     }
+// 
+//     static void requestMediaKeySystemAccessMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "requestMediaKeySystemAccess");
+//         ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+// 
+//         // V8DOMConfiguration::DoNotCheckHolder
+//         // Make sure that info.Holder() really points to an instance of the type.
+//         if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
+//             exceptionState.throwTypeError("Illegal invocation");
+//             return;
+//         }
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         if (UNLIKELY(info.Length() < 2)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+//             return;
+//         }
+// 
+//         V8StringResource<> keySystem;
+//         HeapVector<MediaKeySystemConfiguration> supportedConfigurations;
+//         keySystem = info[0];
+//         if (!keySystem.prepare(exceptionState))
+//             return;
+// 
+//         supportedConfigurations = toImplArray<HeapVector<MediaKeySystemConfiguration>>(info[1], 2, info.GetIsolate(), exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         ScriptPromise result = NavigatorRequestMediaKeySystemAccess::requestMediaKeySystemAccess(scriptState, *impl, keySystem, supportedConfigurations);
+//         v8SetReturnValue(info, result.v8Value());
+//     }
+// 
+//     void requestMediaKeySystemAccessMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::requestMediaKeySystemAccessMethod(info);
+//     }
+// 
+//     static void getGamepadsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         v8SetReturnValue(info, NavigatorGamepad::getGamepads(*impl));
+//     }
+// 
+//     void getGamepadsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::getGamepadsMethod(info);
+//     }
+// 
+//     static void getInstalledRelatedAppsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getInstalledRelatedApps");
+//         ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+// 
+//         // V8DOMConfiguration::DoNotCheckHolder
+//         // Make sure that info.Holder() really points to an instance of the type.
+//         if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
+//             exceptionState.throwTypeError("Illegal invocation");
+//             return;
+//         }
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         ScriptPromise result = NavigatorInstalledApp::getInstalledRelatedApps(scriptState, *impl);
+//         v8SetReturnValue(info, result.v8Value());
+//     }
+// 
+//     void getInstalledRelatedAppsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::getInstalledRelatedAppsMethod(info);
+//     }
+// 
+//     static void getUserMediaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getUserMedia");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         if (UNLIKELY(info.Length() < 3)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+//             return;
+//         }
+// 
+//         MediaStreamConstraints constraints;
+//         NavigatorUserMediaSuccessCallback* successCallback;
+//         NavigatorUserMediaErrorCallback* errorCallback;
+//         if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+//             exceptionState.throwTypeError("parameter 1 ('constraints') is not an object.");
+// 
+//             return;
+//         }
+//         V8MediaStreamConstraints::toImpl(info.GetIsolate(), info[0], constraints, exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         if (info.Length() <= 1 || !info[1]->IsFunction()) {
+//             exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+// 
+//             return;
+//         }
+//         successCallback = V8NavigatorUserMediaSuccessCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+// 
+//         if (info.Length() <= 2 || !info[2]->IsFunction()) {
+//             exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+// 
+//             return;
+//         }
+//         errorCallback = V8NavigatorUserMediaErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+// 
+//         NavigatorMediaStream::getUserMedia(*impl, constraints, successCallback, errorCallback, exceptionState);
+//         if (exceptionState.hadException()) {
+//             return;
+//         }
+//     }
+// 
+//     void getUserMediaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GetUserMediaLegacy);
+//         NavigatorPartialV8Internal::getUserMediaMethod(info);
+//     }
+// 
+//     static void webkitGetUserMediaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "webkitGetUserMedia");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         if (UNLIKELY(info.Length() < 3)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+//             return;
+//         }
+// 
+//         MediaStreamConstraints constraints;
+//         NavigatorUserMediaSuccessCallback* successCallback;
+//         NavigatorUserMediaErrorCallback* errorCallback;
+//         if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+//             exceptionState.throwTypeError("parameter 1 ('constraints') is not an object.");
+// 
+//             return;
+//         }
+//         V8MediaStreamConstraints::toImpl(info.GetIsolate(), info[0], constraints, exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         if (info.Length() <= 1 || !info[1]->IsFunction()) {
+//             exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+// 
+//             return;
+//         }
+//         successCallback = V8NavigatorUserMediaSuccessCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+// 
+//         if (info.Length() <= 2 || !info[2]->IsFunction()) {
+//             exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+// 
+//             return;
+//         }
+//         errorCallback = V8NavigatorUserMediaErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+// 
+//         NavigatorMediaStream::getUserMedia(*impl, constraints, successCallback, errorCallback, exceptionState);
+//         if (exceptionState.hadException()) {
+//             return;
+//         }
+//     }
+// 
+//     void webkitGetUserMediaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GetUserMediaPrefixed);
+//         NavigatorPartialV8Internal::webkitGetUserMediaMethod(info);
+//     }
+// 
+//     static void registerProtocolHandlerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "registerProtocolHandler");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         if (UNLIKELY(info.Length() < 3)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+//             return;
+//         }
+// 
+//         V8StringResource<> scheme;
+//         V8StringResource<> url;
+//         V8StringResource<> title;
+//         scheme = info[0];
+//         if (!scheme.prepare())
+//             return;
+// 
+//         url = info[1];
+//         if (!url.prepare())
+//             return;
+// 
+//         title = info[2];
+//         if (!title.prepare())
+//             return;
+// 
+//         NavigatorContentUtils::registerProtocolHandler(*impl, scheme, url, title, exceptionState);
+//         if (exceptionState.hadException()) {
+//             return;
+//         }
+//     }
+// 
+//     void registerProtocolHandlerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::registerProtocolHandlerMethod(info);
+//     }
+// 
+//     static void isProtocolHandlerRegisteredMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "isProtocolHandlerRegistered");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         if (UNLIKELY(info.Length() < 2)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+//             return;
+//         }
+// 
+//         V8StringResource<> scheme;
+//         V8StringResource<> url;
+//         scheme = info[0];
+//         if (!scheme.prepare())
+//             return;
+// 
+//         url = info[1];
+//         if (!url.prepare())
+//             return;
+// 
+//         String result = NavigatorContentUtils::isProtocolHandlerRegistered(*impl, scheme, url, exceptionState);
+//         if (exceptionState.hadException()) {
+//             return;
+//         }
+//         v8SetReturnValueString(info, result, info.GetIsolate());
+//     }
+// 
+//     void isProtocolHandlerRegisteredMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::isProtocolHandlerRegisteredMethod(info);
+//     }
+// 
+//     static void unregisterProtocolHandlerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "unregisterProtocolHandler");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         if (UNLIKELY(info.Length() < 2)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+//             return;
+//         }
+// 
+//         V8StringResource<> scheme;
+//         V8StringResource<> url;
+//         scheme = info[0];
+//         if (!scheme.prepare())
+//             return;
+// 
+//         url = info[1];
+//         if (!url.prepare())
+//             return;
+// 
+//         NavigatorContentUtils::unregisterProtocolHandler(*impl, scheme, url, exceptionState);
+//         if (exceptionState.hadException()) {
+//             return;
+//         }
+//     }
+// 
+//     void unregisterProtocolHandlerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::unregisterProtocolHandlerMethod(info);
+//     }
 
     static void javaEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
@@ -896,189 +896,189 @@ namespace NavigatorPartialV8Internal {
         NavigatorPartialV8Internal::javaEnabledMethod(info);
     }
 
-    static void vibrate1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "vibrate");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        unsigned pattern;
-        pattern = toUInt32(info.GetIsolate(), info[0], Clamp, exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        v8SetReturnValueBool(info, NavigatorVibration::vibrate(*impl, pattern));
-    }
-
-    static void vibrate2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "vibrate");
-
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        Vector<unsigned> pattern;
-        pattern = toImplArray<Vector<unsigned>>(info[0], 1, info.GetIsolate(), exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        v8SetReturnValueBool(info, NavigatorVibration::vibrate(*impl, pattern));
-    }
-
-    static void vibrateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        bool isArityError = false;
-        switch (std::min(1, info.Length())) {
-        case 1:
-            if (info[0]->IsArray()) {
-                vibrate2Method(info);
-                return;
-            }
-            if (true) {
-                vibrate1Method(info);
-                return;
-            }
-            break;
-        default:
-            isArityError = true;
-        }
-
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "vibrate");
-
-        if (isArityError) {
-            if (info.Length() < 1) {
-                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-                return;
-            }
-        }
-        exceptionState.throwTypeError("No function was found that matched the signature provided.");
-    }
-
-    void vibrateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::vibrateMethod(info);
-    }
-
-    static void getVRDisplaysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getVRDisplays");
-        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-        // V8DOMConfiguration::DoNotCheckHolder
-        // Make sure that info.Holder() really points to an instance of the type.
-        if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
-            exceptionState.throwTypeError("Illegal invocation");
-            return;
-        }
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        ScriptPromise result = NavigatorVR::getVRDisplays(scriptState, *impl);
-        v8SetReturnValue(info, result.v8Value());
-    }
-
-    void getVRDisplaysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        NavigatorPartialV8Internal::getVRDisplaysMethod(info);
-    }
-
-    static void requestMIDIAccessMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "requestMIDIAccess");
-        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-        // V8DOMConfiguration::DoNotCheckHolder
-        // Make sure that info.Holder() really points to an instance of the type.
-        if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
-            exceptionState.throwTypeError("Illegal invocation");
-            return;
-        }
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        MIDIOptions options;
-        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
-
-            return;
-        }
-        V8MIDIOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        ScriptPromise result = NavigatorWebMIDI::requestMIDIAccess(scriptState, *impl, options);
-        v8SetReturnValue(info, result.v8Value());
-    }
-
-    void requestMIDIAccessMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RequestMIDIAccess);
-        NavigatorPartialV8Internal::requestMIDIAccessMethod(info);
-    }
-
-    static void shareMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "share");
-        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-        // V8DOMConfiguration::DoNotCheckHolder
-        // Make sure that info.Holder() really points to an instance of the type.
-        if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
-            exceptionState.throwTypeError("Illegal invocation");
-            return;
-        }
-        Navigator* impl = V8Navigator::toImpl(info.Holder());
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        if (UNLIKELY(info.Length() < 1)) {
-            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-            return;
-        }
-
-        ShareData data;
-        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-            exceptionState.throwTypeError("parameter 1 ('data') is not an object.");
-
-            return;
-        }
-        V8ShareData::toImpl(info.GetIsolate(), info[0], data, exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        ScriptPromise result = NavigatorShare::share(scriptState, *impl, data);
-        v8SetReturnValue(info, result.v8Value());
-    }
-
-    void shareMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebShareShare);
-        NavigatorPartialV8Internal::shareMethod(info);
-    }
+//     static void vibrate1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "vibrate");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         unsigned pattern;
+//         pattern = toUInt32(info.GetIsolate(), info[0], Clamp, exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         v8SetReturnValueBool(info, NavigatorVibration::vibrate(*impl, pattern));
+//     }
+// 
+//     static void vibrate2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "vibrate");
+// 
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         Vector<unsigned> pattern;
+//         pattern = toImplArray<Vector<unsigned>>(info[0], 1, info.GetIsolate(), exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         v8SetReturnValueBool(info, NavigatorVibration::vibrate(*impl, pattern));
+//     }
+// 
+//     static void vibrateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         bool isArityError = false;
+//         switch (std::min(1, info.Length())) {
+//         case 1:
+//             if (info[0]->IsArray()) {
+//                 vibrate2Method(info);
+//                 return;
+//             }
+//             if (true) {
+//                 vibrate1Method(info);
+//                 return;
+//             }
+//             break;
+//         default:
+//             isArityError = true;
+//         }
+// 
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "vibrate");
+// 
+//         if (isArityError) {
+//             if (info.Length() < 1) {
+//                 exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+//                 return;
+//             }
+//         }
+//         exceptionState.throwTypeError("No function was found that matched the signature provided.");
+//     }
+// 
+//     void vibrateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::vibrateMethod(info);
+//     }
+// 
+//     static void getVRDisplaysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "getVRDisplays");
+//         ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+// 
+//         // V8DOMConfiguration::DoNotCheckHolder
+//         // Make sure that info.Holder() really points to an instance of the type.
+//         if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
+//             exceptionState.throwTypeError("Illegal invocation");
+//             return;
+//         }
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         ScriptPromise result = NavigatorVR::getVRDisplays(scriptState, *impl);
+//         v8SetReturnValue(info, result.v8Value());
+//     }
+// 
+//     void getVRDisplaysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         NavigatorPartialV8Internal::getVRDisplaysMethod(info);
+//     }
+// 
+//     static void requestMIDIAccessMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "requestMIDIAccess");
+//         ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+// 
+//         // V8DOMConfiguration::DoNotCheckHolder
+//         // Make sure that info.Holder() really points to an instance of the type.
+//         if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
+//             exceptionState.throwTypeError("Illegal invocation");
+//             return;
+//         }
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         MIDIOptions options;
+//         if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+//             exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
+// 
+//             return;
+//         }
+//         V8MIDIOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         ScriptPromise result = NavigatorWebMIDI::requestMIDIAccess(scriptState, *impl, options);
+//         v8SetReturnValue(info, result.v8Value());
+//     }
+// 
+//     void requestMIDIAccessMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RequestMIDIAccess);
+//         NavigatorPartialV8Internal::requestMIDIAccessMethod(info);
+//     }
+//
+//     static void shareMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Navigator", "share");
+//         ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+// 
+//         // V8DOMConfiguration::DoNotCheckHolder
+//         // Make sure that info.Holder() really points to an instance of the type.
+//         if (!V8Navigator::hasInstance(info.Holder(), info.GetIsolate())) {
+//             exceptionState.throwTypeError("Illegal invocation");
+//             return;
+//         }
+//         Navigator* impl = V8Navigator::toImpl(info.Holder());
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         if (UNLIKELY(info.Length() < 1)) {
+//             exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+//             return;
+//         }
+// 
+//         ShareData data;
+//         if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+//             exceptionState.throwTypeError("parameter 1 ('data') is not an object.");
+// 
+//             return;
+//         }
+//         V8ShareData::toImpl(info.GetIsolate(), info[0], data, exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         ScriptPromise result = NavigatorShare::share(scriptState, *impl, data);
+//         v8SetReturnValue(info, result.v8Value());
+//     }
+// 
+//     void shareMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebShareShare);
+//         NavigatorPartialV8Internal::shareMethod(info);
+//     }
 
 } // namespace NavigatorPartialV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8NavigatorAccessors[] = {
-    { "doNotTrack", NavigatorPartialV8Internal::doNotTrackAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "geolocation", NavigatorPartialV8Internal::geolocationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "mediaDevices", NavigatorPartialV8Internal::mediaDevicesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    //{ "doNotTrack", NavigatorPartialV8Internal::doNotTrackAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    //{ "geolocation", NavigatorPartialV8Internal::geolocationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    //{ "mediaDevices", NavigatorPartialV8Internal::mediaDevicesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "plugins", NavigatorPartialV8Internal::pluginsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "mimeTypes", NavigatorPartialV8Internal::mimeTypesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "webkitTemporaryStorage", NavigatorPartialV8Internal::webkitTemporaryStorageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "webkitPersistentStorage", NavigatorPartialV8Internal::webkitPersistentStorageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "serviceWorker", NavigatorPartialV8Internal::serviceWorkerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    //{ "serviceWorker", NavigatorPartialV8Internal::serviceWorkerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8NavigatorMethods[] = {
-    { "getBattery", NavigatorPartialV8Internal::getBatteryMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
-    { "sendBeacon", NavigatorPartialV8Internal::sendBeaconMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "requestMediaKeySystemAccess", NavigatorPartialV8Internal::requestMediaKeySystemAccessMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
-    { "getGamepads", NavigatorPartialV8Internal::getGamepadsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "webkitGetUserMedia", NavigatorPartialV8Internal::webkitGetUserMediaMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+//     { "getBattery", NavigatorPartialV8Internal::getBatteryMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+//     { "sendBeacon", NavigatorPartialV8Internal::sendBeaconMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+//     { "requestMediaKeySystemAccess", NavigatorPartialV8Internal::requestMediaKeySystemAccessMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+//     { "getGamepads", NavigatorPartialV8Internal::getGamepadsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+//     { "webkitGetUserMedia", NavigatorPartialV8Internal::webkitGetUserMediaMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "javaEnabled", NavigatorPartialV8Internal::javaEnabledMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "vibrate", NavigatorPartialV8Internal::vibrateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    { "requestMIDIAccess", NavigatorPartialV8Internal::requestMIDIAccessMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+//     { "vibrate", NavigatorPartialV8Internal::vibrateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+//     { "requestMIDIAccess", NavigatorPartialV8Internal::requestMIDIAccessMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
 void V8NavigatorPartial::installV8NavigatorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
@@ -1097,137 +1097,137 @@ void V8NavigatorPartial::installV8NavigatorTemplate(v8::Isolate* isolate, const 
     V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NavigatorAccessors, WTF_ARRAY_LENGTH(V8NavigatorAccessors));
     V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NavigatorMethods, WTF_ARRAY_LENGTH(V8NavigatorMethods));
 
-    if (RuntimeEnabledFeatures::budgetEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorbudgetConfiguration = { "budget", NavigatorPartialV8Internal::budgetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorbudgetConfiguration);
-    }
-    if (RuntimeEnabledFeatures::credentialManagerEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorcredentialsConfiguration = { "credentials", NavigatorPartialV8Internal::credentialsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcredentialsConfiguration);
-    }
-    if (RuntimeEnabledFeatures::durableStorageEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorstorageConfiguration = { "storage", NavigatorPartialV8Internal::storageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorstorageConfiguration);
-    }
-    if (RuntimeEnabledFeatures::mediaSessionEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessormediaSessionConfiguration = { "mediaSession", NavigatorPartialV8Internal::mediaSessionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessormediaSessionConfiguration);
-    }
-    if (RuntimeEnabledFeatures::networkInformationEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorconnectionConfiguration = { "connection", NavigatorPartialV8Internal::connectionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorconnectionConfiguration);
-    }
-    if (RuntimeEnabledFeatures::permissionsEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorpermissionsConfiguration = { "permissions", NavigatorPartialV8Internal::permissionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpermissionsConfiguration);
-    }
-    if (RuntimeEnabledFeatures::presentationEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorpresentationConfiguration = { "presentation", NavigatorPartialV8Internal::presentationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpresentationConfiguration);
-    }
-    if (RuntimeEnabledFeatures::quotaPromiseEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorstorageQuotaConfiguration = { "storageQuota", NavigatorPartialV8Internal::storageQuotaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorstorageQuotaConfiguration);
-    }
-    if (RuntimeEnabledFeatures::webBluetoothEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorbluetoothConfiguration = { "bluetooth", NavigatorPartialV8Internal::bluetoothAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorbluetoothConfiguration);
-    }
-    if (RuntimeEnabledFeatures::webNFCEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessornfcConfiguration = { "nfc", NavigatorPartialV8Internal::nfcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessornfcConfiguration);
-    }
-
-    if (RuntimeEnabledFeatures::installedAppEnabled()) {
-        const V8DOMConfiguration::MethodConfiguration getInstalledRelatedAppsMethodConfiguration = { "getInstalledRelatedApps", NavigatorPartialV8Internal::getInstalledRelatedAppsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
-        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getInstalledRelatedAppsMethodConfiguration);
-    }
-    if (RuntimeEnabledFeatures::getUserMediaEnabled()) {
-        const V8DOMConfiguration::MethodConfiguration getUserMediaMethodConfiguration = { "getUserMedia", NavigatorPartialV8Internal::getUserMediaMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getUserMediaMethodConfiguration);
-    }
-    if (RuntimeEnabledFeatures::navigatorContentUtilsEnabled()) {
-        const V8DOMConfiguration::MethodConfiguration registerProtocolHandlerMethodConfiguration = { "registerProtocolHandler", NavigatorPartialV8Internal::registerProtocolHandlerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, registerProtocolHandlerMethodConfiguration);
-    }
-    if (RuntimeEnabledFeatures::customSchemeHandlerEnabled()) {
-        const V8DOMConfiguration::MethodConfiguration isProtocolHandlerRegisteredMethodConfiguration = { "isProtocolHandlerRegistered", NavigatorPartialV8Internal::isProtocolHandlerRegisteredMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, isProtocolHandlerRegisteredMethodConfiguration);
-    }
-    if (RuntimeEnabledFeatures::navigatorContentUtilsEnabled()) {
-        const V8DOMConfiguration::MethodConfiguration unregisterProtocolHandlerMethodConfiguration = { "unregisterProtocolHandler", NavigatorPartialV8Internal::unregisterProtocolHandlerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, unregisterProtocolHandlerMethodConfiguration);
-    }
+//     if (RuntimeEnabledFeatures::budgetEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorbudgetConfiguration = { "budget", NavigatorPartialV8Internal::budgetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorbudgetConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::credentialManagerEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorcredentialsConfiguration = { "credentials", NavigatorPartialV8Internal::credentialsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcredentialsConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::durableStorageEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorstorageConfiguration = { "storage", NavigatorPartialV8Internal::storageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorstorageConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::mediaSessionEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessormediaSessionConfiguration = { "mediaSession", NavigatorPartialV8Internal::mediaSessionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessormediaSessionConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::networkInformationEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorconnectionConfiguration = { "connection", NavigatorPartialV8Internal::connectionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorconnectionConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::permissionsEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorpermissionsConfiguration = { "permissions", NavigatorPartialV8Internal::permissionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpermissionsConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::presentationEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorpresentationConfiguration = { "presentation", NavigatorPartialV8Internal::presentationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpresentationConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::quotaPromiseEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorstorageQuotaConfiguration = { "storageQuota", NavigatorPartialV8Internal::storageQuotaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorstorageQuotaConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::webBluetoothEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorbluetoothConfiguration = { "bluetooth", NavigatorPartialV8Internal::bluetoothAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorbluetoothConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::webNFCEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessornfcConfiguration = { "nfc", NavigatorPartialV8Internal::nfcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessornfcConfiguration);
+//     }
+// 
+//     if (RuntimeEnabledFeatures::installedAppEnabled()) {
+//         const V8DOMConfiguration::MethodConfiguration getInstalledRelatedAppsMethodConfiguration = { "getInstalledRelatedApps", NavigatorPartialV8Internal::getInstalledRelatedAppsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+//         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getInstalledRelatedAppsMethodConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::getUserMediaEnabled()) {
+//         const V8DOMConfiguration::MethodConfiguration getUserMediaMethodConfiguration = { "getUserMedia", NavigatorPartialV8Internal::getUserMediaMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getUserMediaMethodConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::navigatorContentUtilsEnabled()) {
+//         const V8DOMConfiguration::MethodConfiguration registerProtocolHandlerMethodConfiguration = { "registerProtocolHandler", NavigatorPartialV8Internal::registerProtocolHandlerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, registerProtocolHandlerMethodConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::customSchemeHandlerEnabled()) {
+//         const V8DOMConfiguration::MethodConfiguration isProtocolHandlerRegisteredMethodConfiguration = { "isProtocolHandlerRegistered", NavigatorPartialV8Internal::isProtocolHandlerRegisteredMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, isProtocolHandlerRegisteredMethodConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::navigatorContentUtilsEnabled()) {
+//         const V8DOMConfiguration::MethodConfiguration unregisterProtocolHandlerMethodConfiguration = { "unregisterProtocolHandler", NavigatorPartialV8Internal::unregisterProtocolHandlerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, unregisterProtocolHandlerMethodConfiguration);
+//     }
 }
 
-void V8NavigatorPartial::installWebVR(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
-{
-    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Navigator::wrapperTypeInfo.domTemplate(isolate, world);
-    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-    ALLOW_UNUSED_LOCAL(signature);
-    const V8DOMConfiguration::MethodConfiguration methodGetvrdisplaysConfiguration = { "getVRDisplays", NavigatorPartialV8Internal::getVRDisplaysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, methodGetvrdisplaysConfiguration);
-}
-
-void V8NavigatorPartial::installWebVR(ScriptState* scriptState, v8::Local<v8::Object> instance)
-{
-    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Navigator::wrapperTypeInfo);
-    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Navigator::wrapperTypeInfo);
-    ALLOW_UNUSED_LOCAL(interface);
-    installWebVR(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
-}
-
-void V8NavigatorPartial::installWebVR(ScriptState* scriptState)
-{
-    installWebVR(scriptState, v8::Local<v8::Object>());
-}
-
-void V8NavigatorPartial::installWebShare(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
-{
-    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Navigator::wrapperTypeInfo.domTemplate(isolate, world);
-    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-    ALLOW_UNUSED_LOCAL(signature);
-    const V8DOMConfiguration::MethodConfiguration methodShareConfiguration = { "share", NavigatorPartialV8Internal::shareMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, methodShareConfiguration);
-}
-
-void V8NavigatorPartial::installWebShare(ScriptState* scriptState, v8::Local<v8::Object> instance)
-{
-    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Navigator::wrapperTypeInfo);
-    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Navigator::wrapperTypeInfo);
-    ALLOW_UNUSED_LOCAL(interface);
-    installWebShare(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
-}
-
-void V8NavigatorPartial::installWebShare(ScriptState* scriptState)
-{
-    installWebShare(scriptState, v8::Local<v8::Object>());
-}
-
-void V8NavigatorPartial::installWebUSB(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
-{
-    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Navigator::wrapperTypeInfo.domTemplate(isolate, world);
-    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-    ALLOW_UNUSED_LOCAL(signature);
-    const V8DOMConfiguration::AccessorConfiguration accessorusbConfiguration = { "usb", NavigatorPartialV8Internal::usbAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorusbConfiguration);
-}
-
-void V8NavigatorPartial::installWebUSB(ScriptState* scriptState, v8::Local<v8::Object> instance)
-{
-    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Navigator::wrapperTypeInfo);
-    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Navigator::wrapperTypeInfo);
-    ALLOW_UNUSED_LOCAL(interface);
-    installWebUSB(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
-}
-
-void V8NavigatorPartial::installWebUSB(ScriptState* scriptState)
-{
-    installWebUSB(scriptState, v8::Local<v8::Object>());
-}
+// void V8NavigatorPartial::installWebVR(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+// {
+//     v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Navigator::wrapperTypeInfo.domTemplate(isolate, world);
+//     v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+//     ALLOW_UNUSED_LOCAL(signature);
+//     const V8DOMConfiguration::MethodConfiguration methodGetvrdisplaysConfiguration = { "getVRDisplays", NavigatorPartialV8Internal::getVRDisplaysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+//     V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, methodGetvrdisplaysConfiguration);
+// }
+// 
+// void V8NavigatorPartial::installWebVR(ScriptState* scriptState, v8::Local<v8::Object> instance)
+// {
+//     V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+//     v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Navigator::wrapperTypeInfo);
+//     v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Navigator::wrapperTypeInfo);
+//     ALLOW_UNUSED_LOCAL(interface);
+//     installWebVR(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+// }
+// 
+// void V8NavigatorPartial::installWebVR(ScriptState* scriptState)
+// {
+//     installWebVR(scriptState, v8::Local<v8::Object>());
+// }
+// 
+// void V8NavigatorPartial::installWebShare(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+// {
+//     v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Navigator::wrapperTypeInfo.domTemplate(isolate, world);
+//     v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+//     ALLOW_UNUSED_LOCAL(signature);
+//     const V8DOMConfiguration::MethodConfiguration methodShareConfiguration = { "share", NavigatorPartialV8Internal::shareMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+//     V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, methodShareConfiguration);
+// }
+// 
+// void V8NavigatorPartial::installWebShare(ScriptState* scriptState, v8::Local<v8::Object> instance)
+// {
+//     V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+//     v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Navigator::wrapperTypeInfo);
+//     v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Navigator::wrapperTypeInfo);
+//     ALLOW_UNUSED_LOCAL(interface);
+//     installWebShare(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+// }
+// 
+// void V8NavigatorPartial::installWebShare(ScriptState* scriptState)
+// {
+//     installWebShare(scriptState, v8::Local<v8::Object>());
+// }
+// 
+// void V8NavigatorPartial::installWebUSB(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+// {
+//     v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Navigator::wrapperTypeInfo.domTemplate(isolate, world);
+//     v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+//     ALLOW_UNUSED_LOCAL(signature);
+//     const V8DOMConfiguration::AccessorConfiguration accessorusbConfiguration = { "usb", NavigatorPartialV8Internal::usbAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//     V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorusbConfiguration);
+// }
+// 
+// void V8NavigatorPartial::installWebUSB(ScriptState* scriptState, v8::Local<v8::Object> instance)
+// {
+//     V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+//     v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Navigator::wrapperTypeInfo);
+//     v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Navigator::wrapperTypeInfo);
+//     ALLOW_UNUSED_LOCAL(interface);
+//     installWebUSB(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+// }
+// 
+// void V8NavigatorPartial::installWebUSB(ScriptState* scriptState)
+// {
+//     installWebUSB(scriptState, v8::Local<v8::Object>());
+// }
 
 void V8NavigatorPartial::initialize()
 {

@@ -22,8 +22,8 @@
 #include "bindings/modules/v8/V8CanvasRenderingContext2D.h"
 #include "bindings/modules/v8/V8ImageBitmapRenderingContext.h"
 #include "bindings/modules/v8/V8MediaStream.h"
-#include "bindings/modules/v8/V8WebGL2RenderingContext.h"
-#include "bindings/modules/v8/V8WebGLRenderingContext.h"
+// #include "bindings/modules/v8/V8WebGL2RenderingContext.h"
+// #include "bindings/modules/v8/V8WebGLRenderingContext.h"
 #include "core/dom/Document.h"
 #include "core/frame/UseCounter.h"
 #include "modules/canvas/HTMLCanvasElementModule.h"
@@ -89,42 +89,42 @@ namespace HTMLCanvasElementPartialV8Internal {
         HTMLCanvasElementPartialV8Internal::transferControlToOffscreenMethod(info);
     }
 
-    static void captureStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLCanvasElement", "captureStream");
-
-        HTMLCanvasElement* impl = V8HTMLCanvasElement::toImpl(info.Holder());
-
-        double frameRate;
-        int numArgsPassed = info.Length();
-        while (numArgsPassed > 0) {
-            if (!info[numArgsPassed - 1]->IsUndefined())
-                break;
-            --numArgsPassed;
-        }
-        if (UNLIKELY(numArgsPassed <= 0)) {
-            MediaStream* result = HTMLCanvasElementCapture::captureStream(*impl, exceptionState);
-            if (exceptionState.hadException()) {
-                return;
-            }
-            v8SetReturnValueFast(info, result, impl);
-            return;
-        }
-        frameRate = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-        if (exceptionState.hadException())
-            return;
-
-        MediaStream* result = HTMLCanvasElementCapture::captureStream(*impl, frameRate, exceptionState);
-        if (exceptionState.hadException()) {
-            return;
-        }
-        v8SetReturnValueFast(info, result, impl);
-    }
-
-    void captureStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        HTMLCanvasElementPartialV8Internal::captureStreamMethod(info);
-    }
+//     static void captureStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLCanvasElement", "captureStream");
+// 
+//         HTMLCanvasElement* impl = V8HTMLCanvasElement::toImpl(info.Holder());
+// 
+//         double frameRate;
+//         int numArgsPassed = info.Length();
+//         while (numArgsPassed > 0) {
+//             if (!info[numArgsPassed - 1]->IsUndefined())
+//                 break;
+//             --numArgsPassed;
+//         }
+//         if (UNLIKELY(numArgsPassed <= 0)) {
+//             MediaStream* result = HTMLCanvasElementCapture::captureStream(*impl, exceptionState);
+//             if (exceptionState.hadException()) {
+//                 return;
+//             }
+//             v8SetReturnValueFast(info, result, impl);
+//             return;
+//         }
+//         frameRate = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+//         if (exceptionState.hadException())
+//             return;
+// 
+//         MediaStream* result = HTMLCanvasElementCapture::captureStream(*impl, frameRate, exceptionState);
+//         if (exceptionState.hadException()) {
+//             return;
+//         }
+//         v8SetReturnValueFast(info, result, impl);
+//     }
+// 
+//     void captureStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         HTMLCanvasElementPartialV8Internal::captureStreamMethod(info);
+//     }
 
 } // namespace HTMLCanvasElementPartialV8Internal
 
@@ -151,10 +151,10 @@ void V8HTMLCanvasElementPartial::installV8HTMLCanvasElementTemplate(v8::Isolate*
         const V8DOMConfiguration::MethodConfiguration transferControlToOffscreenMethodConfiguration = { "transferControlToOffscreen", HTMLCanvasElementPartialV8Internal::transferControlToOffscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, transferControlToOffscreenMethodConfiguration);
     }
-    if (RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
-        const V8DOMConfiguration::MethodConfiguration captureStreamMethodConfiguration = { "captureStream", HTMLCanvasElementPartialV8Internal::captureStreamMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, captureStreamMethodConfiguration);
-    }
+//     if (RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
+//         const V8DOMConfiguration::MethodConfiguration captureStreamMethodConfiguration = { "captureStream", HTMLCanvasElementPartialV8Internal::captureStreamMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, captureStreamMethodConfiguration);
+//     }
 }
 
 void V8HTMLCanvasElementPartial::initialize()

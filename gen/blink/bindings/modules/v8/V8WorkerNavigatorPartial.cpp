@@ -17,15 +17,15 @@
 #include "bindings/core/v8/V8HiddenValue.h"
 #include "bindings/core/v8/V8ObjectConstructor.h"
 #include "bindings/core/v8/V8WorkerNavigator.h"
-#include "bindings/modules/v8/V8BudgetService.h"
+//#include "bindings/modules/v8/V8BudgetService.h"
 #include "bindings/modules/v8/V8NetworkInformation.h"
-#include "bindings/modules/v8/V8Permissions.h"
+//#include "bindings/modules/v8/V8Permissions.h"
 #include "bindings/modules/v8/V8StorageManager.h"
 #include "core/dom/Document.h"
 #include "core/frame/UseCounter.h"
-#include "modules/budget/WorkerNavigatorBudget.h"
-#include "modules/netinfo/WorkerNavigatorNetworkInformation.h"
-#include "modules/permissions/WorkerNavigatorPermissions.h"
+// #include "modules/budget/WorkerNavigatorBudget.h"
+// #include "modules/netinfo/WorkerNavigatorNetworkInformation.h"
+//#include "modules/permissions/WorkerNavigatorPermissions.h"
 #include "modules/quota/WorkerNavigatorStorageQuota.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/GetPtr.h"
@@ -35,105 +35,105 @@ namespace blink {
 
 namespace WorkerNavigatorPartialV8Internal {
 
-    static void budgetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
-
-        BudgetService* cppValue(WorkerNavigatorBudget::budget(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#budget";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void budgetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        WorkerNavigatorPartialV8Internal::budgetAttributeGetter(info);
-    }
-
-    static void connectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
-
-        ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-        NetworkInformation* cppValue(WorkerNavigatorNetworkInformation::connection(scriptState, *impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#connection";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void connectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NetInfo);
-
-        WorkerNavigatorPartialV8Internal::connectionAttributeGetter(info);
-    }
-
-    static void permissionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
-
-        Permissions* cppValue(WorkerNavigatorPermissions::permissions(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#permissions";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void permissionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        WorkerNavigatorPartialV8Internal::permissionsAttributeGetter(info);
-    }
-
-    static void storageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
-
-        StorageManager* cppValue(WorkerNavigatorStorageQuota::storage(*impl));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#storage";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
-    }
-
-    void storageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        WorkerNavigatorPartialV8Internal::storageAttributeGetter(info);
-    }
+//     static void budgetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+// 
+//         BudgetService* cppValue(WorkerNavigatorBudget::budget(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#budget";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void budgetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         WorkerNavigatorPartialV8Internal::budgetAttributeGetter(info);
+//     }
+// 
+//     static void connectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+// 
+//         ScriptState* scriptState = ScriptState::forReceiverObject(info);
+// 
+//         NetworkInformation* cppValue(WorkerNavigatorNetworkInformation::connection(scriptState, *impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#connection";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void connectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NetInfo);
+// 
+//         WorkerNavigatorPartialV8Internal::connectionAttributeGetter(info);
+//     }
+// 
+//     static void permissionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+// 
+//         Permissions* cppValue(WorkerNavigatorPermissions::permissions(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#permissions";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void permissionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         WorkerNavigatorPartialV8Internal::permissionsAttributeGetter(info);
+//     }
+// 
+//     static void storageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+// 
+//         StorageManager* cppValue(WorkerNavigatorStorageQuota::storage(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerNavigator#storage";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+//     }
+// 
+//     void storageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         WorkerNavigatorPartialV8Internal::storageAttributeGetter(info);
+//     }
 
 } // namespace WorkerNavigatorPartialV8Internal
 
@@ -151,22 +151,22 @@ void V8WorkerNavigatorPartial::installV8WorkerNavigatorTemplate(v8::Isolate* iso
 
     // Register DOM constants, attributes and operations.
 
-    if (RuntimeEnabledFeatures::budgetEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorbudgetConfiguration = { "budget", WorkerNavigatorPartialV8Internal::budgetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorbudgetConfiguration);
-    }
-    if (RuntimeEnabledFeatures::durableStorageEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorstorageConfiguration = { "storage", WorkerNavigatorPartialV8Internal::storageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorstorageConfiguration);
-    }
-    if (RuntimeEnabledFeatures::networkInformationEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorconnectionConfiguration = { "connection", WorkerNavigatorPartialV8Internal::connectionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorconnectionConfiguration);
-    }
-    if (RuntimeEnabledFeatures::permissionsEnabled()) {
-        const V8DOMConfiguration::AccessorConfiguration accessorpermissionsConfiguration = { "permissions", WorkerNavigatorPartialV8Internal::permissionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpermissionsConfiguration);
-    }
+//     if (RuntimeEnabledFeatures::budgetEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorbudgetConfiguration = { "budget", WorkerNavigatorPartialV8Internal::budgetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorbudgetConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::durableStorageEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorstorageConfiguration = { "storage", WorkerNavigatorPartialV8Internal::storageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorstorageConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::networkInformationEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorconnectionConfiguration = { "connection", WorkerNavigatorPartialV8Internal::connectionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorconnectionConfiguration);
+//     }
+//     if (RuntimeEnabledFeatures::permissionsEnabled()) {
+//         const V8DOMConfiguration::AccessorConfiguration accessorpermissionsConfiguration = { "permissions", WorkerNavigatorPartialV8Internal::permissionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpermissionsConfiguration);
+//     }
 }
 
 void V8WorkerNavigatorPartial::initialize()

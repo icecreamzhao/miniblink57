@@ -34,17 +34,17 @@ namespace blink {
 
 namespace HTMLVideoElementPartialV8Internal {
 
-    static void getVideoPlaybackQualityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        HTMLVideoElement* impl = V8HTMLVideoElement::toImpl(info.Holder());
-
-        v8SetReturnValueFast(info, HTMLVideoElementMediaSource::getVideoPlaybackQuality(*impl), impl);
-    }
-
-    void getVideoPlaybackQualityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-    {
-        HTMLVideoElementPartialV8Internal::getVideoPlaybackQualityMethod(info);
-    }
+//     static void getVideoPlaybackQualityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         HTMLVideoElement* impl = V8HTMLVideoElement::toImpl(info.Holder());
+// 
+//         v8SetReturnValueFast(info, HTMLVideoElementMediaSource::getVideoPlaybackQuality(*impl), impl);
+//     }
+// 
+//     void getVideoPlaybackQualityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+//     {
+//         HTMLVideoElementPartialV8Internal::getVideoPlaybackQualityMethod(info);
+//     }
 
 } // namespace HTMLVideoElementPartialV8Internal
 
@@ -62,10 +62,10 @@ void V8HTMLVideoElementPartial::installV8HTMLVideoElementTemplate(v8::Isolate* i
 
     // Register DOM constants, attributes and operations.
 
-    if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
-        const V8DOMConfiguration::MethodConfiguration getVideoPlaybackQualityMethodConfiguration = { "getVideoPlaybackQuality", HTMLVideoElementPartialV8Internal::getVideoPlaybackQualityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
-        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getVideoPlaybackQualityMethodConfiguration);
-    }
+//     if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
+//         const V8DOMConfiguration::MethodConfiguration getVideoPlaybackQualityMethodConfiguration = { "getVideoPlaybackQuality", HTMLVideoElementPartialV8Internal::getVideoPlaybackQualityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+//         V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getVideoPlaybackQualityMethodConfiguration);
+//     }
 }
 
 void V8HTMLVideoElementPartial::initialize()
