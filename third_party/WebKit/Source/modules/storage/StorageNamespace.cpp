@@ -47,13 +47,15 @@ StorageNamespace::~StorageNamespace() { }
 StorageArea* StorageNamespace::localStorageArea(SecurityOrigin* origin)
 {
     ASSERT(isMainThread());
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+    RELEASE_ASSERT(false);
+    return nullptr;
+#else
     static WebStorageNamespace* localStorageNamespace = nullptr;
     if (!localStorageNamespace)
         localStorageNamespace = Platform::current()->createLocalStorageNamespace();
-    return StorageArea::create(
-        WTF::wrapUnique(
-            localStorageNamespace->createStorageArea(WebSecurityOrigin(origin))),
-        LocalStorage);
+    return StorageArea::create(WTF::wrapUnique(localStorageNamespace->createStorageArea(WebSecurityOrigin(origin))), LocalStorage);
+#endif
 }
 
 StorageArea* StorageNamespace::storageArea(SecurityOrigin* origin)

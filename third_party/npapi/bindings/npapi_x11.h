@@ -47,15 +47,16 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-typedef struct _NPSetWindowCallbackStruct {
-    int32_t type;
+typedef struct _NPSetWindowCallbackStruct
+{
+  int32_t      type;
 #ifdef MOZ_X11
-    Display* display;
-    Visual* visual;
-    Colormap colormap;
-    unsigned int depth;
+  Display*     display;
+  Visual*      visual;
+  Colormap     colormap;
+  unsigned int depth;
 #endif
 } NPSetWindowCallbackStruct;
 #endif
 
-#endif // THIRD_PARTY_NPAPI_BINDINGS_NPAPI_X11_H_
+#endif  // THIRD_PARTY_NPAPI_BINDINGS_NPAPI_X11_H_

@@ -37,174 +37,181 @@
 
 #include <vector>
 
-#include "logger.h"
 #include "xp.h"
+#include "logger.h"
 
-extern Logger* logger;
+extern Logger * logger;
 
-DWORD GetPluginsDir(char* path, DWORD maxsize)
+DWORD GetPluginsDir(char * path, DWORD maxsize)
 {
-    if (!path)
-        return 0;
+  if(!path)
+    return 0;
 
-    path[0] = '\0';
+  path[0] = '\0';
 
 #ifdef XP_WIN
 
-    DWORD res = GetModuleFileName(NULL, path, maxsize);
-    if (res == 0)
-        return 0;
+  DWORD res = GetModuleFileName(NULL, path, maxsize);
+  if(res == 0)
+    return 0;
 
-    if (path[strlen(path) - 1] == '\\')
-        path[lstrlen(path) - 1] = '\0';
+  if(path[strlen(path) - 1] == '\\')
+    path[lstrlen(path) - 1] = '\0';
 
-    char* p = strrchr(path, '\\');
+  char *p = strrchr(path, '\\');
 
-    if (p)
-        *p = '\0';
+  if(p)
+    *p = '\0';
 
-    strcat(path, "\\plugins");
+  strcat(path, "\\plugins");
 
 #endif
 
 #ifdef XP_UNIX
-    // Implement UNIX version
+  // Implement UNIX version
 #endif
 
 #ifdef XP_MAC
-    // Implement Mac version
+  // Implement Mac version
 #endif
 
-    res = strlen(path);
-    return res;
+  res = strlen(path);
+  return res;
 }
 
-XP_HLIB LoadRealPlugin(char* mimetype)
+XP_HLIB LoadRealPlugin(char * mimetype)
 {
-    if (!mimetype || !strlen(mimetype))
-        return NULL;
+  if(!mimetype || !strlen(mimetype))
+    return NULL;
 
 #ifdef XP_WIN
 
-    BOOL bDone = FALSE;
-    WIN32_FIND_DATA ffdataStruct;
+  BOOL bDone = FALSE;
+  WIN32_FIND_DATA ffdataStruct;
 
-    char szPath[_MAX_PATH];
-    char szFileName[_MAX_PATH];
+  char szPath[_MAX_PATH];
+  char szFileName[_MAX_PATH];
 
-    // DebugBreak();
+  // DebugBreak();
 
-    GetPluginsDir(szPath, _MAX_PATH);
+  GetPluginsDir(szPath, _MAX_PATH);
 
-    if (logger) {
-        char msg[512];
-        sprintf(msg, "LoadRealPlugin Path: %s\r\n", szPath);
-        logger->logMessage(msg);
+  if(logger) {
+      char msg[512];
+      sprintf(msg, "LoadRealPlugin Path: %s\r\n", szPath);
+      logger->logMessage(msg);
+  }
+
+  strcpy(szFileName, szPath);
+
+  std::vector<std::string> directories;
+
+  directories.push_back(szFileName);
+  directories.push_back("C:\\Windows\\System32\\Macromed\\Flash");
+  directories.push_back("C:\\Windows\\SysWOW64\\Macromed\\Flash");
+
+  for (size_t i = 0; i < directories.size(); ++i) {
+    std::string search_path = directories[i];
+    search_path = search_path.append("\\np*.dll");
+    HANDLE handle = FindFirstFile(search_path.c_str(), &ffdataStruct);
+    if(handle == INVALID_HANDLE_VALUE) 
+    {
+      FindClose(handle);
+      continue;
     }
 
-    strcpy(szFileName, szPath);
+    DWORD versize = 0L;
+    DWORD zero = 0L;
+    char * verbuf = NULL;
 
-    std::vector<std::string> directories;
+    do
+    {
+      std::string cur_file = directories[i];
+      cur_file = cur_file.append("\\");
+      cur_file = cur_file.append(ffdataStruct.cFileName);
+      if(!(ffdataStruct. dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+         strstr(cur_file.c_str(), "npspy.dll") == NULL)
+      {
+        versize = GetFileVersionInfoSize(cur_file.c_str(), &zero);
+	      if (versize > 0)
+		      verbuf = new char[versize];
+        else 
+          continue;
 
-    directories.push_back(szFileName);
-    directories.push_back("C:\\Windows\\System32\\Macromed\\Flash");
-    directories.push_back("C:\\Windows\\SysWOW64\\Macromed\\Flash");
+        if(!verbuf)
+		      continue;
 
-    for (size_t i = 0; i < directories.size(); ++i) {
-        std::string search_path = directories[i];
-        search_path = search_path.append("\\np*.dll");
-        HANDLE handle = FindFirstFile(search_path.c_str(), &ffdataStruct);
-        if (handle == INVALID_HANDLE_VALUE) {
-            FindClose(handle);
-            continue;
+        GetFileVersionInfo(cur_file.c_str(), NULL, versize, verbuf);
+
+        char *mimetypes = NULL;
+        UINT len = 0;
+
+        if(!VerQueryValue(verbuf, "\\StringFileInfo\\040904E4\\MIMEType", (void **)&mimetypes, &len)
+           || !mimetypes || !len)
+        {
+          delete [] verbuf;
+          continue;
         }
 
-        DWORD versize = 0L;
-        DWORD zero = 0L;
-        char* verbuf = NULL;
+        // browse through a string of mimetypes
+        mimetypes[len] = '\0';
+        char * type = mimetypes;
 
-        do {
-            std::string cur_file = directories[i];
-            cur_file = cur_file.append("\\");
-            cur_file = cur_file.append(ffdataStruct.cFileName);
-            if (!(ffdataStruct.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && strstr(cur_file.c_str(), "npspy.dll") == NULL) {
-                versize = GetFileVersionInfoSize(cur_file.c_str(), &zero);
-                if (versize > 0)
-                    verbuf = new char[versize];
-                else
-                    continue;
+        BOOL more = TRUE;
+        while(more)
+        {
+          char * p = strchr(type, '|');
+          if(p)
+            *p = '\0';
+          else
+            more = FALSE;
 
-                if (!verbuf)
-                    continue;
+          if(0 == _stricmp(mimetype, type))
+          {
+            // this is it!
+            delete [] verbuf;
+            FindClose(handle);
+            HINSTANCE hLib = LoadLibrary(cur_file.c_str());
+            return hLib;
+          }
 
-                GetFileVersionInfo(cur_file.c_str(), NULL, versize, verbuf);
+          type = p;
+          type++;
+        }
 
-                char* mimetypes = NULL;
-                UINT len = 0;
+        delete [] verbuf;
+      }
 
-                if (!VerQueryValue(verbuf, "\\StringFileInfo\\040904E4\\MIMEType", (void**)&mimetypes, &len)
-                    || !mimetypes || !len) {
-                    delete[] verbuf;
-                    continue;
-                }
+    } while(FindNextFile(handle, &ffdataStruct));
 
-                // browse through a string of mimetypes
-                mimetypes[len] = '\0';
-                char* type = mimetypes;
-
-                BOOL more = TRUE;
-                while (more) {
-                    char* p = strchr(type, '|');
-                    if (p)
-                        *p = '\0';
-                    else
-                        more = FALSE;
-
-                    if (0 == _stricmp(mimetype, type)) {
-                        // this is it!
-                        delete[] verbuf;
-                        FindClose(handle);
-                        HINSTANCE hLib = LoadLibrary(cur_file.c_str());
-                        return hLib;
-                    }
-
-                    type = p;
-                    type++;
-                }
-
-                delete[] verbuf;
-            }
-
-        } while (FindNextFile(handle, &ffdataStruct));
-
-        FindClose(handle);
-    }
+    FindClose(handle);
+  }
 
 #endif
 
 #ifdef XP_UNIX
-    // Implement UNIX version
+  // Implement UNIX version
 #endif
 
 #ifdef XP_MAC
-    // Implement Mac version
+  // Implement Mac version
 #endif
 
-    return NULL;
+  return NULL;
 }
 
 void UnloadRealPlugin(XP_HLIB hLib)
 {
 #ifdef XP_WIN
-    if (!hLib)
-        FreeLibrary(hLib);
+  if(!hLib)
+    FreeLibrary(hLib);
 #endif
 
 #ifdef XP_UNIX
-        // Implement UNIX version
+  // Implement UNIX version
 #endif
 
 #ifdef XP_MAC
-        // Implement Mac version
+  // Implement Mac version
 #endif
 }

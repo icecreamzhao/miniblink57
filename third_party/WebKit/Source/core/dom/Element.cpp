@@ -198,8 +198,6 @@ Element::Element(const QualifiedName& tagName,
 Element::~Element()
 {
     DCHECK(needsAttach());
-    String out = String::format("Element::~Element, %p\n", this);
-    OutputDebugStringA(out.utf8().data());
 }
 
 inline ElementRareData* Element::elementRareData() const
@@ -3424,8 +3422,8 @@ KURL Element::hrefURL() const
     if (isSVGAElement(*this))
         return toSVGAElement(*this).legacyHrefURL(document());
 #if ENABLE_WML
-    if (isWMLAOrAnchorElement(*this))
-        return getURLAttribute(hrefAttr);
+//     if (isWMLAOrAnchorElement(*this))
+//         return getURLAttribute(hrefAttr);
 #endif
     return KURL();
 }

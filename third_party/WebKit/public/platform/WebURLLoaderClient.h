@@ -50,24 +50,20 @@ public:
     //
     // Implementations should return true to instruct the loader to follow the,
     // redirect, or false otherwise.
-    virtual bool willFollowRedirect(WebURLRequest& newRequest,
-        const WebURLResponse& redirectResponse)
+    virtual bool willFollowRedirect(WebURLRequest& newRequest, const WebURLResponse& redirectResponse)
     {
         return true;
     }
 
     // Called to report upload progress. The bytes reported correspond to
     // the HTTP message body.
-    virtual void didSendData(unsigned long long bytesSent,
-        unsigned long long totalBytesToBeSent) { }
+    virtual void didSendData(unsigned long long bytesSent, unsigned long long totalBytesToBeSent) { }
 
     // Called when response headers are received.
     virtual void didReceiveResponse(const WebURLResponse&) { }
 
     // Called when response headers are received.
-    virtual void didReceiveResponse(
-        const WebURLResponse& response,
-        std::unique_ptr<WebDataConsumerHandle> handle)
+    virtual void didReceiveResponse(const WebURLResponse& response, std::unique_ptr<WebDataConsumerHandle> handle)
     {
         didReceiveResponse(response);
     }
@@ -93,15 +89,11 @@ public:
 
     // Called when the load completes successfully.
     // |totalEncodedDataLength| may be equal to kUnknownEncodedDataLength.
-    virtual void didFinishLoading(double finishTime,
-        int64_t totalEncodedDataLength,
-        int64_t totalEncodedBodyLength) { }
+    virtual void didFinishLoading(double finishTime, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength) { }
 
     // Called when the load completes with an error.
     // |totalEncodedDataLength| may be equal to kUnknownEncodedDataLength.
-    virtual void didFail(const WebURLError&,
-        int64_t totalEncodedDataLength,
-        int64_t totalEncodedBodyLength) { }
+    virtual void didFail(const WebURLError&, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength) { }
 
     // Value passed to didFinishLoading when total encoded data length isn't
     // known.

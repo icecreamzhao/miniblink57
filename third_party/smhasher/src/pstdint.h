@@ -306,7 +306,9 @@
 #ifndef uint8_t
 #if (UCHAR_MAX == UINT8_MAX) || defined(S_SPLINT_S)
 typedef unsigned char uint8_t;
+#ifndef UINT8_C
 #define UINT8_C(v) ((uint8_t)v)
+#endif
 #else
 #error "Platform not supported"
 #endif

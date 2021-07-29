@@ -93,8 +93,7 @@ typedef PRIntn intn;
  */
 
 #if !defined(XP_BEOS) && !defined(VMS) \
-        && !defined(XP_UNIX)           \
-    || defined(NTO)
+    && !defined(XP_UNIX) || defined(NTO)
 typedef PRUintn uint;
 #endif
 
@@ -147,10 +146,10 @@ typedef PRInt64 int64;
  * int32
  */
 
-#if !defined(XP_BEOS) && !defined(VMS)      \
+#if !defined(XP_BEOS) && !defined(VMS) \
     && !defined(_PR_AIX_HAVE_BSD_INT_TYPES) \
     && !defined(HPUX)
-#if !defined(WIN32) || !defined(_WINSOCK2API_) /* defines its own "int32" */
+#if !defined(WIN32) || !defined(_WINSOCK2API_)  /* defines its own "int32" */
 #if !defined(XP_MAC) && !defined(_WIN32) && !defined(XP_OS2) && !defined(NTO)
 typedef PRInt32 int32;
 #else
@@ -163,7 +162,7 @@ typedef long int32;
  * int16
  */
 
-#if !defined(XP_BEOS) && !defined(VMS)      \
+#if !defined(XP_BEOS) && !defined(VMS) \
     && !defined(_PR_AIX_HAVE_BSD_INT_TYPES) \
     && !defined(HPUX)
 typedef PRInt16 int16;
@@ -173,7 +172,7 @@ typedef PRInt16 int16;
  * int8
  */
 
-#if !defined(XP_BEOS) && !defined(VMS)      \
+#if !defined(XP_BEOS) && !defined(VMS) \
     && !defined(_PR_AIX_HAVE_BSD_INT_TYPES) \
     && !defined(HPUX)
 typedef PRInt8 int8;
@@ -184,10 +183,11 @@ typedef PRUptrdiff uptrdiff_t;
 typedef PRUword uprword_t;
 typedef PRWord prword_t;
 
+
 /* Re: prbit.h */
-#define TEST_BIT PR_TEST_BIT
-#define SET_BIT PR_SET_BIT
-#define CLEAR_BIT PR_CLEAR_BIT
+#define TEST_BIT	PR_TEST_BIT
+#define SET_BIT		PR_SET_BIT
+#define CLEAR_BIT	PR_CLEAR_BIT
 
 /* Re: prarena.h->plarena.h */
 #define PRArena PLArena
@@ -240,11 +240,11 @@ typedef PRWord prword_t;
 #define PR_CompareValues PL_CompareValues
 
 #if defined(XP_MAC)
-#ifndef TRUE /* Mac standard is lower case true */
-#define TRUE 1
+#ifndef TRUE				/* Mac standard is lower case true */
+	#define TRUE 1
 #endif
-#ifndef FALSE /* Mac standard is lower case false */
-#define FALSE 0
+#ifndef FALSE				/* Mac standard is lower case false */
+	#define FALSE 0
 #endif
 #endif
 

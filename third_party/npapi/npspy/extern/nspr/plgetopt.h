@@ -45,34 +45,34 @@
 
 PR_BEGIN_EXTERN_C
 
-typedef struct PLOptionInternal PLOptionInternal;
+typedef struct PLOptionInternal PLOptionInternal; 
 
-typedef enum {
-    PL_OPT_OK, /* all's well with the option */
-    PL_OPT_EOL, /* end of options list */
-    PL_OPT_BAD /* invalid option (and value) */
+typedef enum
+{
+        PL_OPT_OK,              /* all's well with the option */
+        PL_OPT_EOL,             /* end of options list */
+        PL_OPT_BAD              /* invalid option (and value) */
 } PLOptStatus;
 
-typedef struct PLOptState {
-    char option; /* the name of the option */
-    const char* value; /* the value of that option | NULL */
+typedef struct PLOptState
+{
+    char option;                /* the name of the option */
+    const char *value;          /* the value of that option | NULL */
 
-    PLOptionInternal* internal; /* private processing state */
+    PLOptionInternal *internal; /* private processing state */
 
 } PLOptState;
 
-PR_EXTERN(PLOptState*)
-PL_CreateOptState(
-    PRIntn argc, char** argv, const char* options);
+PR_EXTERN(PLOptState*) PL_CreateOptState(
+        PRIntn argc, char **argv, const char *options);
 
-PR_EXTERN(void)
-PL_DestroyOptState(PLOptState* opt);
+PR_EXTERN(void) PL_DestroyOptState(PLOptState *opt);
 
-PR_EXTERN(PLOptStatus)
-PL_GetNextOpt(PLOptState* opt);
+PR_EXTERN(PLOptStatus) PL_GetNextOpt(PLOptState *opt);
 
 PR_END_EXTERN_C
 
 #endif /* defined(PLGETOPT_H_) */
 
 /* plgetopt.h */
+

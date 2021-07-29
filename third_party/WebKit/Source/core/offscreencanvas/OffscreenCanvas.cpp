@@ -14,7 +14,7 @@
 #include "core/html/canvas/CanvasRenderingContextFactory.h"
 #include "platform/graphics/Image.h"
 #include "platform/graphics/ImageBuffer.h"
-#include "platform/graphics/OffscreenCanvasFrameDispatcherImpl.h"
+//#include "platform/graphics/OffscreenCanvasFrameDispatcherImpl.h"
 #include "platform/graphics/StaticBitmapImage.h"
 #include "platform/image-encoders/ImageEncoderUtils.h"
 #include "wtf/MathExtras.h"
@@ -235,15 +235,15 @@ bool OffscreenCanvas::isAccelerated() const
 
 OffscreenCanvasFrameDispatcher* OffscreenCanvas::getOrCreateFrameDispatcher()
 {
-    if (!m_frameDispatcher) {
-        // The frame dispatcher connects the current thread of OffscreenCanvas
-        // (either main or worker) to the browser process and remains unchanged
-        // throughout the lifetime of this OffscreenCanvas.
-        m_frameDispatcher = WTF::wrapUnique(new OffscreenCanvasFrameDispatcherImpl(
-            this, m_clientId, m_sinkId, m_placeholderCanvasId, m_size.width(),
-            m_size.height()));
-    }
-    return m_frameDispatcher.get();
+    DebugBreak();
+    return nullptr;
+//     if (!m_frameDispatcher) {
+//         // The frame dispatcher connects the current thread of OffscreenCanvas
+//         // (either main or worker) to the browser process and remains unchanged
+//         // throughout the lifetime of this OffscreenCanvas.
+//         m_frameDispatcher = WTF::wrapUnique(new OffscreenCanvasFrameDispatcherImpl(this, m_clientId, m_sinkId, m_placeholderCanvasId, m_size.width(), m_size.height()));
+//     }
+//     return m_frameDispatcher.get();
 }
 
 ScriptPromise OffscreenCanvas::commit(RefPtr<StaticBitmapImage> image,

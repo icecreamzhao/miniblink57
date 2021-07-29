@@ -71,4 +71,41 @@ v8::Local<v8::Value> V8HiddenValue::getHiddenValueFromMainWorldWrapper(
                              : getHiddenValue(scriptState, wrapper, key);
 }
 
+v8::Local<v8::Value> V8HiddenValue::getHiddenValue(v8::Isolate* isolate, v8::Local<v8::Object> object, v8::Local<v8::String> key)
+{
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    if (context.IsEmpty()) {
+        OutputDebugStringA("V8HiddenValue::getHiddenValue fail\n");
+        return v8::Local<v8::Value>();
+    }
+    v8::Local<v8::Private> privateKey = v8::Private::ForApi(isolate, key);
+    v8::Local<v8::Value> value;
+    // Callsites interpret an empty handle has absence of a result.
+    if (!v8CallBoolean(object->HasPrivate(context, privateKey)))
+        return v8::Local<v8::Value>();
+    if (object->GetPrivate(context, privateKey).ToLocal(&value))
+        return value;
+    return v8::Local<v8::Value>();
+}
+
+bool V8HiddenValue::setHiddenValue(v8::Isolate* isolate, v8::Local<v8::Object> object, v8::Local<v8::String> key, v8::Local<v8::Value> value)
+{
+    if (UNLIKELY(value.IsEmpty()))
+        return false;
+
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    if (context.IsEmpty()) {
+        OutputDebugStringA("V8HiddenValue::setHiddenValue fail\n");
+        return false;
+    }
+    return v8CallBoolean(object->SetPrivate(context, v8::Private::ForApi(isolate, key), value));
+}
+
+bool V8HiddenValue::deleteHiddenValue(v8::Isolate* isolate, v8::Local<v8::Object> object, v8::Local<v8::String> key)
+{
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    return v8CallBoolean(object->SetPrivate(context, v8::Private::ForApi(isolate, key), v8::Undefined(isolate)));
+
+}
+
 } // namespace blink

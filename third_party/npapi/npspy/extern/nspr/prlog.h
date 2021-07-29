@@ -133,16 +133,16 @@ PR_BEGIN_EXTERN_C
 */
 
 typedef enum PRLogModuleLevel {
-    PR_LOG_NONE = 0, /* nothing */
-    PR_LOG_ALWAYS = 1, /* always printed */
-    PR_LOG_ERROR = 2, /* error messages */
-    PR_LOG_WARNING = 3, /* warning messages */
-    PR_LOG_DEBUG = 4, /* debug messages */
+    PR_LOG_NONE = 0,                /* nothing */
+    PR_LOG_ALWAYS = 1,              /* always printed */
+    PR_LOG_ERROR = 2,               /* error messages */
+    PR_LOG_WARNING = 3,             /* warning messages */
+    PR_LOG_DEBUG = 4,               /* debug messages */
 
-    PR_LOG_NOTICE = PR_LOG_DEBUG, /* notice messages */
-    PR_LOG_WARN = PR_LOG_WARNING, /* warning messages */
-    PR_LOG_MIN = PR_LOG_DEBUG, /* minimal debugging messages */
-    PR_LOG_MAX = PR_LOG_DEBUG /* maximal debugging messages */
+    PR_LOG_NOTICE = PR_LOG_DEBUG,   /* notice messages */
+    PR_LOG_WARN = PR_LOG_WARNING,   /* warning messages */
+    PR_LOG_MIN = PR_LOG_DEBUG,      /* minimal debugging messages */
+    PR_LOG_MAX = PR_LOG_DEBUG       /* maximal debugging messages */
 } PRLogModuleLevel;
 
 /*
@@ -151,30 +151,27 @@ typedef enum PRLogModuleLevel {
 **    "level" is the debugging level selected for that module
 */
 typedef struct PRLogModuleInfo {
-    const char* name;
+    const char *name;
     PRLogModuleLevel level;
-    struct PRLogModuleInfo* next;
+    struct PRLogModuleInfo *next;
 } PRLogModuleInfo;
 
 /*
 ** Create a new log module.
 */
-NSPR_API(PRLogModuleInfo*)
-PR_NewLogModule(const char* name);
+NSPR_API(PRLogModuleInfo*) PR_NewLogModule(const char *name);
 
 /*
 ** Set the file to use for logging. Returns PR_FALSE if the file cannot
 ** be created
 */
-NSPR_API(PRBool)
-PR_SetLogFile(const char* name);
+NSPR_API(PRBool) PR_SetLogFile(const char *name);
 
 /*
 ** Set the size of the logging buffer. If "buffer_size" is zero then the
 ** logging becomes "synchronous" (or unbuffered).
 */
-NSPR_API(void)
-PR_SetLogBuffering(PRIntn buffer_size);
+NSPR_API(void) PR_SetLogBuffering(PRIntn buffer_size);
 
 /*
 ** Print a string to the log. "fmt" is a PR_snprintf format type. All
@@ -182,14 +179,12 @@ PR_SetLogBuffering(PRIntn buffer_size);
 ** and a time stamp. Also, the routine provides a missing newline if one
 ** is not provided.
 */
-NSPR_API(void)
-PR_LogPrint(const char* fmt, ...);
+NSPR_API(void) PR_LogPrint(const char *fmt, ...);
 
 /*
 ** Flush the log to its file.
 */
-NSPR_API(void)
-PR_LogFlush(void);
+NSPR_API(void) PR_LogFlush(void);
 
 /*
 ** Windoze 16 can't support a large static string space for all of the
@@ -198,7 +193,7 @@ PR_LogFlush(void);
 #if (defined(DEBUG) || defined(FORCE_PR_LOG)) && !defined(WIN16)
 #define PR_LOGGING 1
 
-#define PR_LOG_TEST(_module, _level) \
+#define PR_LOG_TEST(_module,_level) \
     ((_module)->level >= (_level))
 
 /*
@@ -208,48 +203,47 @@ PR_LogFlush(void);
 **    "args" is a variable length list of arguments to print, in the following
 **       format:  ("printf style format string", ...)
 */
-#define PR_LOG(_module, _level, _args)  \
-    PR_BEGIN_MACRO                      \
-    if (PR_LOG_TEST(_module, _level)) { \
-        PR_LogPrint _args;              \
-    }                                   \
+#define PR_LOG(_module,_level,_args)     \
+    PR_BEGIN_MACRO             \
+      if (PR_LOG_TEST(_module,_level)) { \
+      PR_LogPrint _args;         \
+      }                     \
     PR_END_MACRO
 
 #else /* (defined(DEBUG) || defined(FORCE_PR_LOG)) && !defined(WIN16) */
 
 #undef PR_LOGGING
-#define PR_LOG_TEST(module, level) 0
-#define PR_LOG(module, level, args)
+#define PR_LOG_TEST(module,level) 0
+#define PR_LOG(module,level,args)
 
 #endif /* (defined(DEBUG) || defined(FORCE_PR_LOG)) && !defined(WIN16) */
 
 #ifndef NO_NSPR_10_SUPPORT
 
 #ifdef PR_LOGGING
-#define PR_LOG_BEGIN PR_LOG
-#define PR_LOG_END PR_LOG
-#define PR_LOG_DEFINE PR_NewLogModule
+#define PR_LOG_BEGIN    PR_LOG
+#define PR_LOG_END      PR_LOG
+#define PR_LOG_DEFINE   PR_NewLogModule
 #else
-#define PR_LOG_BEGIN(module, level, args)
-#define PR_LOG_END(module, level, args)
-#define PR_LOG_DEFINE(_name) NULL
+#define PR_LOG_BEGIN(module,level,args)
+#define PR_LOG_END(module,level,args)
+#define PR_LOG_DEFINE(_name)    NULL
 #endif /* PR_LOGGING */
 
 #endif /* NO_NSPR_10_SUPPORT */
 
 #if defined(DEBUG) || defined(FORCE_PR_ASSERT)
 
-NSPR_API(void)
-PR_Assert(const char* s, const char* file, PRIntn ln);
+NSPR_API(void) PR_Assert(const char *s, const char *file, PRIntn ln);
 #define PR_ASSERT(_expr) \
-    ((_expr) ? ((void)0) : PR_Assert(#_expr, __FILE__, __LINE__))
+    ((_expr)?((void)0):PR_Assert(# _expr,__FILE__,__LINE__))
 
 #define PR_NOT_REACHED(_reasonStr) \
-    PR_Assert(_reasonStr, __FILE__, __LINE__)
+    PR_Assert(_reasonStr,__FILE__,__LINE__)
 
 #else
 
-#define PR_ASSERT(expr) ((void)0)
+#define PR_ASSERT(expr) ((void) 0)
 #define PR_NOT_REACHED(reasonStr)
 
 #endif /* defined(DEBUG) || defined(FORCE_PR_ASSERT) */

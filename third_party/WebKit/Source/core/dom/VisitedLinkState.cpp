@@ -49,8 +49,8 @@ static inline const AtomicString& linkAttribute(const Element& element)
     if (element.isHTMLElement())
         return element.fastGetAttribute(HTMLNames::hrefAttr);
 #if ENABLE_WML
-    if (element.isWMLElement())
-        return element.fastGetAttribute(HTMLNames::hrefAttr);
+//     if (element.isWMLElement())
+//         return element.fastGetAttribute(HTMLNames::hrefAttr);
 #endif
     DCHECK(element.isSVGElement());
     return SVGURIReference::legacyHrefString(toSVGElement(element));
@@ -64,8 +64,8 @@ static inline LinkHash linkHashForElement(
     if (isHTMLAnchorElement(element))
         return toHTMLAnchorElement(element).visitedLinkHash();
 #if ENABLE_WML
-    if (isWMLAOrAnchorElement(element))
-        return toWMLAElement(element).visitedLinkHash();
+//     if (isWMLAOrAnchorElement(element))
+//         return toWMLAElement(element).visitedLinkHash();
 #endif
     return visitedLinkHash(
         element.document().baseURL(),

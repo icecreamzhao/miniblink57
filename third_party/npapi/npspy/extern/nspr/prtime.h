@@ -53,11 +53,11 @@ PR_BEGIN_EXTERN_C
 /************************* TYPES AND CONSTANTS ************************/
 /**********************************************************************/
 
-#define PR_MSEC_PER_SEC 1000UL
-#define PR_USEC_PER_SEC 1000000UL
-#define PR_NSEC_PER_SEC 1000000000UL
-#define PR_USEC_PER_MSEC 1000UL
-#define PR_NSEC_PER_MSEC 1000000UL
+#define PR_MSEC_PER_SEC		1000UL
+#define PR_USEC_PER_SEC		1000000UL
+#define PR_NSEC_PER_SEC		1000000000UL
+#define PR_USEC_PER_MSEC	1000UL
+#define PR_NSEC_PER_MSEC	1000000UL
 
 /*
  * PRTime --
@@ -82,8 +82,8 @@ typedef PRInt64 PRTime;
  */
 
 typedef struct PRTimeParameters {
-    PRInt32 tp_gmt_offset; /* the offset from GMT in seconds */
-    PRInt32 tp_dst_offset; /* contribution of DST in seconds */
+    PRInt32 tp_gmt_offset;     /* the offset from GMT in seconds */
+    PRInt32 tp_dst_offset;     /* contribution of DST in seconds */
 } PRTimeParameters;
 
 /*
@@ -110,23 +110,23 @@ typedef struct PRTimeParameters {
  */
 
 typedef struct PRExplodedTime {
-    PRInt32 tm_usec; /* microseconds past tm_sec (0-99999)  */
-    PRInt32 tm_sec; /* seconds past tm_min (0-61, accomodating
-                                   up to two leap seconds) */
-    PRInt32 tm_min; /* minutes past tm_hour (0-59) */
-    PRInt32 tm_hour; /* hours past tm_day (0-23) */
-    PRInt32 tm_mday; /* days past tm_mon (1-31, note that it
+    PRInt32 tm_usec;		    /* microseconds past tm_sec (0-99999)  */
+    PRInt32 tm_sec;             /* seconds past tm_min (0-61, accomodating
+                                   up to two leap seconds) */	
+    PRInt32 tm_min;             /* minutes past tm_hour (0-59) */
+    PRInt32 tm_hour;            /* hours past tm_day (0-23) */
+    PRInt32 tm_mday;            /* days past tm_mon (1-31, note that it
 				                starts from 1) */
-    PRInt32 tm_month; /* months past tm_year (0-11, Jan = 0) */
-    PRInt16 tm_year; /* absolute year, AD (note that we do not
+    PRInt32 tm_month;           /* months past tm_year (0-11, Jan = 0) */
+    PRInt16 tm_year;            /* absolute year, AD (note that we do not
 				                count from 1900) */
 
-    PRInt8 tm_wday; /* calculated day of the week
+    PRInt8 tm_wday;		        /* calculated day of the week
 				                (0-6, Sun = 0) */
-    PRInt16 tm_yday; /* calculated day of the year 
+    PRInt16 tm_yday;            /* calculated day of the year 
 				                (0-365, Jan 1 = 0) */
 
-    PRTimeParameters tm_params; /* time parameters used by conversion */
+    PRTimeParameters tm_params;  /* time parameters used by conversion */
 } PRExplodedTime;
 
 /*
@@ -152,7 +152,7 @@ typedef struct PRExplodedTime {
  *         to GMT before applying the DST rules.
  */
 
-typedef PRTimeParameters(PR_CALLBACK* PRTimeParamFn)(const PRExplodedTime* gmt);
+typedef PRTimeParameters (PR_CALLBACK *PRTimeParamFn)(const PRExplodedTime *gmt);
 
 /**********************************************************************/
 /****************************** FUNCTIONS *****************************/
@@ -174,7 +174,7 @@ typedef PRTimeParameters(PR_CALLBACK* PRTimeParamFn)(const PRExplodedTime* gmt);
 #if defined(HAVE_WATCOM_BUG_2)
 PRTime __pascal __export __loadds
 #else
-NSPR_API(PRTime)
+NSPR_API(PRTime) 
 #endif
 PR_Now(void);
 
@@ -188,17 +188,16 @@ PR_Now(void);
  *     as PRExplodedTime.
  */
 
-NSPR_API(void)
-PR_ExplodeTime(
-    PRTime usecs, PRTimeParamFn params, PRExplodedTime* exploded);
+NSPR_API(void) PR_ExplodeTime(
+    PRTime usecs, PRTimeParamFn params, PRExplodedTime *exploded);
 
 /* Reverse operation of PR_ExplodeTime */
 #if defined(HAVE_WATCOM_BUG_2)
 PRTime __pascal __export __loadds
 #else
-NSPR_API(PRTime)
+NSPR_API(PRTime) 
 #endif
-PR_ImplodeTime(const PRExplodedTime* exploded);
+PR_ImplodeTime(const PRExplodedTime *exploded);
 
 /*
  * Adjust exploded time to normalize field overflows after manipulation.
@@ -212,28 +211,24 @@ PR_ImplodeTime(const PRExplodedTime* exploded);
  *     should treat them as "read-only".
  */
 
-NSPR_API(void)
-PR_NormalizeTime(
-    PRExplodedTime* exploded, PRTimeParamFn params);
+NSPR_API(void) PR_NormalizeTime(
+    PRExplodedTime *exploded, PRTimeParamFn params);
 
 /**********************************************************************/
 /*********************** TIME PARAMETER FUNCTIONS *********************/
 /**********************************************************************/
 
 /* Time parameters that suit current host machine */
-NSPR_API(PRTimeParameters)
-PR_LocalTimeParameters(const PRExplodedTime* gmt);
+NSPR_API(PRTimeParameters) PR_LocalTimeParameters(const PRExplodedTime *gmt);
 
 /* Time parameters that represent Greenwich Mean Time */
-NSPR_API(PRTimeParameters)
-PR_GMTParameters(const PRExplodedTime* gmt);
+NSPR_API(PRTimeParameters) PR_GMTParameters(const PRExplodedTime *gmt);
 
 /*
  * Time parameters that represent the US Pacific Time Zone, with the
  * current daylight saving time rules (for testing only)
  */
-NSPR_API(PRTimeParameters)
-PR_USPacificTimeParameters(const PRExplodedTime* gmt);
+NSPR_API(PRTimeParameters) PR_USPacificTimeParameters(const PRExplodedTime *gmt);
 
 /*
  * This parses a time/date string into a PRTime
@@ -266,11 +261,10 @@ PR_USPacificTimeParameters(const PRExplodedTime* gmt);
  * the time string which you are parsing.
  */
 
-NSPR_API(PRStatus)
-PR_ParseTimeString(
-    const char* string,
-    PRBool default_to_gmt,
-    PRTime* result);
+NSPR_API(PRStatus) PR_ParseTimeString (
+	const char *string,
+	PRBool default_to_gmt,
+	PRTime *result);
 
 /*
  * FIXME: should we also have a formatting function, such as asctime, ctime,
@@ -284,16 +278,15 @@ PR_ParseTimeString(
 #ifndef NO_NSPR_10_SUPPORT
 
 /* Format a time value into a buffer. Same semantics as strftime() */
-NSPR_API(PRUint32)
-PR_FormatTime(char* buf, int buflen, const char* fmt,
-    const PRExplodedTime* tm);
+NSPR_API(PRUint32) PR_FormatTime(char *buf, int buflen, const char *fmt, 
+                                           const PRExplodedTime *tm);
 
 /* Format a time value into a buffer. Time is always in US English format, regardless
  * of locale setting.
  */
 NSPR_API(PRUint32)
-PR_FormatTimeUSEnglish(char* buf, PRUint32 bufSize,
-    const char* format, const PRExplodedTime* tm);
+PR_FormatTimeUSEnglish( char* buf, PRUint32 bufSize,
+                        const char* format, const PRExplodedTime* tm );
 
 #endif /* NO_NSPR_10_SUPPORT */
 

@@ -335,8 +335,8 @@ KURL HitTestResult::absoluteImageURL() const
         urlString = toElement(*innerNodeOrImageMapImage).imageSourceURL();
 
 #if ENABLE_WML
-    if (innerNodeOrImageMapImage->isElementNode() && isWMLImageElement(toElement(*innerNodeOrImageMapImage)))
-        urlString = toElement(*innerNodeOrImageMapImage).imageSourceURL();
+//     if (innerNodeOrImageMapImage->isElementNode() && isWMLImageElement(toElement(*innerNodeOrImageMapImage)))
+//         urlString = toElement(*innerNodeOrImageMapImage).imageSourceURL();
 #endif
 
     if (urlString.isEmpty())
@@ -376,8 +376,8 @@ KURL HitTestResult::absoluteLinkURL() const
 bool HitTestResult::isLiveLink() const
 {
 #if ENABLE_WML
-    if (m_innerURLElement && isWMLAOrAnchorElement(*m_innerURLElement))
-        return m_innerURLElement->isLink();
+//     if (m_innerURLElement && isWMLAOrAnchorElement(*m_innerURLElement))
+//         return m_innerURLElement->isLink();
 #endif
     return m_innerURLElement && m_innerURLElement->isLiveLink();
 }

@@ -26,6 +26,8 @@
 #define WebThread_h
 
 #include "WebCommon.h"
+#include "public/platform/WebTraceLocation.h"
+#include "third_party/WebKit/Source/wtf/Functional.h"
 
 #include <stdint.h>
 
@@ -95,6 +97,27 @@ public:
 
     // Returns the scheduler associated with the thread.
     virtual WebScheduler* scheduler() const = 0;
+
+    class BLINK_PLATFORM_EXPORT Task {
+    public:
+        virtual ~Task() {}
+        virtual void run() = 0;
+    };
+
+    // postTask() and postDelayedTask() take ownership of the passed Task
+    // object. It is safe to invoke postTask() and postDelayedTask() from any
+    // thread.
+    virtual void postTask(const WebTraceLocation&, Task*) = 0;
+    virtual void postDelayedTask(const WebTraceLocation&, Task*, long long delayMs) = 0;
+
+#ifdef INSIDE_BLINK
+    // Helpers for posting bound functions as tasks.
+    void postTask(const WebTraceLocation&, std::unique_ptr<Function<void()>>);
+    void postTask(const WebTraceLocation&, std::unique_ptr<Function<void(), WTF::CrossThreadAffinity>>);
+    
+    void postDelayedTask(const WebTraceLocation&, std::unique_ptr<Function<void()>>, long long delayMs);
+    void postDelayedTask(const WebTraceLocation&, std::unique_ptr<Function<void(), WTF::CrossThreadAffinity>>, long long delayMs);
+#endif
 
     virtual ~WebThread() { }
 };

@@ -37,6 +37,6 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
-#include "oobj.h" /* for the definition of unicode */
+#include "oobj.h"	/* for the definition of unicode */
 
 #endif /* !_TREE_H_ */

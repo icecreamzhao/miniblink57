@@ -26,9 +26,9 @@
 #include "platform/image-decoders/FastSharedBufferReader.h"
 #include "platform/image-decoders/bmp/BMPImageDecoder.h"
 #include "platform/image-decoders/gif/GIFImageDecoder.h"
-// #include "platform/image-decoders/ico/ICOImageDecoder.h"
-// #include "platform/image-decoders/jpeg/JPEGImageDecoder.h"
-// #include "platform/image-decoders/png/PNGImageDecoder.h"
+#include "platform/image-decoders/ico/ICOImageDecoder.h"
+#include "platform/image-decoders/jpeg/JPEGImageDecoder.h"
+#include "platform/image-decoders/png/PNGImageDecoder.h"
 // #include "platform/image-decoders/webp/WEBPImageDecoder.h"
 #include "platform/image-decoders/gdiplus/ImageGDIPlusDecoder.h"
 #if ENABLE_WML
@@ -105,11 +105,11 @@ std::unique_ptr<ImageDecoder> ImageDecoder::create(
     std::unique_ptr<ImageDecoder> decoder;
     switch (sniffResult) {
     case SniffResult::JPEG:
-        //decoder.reset(new JPEGImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
-        decoder.reset(new ImageGDIPlusDecoder(alphaOption, colorBehavior, ImageGDIPlusDecoder::GDIPlusDecoderJPG, maxDecodedBytes));
+        decoder.reset(new JPEGImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
+        //decoder.reset(new ImageGDIPlusDecoder(alphaOption, colorBehavior, ImageGDIPlusDecoder::GDIPlusDecoderJPG, maxDecodedBytes));
         break;
     case SniffResult::PNG:
-        //decoder.reset(new PNGImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
+        decoder.reset(new PNGImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
         break;
     case SniffResult::GIF:
         decoder.reset(new GIFImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
@@ -509,14 +509,12 @@ size_t ImagePlanes::rowBytes(int i) const
     return m_rowBytes[i];
 }
 
-void ImageDecoder::setEmbeddedColorProfile(const char* iccData,
-    unsigned iccLength)
+void ImageDecoder::setEmbeddedColorProfile(const char* iccData, unsigned iccLength)
 {
-    //   sk_sp<SkColorSpace> colorSpace = SkColorSpace::MakeICC(iccData, iccLength);
-    //   if (!colorSpace)
-    //     DLOG(ERROR) << "Failed to parse image ICC profile";
-    //   setEmbeddedColorSpace(std::move(colorSpace));
-    DebugBreak();
+    sk_sp<SkColorSpace> colorSpace = SkColorSpace::NewICC(iccData, iccLength);
+    if (!colorSpace)
+        DLOG(ERROR) << "Failed to parse image ICC profile";
+    setEmbeddedColorSpace(std::move(colorSpace));
 }
 
 void ImageDecoder::setEmbeddedColorSpace(sk_sp<SkColorSpace> colorSpace)
@@ -530,31 +528,28 @@ void ImageDecoder::setEmbeddedColorSpace(sk_sp<SkColorSpace> colorSpace)
 
 SkColorSpaceXform* ImageDecoder::colorTransform()
 {
-    if (!m_sourceToTargetColorTransformNeedsUpdate)
-        return m_sourceToTargetColorTransform.get();
-    m_sourceToTargetColorTransformNeedsUpdate = false;
-    m_sourceToTargetColorTransform = nullptr;
-
-    if (!m_colorBehavior.isTransformToTargetColorSpace())
-        return nullptr;
-
-    sk_sp<SkColorSpace> srcColorSpace = m_embeddedColorSpace;
-    if (!srcColorSpace) {
-        if (RuntimeEnabledFeatures::colorCorrectRenderingEnabled())
-            srcColorSpace = SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
-        else
-            return nullptr;
-    }
-
-    if (SkColorSpace::Equals(m_embeddedColorSpace.get(),
-            m_colorBehavior.targetColorSpace().get())) {
-        return nullptr;
-    }
-
-    //   m_sourceToTargetColorTransform = SkColorSpaceXform::New(
-    //       m_embeddedColorSpace.get(), m_colorBehavior.targetColorSpace().get());
-    //   return m_sourceToTargetColorTransform.get();
-    DebugBreak();
+//     if (!m_sourceToTargetColorTransformNeedsUpdate)
+//         return m_sourceToTargetColorTransform.get();
+//     m_sourceToTargetColorTransformNeedsUpdate = false;
+//     m_sourceToTargetColorTransform = nullptr;
+// 
+//     if (!m_colorBehavior.isTransformToTargetColorSpace())
+//         return nullptr;
+// 
+//     sk_sp<SkColorSpace> srcColorSpace = m_embeddedColorSpace;
+//     if (!srcColorSpace) {
+//         if (RuntimeEnabledFeatures::colorCorrectRenderingEnabled())
+//             srcColorSpace = SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
+//         else
+//             return nullptr;
+//     }
+// 
+//     if (SkColorSpace::Equals(m_embeddedColorSpace.get(), m_colorBehavior.targetColorSpace().get())) {
+//         return nullptr;
+//     }
+// 
+//     m_sourceToTargetColorTransform = SkColorSpaceXform::New(m_embeddedColorSpace, m_colorBehavior.targetColorSpace());
+//     return m_sourceToTargetColorTransform.get();
     return nullptr;
 }
 

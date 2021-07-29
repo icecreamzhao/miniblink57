@@ -81,6 +81,7 @@ public:
     BLINK_EXPORT WebNode previousSibling() const;
     BLINK_EXPORT WebNode nextSibling() const;
 
+    BLINK_EXPORT bool isDraggable() const;
     BLINK_EXPORT bool isLink() const;
     BLINK_EXPORT bool isDocumentNode() const;
     BLINK_EXPORT bool isDocumentTypeNode() const;

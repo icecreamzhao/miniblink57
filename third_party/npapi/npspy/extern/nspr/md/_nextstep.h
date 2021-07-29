@@ -48,8 +48,8 @@ extern int syscall(int number, ...);
  * Internal configuration macros
  */
 
-#define PR_LINKER_ARCH "nextstep"
-#define _PR_SI_SYSNAME "NEXTSTEP"
+#define PR_LINKER_ARCH	"nextstep"
+#define _PR_SI_SYSNAME  "NEXTSTEP"
 #if defined(__sparc__)
 #define _PR_SI_ARCHITECTURE "sparc"
 #elif defined(__m68k__)
@@ -59,14 +59,14 @@ extern int syscall(int number, ...);
 #else
 error Unknown NEXTSTEP architecture
 #endif
-#define PR_DLL_SUFFIX ".so"
+#define PR_DLL_SUFFIX		".so"
 
-#define _PR_VMBASE 0x30000000
-#define _PR_STACK_VMBASE 0x50000000
-#define _MD_DEFAULT_STACK_SIZE 65536L
-#define _MD_MMAP_FLAGS MAP_PRIVATE
+#define _PR_VMBASE              0x30000000
+#define _PR_STACK_VMBASE	0x50000000
+#define _MD_DEFAULT_STACK_SIZE	65536L
+#define _MD_MMAP_FLAGS          MAP_PRIVATE
 
-#undef HAVE_STACK_GROWING_UP
+#undef  HAVE_STACK_GROWING_UP
 
 #define HAVE_WEAK_MALLOC_SYMBOLS
 
@@ -81,7 +81,7 @@ error Unknown NEXTSTEP architecture
 
 #include <setjmp.h>
 
-#define PR_CONTEXT_TYPE jmp_buf
+#define PR_CONTEXT_TYPE	jmp_buf
 
 #define CONTEXT(_th) ((_th)->md.context)
 
@@ -91,47 +91,47 @@ error Unknown NEXTSTEP architecture
 ** __i386__ is a guess (one of the two defines should work)
 */
 #if defined(__sparc__)
-#define _MD_GET_SP(_th) (_th)->md.context[2]
+#define _MD_GET_SP(_th)		(_th)->md.context[2]
 #elif defined(__m68k__)
-#define _MD_GET_SP(_th) (_th)->md.context[2]
+#define _MD_GET_SP(_th)		(_th)->md.context[2]
 #elif defined(__i386__)
 /* One of this two must be OK ... try using sc_onstack
 */
-#define _MD_GET_SP(_th) (((struct sigcontext*)(_th)->md.context)->sc_onstack)
+#define _MD_GET_SP(_th)    (((struct sigcontext *) (_th)->md.context)->sc_onstack)
 //#define _MD_GET_SP(_th)		(_th)->md.context[0].sc_esp
 #else
 error Unknown NEXTSTEP architecture
 #endif
 
-#define PR_NUM_GCREGS _JBLEN
+#define PR_NUM_GCREGS	_JBLEN
 
 /*
 ** Initialize a thread context to run "_main()" when started
 */
-#define _MD_INIT_CONTEXT(_thread, _sp, _main, status) \
-    {                                                 \
-        *status = PR_TRUE;                            \
-        if (setjmp(CONTEXT(_thread))) {               \
-            _main();                                  \
-        }                                             \
-        _MD_GET_SP(_thread) = (int)((_sp)-64);        \
-    }
+#define _MD_INIT_CONTEXT(_thread, _sp, _main, status)  \
+{  \
+    *status = PR_TRUE;  \
+    if (setjmp(CONTEXT(_thread))) {  \
+        _main();  \
+    }  \
+    _MD_GET_SP(_thread) = (int) ((_sp) - 64); \
+}
 
-#define _MD_SWITCH_CONTEXT(_thread)    \
-    if (!setjmp(CONTEXT(_thread))) {   \
-        (_thread)->md.errcode = errno; \
-        _PR_Schedule();                \
+#define _MD_SWITCH_CONTEXT(_thread)  \
+    if (!setjmp(CONTEXT(_thread))) {  \
+	(_thread)->md.errcode = errno;  \
+	_PR_Schedule();  \
     }
 
 /*
 ** Restore a thread context, saved by _MD_SWITCH_CONTEXT
 */
-#define _MD_RESTORE_CONTEXT(_thread)     \
-    {                                    \
-        errno = (_thread)->md.errcode;   \
-        _MD_SET_CURRENT_THREAD(_thread); \
-        longjmp(CONTEXT(_thread), 1);    \
-    }
+#define _MD_RESTORE_CONTEXT(_thread) \
+{   \
+    errno = (_thread)->md.errcode;  \
+    _MD_SET_CURRENT_THREAD(_thread);  \
+    longjmp(CONTEXT(_thread), 1);  \
+}
 
 /* Machine-dependent (MD) data structures */
 
@@ -173,32 +173,32 @@ struct _MDCPU_Unix {
     PRInt32 ioq_osfd_cnt;
 #ifndef _PR_USE_POLL
     fd_set fd_read_set, fd_write_set, fd_exception_set;
-    PRInt16 fd_read_cnt[_PR_MD_MAX_OSFD], fd_write_cnt[_PR_MD_MAX_OSFD],
-        fd_exception_cnt[_PR_MD_MAX_OSFD];
+    PRInt16 fd_read_cnt[_PR_MD_MAX_OSFD],fd_write_cnt[_PR_MD_MAX_OSFD],
+				fd_exception_cnt[_PR_MD_MAX_OSFD];
 #else
-    struct pollfd* ioq_pollfds;
-    int ioq_pollfds_size;
-#endif /* _PR_USE_POLL */
+	struct pollfd *ioq_pollfds;
+	int ioq_pollfds_size;
+#endif	/* _PR_USE_POLL */
 };
 
-#define _PR_IOQ(_cpu) ((_cpu)->md.md_unix.ioQ)
+#define _PR_IOQ(_cpu)			((_cpu)->md.md_unix.ioQ)
 #define _PR_ADD_TO_IOQ(_pq, _cpu) PR_APPEND_LINK(&_pq.links, &_PR_IOQ(_cpu))
-#define _PR_FD_READ_SET(_cpu) ((_cpu)->md.md_unix.fd_read_set)
-#define _PR_FD_READ_CNT(_cpu) ((_cpu)->md.md_unix.fd_read_cnt)
-#define _PR_FD_WRITE_SET(_cpu) ((_cpu)->md.md_unix.fd_write_set)
-#define _PR_FD_WRITE_CNT(_cpu) ((_cpu)->md.md_unix.fd_write_cnt)
-#define _PR_FD_EXCEPTION_SET(_cpu) ((_cpu)->md.md_unix.fd_exception_set)
-#define _PR_FD_EXCEPTION_CNT(_cpu) ((_cpu)->md.md_unix.fd_exception_cnt)
-#define _PR_IOQ_TIMEOUT(_cpu) ((_cpu)->md.md_unix.ioq_timeout)
-#define _PR_IOQ_MAX_OSFD(_cpu) ((_cpu)->md.md_unix.ioq_max_osfd)
-#define _PR_IOQ_OSFD_CNT(_cpu) ((_cpu)->md.md_unix.ioq_osfd_cnt)
-#define _PR_IOQ_POLLFDS(_cpu) ((_cpu)->md.md_unix.ioq_pollfds)
-#define _PR_IOQ_POLLFDS_SIZE(_cpu) ((_cpu)->md.md_unix.ioq_pollfds_size)
+#define _PR_FD_READ_SET(_cpu)		((_cpu)->md.md_unix.fd_read_set)
+#define _PR_FD_READ_CNT(_cpu)		((_cpu)->md.md_unix.fd_read_cnt)
+#define _PR_FD_WRITE_SET(_cpu)		((_cpu)->md.md_unix.fd_write_set)
+#define _PR_FD_WRITE_CNT(_cpu)		((_cpu)->md.md_unix.fd_write_cnt)
+#define _PR_FD_EXCEPTION_SET(_cpu)	((_cpu)->md.md_unix.fd_exception_set)
+#define _PR_FD_EXCEPTION_CNT(_cpu)	((_cpu)->md.md_unix.fd_exception_cnt)
+#define _PR_IOQ_TIMEOUT(_cpu)		((_cpu)->md.md_unix.ioq_timeout)
+#define _PR_IOQ_MAX_OSFD(_cpu)		((_cpu)->md.md_unix.ioq_max_osfd)
+#define _PR_IOQ_OSFD_CNT(_cpu)		((_cpu)->md.md_unix.ioq_osfd_cnt)
+#define _PR_IOQ_POLLFDS(_cpu)		((_cpu)->md.md_unix.ioq_pollfds)
+#define _PR_IOQ_POLLFDS_SIZE(_cpu)	((_cpu)->md.md_unix.ioq_pollfds_size)
 
-#define _PR_IOQ_MIN_POLLFDS_SIZE(_cpu) 32
+#define _PR_IOQ_MIN_POLLFDS_SIZE(_cpu)	32
 
 struct _MDCPU {
-    struct _MDCPU_Unix md_unix;
+	struct _MDCPU_Unix md_unix;
 };
 
 #define _MD_INIT_LOCKS()
@@ -210,25 +210,25 @@ struct _MDCPU {
 #define _MD_IOQ_LOCK()
 #define _MD_IOQ_UNLOCK()
 
-extern PRStatus _MD_InitializeThread(PRThread* thread);
+extern PRStatus _MD_InitializeThread(PRThread *thread);
 
-#define _MD_INIT_RUNNING_CPU(cpu) _MD_unix_init_running_cpu(cpu)
-#define _MD_INIT_THREAD _MD_InitializeThread
+#define _MD_INIT_RUNNING_CPU(cpu)       _MD_unix_init_running_cpu(cpu)
+#define _MD_INIT_THREAD                 _MD_InitializeThread
 #define _MD_EXIT_THREAD(thread)
-#define _MD_SUSPEND_THREAD(thread) _MD_suspend_thread
-#define _MD_RESUME_THREAD(thread) _MD_resume_thread
+#define _MD_SUSPEND_THREAD(thread)      _MD_suspend_thread
+#define _MD_RESUME_THREAD(thread)       _MD_resume_thread
 #define _MD_CLEAN_THREAD(_thread)
 
 extern PRStatus _MD_CREATE_THREAD(
-    PRThread* thread,
-    void (*start)(void*),
+    PRThread *thread,
+    void (*start) (void *),
     PRThreadPriority priority,
     PRThreadScope scope,
     PRThreadState state,
     PRUint32 stackSize);
-extern void _MD_SET_PRIORITY(struct _MDThread* thread, PRUintn newPri);
-extern PRStatus _MD_WAIT(PRThread*, PRIntervalTime timeout);
-extern PRStatus _MD_WAKEUP_WAITER(PRThread*);
+extern void _MD_SET_PRIORITY(struct _MDThread *thread, PRUintn newPri);
+extern PRStatus _MD_WAIT(PRThread *, PRIntervalTime timeout);
+extern PRStatus _MD_WAKEUP_WAITER(PRThread *);
 extern void _MD_YIELD(void);
 
 #endif /* ! _PR_PTHREADS */
@@ -237,16 +237,16 @@ extern void _MD_EarlyInit(void);
 extern PRIntervalTime _PR_UNIX_GetInterval(void);
 extern PRIntervalTime _PR_UNIX_TicksPerSecond(void);
 
-#define _MD_EARLY_INIT _MD_EarlyInit
-#define _MD_FINAL_INIT _PR_UnixInit
-#define _MD_GET_INTERVAL _PR_UNIX_GetInterval
-#define _MD_INTERVAL_PER_SEC _PR_UNIX_TicksPerSecond
+#define _MD_EARLY_INIT                  _MD_EarlyInit
+#define _MD_FINAL_INIT			_PR_UnixInit
+#define _MD_GET_INTERVAL                  _PR_UNIX_GetInterval
+#define _MD_INTERVAL_PER_SEC              _PR_UNIX_TicksPerSecond
 
 /*
  * We wrapped the select() call.  _MD_SELECT refers to the built-in,
  * unwrapped version.
  */
-#define _MD_SELECT(nfds, r, w, e, tv) syscall(SYS_select, nfds, r, w, e, tv)
+#define _MD_SELECT(nfds,r,w,e,tv) syscall(SYS_select,nfds,r,w,e,tv)
 
 /* For writev() */
 #include <sys/uio.h>
@@ -267,21 +267,22 @@ extern PRIntervalTime _PR_UNIX_TicksPerSecond(void);
 **	
 */
 caddr_t mmap(caddr_t addr, size_t len, int prot, int flags,
-    int fildes, off_t off);
+          int fildes, off_t off);
 int munmap(caddr_t addr, size_t len);
 int mprotect(caddr_t addr, size_t len, int prot);
 
 /*	my_mmap() is implemented in nextstep.c and is based on map_fd() of mach.
 */
 caddr_t my_mmap(caddr_t addr, size_t len, int prot, int flags,
-    int fildes, off_t off);
+          int fildes, off_t off);
 int my_munmap(caddr_t addr, size_t len);
+
 
 /*	string.h
 */
 /* balazs.pataki@sztaki.hu: this is missing so implemenetd in nextstep.c ...
 */
-char* strdup(const char* s1);
+char *strdup(const char *s1);
 
 /* unistd.h
 */
@@ -289,7 +290,7 @@ char* strdup(const char* s1);
 **	implemented in NEXTSTEP. Here I give the declaration for them to be used
 **	by prmalloc.c, and I have a wrapped syscall() version of them in nextstep.c
 */
-int brk(void* endds);
-void* sbrk(int incr);
+int brk(void *endds);
+void *sbrk(int incr);
 
 #endif /* nspr_nextstep_defs_h___ */

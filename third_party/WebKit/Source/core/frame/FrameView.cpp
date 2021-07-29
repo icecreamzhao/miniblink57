@@ -3952,7 +3952,7 @@ void FrameView::setLayoutSizeInternal(const IntSize& size)
     m_layoutSize = size;
     contentsResized();
 
-    String out = String::format("FrameView::setLayoutSizeInternal: %d\n", m_layoutSize.width());
+    String out = String::format("FrameView::setLayoutSizeInternal: (%d, %d)\n", m_layoutSize.width(), m_layoutSize.height());
     OutputDebugStringA(out.utf8().data());
 }
 

@@ -288,6 +288,7 @@ public:
     void setTimeStampSeconds(double seconds) { m_timeStampSeconds = seconds; }
 
     unsigned size() const { return m_size; }
+    void setSize(unsigned size) { m_size = size; }
 
 protected:
     // The root frame scale.

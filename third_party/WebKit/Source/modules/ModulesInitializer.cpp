@@ -44,8 +44,7 @@ void ModulesInitializer::initialize()
     ModuleBindingsInitializer::init();
     //IndexedDBNames::init();
     //AXObjectCache::init(AXObjectCacheImpl::create);
-    //   DraggedIsolatedFileSystem::init(
-    //       DraggedIsolatedFileSystemImpl::prepareForDataObject);
+    //   DraggedIsolatedFileSystem::init(DraggedIsolatedFileSystemImpl::prepareForDataObject);
     CSSPaintImageGenerator::init(CSSPaintImageGeneratorImpl::create);
     // Some unit tests may have no message loop ready, so we can't initialize the
     // mojo stuff here. They can initialize those mojo stuff they're interested in
@@ -55,23 +54,15 @@ void ModulesInitializer::initialize()
 
     CoreInitializer::initialize();
 
-    //   // Canvas context types must be registered with the HTMLCanvasElement.
-    //   HTMLCanvasElement::registerRenderingContextFactory(
-    //       WTF::makeUnique<CanvasRenderingContext2D::Factory>());
-    //   HTMLCanvasElement::registerRenderingContextFactory(
-    //       WTF::makeUnique<WebGLRenderingContext::Factory>());
-    //   HTMLCanvasElement::registerRenderingContextFactory(
-    //       WTF::makeUnique<WebGL2RenderingContext::Factory>());
-    //   HTMLCanvasElement::registerRenderingContextFactory(
-    //       WTF::makeUnique<ImageBitmapRenderingContext::Factory>());
-    //
+    // Canvas context types must be registered with the HTMLCanvasElement.
+    HTMLCanvasElement::registerRenderingContextFactory(WTF::makeUnique<CanvasRenderingContext2D::Factory>());
+    //   HTMLCanvasElement::registerRenderingContextFactory(WTF::makeUnique<WebGLRenderingContext::Factory>());
+    //   HTMLCanvasElement::registerRenderingContextFactory(WTF::makeUnique<WebGL2RenderingContext::Factory>());
+    HTMLCanvasElement::registerRenderingContextFactory(WTF::makeUnique<ImageBitmapRenderingContext::Factory>());
     //   // OffscreenCanvas context types must be registered with the OffscreenCanvas.
-    //   OffscreenCanvas::registerRenderingContextFactory(
-    //       WTF::makeUnique<OffscreenCanvasRenderingContext2D::Factory>());
-    //   OffscreenCanvas::registerRenderingContextFactory(
-    //       WTF::makeUnique<WebGLRenderingContext::Factory>());
-    //   OffscreenCanvas::registerRenderingContextFactory(
-    //       WTF::makeUnique<WebGL2RenderingContext::Factory>());
+    OffscreenCanvas::registerRenderingContextFactory(WTF::makeUnique<OffscreenCanvasRenderingContext2D::Factory>());
+    //   OffscreenCanvas::registerRenderingContextFactory(WTF::makeUnique<WebGLRenderingContext::Factory>());
+    //   OffscreenCanvas::registerRenderingContextFactory(WTF::makeUnique<WebGL2RenderingContext::Factory>());
 
     ASSERT(isInitialized());
 }

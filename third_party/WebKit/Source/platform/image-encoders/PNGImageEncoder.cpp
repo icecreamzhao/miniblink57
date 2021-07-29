@@ -34,7 +34,7 @@
 #include "wtf/PtrUtil.h"
 #include <memory>
 
-#include "zlib.h"
+#include "third_party/zlib/zlib.h"
 
 namespace blink {
 

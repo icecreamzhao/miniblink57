@@ -19,6 +19,10 @@ StorageNamespaceController::StorageNamespaceController(StorageClient* client)
     : m_client(client)
     , m_inspectorAgent(nullptr)
 {
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "StorageNamespaceController: %p %p\n", this, m_client);
+    OutputDebugStringA(output);
+    free(output);
 }
 
 StorageNamespaceController::~StorageNamespaceController() { }
@@ -29,8 +33,28 @@ DEFINE_TRACE(StorageNamespaceController)
     //visitor->trace(m_inspectorAgent);
 }
 
-StorageNamespace* StorageNamespaceController::sessionStorage(
-    bool optionalCreate)
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+
+StorageNamespace* StorageNamespaceController::localStorage()
+{
+    if (!m_localStorage)
+        m_localStorage = m_client->createLocalStorageNamespace();
+    return m_localStorage.get();
+}
+
+#endif
+
+StorageClient* StorageNamespaceController::getStorageClient()
+{
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "StorageNamespaceController::getStorageClient: %p %p\n", this, m_client);
+    OutputDebugStringA(output);
+    free(output);
+
+    return m_client;
+}
+
+StorageNamespace* StorageNamespaceController::sessionStorage(bool optionalCreate)
 {
     if (!m_sessionStorage && optionalCreate)
         m_sessionStorage = m_client->createSessionStorageNamespace();

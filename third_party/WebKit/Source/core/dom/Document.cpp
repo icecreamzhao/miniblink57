@@ -1248,18 +1248,18 @@ Element* Document::createElement(const QualifiedName& qName,
     else if (qName.namespaceURI() == SVGNames::svgNamespaceURI)
         e = SVGElementFactory::createSVGElement(qName.localName(), *this, flags);
 #if ENABLE_WML
-    else if (qName.namespaceURI() == WMLNames::wmlNamespaceURI || isWMLDocument()) {
-        if (qName.localName() == inputTag.localName())
-            e = WMLInputElement::create(*this);
-        else if (qName.localName() == selectTag.localName())
-            e = WMLSelectElement::create(*this);
-        else if (qName.localName() == optionTag.localName())
-            e = WMLOptionElement::create(*this);
-        else if (qName.localName() == optgroupTag.localName())
-            e = WMLOptGroupElement::create(*this);
-        else
-            e = WMLElementFactory::createWMLElement(qName.localName(), *this, CreatedByCreateElement);
-    }
+//     else if (qName.namespaceURI() == WMLNames::wmlNamespaceURI || isWMLDocument()) {
+//         if (qName.localName() == inputTag.localName())
+//             e = WMLInputElement::create(*this);
+//         else if (qName.localName() == selectTag.localName())
+//             e = WMLSelectElement::create(*this);
+//         else if (qName.localName() == optionTag.localName())
+//             e = WMLOptionElement::create(*this);
+//         else if (qName.localName() == optgroupTag.localName())
+//             e = WMLOptGroupElement::create(*this);
+//         else
+//             e = WMLElementFactory::createWMLElement(qName.localName(), *this, CreatedByCreateElement);
+//     }
 #endif
 
     if (e)
@@ -3427,8 +3427,8 @@ void Document::updateBaseURL()
             Traversal<HTMLAnchorElement>::startsAfter(*this))
             anchor.invalidateCachedVisitedLinkHash();
 #if ENABLE_WML
-        for (WMLAElement* anchor = Traversal<WMLAElement>::firstWithin(*this); anchor; anchor = Traversal<WMLAElement>::next(*anchor))
-            anchor->invalidateCachedVisitedLinkHash();
+//         for (WMLAElement* anchor = Traversal<WMLAElement>::firstWithin(*this); anchor; anchor = Traversal<WMLAElement>::next(*anchor))
+//             anchor->invalidateCachedVisitedLinkHash();
 #endif
     }
 }
@@ -6712,16 +6712,16 @@ void Document::decrementPasswordCount()
 #if ENABLE_WML
 void Document::resetWMLPageState()
 {
-    if (WMLPageState* pageState = wmlPageStateForDocument(this))
-        pageState->reset();
+//     if (WMLPageState* pageState = wmlPageStateForDocument(this))
+//         pageState->reset();
 }
 
 void Document::initializeWMLPageState()
 {
-    if (!isWMLDocument())
-        return;
-
-    static_cast<WMLDocument*>(this)->initialize();
+//     if (!isWMLDocument())
+//         return;
+// 
+//     static_cast<WMLDocument*>(this)->initialize();
 }
 #endif
 

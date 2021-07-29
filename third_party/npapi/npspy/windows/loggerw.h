@@ -42,24 +42,25 @@
 
 #include "logger.h"
 
-class LoggerWin : public Logger {
+class LoggerWin : public Logger
+{
 public:
-    HWND hWnd;
-    int width;
-    int height;
-    int x;
-    int y;
-    BOOL bSaveSettings;
+  HWND hWnd;
+  int width;
+  int height;
+  int x;
+  int y;
+  BOOL bSaveSettings;
 
-    LoggerWin();
-    ~LoggerWin();
+  LoggerWin();
+  ~LoggerWin();
 
-    BOOL platformInit();
-    void platformShut();
-    void dumpStringToMainWindow(const std::string& string);
+  BOOL platformInit();
+  void platformShut();
+  void dumpStringToMainWindow(const std::string& string);
 
-    void onDestroyWindow();
-    void onClear();
+  void onDestroyWindow();
+  void onClear();
 };
 
 #endif

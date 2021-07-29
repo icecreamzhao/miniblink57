@@ -17,10 +17,8 @@ void initPartialInterfacesInModules();
 void ModuleBindingsInitializer::init()
 {
     registerInstallConditionalFeaturesForModules();
-    //initPartialInterfacesInModules();
-    //DebugBreak();
-    SerializedScriptValueFactory::initialize(
-        new SerializedScriptValueForModulesFactory);
+    initPartialInterfacesInModules();
+    SerializedScriptValueFactory::initialize(new SerializedScriptValueForModulesFactory);
 }
 
 } // namespace blink

@@ -61,9 +61,9 @@
 #undef __STRICT_ANSI__
 #define __STRICT_ANSI__
 #endif
-#include <netinet/in.h> /* INADDR_ANY, ..., ntohl(), ... */
-#include <sys/socket.h> /* AF_INET */
 #include <sys/types.h>
+#include <sys/socket.h>		/* AF_INET */
+#include <netinet/in.h>         /* INADDR_ANY, ..., ntohl(), ... */
 #ifdef XP_OS2
 #include <sys/ioctl.h>
 #endif

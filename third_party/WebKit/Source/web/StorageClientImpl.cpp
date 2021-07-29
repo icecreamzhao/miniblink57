@@ -39,6 +39,10 @@ namespace blink {
 StorageClientImpl::StorageClientImpl(WebViewImpl* webView)
     : m_webView(webView)
 {
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "StorageClientImpl: %p %p\n", this, &m_webView);
+    OutputDebugStringA(output);
+    free(output);
 }
 
 std::unique_ptr<StorageNamespace>
@@ -46,9 +50,17 @@ StorageClientImpl::createSessionStorageNamespace()
 {
     if (!m_webView->client())
         return nullptr;
-    return WTF::wrapUnique(new StorageNamespace(
-        WTF::wrapUnique(m_webView->client()->createSessionStorageNamespace())));
+    return WTF::wrapUnique(new StorageNamespace(WTF::wrapUnique(m_webView->client()->createSessionStorageNamespace())));
 }
+
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+
+std::unique_ptr<StorageNamespace> StorageClientImpl::createLocalStorageNamespace()
+{
+    return wrapUnique(new StorageNamespace(wrapUnique(m_webView->client()->createLocalStorageNamespace())));
+}
+
+#endif
 
 bool StorageClientImpl::canAccessStorage(LocalFrame* frame,
     StorageType type) const

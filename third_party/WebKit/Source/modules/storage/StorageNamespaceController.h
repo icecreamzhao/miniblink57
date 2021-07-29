@@ -23,7 +23,11 @@ class MODULES_EXPORT StorageNamespaceController final
 
 public:
     StorageNamespace* sessionStorage(bool optionalCreate = true);
-    StorageClient* getStorageClient() { return m_client; }
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+    StorageNamespace* localStorage();
+#endif
+
+    StorageClient* getStorageClient();
     ~StorageNamespaceController();
 
     static void provideStorageNamespaceTo(Page&, StorageClient*);
@@ -45,6 +49,9 @@ private:
     explicit StorageNamespaceController(StorageClient*);
     static const char* supplementName();
     std::unique_ptr<StorageNamespace> m_sessionStorage;
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+    std::unique_ptr<StorageNamespace> m_localStorage;
+#endif
     StorageClient* m_client;
     Member<InspectorDOMStorageAgent> m_inspectorAgent;
 };

@@ -46,11 +46,11 @@ PR_BEGIN_EXTERN_C
 
 #include "md/_pcos.h"
 #ifdef WINNT
-#include "md/_win32_errors.h"
 #include "md/_winnt.h"
-#elif defined(WIN95)
 #include "md/_win32_errors.h"
+#elif defined(WIN95)
 #include "md/_win95.h"
+#include "md/_win32_errors.h"
 #elif defined(WIN16)
 #include "md/_win16.h"
 #elif defined(OS2)
@@ -140,8 +140,8 @@ PR_BEGIN_EXTERN_C
 
 #endif
 
-#include "md/_unix_errors.h"
 #include "md/_unixos.h"
+#include "md/_unix_errors.h"
 
 #elif defined(XP_BEOS)
 

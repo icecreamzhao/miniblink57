@@ -40,43 +40,44 @@
 #include "logfile.h"
 #include "plugload.h"
 
-CLogFile::CLogFile()
-    : hFile(NULL)
+CLogFile::CLogFile() :
+  hFile(NULL)
 {
-    szFileName[0] = '\0';
+  szFileName[0] = '\0';
 }
 
 CLogFile::~CLogFile()
 {
-    if (hFile != NULL)
-        close();
+  if(hFile != NULL)
+    close();
 }
 
-BOOL CLogFile::create(char* filename, BOOL delete_existing)
+BOOL CLogFile::create(char * filename, BOOL delete_existing)
 {
-    strcpy(szFileName, filename);
+  strcpy(szFileName, filename);
 
-    if (!delete_existing && XP_IsFile(szFileName))
-        return FALSE;
+  if(!delete_existing && XP_IsFile(szFileName))
+      return FALSE;
 
-    hFile = XP_CreateFile(szFileName);
-    return (hFile != NULL);
+  hFile = XP_CreateFile(szFileName);
+  return (hFile != NULL);
 }
 
 void CLogFile::close()
 {
-    if (hFile != NULL) {
-        XP_CloseFile(hFile);
-        hFile = NULL;
-    }
+  if(hFile != NULL)
+  {
+    XP_CloseFile(hFile);
+    hFile = NULL;
+  }
 }
 
 DWORD CLogFile::write(const std::string& buf)
 {
-    return XP_WriteFile(hFile, buf.c_str(), buf.length());
+  return XP_WriteFile(hFile, buf.c_str(), buf.length());
 }
 
 void CLogFile::flush()
 {
-    XP_FlushFileBuffers(hFile);
+  XP_FlushFileBuffers(hFile);
 }

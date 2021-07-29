@@ -304,50 +304,32 @@ void FrameSelection::setSelection(const SelectionInDOMTree& newSelection,
         // TODO(editing-dev): The use of
         // updateStyleAndLayoutIgnorePendingStylesheets
         // needs to be audited.  See http://crbug.com/590369 for more details.
-        newSelection.base()
-            .document()
-            ->updateStyleAndLayoutIgnorePendingStylesheets();
+        newSelection.base().document()->updateStyleAndLayoutIgnorePendingStylesheets();
     }
-    setSelection(createVisibleSelection(newSelection), options, align,
-        granularity);
+    setSelection(createVisibleSelection(newSelection), options, align, granularity);
 }
 
 // TODO(yosin): We will make |selectionInFlatTree| version of |SetSelection()|
 // as primary function instead of wrapper.
-void FrameSelection::setSelection(const SelectionInFlatTree& newSelection,
-    SetSelectionOptions options,
-    CursorAlignOnScroll align,
-    TextGranularity granularity)
+void FrameSelection::setSelection(const SelectionInFlatTree& newSelection, SetSelectionOptions options, CursorAlignOnScroll align, TextGranularity granularity)
 {
     if (!newSelection.isNone()) {
         // TODO(editing-dev): The use of
         // updateStyleAndLayoutIgnorePendingStylesheets
         // needs to be audited.  See http://crbug.com/590369 for more details.
-        newSelection.base()
-            .document()
-            ->updateStyleAndLayoutIgnorePendingStylesheets();
+        newSelection.base().document()->updateStyleAndLayoutIgnorePendingStylesheets();
     }
-    setSelection(createVisibleSelection(newSelection), options, align,
-        granularity);
+    setSelection(createVisibleSelection(newSelection), options, align, granularity);
 }
 
-void FrameSelection::setSelection(const VisibleSelection& newSelection,
-    SetSelectionOptions options,
-    CursorAlignOnScroll align,
-    TextGranularity granularity)
+void FrameSelection::setSelection(const VisibleSelection& newSelection, SetSelectionOptions options, CursorAlignOnScroll align, TextGranularity granularity)
 {
-    setSelectionAlgorithm<EditingStrategy>(newSelection, options, align,
-        granularity);
+    setSelectionAlgorithm<EditingStrategy>(newSelection, options, align, granularity);
 }
 
-void FrameSelection::setSelection(
-    const VisibleSelectionInFlatTree& newSelection,
-    SetSelectionOptions options,
-    CursorAlignOnScroll align,
-    TextGranularity granularity)
+void FrameSelection::setSelection(const VisibleSelectionInFlatTree& newSelection, SetSelectionOptions options, CursorAlignOnScroll align, TextGranularity granularity)
 {
-    setSelectionAlgorithm<EditingInFlatTreeStrategy>(newSelection, options, align,
-        granularity);
+    setSelectionAlgorithm<EditingInFlatTreeStrategy>(newSelection, options, align, granularity);
 }
 
 static bool removingNodeRemovesPosition(Node& node, const Position& position)
@@ -1340,6 +1322,7 @@ DEFINE_TRACE(FrameSelection)
 
 void FrameSelection::scheduleVisualUpdate() const
 {
+    OutputDebugStringA("FrameSelection::scheduleVisualUpdate\n");
     if (Page* page = m_frame->page())
         page->animator().scheduleVisualUpdate(m_frame->localFrameRoot());
 }

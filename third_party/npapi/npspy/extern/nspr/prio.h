@@ -42,28 +42,28 @@
 #ifndef prio_h___
 #define prio_h___
 
-#include "prinet.h"
-#include "prinrval.h"
 #include "prlong.h"
 #include "prtime.h"
+#include "prinrval.h"
+#include "prinet.h"
 
 PR_BEGIN_EXTERN_C
 
 /* Typedefs */
-typedef struct PRDir PRDir;
-typedef struct PRDirEntry PRDirEntry;
+typedef struct PRDir            PRDir;
+typedef struct PRDirEntry       PRDirEntry;
 #ifdef MOZ_UNICODE
-typedef struct PRDirUTF16 PRDirUTF16;
-typedef struct PRDirEntryUTF16 PRDirEntryUTF16;
+typedef struct PRDirUTF16       PRDirUTF16;
+typedef struct PRDirEntryUTF16  PRDirEntryUTF16;
 #endif /* MOZ_UNICODE */
-typedef struct PRFileDesc PRFileDesc;
-typedef struct PRFileInfo PRFileInfo;
-typedef struct PRFileInfo64 PRFileInfo64;
-typedef union PRNetAddr PRNetAddr;
-typedef struct PRIOMethods PRIOMethods;
-typedef struct PRPollDesc PRPollDesc;
-typedef struct PRFilePrivate PRFilePrivate;
-typedef struct PRSendFileData PRSendFileData;
+typedef struct PRFileDesc       PRFileDesc;
+typedef struct PRFileInfo       PRFileInfo;
+typedef struct PRFileInfo64     PRFileInfo64;
+typedef union  PRNetAddr        PRNetAddr;
+typedef struct PRIOMethods      PRIOMethods;
+typedef struct PRPollDesc       PRPollDesc;
+typedef struct PRFilePrivate    PRFilePrivate;
+typedef struct PRSendFileData   PRSendFileData;
 
 /*
 ***************************************************************************
@@ -76,15 +76,15 @@ typedef struct PRSendFileData PRSendFileData;
 ***************************************************************************
 */
 
-typedef PRIntn PRDescIdentity; /* see: Layering file descriptors */
+typedef PRIntn PRDescIdentity;          /* see: Layering file descriptors */
 
 struct PRFileDesc {
-    const PRIOMethods* methods; /* the I/O methods table */
-    PRFilePrivate* secret; /* layer dependent data */
-    PRFileDesc *lower, *higher; /* pointers to adjacent layers */
-    void(PR_CALLBACK* dtor)(PRFileDesc* fd);
-    /* A destructor function for layer */
-    PRDescIdentity identity; /* Identity of this particular layer  */
+    const PRIOMethods *methods;         /* the I/O methods table */
+    PRFilePrivate *secret;              /* layer dependent data */
+    PRFileDesc *lower, *higher;         /* pointers to adjacent layers */
+    void (PR_CALLBACK *dtor)(PRFileDesc *fd);
+                                        /* A destructor function for layer */
+    PRDescIdentity identity;            /* Identity of this particular layer  */
 };
 
 /*
@@ -97,9 +97,9 @@ struct PRFileDesc {
 ***************************************************************************
 */
 typedef enum PRTransmitFileFlags {
-    PR_TRANSMITFILE_KEEP_OPEN = 0, /* socket is left open after file
+    PR_TRANSMITFILE_KEEP_OPEN = 0,    /* socket is left open after file
                                        * is transmitted. */
-    PR_TRANSMITFILE_CLOSE_SOCKET = 1 /* socket is closed after file
+    PR_TRANSMITFILE_CLOSE_SOCKET = 1  /* socket is closed after file
                                        * is transmitted. */
 } PRTransmitFileFlags;
 
@@ -154,54 +154,54 @@ typedef enum PRTransmitFileFlags {
 *************************************************************************/
 
 struct PRIPv6Addr {
-    union {
-        PRUint8 _S6_u8[16];
-        PRUint16 _S6_u16[8];
-        PRUint32 _S6_u32[4];
-        PRUint64 _S6_u64[2];
-    } _S6_un;
+	union {
+		PRUint8  _S6_u8[16];
+		PRUint16 _S6_u16[8];
+		PRUint32 _S6_u32[4];
+		PRUint64 _S6_u64[2];
+	} _S6_un;
 };
-#define pr_s6_addr _S6_un._S6_u8
-#define pr_s6_addr16 _S6_un._S6_u16
-#define pr_s6_addr32 _S6_un._S6_u32
-#define pr_s6_addr64 _S6_un._S6_u64
+#define pr_s6_addr		_S6_un._S6_u8
+#define pr_s6_addr16	_S6_un._S6_u16
+#define pr_s6_addr32	_S6_un._S6_u32
+#define pr_s6_addr64 	_S6_un._S6_u64
 
 typedef struct PRIPv6Addr PRIPv6Addr;
 
 union PRNetAddr {
     struct {
-        PRUint16 family; /* address family (0x00ff maskable) */
+        PRUint16 family;                /* address family (0x00ff maskable) */
 #ifdef XP_BEOS
-        char data[10]; /* Be has a smaller structure */
+        char data[10];                  /* Be has a smaller structure */
 #else
-        char data[14]; /* raw address data */
+        char data[14];                  /* raw address data */
 #endif
     } raw;
     struct {
-        PRUint16 family; /* address family (AF_INET) */
-        PRUint16 port; /* port number */
-        PRUint32 ip; /* The actual 32 bits of address */
+        PRUint16 family;                /* address family (AF_INET) */
+        PRUint16 port;                  /* port number */
+        PRUint32 ip;                    /* The actual 32 bits of address */
 #ifdef XP_BEOS
-        char pad[4]; /* Be has a smaller structure */
+        char pad[4];                    /* Be has a smaller structure */
 #else
         char pad[8];
 #endif
     } inet;
     struct {
-        PRUint16 family; /* address family (AF_INET6) */
-        PRUint16 port; /* port number */
-        PRUint32 flowinfo; /* routing information */
-        PRIPv6Addr ip; /* the actual 128 bits of address */
-        PRUint32 scope_id; /* set of interfaces for a scope */
+        PRUint16 family;                /* address family (AF_INET6) */
+        PRUint16 port;                  /* port number */
+        PRUint32 flowinfo;              /* routing information */
+        PRIPv6Addr ip;                  /* the actual 128 bits of address */
+        PRUint32 scope_id;              /* set of interfaces for a scope */
     } ipv6;
 #if defined(XP_UNIX) || defined(XP_OS2)
-    struct { /* Unix domain socket address */
-        PRUint16 family; /* address family (AF_UNIX) */
+    struct {                            /* Unix domain socket address */
+        PRUint16 family;                /* address family (AF_UNIX) */
 #ifdef XP_OS2
-        char path[108]; /* null-terminated pathname */
-        /* bind fails if size is not 108. */
+        char path[108];                 /* null-terminated pathname */
+                                        /* bind fails if size is not 108. */
 #else
-        char path[104]; /* null-terminated pathname */
+        char path[104];                 /* null-terminated pathname */
 #endif
     } local;
 #endif
@@ -216,58 +216,61 @@ union PRNetAddr {
 ** the following enumeration are supported.
 ***************************************************************************
 */
-typedef enum PRSockOption {
-    PR_SockOpt_Nonblocking, /* nonblocking io */
-    PR_SockOpt_Linger, /* linger on close if data present */
-    PR_SockOpt_Reuseaddr, /* allow local address reuse */
-    PR_SockOpt_Keepalive, /* keep connections alive */
-    PR_SockOpt_RecvBufferSize, /* send buffer size */
-    PR_SockOpt_SendBufferSize, /* receive buffer size */
+typedef enum PRSockOption
+{
+    PR_SockOpt_Nonblocking,     /* nonblocking io */
+    PR_SockOpt_Linger,          /* linger on close if data present */
+    PR_SockOpt_Reuseaddr,       /* allow local address reuse */
+    PR_SockOpt_Keepalive,       /* keep connections alive */
+    PR_SockOpt_RecvBufferSize,  /* send buffer size */
+    PR_SockOpt_SendBufferSize,  /* receive buffer size */
 
-    PR_SockOpt_IpTimeToLive, /* time to live */
+    PR_SockOpt_IpTimeToLive,    /* time to live */
     PR_SockOpt_IpTypeOfService, /* type of service and precedence */
 
-    PR_SockOpt_AddMember, /* add an IP group membership */
-    PR_SockOpt_DropMember, /* drop an IP group membership */
-    PR_SockOpt_McastInterface, /* multicast interface address */
+    PR_SockOpt_AddMember,       /* add an IP group membership */
+    PR_SockOpt_DropMember,      /* drop an IP group membership */
+    PR_SockOpt_McastInterface,  /* multicast interface address */
     PR_SockOpt_McastTimeToLive, /* multicast timetolive */
-    PR_SockOpt_McastLoopback, /* multicast loopback */
+    PR_SockOpt_McastLoopback,   /* multicast loopback */
 
-    PR_SockOpt_NoDelay, /* don't delay send to coalesce packets */
-    PR_SockOpt_MaxSegment, /* maximum segment size */
-    PR_SockOpt_Broadcast, /* enable broadcast */
+    PR_SockOpt_NoDelay,         /* don't delay send to coalesce packets */
+    PR_SockOpt_MaxSegment,      /* maximum segment size */
+    PR_SockOpt_Broadcast,       /* enable broadcast */
     PR_SockOpt_Last
 } PRSockOption;
 
 typedef struct PRLinger {
-    PRBool polarity; /* Polarity of the option's setting */
-    PRIntervalTime linger; /* Time to linger before closing */
+	PRBool polarity;		    /* Polarity of the option's setting */
+	PRIntervalTime linger;	    /* Time to linger before closing */
 } PRLinger;
 
 typedef struct PRMcastRequest {
-    PRNetAddr mcaddr; /* IP multicast address of group */
-    PRNetAddr ifaddr; /* local IP address of interface */
+	PRNetAddr mcaddr;			/* IP multicast address of group */
+	PRNetAddr ifaddr;			/* local IP address of interface */
 } PRMcastRequest;
 
-typedef struct PRSocketOptionData {
+typedef struct PRSocketOptionData
+{
     PRSockOption option;
-    union {
-        PRUintn ip_ttl; /* IP time to live */
-        PRUintn mcast_ttl; /* IP multicast time to live */
-        PRUintn tos; /* IP type of service and precedence */
-        PRBool non_blocking; /* Non-blocking (network) I/O */
-        PRBool reuse_addr; /* Allow local address reuse */
-        PRBool keep_alive; /* Keep connections alive */
-        PRBool mcast_loopback; /* IP multicast loopback */
-        PRBool no_delay; /* Don't delay send to coalesce packets */
-        PRBool broadcast; /* Enable broadcast */
-        PRSize max_segment; /* Maximum segment size */
-        PRSize recv_buffer_size; /* Receive buffer size */
-        PRSize send_buffer_size; /* Send buffer size */
-        PRLinger linger; /* Time to linger on close if data present */
-        PRMcastRequest add_member; /* add an IP group membership */
+    union
+    {
+        PRUintn ip_ttl;             /* IP time to live */
+        PRUintn mcast_ttl;          /* IP multicast time to live */
+        PRUintn tos;                /* IP type of service and precedence */
+        PRBool non_blocking;        /* Non-blocking (network) I/O */
+        PRBool reuse_addr;          /* Allow local address reuse */
+        PRBool keep_alive;          /* Keep connections alive */
+        PRBool mcast_loopback;      /* IP multicast loopback */
+        PRBool no_delay;            /* Don't delay send to coalesce packets */
+        PRBool broadcast;           /* Enable broadcast */
+        PRSize max_segment;         /* Maximum segment size */
+        PRSize recv_buffer_size;    /* Receive buffer size */
+        PRSize send_buffer_size;    /* Send buffer size */
+        PRLinger linger;            /* Time to linger on close if data present */
+        PRMcastRequest add_member;  /* add an IP group membership */
         PRMcastRequest drop_member; /* Drop an IP group membership */
-        PRNetAddr mcast_if; /* multicast interface address */
+        PRNetAddr mcast_if;         /* multicast interface address */
     } value;
 } PRSocketOptionData;
 
@@ -280,7 +283,7 @@ typedef struct PRSocketOptionData {
 ***************************************************************************
 */
 typedef struct PRIOVec {
-    char* iov_base;
+    char *iov_base;
     int iov_len;
 } PRIOVec;
 
@@ -289,7 +292,8 @@ typedef struct PRIOVec {
 ** Discover what type of socket is being described by the file descriptor.
 ***************************************************************************
 */
-typedef enum PRDescType {
+typedef enum PRDescType
+{
     PR_DESC_FILE = 1,
     PR_DESC_SOCKET_TCP = 2,
     PR_DESC_SOCKET_UDP = 3,
@@ -303,8 +307,7 @@ typedef enum PRSeekWhence {
     PR_SEEK_END = 2
 } PRSeekWhence;
 
-NSPR_API(PRDescType)
-PR_GetDescType(PRFileDesc* file);
+NSPR_API(PRDescType) PR_GetDescType(PRFileDesc *file);
 
 /*
 ***************************************************************************
@@ -322,99 +325,99 @@ PR_GetDescType(PRFileDesc* file);
 ***************************************************************************
 */
 
-typedef PRStatus(PR_CALLBACK* PRCloseFN)(PRFileDesc* fd);
-typedef PRInt32(PR_CALLBACK* PRReadFN)(PRFileDesc* fd, void* buf, PRInt32 amount);
-typedef PRInt32(PR_CALLBACK* PRWriteFN)(PRFileDesc* fd, const void* buf, PRInt32 amount);
-typedef PRInt32(PR_CALLBACK* PRAvailableFN)(PRFileDesc* fd);
-typedef PRInt64(PR_CALLBACK* PRAvailable64FN)(PRFileDesc* fd);
-typedef PRStatus(PR_CALLBACK* PRFsyncFN)(PRFileDesc* fd);
-typedef PROffset32(PR_CALLBACK* PRSeekFN)(PRFileDesc* fd, PROffset32 offset, PRSeekWhence how);
-typedef PROffset64(PR_CALLBACK* PRSeek64FN)(PRFileDesc* fd, PROffset64 offset, PRSeekWhence how);
-typedef PRStatus(PR_CALLBACK* PRFileInfoFN)(PRFileDesc* fd, PRFileInfo* info);
-typedef PRStatus(PR_CALLBACK* PRFileInfo64FN)(PRFileDesc* fd, PRFileInfo64* info);
-typedef PRInt32(PR_CALLBACK* PRWritevFN)(
-    PRFileDesc* fd, const PRIOVec* iov, PRInt32 iov_size,
+typedef PRStatus (PR_CALLBACK *PRCloseFN)(PRFileDesc *fd);
+typedef PRInt32 (PR_CALLBACK *PRReadFN)(PRFileDesc *fd, void *buf, PRInt32 amount);
+typedef PRInt32 (PR_CALLBACK *PRWriteFN)(PRFileDesc *fd, const void *buf, PRInt32 amount);
+typedef PRInt32 (PR_CALLBACK *PRAvailableFN)(PRFileDesc *fd);
+typedef PRInt64 (PR_CALLBACK *PRAvailable64FN)(PRFileDesc *fd);
+typedef PRStatus (PR_CALLBACK *PRFsyncFN)(PRFileDesc *fd);
+typedef PROffset32 (PR_CALLBACK *PRSeekFN)(PRFileDesc *fd, PROffset32 offset, PRSeekWhence how);
+typedef PROffset64 (PR_CALLBACK *PRSeek64FN)(PRFileDesc *fd, PROffset64 offset, PRSeekWhence how);
+typedef PRStatus (PR_CALLBACK *PRFileInfoFN)(PRFileDesc *fd, PRFileInfo *info);
+typedef PRStatus (PR_CALLBACK *PRFileInfo64FN)(PRFileDesc *fd, PRFileInfo64 *info);
+typedef PRInt32 (PR_CALLBACK *PRWritevFN)(
+    PRFileDesc *fd, const PRIOVec *iov, PRInt32 iov_size,
     PRIntervalTime timeout);
-typedef PRStatus(PR_CALLBACK* PRConnectFN)(
-    PRFileDesc* fd, const PRNetAddr* addr, PRIntervalTime timeout);
-typedef PRFileDesc*(PR_CALLBACK* PRAcceptFN)(
-    PRFileDesc* fd, PRNetAddr* addr, PRIntervalTime timeout);
-typedef PRStatus(PR_CALLBACK* PRBindFN)(PRFileDesc* fd, const PRNetAddr* addr);
-typedef PRStatus(PR_CALLBACK* PRListenFN)(PRFileDesc* fd, PRIntn backlog);
-typedef PRStatus(PR_CALLBACK* PRShutdownFN)(PRFileDesc* fd, PRIntn how);
-typedef PRInt32(PR_CALLBACK* PRRecvFN)(
-    PRFileDesc* fd, void* buf, PRInt32 amount,
+typedef PRStatus (PR_CALLBACK *PRConnectFN)(
+    PRFileDesc *fd, const PRNetAddr *addr, PRIntervalTime timeout);
+typedef PRFileDesc* (PR_CALLBACK *PRAcceptFN) (
+    PRFileDesc *fd, PRNetAddr *addr, PRIntervalTime timeout);
+typedef PRStatus (PR_CALLBACK *PRBindFN)(PRFileDesc *fd, const PRNetAddr *addr);
+typedef PRStatus (PR_CALLBACK *PRListenFN)(PRFileDesc *fd, PRIntn backlog);
+typedef PRStatus (PR_CALLBACK *PRShutdownFN)(PRFileDesc *fd, PRIntn how);
+typedef PRInt32 (PR_CALLBACK *PRRecvFN)(
+    PRFileDesc *fd, void *buf, PRInt32 amount,
     PRIntn flags, PRIntervalTime timeout);
-typedef PRInt32(PR_CALLBACK* PRSendFN)(
-    PRFileDesc* fd, const void* buf, PRInt32 amount,
+typedef PRInt32 (PR_CALLBACK *PRSendFN) (
+    PRFileDesc *fd, const void *buf, PRInt32 amount,
     PRIntn flags, PRIntervalTime timeout);
-typedef PRInt32(PR_CALLBACK* PRRecvfromFN)(
-    PRFileDesc* fd, void* buf, PRInt32 amount,
-    PRIntn flags, PRNetAddr* addr, PRIntervalTime timeout);
-typedef PRInt32(PR_CALLBACK* PRSendtoFN)(
-    PRFileDesc* fd, const void* buf, PRInt32 amount,
-    PRIntn flags, const PRNetAddr* addr, PRIntervalTime timeout);
-typedef PRInt16(PR_CALLBACK* PRPollFN)(
-    PRFileDesc* fd, PRInt16 in_flags, PRInt16* out_flags);
-typedef PRInt32(PR_CALLBACK* PRAcceptreadFN)(
-    PRFileDesc* sd, PRFileDesc** nd, PRNetAddr** raddr,
-    void* buf, PRInt32 amount, PRIntervalTime t);
-typedef PRInt32(PR_CALLBACK* PRTransmitfileFN)(
-    PRFileDesc* sd, PRFileDesc* fd, const void* headers,
-    PRInt32 hlen, PRTransmitFileFlags flags, PRIntervalTime t);
-typedef PRStatus(PR_CALLBACK* PRGetsocknameFN)(PRFileDesc* fd, PRNetAddr* addr);
-typedef PRStatus(PR_CALLBACK* PRGetpeernameFN)(PRFileDesc* fd, PRNetAddr* addr);
-typedef PRStatus(PR_CALLBACK* PRGetsocketoptionFN)(
-    PRFileDesc* fd, PRSocketOptionData* data);
-typedef PRStatus(PR_CALLBACK* PRSetsocketoptionFN)(
-    PRFileDesc* fd, const PRSocketOptionData* data);
-typedef PRInt32(PR_CALLBACK* PRSendfileFN)(
-    PRFileDesc* networkSocket, PRSendFileData* sendData,
-    PRTransmitFileFlags flags, PRIntervalTime timeout);
-typedef PRStatus(PR_CALLBACK* PRConnectcontinueFN)(
-    PRFileDesc* fd, PRInt16 out_flags);
-typedef PRIntn(PR_CALLBACK* PRReservedFN)(PRFileDesc* fd);
+typedef PRInt32 (PR_CALLBACK *PRRecvfromFN)(
+    PRFileDesc *fd, void *buf, PRInt32 amount,
+    PRIntn flags, PRNetAddr *addr, PRIntervalTime timeout);
+typedef PRInt32 (PR_CALLBACK *PRSendtoFN)(
+    PRFileDesc *fd, const void *buf, PRInt32 amount,
+    PRIntn flags, const PRNetAddr *addr, PRIntervalTime timeout);
+typedef PRInt16 (PR_CALLBACK *PRPollFN)(
+    PRFileDesc *fd, PRInt16 in_flags, PRInt16 *out_flags);
+typedef PRInt32 (PR_CALLBACK *PRAcceptreadFN)(
+    PRFileDesc *sd, PRFileDesc **nd, PRNetAddr **raddr,
+    void *buf, PRInt32 amount, PRIntervalTime t);
+typedef PRInt32 (PR_CALLBACK *PRTransmitfileFN)(
+     PRFileDesc *sd, PRFileDesc *fd, const void *headers,
+     PRInt32 hlen, PRTransmitFileFlags flags, PRIntervalTime t);
+typedef PRStatus (PR_CALLBACK *PRGetsocknameFN)(PRFileDesc *fd, PRNetAddr *addr);
+typedef PRStatus (PR_CALLBACK *PRGetpeernameFN)(PRFileDesc *fd, PRNetAddr *addr);
+typedef PRStatus (PR_CALLBACK *PRGetsocketoptionFN)(
+    PRFileDesc *fd, PRSocketOptionData *data);
+typedef PRStatus (PR_CALLBACK *PRSetsocketoptionFN)(
+    PRFileDesc *fd, const PRSocketOptionData *data);
+typedef PRInt32 (PR_CALLBACK *PRSendfileFN)(
+	PRFileDesc *networkSocket, PRSendFileData *sendData,
+	PRTransmitFileFlags flags, PRIntervalTime timeout);
+typedef PRStatus (PR_CALLBACK *PRConnectcontinueFN)(
+    PRFileDesc *fd, PRInt16 out_flags);
+typedef PRIntn (PR_CALLBACK *PRReservedFN)(PRFileDesc *fd);
 
 struct PRIOMethods {
-    PRDescType file_type; /* Type of file represented (tos)           */
-    PRCloseFN close; /* close file and destroy descriptor        */
-    PRReadFN read; /* read up to specified bytes into buffer   */
-    PRWriteFN write; /* write specified bytes from buffer        */
-    PRAvailableFN available; /* determine number of bytes available      */
-    PRAvailable64FN available64; /*          ditto, 64 bit                   */
-    PRFsyncFN fsync; /* flush all buffers to permanent store     */
-    PRSeekFN seek; /* position the file to the desired place   */
-    PRSeek64FN seek64; /*           ditto, 64 bit                  */
-    PRFileInfoFN fileInfo; /* Get information about an open file       */
-    PRFileInfo64FN fileInfo64; /*           ditto, 64 bit                  */
-    PRWritevFN writev; /* Write segments as described by iovector  */
-    PRConnectFN connect; /* Connect to the specified (net) address   */
-    PRAcceptFN accept; /* Accept a connection for a (net) peer     */
-    PRBindFN bind; /* Associate a (net) address with the fd    */
-    PRListenFN listen; /* Prepare to listen for (net) connections  */
-    PRShutdownFN shutdown; /* Shutdown a (net) connection              */
-    PRRecvFN recv; /* Solicit up the the specified bytes       */
-    PRSendFN send; /* Send all the bytes specified             */
-    PRRecvfromFN recvfrom; /* Solicit (net) bytes and report source    */
-    PRSendtoFN sendto; /* Send bytes to (net) address specified    */
-    PRPollFN poll; /* Test the fd to see if it is ready        */
-    PRAcceptreadFN acceptread; /* Accept and read on a new (net) fd        */
-    PRTransmitfileFN transmitfile; /* Transmit at entire file                  */
-    PRGetsocknameFN getsockname; /* Get (net) address associated with fd     */
-    PRGetpeernameFN getpeername; /* Get peer's (net) address                 */
-    PRReservedFN reserved_fn_6; /* reserved for future use */
-    PRReservedFN reserved_fn_5; /* reserved for future use */
+    PRDescType file_type;           /* Type of file represented (tos)           */
+    PRCloseFN close;                /* close file and destroy descriptor        */
+    PRReadFN read;                  /* read up to specified bytes into buffer   */
+    PRWriteFN write;                /* write specified bytes from buffer        */
+    PRAvailableFN available;        /* determine number of bytes available      */
+    PRAvailable64FN available64;    /*          ditto, 64 bit                   */
+    PRFsyncFN fsync;                /* flush all buffers to permanent store     */
+    PRSeekFN seek;                  /* position the file to the desired place   */
+    PRSeek64FN seek64;              /*           ditto, 64 bit                  */
+    PRFileInfoFN fileInfo;          /* Get information about an open file       */
+    PRFileInfo64FN fileInfo64;      /*           ditto, 64 bit                  */
+    PRWritevFN writev;              /* Write segments as described by iovector  */
+    PRConnectFN connect;            /* Connect to the specified (net) address   */
+    PRAcceptFN accept;              /* Accept a connection for a (net) peer     */
+    PRBindFN bind;                  /* Associate a (net) address with the fd    */
+    PRListenFN listen;              /* Prepare to listen for (net) connections  */
+    PRShutdownFN shutdown;          /* Shutdown a (net) connection              */
+    PRRecvFN recv;                  /* Solicit up the the specified bytes       */
+    PRSendFN send;                  /* Send all the bytes specified             */
+    PRRecvfromFN recvfrom;          /* Solicit (net) bytes and report source    */
+    PRSendtoFN sendto;              /* Send bytes to (net) address specified    */
+    PRPollFN poll;                  /* Test the fd to see if it is ready        */
+    PRAcceptreadFN acceptread;      /* Accept and read on a new (net) fd        */
+    PRTransmitfileFN transmitfile;  /* Transmit at entire file                  */
+    PRGetsocknameFN getsockname;    /* Get (net) address associated with fd     */
+    PRGetpeernameFN getpeername;    /* Get peer's (net) address                 */
+    PRReservedFN reserved_fn_6;     /* reserved for future use */
+    PRReservedFN reserved_fn_5;     /* reserved for future use */
     PRGetsocketoptionFN getsocketoption;
-    /* Get current setting of specified option  */
+                                    /* Get current setting of specified option  */
     PRSetsocketoptionFN setsocketoption;
-    /* Set value of specified option            */
-    PRSendfileFN sendfile; /* Send a (partial) file with header/trailer*/
+                                    /* Set value of specified option            */
+    PRSendfileFN sendfile;			/* Send a (partial) file with header/trailer*/
     PRConnectcontinueFN connectcontinue;
-    /* Continue a nonblocking connect */
-    PRReservedFN reserved_fn_3; /* reserved for future use */
-    PRReservedFN reserved_fn_2; /* reserved for future use */
-    PRReservedFN reserved_fn_1; /* reserved for future use */
-    PRReservedFN reserved_fn_0; /* reserved for future use */
+                                    /* Continue a nonblocking connect */
+    PRReservedFN reserved_fn_3;		/* reserved for future use */
+    PRReservedFN reserved_fn_2;		/* reserved for future use */
+    PRReservedFN reserved_fn_1;		/* reserved for future use */
+    PRReservedFN reserved_fn_0;		/* reserved for future use */
 };
 
 /*
@@ -436,18 +439,18 @@ struct PRIOMethods {
  **************************************************************************
  */
 
-typedef enum PRSpecialFD {
-    PR_StandardInput, /* standard input */
-    PR_StandardOutput, /* standard output */
-    PR_StandardError /* standard error */
+typedef enum PRSpecialFD
+{
+    PR_StandardInput,          /* standard input */
+    PR_StandardOutput,         /* standard output */
+    PR_StandardError           /* standard error */
 } PRSpecialFD;
 
-NSPR_API(PRFileDesc*)
-PR_GetSpecialFD(PRSpecialFD id);
+NSPR_API(PRFileDesc*) PR_GetSpecialFD(PRSpecialFD id);
 
-#define PR_STDIN PR_GetSpecialFD(PR_StandardInput)
-#define PR_STDOUT PR_GetSpecialFD(PR_StandardOutput)
-#define PR_STDERR PR_GetSpecialFD(PR_StandardError)
+#define PR_STDIN	PR_GetSpecialFD(PR_StandardInput)
+#define PR_STDOUT	PR_GetSpecialFD(PR_StandardOutput)
+#define PR_STDERR	PR_GetSpecialFD(PR_StandardError)
 
 /*
  **************************************************************************
@@ -478,19 +481,15 @@ PR_GetSpecialFD(PRSpecialFD id);
  **************************************************************************
  */
 
-#define PR_IO_LAYER_HEAD (PRDescIdentity) - 3
-#define PR_INVALID_IO_LAYER (PRDescIdentity) - 1
-#define PR_TOP_IO_LAYER (PRDescIdentity) - 2
+#define PR_IO_LAYER_HEAD (PRDescIdentity)-3
+#define PR_INVALID_IO_LAYER (PRDescIdentity)-1
+#define PR_TOP_IO_LAYER (PRDescIdentity)-2
 #define PR_NSPR_IO_LAYER (PRDescIdentity)0
 
-NSPR_API(PRDescIdentity)
-PR_GetUniqueIdentity(const char* layer_name);
-NSPR_API(const char*)
-PR_GetNameForIdentity(PRDescIdentity ident);
-NSPR_API(PRDescIdentity)
-PR_GetLayersIdentity(PRFileDesc* fd);
-NSPR_API(PRFileDesc*)
-PR_GetIdentitiesLayer(PRFileDesc* fd_stack, PRDescIdentity id);
+NSPR_API(PRDescIdentity) PR_GetUniqueIdentity(const char *layer_name);
+NSPR_API(const char*) PR_GetNameForIdentity(PRDescIdentity ident);
+NSPR_API(PRDescIdentity) PR_GetLayersIdentity(PRFileDesc* fd);
+NSPR_API(PRFileDesc*) PR_GetIdentitiesLayer(PRFileDesc* fd_stack, PRDescIdentity id);
 
 /*
  **************************************************************************
@@ -500,8 +499,7 @@ PR_GetIdentitiesLayer(PRFileDesc* fd_stack, PRDescIdentity id);
  * layer's methods table. You may NOT modify the table directly.
  **************************************************************************
  */
-NSPR_API(const PRIOMethods*)
-PR_GetDefaultIOMethods(void);
+NSPR_API(const PRIOMethods *) PR_GetDefaultIOMethods(void);
 
 /*
  **************************************************************************
@@ -512,9 +510,8 @@ PR_GetDefaultIOMethods(void);
  * provided. The runtime will not modify the table nor test its correctness.
  **************************************************************************
  */
-NSPR_API(PRFileDesc*)
-PR_CreateIOLayerStub(
-    PRDescIdentity ident, const PRIOMethods* methods);
+NSPR_API(PRFileDesc*) PR_CreateIOLayerStub(
+    PRDescIdentity ident, const PRIOMethods *methods);
 
 /*
  **************************************************************************
@@ -530,8 +527,7 @@ PR_CreateIOLayerStub(
  * pushing and popping layers of the stack.
  **************************************************************************
  */
-NSPR_API(PRFileDesc*)
-PR_CreateIOLayer(PRFileDesc* fd);
+NSPR_API(PRFileDesc*) PR_CreateIOLayer(PRFileDesc* fd);
 
 /*
  **************************************************************************
@@ -547,9 +543,8 @@ PR_CreateIOLayer(PRFileDesc* fd);
  * stack will not change.
  **************************************************************************
  */
-NSPR_API(PRStatus)
-PR_PushIOLayer(
-    PRFileDesc* fd_stack, PRDescIdentity id, PRFileDesc* layer);
+NSPR_API(PRStatus) PR_PushIOLayer(
+    PRFileDesc *fd_stack, PRDescIdentity id, PRFileDesc *layer);
 
 /*
  **************************************************************************
@@ -565,8 +560,7 @@ PR_PushIOLayer(
  * that file descriptor will remain valid.
  **************************************************************************
  */
-NSPR_API(PRFileDesc*)
-PR_PopIOLayer(PRFileDesc* fd_stack, PRDescIdentity id);
+NSPR_API(PRFileDesc*) PR_PopIOLayer(PRFileDesc *fd_stack, PRDescIdentity id);
 
 /*
  **************************************************************************
@@ -613,14 +607,14 @@ PR_PopIOLayer(PRFileDesc* fd_stack, PRDescIdentity id);
  */
 
 /* Open flags */
-#define PR_RDONLY 0x01
-#define PR_WRONLY 0x02
-#define PR_RDWR 0x04
-#define PR_CREATE_FILE 0x08
-#define PR_APPEND 0x10
-#define PR_TRUNCATE 0x20
-#define PR_SYNC 0x40
-#define PR_EXCL 0x80
+#define PR_RDONLY       0x01
+#define PR_WRONLY       0x02
+#define PR_RDWR         0x04
+#define PR_CREATE_FILE  0x08
+#define PR_APPEND       0x10
+#define PR_TRUNCATE     0x20
+#define PR_SYNC         0x40
+#define PR_EXCL         0x80
 
 /*
 ** File modes ....
@@ -640,8 +634,7 @@ PR_PopIOLayer(PRFileDesc* fd_stack, PRDescIdentity id);
 **
 */
 
-NSPR_API(PRFileDesc*)
-PR_Open(const char* name, PRIntn flags, PRIntn mode);
+NSPR_API(PRFileDesc*) PR_Open(const char *name, PRIntn flags, PRIntn mode);
 
 /*
  **************************************************************************
@@ -654,30 +647,28 @@ PR_Open(const char* name, PRIntn flags, PRIntn mode);
  */
 
 /* File mode bits */
-#define PR_IRWXU 00700 /* read, write, execute/search by owner */
-#define PR_IRUSR 00400 /* read permission, owner */
-#define PR_IWUSR 00200 /* write permission, owner */
-#define PR_IXUSR 00100 /* execute/search permission, owner */
-#define PR_IRWXG 00070 /* read, write, execute/search by group */
-#define PR_IRGRP 00040 /* read permission, group */
-#define PR_IWGRP 00020 /* write permission, group */
-#define PR_IXGRP 00010 /* execute/search permission, group */
-#define PR_IRWXO 00007 /* read, write, execute/search by others */
-#define PR_IROTH 00004 /* read permission, others */
-#define PR_IWOTH 00002 /* write permission, others */
-#define PR_IXOTH 00001 /* execute/search permission, others */
+#define PR_IRWXU 00700  /* read, write, execute/search by owner */
+#define PR_IRUSR 00400  /* read permission, owner */
+#define PR_IWUSR 00200  /* write permission, owner */
+#define PR_IXUSR 00100  /* execute/search permission, owner */
+#define PR_IRWXG 00070  /* read, write, execute/search by group */
+#define PR_IRGRP 00040  /* read permission, group */
+#define PR_IWGRP 00020  /* write permission, group */
+#define PR_IXGRP 00010  /* execute/search permission, group */
+#define PR_IRWXO 00007  /* read, write, execute/search by others */
+#define PR_IROTH 00004  /* read permission, others */
+#define PR_IWOTH 00002  /* write permission, others */
+#define PR_IXOTH 00001  /* execute/search permission, others */
 
-NSPR_API(PRFileDesc*)
-PR_OpenFile(
-    const char* name, PRIntn flags, PRIntn mode);
+NSPR_API(PRFileDesc*) PR_OpenFile(
+    const char *name, PRIntn flags, PRIntn mode);
 
 #ifdef MOZ_UNICODE
 /*
  * EXPERIMENTAL: This function may be removed in a future release.
  */
-NSPR_API(PRFileDesc*)
-PR_OpenFileUTF16(
-    const PRUnichar* name, PRIntn flags, PRIntn mode);
+NSPR_API(PRFileDesc*) PR_OpenFileUTF16(
+    const PRUnichar *name, PRIntn flags, PRIntn mode);
 #endif /* MOZ_UNICODE */
 
 /*
@@ -700,8 +691,7 @@ PR_OpenFileUTF16(
  **************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_Close(PRFileDesc* fd);
+NSPR_API(PRStatus)    PR_Close(PRFileDesc *fd);
 
 /*
  **************************************************************************
@@ -736,8 +726,7 @@ PR_Close(PRFileDesc* fd);
  **************************************************************************
  */
 
-NSPR_API(PRInt32)
-PR_Read(PRFileDesc* fd, void* buf, PRInt32 amount);
+NSPR_API(PRInt32) PR_Read(PRFileDesc *fd, void *buf, PRInt32 amount);
 
 /*
  ***************************************************************************
@@ -761,8 +750,7 @@ PR_Read(PRFileDesc* fd, void* buf, PRInt32 amount);
  ***************************************************************************
  */
 
-NSPR_API(PRInt32)
-PR_Write(PRFileDesc* fd, const void* buf, PRInt32 amount);
+NSPR_API(PRInt32) PR_Write(PRFileDesc *fd,const void *buf,PRInt32 amount);
 
 /*
  ***************************************************************************
@@ -794,11 +782,10 @@ PR_Write(PRFileDesc* fd, const void* buf, PRInt32 amount);
  ***************************************************************************
  */
 
-#define PR_MAX_IOVECTOR_SIZE 16 /* 'iov_size' must be <= */
+#define PR_MAX_IOVECTOR_SIZE 16   /* 'iov_size' must be <= */
 
-NSPR_API(PRInt32)
-PR_Writev(
-    PRFileDesc* fd, const PRIOVec* iov, PRInt32 iov_size,
+NSPR_API(PRInt32) PR_Writev(
+    PRFileDesc *fd, const PRIOVec *iov, PRInt32 iov_size,
     PRIntervalTime timeout);
 
 /*
@@ -818,29 +805,29 @@ PR_Writev(
  ***************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_Delete(const char* name);
+NSPR_API(PRStatus) PR_Delete(const char *name);
 
 /**************************************************************************/
 
-typedef enum PRFileType {
+typedef enum PRFileType
+{
     PR_FILE_FILE = 1,
     PR_FILE_DIRECTORY = 2,
     PR_FILE_OTHER = 3
 } PRFileType;
 
 struct PRFileInfo {
-    PRFileType type; /* Type of file */
-    PROffset32 size; /* Size, in bytes, of file's contents */
-    PRTime creationTime; /* Creation time per definition of PRTime */
-    PRTime modifyTime; /* Last modification time per definition of PRTime */
+    PRFileType type;        /* Type of file */
+    PROffset32 size;        /* Size, in bytes, of file's contents */
+    PRTime creationTime;    /* Creation time per definition of PRTime */
+    PRTime modifyTime;      /* Last modification time per definition of PRTime */
 };
 
 struct PRFileInfo64 {
-    PRFileType type; /* Type of file */
-    PROffset64 size; /* Size, in bytes, of file's contents */
-    PRTime creationTime; /* Creation time per definition of PRTime */
-    PRTime modifyTime; /* Last modification time per definition of PRTime */
+    PRFileType type;        /* Type of file */
+    PROffset64 size;        /* Size, in bytes, of file's contents */
+    PRTime creationTime;    /* Creation time per definition of PRTime */
+    PRTime modifyTime;      /* Last modification time per definition of PRTime */
 };
 
 /****************************************************************************
@@ -861,17 +848,14 @@ struct PRFileInfo64 {
  ***************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_GetFileInfo(const char* fn, PRFileInfo* info);
-NSPR_API(PRStatus)
-PR_GetFileInfo64(const char* fn, PRFileInfo64* info);
+NSPR_API(PRStatus) PR_GetFileInfo(const char *fn, PRFileInfo *info);
+NSPR_API(PRStatus) PR_GetFileInfo64(const char *fn, PRFileInfo64 *info);
 
 #ifdef MOZ_UNICODE
 /*
  * EXPERIMENTAL: This function may be removed in a future release.
  */
-NSPR_API(PRStatus)
-PR_GetFileInfo64UTF16(const PRUnichar* fn, PRFileInfo64* info);
+NSPR_API(PRStatus) PR_GetFileInfo64UTF16(const PRUnichar *fn, PRFileInfo64 *info);
 #endif /* MOZ_UNICODE */
 
 /*
@@ -891,10 +875,8 @@ PR_GetFileInfo64UTF16(const PRUnichar* fn, PRFileInfo64* info);
  ***************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_GetOpenFileInfo(PRFileDesc* fd, PRFileInfo* info);
-NSPR_API(PRStatus)
-PR_GetOpenFileInfo64(PRFileDesc* fd, PRFileInfo64* info);
+NSPR_API(PRStatus) PR_GetOpenFileInfo(PRFileDesc *fd, PRFileInfo *info);
+NSPR_API(PRStatus) PR_GetOpenFileInfo64(PRFileDesc *fd, PRFileInfo64 *info);
 
 /*
  **************************************************************************
@@ -912,8 +894,7 @@ PR_GetOpenFileInfo64(PRFileDesc* fd, PRFileInfo64* info);
  **************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_Rename(const char* from, const char* to);
+NSPR_API(PRStatus)    PR_Rename(const char *from, const char *to);
 
 /*
  *************************************************************************
@@ -945,8 +926,7 @@ typedef enum PRAccessHow {
     PR_ACCESS_READ_OK = 3
 } PRAccessHow;
 
-NSPR_API(PRStatus)
-PR_Access(const char* name, PRAccessHow how);
+NSPR_API(PRStatus) PR_Access(const char *name, PRAccessHow how);
 
 /*
  *************************************************************************
@@ -981,10 +961,8 @@ PR_Access(const char* name, PRAccessHow how);
  *************************************************************************
  */
 
-NSPR_API(PROffset32)
-PR_Seek(PRFileDesc* fd, PROffset32 offset, PRSeekWhence whence);
-NSPR_API(PROffset64)
-PR_Seek64(PRFileDesc* fd, PROffset64 offset, PRSeekWhence whence);
+NSPR_API(PROffset32) PR_Seek(PRFileDesc *fd, PROffset32 offset, PRSeekWhence whence);
+NSPR_API(PROffset64) PR_Seek64(PRFileDesc *fd, PROffset64 offset, PRSeekWhence whence);
 
 /*
  ************************************************************************
@@ -1006,10 +984,8 @@ PR_Seek64(PRFileDesc* fd, PROffset64 offset, PRSeekWhence whence);
  ************************************************************************
  */
 
-NSPR_API(PRInt32)
-PR_Available(PRFileDesc* fd);
-NSPR_API(PRInt64)
-PR_Available64(PRFileDesc* fd);
+NSPR_API(PRInt32) PR_Available(PRFileDesc *fd);
+NSPR_API(PRInt64) PR_Available64(PRFileDesc *fd);
 
 /*
  ************************************************************************
@@ -1028,24 +1004,23 @@ PR_Available64(PRFileDesc* fd);
  ************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_Sync(PRFileDesc* fd);
+NSPR_API(PRStatus)	PR_Sync(PRFileDesc *fd);
 
 /************************************************************************/
 
 struct PRDirEntry {
-    const char* name; /* name of entry, relative to directory name */
+    const char *name;        /* name of entry, relative to directory name */
 };
 
 #ifdef MOZ_UNICODE
 struct PRDirEntryUTF16 {
-    const PRUnichar* name; /* name of entry in UTF16, relative to
+    const PRUnichar *name;   /* name of entry in UTF16, relative to
                               * directory name */
 };
 #endif /* MOZ_UNICODE */
 
 #if !defined(NO_NSPR_10_SUPPORT)
-#define PR_DirName(dirEntry) (dirEntry->name)
+#define PR_DirName(dirEntry)	(dirEntry->name)
 #endif
 
 /*
@@ -1068,15 +1043,13 @@ struct PRDirEntryUTF16 {
  *************************************************************************
  */
 
-NSPR_API(PRDir*)
-PR_OpenDir(const char* name);
+NSPR_API(PRDir*) PR_OpenDir(const char *name);
 
 #ifdef MOZ_UNICODE
 /*
  * EXPERIMENTAL: This function may be removed in a future release.
  */
-NSPR_API(PRDirUTF16*)
-PR_OpenDirUTF16(const PRUnichar* name);
+NSPR_API(PRDirUTF16*) PR_OpenDirUTF16(const PRUnichar *name);
 #endif /* MOZ_UNICODE */
 
 /*
@@ -1110,15 +1083,13 @@ typedef enum PRDirFlags {
     PR_SKIP_HIDDEN = 0x4
 } PRDirFlags;
 
-NSPR_API(PRDirEntry*)
-PR_ReadDir(PRDir* dir, PRDirFlags flags);
+NSPR_API(PRDirEntry*) PR_ReadDir(PRDir *dir, PRDirFlags flags);
 
 #ifdef MOZ_UNICODE
 /*
  * EXPERIMENTAL: This function may be removed in a future release.
  */
-NSPR_API(PRDirEntryUTF16*)
-PR_ReadDirUTF16(PRDirUTF16* dir, PRDirFlags flags);
+NSPR_API(PRDirEntryUTF16*) PR_ReadDirUTF16(PRDirUTF16 *dir, PRDirFlags flags);
 #endif /* MOZ_UNICODE */
 
 /*
@@ -1138,15 +1109,13 @@ PR_ReadDirUTF16(PRDirUTF16* dir, PRDirFlags flags);
  *************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_CloseDir(PRDir* dir);
+NSPR_API(PRStatus) PR_CloseDir(PRDir *dir);
 
 #ifdef MOZ_UNICODE
 /*
  * EXPERIMENTAL: This function may be removed in a future release.
  */
-NSPR_API(PRStatus)
-PR_CloseDirUTF16(PRDirUTF16* dir);
+NSPR_API(PRStatus) PR_CloseDirUTF16(PRDirUTF16 *dir);
 #endif /* MOZ_UNICODE */
 
 /*
@@ -1169,8 +1138,7 @@ PR_CloseDirUTF16(PRDirUTF16* dir);
  *************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_MkDir(const char* name, PRIntn mode);
+NSPR_API(PRStatus) PR_MkDir(const char *name, PRIntn mode);
 
 /*
  *************************************************************************
@@ -1182,8 +1150,7 @@ PR_MkDir(const char* name, PRIntn mode);
  *************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_MakeDir(const char* name, PRIntn mode);
+NSPR_API(PRStatus) PR_MakeDir(const char *name, PRIntn mode);
 
 /*
  *************************************************************************
@@ -1203,8 +1170,7 @@ PR_MakeDir(const char* name, PRIntn mode);
  **************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_RmDir(const char* name);
+NSPR_API(PRStatus) PR_RmDir(const char *name);
 
 /*
  *************************************************************************
@@ -1223,8 +1189,7 @@ PR_RmDir(const char* name);
  **************************************************************************
  */
 
-NSPR_API(PRFileDesc*)
-PR_NewUDPSocket(void);
+NSPR_API(PRFileDesc*)    PR_NewUDPSocket(void);
 
 /*
  *************************************************************************
@@ -1243,8 +1208,7 @@ PR_NewUDPSocket(void);
  **************************************************************************
  */
 
-NSPR_API(PRFileDesc*)
-PR_NewTCPSocket(void);
+NSPR_API(PRFileDesc*)    PR_NewTCPSocket(void);
 
 /*
  *************************************************************************
@@ -1264,8 +1228,7 @@ PR_NewTCPSocket(void);
  **************************************************************************
  */
 
-NSPR_API(PRFileDesc*)
-PR_OpenUDPSocket(PRIntn af);
+NSPR_API(PRFileDesc*)    PR_OpenUDPSocket(PRIntn af);
 
 /*
  *************************************************************************
@@ -1285,8 +1248,7 @@ PR_OpenUDPSocket(PRIntn af);
  **************************************************************************
  */
 
-NSPR_API(PRFileDesc*)
-PR_OpenTCPSocket(PRIntn af);
+NSPR_API(PRFileDesc*)    PR_OpenTCPSocket(PRIntn af);
 
 /*
  *************************************************************************
@@ -1310,9 +1272,8 @@ PR_OpenTCPSocket(PRIntn af);
  **************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_Connect(
-    PRFileDesc* fd, const PRNetAddr* addr, PRIntervalTime timeout);
+NSPR_API(PRStatus) PR_Connect(
+    PRFileDesc *fd, const PRNetAddr *addr, PRIntervalTime timeout);
 
 /*
  *************************************************************************
@@ -1346,8 +1307,7 @@ PR_Connect(
  *       error code.
  */
 
-NSPR_API(PRStatus)
-PR_ConnectContinue(PRFileDesc* fd, PRInt16 out_flags);
+NSPR_API(PRStatus)    PR_ConnectContinue(PRFileDesc *fd, PRInt16 out_flags);
 
 /*
  *************************************************************************
@@ -1377,8 +1337,7 @@ PR_ConnectContinue(PRFileDesc* fd, PRInt16 out_flags);
  *       error code.
  */
 
-NSPR_API(PRStatus)
-PR_GetConnectStatus(const PRPollDesc* pd);
+NSPR_API(PRStatus)    PR_GetConnectStatus(const PRPollDesc *pd);
 
 /*
  *************************************************************************
@@ -1402,9 +1361,8 @@ PR_GetConnectStatus(const PRPollDesc* pd);
  **************************************************************************
  */
 
-NSPR_API(PRFileDesc*)
-PR_Accept(
-    PRFileDesc* fd, PRNetAddr* addr, PRIntervalTime timeout);
+NSPR_API(PRFileDesc*) PR_Accept(
+    PRFileDesc *fd, PRNetAddr *addr, PRIntervalTime timeout);
 
 /*
  *************************************************************************
@@ -1425,8 +1383,7 @@ PR_Accept(
  **************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_Bind(PRFileDesc* fd, const PRNetAddr* addr);
+NSPR_API(PRStatus) PR_Bind(PRFileDesc *fd, const PRNetAddr *addr);
 
 /*
  *************************************************************************
@@ -1448,8 +1405,7 @@ PR_Bind(PRFileDesc* fd, const PRNetAddr* addr);
  **************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_Listen(PRFileDesc* fd, PRIntn backlog);
+NSPR_API(PRStatus) PR_Listen(PRFileDesc *fd, PRIntn backlog);
 
 /*
  *************************************************************************
@@ -1473,14 +1429,14 @@ PR_Listen(PRFileDesc* fd, PRIntn backlog);
  **************************************************************************
  */
 
-typedef enum PRShutdownHow {
-    PR_SHUTDOWN_RCV = 0, /* disallow further receives */
-    PR_SHUTDOWN_SEND = 1, /* disallow further sends */
-    PR_SHUTDOWN_BOTH = 2 /* disallow further receives and sends */
+typedef enum PRShutdownHow
+{
+    PR_SHUTDOWN_RCV = 0,      /* disallow further receives */
+    PR_SHUTDOWN_SEND = 1,     /* disallow further sends */
+    PR_SHUTDOWN_BOTH = 2      /* disallow further receives and sends */
 } PRShutdownHow;
 
-NSPR_API(PRStatus)
-PR_Shutdown(PRFileDesc* fd, PRShutdownHow how);
+NSPR_API(PRStatus)    PR_Shutdown(PRFileDesc *fd, PRShutdownHow how);
 
 /*
  *************************************************************************
@@ -1513,9 +1469,8 @@ PR_Shutdown(PRFileDesc* fd, PRShutdownHow how);
 
 #define PR_MSG_PEEK 0x2
 
-NSPR_API(PRInt32)
-PR_Recv(PRFileDesc* fd, void* buf, PRInt32 amount,
-    PRIntn flags, PRIntervalTime timeout);
+NSPR_API(PRInt32)    PR_Recv(PRFileDesc *fd, void *buf, PRInt32 amount,
+                PRIntn flags, PRIntervalTime timeout);
 
 /*
  *************************************************************************
@@ -1545,9 +1500,8 @@ PR_Recv(PRFileDesc* fd, void* buf, PRInt32 amount,
  **************************************************************************
  */
 
-NSPR_API(PRInt32)
-PR_Send(PRFileDesc* fd, const void* buf, PRInt32 amount,
-    PRIntn flags, PRIntervalTime timeout);
+NSPR_API(PRInt32)    PR_Send(PRFileDesc *fd, const void *buf, PRInt32 amount,
+                                PRIntn flags, PRIntervalTime timeout);
 
 /*
  *************************************************************************
@@ -1581,10 +1535,9 @@ PR_Send(PRFileDesc* fd, const void* buf, PRInt32 amount,
  **************************************************************************
  */
 
-NSPR_API(PRInt32)
-PR_RecvFrom(
-    PRFileDesc* fd, void* buf, PRInt32 amount, PRIntn flags,
-    PRNetAddr* addr, PRIntervalTime timeout);
+NSPR_API(PRInt32) PR_RecvFrom(
+    PRFileDesc *fd, void *buf, PRInt32 amount, PRIntn flags,
+    PRNetAddr *addr, PRIntervalTime timeout);
 
 /*
  *************************************************************************
@@ -1615,10 +1568,9 @@ PR_RecvFrom(
  **************************************************************************
  */
 
-NSPR_API(PRInt32)
-PR_SendTo(
-    PRFileDesc* fd, const void* buf, PRInt32 amount, PRIntn flags,
-    const PRNetAddr* addr, PRIntervalTime timeout);
+NSPR_API(PRInt32) PR_SendTo(
+    PRFileDesc *fd, const void *buf, PRInt32 amount, PRIntn flags,
+    const PRNetAddr *addr, PRIntervalTime timeout);
 
 /*
 *************************************************************************
@@ -1656,10 +1608,9 @@ PR_SendTo(
 **************************************************************************
 */
 
-NSPR_API(PRInt32)
-PR_TransmitFile(
-    PRFileDesc* networkSocket, PRFileDesc* sourceFile,
-    const void* headers, PRInt32 hlen, PRTransmitFileFlags flags,
+NSPR_API(PRInt32) PR_TransmitFile(
+    PRFileDesc *networkSocket, PRFileDesc *sourceFile,
+    const void *headers, PRInt32 hlen, PRTransmitFileFlags flags,
     PRIntervalTime timeout);
 
 /*
@@ -1697,21 +1648,21 @@ PR_TransmitFile(
 */
 
 struct PRSendFileData {
-    PRFileDesc* fd; /* file to send							*/
-    PRUint32 file_offset; /* file offset							*/
-    PRSize file_nbytes; /* number of bytes of file data to send	*/
-    /* if 0, send data from file_offset to	*/
-    /* end-of-file.							*/
-    const void* header; /* header buffer						*/
-    PRInt32 hlen; /* header len							*/
-    const void* trailer; /* trailer buffer						*/
-    PRInt32 tlen; /* trailer len							*/
+	PRFileDesc	*fd;			/* file to send							*/
+	PRUint32	file_offset;	/* file offset							*/
+	PRSize		file_nbytes;	/* number of bytes of file data to send	*/
+								/* if 0, send data from file_offset to	*/
+								/* end-of-file.							*/
+	const void	*header;		/* header buffer						*/
+	PRInt32		hlen;			/* header len							*/
+	const void	*trailer;		/* trailer buffer						*/
+	PRInt32		tlen;			/* trailer len							*/
 };
 
-NSPR_API(PRInt32)
-PR_SendFile(
-    PRFileDesc* networkSocket, PRSendFileData* sendData,
-    PRTransmitFileFlags flags, PRIntervalTime timeout);
+
+NSPR_API(PRInt32) PR_SendFile(
+    PRFileDesc *networkSocket, PRSendFileData *sendData,
+	PRTransmitFileFlags flags, PRIntervalTime timeout);
 
 /*
 *************************************************************************
@@ -1753,7 +1704,7 @@ PR_SendFile(
 **     The number of bytes read from the client or -1 on failure.  The reason 
 **     for the failure is obtained by calling PR_GetError().
 **************************************************************************
-**/
+**/       
 /* define buffer overhead constant. Add this value to the user's 
 ** data length when allocating a buffer to accept data.
 **    Example:
@@ -1761,12 +1712,11 @@ PR_SendFile(
 **    char buf[USER_DATA_SIZE + PR_ACCEPT_READ_BUF_OVERHEAD];
 **    bytesRead = PR_AcceptRead( s, fd, &a, &p, USER_DATA_SIZE, ...);
 */
-#define PR_ACCEPT_READ_BUF_OVERHEAD (32 + (2 * sizeof(PRNetAddr)))
+#define PR_ACCEPT_READ_BUF_OVERHEAD (32+(2*sizeof(PRNetAddr)))
 
-NSPR_API(PRInt32)
-PR_AcceptRead(
-    PRFileDesc* listenSock, PRFileDesc** acceptedSock,
-    PRNetAddr** peerAddr, void* buf, PRInt32 amount, PRIntervalTime timeout);
+NSPR_API(PRInt32) PR_AcceptRead(
+    PRFileDesc *listenSock, PRFileDesc **acceptedSock,
+    PRNetAddr **peerAddr, void *buf, PRInt32 amount, PRIntervalTime timeout);
 
 /*
 *************************************************************************
@@ -1788,8 +1738,7 @@ PR_AcceptRead(
 ** XXX can we implement this on windoze and mac?
 **************************************************************************
 **/
-NSPR_API(PRStatus)
-PR_NewTCPSocketPair(PRFileDesc* fds[2]);
+NSPR_API(PRStatus) PR_NewTCPSocketPair(PRFileDesc *fds[2]);
 
 /*
 *************************************************************************
@@ -1809,8 +1758,7 @@ PR_NewTCPSocketPair(PRFileDesc* fds[2]);
 **     be obtained by calling PR_GetError().
 **************************************************************************
 **/
-NSPR_API(PRStatus)
-PR_GetSockName(PRFileDesc* fd, PRNetAddr* addr);
+NSPR_API(PRStatus)	PR_GetSockName(PRFileDesc *fd, PRNetAddr *addr);
 
 /*
 *************************************************************************
@@ -1832,16 +1780,13 @@ PR_GetSockName(PRFileDesc* fd, PRNetAddr* addr);
 **     be obtained by calling PR_GetError().
 **************************************************************************
 **/
-NSPR_API(PRStatus)
-PR_GetPeerName(PRFileDesc* fd, PRNetAddr* addr);
+NSPR_API(PRStatus)	PR_GetPeerName(PRFileDesc *fd, PRNetAddr *addr);
 
-NSPR_API(PRStatus)
-PR_GetSocketOption(
-    PRFileDesc* fd, PRSocketOptionData* data);
+NSPR_API(PRStatus)	PR_GetSocketOption(
+    PRFileDesc *fd, PRSocketOptionData *data);
 
-NSPR_API(PRStatus)
-PR_SetSocketOption(
-    PRFileDesc* fd, const PRSocketOptionData* data);
+NSPR_API(PRStatus)	PR_SetSocketOption(
+    PRFileDesc *fd, const PRSocketOptionData *data);
 
 /*
  *********************************************************************
@@ -1870,9 +1815,8 @@ PR_SetSocketOption(
  *     be obtained by calling PR_GetError().
  *************************************************************************
  */
-NSPR_API(PRStatus)
-PR_SetFDInheritable(
-    PRFileDesc* fd,
+NSPR_API(PRStatus) PR_SetFDInheritable(
+    PRFileDesc *fd,
     PRBool inheritable);
 
 /*
@@ -1891,8 +1835,7 @@ PR_SetFDInheritable(
  *     by calling PR_GetError().
  *************************************************************************
  */
-NSPR_API(PRFileDesc*)
-PR_GetInheritedFD(const char* name);
+NSPR_API(PRFileDesc *) PR_GetInheritedFD(const char *name);
 
 /*
  *********************************************************************
@@ -1908,35 +1851,30 @@ typedef struct PRFileMap PRFileMap;
  * protection options for read and write accesses of a file mapping
  */
 typedef enum PRFileMapProtect {
-    PR_PROT_READONLY, /* read only */
-    PR_PROT_READWRITE, /* readable, and write is shared */
-    PR_PROT_WRITECOPY /* readable, and write is private (copy-on-write) */
+    PR_PROT_READONLY,     /* read only */
+    PR_PROT_READWRITE,    /* readable, and write is shared */
+    PR_PROT_WRITECOPY     /* readable, and write is private (copy-on-write) */
 } PRFileMapProtect;
 
-NSPR_API(PRFileMap*)
-PR_CreateFileMap(
-    PRFileDesc* fd,
+NSPR_API(PRFileMap *) PR_CreateFileMap(
+    PRFileDesc *fd,
     PRInt64 size,
     PRFileMapProtect prot);
 
 /*
  * return the alignment (in bytes) of the offset argument to PR_MemMap
  */
-NSPR_API(PRInt32)
-PR_GetMemMapAlignment(void);
+NSPR_API(PRInt32) PR_GetMemMapAlignment(void);
 
-NSPR_API(void*)
-PR_MemMap(
-    PRFileMap* fmap,
-    PROffset64 offset, /* must be aligned and sized according to the
+NSPR_API(void *) PR_MemMap(
+    PRFileMap *fmap,
+    PROffset64 offset,  /* must be aligned and sized according to the
                          * return value of PR_GetMemMapAlignment() */
     PRUint32 len);
 
-NSPR_API(PRStatus)
-PR_MemUnmap(void* addr, PRUint32 len);
+NSPR_API(PRStatus) PR_MemUnmap(void *addr, PRUint32 len);
 
-NSPR_API(PRStatus)
-PR_CloseFileMap(PRFileMap* fmap);
+NSPR_API(PRStatus) PR_CloseFileMap(PRFileMap *fmap);
 
 /*
  ******************************************************************
@@ -1951,10 +1889,10 @@ PR_CloseFileMap(PRFileMap* fmap);
  * read and write ends of the pipe.
  */
 
-NSPR_API(PRStatus)
-PR_CreatePipe(
-    PRFileDesc** readPipe,
-    PRFileDesc** writePipe);
+NSPR_API(PRStatus) PR_CreatePipe(
+    PRFileDesc **readPipe,
+    PRFileDesc **writePipe
+);
 
 /************************************************************************/
 /************** The following definitions are for poll ******************/
@@ -1974,23 +1912,23 @@ struct PRPollDesc {
 #if defined(_PR_POLL_BACKCOMPAT)
 
 #include <poll.h>
-#define PR_POLL_READ POLLIN
-#define PR_POLL_WRITE POLLOUT
-#define PR_POLL_EXCEPT POLLPRI
-#define PR_POLL_ERR POLLERR /* only in out_flags */
-#define PR_POLL_NVAL POLLNVAL /* only in out_flags when fd is bad */
-#define PR_POLL_HUP POLLHUP /* only in out_flags */
+#define PR_POLL_READ    POLLIN
+#define PR_POLL_WRITE   POLLOUT
+#define PR_POLL_EXCEPT  POLLPRI
+#define PR_POLL_ERR     POLLERR     /* only in out_flags */
+#define PR_POLL_NVAL    POLLNVAL    /* only in out_flags when fd is bad */
+#define PR_POLL_HUP     POLLHUP     /* only in out_flags */
 
-#else /* _PR_POLL_BACKCOMPAT */
+#else  /* _PR_POLL_BACKCOMPAT */
 
-#define PR_POLL_READ 0x1
-#define PR_POLL_WRITE 0x2
-#define PR_POLL_EXCEPT 0x4
-#define PR_POLL_ERR 0x8 /* only in out_flags */
-#define PR_POLL_NVAL 0x10 /* only in out_flags when fd is bad */
-#define PR_POLL_HUP 0x20 /* only in out_flags */
+#define PR_POLL_READ    0x1
+#define PR_POLL_WRITE   0x2
+#define PR_POLL_EXCEPT  0x4
+#define PR_POLL_ERR     0x8         /* only in out_flags */
+#define PR_POLL_NVAL    0x10        /* only in out_flags when fd is bad */
+#define PR_POLL_HUP     0x20        /* only in out_flags */
 
-#endif /* _PR_POLL_BACKCOMPAT */
+#endif  /* _PR_POLL_BACKCOMPAT */
 
 /*
 *************************************************************************
@@ -2032,9 +1970,8 @@ struct PRPollDesc {
 **                              calling PR_GetError().
 **************************************************************************
 */
-NSPR_API(PRInt32)
-PR_Poll(
-    PRPollDesc* pds, PRIntn npds, PRIntervalTime timeout);
+NSPR_API(PRInt32) PR_Poll(
+    PRPollDesc *pds, PRIntn npds, PRIntervalTime timeout);
 
 /*
 **************************************************************************
@@ -2077,17 +2014,13 @@ PR_Poll(
 **************************************************************************
 */
 
-NSPR_API(PRFileDesc*)
-PR_NewPollableEvent(void);
+NSPR_API(PRFileDesc *) PR_NewPollableEvent(void);
 
-NSPR_API(PRStatus)
-PR_DestroyPollableEvent(PRFileDesc* event);
+NSPR_API(PRStatus) PR_DestroyPollableEvent(PRFileDesc *event);
 
-NSPR_API(PRStatus)
-PR_SetPollableEvent(PRFileDesc* event);
+NSPR_API(PRStatus) PR_SetPollableEvent(PRFileDesc *event);
 
-NSPR_API(PRStatus)
-PR_WaitForPollableEvent(PRFileDesc* event);
+NSPR_API(PRStatus) PR_WaitForPollableEvent(PRFileDesc *event);
 
 PR_END_EXTERN_C
 

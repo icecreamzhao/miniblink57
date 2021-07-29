@@ -580,6 +580,7 @@ public:
     {
         return HashFunctions::hash(key);
     }
+
     template <typename T, typename U>
     static bool equal(const T& a, const U& b)
     {
@@ -1067,11 +1068,9 @@ template <typename Key,
     typename Allocator>
 template <typename HashTranslator, typename T>
 inline Value*
-HashTable<Key, Value, Extractor, HashFunctions, Traits, KeyTraits, Allocator>::
-    lookup(const T& key)
+HashTable<Key, Value, Extractor, HashFunctions, Traits, KeyTraits, Allocator>::lookup(const T& key)
 {
-    return const_cast<Value*>(
-        const_cast<const HashTable*>(this)->lookup<HashTranslator>(key));
+    return const_cast<Value*>(const_cast<const HashTable*>(this)->lookup<HashTranslator>(key));
 }
 
 template <typename Key,

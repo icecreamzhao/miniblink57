@@ -40,29 +40,31 @@
 #include "xp.h"
 
 #include "logger.h"
-#include "plugload.h"
 #include "profile.h"
+#include "plugload.h"
 
-Logger::Logger()
-    : bMutedAll(FALSE)
-    , bOnTop(TRUE)
-    , bToWindow(TRUE)
-    , bToConsole(FALSE)
-    , bToFile(FALSE)
-    , bSPALID(FALSE)
+Logger::Logger() :
+  bMutedAll(FALSE),
+  bOnTop(TRUE),
+  bToWindow(TRUE),
+  bToConsole(FALSE),
+  bToFile(FALSE),
+  bSPALID(FALSE)
 {
-    if (0 != GetPluginsDir(szFile, sizeof(szFile))) {
-        strcat(szFile, DIR_SEPARATOR);
-        strcat(szFile, DEFAULT_LOG_FILE_NAME);
-    } else
-        szFile[0] = '\0';
+  if(0 != GetPluginsDir(szFile, sizeof(szFile)))
+  {
+    strcat(szFile, DIR_SEPARATOR);
+    strcat(szFile, DEFAULT_LOG_FILE_NAME);
+  }
+  else
+    szFile[0] = '\0';
 
-    for (int i = 0; i < sizeof(bMutedCalls) / sizeof(BOOL); i++)
-        bMutedCalls[i] = FALSE;
-
-    bMutedCalls[action_npn_mem_alloc] = TRUE;
-    bMutedCalls[action_npn_mem_free] = TRUE;
-    bMutedCalls[action_npn_mem_flush] = TRUE;
+  for(int i = 0; i < sizeof(bMutedCalls)/sizeof(BOOL); i++)
+    bMutedCalls[i] = FALSE;
+  
+  bMutedCalls[action_npn_mem_alloc] = TRUE;
+  bMutedCalls[action_npn_mem_free]  = TRUE;
+  bMutedCalls[action_npn_mem_flush] = TRUE;
 }
 
 Logger::~Logger()
@@ -71,301 +73,265 @@ Logger::~Logger()
 
 BOOL Logger::init()
 {
-    if (bToFile)
-        filer.create(szFile, TRUE);
+  if(bToFile)
+    filer.create(szFile, TRUE);
 
-    return TRUE;
+  return TRUE;
 }
 
 void Logger::shut()
 {
-    filer.close();
+  filer.close();
 }
 
 #define MAX_OUTPUT_SIZE 8192
 
 void Logger::logNS_NP_GetEntryPoints()
 {
-    char szLog[] = "NP_GetEntryPoints by Netscape\r\n";
+  char szLog[] = "NP_GetEntryPoints by Netscape\r\n";
 
-    if (bToConsole)
-        printf("%s", szLog);
+  if(bToConsole)
+    printf("%s", szLog);
+  
+  if(bToFile)
+    filer.write(szLog);
 
-    if (bToFile)
-        filer.write(szLog);
-
-    if (bToWindow)
-        dumpStringToMainWindow(szLog);
+  if(bToWindow)
+    dumpStringToMainWindow(szLog);
 }
 
 void Logger::logNS_NP_Initialize()
 {
-    char szLog[] = "NP_Initialize by Netscape\r\n";
+  char szLog[] = "NP_Initialize by Netscape\r\n";
 
-    if (bToConsole)
-        printf("%s", szLog);
+  if(bToConsole)
+    printf("%s", szLog);
+  
+  if(bToFile)
+    filer.write(szLog);
 
-    if (bToFile)
-        filer.write(szLog);
-
-    if (bToWindow)
-        dumpStringToMainWindow(szLog);
+  if(bToWindow)
+    dumpStringToMainWindow(szLog);
 }
 
 void Logger::logNS_NP_Shutdown()
 {
-    char szLog[] = "NP_Shutdown by Netscape\r\n";
+  char szLog[] = "NP_Shutdown by Netscape\r\n";
 
-    if (bToConsole)
-        printf("%s", szLog);
+  if(bToConsole)
+    printf("%s", szLog);
+  
+  if(bToFile)
+    filer.write(szLog);
 
-    if (bToFile)
-        filer.write(szLog);
-
-    if (bToWindow)
-        dumpStringToMainWindow(szLog);
+  if(bToWindow)
+    dumpStringToMainWindow(szLog);
 }
 
-void Logger::logSPY_NP_GetEntryPoints(NPPluginFuncs* pNPPFuncs)
+void Logger::logSPY_NP_GetEntryPoints(NPPluginFuncs * pNPPFuncs)
 {
-    char szLog[80] = "NP_GetEntryPoints by NPSpy\r\n";
+  char szLog[80] = "NP_GetEntryPoints by NPSpy\r\n";
 
-    if (bToConsole)
-        printf("%s", szLog);
+  if(bToConsole)
+    printf("%s", szLog);
+  
+  if(bToFile)
+    filer.write(szLog);
 
-    if (bToFile)
-        filer.write(szLog);
+  if(bToWindow)
+    dumpStringToMainWindow(szLog);
 
-    if (bToWindow)
-        dumpStringToMainWindow(szLog);
+  if(!pNPPFuncs)
+    return;
 
-    if (!pNPPFuncs)
-        return;
+  char szLog1[80],szLog2[80],szLog3[80],szLog4[80],szLog5[80],szLog6[80],szLog7[80],
+       szLog8[80],szLog9[80],szLog10[80],szLog11[80],szLog12[80],szLog13[80],szLog14[80],
+       szLog15[80],szLog16[80],szLog17[80],szLog18[80],szLog19[80],szLog20[80];
 
-    char szLog1[80], szLog2[80], szLog3[80], szLog4[80], szLog5[80], szLog6[80], szLog7[80],
-        szLog8[80], szLog9[80], szLog10[80], szLog11[80], szLog12[80], szLog13[80], szLog14[80],
-        szLog15[80], szLog16[80], szLog17[80], szLog18[80], szLog19[80], szLog20[80];
+  sprintf(szLog1, "\r\n");
+  sprintf(szLog2, "     Plugin entry point table\r\n");
+  sprintf(szLog3, "     ========================\r\n");
 
-    sprintf(szLog1, "\r\n");
-    sprintf(szLog2, "     Plugin entry point table\r\n");
-    sprintf(szLog3, "     ========================\r\n");
+  if(pNPPFuncs->size)
+    sprintf(szLog4, "    size          = %i\r\n", pNPPFuncs->size);
+  else
+    sprintf(szLog4, "    size          = not set!\r\n");
 
-    if (pNPPFuncs->size)
-        sprintf(szLog4, "    size          = %i\r\n", pNPPFuncs->size);
-    else
-        sprintf(szLog4, "    size          = not set!\r\n");
+  if(pNPPFuncs->version)
+    sprintf(szLog5, "    version       = %i\r\n", pNPPFuncs->version);
+  else
+    sprintf(szLog5, "    version       = not set!\r\n");
+  
+  if(pNPPFuncs->newp)
+    sprintf(szLog6, "    newp          = %#08lx\r\n", pNPPFuncs->newp);
+  else
+    sprintf(szLog6, "    newp          = not set!\r\n");
+  
+  if(pNPPFuncs->destroy)
+    sprintf(szLog7, "    destroy       = %#08lx\r\n", pNPPFuncs->destroy);
+  else
+    sprintf(szLog7, "    destroy       = not set!\r\n");
+  
+  if(pNPPFuncs->setwindow)
+    sprintf(szLog8, "    setwindow     = %#08lx\r\n", pNPPFuncs->setwindow);
+  else
+    sprintf(szLog8, "    setwindow     = not set!\r\n");
+  
+  if(pNPPFuncs->newstream)
+    sprintf(szLog9, "    newstream     = %#08lx\r\n", pNPPFuncs->newstream);
+  else
+    sprintf(szLog9, "    newstream     = not set!\r\n");
+  
+  if(pNPPFuncs->destroystream)
+    sprintf(szLog10, "    destroystream = %#08lx\r\n", pNPPFuncs->destroystream);
+  else
+    sprintf(szLog10, "    destroystream = not set!\r\n");
+  
+  if(pNPPFuncs->asfile)
+    sprintf(szLog11, "    asfile        = %#08lx\r\n", pNPPFuncs->asfile);
+  else
+    sprintf(szLog11, "    asfile        = not set!\r\n");
+  
+  if(pNPPFuncs->writeready)
+    sprintf(szLog12, "    writeready    = %#08lx\r\n", pNPPFuncs->writeready);
+  else
+    sprintf(szLog12, "    writeready    = not set!\r\n");
+  
+  if(pNPPFuncs->write)
+    sprintf(szLog13, "    write         = %#08lx\r\n", pNPPFuncs->write);
+  else
+    sprintf(szLog13, "    write         = not set!\r\n");
+  
+  if(pNPPFuncs->print)
+    sprintf(szLog14, "    print         = %#08lx\r\n", pNPPFuncs->print);
+  else
+    sprintf(szLog14, "    print         = not set!\r\n");
+  
+  if(pNPPFuncs->event)
+    sprintf(szLog15, "    event         = %#08lx\r\n", pNPPFuncs->event);
+  else
+    sprintf(szLog15, "    event         = not set!\r\n");
+  
+  if(pNPPFuncs->urlnotify)
+    sprintf(szLog16, "    urlnotify     = %#08lx\r\n", pNPPFuncs->urlnotify);
+  else
+    sprintf(szLog16, "    urlnotify     = not set!\r\n");
+  
+  if(pNPPFuncs->javaClass)
+    sprintf(szLog17, "    javaClass     = %#08lx\r\n", pNPPFuncs->javaClass);
+  else
+    sprintf(szLog17, "    javaClass     = not set!\r\n");
+  
+  if(pNPPFuncs->getvalue)
+    sprintf(szLog18, "    getvalue      = %#08lx\r\n", pNPPFuncs->getvalue);
+  else
+    sprintf(szLog18, "    getvalue      = not set!\r\n");
+  
+  if(pNPPFuncs->setvalue)
+    sprintf(szLog19, "    setvalue      = %#08lx\r\n", pNPPFuncs->setvalue);
+  else
+    sprintf(szLog19, "    setvalue      = not set!\r\n");
 
-    if (pNPPFuncs->version)
-        sprintf(szLog5, "    version       = %i\r\n", pNPPFuncs->version);
-    else
-        sprintf(szLog5, "    version       = not set!\r\n");
+  sprintf(szLog20, "\r\n");
 
-    if (pNPPFuncs->newp)
-        sprintf(szLog6, "    newp          = %#08lx\r\n", pNPPFuncs->newp);
-    else
-        sprintf(szLog6, "    newp          = not set!\r\n");
-
-    if (pNPPFuncs->destroy)
-        sprintf(szLog7, "    destroy       = %#08lx\r\n", pNPPFuncs->destroy);
-    else
-        sprintf(szLog7, "    destroy       = not set!\r\n");
-
-    if (pNPPFuncs->setwindow)
-        sprintf(szLog8, "    setwindow     = %#08lx\r\n", pNPPFuncs->setwindow);
-    else
-        sprintf(szLog8, "    setwindow     = not set!\r\n");
-
-    if (pNPPFuncs->newstream)
-        sprintf(szLog9, "    newstream     = %#08lx\r\n", pNPPFuncs->newstream);
-    else
-        sprintf(szLog9, "    newstream     = not set!\r\n");
-
-    if (pNPPFuncs->destroystream)
-        sprintf(szLog10, "    destroystream = %#08lx\r\n", pNPPFuncs->destroystream);
-    else
-        sprintf(szLog10, "    destroystream = not set!\r\n");
-
-    if (pNPPFuncs->asfile)
-        sprintf(szLog11, "    asfile        = %#08lx\r\n", pNPPFuncs->asfile);
-    else
-        sprintf(szLog11, "    asfile        = not set!\r\n");
-
-    if (pNPPFuncs->writeready)
-        sprintf(szLog12, "    writeready    = %#08lx\r\n", pNPPFuncs->writeready);
-    else
-        sprintf(szLog12, "    writeready    = not set!\r\n");
-
-    if (pNPPFuncs->write)
-        sprintf(szLog13, "    write         = %#08lx\r\n", pNPPFuncs->write);
-    else
-        sprintf(szLog13, "    write         = not set!\r\n");
-
-    if (pNPPFuncs->print)
-        sprintf(szLog14, "    print         = %#08lx\r\n", pNPPFuncs->print);
-    else
-        sprintf(szLog14, "    print         = not set!\r\n");
-
-    if (pNPPFuncs->event)
-        sprintf(szLog15, "    event         = %#08lx\r\n", pNPPFuncs->event);
-    else
-        sprintf(szLog15, "    event         = not set!\r\n");
-
-    if (pNPPFuncs->urlnotify)
-        sprintf(szLog16, "    urlnotify     = %#08lx\r\n", pNPPFuncs->urlnotify);
-    else
-        sprintf(szLog16, "    urlnotify     = not set!\r\n");
-
-    if (pNPPFuncs->javaClass)
-        sprintf(szLog17, "    javaClass     = %#08lx\r\n", pNPPFuncs->javaClass);
-    else
-        sprintf(szLog17, "    javaClass     = not set!\r\n");
-
-    if (pNPPFuncs->getvalue)
-        sprintf(szLog18, "    getvalue      = %#08lx\r\n", pNPPFuncs->getvalue);
-    else
-        sprintf(szLog18, "    getvalue      = not set!\r\n");
-
-    if (pNPPFuncs->setvalue)
-        sprintf(szLog19, "    setvalue      = %#08lx\r\n", pNPPFuncs->setvalue);
-    else
-        sprintf(szLog19, "    setvalue      = not set!\r\n");
-
-    sprintf(szLog20, "\r\n");
-
-    if (bToConsole) {
-        printf("%s", szLog1);
-        printf("%s", szLog2);
-        printf("%s", szLog3);
-        printf("%s", szLog4);
-        printf("%s", szLog5);
-        printf("%s", szLog6);
-        printf("%s", szLog7);
-        printf("%s", szLog8);
-        printf("%s", szLog9);
-        printf("%s", szLog10);
-        printf("%s", szLog11);
-        printf("%s", szLog12);
-        printf("%s", szLog13);
-        printf("%s", szLog14);
-        printf("%s", szLog15);
-        printf("%s", szLog16);
-        printf("%s", szLog17);
-        printf("%s", szLog18);
-        printf("%s", szLog19);
-        printf("%s", szLog20);
-    }
-
-    if (bToFile) {
-        filer.write(szLog1);
-        filer.write(szLog2);
-        filer.write(szLog3);
-        filer.write(szLog4);
-        filer.write(szLog5);
-        filer.write(szLog6);
-        filer.write(szLog7);
-        filer.write(szLog8);
-        filer.write(szLog9);
-        filer.write(szLog10);
-        filer.write(szLog11);
-        filer.write(szLog12);
-        filer.write(szLog13);
-        filer.write(szLog14);
-        filer.write(szLog15);
-        filer.write(szLog16);
-        filer.write(szLog17);
-        filer.write(szLog18);
-        filer.write(szLog19);
-        filer.write(szLog20);
-    }
-
-    if (bToWindow) {
-        dumpStringToMainWindow(szLog1);
-        dumpStringToMainWindow(szLog2);
-        dumpStringToMainWindow(szLog3);
-        dumpStringToMainWindow(szLog4);
-        dumpStringToMainWindow(szLog5);
-        dumpStringToMainWindow(szLog6);
-        dumpStringToMainWindow(szLog7);
-        dumpStringToMainWindow(szLog8);
-        dumpStringToMainWindow(szLog9);
-        dumpStringToMainWindow(szLog10);
-        dumpStringToMainWindow(szLog11);
-        dumpStringToMainWindow(szLog12);
-        dumpStringToMainWindow(szLog13);
-        dumpStringToMainWindow(szLog14);
-        dumpStringToMainWindow(szLog15);
-        dumpStringToMainWindow(szLog16);
-        dumpStringToMainWindow(szLog17);
-        dumpStringToMainWindow(szLog18);
-        dumpStringToMainWindow(szLog19);
-        dumpStringToMainWindow(szLog20);
-    }
+  if(bToConsole)
+  {
+    printf("%s", szLog1); printf("%s", szLog2); printf("%s", szLog3); printf("%s", szLog4);
+    printf("%s", szLog5); printf("%s", szLog6); printf("%s", szLog7); printf("%s", szLog8);
+    printf("%s", szLog9); printf("%s", szLog10); printf("%s", szLog11); printf("%s", szLog12);
+    printf("%s", szLog13); printf("%s", szLog14); printf("%s", szLog15); printf("%s", szLog16);
+    printf("%s", szLog17); printf("%s", szLog18); printf("%s", szLog19); printf("%s", szLog20);
+  }
+  
+  if(bToFile)
+  {
+    filer.write(szLog1); filer.write(szLog2); filer.write(szLog3); filer.write(szLog4);
+    filer.write(szLog5); filer.write(szLog6); filer.write(szLog7); filer.write(szLog8);
+    filer.write(szLog9); filer.write(szLog10); filer.write(szLog11); filer.write(szLog12);
+    filer.write(szLog13); filer.write(szLog14); filer.write(szLog15); filer.write(szLog16);
+    filer.write(szLog17); filer.write(szLog18); filer.write(szLog19); filer.write(szLog20);
+  }
+  
+  if(bToWindow)
+  {
+    dumpStringToMainWindow(szLog1); dumpStringToMainWindow(szLog2);
+    dumpStringToMainWindow(szLog3); dumpStringToMainWindow(szLog4);
+    dumpStringToMainWindow(szLog5); dumpStringToMainWindow(szLog6);
+    dumpStringToMainWindow(szLog7); dumpStringToMainWindow(szLog8);
+    dumpStringToMainWindow(szLog9); dumpStringToMainWindow(szLog10);
+    dumpStringToMainWindow(szLog11); dumpStringToMainWindow(szLog12);
+    dumpStringToMainWindow(szLog13); dumpStringToMainWindow(szLog14);
+    dumpStringToMainWindow(szLog15); dumpStringToMainWindow(szLog16);
+    dumpStringToMainWindow(szLog17); dumpStringToMainWindow(szLog18);
+    dumpStringToMainWindow(szLog19); dumpStringToMainWindow(szLog20);
+  }
 }
 
 void Logger::logSPY_NP_Initialize()
 {
-    char szLog[] = "NP_Initialize by NPSpy\r\n";
+  char szLog[] = "NP_Initialize by NPSpy\r\n";
 
-    if (bToConsole)
-        printf("%s", szLog);
+  if(bToConsole)
+    printf("%s", szLog);
+  
+  if(bToFile)
+    filer.write(szLog);
 
-    if (bToFile)
-        filer.write(szLog);
-
-    if (bToWindow)
-        dumpStringToMainWindow(szLog);
+  if(bToWindow)
+    dumpStringToMainWindow(szLog);
 }
 
-void Logger::logSPY_NP_Shutdown(char* mimetype)
+void Logger::logSPY_NP_Shutdown(char * mimetype)
 {
-    char szLog[512] = "NP_Shutdown by NPSpy\r\n";
-    if (mimetype) {
-        strcat(szLog, " for \"");
-        strcat(szLog, mimetype);
-        strcat(szLog, "\"\r\n");
-    }
+  char szLog[512] = "NP_Shutdown by NPSpy\r\n";
+  if(mimetype)
+  {
+    strcat(szLog, " for \"");
+    strcat(szLog, mimetype);
+    strcat(szLog, "\"\r\n");
+  }
 
-    if (bToConsole)
-        printf("%s", szLog);
+  if(bToConsole)
+    printf("%s", szLog);
+  
+  if(bToFile)
+    filer.write(szLog);
 
-    if (bToFile)
-        filer.write(szLog);
-
-    if (bToWindow)
-        dumpStringToMainWindow(szLog);
+  if(bToWindow)
+    dumpStringToMainWindow(szLog);
 }
 
 void Logger::logCall(NPAPI_Action action, DWORD dw1, DWORD dw2, DWORD dw3, DWORD dw4, DWORD dw5, DWORD dw6, DWORD dw7)
 {
-    if (isMuted(action))
-        return;
+  if(isMuted(action))
+    return;
 
-    std::string log;
+  std::string log;
 
-    LogItemStruct* lis = makeLogItemStruct(action, dw1, dw2, dw3, dw4, dw5, dw6, dw7);
-    formatLogItem(lis, &log, TRUE);
-    freeLogItemStruct(lis);
+  LogItemStruct * lis = makeLogItemStruct(action, dw1, dw2, dw3, dw4, dw5, dw6, dw7);
+  formatLogItem(lis, &log, TRUE);
+  freeLogItemStruct(lis);
 
-    if (bToConsole)
-        printf("%s", log.c_str());
+  if(bToConsole)
+    printf("%s", log.c_str());
+  
+  if(bToFile)
+    filer.write(log);
 
-    if (bToFile)
-        filer.write(log);
-
-    if (bToWindow)
-        dumpStringToMainWindow(log);
+  if(bToWindow)
+    dumpStringToMainWindow(log);
 }
 
-void Logger::logMessage(const char* msg)
+void Logger::logMessage(const char *msg)
 {
-    if (bToConsole)
-        printf("%s", msg);
+  if(bToConsole)
+    printf("%s", msg);
+  
+  if(bToFile)
+    filer.write((char *)msg);
 
-    if (bToFile)
-        filer.write((char*)msg);
-
-    if (bToWindow)
-        dumpStringToMainWindow((char*)msg);
+  if(bToWindow)
+    dumpStringToMainWindow((char *)msg);
 }
 
 void Logger::logReturn(NPAPI_Action action, DWORD dwRet)
@@ -380,65 +346,70 @@ void Logger::logReturn(NPAPI_Action action, DWORD dwRet)
 
 void Logger::setOnTop(BOOL ontop)
 {
-    bOnTop = ontop;
+  bOnTop = ontop;
 }
 
-void Logger::setToFile(BOOL tofile, char* filename)
+void Logger::setToFile(BOOL tofile, char * filename)
 {
-    if (!filename || !*filename || (strlen(filename) > _MAX_PATH)) {
-        bToFile = FALSE;
-        return;
+  if(!filename || !*filename || (strlen(filename) > _MAX_PATH))
+  {
+    bToFile = FALSE;
+    return;
+  }
+
+  //don't screw up the file on false call
+  BOOL samefile = (_stricmp(szFile, filename) == 0);
+  BOOL sameaction = (bToFile == tofile);
+  
+  if(sameaction)
+  {
+    if(samefile)
+      return;
+
+    strcpy(szFile, filename);
+
+    if(bToFile)
+    {
+      filer.close();
+      filer.create(szFile, TRUE);
     }
+  }
 
-    //don't screw up the file on false call
-    BOOL samefile = (_stricmp(szFile, filename) == 0);
-    BOOL sameaction = (bToFile == tofile);
+  if(!sameaction)
+  {
+    bToFile = tofile;
 
-    if (sameaction) {
-        if (samefile)
-            return;
+    if(!samefile)
+      strcpy(szFile, filename);
 
-        strcpy(szFile, filename);
-
-        if (bToFile) {
-            filer.close();
-            filer.create(szFile, TRUE);
-        }
-    }
-
-    if (!sameaction) {
-        bToFile = tofile;
-
-        if (!samefile)
-            strcpy(szFile, filename);
-
-        if (bToFile)
-            filer.create(szFile, TRUE);
-        else
-            filer.close();
-    }
+    if(bToFile)
+      filer.create(szFile, TRUE);
+    else
+      filer.close();
+  }
 }
 
 BOOL Logger::isMuted(NPAPI_Action action)
 {
-    if (bMutedAll)
-        return TRUE;
+  if(bMutedAll)
+    return TRUE;
 
-    if (action >= TOTAL_NUMBER_OF_API_CALLS) {
-        assert(0);
-        return FALSE;
-    }
+  if(action >= TOTAL_NUMBER_OF_API_CALLS)
+  {
+    assert(0);
+    return FALSE;
+  }
 
-    return bMutedCalls[action];
+  return bMutedCalls[action];
 }
 
-BOOL* Logger::getMutedCalls()
+BOOL * Logger::getMutedCalls()
 {
-    return &bMutedCalls[0];
+  return &bMutedCalls[0];
 }
 
-void Logger::setMutedCalls(BOOL* mutedcalls)
+void Logger::setMutedCalls(BOOL * mutedcalls)
 {
-    for (int i = 0; i < sizeof(bMutedCalls) / sizeof(BOOL); i++)
-        bMutedCalls[i] = mutedcalls[i];
+  for(int i = 0; i < sizeof(bMutedCalls)/sizeof(BOOL); i++)
+    bMutedCalls[i] = mutedcalls[i];
 }

@@ -82,96 +82,97 @@
 
 /* DLL Entry modifiers... */
 #if defined(XP_OS2)
-#ifdef XP_OS2_VACPP
-#define JNI_PUBLIC_API(ResultType) ResultType _System
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNICALL _Optlink
-#define JNIEXPORT
-#else
-#define JNI_PUBLIC_API(ResultType) ResultType
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNICALL
-#define JNIEXPORT
-#endif
+#  ifdef XP_OS2_VACPP
+#     define JNI_PUBLIC_API(ResultType)      ResultType _System
+#     define JNI_PUBLIC_VAR(VarType)         VarType
+#     define JNICALL                         _Optlink
+#     define JNIEXPORT
+#  else
+#     define JNI_PUBLIC_API(ResultType)	   ResultType
+#     define JNI_PUBLIC_VAR(VarType)         VarType
+#     define JNICALL
+#     define JNIEXPORT
+#  endif
 /* Win32 */
 #elif defined(XP_WIN) || defined(_WINDOWS) || defined(WIN32) || defined(_WIN32)
-#include <windows.h>
-#if defined(_MSC_VER) || defined(__GNUC__)
-#if defined(WIN32) || defined(_WIN32)
-#define JNI_PUBLIC_API(ResultType) _declspec(dllexport) ResultType __stdcall
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNI_NATIVE_STUB(ResultType) _declspec(dllexport) ResultType
-#define JNICALL __stdcall
-#else /* !_WIN32 */
-#if defined(_WINDLL)
-#define JNI_PUBLIC_API(ResultType) ResultType __cdecl __export __loadds
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNI_NATIVE_STUB(ResultType) ResultType __cdecl __loadds
-#define JNICALL __loadds
-#else /* !WINDLL */
-#define JNI_PUBLIC_API(ResultType) ResultType __cdecl __export
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNI_NATIVE_STUB(ResultType) ResultType __cdecl __export
-#define JNICALL __export
-#endif /* !WINDLL */
-#endif /* !_WIN32 */
-#elif defined(__BORLANDC__)
-#if defined(WIN32) || defined(_WIN32)
-#define JNI_PUBLIC_API(ResultType) __export ResultType
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNI_NATIVE_STUB(ResultType) __export ResultType
-#define JNICALL
-#else /* !_WIN32 */
-#define JNI_PUBLIC_API(ResultType) ResultType _cdecl _export _loadds
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNI_NATIVE_STUB(ResultType) ResultType _cdecl _loadds
-#define JNICALL _loadds
-#endif
-#else
-#error Unsupported PC development environment.
-#endif
-#ifndef IS_LITTLE_ENDIAN
-#define IS_LITTLE_ENDIAN
-#endif
-/*  This is the stuff inherited from JavaSoft .. */
-#define JNIEXPORT __declspec(dllexport)
+#	include <windows.h>
+#	if defined(_MSC_VER) || defined(__GNUC__)
+#		if defined(WIN32) || defined(_WIN32)
+#			define JNI_PUBLIC_API(ResultType)	_declspec(dllexport) ResultType __stdcall
+#			define JNI_PUBLIC_VAR(VarType)		VarType
+#			define JNI_NATIVE_STUB(ResultType)	_declspec(dllexport) ResultType
+#			define JNICALL                          __stdcall
+#		else /* !_WIN32 */
+#		    if defined(_WINDLL)
+#			define JNI_PUBLIC_API(ResultType)	ResultType __cdecl __export __loadds 
+#			define JNI_PUBLIC_VAR(VarType)		VarType
+#			define JNI_NATIVE_STUB(ResultType)	ResultType __cdecl __loadds
+#			define JNICALL			        __loadds
+#		    else /* !WINDLL */
+#			define JNI_PUBLIC_API(ResultType)	ResultType __cdecl __export
+#			define JNI_PUBLIC_VAR(VarType)		VarType
+#			define JNI_NATIVE_STUB(ResultType)	ResultType __cdecl __export
+#			define JNICALL			        __export
+#                   endif /* !WINDLL */
+#		endif /* !_WIN32 */
+#	elif defined(__BORLANDC__)
+#		if defined(WIN32) || defined(_WIN32)
+#			define JNI_PUBLIC_API(ResultType)	__export ResultType
+#			define JNI_PUBLIC_VAR(VarType)		VarType
+#			define JNI_NATIVE_STUB(ResultType)	 __export ResultType
+#			define JNICALL
+#		else /* !_WIN32 */
+#			define JNI_PUBLIC_API(ResultType)	ResultType _cdecl _export _loadds 
+#			define JNI_PUBLIC_VAR(VarType)		VarType
+#			define JNI_NATIVE_STUB(ResultType)	ResultType _cdecl _loadds
+#			define JNICALL			_loadds
+#		endif
+#	else
+#		error Unsupported PC development environment.	
+#	endif
+#	ifndef IS_LITTLE_ENDIAN
+#		define IS_LITTLE_ENDIAN
+#	endif
+	/*  This is the stuff inherited from JavaSoft .. */
+#	define JNIEXPORT __declspec(dllexport)
+
 
 /* Mac */
 #elif macintosh || Macintosh || THINK_C
-#if defined(__MWERKS__) /* Metrowerks */
-#if !__option(enumsalwaysint)
-#error You need to define 'Enums Always Int' for your project.
-#endif
-#if defined(TARGET_CPU_68K) && !TARGET_RT_MAC_CFM
-#if !__option(fourbyteints)
-#error You need to define 'Struct Alignment: 68k' for your project.
-#endif
-#endif /* !GENERATINGCFM */
-#define JNI_PUBLIC_API(ResultType) __declspec(export) ResultType
-#define JNI_PUBLIC_VAR(VarType) JNI_PUBLIC_API(VarType)
-#define JNI_NATIVE_STUB(ResultType) JNI_PUBLIC_API(ResultType)
-#elif defined(__SC__) /* Symantec */
-#error What are the Symantec defines? (warren@netscape.com)
-#elif macintosh && applec /* MPW */
-#error Please upgrade to the latest MPW compiler (SC).
-#else
-#error Unsupported Mac development environment.
-#endif
-#define JNICALL
-/*  This is the stuff inherited from JavaSoft .. */
-#define JNIEXPORT
+#	if defined(__MWERKS__)				/* Metrowerks */
+#		if !__option(enumsalwaysint)
+#			error You need to define 'Enums Always Int' for your project.
+#		endif
+#		if defined(TARGET_CPU_68K) && !TARGET_RT_MAC_CFM 
+#			if !__option(fourbyteints) 
+#				error You need to define 'Struct Alignment: 68k' for your project.
+#			endif
+#		endif /* !GENERATINGCFM */
+#		define JNI_PUBLIC_API(ResultType)	__declspec(export) ResultType 
+#		define JNI_PUBLIC_VAR(VarType)		JNI_PUBLIC_API(VarType)
+#		define JNI_NATIVE_STUB(ResultType)	JNI_PUBLIC_API(ResultType)
+#	elif defined(__SC__)				/* Symantec */
+#		error What are the Symantec defines? (warren@netscape.com)
+#	elif macintosh && applec			/* MPW */
+#		error Please upgrade to the latest MPW compiler (SC).
+#	else
+#		error Unsupported Mac development environment.
+#	endif
+#	define JNICALL
+	/*  This is the stuff inherited from JavaSoft .. */
+#	define JNIEXPORT
 
 /* Unix or else */
 #else
-#define JNI_PUBLIC_API(ResultType) ResultType
-#define JNI_PUBLIC_VAR(VarType) VarType
-#define JNI_NATIVE_STUB(ResultType) ResultType
-#define JNICALL
-/*  This is the stuff inherited from JavaSoft .. */
-#define JNIEXPORT
+#	define JNI_PUBLIC_API(ResultType)		ResultType
+#       define JNI_PUBLIC_VAR(VarType)                  VarType
+#       define JNI_NATIVE_STUB(ResultType)              ResultType
+#	define JNICALL
+	/*  This is the stuff inherited from JavaSoft .. */
+#	define JNIEXPORT
 #endif
 
-#ifndef FAR /* for non-Win16 */
+#ifndef FAR		/* for non-Win16 */
 #define FAR
 #endif
 

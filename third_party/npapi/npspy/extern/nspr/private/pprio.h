@@ -41,8 +41,8 @@
 #ifndef pprio_h___
 #define pprio_h___
 
-#include "prio.h"
 #include "prtypes.h"
+#include "prio.h"
 
 PR_BEGIN_EXTERN_C
 
@@ -50,39 +50,28 @@ PR_BEGIN_EXTERN_C
 /************************************************************************/
 
 /* Return the method tables for files, tcp sockets and udp sockets */
-NSPR_API(const PRIOMethods*)
-PR_GetFileMethods(void);
-NSPR_API(const PRIOMethods*)
-PR_GetTCPMethods(void);
-NSPR_API(const PRIOMethods*)
-PR_GetUDPMethods(void);
-NSPR_API(const PRIOMethods*)
-PR_GetPipeMethods(void);
+NSPR_API(const PRIOMethods*)    PR_GetFileMethods(void);
+NSPR_API(const PRIOMethods*)    PR_GetTCPMethods(void);
+NSPR_API(const PRIOMethods*)    PR_GetUDPMethods(void);
+NSPR_API(const PRIOMethods*)    PR_GetPipeMethods(void);
 
 /*
 ** Convert a NSPR Socket Handle to a Native Socket handle.
 ** This function will be obsoleted with the next release; avoid using it.
 */
-NSPR_API(PRInt32)
-PR_FileDesc2NativeHandle(PRFileDesc*);
-NSPR_API(void)
-PR_ChangeFileDescNativeHandle(PRFileDesc*, PRInt32);
-NSPR_API(PRFileDesc*)
-PR_AllocFileDesc(PRInt32 osfd,
-    const PRIOMethods* methods);
-NSPR_API(void)
-PR_FreeFileDesc(PRFileDesc* fd);
+NSPR_API(PRInt32)      PR_FileDesc2NativeHandle(PRFileDesc *);
+NSPR_API(void)         PR_ChangeFileDescNativeHandle(PRFileDesc *, PRInt32);
+NSPR_API(PRFileDesc*)  PR_AllocFileDesc(PRInt32 osfd,
+                                         const PRIOMethods *methods);
+NSPR_API(void)         PR_FreeFileDesc(PRFileDesc *fd);
 /*
 ** Import an existing OS file to NSPR. 
 */
-NSPR_API(PRFileDesc*)
-PR_ImportFile(PRInt32 osfd);
-NSPR_API(PRFileDesc*)
-PR_ImportPipe(PRInt32 osfd);
-NSPR_API(PRFileDesc*)
-PR_ImportTCPSocket(PRInt32 osfd);
-NSPR_API(PRFileDesc*)
-PR_ImportUDPSocket(PRInt32 osfd);
+NSPR_API(PRFileDesc*)  PR_ImportFile(PRInt32 osfd);
+NSPR_API(PRFileDesc*)  PR_ImportPipe(PRInt32 osfd);
+NSPR_API(PRFileDesc*)  PR_ImportTCPSocket(PRInt32 osfd);
+NSPR_API(PRFileDesc*)  PR_ImportUDPSocket(PRInt32 osfd);
+
 
 /*
  *************************************************************************
@@ -102,8 +91,7 @@ PR_ImportUDPSocket(PRInt32 osfd);
  **************************************************************************
  */
 
-NSPR_API(PRFileDesc*)
-PR_CreateSocketPollFd(PRInt32 osfd);
+NSPR_API(PRFileDesc*)	PR_CreateSocketPollFd(PRInt32 osfd);
 
 /*
  *************************************************************************
@@ -121,8 +109,8 @@ PR_CreateSocketPollFd(PRInt32 osfd);
  **************************************************************************
  */
 
-NSPR_API(PRStatus)
-PR_DestroySocketPollFd(PRFileDesc* fd);
+NSPR_API(PRStatus) PR_DestroySocketPollFd(PRFileDesc *fd);
+
 
 /*
 ** Macros for PR_Socket
@@ -145,8 +133,7 @@ PR_DestroySocketPollFd(PRFileDesc* fd);
 /*
 ** Create a new Socket; this function is obsolete.
 */
-NSPR_API(PRFileDesc*)
-PR_Socket(PRInt32 domain, PRInt32 type, PRInt32 proto);
+NSPR_API(PRFileDesc*)	PR_Socket(PRInt32 domain, PRInt32 type, PRInt32 proto);
 
 /* FUNCTION: PR_LockFile
 ** DESCRIPTION:
@@ -155,8 +142,7 @@ PR_Socket(PRInt32 domain, PRInt32 type, PRInt32 proto);
 **    PR_SUCCESS when the lock is held
 **    PR_FAILURE otherwise
 */
-NSPR_API(PRStatus)
-PR_LockFile(PRFileDesc* fd);
+NSPR_API(PRStatus) PR_LockFile(PRFileDesc *fd);
 
 /* FUNCTION: PR_TLockFile
 ** DESCRIPTION:
@@ -166,8 +152,7 @@ PR_LockFile(PRFileDesc* fd);
 **    PR_SUCCESS when the lock is held
 **    PR_FAILURE otherwise
 */
-NSPR_API(PRStatus)
-PR_TLockFile(PRFileDesc* fd);
+NSPR_API(PRStatus) PR_TLockFile(PRFileDesc *fd);
 
 /* FUNCTION: PR_UnlockFile
 ** DESCRIPTION:
@@ -177,23 +162,20 @@ PR_TLockFile(PRFileDesc* fd);
 **    PR_SUCCESS when the lock is released
 **    PR_FAILURE otherwise
 */
-NSPR_API(PRStatus)
-PR_UnlockFile(PRFileDesc* fd);
+NSPR_API(PRStatus) PR_UnlockFile(PRFileDesc *fd);
 
 /*
 ** Emulate acceptread by accept and recv.
 */
-NSPR_API(PRInt32)
-PR_EmulateAcceptRead(PRFileDesc* sd, PRFileDesc** nd,
-    PRNetAddr** raddr, void* buf, PRInt32 amount, PRIntervalTime timeout);
+NSPR_API(PRInt32) PR_EmulateAcceptRead(PRFileDesc *sd, PRFileDesc **nd,
+    PRNetAddr **raddr, void *buf, PRInt32 amount, PRIntervalTime timeout);
 
 /*
 ** Emulate sendfile by reading from the file and writing to the socket.
 ** The file is memory-mapped if memory-mapped files are supported.
 */
-NSPR_API(PRInt32)
-PR_EmulateSendFile(
-    PRFileDesc* networkSocket, PRSendFileData* sendData,
+NSPR_API(PRInt32) PR_EmulateSendFile(
+    PRFileDesc *networkSocket, PRSendFileData *sendData,
     PRTransmitFileFlags flags, PRIntervalTime timeout);
 
 #ifdef WIN32
@@ -205,11 +187,10 @@ PR_EmulateSendFile(
 **    the acceptcontext.  The generic version of PR_AcceptRead always
 **    updates the accept context.  This version does not.
 **/
-NSPR_API(PRInt32)
-PR_NTFast_AcceptRead(PRFileDesc* sd, PRFileDesc** nd,
-    PRNetAddr** raddr, void* buf, PRInt32 amount, PRIntervalTime t);
+NSPR_API(PRInt32) PR_NTFast_AcceptRead(PRFileDesc *sd, PRFileDesc **nd,
+              PRNetAddr **raddr, void *buf, PRInt32 amount, PRIntervalTime t);
 
-typedef void (*_PR_AcceptTimeoutCallback)(void*);
+typedef void (*_PR_AcceptTimeoutCallback)(void *);
 
 /* FUNCTION: PR_NTFast_AcceptRead_WithTimeoutCallback
 ** DESCRIPTION:
@@ -225,16 +206,15 @@ typedef void (*_PR_AcceptTimeoutCallback)(void*);
 **    continue the accept.   If the timeout occurs on the read, it will 
 **    close the connection and return error.
 */
-NSPR_API(PRInt32)
-PR_NTFast_AcceptRead_WithTimeoutCallback(
-    PRFileDesc* sd,
-    PRFileDesc** nd,
-    PRNetAddr** raddr,
-    void* buf,
-    PRInt32 amount,
-    PRIntervalTime t,
-    _PR_AcceptTimeoutCallback callback,
-    void* callback_arg);
+NSPR_API(PRInt32) PR_NTFast_AcceptRead_WithTimeoutCallback(
+              PRFileDesc *sd, 
+              PRFileDesc **nd,
+              PRNetAddr **raddr, 
+              void *buf, 
+              PRInt32 amount, 
+              PRIntervalTime t,
+              _PR_AcceptTimeoutCallback callback, 
+              void *callback_arg);
 
 /* FUNCTION: PR_NTFast_Accept
 ** DESCRIPTION:
@@ -244,9 +224,8 @@ PR_NTFast_AcceptRead_WithTimeoutCallback(
 **    the acceptcontext.  The generic version of PR_Accept always
 **    updates the accept context.  This version does not.
 **/
-NSPR_API(PRFileDesc*)
-PR_NTFast_Accept(PRFileDesc* fd, PRNetAddr* addr,
-    PRIntervalTime timeout);
+NSPR_API(PRFileDesc*)	PR_NTFast_Accept(PRFileDesc *fd, PRNetAddr *addr,
+                                                PRIntervalTime timeout);
 
 /* FUNCTION: PR_NTFast_Update
 ** DESCRIPTION:
@@ -256,16 +235,16 @@ PR_NTFast_Accept(PRFileDesc* fd, PRNetAddr* addr,
 **    Without calling this, the only operations supported on the socket
 **    Are PR_Read, PR_Write, PR_Transmitfile, and PR_Close.
 */
-NSPR_API(void)
-PR_NTFast_UpdateAcceptContext(PRFileDesc* acceptSock,
-    PRFileDesc* listenSock);
+NSPR_API(void) PR_NTFast_UpdateAcceptContext(PRFileDesc *acceptSock, 
+                                        PRFileDesc *listenSock);
+
 
 /* FUNCTION: PR_NT_CancelIo
 ** DESCRIPTION:
 **    Cancel IO operations on fd.
 */
-NSPR_API(PRStatus)
-PR_NT_CancelIo(PRFileDesc* fd);
+NSPR_API(PRStatus) PR_NT_CancelIo(PRFileDesc *fd);
+
 
 #endif /* WIN32 */
 
@@ -274,9 +253,9 @@ PR_NT_CancelIo(PRFileDesc* fd);
 ** environment vars
 */
 #ifdef XP_MAC
-NSPR_API(void)
-PR_Init_Log(void);
+NSPR_API(void) PR_Init_Log(void);
 #endif
+
 
 PR_END_EXTERN_C
 

@@ -48,8 +48,7 @@ PR_BEGIN_EXTERN_C
 ** Yield the current thread.  The proper function to use in place of
 ** PR_Yield() is PR_Sleep() with an argument of PR_INTERVAL_NO_WAIT.
 */
-NSPR_API(PRStatus)
-PR_Yield(void);
+NSPR_API(PRStatus) PR_Yield(void);
 
 /************************************************************************/
 /************* The following definitions are for select *****************/
@@ -65,10 +64,10 @@ PR_Yield(void);
 #define PR_MAX_SELECT_DESC 1024
 #endif
 typedef struct PR_fd_set {
-    PRUint32 hsize;
-    PRFileDesc* harray[PR_MAX_SELECT_DESC];
-    PRUint32 nsize;
-    PRInt32 narray[PR_MAX_SELECT_DESC];
+    PRUint32      hsize;
+    PRFileDesc   *harray[PR_MAX_SELECT_DESC];
+    PRUint32      nsize;
+    PRInt32       narray[PR_MAX_SELECT_DESC];
 } PR_fd_set;
 
 /*
@@ -126,10 +125,9 @@ typedef struct PR_fd_set {
 ** XXX can we implement this on windoze and mac?
 **************************************************************************
 */
-NSPR_API(PRInt32)
-PR_Select(
-    PRInt32 num, PR_fd_set* readfds, PR_fd_set* writefds,
-    PR_fd_set* exceptfds, PRIntervalTime timeout);
+NSPR_API(PRInt32) PR_Select(
+    PRInt32 num, PR_fd_set *readfds, PR_fd_set *writefds,
+    PR_fd_set *exceptfds, PRIntervalTime timeout);
 
 /* 
 ** The following are not thread safe for two threads operating on them at the
@@ -149,20 +147,13 @@ PR_Select(
 ** fdset, zero otherwise.
 */
 
-NSPR_API(void)
-PR_FD_ZERO(PR_fd_set* set);
-NSPR_API(void)
-PR_FD_SET(PRFileDesc* fd, PR_fd_set* set);
-NSPR_API(void)
-PR_FD_CLR(PRFileDesc* fd, PR_fd_set* set);
-NSPR_API(PRInt32)
-PR_FD_ISSET(PRFileDesc* fd, PR_fd_set* set);
-NSPR_API(void)
-PR_FD_NSET(PRInt32 osfd, PR_fd_set* set);
-NSPR_API(void)
-PR_FD_NCLR(PRInt32 osfd, PR_fd_set* set);
-NSPR_API(PRInt32)
-PR_FD_NISSET(PRInt32 osfd, PR_fd_set* set);
+NSPR_API(void)        PR_FD_ZERO(PR_fd_set *set);
+NSPR_API(void)        PR_FD_SET(PRFileDesc *fd, PR_fd_set *set);
+NSPR_API(void)        PR_FD_CLR(PRFileDesc *fd, PR_fd_set *set);
+NSPR_API(PRInt32)     PR_FD_ISSET(PRFileDesc *fd, PR_fd_set *set);
+NSPR_API(void)        PR_FD_NSET(PRInt32 osfd, PR_fd_set *set);
+NSPR_API(void)        PR_FD_NCLR(PRInt32 osfd, PR_fd_set *set);
+NSPR_API(PRInt32)     PR_FD_NISSET(PRInt32 osfd, PR_fd_set *set);
 
 #ifndef NO_NSPR_10_SUPPORT
 #ifdef XP_MAC
@@ -171,8 +162,7 @@ PR_FD_NISSET(PRInt32 osfd, PR_fd_set* set);
 #include <sys/stat.h>
 #endif
 
-NSPR_API(PRInt32)
-PR_Stat(const char* path, struct stat* buf);
+NSPR_API(PRInt32) PR_Stat(const char *path, struct stat *buf);
 #endif /* NO_NSPR_10_SUPPORT */
 
 PR_END_EXTERN_C

@@ -47,37 +47,35 @@
 
 #if defined(XP_UNIX)
 
-#include <prnetdb.h>
 #include <prtypes.h>
+#include <prnetdb.h>
 
 NSPR_BEGIN_EXTERN_C
 
-#define PL_RESOLVE_MAXHOSTENTBUF 1024
-#define PL_RESOLVE_DEFAULT_TIMEOUT 0
+#define PL_RESOLVE_MAXHOSTENTBUF        1024
+#define PL_RESOLVE_DEFAULT_TIMEOUT      0
 
 /* Error return codes */
-#define PL_RESOLVE_OK 0
-#define PL_RESOLVE_EWINIT 1 /* Failed to initialize window */
-#define PL_RESOLVE_EMAKE 2 /* Failed to create request */
-#define PL_RESOLVE_ELAUNCH 3 /* Error launching Async request */
-#define PL_RESOLVE_ETIMEDOUT 4 /* Request timed-out */
-#define PL_RESOLVE_EINVAL 5 /* Invalid argument */
-#define PL_RESOLVE_EOVERFLOW 6 /* Buffer Overflow */
-#define PL_RESOLVE_EUNKNOWN 7 /* berzerk error */
+#define PL_RESOLVE_OK            0
+#define PL_RESOLVE_EWINIT        1           /* Failed to initialize window */
+#define PL_RESOLVE_EMAKE         2           /* Failed to create request */
+#define PL_RESOLVE_ELAUNCH       3           /* Error launching Async request */
+#define PL_RESOLVE_ETIMEDOUT     4           /* Request timed-out */
+#define PL_RESOLVE_EINVAL        5           /* Invalid argument */
+#define PL_RESOLVE_EOVERFLOW     6           /* Buffer Overflow */
+#define PL_RESOLVE_EUNKNOWN      7           /* berzerk error */
 
 /* ----------- Function Prototypes ----------------*/
 
-PR_EXTERN(PRStatus)
-PL_ResolveName(
-    const char* name, unsigned char* buf,
+PR_EXTERN(PRStatus) PL_ResolveName(
+    const char *name, unsigned char *buf,
     PRIntn bufsize, PRIntervalTime timeout,
-    PRHostEnt* hostentry, PRIntervalTime* ttl);
+    PRHostEnt *hostentry, PRIntervalTime *ttl);
 
-PR_EXTERN(PRStatus)
-PL_ResolveAddr(
-    const PRNetAddr* address, unsigned char* buf,
+PR_EXTERN(PRStatus) PL_ResolveAddr(
+    const PRNetAddr *address, unsigned char *buf,
     PRIntn bufsize, PRIntervalTime timeout,
-    PRHostEnt* hostentry, PRIntervalTime* ttl);
+    PRHostEnt *hostentry, PRIntervalTime *ttl);
 
 typedef struct PLResolveStats {
     int re_errors;
@@ -98,8 +96,7 @@ typedef struct PLResoveInfo {
     PLResolveStats stats;
 } PLResoveInfo;
 
-PR_EXTERN(void)
-PL_ResolveInfo(PLResoveInfo* info);
+PR_EXTERN(void) PL_ResolveInfo(PLResoveInfo *info);
 
 NSPR_END_EXTERN_C
 

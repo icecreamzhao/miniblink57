@@ -40,57 +40,61 @@
 
 #include "windowsxx.h"
 
-#include "logger.h"
 #include "resource.h"
+#include "logger.h"
 
 static void onApply(HWND hWnd)
 {
-    Logger* logger = (Logger*)GetWindowLong(hWnd, DWL_USER);
-    if (!logger)
-        return;
+  Logger * logger = (Logger *)GetWindowLong(hWnd, DWL_USER);
+  if(!logger)
+    return;
 
-    logger->bSPALID = (BST_CHECKED == IsDlgButtonChecked(hWnd, IDC_CHECK_SPALID));
-    logger->bSaveSettings = TRUE;
+  logger->bSPALID = (BST_CHECKED == IsDlgButtonChecked(hWnd, IDC_CHECK_SPALID));
+  logger->bSaveSettings = TRUE;
 }
 
 static void onNotify(HWND hWnd, int idCtrl, LPNMHDR lpNMHdr)
 {
-    switch (lpNMHdr->code) {
+  switch(lpNMHdr->code)
+  {
     case PSN_RESET:
-        break;
+      break;
     case PSN_APPLY:
-        onApply(hWnd);
-        break;
-    }
+      onApply(hWnd);
+      break;
+  }
 }
 
 static BOOL onInitDialog(HWND hWnd, HWND hWndFocus, LPARAM lParam)
 {
-    Logger* logger = NULL;
+  Logger * logger = NULL;
 
-    if (lParam) {
-        logger = (Logger*)(((PROPSHEETPAGE*)lParam)->lParam);
-        SetWindowLong(hWnd, DWL_USER, (long)logger);
-    }
+  if(lParam)
+  {
+    logger = (Logger *)(((PROPSHEETPAGE *)lParam)->lParam);
+    SetWindowLong(hWnd, DWL_USER, (long)logger);
+  }
 
-    if (logger) {
-        CheckDlgButton(hWnd, IDC_CHECK_SPALID, logger->bSPALID ? BST_CHECKED : BST_UNCHECKED);
-    }
+  if(logger)
+  {
+    CheckDlgButton(hWnd, IDC_CHECK_SPALID, logger->bSPALID ? BST_CHECKED : BST_UNCHECKED);
+  }
 
-    return TRUE;
+  return TRUE;
 }
 
 BOOL CALLBACK AdvancedPageProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    switch (msg) {
+  switch(msg)
+  {
     case WM_INITDIALOG:
-        return (BOOL)HANDLE_WM_INITDIALOG(hWnd, wParam, lParam, onInitDialog);
+      return (BOOL)HANDLE_WM_INITDIALOG(hWnd, wParam, lParam, onInitDialog);
     case WM_NOTIFY:
-        HANDLE_WM_NOTIFY(hWnd, wParam, lParam, onNotify);
-        break;
+      HANDLE_WM_NOTIFY(hWnd, wParam, lParam, onNotify);
+      break;
 
     default:
-        return FALSE;
-    }
-    return TRUE;
+      return FALSE;
+  }
+  return TRUE;
 }

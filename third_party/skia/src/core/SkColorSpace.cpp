@@ -132,6 +132,39 @@ sk_sp<SkColorSpace> SkColorSpace::NewNamed(Named named)
     return nullptr;
 }
 
+// sk_sp<SkColorSpace> SkColorSpace::MakeRGB(const SkColorSpaceTransferFn& coeffs,
+//     const SkMatrix44& toXYZD50)
+// {
+//     if (!is_valid_transfer_fn(coeffs)) {
+//         return nullptr;
+//     }
+// 
+//     if (is_almost_srgb(coeffs)) {
+//         return SkColorSpace::MakeRGB(kSRGB_RenderTargetGamma, toXYZD50);
+//     }
+// 
+//     if (is_almost_2dot2(coeffs)) {
+//         return SkColorSpace_Base::MakeRGB(k2Dot2Curve_SkGammaNamed, toXYZD50);
+//     }
+// 
+//     if (is_almost_linear(coeffs)) {
+//         return SkColorSpace_Base::MakeRGB(kLinear_SkGammaNamed, toXYZD50);
+//     }
+// 
+//     void* memory = sk_malloc_throw(sizeof(SkGammas) + sizeof(SkColorSpaceTransferFn));
+//     sk_sp<SkGammas> gammas = sk_sp<SkGammas>(new (memory) SkGammas(3));
+//     SkColorSpaceTransferFn* fn = SkTAddOffset<SkColorSpaceTransferFn>(memory, sizeof(SkGammas));
+//     *fn = coeffs;
+//     SkGammas::Data data;
+//     data.fParamOffset = 0;
+//     for (int channel = 0; channel < 3; ++channel) {
+//         gammas->fType[channel] = SkGammas::Type::kParam_Type;
+//         gammas->fData[channel] = data;
+//     }
+//     return sk_sp<SkColorSpace>(new SkColorSpace_XYZ(kNonStandard_SkGammaNamed,
+//         std::move(gammas), toXYZD50, nullptr));
+// }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum Version {
@@ -302,32 +335,50 @@ bool SkColorSpace::Equals(const SkColorSpace* src, const SkColorSpace* dst)
         return false;
     }
 
+//     // profiles are mandatory for A2B0 color spaces
+//     SkASSERT(as_CSB(src)->type() == SkColorSpace_Base::Type::kXYZ);
+//     const SkColorSpace_XYZ* srcXYZ = static_cast<const SkColorSpace_XYZ*>(src);
+//     const SkColorSpace_XYZ* dstXYZ = static_cast<const SkColorSpace_XYZ*>(dst);
+// 
+//     if (srcXYZ->gammaNamed() != dstXYZ->gammaNamed()) {
+//         return false;
+//     }
+// 
+//     switch (srcXYZ->gammaNamed()) {
+//     case kSRGB_SkGammaNamed:
+//     case k2Dot2Curve_SkGammaNamed:
+//     case kLinear_SkGammaNamed:
+//         if (srcXYZ->toXYZD50Hash() == dstXYZ->toXYZD50Hash()) {
+//             SkASSERT(*srcXYZ->toXYZD50() == *dstXYZ->toXYZD50() && "Hash collision");
+//             return true;
+//         }
+//         return false;
+//     default:
+//         // It is unlikely that we will reach this case.
+//         sk_sp<SkData> serializedSrcData = src->serialize();
+//         sk_sp<SkData> serializedDstData = dst->serialize();
+//         return serializedSrcData->size() == serializedDstData->size() &&
+//             0 == memcmp(serializedSrcData->data(), serializedDstData->data(), serializedSrcData->size());
+//     }
+
     // profiles are mandatory for A2B0 color spaces
-    //   SkASSERT(as_CSB(src)->type() == SkColorSpace_Base::Type::kXYZ);
-    //   const SkColorSpace_XYZ* srcXYZ = static_cast<const SkColorSpace_XYZ*>(src);
-    //   const SkColorSpace_XYZ* dstXYZ = static_cast<const SkColorSpace_XYZ*>(dst);
-    //
-    //   if (srcXYZ->gammaNamed() != dstXYZ->gammaNamed()) {
-    //     return false;
-    //   }
-    //
-    //   switch (srcXYZ->gammaNamed()) {
-    //   case kSRGB_SkGammaNamed:
-    //   case k2Dot2Curve_SkGammaNamed:
-    //   case kLinear_SkGammaNamed:
-    //     if (srcXYZ->toXYZD50Hash() == dstXYZ->toXYZD50Hash()) {
-    //       SkASSERT(*srcXYZ->toXYZD50() == *dstXYZ->toXYZD50() && "Hash collision");
-    //       return true;
-    //     }
-    //     return false;
-    //   default:
-    //     // It is unlikely that we will reach this case.
-    //     sk_sp<SkData> serializedSrcData = src->serialize();
-    //     sk_sp<SkData> serializedDstData = dst->serialize();
-    //     return serializedSrcData->size() == serializedDstData->size() &&
-    //       0 == memcmp(serializedSrcData->data(), serializedDstData->data(),
-    //         serializedSrcData->size());
-    //   }
-    *(int*)1 = 1; // debugbreak
+    if (src->gammaNamed() != dst->gammaNamed()) {
+        return false;
+    }
+
+    switch (src->gammaNamed()) {
+    case kSRGB_GammaNamed:
+    case k2Dot2Curve_GammaNamed:
+    case kLinear_GammaNamed:
+        if (src->fToXYZD50 == dst->fToXYZD50)
+            return true;
+        return false;
+    default:
+        // It is unlikely that we will reach this case.
+        sk_sp<SkData> serializedSrcData = src->serialize();
+        sk_sp<SkData> serializedDstData = dst->serialize();
+        return serializedSrcData->size() == serializedDstData->size() &&
+            0 == memcmp(serializedSrcData->data(), serializedDstData->data(), serializedSrcData->size());
+    }
     return false;
 }

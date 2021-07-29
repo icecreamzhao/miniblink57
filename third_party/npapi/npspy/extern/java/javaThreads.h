@@ -37,8 +37,8 @@
 #ifndef _JAVATHREADS_H_
 #define _JAVATHREADS_H_
 
-#include "bool.h"
-#include "interpreter.h"
 #include "oobj.h"
+#include "interpreter.h"
+#include "bool.h"
 
 #endif /* !_JAVATHREADS_H_ */

@@ -34,6 +34,7 @@
 #include <wtf/text/StringHash.h>
 #include <wtf/text/StringToNumber.h>
 #include <wtf/text/TextEncoding.h>
+#include <wtf/text/WTFStringUtil.h>
 
 #if USE(ICU_UNICODE)
 #include <unicode/uidna.h>
@@ -355,10 +356,13 @@ bool needInserFileHead(const String& url)
     if (WTF::kNotFound != url.find("file:/"))
         return false;
 
+    if (WTF::kNotFound != url.find("data:"))
+        return false;
+
     //     if (WTF::kNotFound != url.find(":\\"))
     //         return true;
 
-    if (':' == url[1] && ('\\' == url[1] || '/' == url[1]))
+    if (':' == url[1] && ('\\' == url[2] || '/' == url[2]))
         return true;
 
     return false;
@@ -2159,5 +2163,14 @@ bool KURL::isAboutBlankURL() const
 {
     return *this == blankURL();
 }
+
+String KURL::getUTF8String() const
+{
+    if (m_string.isNull())
+        return emptyString();
+
+    return WTF::ensureStringToUTF8String(m_string);
+}
+
 
 }

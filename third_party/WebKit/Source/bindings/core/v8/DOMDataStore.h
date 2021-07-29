@@ -66,20 +66,17 @@ public:
         return DOMWrapperWorld::current(isolate).domDataStore();
     }
 
-    static bool setReturnValue(v8::ReturnValue<v8::Value> returnValue,
-        ScriptWrappable* object)
+    static bool setReturnValue(v8::ReturnValue<v8::Value> returnValue, ScriptWrappable* object)
     {
-        return current(returnValue.GetIsolate())
-            .setReturnValueFrom(returnValue, object);
+        return current(returnValue.GetIsolate()).setReturnValueFrom(returnValue, object);
     }
 
-    static bool setReturnValue(v8::ReturnValue<v8::Value> returnValue,
-        Node* object)
+    static bool setReturnValue(v8::ReturnValue<v8::Value> returnValue, Node* object)
     {
         if (canUseScriptWrappable(object))
             return ScriptWrappable::fromNode(object)->setReturnValue(returnValue);
-        return current(returnValue.GetIsolate())
-            .setReturnValueFrom(returnValue, ScriptWrappable::fromNode(object));
+
+        return current(returnValue.GetIsolate()).setReturnValueFrom(returnValue, ScriptWrappable::fromNode(object));
     }
 
     static bool setReturnValueForMainWorld(v8::ReturnValue<v8::Value> returnValue,

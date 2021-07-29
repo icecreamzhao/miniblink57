@@ -10,8 +10,13 @@ void SetAffinity(int cpu);
 
 #if defined(_MSC_VER)
 
+#ifndef FORCE_INLINE
 #define FORCE_INLINE __forceinline
+#endif
+
+#ifndef NEVER_INLINE
 #define NEVER_INLINE __declspec(noinline)
+#endif
 
 #include "pstdint.h"
 #include <intrin.h> // for __rdtsc

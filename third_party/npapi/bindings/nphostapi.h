@@ -19,13 +19,13 @@ extern "C" {
 // NPAPI library entry points
 //
 #if defined(OS_POSIX) && !defined(OS_MACOSX)
-typedef NPError(API_CALL* NP_InitializeFunc)(NPNetscapeFuncs* pNFuncs,
-    NPPluginFuncs* pPFuncs);
+typedef NPError (API_CALL * NP_InitializeFunc)(NPNetscapeFuncs* pNFuncs,
+                                               NPPluginFuncs* pPFuncs);
 #else
-typedef NPError(API_CALL* NP_InitializeFunc)(NPNetscapeFuncs* pFuncs);
-typedef NPError(API_CALL* NP_GetEntryPointsFunc)(NPPluginFuncs* pFuncs);
+typedef NPError (API_CALL * NP_InitializeFunc)(NPNetscapeFuncs* pFuncs);
+typedef NPError (API_CALL * NP_GetEntryPointsFunc)(NPPluginFuncs* pFuncs);
 #endif
-typedef NPError(API_CALL* NP_ShutdownFunc)(void);
+typedef NPError (API_CALL * NP_ShutdownFunc)(void);
 
 #ifdef __cplusplus
 } // extern "C"

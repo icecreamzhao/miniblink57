@@ -91,7 +91,7 @@
 // #include "modules/accessibility/AXObjectCacheImpl.h"
 // #include "modules/credentialmanager/CredentialManagerClient.h"
 // #include "modules/encryptedmedia/MediaKeysController.h"
-// #include "modules/storage/StorageNamespaceController.h"
+#include "modules/storage/StorageNamespaceController.h"
 // #include "modules/webgl/WebGLRenderingContext.h"
 #include "platform/ContextMenu.h"
 #include "platform/ContextMenuItem.h"
@@ -456,12 +456,9 @@ WebViewImpl::WebViewImpl(WebViewClient* client,
     //provideDatabaseClientTo(*m_page, DatabaseClientImpl::create());
 
     provideStorageQuotaClientTo(*m_page, StorageQuotaClientImpl::create());
-    m_page->setValidationMessageClient(
-        ValidationMessageClientImpl::create(*this));
-    //   provideDedicatedWorkerMessagingProxyProviderTo(
-    //       *m_page, DedicatedWorkerMessagingProxyProviderImpl::create());
-    //StorageNamespaceController::provideStorageNamespaceTo(*m_page,
-    //                                                      &m_storageClientImpl);
+    m_page->setValidationMessageClient(ValidationMessageClientImpl::create(*this));
+    //provideDedicatedWorkerMessagingProxyProviderTo(*m_page, DedicatedWorkerMessagingProxyProviderImpl::create());
+    StorageNamespaceController::provideStorageNamespaceTo(*m_page, &m_storageClientImpl);
 
     setVisibilityState(visibilityState, true);
 
@@ -1190,6 +1187,20 @@ WebInputEventResult WebViewImpl::handleKeyEvent(const WebKeyboardEvent& event)
 
     LocalFrame* frame = toLocalFrame(focusedFrame);
 
+#if 1
+//     if (event.windowsKeyCode == 166) {
+//         WebKeyboardEvent evt = event;
+//         evt.nativeKeyCode = 8;
+//         KeyboardEvent* irkeypress = KeyboardEvent::create(evt, mainFrameImpl()->frame()->document()->domWindow());
+//         irkeypress->setType(AtomicString("irkeypress"));
+//         mainFrameImpl()->frame()->document()->dispatchEvent(irkeypress);
+// 
+//         irkeypress->setType(EventTypeNames::keypress);
+//         mainFrameImpl()->frame()->document()->dispatchEvent(irkeypress);
+// 
+//         return WebInputEventResult::HandledSuppressed;
+//     }
+#endif
     WebInputEventResult result = frame->eventHandler().keyEvent(event);
     if (result != WebInputEventResult::NotHandled) {
         if (WebInputEvent::RawKeyDown == event.type()) {

@@ -128,9 +128,9 @@
 #ifndef prshma_h___
 #define prshma_h___
 
+#include "prtypes.h"
 #include "prio.h"
 #include "prproces.h"
-#include "prtypes.h"
 
 PR_BEGIN_EXTERN_C
 
@@ -160,11 +160,12 @@ PR_BEGIN_EXTERN_C
 **   Pointer to PRFileMap or NULL on error.
 **
 */
-NSPR_API(PRFileMap*)
+NSPR_API( PRFileMap *)
 PR_OpenAnonFileMap(
-    const char* dirName,
-    PRSize size,
-    PRFileMapProtect prot);
+    const char *dirName,
+    PRSize      size, 
+    PRFileMapProtect prot
+);  
 
 /*
 ** PR_ProcessAttrSetInheritableFileMap() -- Prepare FileMap for export  
@@ -187,11 +188,12 @@ PR_OpenAnonFileMap(
 **   PRStatus
 **
 */
-NSPR_API(PRStatus)
-PR_ProcessAttrSetInheritableFileMap(
-    PRProcessAttr* attr,
-    PRFileMap* fm,
-    const char* shmname);
+NSPR_API(PRStatus) 
+PR_ProcessAttrSetInheritableFileMap( 
+    PRProcessAttr   *attr,
+    PRFileMap       *fm, 
+    const char      *shmname
+);
 
 /*
 ** PR_GetInheritedFileMap() -- Import a PRFileMap previously exported
@@ -211,9 +213,10 @@ PR_ProcessAttrSetInheritableFileMap(
 **   PRFileMap pointer or NULL.
 **
 */
-NSPR_API(PRFileMap*)
-PR_GetInheritedFileMap(
-    const char* shmname);
+NSPR_API( PRFileMap *)
+PR_GetInheritedFileMap( 
+    const char *shmname 
+);
 
 /*
 ** PR_ExportFileMapAsString() -- Creates a string identifying a PRFileMap
@@ -234,11 +237,12 @@ PR_GetInheritedFileMap(
 **   PRStatus
 **
 */
-NSPR_API(PRStatus)
-PR_ExportFileMapAsString(
-    PRFileMap* fm,
-    PRSize bufsize,
-    char* buf);
+NSPR_API( PRStatus )
+PR_ExportFileMapAsString( 
+    PRFileMap *fm,
+    PRSize    bufsize,
+    char      *buf
+);
 #define PR_FILEMAP_STRING_BUFSIZE 128
 
 /*
@@ -255,9 +259,10 @@ PR_ExportFileMapAsString(
 **   PRFileMap pointer or NULL.
 **
 */
-NSPR_API(PRFileMap*)
-PR_ImportFileMapFromString(
-    const char* fmstring);
+NSPR_API( PRFileMap * )
+PR_ImportFileMapFromString( 
+    const char *fmstring
+);
 
 PR_END_EXTERN_C
 #endif /* prshma_h___ */

@@ -66,9 +66,7 @@ class IsAssignable {
         char padding[8];
     };
 
-    template <typename T2,
-        typename From2,
-        typename = decltype(std::declval<T2&>() = std::declval<From2>())>
+    template <typename T2, typename From2, typename = decltype(std::declval<T2&>() = std::declval<From2>())>
     static YesType checkAssignability(int);
     template <typename T2, typename From2>
     static NoType checkAssignability(...);
@@ -280,12 +278,7 @@ class IsTraceable {
 
     // Note that this also checks if a superclass of V has a trace method.
     template <typename V>
-    static YesType checkHasTraceMethod(
-        V* v,
-        blink::Visitor* p = nullptr,
-        typename std::enable_if<
-            std::is_same<decltype(v->trace(p)), void>::value>::type* g
-        = nullptr);
+    static YesType checkHasTraceMethod(V* v, blink::Visitor* p = nullptr, typename std::enable_if<std::is_same<decltype(v->trace(p)), void>::value>::type* g = nullptr);
     template <typename V>
     static NoType checkHasTraceMethod(...);
 
@@ -339,8 +332,7 @@ class IsGarbageCollectedType {
 
     using NonConstType = typename std::remove_const<T>::type;
     template <typename U>
-    static YesType checkGarbageCollectedType(
-        typename U::IsGarbageCollectedTypeMarker*);
+    static YesType checkGarbageCollectedType(typename U::IsGarbageCollectedTypeMarker*);
     template <typename U>
     static NoType checkGarbageCollectedType(...);
 
@@ -355,8 +347,7 @@ class IsGarbageCollectedType {
     //    class B : public A, public GarbageCollectedMixin { ... };
     //
     template <typename U>
-    static YesType checkGarbageCollectedMixinType(
-        typename U::IsGarbageCollectedMixinMarker*);
+    static YesType checkGarbageCollectedMixinType(typename U::IsGarbageCollectedMixinMarker*);
     template <typename U>
     static NoType checkGarbageCollectedMixinType(...);
 
@@ -378,8 +369,7 @@ class IsPersistentReferenceType {
     } NoType;
 
     template <typename U>
-    static YesType checkPersistentReferenceType(
-        typename U::IsPersistentReferenceTypeMarker*);
+    static YesType checkPersistentReferenceType(typename U::IsPersistentReferenceTypeMarker*);
     template <typename U>
     static NoType checkPersistentReferenceType(...);
 
@@ -388,10 +378,8 @@ public:
 };
 
 template <typename T,
-    bool = std::is_function<typename std::remove_const<
-               typename std::remove_pointer<T>::type>::type>::value
-        || std::is_void<typename std::remove_const<
-            typename std::remove_pointer<T>::type>::type>::value>
+    bool = std::is_function<typename std::remove_const<typename std::remove_pointer<T>::type>::type>::value
+        || std::is_void<typename std::remove_const<typename std::remove_pointer<T>::type>::type>::value>
 class IsPointerToGarbageCollectedType {
 public:
     static const bool value = false;
@@ -401,6 +389,18 @@ template <typename T>
 class IsPointerToGarbageCollectedType<T*, false> {
 public:
     static const bool value = IsGarbageCollectedType<T>::value;
+};
+
+template <class T> struct IsArray {
+    static const bool value = false;
+};
+
+template <class T> struct IsArray<T[]> {
+    static const bool value = true;
+};
+
+template <class T, size_t N> struct IsArray<T[N]> {
+    static const bool value = true;
 };
 
 } // namespace WTF

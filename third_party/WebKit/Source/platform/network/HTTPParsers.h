@@ -103,10 +103,7 @@ PLATFORM_EXPORT bool isValidHTTPFieldContentRFC7230(const String&);
 PLATFORM_EXPORT bool isValidHTTPToken(const String&);
 // |matcher| specifies a function to check a whitespace character. if |nullptr|
 // is specified, ' ' and '\t' are treated as whitespace characters.
-PLATFORM_EXPORT bool parseHTTPRefresh(const String& refresh,
-    WTF::CharacterMatchFunctionPtr matcher,
-    double& delay,
-    String& url);
+PLATFORM_EXPORT bool parseHTTPRefresh(const String& refresh, WTF::CharacterMatchFunctionPtr matcher, double& delay, String& url);
 PLATFORM_EXPORT double parseDate(const String&);
 
 // Given a Media Type (like "foo/bar; baz=gazonk" - usually from the
@@ -120,45 +117,32 @@ PLATFORM_EXPORT double parseDate(const String&);
 //   are trimmed.
 PLATFORM_EXPORT AtomicString extractMIMETypeFromMediaType(const AtomicString&);
 PLATFORM_EXPORT String extractCharsetFromMediaType(const String&);
-PLATFORM_EXPORT void findCharsetInMediaType(const String& mediaType,
-    unsigned& charsetPos,
-    unsigned& charsetLen,
-    unsigned start = 0);
-PLATFORM_EXPORT ReflectedXSSDisposition
-parseXSSProtectionHeader(const String& header,
-    String& failureReason,
-    unsigned& failurePosition,
-    String& reportURL);
-PLATFORM_EXPORT CacheControlHeader
-parseCacheControlDirectives(const AtomicString& cacheControlHeader,
-    const AtomicString& pragmaHeader);
-PLATFORM_EXPORT void parseCommaDelimitedHeader(const String& headerValue,
-    CommaDelimitedHeaderSet&);
+PLATFORM_EXPORT void findCharsetInMediaType(const String& mediaType, unsigned& charsetPos, unsigned& charsetLen, unsigned start = 0);
+
+PLATFORM_EXPORT ReflectedXSSDisposition parseXSSProtectionHeader(const String& header, String& failureReason, unsigned& failurePosition, String& reportURL);
+
+PLATFORM_EXPORT CacheControlHeader parseCacheControlDirectives(const AtomicString& cacheControlHeader, const AtomicString& pragmaHeader);
+PLATFORM_EXPORT void parseCommaDelimitedHeader(const String& headerValue, CommaDelimitedHeaderSet&);
 // Returns true on success, otherwise false. The Suborigin argument must be a
 // non-null return argument. |messages| is a list of messages based on any
 // parse warnings or errors. Even if parseSuboriginHeader returns true, there
 // may be Strings in |messages|.
-PLATFORM_EXPORT bool parseSuboriginHeader(const String& header,
-    Suborigin*,
-    WTF::Vector<String>& messages);
+PLATFORM_EXPORT bool parseSuboriginHeader(const String& header, Suborigin*, WTF::Vector<String>& messages);
 
-PLATFORM_EXPORT ContentTypeOptionsDisposition
-parseContentTypeOptionsHeader(const String& header);
+PLATFORM_EXPORT ContentTypeOptionsDisposition parseContentTypeOptionsHeader(const String& header);
 
 // Returns true and stores the position of the end of the headers to |*end|
 // if the headers part ends in |bytes[0..size]|. Returns false otherwise.
-PLATFORM_EXPORT bool parseMultipartHeadersFromBody(const char* bytes,
-    size_t,
-    ResourceResponse*,
-    size_t* end);
+PLATFORM_EXPORT bool parseMultipartHeadersFromBody(const char* bytes, size_t, ResourceResponse*, size_t* end);
 
 // Parses a header value containing JSON data, according to
 // https://tools.ietf.org/html/draft-ietf-httpbis-jfv-01
 // Returns an empty unique_ptr if the header cannot be parsed as JSON. JSON
 // strings which represent object nested deeper than |maxParseDepth| will also
 // cause an empty return value.
-PLATFORM_EXPORT std::unique_ptr<JSONArray> parseJSONHeader(const String& header,
-    int maxParseDepth);
+PLATFORM_EXPORT std::unique_ptr<JSONArray> parseJSONHeader(const String& header, int maxParseDepth);
+
+size_t parseHTTPHeader(const char* s, size_t size, String& failureReason, AtomicString& name, AtomicString& value);
 
 } // namespace blink
 

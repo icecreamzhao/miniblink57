@@ -117,8 +117,7 @@ PR_BEGIN_EXTERN_C
 **   functions on the same platform. (!)
 ** 
 */
-NSPR_API(char*)
-PR_GetEnv(const char* var);
+NSPR_API(char*) PR_GetEnv(const char *var);
 
 /*
 ** PR_SetEnv() -- set, unset or change an environment variable
@@ -141,15 +140,13 @@ PR_GetEnv(const char* var);
 ** 
 ** 
 */
-NSPR_API(PRStatus)
-PR_SetEnv(const char* string);
+NSPR_API(PRStatus) PR_SetEnv(const char *string);
 
 /*
 ** DEPRECATED.  Use PR_SetEnv() instead.
 */
 #ifdef XP_MAC
-NSPR_API(PRIntn)
-PR_PutEnv(const char* string);
+NSPR_API(PRIntn) PR_PutEnv(const char *string);
 #endif
 
 PR_END_EXTERN_C

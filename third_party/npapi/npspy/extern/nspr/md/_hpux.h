@@ -39,29 +39,29 @@
  * Internal configuration macros
  */
 
-#define PR_LINKER_ARCH "hpux"
-#define _PR_SI_SYSNAME "HPUX"
+#define PR_LINKER_ARCH    "hpux"
+#define _PR_SI_SYSNAME   "HPUX"
 #define _PR_SI_ARCHITECTURE "hppa1.1"
-#define PR_DLL_SUFFIX ".sl"
+#define PR_DLL_SUFFIX        ".sl"
 
-#define _PR_VMBASE 0x30000000
-#define _PR_STACK_VMBASE 0x50000000
+#define _PR_VMBASE        0x30000000 
+#define _PR_STACK_VMBASE    0x50000000
 /*
  * _USE_BIG_FDS increases the size of fd_set from 256 bytes to
  * about 7500 bytes.  PR_Poll allocates three fd_sets on the
  * stack, so it is safer to also increase the default thread
  * stack size.
  */
-#define _MD_DEFAULT_STACK_SIZE (2 * 65536L)
-#define _MD_MINIMUM_STACK_SIZE (2 * 65536L)
-#define _MD_MMAP_FLAGS MAP_PRIVATE
+#define _MD_DEFAULT_STACK_SIZE    (2*65536L)
+#define _MD_MINIMUM_STACK_SIZE    (2*65536L)
+#define _MD_MMAP_FLAGS          MAP_PRIVATE
 
 #define NEED_TIME_R
 
 #define HAVE_STACK_GROWING_UP
-#undef HAVE_WEAK_IO_SYMBOLS
-#undef HAVE_WEAK_MALLOC_SYMBOLS
-#define HAVE_DLL
+#undef	HAVE_WEAK_IO_SYMBOLS
+#undef	HAVE_WEAK_MALLOC_SYMBOLS
+#define	HAVE_DLL
 #ifdef IS_64
 #define USE_DLFCN
 #else
@@ -89,51 +89,50 @@
 
 #if !defined(_PR_PTHREADS)
 
-#include <setjmp.h>
 #include <syscall.h>
+#include <setjmp.h>
 
 #define USE_SETJMP
 
-#define _MD_GET_SP(_t) (*((int*)((_t)->md.jb) + 1))
+#define _MD_GET_SP(_t) (*((int *)((_t)->md.jb) + 1))
 #define PR_NUM_GCREGS _JBLEN
 /* Caveat: This makes jmp_buf full of doubles. */
 #define CONTEXT(_th) ((_th)->md.jb)
 
-/* Stack needs two frames (64 bytes) at the bottom */
-#define _MD_SET_THR_SP(_t, _sp)((_MD_GET_SP(_t)) = (int)(_sp + 64 * 2))
-#define SAVE_CONTEXT(_th) _setjmp(CONTEXT(_th))
-#define GOTO_CONTEXT(_th) _longjmp(CONTEXT(_th), 1)
+    /* Stack needs two frames (64 bytes) at the bottom */ \
+#define _MD_SET_THR_SP(_t, _sp)     ((_MD_GET_SP(_t)) = (int) (_sp + 64 *2))
+#define SAVE_CONTEXT(_th)           _setjmp(CONTEXT(_th))
+#define GOTO_CONTEXT(_th)           _longjmp(CONTEXT(_th), 1)
 
 #if !defined(PTHREADS_USER)
 
-#define _MD_INIT_CONTEXT(_thread, _sp, _main, status)         \
-    {                                                         \
-        *(status) = PR_TRUE;                                  \
-        if (_setjmp(CONTEXT(_thread)))                        \
-            (*_main)();                                       \
-        /* Stack needs two frames (64 bytes) at the bottom */ \
-        (_MD_GET_SP(_thread)) = (int)((_sp) + 64 * 2);        \
-    }
+#define _MD_INIT_CONTEXT(_thread, _sp, _main, status) \
+{ \
+    *(status) = PR_TRUE; \
+    if (_setjmp(CONTEXT(_thread))) (*_main)(); \
+    /* Stack needs two frames (64 bytes) at the bottom */ \
+    (_MD_GET_SP(_thread)) = (int) ((_sp) + 64*2); \
+}
 
-#define _MD_SWITCH_CONTEXT(_thread)    \
-    if (!_setjmp(CONTEXT(_thread))) {  \
-        (_thread)->md.errcode = errno; \
-        _PR_Schedule();                \
+#define _MD_SWITCH_CONTEXT(_thread) \
+    if (!_setjmp(CONTEXT(_thread))) { \
+    (_thread)->md.errcode = errno; \
+    _PR_Schedule(); \
     }
 
 /*
 ** Restore a thread context, saved by _MD_SWITCH_CONTEXT
 */
-#define _MD_RESTORE_CONTEXT(_thread)     \
-    {                                    \
-        errno = (_thread)->md.errcode;   \
-        _MD_SET_CURRENT_THREAD(_thread); \
-        _longjmp(CONTEXT(_thread), 1);   \
-    }
+#define _MD_RESTORE_CONTEXT(_thread) \
+{ \
+    errno = (_thread)->md.errcode; \
+    _MD_SET_CURRENT_THREAD(_thread); \
+    _longjmp(CONTEXT(_thread), 1); \
+}
 
-    /* Machine-dependent (MD) data structures.  HP-UX has no native threads. */
+/* Machine-dependent (MD) data structures.  HP-UX has no native threads. */
 
-    struct _MDThread {
+struct _MDThread {
     jmp_buf jb;
     int id;
     int errcode;
@@ -171,29 +170,29 @@ struct _MDCPU_Unix {
     PRInt32 ioq_osfd_cnt;
 #ifndef _PR_USE_POLL
     fd_set fd_read_set, fd_write_set, fd_exception_set;
-    PRInt16 fd_read_cnt[_PR_MD_MAX_OSFD], fd_write_cnt[_PR_MD_MAX_OSFD],
-        fd_exception_cnt[_PR_MD_MAX_OSFD];
+    PRInt16 fd_read_cnt[_PR_MD_MAX_OSFD],fd_write_cnt[_PR_MD_MAX_OSFD],
+				fd_exception_cnt[_PR_MD_MAX_OSFD];
 #else
-    struct pollfd* ioq_pollfds;
-    int ioq_pollfds_size;
-#endif /* _PR_USE_POLL */
+	struct pollfd *ioq_pollfds;
+	int ioq_pollfds_size;
+#endif	/* _PR_USE_POLL */
 };
 
-#define _PR_IOQ(_cpu) ((_cpu)->md.md_unix.ioQ)
+#define _PR_IOQ(_cpu)			((_cpu)->md.md_unix.ioQ)
 #define _PR_ADD_TO_IOQ(_pq, _cpu) PR_APPEND_LINK(&_pq.links, &_PR_IOQ(_cpu))
-#define _PR_FD_READ_SET(_cpu) ((_cpu)->md.md_unix.fd_read_set)
-#define _PR_FD_READ_CNT(_cpu) ((_cpu)->md.md_unix.fd_read_cnt)
-#define _PR_FD_WRITE_SET(_cpu) ((_cpu)->md.md_unix.fd_write_set)
-#define _PR_FD_WRITE_CNT(_cpu) ((_cpu)->md.md_unix.fd_write_cnt)
-#define _PR_FD_EXCEPTION_SET(_cpu) ((_cpu)->md.md_unix.fd_exception_set)
-#define _PR_FD_EXCEPTION_CNT(_cpu) ((_cpu)->md.md_unix.fd_exception_cnt)
-#define _PR_IOQ_TIMEOUT(_cpu) ((_cpu)->md.md_unix.ioq_timeout)
-#define _PR_IOQ_MAX_OSFD(_cpu) ((_cpu)->md.md_unix.ioq_max_osfd)
-#define _PR_IOQ_OSFD_CNT(_cpu) ((_cpu)->md.md_unix.ioq_osfd_cnt)
-#define _PR_IOQ_POLLFDS(_cpu) ((_cpu)->md.md_unix.ioq_pollfds)
-#define _PR_IOQ_POLLFDS_SIZE(_cpu) ((_cpu)->md.md_unix.ioq_pollfds_size)
+#define _PR_FD_READ_SET(_cpu)		((_cpu)->md.md_unix.fd_read_set)
+#define _PR_FD_READ_CNT(_cpu)		((_cpu)->md.md_unix.fd_read_cnt)
+#define _PR_FD_WRITE_SET(_cpu)		((_cpu)->md.md_unix.fd_write_set)
+#define _PR_FD_WRITE_CNT(_cpu)		((_cpu)->md.md_unix.fd_write_cnt)
+#define _PR_FD_EXCEPTION_SET(_cpu)	((_cpu)->md.md_unix.fd_exception_set)
+#define _PR_FD_EXCEPTION_CNT(_cpu)	((_cpu)->md.md_unix.fd_exception_cnt)
+#define _PR_IOQ_TIMEOUT(_cpu)		((_cpu)->md.md_unix.ioq_timeout)
+#define _PR_IOQ_MAX_OSFD(_cpu)		((_cpu)->md.md_unix.ioq_max_osfd)
+#define _PR_IOQ_OSFD_CNT(_cpu)		((_cpu)->md.md_unix.ioq_osfd_cnt)
+#define _PR_IOQ_POLLFDS(_cpu)		((_cpu)->md.md_unix.ioq_pollfds)
+#define _PR_IOQ_POLLFDS_SIZE(_cpu)	((_cpu)->md.md_unix.ioq_pollfds_size)
 
-#define _PR_IOQ_MIN_POLLFDS_SIZE(_cpu) 32
+#define _PR_IOQ_MIN_POLLFDS_SIZE(_cpu)	32
 
 struct _MDCPU {
     struct _MDCPU_Unix md_unix;
@@ -208,11 +207,11 @@ struct _MDCPU {
 #define _MD_IOQ_LOCK()
 #define _MD_IOQ_UNLOCK()
 
-#define _MD_INIT_RUNNING_CPU(cpu) _MD_unix_init_running_cpu(cpu)
-#define _MD_INIT_THREAD _MD_InitializeThread
+#define _MD_INIT_RUNNING_CPU(cpu)       _MD_unix_init_running_cpu(cpu)
+#define _MD_INIT_THREAD                 _MD_InitializeThread
 #define _MD_EXIT_THREAD(thread)
-#define _MD_SUSPEND_THREAD(thread) _MD_suspend_thread
-#define _MD_RESUME_THREAD(thread) _MD_resume_thread
+#define _MD_SUSPEND_THREAD(thread)      _MD_suspend_thread
+#define _MD_RESUME_THREAD(thread)       _MD_resume_thread
 #define _MD_CLEAN_THREAD(_thread)
 
 #else /* PTHREADS_USER	*/
@@ -221,32 +220,32 @@ struct _MDCPU {
 
 #endif /* PTHREADS_USER	*/
 
-#endif /* !defined(_PR_PTHREADS) */
+#endif  /* !defined(_PR_PTHREADS) */
 
 #if !defined(PTHREADS_USER)
-#define _MD_EARLY_INIT _MD_EarlyInit
-#define _MD_FINAL_INIT _PR_UnixInit
-#endif
+#define _MD_EARLY_INIT                 	_MD_EarlyInit
+#define _MD_FINAL_INIT					_PR_UnixInit
+#endif 
 
 #if defined(HPUX_LW_TIMER)
 extern void _PR_HPUX_LW_IntervalInit(void);
 extern PRIntervalTime _PR_HPUX_LW_GetInterval(void);
-#define _MD_INTERVAL_INIT _PR_HPUX_LW_IntervalInit
-#define _MD_GET_INTERVAL _PR_HPUX_LW_GetInterval
-#define _MD_INTERVAL_PER_SEC() 1000
+#define _MD_INTERVAL_INIT                 _PR_HPUX_LW_IntervalInit
+#define _MD_GET_INTERVAL                  _PR_HPUX_LW_GetInterval
+#define _MD_INTERVAL_PER_SEC()            1000
 #else
-#define _MD_GET_INTERVAL _PR_UNIX_GetInterval
-#define _MD_INTERVAL_PER_SEC _PR_UNIX_TicksPerSecond
+#define _MD_GET_INTERVAL                  _PR_UNIX_GetInterval
+#define _MD_INTERVAL_PER_SEC              _PR_UNIX_TicksPerSecond
 #endif
 
 /*
  * We wrapped the select() call.  _MD_SELECT refers to the built-in,
  * unwrapped version.
  */
-#define _MD_SELECT(nfds, r, w, e, tv) syscall(SYS_select, nfds, r, w, e, tv)
+#define _MD_SELECT(nfds,r,w,e,tv) syscall(SYS_select,nfds,r,w,e,tv)
 
 #include <poll.h>
-#define _MD_POLL(fds, nfds, timeout) syscall(SYS_poll, fds, nfds, timeout)
+#define _MD_POLL(fds,nfds,timeout) syscall(SYS_poll,fds,nfds,timeout)
 
 #ifdef HPUX11
 extern void _MD_hpux_map_sendfile_error(int err);

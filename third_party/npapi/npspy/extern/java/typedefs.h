@@ -34,10 +34,10 @@
  * the terms of any one of the NPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifndef _TYPEDEFS_H_
-#define _TYPEDEFS_H_
+#ifndef	_TYPEDEFS_H_
+#define	_TYPEDEFS_H_
 
-#include "sysmacros_md.h"
 #include "typedefs_md.h"
+#include "sysmacros_md.h"
 
-#endif /* !_TYPEDEFS_H_ */
+#endif	/* !_TYPEDEFS_H_ */

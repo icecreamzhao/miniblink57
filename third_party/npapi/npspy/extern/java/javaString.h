@@ -41,7 +41,8 @@
 
 #include "jdk_java_lang_String.h"
 
-JRI_PUBLIC_API(Hjava_lang_String*)
-makeJavaString(char*, int);
+JRI_PUBLIC_API(Hjava_lang_String *)
+makeJavaString(char *, int);
 
 #endif /* !_JAVASTRING_H_ */
+

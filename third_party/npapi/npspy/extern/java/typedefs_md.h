@@ -37,8 +37,8 @@
 #ifndef sun_java_typedefs_md_h___
 #define sun_java_typedefs_md_h___
 
-#include "nspr_md.h"
 #include "prtypes.h"
+#include "nspr_md.h"
 
 /* Some platforms need this to define int32_t */
 #ifdef HAVE_SYS_BITYPES_H
@@ -57,8 +57,8 @@ typedef int32 int32_t;
 
 #ifndef HAVE_UINT16_T
 typedef uint16 uint16_t;
-#ifndef _UINT32_T
-#define _UINT32_T
+#ifndef	_UINT32_T
+#define	_UINT32_T
 typedef uint32 uint32_t;
 #endif
 #endif
@@ -86,7 +86,7 @@ typedef unsigned int uint_t;
 */
 #pragma warning_errors off
 #ifndef __OPENTRANSPORT__
-typedef unsigned long uint_t; /* this is already declared in OpenTransport.h, but we don't want to drag in
+typedef unsigned long uint_t;	/* this is already declared in OpenTransport.h, but we don't want to drag in
 					all the other defines present there. This is a bad solution, but the
 					least bad given the alternatives. */
 #endif /* __OPENTRANSPORT__ */

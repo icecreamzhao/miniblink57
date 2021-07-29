@@ -40,8 +40,8 @@
 #ifndef pratom_h___
 #define pratom_h___
 
-#include "prlock.h"
 #include "prtypes.h"
+#include "prlock.h"
 
 PR_BEGIN_EXTERN_C
 
@@ -54,8 +54,7 @@ PR_BEGIN_EXTERN_C
 ** RETURN:
 **    the returned value is the result of the increment
 */
-NSPR_API(PRInt32)
-PR_AtomicIncrement(PRInt32* val);
+NSPR_API(PRInt32)	PR_AtomicIncrement(PRInt32 *val);
 
 /*
 ** FUNCTION: PR_AtomicDecrement
@@ -66,8 +65,7 @@ PR_AtomicIncrement(PRInt32* val);
 ** RETURN:
 **    the returned value is the result of the decrement
 */
-NSPR_API(PRInt32)
-PR_AtomicDecrement(PRInt32* val);
+NSPR_API(PRInt32)	PR_AtomicDecrement(PRInt32 *val);
 
 /*
 ** FUNCTION: PR_AtomicSet
@@ -79,8 +77,7 @@ PR_AtomicDecrement(PRInt32* val);
 ** RETURN:
 **    Returns the prior value
 */
-NSPR_API(PRInt32)
-PR_AtomicSet(PRInt32* val, PRInt32 newval);
+NSPR_API(PRInt32) PR_AtomicSet(PRInt32 *val, PRInt32 newval);
 
 /*
 ** FUNCTION: PR_AtomicAdd
@@ -92,8 +89,7 @@ PR_AtomicSet(PRInt32* val, PRInt32 newval);
 ** RETURN:
 **    the returned value is the result of the addition
 */
-NSPR_API(PRInt32)
-PR_AtomicAdd(PRInt32* ptr, PRInt32 val);
+NSPR_API(PRInt32)	PR_AtomicAdd(PRInt32 *ptr, PRInt32 val);
 
 /*
 ** LIFO linked-list (stack)
@@ -101,7 +97,7 @@ PR_AtomicAdd(PRInt32* ptr, PRInt32 val);
 typedef struct PRStackElemStr PRStackElem;
 
 struct PRStackElemStr {
-    PRStackElem* prstk_elem_next; /* next pointer MUST be at offset 0;
+    PRStackElem	*prstk_elem_next;	/* next pointer MUST be at offset 0;
 									  assembly language code relies on this */
 };
 
@@ -116,8 +112,7 @@ typedef struct PRStackStr PRStack;
 ** RETURN:
 **    A pointer to the created stack, if successful, else NULL.
 */
-NSPR_API(PRStack*)
-PR_CreateStack(const char* stack_name);
+NSPR_API(PRStack *)	PR_CreateStack(const char *stack_name);
 
 /*
 ** FUNCTION: PR_StackPush
@@ -129,8 +124,7 @@ PR_CreateStack(const char* stack_name);
 ** RETURN:
 **    None
 */
-NSPR_API(void)
-PR_StackPush(PRStack* stack, PRStackElem* stack_elem);
+NSPR_API(void)			PR_StackPush(PRStack *stack, PRStackElem *stack_elem);
 
 /*
 ** FUNCTION: PR_StackPop
@@ -143,8 +137,7 @@ PR_StackPush(PRStack* stack, PRStackElem* stack_elem);
 **	  if non-empty,
 **    else NULL
 */
-NSPR_API(PRStackElem*)
-PR_StackPop(PRStack* stack);
+NSPR_API(PRStackElem *)	PR_StackPop(PRStack *stack);
 
 /*
 ** FUNCTION: PR_DestroyStack
@@ -158,8 +151,7 @@ PR_StackPop(PRStack* stack);
 **					PR_GetError will return
 **						PR_INVALID_STATE_ERROR - stack is not empty
 */
-NSPR_API(PRStatus)
-PR_DestroyStack(PRStack* stack);
+NSPR_API(PRStatus)		PR_DestroyStack(PRStack *stack);
 
 PR_END_EXTERN_C
 

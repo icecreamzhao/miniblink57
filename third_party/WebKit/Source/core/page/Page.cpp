@@ -585,9 +585,10 @@ void Page::willBeDestroyed()
 #if ENABLE_WML
 WMLPageState* Page::wmlPageState()
 {
-    if (!m_wmlPageState)
-        m_wmlPageState = WTF::wrapUnique(new WMLPageState(this));
-    return m_wmlPageState.get();
+//     if (!m_wmlPageState)
+//         m_wmlPageState = WTF::wrapUnique(new WMLPageState(this));
+//     return m_wmlPageState.get();
+    return nullptr;
 }
 #endif
 

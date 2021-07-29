@@ -18,15 +18,15 @@ void HTMLCanvasElementModule::getContext(
     ExceptionState& exceptionState,
     RenderingContext& result)
 {
-    if (canvas.surfaceLayerBridge()) {
-        // The existence of canvas surfaceLayerBridge indicates that
-        // HTMLCanvasElement.transferControlToOffscreen() has been called.
-        exceptionState.throwDOMException(InvalidStateError,
-            "Cannot get context from a canvas that "
-            "has transferred its control to "
-            "offscreen.");
-        return;
-    }
+//     if (canvas.surfaceLayerBridge()) {
+//         // The existence of canvas surfaceLayerBridge indicates that
+//         // HTMLCanvasElement.transferControlToOffscreen() has been called.
+//         exceptionState.throwDOMException(InvalidStateError,
+//             "Cannot get context from a canvas that "
+//             "has transferred its control to "
+//             "offscreen.");
+//         return;
+//     }
 
     CanvasRenderingContext* context = canvas.getCanvasRenderingContext(type, attributes);
     if (context) {
@@ -38,12 +38,13 @@ OffscreenCanvas* HTMLCanvasElementModule::transferControlToOffscreen(
     HTMLCanvasElement& canvas,
     ExceptionState& exceptionState)
 {
-    if (canvas.surfaceLayerBridge()) {
-        exceptionState.throwDOMException(
-            InvalidStateError,
-            "Cannot transfer control from a canvas for more than one time.");
-        return nullptr;
-    }
+    DebugBreak();
+//     if (canvas.surfaceLayerBridge()) {
+//         exceptionState.throwDOMException(
+//             InvalidStateError,
+//             "Cannot transfer control from a canvas for more than one time.");
+//         return nullptr;
+//     }
 
     canvas.createLayer();
 
@@ -66,11 +67,12 @@ OffscreenCanvas* HTMLCanvasElementModule::transferControlToOffscreenInternal(
     offscreenCanvas->setPlaceholderCanvasId(canvasId);
     canvas.registerPlaceholder(canvasId);
 
-    CanvasSurfaceLayerBridge* bridge = canvas.surfaceLayerBridge();
-    if (bridge) {
-        offscreenCanvas->setFrameSinkId(bridge->getFrameSinkId().client_id(),
-            bridge->getFrameSinkId().sink_id());
-    }
+//     CanvasSurfaceLayerBridge* bridge = canvas.surfaceLayerBridge();
+//     if (bridge) {
+//         offscreenCanvas->setFrameSinkId(bridge->getFrameSinkId().client_id(),
+//             bridge->getFrameSinkId().sink_id());
+//     }
+    DebugBreak();
     return offscreenCanvas;
 }
 }

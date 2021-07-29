@@ -163,6 +163,8 @@ private:                                                                        
 
 #define USE_ALLOCATOR(ClassName, Allocator) WTF_USE_ALLOCATOR(ClassName, Allocator)
 
+#define WTF_MAKE_FAST_ALLOCATED(ClassName) WTF_USE_ALLOCATOR(ClassName, PartitionAllocator)
+
 using WTF::PartitionAllocator;
 
 #endif // WTF_PartitionAllocator_h

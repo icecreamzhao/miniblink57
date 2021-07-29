@@ -56,11 +56,13 @@ PR_BEGIN_EXTERN_C
  * if the allocation fails.
  */
 
-PR_EXTERN(char*)
-PL_Base64Encode(
-    const char* src,
-    PRUint32 srclen,
-    char* dest);
+PR_EXTERN(char *)
+PL_Base64Encode
+(
+    const char *src,
+    PRUint32    srclen,
+    char       *dest
+);
 
 /*
  * PL_Base64Decode
@@ -80,11 +82,13 @@ PL_Base64Encode(
  * is retuned if the allocation fails, or if the source is not well-coded.
  */
 
-PR_EXTERN(char*)
-PL_Base64Decode(
-    const char* src,
-    PRUint32 srclen,
-    char* dest);
+PR_EXTERN(char *)
+PL_Base64Decode
+(
+    const char *src,
+    PRUint32    srclen,
+    char       *dest
+);
 
 PR_END_EXTERN_C
 

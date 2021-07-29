@@ -42,9 +42,7 @@ const VisibleSelection& PendingSelection::visibleSelection() const
     return m_frameSelection->selection();
 }
 
-static bool isSelectionInDocument(
-    const VisibleSelectionInFlatTree& visibleSelection,
-    const Document& document)
+static bool isSelectionInDocument(const VisibleSelectionInFlatTree& visibleSelection, const Document& document)
 {
     const PositionInFlatTree& start = visibleSelection.start();
     if (start.isNotNull() && (!start.isConnected() || start.document() != document))
@@ -58,8 +56,7 @@ static bool isSelectionInDocument(
     return true;
 }
 
-VisibleSelectionInFlatTree PendingSelection::calcVisibleSelection(
-    const VisibleSelectionInFlatTree& originalSelection) const
+VisibleSelectionInFlatTree PendingSelection::calcVisibleSelection(const VisibleSelectionInFlatTree& originalSelection) const
 {
     const PositionInFlatTree& start = originalSelection.start();
     const PositionInFlatTree& end = originalSelection.end();
@@ -71,20 +68,17 @@ VisibleSelectionInFlatTree PendingSelection::calcVisibleSelection(
     if (enclosingTextControl(start.computeContainerNode())) {
         // TODO(yosin) We should use |PositionMoveType::CodePoint| to avoid
         // ending paint at middle of character.
-        PositionInFlatTree endPosition = paintBlockCursor ? nextPositionOf(originalSelection.extent(),
-                                             PositionMoveType::CodeUnit)
-                                                          : end;
+        PositionInFlatTree endPosition = paintBlockCursor ? nextPositionOf(originalSelection.extent(), PositionMoveType::CodeUnit) : end;
         selection.setWithoutValidation(start, endPosition);
         return selection;
     }
 
-    const VisiblePositionInFlatTree& visibleStart = createVisiblePosition(
-        start, selectionType == SelectionType::RangeSelection ? TextAffinity::Downstream : affinity);
+    const VisiblePositionInFlatTree& visibleStart = createVisiblePosition(start, selectionType == SelectionType::RangeSelection ? TextAffinity::Downstream : affinity);
     if (visibleStart.isNull())
         return VisibleSelectionInFlatTree();
+
     if (paintBlockCursor) {
-        const VisiblePositionInFlatTree visibleExtent = nextPositionOf(
-            createVisiblePosition(end, affinity), CanSkipOverEditingBoundary);
+        const VisiblePositionInFlatTree visibleExtent = nextPositionOf(createVisiblePosition(end, affinity), CanSkipOverEditingBoundary);
         if (visibleExtent.isNull())
             return VisibleSelectionInFlatTree();
         SelectionInFlatTree::Builder builder;
@@ -92,9 +86,11 @@ VisibleSelectionInFlatTree PendingSelection::calcVisibleSelection(
         builder.extend(visibleExtent.deepEquivalent());
         return createVisibleSelection(builder.build());
     }
+
     const VisiblePositionInFlatTree visibleEnd = createVisiblePosition(end, selectionType == SelectionType::RangeSelection ? TextAffinity::Upstream : affinity);
     if (visibleEnd.isNull())
         return VisibleSelectionInFlatTree();
+
     SelectionInFlatTree::Builder builder;
     builder.collapse(visibleStart.toPositionWithAffinity());
     builder.extend(visibleEnd.deepEquivalent());
@@ -151,8 +147,7 @@ void PendingSelection::commit(LayoutView& layoutView)
         return;
     DCHECK(layoutView == startLayoutObject->view());
     DCHECK(layoutView == endLayoutObject->view());
-    layoutView.setSelection(startLayoutObject, startPos.computeEditingOffset(),
-        endLayoutObject, endPos.computeEditingOffset());
+    layoutView.setSelection(startLayoutObject, startPos.computeEditingOffset(), endLayoutObject, endPos.computeEditingOffset());
 }
 
 DEFINE_TRACE(PendingSelection)

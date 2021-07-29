@@ -155,7 +155,7 @@ bool isGraphemeBreak(UChar32 prevCodePoint, UChar32 nextCodePoint)
     if (nextCodePoint == 0xD || nextCodePoint == 0xA)
         return true;
 
-    return false;
+    return true;
 }
 
 } // namespace blink

@@ -11,61 +11,62 @@ namespace blink {
 
 namespace {
 
-    WebScopedInputEvent makeWebScopedInputEvent(const blink::WebInputEvent& event)
-    {
-        if (blink::WebInputEvent::isGestureEventType(event.type())) {
-            return WebScopedInputEvent(new blink::WebGestureEvent(
-                static_cast<const blink::WebGestureEvent&>(event)));
-        }
-        if (blink::WebInputEvent::isMouseEventType(event.type())) {
-            return WebScopedInputEvent(new blink::WebMouseEvent(
-                static_cast<const blink::WebMouseEvent&>(event)));
-        }
-        if (blink::WebInputEvent::isTouchEventType(event.type())) {
-            return WebScopedInputEvent(new blink::WebTouchEvent(
-                static_cast<const blink::WebTouchEvent&>(event)));
-        }
-        if (event.type() == blink::WebInputEvent::MouseWheel) {
-            return WebScopedInputEvent(new blink::WebMouseWheelEvent(
-                static_cast<const blink::WebMouseWheelEvent&>(event)));
-        }
-        if (blink::WebInputEvent::isKeyboardEventType(event.type())) {
-            return WebScopedInputEvent(new blink::WebKeyboardEvent(
-                static_cast<const blink::WebKeyboardEvent&>(event)));
-        }
-        NOTREACHED();
-        return WebScopedInputEvent();
+WebScopedInputEvent makeWebScopedInputEvent(const blink::WebInputEvent& event)
+{
+    if (blink::WebInputEvent::isGestureEventType(event.type())) {
+        return WebScopedInputEvent(new blink::WebGestureEvent(
+            static_cast<const blink::WebGestureEvent&>(event)));
     }
-
-    struct WebInputEventDelete {
-        template <class EventType>
-        bool Execute(WebInputEvent* event) const
-        {
-            if (!event)
-                return false;
-            DCHECK_EQ(sizeof(EventType), event->size());
-            delete static_cast<EventType*>(event);
-            return true;
-        }
-    };
-
-    template <typename Operator, typename ArgIn>
-    bool Apply(Operator op, WebInputEvent::Type type, const ArgIn& argIn)
-    {
-        if (WebInputEvent::isMouseEventType(type))
-            return op.template Execute<WebMouseEvent>(argIn);
-        if (type == WebInputEvent::MouseWheel)
-            return op.template Execute<WebMouseWheelEvent>(argIn);
-        if (WebInputEvent::isKeyboardEventType(type))
-            return op.template Execute<WebKeyboardEvent>(argIn);
-        if (WebInputEvent::isTouchEventType(type))
-            return op.template Execute<WebTouchEvent>(argIn);
-        if (WebInputEvent::isGestureEventType(type))
-            return op.template Execute<WebGestureEvent>(argIn);
-
-        NOTREACHED() << "Unknown webkit event type " << type;
-        return false;
+    if (blink::WebInputEvent::isMouseEventType(event.type())) {
+        return WebScopedInputEvent(new blink::WebMouseEvent(
+            static_cast<const blink::WebMouseEvent&>(event)));
     }
+    if (blink::WebInputEvent::isTouchEventType(event.type())) {
+        return WebScopedInputEvent(new blink::WebTouchEvent(
+            static_cast<const blink::WebTouchEvent&>(event)));
+    }
+    if (event.type() == blink::WebInputEvent::MouseWheel) {
+        return WebScopedInputEvent(new blink::WebMouseWheelEvent(
+            static_cast<const blink::WebMouseWheelEvent&>(event)));
+    }
+    if (blink::WebInputEvent::isKeyboardEventType(event.type())) {
+        return WebScopedInputEvent(new blink::WebKeyboardEvent(
+            static_cast<const blink::WebKeyboardEvent&>(event)));
+    }
+    NOTREACHED();
+    return WebScopedInputEvent();
+}
+
+struct WebInputEventDelete {
+    template <class EventType>
+    bool Execute(WebInputEvent* event) const
+    {
+        if (!event)
+            return false;
+
+        DCHECK_EQ(sizeof(EventType), event->size());
+        delete static_cast<EventType*>(event);
+        return true;
+    }
+};
+
+template <typename Operator, typename ArgIn>
+bool Apply(Operator op, WebInputEvent::Type type, const ArgIn & argIn)
+{
+    if (WebInputEvent::isMouseEventType(type))
+        return op.template Execute<WebMouseEvent>(argIn);
+    if (type == WebInputEvent::MouseWheel)
+        return op.template Execute<WebMouseWheelEvent>(argIn);
+    if (WebInputEvent::isKeyboardEventType(type))
+        return op.template Execute<WebKeyboardEvent>(argIn);
+    if (WebInputEvent::isTouchEventType(type))
+        return op.template Execute<WebTouchEvent>(argIn);
+    if (WebInputEvent::isGestureEventType(type))
+        return op.template Execute<WebGestureEvent>(argIn);
+
+    NOTREACHED() << "Unknown webkit event type " << type;
+    return false;
+}
 }
 
 void WebInputEventDeleter::operator()(WebInputEvent* event) const

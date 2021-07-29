@@ -113,23 +113,14 @@ private:
     int m_saveCount;
 };
 
-CanvasRenderingContext2D::CanvasRenderingContext2D(
-    HTMLCanvasElement* canvas,
-    const CanvasContextCreationAttributes& attrs,
-    Document& document)
+CanvasRenderingContext2D::CanvasRenderingContext2D(HTMLCanvasElement* canvas, const CanvasContextCreationAttributes& attrs, Document& document)
     : CanvasRenderingContext(canvas, nullptr, attrs)
     , m_contextLostMode(NotLostContext)
     , m_contextRestorable(true)
     , m_tryRestoreContextAttemptCount(0)
-    , m_dispatchContextLostEventTimer(
-          this,
-          &CanvasRenderingContext2D::dispatchContextLostEvent)
-    , m_dispatchContextRestoredEventTimer(
-          this,
-          &CanvasRenderingContext2D::dispatchContextRestoredEvent)
-    , m_tryRestoreContextEventTimer(
-          this,
-          &CanvasRenderingContext2D::tryRestoreContextEvent)
+    , m_dispatchContextLostEventTimer(this, &CanvasRenderingContext2D::dispatchContextLostEvent)
+    , m_dispatchContextRestoredEventTimer(this, &CanvasRenderingContext2D::dispatchContextRestoredEvent)
+    , m_tryRestoreContextEventTimer(this, &CanvasRenderingContext2D::tryRestoreContextEvent)
     , m_pruneLocalFontCacheScheduled(false)
 {
     if (document.settings() && document.settings()->getAntialiasedClips2dCanvasEnabled())
@@ -141,8 +132,7 @@ CanvasRenderingContext2D::CanvasRenderingContext2D(
 void CanvasRenderingContext2D::setCanvasGetContextResult(
     RenderingContext& result)
 {
-    //result.setCanvasRenderingContext2D(this);
-    DebugBreak();
+    result.setCanvasRenderingContext2D(this);
 }
 
 CanvasRenderingContext2D::~CanvasRenderingContext2D() { }

@@ -57,11 +57,8 @@ class PLATFORM_EXPORT UserGestureToken : public RefCounted<UserGestureToken> {
     WTF_MAKE_NONCOPYABLE(UserGestureToken);
 
 public:
-    enum Status { NewGesture,
-        PossiblyExistingGesture };
-    enum TimeoutPolicy { Default,
-        OutOfProcess,
-        HasPaused };
+    enum Status { NewGesture, PossiblyExistingGesture };
+    enum TimeoutPolicy { Default, OutOfProcess, HasPaused };
 
     ~UserGestureToken() { }
     bool hasGestures() const;

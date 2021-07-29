@@ -135,11 +135,20 @@ Storage* DOMWindowStorage::localStorage(ExceptionState& exceptionState) const
     FrameHost* host = document->frameHost();
     if (!host || !host->settings().getLocalStorageEnabled())
         return nullptr;
+
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+    Page* page = document->page();
+    if (!page)
+        return nullptr;
+    StorageArea* storageArea = StorageNamespaceController::from(page)->localStorage()->storageArea(document->getSecurityOrigin());
+#else
     StorageArea* storageArea = StorageNamespace::localStorageArea(document->getSecurityOrigin());
     if (!storageArea->canAccessStorage(document->frame())) {
         exceptionState.throwSecurityError(accessDeniedMessage);
         return nullptr;
     }
+#endif
+
     m_localStorage = Storage::create(document->frame(), storageArea);
     return m_localStorage;
 }

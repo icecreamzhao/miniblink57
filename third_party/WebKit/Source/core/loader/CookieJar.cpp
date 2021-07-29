@@ -54,9 +54,7 @@ String cookies(const Document* document, const KURL& url)
     return cookieJar->cookies(url, document->firstPartyForCookies());
 }
 
-void setCookies(Document* document,
-    const KURL& url,
-    const String& cookieString)
+void setCookies(Document* document, const KURL& url, const String& cookieString)
 {
     WebCookieJar* cookieJar = toCookieJar(document);
     if (!cookieJar)
@@ -71,6 +69,16 @@ bool cookiesEnabled(const Document* document)
         return false;
     return cookieJar->cookiesEnabled(document->cookieURL(),
         document->firstPartyForCookies());
+}
+
+String cookieRequestHeaderFieldValue(const Document& document, const blink::KURL& url)
+{
+    DebugBreak();
+    return "";
+//     WebCookieJar* cookieJar = toCookieJar(&document);
+//     if (!cookieJar)
+//         return String();
+//     return cookieJar->cookieRequestHeaderFieldValue(url, document->firstPartyForCookies());
 }
 
 } // namespace blink

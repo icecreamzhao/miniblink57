@@ -127,41 +127,32 @@ TaskHandle::TaskHandle(RefPtr<Runner> runner)
 // avoid copying the closure later in the call chain. Copying the bound state
 // can lead to data races with ref counted objects like StringImpl. See
 // crbug.com/679915 for more details.
-void WebTaskRunner::postTask(const WebTraceLocation& location,
-    std::unique_ptr<CrossThreadClosure> task)
+void WebTaskRunner::postTask(const WebTraceLocation& location, std::unique_ptr<CrossThreadClosure> task)
 {
-    toSingleThreadTaskRunner()->PostTask(
-        location, base::Bind(&runCrossThreadClosure, base::Passed(&task)));
+    toSingleThreadTaskRunner()->PostTask(location, base::Bind(&runCrossThreadClosure, base::Passed(&task)));
 }
 
-void WebTaskRunner::postDelayedTask(const WebTraceLocation& location,
-    std::unique_ptr<CrossThreadClosure> task,
-    long long delayMs)
+void WebTaskRunner::postDelayedTask(const WebTraceLocation& location, std::unique_ptr<CrossThreadClosure> task, long long delayMs)
 {
     toSingleThreadTaskRunner()->PostDelayedTask(
         location, base::Bind(&runCrossThreadClosure, base::Passed(&task)),
         base::TimeDelta::FromMilliseconds(delayMs));
 }
 
-void WebTaskRunner::postTask(const WebTraceLocation& location,
-    std::unique_ptr<WTF::Closure> task)
+void WebTaskRunner::postTask(const WebTraceLocation& location, std::unique_ptr<WTF::Closure> task)
 {
     toSingleThreadTaskRunner()->PostTask(location,
         convertToBaseCallback(std::move(task)));
 }
 
-void WebTaskRunner::postDelayedTask(const WebTraceLocation& location,
-    std::unique_ptr<WTF::Closure> task,
-    long long delayMs)
+void WebTaskRunner::postDelayedTask(const WebTraceLocation& location, std::unique_ptr<WTF::Closure> task, long long delayMs)
 {
     toSingleThreadTaskRunner()->PostDelayedTask(
         location, convertToBaseCallback(std::move(task)),
         base::TimeDelta::FromMilliseconds(delayMs));
 }
 
-TaskHandle WebTaskRunner::postCancellableTask(
-    const WebTraceLocation& location,
-    std::unique_ptr<WTF::Closure> task)
+TaskHandle WebTaskRunner::postCancellableTask(const WebTraceLocation& location, std::unique_ptr<WTF::Closure> task)
 {
     DCHECK(runsTasksOnCurrentThread());
     RefPtr<TaskHandle::Runner> runner = adoptRef(new TaskHandle::Runner(std::move(task)));

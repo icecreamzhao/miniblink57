@@ -97,8 +97,8 @@ XMLDocument* DOMImplementation::createDocument(
         doc = XMLDocument::createXHTML(
             init.withRegistrationContext(document().registrationContext()));
 #if ENABLE_WML
-    } else if (namespaceURI == WMLNames::wmlNamespaceURI) {
-        doc = WMLDocument::create(init);
+//     } else if (namespaceURI == WMLNames::wmlNamespaceURI) {
+//         doc = WMLDocument::create(init);
 #endif
     } else {
         doc = XMLDocument::create(init);
@@ -279,8 +279,8 @@ Document* DOMImplementation::createDocument(const String& type,
     if (type != "text/plain" && pluginData && pluginData->supportsMimeType(type))
         return PluginDocument::create(init);
 #if ENABLE_WML
-    if (type == "text/vnd.wap.wml" || type == "application/vnd.wap.wmlc")
-        return WMLDocument::create(init);
+//     if (type == "text/vnd.wap.wml" || type == "application/vnd.wap.wmlc")
+//         return WMLDocument::create(init);
 #endif
 
     if (isTextMIMEType(type))

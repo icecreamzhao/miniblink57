@@ -90,9 +90,9 @@
 ** /lth. 08-Jun-1998.                                                                                  
 */
 
+#include "prtypes.h"
 #include "prthread.h"
 #include "prtime.h"
-#include "prtypes.h"
 
 PR_BEGIN_EXTERN_C
 
@@ -101,18 +101,19 @@ PR_BEGIN_EXTERN_C
 ** ... Don't even think about looking in here.
 **
 */
-typedef void* PRTraceHandle;
+typedef void *  PRTraceHandle;
 
 /*
 ** PRTraceEntry -- A trace entry in the in-memory trace buffer
 ** looks like this.
 **
 */
-typedef struct PRTraceEntry {
-    PRThread* thread; /* The thread creating the trace entry */
-    PRTraceHandle handle; /* PRTraceHandle creating the trace entry */
-    PRTime time; /* Value of PR_Now() at time of trace entry */
-    PRUint32 userData[8]; /* user supplied trace data */
+typedef struct PRTraceEntry
+{
+    PRThread        *thread;        /* The thread creating the trace entry */
+    PRTraceHandle   handle;         /* PRTraceHandle creating the trace entry */
+    PRTime          time;           /* Value of PR_Now() at time of trace entry */
+    PRUint32        userData[8];    /* user supplied trace data */
 } PRTraceEntry;
 
 /*
@@ -120,9 +121,10 @@ typedef struct PRTraceEntry {
 ** PR_[Set|Get]TraceOption(). See descriptive meanings there.
 **
 */
-typedef enum PRTraceOption {
+typedef enum PRTraceOption
+{
     PRTraceBufSize,
-    PRTraceEnable,
+    PRTraceEnable,              
     PRTraceDisable,
     PRTraceSuspend,
     PRTraceResume,
@@ -150,12 +152,13 @@ typedef enum PRTraceOption {
 ** to value. e.g. PR_INIT_TRACE_HANDLE( myHandle, NULL );
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_INIT_TRACE_HANDLE(handle, value) \
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_INIT_TRACE_HANDLE(handle,value)\
     (handle) = (PRCounterHandle)(value)
 #else
-#define PR_INIT_TRACE_HANDLE(handle, value)
+#define PR_INIT_TRACE_HANDLE(handle,value)
 #endif
+
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_CreateTrace() -- Create a trace handle
@@ -192,19 +195,20 @@ typedef enum PRTraceOption {
 #define PRTRACE_NAME_MAX 31
 #define PRTRACE_DESC_MAX 255
 
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_CREATE_TRACE(handle, qName, rName, description) \
-    (handle) = PR_CreateTrace((qName), (rName), (description))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_CREATE_TRACE(handle,qName,rName,description)\
+    (handle) = PR_CreateTrace((qName),(rName),(description))
 #else
-#define PR_CREATE_TRACE(handle, qName, rName, description)
+#define PR_CREATE_TRACE(handle,qName,rName,description)
 #endif
 
 NSPR_API(PRTraceHandle)
-PR_CreateTrace(
-    const char* qName, /* QName for this trace handle */
-    const char* rName, /* RName for this trace handle */
-    const char* description /* description for this trace handle */
+	PR_CreateTrace( 
+    	const char *qName,          /* QName for this trace handle */
+	    const char *rName,          /* RName for this trace handle */
+	    const char *description     /* description for this trace handle */
 );
+
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_DestroyTrace() -- Destroy a trace handle
@@ -225,17 +229,18 @@ PR_CreateTrace(
 ** RESTRICTIONS:
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_DESTROY_TRACE(handle) \
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_DESTROY_TRACE(handle)\
     PR_DestroyTrace((handle))
 #else
 #define PR_DESTROY_TRACE(handle)
 #endif
 
-NSPR_API(void)
-PR_DestroyTrace(
-    PRTraceHandle handle /* Handle to be destroyed */
+NSPR_API(void) 
+	PR_DestroyTrace( 
+		PRTraceHandle handle    /* Handle to be destroyed */
 );
+
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_Trace() -- Make a trace entry in the in-memory trace
@@ -265,24 +270,24 @@ PR_DestroyTrace(
 ** RESTRICTIONS:
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_TRACE(handle, ud0, ud1, ud2, ud3, ud4, ud5, ud6, ud7) \
-    PR_Trace((handle), (ud0), (ud1), (ud2), (ud3), (ud4), (ud5), (ud6), (ud7))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_TRACE(handle,ud0,ud1,ud2,ud3,ud4,ud5,ud6,ud7)\
+    PR_Trace((handle),(ud0),(ud1),(ud2),(ud3),(ud4),(ud5),(ud6),(ud7))
 #else
-#define PR_TRACE(handle, ud0, ud1, ud2, ud3, ud4, ud5, ud6, ud7)
+#define PR_TRACE(handle,ud0,ud1,ud2,ud3,ud4,ud5,ud6,ud7)
 #endif
 
-NSPR_API(void)
-PR_Trace(
-    PRTraceHandle handle, /* use this trace handle */
-    PRUint32 userData0, /* User supplied data word 0 */
-    PRUint32 userData1, /* User supplied data word 1 */
-    PRUint32 userData2, /* User supplied data word 2 */
-    PRUint32 userData3, /* User supplied data word 3 */
-    PRUint32 userData4, /* User supplied data word 4 */
-    PRUint32 userData5, /* User supplied data word 5 */
-    PRUint32 userData6, /* User supplied data word 6 */
-    PRUint32 userData7 /* User supplied data word 7 */
+NSPR_API(void) 
+	PR_Trace( 
+    	PRTraceHandle handle,       /* use this trace handle */
+	    PRUint32    userData0,      /* User supplied data word 0 */
+	    PRUint32    userData1,      /* User supplied data word 1 */
+	    PRUint32    userData2,      /* User supplied data word 2 */
+	    PRUint32    userData3,      /* User supplied data word 3 */
+	    PRUint32    userData4,      /* User supplied data word 4 */
+	    PRUint32    userData5,      /* User supplied data word 5 */
+	    PRUint32    userData6,      /* User supplied data word 6 */
+	    PRUint32    userData7       /* User supplied data word 7 */
 );
 
 /* -----------------------------------------------------------------------
@@ -352,18 +357,19 @@ PR_Trace(
 ** RESTRICTIONS:
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_SET_TRACE_OPTION(command, value) \
-    PR_SetTraceOption((command), (value))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_SET_TRACE_OPTION(command,value)\
+    PR_SetTraceOption((command),(value))
 #else
-#define PR_SET_TRACE_OPTION(command, value)
+#define PR_SET_TRACE_OPTION(command,value)
 #endif
 
-NSPR_API(void)
-PR_SetTraceOption(
-    PRTraceOption command, /* One of the enumerated values */
-    void* value /* command value or NULL */
+NSPR_API(void) 
+	PR_SetTraceOption( 
+	    PRTraceOption command,  /* One of the enumerated values */
+	    void *value             /* command value or NULL */
 );
+
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_GetTraceOption() -- Retrieve settings from the Trace Facility
@@ -389,17 +395,17 @@ PR_SetTraceOption(
 ** RESTRICTIONS:
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_GET_TRACE_OPTION(command, value) \
-    PR_GetTraceOption((command), (value))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_GET_TRACE_OPTION(command,value)\
+    PR_GetTraceOption((command),(value))
 #else
-#define PR_GET_TRACE_OPTION(command, value)
+#define PR_GET_TRACE_OPTION(command,value)
 #endif
 
-NSPR_API(void)
-PR_GetTraceOption(
-    PRTraceOption command, /* One of the enumerated values */
-    void* value /* command value or NULL */
+NSPR_API(void) 
+	PR_GetTraceOption( 
+    	PRTraceOption command,  /* One of the enumerated values */
+	    void *value             /* command value or NULL */
 );
 
 /* -----------------------------------------------------------------------
@@ -425,17 +431,17 @@ PR_GetTraceOption(
 ** RESTRICTIONS:
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_GET_TRACE_HANDLE_FROM_NAME(handle, qName, rName) \
-    (handle) = PR_GetTraceHandleFromName((qName), (rName))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_GET_TRACE_HANDLE_FROM_NAME(handle,qName,rName)\
+    (handle) = PR_GetTraceHandleFromName((qName),(rName))
 #else
-#define PR_GET_TRACE_HANDLE_FROM_NAME(handle, qName, rName)
+#define PR_GET_TRACE_HANDLE_FROM_NAME(handle,qName,rName)
 #endif
 
-NSPR_API(PRTraceHandle)
-PR_GetTraceHandleFromName(
-    const char* qName, /* QName search argument */
-    const char* rName /* RName search argument */
+NSPR_API(PRTraceHandle) 
+	PR_GetTraceHandleFromName( 
+    	const char *qName,      /* QName search argument */
+        const char *rName       /* RName search argument */
 );
 
 /* -----------------------------------------------------------------------
@@ -457,19 +463,19 @@ PR_GetTraceHandleFromName(
 ** RESTRICTIONS:
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_GET_TRACE_NAME_FROM_HANDLE(handle, qName, rName, description) \
-    PR_GetTraceNameFromHandle((handle), (qName), (rName), (description))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_GET_TRACE_NAME_FROM_HANDLE(handle,qName,rName,description)\
+    PR_GetTraceNameFromHandle((handle),(qName),(rName),(description))
 #else
-#define PR_GET_TRACE_NAME_FROM_HANDLE(handle, qName, rName, description)
+#define PR_GET_TRACE_NAME_FROM_HANDLE(handle,qName,rName,description)
 #endif
 
-NSPR_API(void)
-PR_GetTraceNameFromHandle(
-    PRTraceHandle handle, /* handle as search argument */
-    const char** qName, /* pointer to associated QName */
-    const char** rName, /* pointer to associated RName */
-    const char** description /* pointer to associated description */
+NSPR_API(void) 
+	PR_GetTraceNameFromHandle( 
+    	PRTraceHandle handle,       /* handle as search argument */
+	    const char **qName,         /* pointer to associated QName */
+	    const char **rName,         /* pointer to associated RName */
+    	const char **description    /* pointer to associated description */
 );
 
 /* -----------------------------------------------------------------------
@@ -499,16 +505,18 @@ PR_GetTraceNameFromHandle(
 ** See: PR_SetTraceOption( PRLockTraceHandles ).
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_FIND_NEXT_TRACE_QNAME(next, handle) \
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_FIND_NEXT_TRACE_QNAME(next,handle)\
     (next) = PR_FindNextTraceQname((handle))
 #else
-#define PR_FIND_NEXT_TRACE_QNAME(next, handle)
+#define PR_FIND_NEXT_TRACE_QNAME(next,handle)
 #endif
 
-NSPR_API(PRTraceHandle)
-PR_FindNextTraceQname(
-    PRTraceHandle handle);
+NSPR_API(PRTraceHandle) 
+	PR_FindNextTraceQname( 
+        PRTraceHandle handle
+);
+
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_FindNextTraceRname() -- Retrieive an RName handle
@@ -539,17 +547,18 @@ PR_FindNextTraceQname(
 ** PR_SetTraceOption( PRLockTraceHandles ).
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_FIND_NEXT_TRACE_RNAME(next, rhandle, qhandle) \
-    (next) = PR_FindNextTraceRname((rhandle), (qhandle))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_FIND_NEXT_TRACE_RNAME(next,rhandle,qhandle)\
+    (next) = PR_FindNextTraceRname((rhandle),(qhandle))
 #else
-#define PR_FIND_NEXT_TRACE_RNAME(next, rhandle, qhandle)
+#define PR_FIND_NEXT_TRACE_RNAME(next,rhandle,qhandle)
 #endif
 
-NSPR_API(PRTraceHandle)
-PR_FindNextTraceRname(
-    PRTraceHandle rhandle,
-    PRTraceHandle qhandle);
+NSPR_API(PRTraceHandle) 
+	PR_FindNextTraceRname( 
+        PRTraceHandle rhandle,
+        PRTraceHandle qhandle
+);
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_RecordTraceEntries() -- Write trace entries to external media
@@ -594,16 +603,17 @@ PR_FindNextTraceRname(
 ** On error, PR_RecordTraceEntries() may return prematurely.
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_RECORD_TRACE_ENTRIES() \
-    PR_RecordTraceEntries()
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_RECORD_TRACE_ENTRIES()\
+	PR_RecordTraceEntries()
 #else
 #define PR_RECORD_TRACE_ENTRIES()
 #endif
-
+    
 NSPR_API(void)
-PR_RecordTraceEntries(
-    void);
+	PR_RecordTraceEntries(
+        void 
+);
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_GetTraceEntries() -- Retreive trace entries from
@@ -645,20 +655,21 @@ PR_RecordTraceEntries(
 ** application may be realized. ... YMMV.
 ** 
 */
-#if defined(DEBUG) || defined(FORCE_NSPR_TRACE)
-#define PR_GET_TRACE_ENTRIES(buffer, count, found) \
-    PR_GetTraceEntries((buffer), (count), (found))
+#if defined (DEBUG) || defined (FORCE_NSPR_TRACE)
+#define PR_GET_TRACE_ENTRIES(buffer,count,found)\
+        PR_GetTraceEntries((buffer),(count),(found))
 #else
-#define PR_GET_TRACE_ENTRIES(buffer, count, found)
+#define PR_GET_TRACE_ENTRIES(buffer,count,found)
 #endif
 
 NSPR_API(PRIntn)
-PR_GetTraceEntries(
-    PRTraceEntry* buffer, /* where to write output */
-    PRInt32 count, /* number to get */
-    PRInt32* found /* number you got */
+    PR_GetTraceEntries(
+        PRTraceEntry    *buffer,    /* where to write output */
+        PRInt32         count,      /* number to get */
+        PRInt32         *found      /* number you got */
 );
 
 PR_END_EXTERN_C
 
 #endif /* prtrace_h___ */
+

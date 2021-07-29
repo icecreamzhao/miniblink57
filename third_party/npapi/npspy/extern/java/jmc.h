@@ -43,14 +43,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define JMC_PUBLIC_API JRI_PUBLIC_API
+#define JMC_PUBLIC_API JRI_PUBLIC_API 
 
 typedef struct JMCInterfaceID {
-    jint a, b, c, d;
+	jint a, b, c, d;
 } JMCInterfaceID;
 
 #ifdef __cplusplus
-#define EXTERN_C extern "C"
+#define EXTERN_C		extern "C"
 #define EXTERN_C_WITHOUT_EXTERN "C"
 #else
 #undef EXTERN_C
@@ -61,20 +61,20 @@ typedef struct JMCInterfaceID {
 typedef struct JMCException JMCException;
 
 JRI_PUBLIC_API(void)
-JMCException_Destroy(struct JMCException*);
+JMCException_Destroy(struct JMCException *);
 
-#define JMC_EXCEPTION(resultPtr, exceptionToReturn)             \
-    (((resultPtr) != NULL)                                      \
-            ? ((*(resultPtr) = (exceptionToReturn), resultPtr)) \
-            : (JMCException_Destroy(exceptionToReturn), resultPtr))
+#define JMC_EXCEPTION(resultPtr, exceptionToReturn)		 \
+	(((resultPtr) != NULL)					 \
+	 ? ((*(resultPtr) = (exceptionToReturn), resultPtr))	 \
+	 : (JMCException_Destroy(exceptionToReturn), resultPtr))
 
-#define JMC_EXCEPTION_RETURNED(resultPtr) \
-    ((resultPtr) != NULL && *(resultPtr) != NULL)
+#define JMC_EXCEPTION_RETURNED(resultPtr)			 \
+	((resultPtr) != NULL && *(resultPtr) != NULL)
 
-#define JMCEXCEPTION_OUT_OF_MEMORY ((struct JMCException*)-1)
+#define JMCEXCEPTION_OUT_OF_MEMORY	((struct JMCException*)-1)
 
-#define JMC_DELETE_EXCEPTION(resultPtr) \
-    (JMCException_Destroy(*(resultPtr)), *(resultPtr) = NULL)
+#define JMC_DELETE_EXCEPTION(resultPtr)				 \
+	(JMCException_Destroy(*(resultPtr)), *(resultPtr) = NULL)
 
 #ifdef __cplusplus
 } /* extern "C" */

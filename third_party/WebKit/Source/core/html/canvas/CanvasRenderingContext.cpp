@@ -72,21 +72,22 @@ WTF::String CanvasRenderingContext::colorSpaceAsString() const
 
 sk_sp<SkColorSpace> CanvasRenderingContext::skColorSpace() const
 {
-    //   switch (m_colorSpace) {
-    //     case kSRGBCanvasColorSpace:
-    //       return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
-    //     case kLinearRGBCanvasColorSpace:
-    //       return SkColorSpace::MakeNamed(SkColorSpace::kSRGBLinear_Named);
-    //     case kLegacyCanvasColorSpace:
-    //       if (RuntimeEnabledFeatures::colorCorrectRenderingEnabled()) {
-    //         // Legacy colorspace ensures color matching with CSS is preserved.
-    //         // So if CSS is color corrected from sRGB to display space, then
-    //         // canvas must do the same
-    //         return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
-    //       }
-    //       return nullptr;
-    //   };
-    //   CHECK(false);
+    switch (m_colorSpace) {
+    case kSRGBCanvasColorSpace:
+        return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
+    case kLinearRGBCanvasColorSpace:
+        //return SkColorSpace::MakeNamed(SkColorSpace::kSRGBLinear_Named);
+        DebugBreak();
+    case kLegacyCanvasColorSpace:
+        if (RuntimeEnabledFeatures::colorCorrectRenderingEnabled()) {
+            // Legacy colorspace ensures color matching with CSS is preserved.
+            // So if CSS is color corrected from sRGB to display space, then
+            // canvas must do the same
+            return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
+        }
+        return nullptr;
+    };
+    CHECK(false);
     DebugBreak();
     return nullptr;
 }

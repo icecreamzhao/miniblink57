@@ -33,12 +33,12 @@
  */
 
 #if defined(PLARENAS_H)
-#else /* defined(PLARENAS_H) */
+#else  /* defined(PLARENAS_H) */
 #define PLARENAS_H
 
 PR_BEGIN_EXTERN_C
 
-typedef struct PLArenaPool PLArenaPool;
+typedef struct PLArenaPool      PLArenaPool;
 
 /*
 ** Allocate an arena pool as specified by the parameters.
@@ -50,7 +50,7 @@ typedef struct PLArenaPool PLArenaPool;
 ** reasons. The reason for a particular failure can be discovered
 ** by calling PR_GetError().
 */
-#if 0 /* Not implemented */
+#if 0  /* Not implemented */
 PR_EXTERN(PLArenaPool*) PL_AllocArenaPool(
     const char *name, PRUint32 size, PRUint32 align);
 #endif
@@ -61,56 +61,49 @@ PR_EXTERN(PLArenaPool*) PL_AllocArenaPool(
 ** This function may fail if the arena is not empty and the caller
 ** wishes to check for empty upon descruction.
 */
-#if 0 /* Not implemented */
+#if 0  /* Not implemented */
 PR_EXTERN(PRStatus) PL_DestroyArenaPool(PLArenaPool *pool, PRBool checkEmpty);
 #endif
+
 
 /*
 ** Initialize an arena pool with the given name for debugging and metering,
 ** with a minimum size per arena of size bytes.
 **/
-PR_EXTERN(void)
-PL_InitArenaPool(
-    PLArenaPool* pool, const char* name, PRUint32 size, PRUint32 align);
+PR_EXTERN(void) PL_InitArenaPool(
+    PLArenaPool *pool, const char *name, PRUint32 size, PRUint32 align);
 
 /*
 ** Finish using arenas, freeing all memory associated with them.
 **/
-PR_EXTERN(void)
-PL_ArenaFinish(void);
+PR_EXTERN(void) PL_ArenaFinish(void);
 
 /*
 ** Free the arenas in pool.  The user may continue to allocate from pool
 ** after calling this function.  There is no need to call PL_InitArenaPool()
 ** again unless PL_FinishArenaPool(pool) has been called.
 **/
-PR_EXTERN(void)
-PL_FreeArenaPool(PLArenaPool* pool);
+PR_EXTERN(void) PL_FreeArenaPool(PLArenaPool *pool);
 
 /*
 ** Free the arenas in pool and finish using it altogether.
 **/
-PR_EXTERN(void)
-PL_FinishArenaPool(PLArenaPool* pool);
+PR_EXTERN(void) PL_FinishArenaPool(PLArenaPool *pool);
 
 /*
 ** Compact all of the arenas in a pool so that no space is wasted.
 **/
-PR_EXTERN(void)
-PL_CompactArenaPool(PLArenaPool* pool);
+PR_EXTERN(void) PL_CompactArenaPool(PLArenaPool *pool);
 
 /*
 ** Friend functions used by the PL_ARENA_*() macros.
 **/
-PR_EXTERN(void*)
-PL_ArenaAllocate(PLArenaPool* pool, PRUint32 nb);
+PR_EXTERN(void *) PL_ArenaAllocate(PLArenaPool *pool, PRUint32 nb);
 
-PR_EXTERN(void*)
-PL_ArenaGrow(
-    PLArenaPool* pool, void* p, PRUint32 size, PRUint32 incr);
+PR_EXTERN(void *) PL_ArenaGrow(
+    PLArenaPool *pool, void *p, PRUint32 size, PRUint32 incr);
 
-PR_EXTERN(void)
-PL_ArenaRelease(PLArenaPool* pool, char* mark);
+PR_EXTERN(void) PL_ArenaRelease(PLArenaPool *pool, char *mark);
 
 PR_END_EXTERN_C
 

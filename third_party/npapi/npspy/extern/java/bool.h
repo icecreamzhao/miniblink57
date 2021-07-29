@@ -34,8 +34,8 @@
  * the terms of any one of the NPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifndef _BOOL_H_
-#define _BOOL_H_
+#ifndef	_BOOL_H_
+#define	_BOOL_H_
 
 #include "prtypes.h"
 

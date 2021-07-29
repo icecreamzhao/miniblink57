@@ -343,6 +343,17 @@ void WebFrame::close()
     m_openedFrameTracker->dispose();
 }
 
+// Convenience helper for frame tree helpers in FrameClient to reduce the amount
+// of null-checking boilerplate code. Since the frame tree is maintained in the
+// web/ layer, the frame tree helpers often have to deal with null WebFrames:
+// for example, a frame with no parent will return null for WebFrame::parent().
+// TODO(dcheng): Remove duplication between FrameLoaderClientImpl and
+// RemoteFrameClientImpl somehow...
+Frame* toCoreFrame(const WebFrame* frame)
+{
+    return frame ? frame->toImplBase()->frame() : nullptr;
+}
+
 #define DEFINE_VISITOR_METHOD(VisitorDispatcher)                           \
     void WebFrame::traceFrame(VisitorDispatcher visitor, WebFrame* frame)  \
     {                                                                      \

@@ -795,27 +795,26 @@ void LocalDOMWindow::alert(ScriptState* scriptState, const String& message)
         return;
     }
 
-    //   switch (document()->getEngagementLevel()) {
-    //     case mojom::blink::EngagementLevel::NONE:
-    //       UseCounter::count(document(), UseCounter::AlertEngagementNone);
-    //       break;
-    //     case mojom::blink::EngagementLevel::MINIMAL:
-    //       UseCounter::count(document(), UseCounter::AlertEngagementMinimal);
-    //       break;
-    //     case mojom::blink::EngagementLevel::LOW:
-    //       UseCounter::count(document(), UseCounter::AlertEngagementLow);
-    //       break;
-    //     case mojom::blink::EngagementLevel::MEDIUM:
-    //       UseCounter::count(document(), UseCounter::AlertEngagementMedium);
-    //       break;
-    //     case mojom::blink::EngagementLevel::HIGH:
-    //       UseCounter::count(document(), UseCounter::AlertEngagementHigh);
-    //       break;
-    //     case mojom::blink::EngagementLevel::MAX:
-    //       UseCounter::count(document(), UseCounter::AlertEngagementMax);
-    //       break;
-    //   }
-    DebugBreak();
+//     switch (document()->getEngagementLevel()) {
+//     case mojom::blink::EngagementLevel::NONE:
+//         UseCounter::count(document(), UseCounter::AlertEngagementNone);
+//         break;
+//     case mojom::blink::EngagementLevel::MINIMAL:
+//         UseCounter::count(document(), UseCounter::AlertEngagementMinimal);
+//         break;
+//     case mojom::blink::EngagementLevel::LOW:
+//         UseCounter::count(document(), UseCounter::AlertEngagementLow);
+//         break;
+//     case mojom::blink::EngagementLevel::MEDIUM:
+//         UseCounter::count(document(), UseCounter::AlertEngagementMedium);
+//         break;
+//     case mojom::blink::EngagementLevel::HIGH:
+//         UseCounter::count(document(), UseCounter::AlertEngagementHigh);
+//         break;
+//     case mojom::blink::EngagementLevel::MAX:
+//         UseCounter::count(document(), UseCounter::AlertEngagementMax);
+//         break;
+//     }
 
     if (v8::MicrotasksScope::IsRunningMicrotasks(scriptState->isolate())) {
         UseCounter::count(document(), UseCounter::During_Microtask_Alert);

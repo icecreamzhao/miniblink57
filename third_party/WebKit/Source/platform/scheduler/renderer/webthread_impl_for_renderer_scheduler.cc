@@ -13,70 +13,80 @@
 namespace blink {
 namespace scheduler {
 
-    WebThreadImplForRendererScheduler::WebThreadImplForRendererScheduler(
-        RendererSchedulerImpl* scheduler)
-        : web_scheduler_(new RendererWebSchedulerImpl(scheduler))
-        , task_runner_(scheduler->DefaultTaskRunner())
-        , idle_task_runner_(scheduler->IdleTaskRunner())
-        , scheduler_(scheduler)
-        , thread_id_(base::PlatformThread::CurrentId())
-        , web_task_runner_(
-              WebTaskRunnerImpl::create(scheduler->DefaultTaskRunner()))
-    {
-    }
+WebThreadImplForRendererScheduler::WebThreadImplForRendererScheduler(
+    RendererSchedulerImpl* scheduler)
+    : web_scheduler_(new RendererWebSchedulerImpl(scheduler))
+    , task_runner_(scheduler->DefaultTaskRunner())
+    , idle_task_runner_(scheduler->IdleTaskRunner())
+    , scheduler_(scheduler)
+    , thread_id_(base::PlatformThread::CurrentId())
+    , web_task_runner_(
+        WebTaskRunnerImpl::create(scheduler->DefaultTaskRunner()))
+{
+}
 
-    WebThreadImplForRendererScheduler::~WebThreadImplForRendererScheduler() { }
+WebThreadImplForRendererScheduler::~WebThreadImplForRendererScheduler() {}
 
-    blink::PlatformThreadId WebThreadImplForRendererScheduler::threadId() const
-    {
-        return thread_id_;
-    }
+blink::PlatformThreadId WebThreadImplForRendererScheduler::threadId() const
+{
+    return thread_id_;
+}
 
-    blink::WebScheduler* WebThreadImplForRendererScheduler::scheduler() const
-    {
-        return web_scheduler_.get();
-    }
+blink::WebScheduler* WebThreadImplForRendererScheduler::scheduler() const
+{
+    return web_scheduler_.get();
+}
 
-    base::SingleThreadTaskRunner* WebThreadImplForRendererScheduler::GetTaskRunner()
-        const
-    {
-        return task_runner_.get();
-    }
+base::SingleThreadTaskRunner* WebThreadImplForRendererScheduler::GetTaskRunner()
+const
+{
+    return task_runner_.get();
+}
 
-    SingleThreadIdleTaskRunner*
-    WebThreadImplForRendererScheduler::GetIdleTaskRunner() const
-    {
-        return idle_task_runner_.get();
-    }
+SingleThreadIdleTaskRunner*
+WebThreadImplForRendererScheduler::GetIdleTaskRunner() const
+{
+    return idle_task_runner_.get();
+}
 
-    blink::WebTaskRunner* WebThreadImplForRendererScheduler::getWebTaskRunner()
-    {
-        return web_task_runner_.get();
-    }
+blink::WebTaskRunner* WebThreadImplForRendererScheduler::getWebTaskRunner()
+{
+    return web_task_runner_.get();
+}
 
-    void WebThreadImplForRendererScheduler::AddTaskObserverInternal(
-        base::MessageLoop::TaskObserver* observer)
-    {
-        scheduler_->AddTaskObserver(observer);
-    }
+void WebThreadImplForRendererScheduler::AddTaskObserverInternal(
+    base::MessageLoop::TaskObserver* observer)
+{
+    scheduler_->AddTaskObserver(observer);
+}
 
-    void WebThreadImplForRendererScheduler::RemoveTaskObserverInternal(
-        base::MessageLoop::TaskObserver* observer)
-    {
-        scheduler_->RemoveTaskObserver(observer);
-    }
+void WebThreadImplForRendererScheduler::RemoveTaskObserverInternal(
+    base::MessageLoop::TaskObserver* observer)
+{
+    scheduler_->RemoveTaskObserver(observer);
+}
 
-    void WebThreadImplForRendererScheduler::AddTaskTimeObserverInternal(
-        TaskTimeObserver* task_time_observer)
-    {
-        scheduler_->AddTaskTimeObserver(task_time_observer);
-    }
+void WebThreadImplForRendererScheduler::AddTaskTimeObserverInternal(
+    TaskTimeObserver* task_time_observer)
+{
+    scheduler_->AddTaskTimeObserver(task_time_observer);
+}
 
-    void WebThreadImplForRendererScheduler::RemoveTaskTimeObserverInternal(
-        TaskTimeObserver* task_time_observer)
-    {
-        scheduler_->RemoveTaskTimeObserver(task_time_observer);
-    }
+void WebThreadImplForRendererScheduler::RemoveTaskTimeObserverInternal(
+    TaskTimeObserver* task_time_observer)
+{
+    scheduler_->RemoveTaskTimeObserver(task_time_observer);
+}
+
+void WebThreadImplForRendererScheduler::postTask(const WebTraceLocation&, Task*)
+{
+    DebugBreak();
+}
+
+void WebThreadImplForRendererScheduler::postDelayedTask(const WebTraceLocation&, Task*, long long delayMs)
+{
+    DebugBreak();
+}
 
 } // namespace scheduler
 } // namespace blink

@@ -94,6 +94,8 @@ public:
 
     FrameClient* client() const;
 
+    int64_t frameID() const { return m_frameID; }
+
     // NOTE: Page is moving out of Blink up into the browser process as
     // part of the site-isolation (out of process iframes) work.
     // FrameHost should be used instead where possible.
@@ -168,6 +170,8 @@ protected:
 
 private:
     bool canNavigateWithoutFramebusting(const Frame&, String& errorReason);
+
+    int64_t m_frameID;
 
     Member<FrameClient> m_client;
     bool m_isLoading;

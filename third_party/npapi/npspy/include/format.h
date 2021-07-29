@@ -38,116 +38,119 @@
 #ifndef __FORMAT_H__
 #define __FORMAT_H__
 
-#include "npapi.h"
 #include <string>
+#include "npapi.h"
 
-typedef enum {
-    action_invalid = 0,
-    action_npn_version,
-    action_npn_get_url_notify,
-    action_npn_get_url,
-    action_npn_post_url_notify,
-    action_npn_post_url,
-    action_npn_request_read,
-    action_npn_new_stream,
-    action_npn_write,
-    action_npn_destroy_stream,
-    action_npn_status,
-    action_npn_user_agent,
-    action_npn_mem_alloc,
-    action_npn_mem_free,
-    action_npn_mem_flush,
-    action_npn_reload_plugins,
-    action_npn_get_java_env,
-    action_npn_get_java_peer,
-    action_npn_get_value,
-    action_npn_set_value,
-    action_npn_invalidate_rect,
-    action_npn_invalidate_region,
-    action_npn_force_redraw,
-    action_npn_enumerate,
-    action_npn_pop_popups_enabled_state,
-    action_npn_push_popups_enabled_state,
-    action_npn_set_exception,
-    action_npn_release_variant_value,
-    action_npn_has_method,
-    action_npn_has_property,
-    action_npn_remove_property,
-    action_npn_set_property,
-    action_npn_get_property,
-    action_npn_evaluate,
-    action_npn_invoke_default,
-    action_npn_invoke,
-    action_npn_release_object,
-    action_npn_retain_object,
-    action_npn_create_object,
-    action_npn_int_from_identifier,
-    action_npn_utf8_from_identifier,
-    action_npn_identifier_is_string,
-    action_npn_get_int_identifer,
-    action_npn_get_string_identifier,
-    action_npn_get_string_identifiers,
+typedef enum
+{
+  action_invalid = 0,
+  action_npn_version,
+  action_npn_get_url_notify,
+  action_npn_get_url,
+  action_npn_post_url_notify,
+  action_npn_post_url,
+  action_npn_request_read,
+  action_npn_new_stream,
+  action_npn_write,
+  action_npn_destroy_stream,
+  action_npn_status,
+  action_npn_user_agent,
+  action_npn_mem_alloc,
+  action_npn_mem_free,
+  action_npn_mem_flush,
+  action_npn_reload_plugins,
+  action_npn_get_java_env,
+  action_npn_get_java_peer,
+  action_npn_get_value,
+  action_npn_set_value,
+  action_npn_invalidate_rect,
+  action_npn_invalidate_region,
+  action_npn_force_redraw,
+  action_npn_enumerate,
+  action_npn_pop_popups_enabled_state,
+  action_npn_push_popups_enabled_state,
+  action_npn_set_exception,
+  action_npn_release_variant_value,
+  action_npn_has_method,
+  action_npn_has_property,
+  action_npn_remove_property,
+  action_npn_set_property,
+  action_npn_get_property,
+  action_npn_evaluate,
+  action_npn_invoke_default,
+  action_npn_invoke,
+  action_npn_release_object,
+  action_npn_retain_object,
+  action_npn_create_object,
+  action_npn_int_from_identifier,
+  action_npn_utf8_from_identifier,
+  action_npn_identifier_is_string,
+  action_npn_get_int_identifer,
+  action_npn_get_string_identifier,
+  action_npn_get_string_identifiers,
 
-    action_npp_new,
-    action_npp_destroy,
-    action_npp_set_window,
-    action_npp_new_stream,
-    action_npp_destroy_stream,
-    action_npp_stream_as_file,
-    action_npp_write_ready,
-    action_npp_write,
-    action_npp_print,
-    action_npp_handle_event,
-    action_npp_url_notify,
-    action_npp_get_java_class,
-    action_npp_get_value,
-    action_npp_set_value
+  action_npp_new,
+  action_npp_destroy,
+  action_npp_set_window,
+  action_npp_new_stream,
+  action_npp_destroy_stream,
+  action_npp_stream_as_file,
+  action_npp_write_ready,
+  action_npp_write,
+  action_npp_print,
+  action_npp_handle_event,
+  action_npp_url_notify,
+  action_npp_get_java_class,
+  action_npp_get_value,
+  action_npp_set_value
 } NPAPI_Action;
 
-struct LogArgumentStruct {
-    DWORD dwArg;
-    int iLength;
-    void* pData;
+struct LogArgumentStruct
+{
+  DWORD dwArg;
+  int iLength;
+  void * pData;
 
-    LogArgumentStruct()
-    {
-        iLength = 0;
-        pData = NULL;
-    }
+  LogArgumentStruct()
+  {
+    iLength = 0;
+    pData = NULL;
+  }
 
-    ~LogArgumentStruct()
-    {
-        if (pData != NULL)
-            delete[] pData;
-        iLength = 0;
-    }
+  ~LogArgumentStruct()
+  {
+    if(pData != NULL)
+      delete [] pData;
+    iLength = 0;
+  }
 };
 
-struct LogItemStruct {
-    NPAPI_Action action;
-    LogArgumentStruct arg1;
-    LogArgumentStruct arg2;
-    LogArgumentStruct arg3;
-    LogArgumentStruct arg4;
-    LogArgumentStruct arg5;
-    LogArgumentStruct arg6;
-    LogArgumentStruct arg7;
+struct LogItemStruct
+{
+  NPAPI_Action action;
+  LogArgumentStruct arg1;
+  LogArgumentStruct arg2;
+  LogArgumentStruct arg3;
+  LogArgumentStruct arg4;
+  LogArgumentStruct arg5;
+  LogArgumentStruct arg6;
+  LogArgumentStruct arg7;
 
-    LogItemStruct() { }
-    ~LogItemStruct() { }
+  LogItemStruct(){}
+  ~LogItemStruct(){}
 };
 
-char* FormatNPAPIError(int iError);
-char* FormatNPAPIReason(int iReason);
-char* FormatNPPVariable(NPPVariable var);
-char* FormatNPNVariable(NPNVariable var);
-BOOL FormatPCHARArgument(char* szBuf, int iLength, LogArgumentStruct* parg);
-BOOL FormatBOOLArgument(char* szBuf, int iLength, LogArgumentStruct* parg);
-BOOL FormatPBOOLArgument(char* szBuf, int iLength, LogArgumentStruct* parg);
-LogItemStruct* makeLogItemStruct(NPAPI_Action action,
-    DWORD dw1, DWORD dw2, DWORD dw3, DWORD dw4,
-    DWORD dw5, DWORD dw6, DWORD dw7, BOOL bShort = FALSE);
-void freeLogItemStruct(LogItemStruct* lis);
-void formatLogItem(LogItemStruct* plis, std::string* szOutput, BOOL bDOSStyle = FALSE);
+char * FormatNPAPIError(int iError);
+char * FormatNPAPIReason(int iReason);
+char * FormatNPPVariable(NPPVariable var);
+char * FormatNPNVariable(NPNVariable var);
+BOOL FormatPCHARArgument(char * szBuf, int iLength, LogArgumentStruct * parg);
+BOOL FormatBOOLArgument(char * szBuf, int iLength, LogArgumentStruct * parg);
+BOOL FormatPBOOLArgument(char * szBuf, int iLength, LogArgumentStruct * parg);
+LogItemStruct * makeLogItemStruct(NPAPI_Action action, 
+                                  DWORD dw1, DWORD dw2, DWORD dw3, DWORD dw4,
+                                  DWORD dw5, DWORD dw6, DWORD dw7, BOOL bShort = FALSE);
+void freeLogItemStruct(LogItemStruct * lis);
+void formatLogItem(LogItemStruct * plis, std::string * szOutput, BOOL bDOSStyle = FALSE);
 
 #endif // __LOGHLP_H__

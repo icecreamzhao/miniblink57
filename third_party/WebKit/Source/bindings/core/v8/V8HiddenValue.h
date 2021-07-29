@@ -75,6 +75,10 @@ public:
         ScriptWrappable*,
         v8::Local<v8::String>);
 
+    static bool setHiddenValue(v8::Isolate* isolate, v8::Local<v8::Object> object, v8::Local<v8::String> key, v8::Local<v8::Value> value);
+    static v8::Local<v8::Value> getHiddenValue(v8::Isolate* isolate, v8::Local<v8::Object> object, v8::Local<v8::String> key);
+    static bool deleteHiddenValue(v8::Isolate* isolate, v8::Local<v8::Object> object, v8::Local<v8::String> key);
+
 private:
     V8HiddenValue() { }
 

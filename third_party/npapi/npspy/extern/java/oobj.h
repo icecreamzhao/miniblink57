@@ -39,9 +39,9 @@
 
 #include <stddef.h>
 
+#include "typedefs.h"
 #include "bool.h"
 #include "jriext.h"
-#include "typedefs.h"
 
 typedef void Hjava_lang_Class;
 typedef Hjava_lang_Class ClassClass;
@@ -53,6 +53,6 @@ typedef Hjava_lang_Object JHandle;
 struct methodblock;
 
 JRI_PUBLIC_API(void)
-MakeClassSticky(ClassClass* cb);
+MakeClassSticky(ClassClass *cb);
 
 #endif /* !_OOBJ_H_ */

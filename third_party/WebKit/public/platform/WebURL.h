@@ -34,6 +34,7 @@
 #include "WebCommon.h"
 #include "WebString.h"
 //#include "url/third_party/mozilla/url_parse.h"
+#include "third_party/WebKit/public/platform/WebCString.h"
 
 #if !INSIDE_BLINK
 #include "url/gurl.h"
@@ -69,6 +70,13 @@ public:
     }
 
     const WebString& string() const { return m_string; }
+
+    // FIXME: Remove this API.
+    WebCString spec() const
+    {
+        std::string spec = m_string.utf8();
+        return WebCString(spec.data(), spec.length());
+    }
 
     //const url::Parsed& parsed() const { return m_parsed; }
 

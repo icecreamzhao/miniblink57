@@ -243,18 +243,16 @@ namespace {
 
     uint32_t cacheTag(CacheTagKind kind, CachedMetadataHandler* cacheHandler)
     {
-//         static_assert((1 << kCacheTagKindSize) >= CacheTagLast, "CacheTagLast must be large enough");
-// 
-//         static uint32_t v8CacheDataVersion = v8::ScriptCompiler::CachedDataVersionTag() << kCacheTagKindSize;
-// 
-//         // A script can be (successfully) interpreted with different encodings,
-//         // depending on the page it appears in. The cache doesn't know anything
-//         // about encodings, but the cached data is specific to one encoding. If we
-//         // later load the script from the cache and interpret it with a different
-//         // encoding, the cached data is not valid for that encoding.
-//         return (v8CacheDataVersion | kind) + StringHash::hash(cacheHandler->encoding());
-        DebugBreak();
-        return 0;
+        static_assert((1 << kCacheTagKindSize) >= CacheTagLast, "CacheTagLast must be large enough");
+
+        static uint32_t v8CacheDataVersion = v8::ScriptCompiler::CachedDataVersionTag() << kCacheTagKindSize;
+
+        // A script can be (successfully) interpreted with different encodings,
+        // depending on the page it appears in. The cache doesn't know anything
+        // about encodings, but the cached data is specific to one encoding. If we
+        // later load the script from the cache and interpret it with a different
+        // encoding, the cached data is not valid for that encoding.
+        return (v8CacheDataVersion | kind) + StringHash::hash(cacheHandler->encoding());
     }
 
     // Check previously stored timestamp.
@@ -494,13 +492,11 @@ v8::MaybeLocal<v8::Script> V8ScriptRunner::compileScript(
     if (!cacheHandler && (scriptStartPosition.m_line.zeroBasedInt() == 0) && (scriptStartPosition.m_column.zeroBasedInt() == 0))
         cacheabilityIfNoHandler = V8CompileHistogram::Cacheability::InlineScript;
 
-    RefPtr<CachedMetadata> codeCache(
-        cacheHandler
+    RefPtr<CachedMetadata> codeCache(cacheHandler
             ? cacheHandler->cachedMetadata(cacheTag(CacheTagCode, cacheHandler))
             : nullptr);
     std::unique_ptr<CompileFn> compileFn = streamer ? selectCompileFunction(cacheOptions, resource, streamer)
-                                                    : selectCompileFunction(cacheOptions, cacheHandler, codeCache,
-                                                        code, cacheabilityIfNoHandler);
+                                                    : selectCompileFunction(cacheOptions, cacheHandler, codeCache, code, cacheabilityIfNoHandler);
 
     return (*compileFn)(isolate, code, origin);
 }

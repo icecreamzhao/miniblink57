@@ -10,4 +10,4 @@ extern int x86_cpu_enable_simd;
 
 void x86_check_features(void);
 
-#endif /* X86_H */
+#endif  /* X86_H */

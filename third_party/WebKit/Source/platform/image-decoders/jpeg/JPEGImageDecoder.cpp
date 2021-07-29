@@ -42,8 +42,8 @@
 #include <memory>
 
 extern "C" {
-#include "iccjpeg.h"
-#include "jpeglib.h"
+#include "third_party/libjpeg/iccjpeg.h"
+#include "third_party/libjpeg/jpeglib.h"
 #include <setjmp.h>
 #include <stdio.h> // jpeglib.h needs stdio FILE.
 }
@@ -867,12 +867,11 @@ bool outputRows(JPEGImageReader* reader, ImageFrame& buffer)
         for (int x = 0; x < width; ++pixel, ++x)
             setPixel<colorSpace>(buffer, pixel, samples, x);
 
-        SkColorSpaceXform* xform = reader->decoder()->colorTransform();
-        if (JCS_RGB == colorSpace && xform) {
-            ImageFrame::PixelData* row = buffer.getAddr(0, y);
-            xform->apply(xformColorFormat(), row, xformColorFormat(), row, width,
-                kOpaque_SkAlphaType);
-        }
+//         SkColorSpaceXform* xform = reader->decoder()->colorTransform();
+//         if (JCS_RGB == colorSpace && xform) {
+//             ImageFrame::PixelData* row = buffer.getAddr(0, y);
+//             xform->apply(xformColorFormat(), row, xformColorFormat(), row, width, kOpaque_SkAlphaType);
+//         }
     }
 
     buffer.setPixelsChanged(true);

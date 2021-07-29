@@ -17,6 +17,10 @@ namespace base {
 class SingleThreadTaskRunner;
 }
 
+namespace mojom {
+enum class EngagementLevel : int32_t;
+}
+
 namespace blink {
 
 class WebAutofillClient;

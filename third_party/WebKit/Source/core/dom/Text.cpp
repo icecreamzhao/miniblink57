@@ -357,23 +357,23 @@ LayoutText* Text::createTextLayoutObject(const ComputedStyle& style)
 #if ENABLE_WML
 void Text::delaySetWMLTextFired(TimerBase*)
 {
-    if (!m_delaySetWMLText.isEmpty())
-        setData(m_delaySetWMLText);
-    m_delaySetWMLText = "";
+//     if (!m_delaySetWMLText.isEmpty())
+//         setData(m_delaySetWMLText);
+//     m_delaySetWMLText = "";
 }
 #endif
 
 void Text::attachLayoutTree(const AttachContext& context)
 {
 #if ENABLE_WML
-    if (document().isWMLDocument() && !containsOnlyWhitespace()) {
-        String text = data();
-        ASSERT(!text.isEmpty());
-
-        text = substituteVariableReferences(text, &document());
-        m_delaySetWMLText = text;
-        m_delaySetWMLTextTimer.startOneShot(0, BLINK_FROM_HERE);
-    }
+//     if (document().isWMLDocument() && !containsOnlyWhitespace()) {
+//         String text = data();
+//         ASSERT(!text.isEmpty());
+// 
+//         text = substituteVariableReferences(text, &document());
+//         m_delaySetWMLText = text;
+//         m_delaySetWMLTextTimer.startOneShot(0, BLINK_FROM_HERE);
+//     }
 #endif
 
     if (ContainerNode* layoutParent = LayoutTreeBuilderTraversal::parent(*this)) {

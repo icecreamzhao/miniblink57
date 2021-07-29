@@ -169,11 +169,11 @@ bool requestIsSubframeSubresource(Frame* frame,
 }
 
 // static
-bool MixedContentChecker::isMixedContent(SecurityOrigin* securityOrigin,
-    const KURL& url)
+bool MixedContentChecker::isMixedContent(SecurityOrigin* securityOrigin, const KURL& url)
 {
-    if (!SchemeRegistry::shouldTreatURLSchemeAsRestrictingMixedContent(
-            securityOrigin->protocol()))
+    if (url.protocol() == "data")
+        return false;
+    if (!SchemeRegistry::shouldTreatURLSchemeAsRestrictingMixedContent(securityOrigin->protocol()))
         return false;
 
     // |url| is mixed content if its origin is not potentially trustworthy nor

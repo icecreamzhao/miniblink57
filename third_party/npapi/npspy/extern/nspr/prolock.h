@@ -79,7 +79,7 @@ PR_BEGIN_EXTERN_C
 */
 
 #if defined(DEBUG) || defined(FORCE_NSPR_ORDERED_LOCKS)
-typedef void* PROrderedLock;
+typedef void * PROrderedLock;
 #else
 /*
 ** Map PROrderedLock and methods onto PRLock when ordered locking
@@ -108,16 +108,17 @@ typedef PRLock PROrderedLock;
 ** 
 */
 #if defined(DEBUG) || defined(FORCE_NSPR_ORDERED_LOCKS)
-#define PR_CREATE_ORDERED_LOCK(order, name) \
-    PR_CreateOrderedLock((order), (name))
+#define PR_CREATE_ORDERED_LOCK(order,name)\
+    PR_CreateOrderedLock((order),(name))
 #else
 #define PR_CREATE_ORDERED_LOCK(order) PR_NewLock()
 #endif
 
-NSPR_API(PROrderedLock*)
-PR_CreateOrderedLock(
-    PRInt32 order,
-    const char* name);
+NSPR_API(PROrderedLock *) 
+    PR_CreateOrderedLock( 
+        PRInt32 order,
+        const char *name
+);
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_DestroyOrderedLock() -- Destroy an Ordered Lock
@@ -140,9 +141,10 @@ PR_CreateOrderedLock(
 #define PR_DESTROY_ORDERED_LOCK(lock) PR_DestroyLock((lock))
 #endif
 
-NSPR_API(void)
-PR_DestroyOrderedLock(
-    PROrderedLock* lock);
+NSPR_API(void) 
+    PR_DestroyOrderedLock( 
+        PROrderedLock *lock 
+);
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_LockOrderedLock() -- Lock an ordered lock
@@ -167,9 +169,10 @@ PR_DestroyOrderedLock(
 #define PR_LOCK_ORDERED_LOCK(lock) PR_Lock((lock))
 #endif
 
-NSPR_API(void)
-PR_LockOrderedLock(
-    PROrderedLock* lock);
+NSPR_API(void) 
+    PR_LockOrderedLock( 
+        PROrderedLock *lock 
+);
 
 /* -----------------------------------------------------------------------
 ** FUNCTION: PR_UnlockOrderedLock() -- unlock and Ordered Lock
@@ -194,9 +197,10 @@ PR_LockOrderedLock(
 #define PR_UNLOCK_ORDERED_LOCK(lock) PR_Unlock((lock))
 #endif
 
-NSPR_API(PRStatus)
-PR_UnlockOrderedLock(
-    PROrderedLock* lock);
+NSPR_API(PRStatus) 
+    PR_UnlockOrderedLock( 
+        PROrderedLock *lock 
+);
 
 PR_END_EXTERN_C
 

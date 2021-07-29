@@ -63,9 +63,7 @@ public:
     // non-nestable may not affect when the task gets run, or it could
     // make it run later than it normally would, but it won't make it
     // run earlier than it normally would.
-    virtual void postNonNestableIdleTask(const WebTraceLocation&,
-        WebThread::IdleTask*)
-        = 0;
+    virtual void postNonNestableIdleTask(const WebTraceLocation&, WebThread::IdleTask*) = 0;
 
     // Returns a WebTaskRunner for loading tasks. Can be called from any thread.
     virtual WebTaskRunner* loadingTaskRunner() = 0;
@@ -88,8 +86,7 @@ public:
     // if the suspension count is zero and the current scheduler policy allows it.
     virtual void resumeTimerQueue() = 0;
 
-    enum class NavigatingFrameType { kMainFrame,
-        kChildFrame };
+    enum class NavigatingFrameType { kMainFrame, kChildFrame };
 
     // Tells the scheduler that a navigation task is pending.
     // TODO(alexclarke): Long term should this be a task trait?
@@ -103,8 +100,7 @@ public:
     typedef Function<void(double deadlineSeconds)> IdleTask;
 
     void postIdleTask(const WebTraceLocation&, std::unique_ptr<IdleTask>);
-    void postNonNestableIdleTask(const WebTraceLocation&,
-        std::unique_ptr<IdleTask>);
+    void postNonNestableIdleTask(const WebTraceLocation&, std::unique_ptr<IdleTask>);
 #endif
 };
 

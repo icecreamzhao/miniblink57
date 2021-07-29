@@ -923,15 +923,15 @@ inline LocalFrame::LocalFrame(FrameLoaderClient* client,
     , m_interfaceProvider(interfaceProvider)
     , m_interfaceRegistry(interfaceRegistry)
 {
-    //   if (isLocalRoot()) {
-    //     m_instrumentingAgents = new InstrumentingAgents();
-    //     m_performanceMonitor = new PerformanceMonitor(this);
-    //   } else {
-    //     m_instrumentingAgents = localFrameRoot()->m_instrumentingAgents;
-    //     m_performanceMonitor = localFrameRoot()->m_performanceMonitor;
-    //   }
+    if (isLocalRoot()) {
+        //m_instrumentingAgents = new InstrumentingAgents();
+        m_performanceMonitor = new PerformanceMonitor(this);
+    } else {
+        //m_instrumentingAgents = localFrameRoot()->m_instrumentingAgents;
+        m_performanceMonitor = localFrameRoot()->m_performanceMonitor;
+    }
     m_instrumentingAgents = nullptr;
-    m_performanceMonitor = nullptr;
+//     m_performanceMonitor = nullptr;
 }
 
 WebFrameScheduler* LocalFrame::frameScheduler()

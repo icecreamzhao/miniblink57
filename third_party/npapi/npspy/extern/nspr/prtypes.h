@@ -111,7 +111,7 @@
 
 #elif defined(WIN16)
 
-#define PR_CALLBACK_DECL __cdecl
+#define PR_CALLBACK_DECL        __cdecl
 
 #if defined(_WINDLL)
 #define PR_EXPORT(__type) extern __type _cdecl _export _loadds
@@ -124,7 +124,7 @@
 #define PR_EXTERN_DATA(__type) extern __type _export
 #define PR_IMPLEMENT_DATA(__type) __type _export
 
-#define PR_CALLBACK __cdecl __loadds
+#define PR_CALLBACK             __cdecl __loadds
 #define PR_STATIC_CALLBACK(__x) static __x PR_CALLBACK
 
 #else /* this must be .EXE */
@@ -138,7 +138,7 @@
 #define PR_EXTERN_DATA(__type) extern __type _export
 #define PR_IMPLEMENT_DATA(__type) __type _export
 
-#define PR_CALLBACK __cdecl __loadds
+#define PR_CALLBACK             __cdecl __loadds
 #define PR_STATIC_CALLBACK(__x) __x PR_CALLBACK
 #endif /* _WINDLL */
 
@@ -190,10 +190,8 @@
 **      Macro body brackets so that macros with compound statement definitions
 **      behave syntactically more like functions when called.
 ***********************************************************************/
-#define PR_BEGIN_MACRO do {
-#define PR_END_MACRO \
-    }                \
-    while (0)
+#define PR_BEGIN_MACRO  do {
+#define PR_END_MACRO    } while (0)
 
 /***********************************************************************
 ** MACROS:      PR_BEGIN_EXTERN_C
@@ -202,8 +200,8 @@
 **      Macro shorthands for conditional C++ extern block delimiters.
 ***********************************************************************/
 #ifdef __cplusplus
-#define PR_BEGIN_EXTERN_C extern "C" {
-#define PR_END_EXTERN_C }
+#define PR_BEGIN_EXTERN_C       extern "C" {
+#define PR_END_EXTERN_C         }
 #else
 #define PR_BEGIN_EXTERN_C
 #define PR_END_EXTERN_C
@@ -215,8 +213,8 @@
 ** DESCRIPTION:
 ** Bit masking macros.  XXX n must be <= 31 to be portable
 ***********************************************************************/
-#define PR_BIT(n) ((PRUint32)1 << (n))
-#define PR_BITMASK(n) (PR_BIT(n) - 1)
+#define PR_BIT(n)       ((PRUint32)1 << (n))
+#define PR_BITMASK(n)   (PR_BIT(n) - 1)
 
 /***********************************************************************
 ** MACROS:      PR_ROUNDUP
@@ -226,10 +224,10 @@
 ** DESCRIPTION:
 **      Commonly used macros for operations on compatible types.
 ***********************************************************************/
-#define PR_ROUNDUP(x, y) ((((x) + ((y)-1)) / (y)) * (y))
-#define PR_MIN(x, y) ((x) < (y) ? (x) : (y))
-#define PR_MAX(x, y) ((x) > (y) ? (x) : (y))
-#define PR_ABS(x) ((x) < 0 ? -(x) : (x))
+#define PR_ROUNDUP(x,y) ((((x)+((y)-1))/(y))*(y))
+#define PR_MIN(x,y)     ((x)<(y)?(x):(y))
+#define PR_MAX(x,y)     ((x)>(y)?(x):(y))
+#define PR_ABS(x)       ((x)<0?-(x):(x))
 
 PR_BEGIN_EXTERN_C
 
@@ -249,9 +247,9 @@ typedef unsigned char PRUint8;
 ** For these compilers, we have to define PRInt8 as plain 'char'.
 ** Make sure that plain 'char' is indeed signed under these compilers.
 */
-#if (defined(HPUX) && defined(__cplusplus)          \
-    && !defined(__GNUC__) && __cplusplus < 199707L) \
-    || (defined(SCO) && defined(__cplusplus)        \
+#if (defined(HPUX) && defined(__cplusplus) \
+        && !defined(__GNUC__) && __cplusplus < 199707L) \
+    || (defined(SCO) && defined(__cplusplus) \
         && !defined(__GNUC__) && __cplusplus == 1L)
 typedef char PRInt8;
 #else
@@ -307,13 +305,13 @@ typedef short PRInt16;
 #if PR_BYTES_PER_INT == 4
 typedef unsigned int PRUint32;
 typedef int PRInt32;
-#define PR_INT32(x) x
-#define PR_UINT32(x) x##U
+#define PR_INT32(x)  x
+#define PR_UINT32(x) x ## U
 #elif PR_BYTES_PER_LONG == 4
 typedef unsigned long PRUint32;
 typedef long PRInt32;
-#define PR_INT32(x) x##L
-#define PR_UINT32(x) x##UL
+#define PR_INT32(x)  x ## L
+#define PR_UINT32(x) x ## UL
 #else
 #error No suitable type for PRInt32/PRUint32
 #endif
@@ -348,13 +346,13 @@ typedef unsigned long PRUint64;
 typedef __int64 PRInt64;
 typedef unsigned __int64 PRUint64;
 #elif defined(WIN32) && !defined(__GNUC__)
-typedef __int64 PRInt64;
+typedef __int64  PRInt64;
 typedef unsigned __int64 PRUint64;
 #else
 typedef long long PRInt64;
 typedef unsigned long long PRUint64;
 #endif /* PR_BYTES_PER_LONG == 8 */
-#else /* !HAVE_LONG_LONG */
+#else  /* !HAVE_LONG_LONG */
 typedef struct {
 #ifdef IS_LITTLE_ENDIAN
     PRUint32 lo, hi;
@@ -386,7 +384,7 @@ typedef unsigned int PRUintn;
 ** DESCRIPTION:
 **  NSPR's floating point type is always 64 bits. 
 ************************************************************************/
-typedef double PRFloat64;
+typedef double          PRFloat64;
 
 /************************************************************************
 ** TYPES:       PRSize
@@ -394,6 +392,7 @@ typedef double PRFloat64;
 **  A type for representing the size of objects. 
 ************************************************************************/
 typedef size_t PRSize;
+
 
 /************************************************************************
 ** TYPES:       PROffset32, PROffset64
@@ -443,8 +442,7 @@ typedef PRUint8 PRPackedBool;
 ** Status code used by some routines that have a single point of failure or 
 ** special status return.
 */
-typedef enum { PR_FAILURE = -1,
-    PR_SUCCESS = 0 } PRStatus;
+typedef enum { PR_FAILURE = -1, PR_SUCCESS = 0 } PRStatus;
 
 #ifdef MOZ_UNICODE
 /*
@@ -483,16 +481,14 @@ typedef unsigned long PRUword;
 ** Fundamental NSPR macros, used nearly everywhere.
 */
 
-#define PR_PUBLIC_API PR_IMPLEMENT
+#define PR_PUBLIC_API		PR_IMPLEMENT
 
 /*
 ** Macro body brackets so that macros with compound statement definitions
 ** behave syntactically more like functions when called.
 */
-#define NSPR_BEGIN_MACRO do {
-#define NSPR_END_MACRO \
-    }                  \
-    while (0)
+#define NSPR_BEGIN_MACRO        do {
+#define NSPR_END_MACRO          } while (0)
 
 /*
 ** Macro shorthands for conditional C++ extern block delimiters.
@@ -505,8 +501,8 @@ typedef unsigned long PRUword;
 #endif
 
 #ifdef __cplusplus
-#define NSPR_BEGIN_EXTERN_C extern "C" {
-#define NSPR_END_EXTERN_C }
+#define NSPR_BEGIN_EXTERN_C     extern "C" {
+#define NSPR_END_EXTERN_C       }
 #else
 #define NSPR_BEGIN_EXTERN_C
 #define NSPR_END_EXTERN_C
@@ -524,3 +520,4 @@ typedef unsigned long PRUword;
 PR_END_EXTERN_C
 
 #endif /* prtypes_h___ */
+

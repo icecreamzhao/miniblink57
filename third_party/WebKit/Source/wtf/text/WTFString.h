@@ -212,15 +212,13 @@ public:
     }
 
     // ASCII case insensitive string matching.
-    size_t findIgnoringASCIICase(const StringView& value,
-        unsigned start = 0) const
+    size_t findIgnoringASCIICase(const StringView& value, unsigned start = 0) const
     {
         return m_impl ? m_impl->findIgnoringASCIICase(value, start) : kNotFound;
     }
 
     bool contains(char c) const { return find(c) != kNotFound; }
-    bool contains(const StringView& value,
-        TextCaseSensitivity caseSensitivity = TextCaseSensitive) const
+    bool contains(const StringView& value, TextCaseSensitivity caseSensitivity = TextCaseSensitive) const
     {
         return find(value, 0, caseSensitivity) != kNotFound;
     }
@@ -237,9 +235,7 @@ public:
 
     UChar32 characterStartingAt(unsigned) const;
 
-    bool startsWith(
-        const StringView& prefix,
-        TextCaseSensitivity caseSensitivity = TextCaseSensitive) const
+    bool startsWith(const StringView& prefix, TextCaseSensitivity caseSensitivity = TextCaseSensitive) const
     {
         return m_impl
             ? DISPATCH_CASE_OP(caseSensitivity, m_impl->startsWith, (prefix))
@@ -250,8 +246,7 @@ public:
         return m_impl ? m_impl->startsWith(character) : false;
     }
 
-    bool endsWith(const StringView& suffix,
-        TextCaseSensitivity caseSensitivity = TextCaseSensitive) const
+    bool endsWith(const StringView& suffix, TextCaseSensitivity caseSensitivity = TextCaseSensitive) const
     {
         return m_impl
             ? DISPATCH_CASE_OP(caseSensitivity, m_impl->endsWith, (suffix))
@@ -288,9 +283,7 @@ public:
             m_impl = m_impl->replace(pattern, replacement);
         return *this;
     }
-    String& replace(unsigned index,
-        unsigned lengthToReplace,
-        const StringView& replacement)
+    String& replace(unsigned index, unsigned lengthToReplace, const StringView& replacement)
     {
         if (m_impl)
             m_impl = m_impl->replace(index, lengthToReplace, replacement);
@@ -325,8 +318,7 @@ public:
     String stripWhiteSpace() const;
     String stripWhiteSpace(IsWhiteSpaceFunctionPtr) const;
     String simplifyWhiteSpace(StripBehavior = StripExtraWhiteSpace) const;
-    String simplifyWhiteSpace(IsWhiteSpaceFunctionPtr,
-        StripBehavior = StripExtraWhiteSpace) const;
+    String simplifyWhiteSpace(IsWhiteSpaceFunctionPtr, StripBehavior = StripExtraWhiteSpace) const;
 
     String removeCharacters(CharacterMatchFunctionPtr) const;
     template <bool isSpecialCharacter(UChar)>
@@ -419,8 +411,7 @@ public:
 
     static String make8BitFrom16BitSource(const UChar*, size_t);
     template <size_t inlineCapacity>
-    static String make8BitFrom16BitSource(
-        const Vector<UChar, inlineCapacity>& buffer)
+    static String make8BitFrom16BitSource(const Vector<UChar, inlineCapacity>& buffer)
     {
         return make8BitFrom16BitSource(buffer.data(), buffer.size());
     }
@@ -446,8 +437,7 @@ public:
     static String fromUTF8WithLatin1Fallback(const LChar*, size_t);
     static String fromUTF8WithLatin1Fallback(const char* s, size_t length)
     {
-        return fromUTF8WithLatin1Fallback(reinterpret_cast<const LChar*>(s),
-            length);
+        return fromUTF8WithLatin1Fallback(reinterpret_cast<const LChar*>(s), length);
     }
 
     bool containsOnlyASCII() const

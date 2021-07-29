@@ -262,8 +262,7 @@ public:
     // The URL list of the Response object the ServiceWorker passed to
     // respondWith(). See ServiceWorkerResponseInfo::url_list_via_service_worker()
     // for details.
-    BLINK_PLATFORM_EXPORT void setURLListViaServiceWorker(
-        const WebVector<WebURL>&);
+    BLINK_PLATFORM_EXPORT void setURLListViaServiceWorker(const WebVector<WebURL>&);
 
     // Returns the last URL of the URL list of the Response object the
     // ServiceWorker passed to respondWith() if it did. Otherwise returns an empty
@@ -282,8 +281,7 @@ public:
     // The headers that should be exposed according to CORS. Only guaranteed
     // to be set if the response was served by a ServiceWorker.
     BLINK_PLATFORM_EXPORT WebVector<WebString> corsExposedHeaderNames() const;
-    BLINK_PLATFORM_EXPORT void setCorsExposedHeaderNames(
-        const WebVector<WebString>&);
+    BLINK_PLATFORM_EXPORT void setCorsExposedHeaderNames(const WebVector<WebString>&);
 
     // Whether service worker navigation preload occurred.
     // See ServiceWorkerResponseInfo::did_navigation_preload() for

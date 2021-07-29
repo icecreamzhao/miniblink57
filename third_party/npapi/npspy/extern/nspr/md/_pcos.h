@@ -35,13 +35,13 @@
 #ifndef prpcos_h___
 #define prpcos_h___
 
-#define PR_DLL_SUFFIX ".dll"
+#define PR_DLL_SUFFIX		".dll"
 
 #include <stdlib.h>
 
-#define DIRECTORY_SEPARATOR '\\'
-#define DIRECTORY_SEPARATOR_STR "\\"
-#define PATH_SEPARATOR ';'
+#define DIRECTORY_SEPARATOR         '\\'
+#define DIRECTORY_SEPARATOR_STR     "\\"
+#define PATH_SEPARATOR              ';'
 
 #ifdef WIN16
 #define GCPTR __far
@@ -54,11 +54,12 @@
 */
 PR_BEGIN_EXTERN_C
 #ifndef XP_OS2_EMX
-extern char* optarg;
+extern char *optarg;
 extern int optind;
-extern int getopt(int argc, char** argv, char* spec);
+extern int getopt(int argc, char **argv, char *spec);
 #endif
 PR_END_EXTERN_C
+
 
 /*
 ** Definitions of directory structures amd functions
@@ -68,17 +69,17 @@ PR_END_EXTERN_C
 #ifdef XP_OS2_EMX
 #include <sys/types.h>
 #endif
-#include <fcntl.h> /* O_BINARY */
-#include <io.h>
 #include <sys/stat.h>
+#include <io.h>
+#include <fcntl.h>          /* O_BINARY */
 
 #ifdef OS2
-extern PRStatus _MD_OS2GetHostName(char* name, PRUint32 namelen);
+extern PRStatus _MD_OS2GetHostName(char *name, PRUint32 namelen);
 #define _MD_GETHOSTNAME _MD_OS2GetHostName
 #else
-extern PRStatus _MD_WindowsGetHostName(char* name, PRUint32 namelen);
+extern PRStatus _MD_WindowsGetHostName(char *name, PRUint32 namelen);
 #define _MD_GETHOSTNAME _MD_WindowsGetHostName
-extern PRStatus _MD_WindowsGetSysInfo(PRSysInfo cmd, char* name, PRUint32 namelen);
+extern PRStatus _MD_WindowsGetSysInfo(PRSysInfo cmd, char *name, PRUint32 namelen);
 #define _MD_GETSYSINFO _MD_WindowsGetSysInfo
 #endif
 

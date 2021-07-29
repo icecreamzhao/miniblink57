@@ -16,14 +16,13 @@ namespace blink {
 
 PassRefPtr<StaticBitmapImage> StaticBitmapImage::create(sk_sp<SkImage> image)
 {
-    //   if (!image)
-    //     return nullptr;
-    //   if (image->isTextureBacked())
-    //     return AcceleratedStaticBitmapImage::createFromSharedContextImage(
-    //         std::move(image));
-    //   return UnacceleratedStaticBitmapImage::create(std::move(image));
-    DebugBreak();
-    return nullptr;
+    if (!image)
+        return nullptr;
+    if (image->isTextureBacked()) {
+        //return AcceleratedStaticBitmapImage::createFromSharedContextImage(std::move(image));
+        DebugBreak();
+    }
+    return UnacceleratedStaticBitmapImage::create(std::move(image));
 }
 
 void StaticBitmapImage::drawHelper(SkCanvas* canvas,
@@ -39,8 +38,7 @@ void StaticBitmapImage::drawHelper(SkCanvas* canvas,
     if (dstRect.isEmpty() || adjustedSrcRect.isEmpty())
         return; // Nothing to draw.
 
-    canvas->drawImageRect(image.get(), adjustedSrcRect, dstRect, &paint,
-        WebCoreClampingModeToSkiaRectConstraint(clampMode));
+    canvas->drawImageRect(image.get(), adjustedSrcRect, dstRect, &paint, WebCoreClampingModeToSkiaRectConstraint(clampMode));
 }
 
 } // namespace blink

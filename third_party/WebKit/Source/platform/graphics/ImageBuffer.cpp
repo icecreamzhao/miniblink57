@@ -46,8 +46,8 @@
 #include "platform/graphics/gpu/DrawingBuffer.h"
 #include "platform/graphics/gpu/Extensions3DUtil.h"
 #include "platform/graphics/skia/SkiaUtils.h"
-// #include "platform/image-encoders/JPEGImageEncoder.h"
-// #include "platform/image-encoders/PNGImageEncoder.h"
+#include "platform/image-encoders/JPEGImageEncoder.h"
+#include "platform/image-encoders/PNGImageEncoder.h"
 // #include "platform/image-encoders/WEBPImageEncoder.h"
 #include "platform/network/mime/MIMETypeRegistry.h"
 #include "public/platform/Platform.h"
@@ -564,25 +564,23 @@ void ImageBuffer::setSurface(std::unique_ptr<ImageBufferSurface> surface)
     DebugBreak();
 }
 
-bool ImageDataBuffer::encodeImage(const String& mimeType,
-    const double& quality,
-    Vector<unsigned char>* encodedImage) const
+bool ImageDataBuffer::encodeImage(const String& mimeType, const double& quality, Vector<unsigned char>* encodedImage) const
 {
-    //   if (mimeType == "image/jpeg") {
-    //     if (!JPEGImageEncoder::encode(*this, quality, encodedImage))
-    //       return false;
-    //   } else if (mimeType == "image/webp") {
-    //     int compressionQuality = WEBPImageEncoder::DefaultCompressionQuality;
-    //     if (quality >= 0.0 && quality <= 1.0)
-    //       compressionQuality = static_cast<int>(quality * 100 + 0.5);
-    //     if (!WEBPImageEncoder::encode(*this, compressionQuality, encodedImage))
-    //       return false;
-    //   } else {
-    //     if (!PNGImageEncoder::encode(*this, encodedImage))
-    //       return false;
-    //     DCHECK_EQ(mimeType, "image/png");
-    //   }
-    DebugBreak();
+    if (mimeType == "image/jpeg") {
+        if (!JPEGImageEncoder::encode(*this, quality, encodedImage))
+            return false;
+    } else if (mimeType == "image/webp") {
+//         int compressionQuality = WEBPImageEncoder::DefaultCompressionQuality;
+//         if (quality >= 0.0 && quality <= 1.0)
+//             compressionQuality = static_cast<int>(quality * 100 + 0.5);
+//         if (!WEBPImageEncoder::encode(*this, compressionQuality, encodedImage))
+//             return false;
+        return false;
+    } else {
+        if (!PNGImageEncoder::encode(*this, encodedImage))
+            return false;
+        DCHECK_EQ(mimeType, "image/png");
+    }
     return true;
 }
 

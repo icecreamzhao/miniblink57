@@ -125,10 +125,10 @@ ImageBuffer* OffscreenCanvasRenderingContext2D::imageBuffer() const
         IntSize surfaceSize(width(), height());
         OpacityMode opacityMode = hasAlpha() ? NonOpaque : Opaque;
         std::unique_ptr<ImageBufferSurface> surface;
-        if (RuntimeEnabledFeatures::accelerated2dCanvasEnabled()) {
-            surface.reset(
-                new AcceleratedImageBufferSurface(surfaceSize, opacityMode));
-        }
+//         if (RuntimeEnabledFeatures::accelerated2dCanvasEnabled()) {
+//             surface.reset(
+//                 new AcceleratedImageBufferSurface(surfaceSize, opacityMode));
+//         }
 
         if (!surface || !surface->isValid()) {
             surface.reset(new UnacceleratedImageBufferSurface(

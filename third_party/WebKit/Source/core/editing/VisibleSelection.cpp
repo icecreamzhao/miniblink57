@@ -64,7 +64,9 @@ VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(
 {
     validate(m_granularity);
 }
+
 #ifdef TENCENT_CHANGES
+
 template <typename Strategy>
 VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const PositionTemplate<Strategy>& pos, TextAffinity affinity, bool isDirectional)
     : VisibleSelectionTemplate(pos, pos, affinity, isDirectional)
@@ -106,6 +108,7 @@ VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const EphemeralRang
     : VisibleSelectionTemplate(range.startPosition(), range.endPosition(), affinity, isDirectional)
 {
 }
+
 template <typename Strategy>
 void VisibleSelectionTemplate<Strategy>::expandUsingGranularity(TextGranularity granularity)
 {
@@ -113,10 +116,11 @@ void VisibleSelectionTemplate<Strategy>::expandUsingGranularity(TextGranularity 
         return;
     validate(granularity);
 }
+
 #endif
+
 template <typename Strategy>
-VisibleSelectionTemplate<Strategy> VisibleSelectionTemplate<Strategy>::create(
-    const SelectionTemplate<Strategy>& selection)
+VisibleSelectionTemplate<Strategy> VisibleSelectionTemplate<Strategy>::create(const SelectionTemplate<Strategy>& selection)
 {
     return VisibleSelectionTemplate(selection);
 }
@@ -126,16 +130,13 @@ VisibleSelection createVisibleSelection(const SelectionInDOMTree& selection)
     return VisibleSelection::create(selection);
 }
 
-VisibleSelectionInFlatTree createVisibleSelection(
-    const SelectionInFlatTree& selection)
+VisibleSelectionInFlatTree createVisibleSelection(const SelectionInFlatTree& selection)
 {
     return VisibleSelectionInFlatTree::create(selection);
 }
 
 template <typename Strategy>
-static SelectionType computeSelectionType(
-    const PositionTemplate<Strategy>& start,
-    const PositionTemplate<Strategy>& end)
+static SelectionType computeSelectionType(const PositionTemplate<Strategy>& start, const PositionTemplate<Strategy>& end)
 {
     if (start.isNull()) {
         DCHECK(end.isNull());

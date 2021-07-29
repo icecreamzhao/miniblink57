@@ -160,8 +160,7 @@ void ScreenOrientation::setAngle(unsigned short angle)
     m_angle = angle;
 }
 
-ScriptPromise ScreenOrientation::lock(ScriptState* state,
-    const AtomicString& lockString)
+ScriptPromise ScreenOrientation::lock(ScriptState* state, const AtomicString& lockString)
 {
     ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(state);
     ScriptPromise promise = resolver->promise();

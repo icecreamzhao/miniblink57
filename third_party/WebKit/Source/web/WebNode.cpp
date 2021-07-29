@@ -117,6 +117,22 @@ WebNode WebNode::nextSibling() const
     return WebNode(m_private->nextSibling());
 }
 
+bool WebNode::isDraggable() const
+{
+    Node* n = m_private.get();
+
+    LayoutObject* obj = m_private->layoutObject();
+    if (!obj)
+        return false;
+
+    const ComputedStyle* style = obj->style();
+    if (!style)
+        return false;
+
+    return DraggableRegionDrag == style->getDraggableRegionMode();
+}
+
+
 bool WebNode::isLink() const
 {
     return m_private->isLink();

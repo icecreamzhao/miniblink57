@@ -793,8 +793,8 @@ int nextGraphemeBoundaryOf(const Node* node, int current)
     DCHECK_LE(current, length);
     if (current >= length - 1)
         return current + 1;
-    return findNextBoundaryOffset<ForwardGraphemeBoundaryStateMachine>(text,
-        current);
+    int result = findNextBoundaryOffset<ForwardGraphemeBoundaryStateMachine>(text, current);
+    return result;
 }
 
 template <typename Strategy>

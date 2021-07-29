@@ -27,7 +27,7 @@
 #define PNGImageReader_h
 
 #include "platform/PlatformExport.h"
-#include "png.h"
+#include "third_party/libpng/png.h"
 #include "wtf/Allocator.h"
 #include "wtf/PtrUtil.h"
 

@@ -137,6 +137,7 @@ public:
         return m_string;
     }
     const String& getString() const { return m_string; }
+    String getUTF8String() const;
     //URLString urlString() const { return URLString(m_string); }
 #endif
 

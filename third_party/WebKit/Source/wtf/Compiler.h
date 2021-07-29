@@ -65,7 +65,9 @@
 
 // TODO(palmer): Remove this and update callers to use NOINLINE from Chromium
 // base. https://bugs.chromium.org/p/chromium/issues/detail?id=632441
+#ifndef NEVER_INLINE
 #define NEVER_INLINE NOINLINE
+#endif
 
 /* OBJC_CLASS */
 

@@ -17,6 +17,9 @@ public:
     virtual ~StorageClient() { }
 
     virtual std::unique_ptr<StorageNamespace> createSessionStorageNamespace() = 0;
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+    virtual std::unique_ptr<StorageNamespace> createLocalStorageNamespace() = 0;
+#endif
     virtual bool canAccessStorage(LocalFrame*, StorageType) const = 0;
 };
 

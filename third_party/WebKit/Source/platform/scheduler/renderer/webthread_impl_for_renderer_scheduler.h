@@ -29,6 +29,9 @@ namespace scheduler {
         PlatformThreadId threadId() const override;
         WebTaskRunner* getWebTaskRunner() override;
 
+        void postTask(const WebTraceLocation&, Task*) override;
+        void postDelayedTask(const WebTraceLocation&, Task*, long long delayMs) override;
+
         // WebThreadBase implementation.
         base::SingleThreadTaskRunner* GetTaskRunner() const override;
         SingleThreadIdleTaskRunner* GetIdleTaskRunner() const override;

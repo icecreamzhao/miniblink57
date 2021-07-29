@@ -39,9 +39,124 @@
 #include "platform/image-decoders/png/PNGImageDecoder.h"
 
 #include "platform/image-decoders/png/PNGImageReader.h"
-#include "png.h"
+#include "third_party/libpng/png.h"
+
+#include "third_party/skia/include/core/SkPoint3.h"
+#include "third_party/skia/include/core/SkMatrix.h"
+#include "third_party/skia/include/core/SkMatrix44.h"
+//#include "third_party/skia/include/third_party/skcms/skcms.h"
+#include <float.h>
+
 #include "wtf/PtrUtil.h"
 #include <memory>
+
+
+struct SK_API SkColorSpaceTransferFn {
+    float fG;
+    float fA;
+    float fB;
+    float fC;
+    float fD;
+    float fE;
+    float fF;
+};
+
+/**
+*  Describes a color gamut with primaries and a white point.
+*/
+struct SK_API SkColorSpacePrimaries {
+    float fRX, fRY;
+    float fGX, fGY;
+    float fBX, fBY;
+    float fWX, fWY;
+
+    /**
+    *  Convert primaries and a white point to a toXYZD50 matrix, the preferred color gamut
+    *  representation of SkColorSpace.
+    */
+    bool toXYZD50(SkMatrix44* toXYZD50) const;
+};
+
+static inline float add_epsilon(float v)
+{
+    return v + FLT_MIN;
+}
+
+static inline bool is_zero_to_one(float v)
+{
+    // Because we allow a value just barely larger than 1, the client can use an
+    // entirely linear transfer function.
+    return (0.0f <= v) && (v <= add_epsilon(1.0f));
+}
+
+bool SkColorSpacePrimaries::toXYZD50(SkMatrix44* toXYZ_D50) const
+{
+    if (!is_zero_to_one(fRX) || !is_zero_to_one(fRY) ||
+        !is_zero_to_one(fGX) || !is_zero_to_one(fGY) ||
+        !is_zero_to_one(fBX) || !is_zero_to_one(fBY) ||
+        !is_zero_to_one(fWX) || !is_zero_to_one(fWY)) {
+        return false;
+    }
+
+    // First, we need to convert xy values (primaries) to XYZ.
+    SkMatrix primaries;
+    primaries.setAll(fRX, fGX, fBX,
+        fRY, fGY, fBY,
+        1.0f - fRX - fRY, 1.0f - fGX - fGY, 1.0f - fBX - fBY);
+    SkMatrix primariesInv;
+    if (!primaries.invert(&primariesInv)) {
+        return false;
+    }
+
+    // Assumes that Y is 1.0f.
+    SkVector3 wXYZ = SkVector3::Make(fWX / fWY, 1.0f, (1.0f - fWX - fWY) / fWY);
+    SkVector3 XYZ;
+    XYZ.fX = primariesInv[0] * wXYZ.fX + primariesInv[1] * wXYZ.fY + primariesInv[2] * wXYZ.fZ;
+    XYZ.fY = primariesInv[3] * wXYZ.fX + primariesInv[4] * wXYZ.fY + primariesInv[5] * wXYZ.fZ;
+    XYZ.fZ = primariesInv[6] * wXYZ.fX + primariesInv[7] * wXYZ.fY + primariesInv[8] * wXYZ.fZ;
+    SkMatrix toXYZ;
+    toXYZ.setAll(XYZ.fX, 0.0f, 0.0f,
+        0.0f, XYZ.fY, 0.0f,
+        0.0f, 0.0f, XYZ.fZ);
+    toXYZ.postConcat(primaries);
+
+    // Now convert toXYZ matrix to toXYZD50.
+    SkVector3 wXYZD50 = SkVector3::Make(0.96422f, 1.0f, 0.82521f);
+
+    // Calculate the chromatic adaptation matrix.  We will use the Bradford method, thus
+    // the matrices below.  The Bradford method is used by Adobe and is widely considered
+    // to be the best.
+    SkMatrix mA, mAInv;
+    mA.setAll(+0.8951f, +0.2664f, -0.1614f,
+        -0.7502f, +1.7135f, +0.0367f,
+        +0.0389f, -0.0685f, +1.0296f);
+    mAInv.setAll(+0.9869929f, -0.1470543f, +0.1599627f,
+        +0.4323053f, +0.5183603f, +0.0492912f,
+        -0.0085287f, +0.0400428f, +0.9684867f);
+
+    SkVector3 srcCone;
+    srcCone.fX = mA[0] * wXYZ.fX + mA[1] * wXYZ.fY + mA[2] * wXYZ.fZ;
+    srcCone.fY = mA[3] * wXYZ.fX + mA[4] * wXYZ.fY + mA[5] * wXYZ.fZ;
+    srcCone.fZ = mA[6] * wXYZ.fX + mA[7] * wXYZ.fY + mA[8] * wXYZ.fZ;
+    SkVector3 dstCone;
+    dstCone.fX = mA[0] * wXYZD50.fX + mA[1] * wXYZD50.fY + mA[2] * wXYZD50.fZ;
+    dstCone.fY = mA[3] * wXYZD50.fX + mA[4] * wXYZD50.fY + mA[5] * wXYZD50.fZ;
+    dstCone.fZ = mA[6] * wXYZD50.fX + mA[7] * wXYZD50.fY + mA[8] * wXYZD50.fZ;
+
+    SkMatrix DXToD50;
+    DXToD50.setIdentity();
+    DXToD50[0] = dstCone.fX / srcCone.fX;
+    DXToD50[4] = dstCone.fY / srcCone.fY;
+    DXToD50[8] = dstCone.fZ / srcCone.fZ;
+    DXToD50.postConcat(mAInv);
+    DXToD50.preConcat(mA);
+
+    toXYZ.postConcat(DXToD50);
+    toXYZ_D50->set3x3(toXYZ[0], toXYZ[3], toXYZ[6],
+        toXYZ[1], toXYZ[4], toXYZ[7],
+        toXYZ[2], toXYZ[5], toXYZ[8]);
+    return true;
+}
 
 namespace blink {
 
@@ -67,47 +182,46 @@ inline sk_sp<SkColorSpace> readColorSpace(png_structp png, png_infop info)
         return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
     }
 
-    png_charp name = nullptr;
-    int compression = 0;
-    png_bytep profile = nullptr;
-    png_uint_32 length = 0;
-    if (png_get_iCCP(png, info, &name, &compression, &profile, &length)) {
-        return SkColorSpace::MakeICC(profile, length);
-    }
-
-    png_fixed_point chrm[8];
-    if (png_get_cHRM_fixed(png, info, &chrm[0], &chrm[1], &chrm[2], &chrm[3],
-            &chrm[4], &chrm[5], &chrm[6], &chrm[7])) {
-        SkColorSpacePrimaries primaries;
-        primaries.fRX = pngFixedToFloat(chrm[2]);
-        primaries.fRY = pngFixedToFloat(chrm[3]);
-        primaries.fGX = pngFixedToFloat(chrm[4]);
-        primaries.fGY = pngFixedToFloat(chrm[5]);
-        primaries.fBX = pngFixedToFloat(chrm[6]);
-        primaries.fBY = pngFixedToFloat(chrm[7]);
-        primaries.fWX = pngFixedToFloat(chrm[0]);
-        primaries.fWY = pngFixedToFloat(chrm[1]);
-
-        SkMatrix44 toXYZD50(SkMatrix44::kUninitialized_Constructor);
-        if (primaries.toXYZD50(&toXYZD50)) {
-            png_fixed_point gammaFixed;
-            if (PNG_INFO_gAMA == png_get_gAMA_fixed(png, info, &gammaFixed)) {
-                SkColorSpaceTransferFn fn;
-                fn.fA = 1.0f;
-                fn.fB = fn.fC = fn.fD = fn.fE = fn.fF = 0.0f;
-                // This is necessary because the gAMA chunk actually stores 1/gamma.
-                fn.fG = 1.0f / pngFixedToFloat(gammaFixed);
-                return SkColorSpace::MakeRGB(fn, toXYZD50);
-            }
-
-            // Note that we only use the cHRM tag when gAMA is present.  The
-            // specification states that the cHRM is valid even without a gAMA
-            // tag, but we cannot apply the cHRM without guessing a transfer
-            // function.  It's possible that we should guess sRGB transfer
-            // function, given that unmarked PNGs should be treated as sRGB.
-            // However, the current behavior matches Safari and Firefox.
-        }
-    }
+//     png_charp name = nullptr;
+//     int compression = 0;
+//     png_bytep profile = nullptr;
+//     png_uint_32 length = 0;
+//     if (png_get_iCCP(png, info, &name, &compression, &profile, &length)) {
+//         return SkColorSpace::NewICC(profile, length);
+//     }
+// 
+//     png_fixed_point chrm[8];
+//     if (png_get_cHRM_fixed(png, info, &chrm[0], &chrm[1], &chrm[2], &chrm[3], &chrm[4], &chrm[5], &chrm[6], &chrm[7])) {
+//         SkColorSpacePrimaries primaries;
+//         primaries.fRX = pngFixedToFloat(chrm[2]);
+//         primaries.fRY = pngFixedToFloat(chrm[3]);
+//         primaries.fGX = pngFixedToFloat(chrm[4]);
+//         primaries.fGY = pngFixedToFloat(chrm[5]);
+//         primaries.fBX = pngFixedToFloat(chrm[6]);
+//         primaries.fBY = pngFixedToFloat(chrm[7]);
+//         primaries.fWX = pngFixedToFloat(chrm[0]);
+//         primaries.fWY = pngFixedToFloat(chrm[1]);
+// 
+//         SkMatrix44 toXYZD50(SkMatrix44::kUninitialized_Constructor);
+//         if (primaries.toXYZD50(&toXYZD50)) {
+//             png_fixed_point gammaFixed;
+//             if (PNG_INFO_gAMA == png_get_gAMA_fixed(png, info, &gammaFixed)) {
+//                 SkColorSpaceTransferFn fn;
+//                 fn.fA = 1.0f;
+//                 fn.fB = fn.fC = fn.fD = fn.fE = fn.fF = 0.0f;
+//                 // This is necessary because the gAMA chunk actually stores 1/gamma.
+//                 fn.fG = 1.0f / pngFixedToFloat(gammaFixed);
+//                 return SkColorSpace::MakeRGB(fn, toXYZD50);
+//             }
+// 
+//             // Note that we only use the cHRM tag when gAMA is present.  The
+//             // specification states that the cHRM is valid even without a gAMA
+//             // tag, but we cannot apply the cHRM without guessing a transfer
+//             // function.  It's possible that we should guess sRGB transfer
+//             // function, given that unmarked PNGs should be treated as sRGB.
+//             // However, the current behavior matches Safari and Firefox.
+//         }
+//     }
 
     return nullptr;
 }
@@ -216,9 +330,7 @@ void PNGImageDecoder::headerAvailable()
     }
 }
 
-void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer,
-    unsigned rowIndex,
-    int)
+void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer, unsigned rowIndex, int)
 {
     if (m_frameBufferCache.isEmpty())
         return;
@@ -316,12 +428,11 @@ void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer,
         // the premultiply, we will very likely end up with valid pixels
         // where R, G, and/or B are greater than A.  The legacy drawing
         // pipeline does not know how to handle this.
-        if (SkColorSpaceXform* xform = colorTransform()) {
-            SkColorSpaceXform::ColorFormat colorFormat = SkColorSpaceXform::kRGBA_8888_ColorFormat;
-            xform->apply(colorFormat, dstRow, colorFormat, srcPtr, size().width(),
-                kUnpremul_SkAlphaType);
-            srcPtr = (png_bytep)dstRow;
-        }
+//         if (SkColorSpaceXform* xform = colorTransform()) {
+//             SkColorSpaceXform::ColorFormat colorFormat = SkColorSpaceXform::kRGBA_8888_ColorFormat;
+//             xform->apply(colorFormat, dstRow, colorFormat, srcPtr, size().width(), kUnpremul_SkAlphaType);
+//             srcPtr = (png_bytep)dstRow;
+//         }
 
         if (buffer.premultiplyAlpha()) {
             for (auto* dstPixel = dstRow; dstPixel < dstRow + width;
@@ -346,10 +457,10 @@ void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer,
         // We'll apply the color space xform to opaque pixels after they have been
         // written to the ImageFrame, purely because SkColorSpaceXform supports
         // RGBA (and not RGB).
-        if (SkColorSpaceXform* xform = colorTransform()) {
-            xform->apply(xformColorFormat(), dstRow, xformColorFormat(), dstRow,
-                size().width(), kOpaque_SkAlphaType);
-        }
+//         if (SkColorSpaceXform* xform = colorTransform()) {
+//             xform->apply(xformColorFormat(), dstRow, xformColorFormat(), dstRow,
+//                 size().width(), kOpaque_SkAlphaType);
+//         }
     }
 
     if (alphaMask != 255 && !buffer.hasAlpha())

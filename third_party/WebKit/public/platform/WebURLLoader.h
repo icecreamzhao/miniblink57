@@ -60,15 +60,12 @@ public:
         WebURLError&,
         WebData&,
         int64_t& encodedDataLength,
-        int64_t& encodedBodyLength)
-        = 0;
+        int64_t& encodedBodyLength) = 0;
 
     // Load the request asynchronously, sending notifications to the given
     // client.  The client will receive no further notifications if the
     // loader is disposed before it completes its work.
-    virtual void loadAsynchronously(const WebURLRequest&,
-        WebURLLoaderClient*)
-        = 0;
+    virtual void loadAsynchronously(const WebURLRequest&, WebURLLoaderClient*) = 0;
 
     // Cancels an asynchronous load.  This will appear as a load error to
     // the client.
@@ -81,8 +78,7 @@ public:
     // its previous value. For example, a preload request starts with low
     // priority, but may increase when the resource is needed for rendering.
     virtual void didChangePriority(WebURLRequest::Priority newPriority) { }
-    virtual void didChangePriority(WebURLRequest::Priority newPriority,
-        int intraPriorityValue)
+    virtual void didChangePriority(WebURLRequest::Priority newPriority, int intraPriorityValue)
     {
         didChangePriority(newPriority);
     }

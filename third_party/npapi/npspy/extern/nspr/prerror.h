@@ -51,8 +51,7 @@ typedef PRInt32 PRErrorCode;
 ** the error. Also, if available, the platform specific oserror is stored.
 ** If there is no appropriate OS error number, a zero my be supplied.
 */
-NSPR_API(void)
-PR_SetError(PRErrorCode errorCode, PRInt32 oserr);
+NSPR_API(void) PR_SetError(PRErrorCode errorCode, PRInt32 oserr);
 
 /*
 ** The text value specified may be NULL. If it is not NULL and the text length
@@ -63,38 +62,34 @@ PR_SetError(PRErrorCode errorCode, PRInt32 oserr);
 ** The text will be copied into to thread structure and remain there
 ** until the next call to PR_SetError.
 */
-NSPR_API(void)
-PR_SetErrorText(
-    PRIntn textLength, const char* text);
+NSPR_API(void) PR_SetErrorText(
+    PRIntn textLength, const char *text);
 
 /*
 ** Return the current threads last set error code.
 */
-NSPR_API(PRErrorCode)
-PR_GetError(void);
+NSPR_API(PRErrorCode) PR_GetError(void);
 
 /*
 ** Return the current threads last set os error code. This is used for
 ** machine specific code that desires the underlying os error.
 */
-NSPR_API(PRInt32)
-PR_GetOSError(void);
+NSPR_API(PRInt32) PR_GetOSError(void);
 
 /*
 ** Get the length of the error text. If a zero is returned, then there
 ** is no text. Otherwise, the value returned is sufficient to contain
 ** the error text currently available.
 */
-NSPR_API(PRInt32)
-PR_GetErrorTextLength(void);
+NSPR_API(PRInt32) PR_GetErrorTextLength(void);
 
 /*
 ** Copy the current threads current error text. Then actual number of bytes
 ** copied is returned as the result. If the result is zero, the 'text' area
 ** is unaffected.
 */
-NSPR_API(PRInt32)
-PR_GetErrorText(char* text);
+NSPR_API(PRInt32) PR_GetErrorText(char *text);
+
 
 /*
 Copyright (C) 1987, 1988 Student Information Processing Board of the
@@ -110,6 +105,7 @@ without specific, written prior permission.  M.I.T. and the M.I.T. S.I.P.B.
 make no representations about the suitability of this software for any
 purpose.  It is provided "as is" without express or implied warranty.
 */
+
 
 /*
  * NOTE:
@@ -185,8 +181,8 @@ typedef PRUint32 PRLanguageCode;
  *    An error message in an error table.
  */
 struct PRErrorMessage {
-    const char* name; /* Macro name for error */
-    const char* en_text; /* Default English text */
+    const char * name;    /* Macro name for error */
+    const char * en_text; /* Default English text */
 };
 
 /*
@@ -195,8 +191,8 @@ struct PRErrorMessage {
  *    An error table, provided by a library.
  */
 struct PRErrorTable {
-    const struct PRErrorMessage* msgs; /* Array of error information */
-    const char* name; /* Name of error table source */
+    const struct PRErrorMessage * msgs; /* Array of error information */
+    const char *name; /* Name of error table source */
     PRErrorCode base; /* Error code for first error in table */
     int n_msgs; /* Number of codes in table */
 };
@@ -226,11 +222,11 @@ struct PRErrorCallbackTablePrivate;
  *    The callback returns the appropriate UTF-8 encoded description, or NULL
  *    if no description can be found.
  */
-typedef const char*
-PRErrorCallbackLookupFn(PRErrorCode code, PRLanguageCode language,
-    const struct PRErrorTable* table,
-    struct PRErrorCallbackPrivate* cb_private,
-    struct PRErrorCallbackTablePrivate* table_private);
+typedef const char *
+PRErrorCallbackLookupFn(PRErrorCode code, PRLanguageCode language, 
+		   const struct PRErrorTable *table,
+		   struct PRErrorCallbackPrivate *cb_private,
+		   struct PRErrorCallbackTablePrivate *table_private);
 
 /*
  * PRErrorCallbackNewTableFn --
@@ -242,9 +238,9 @@ PRErrorCallbackLookupFn(PRErrorCode code, PRLanguageCode language,
  *    data it wishes to associate with the error table.  Does not need to be thread
  *    safe.
  */
-typedef struct PRErrorCallbackTablePrivate*
-PRErrorCallbackNewTableFn(const struct PRErrorTable* table,
-    struct PRErrorCallbackPrivate* cb_private);
+typedef struct PRErrorCallbackTablePrivate *
+PRErrorCallbackNewTableFn(const struct PRErrorTable *table,
+			struct PRErrorCallbackPrivate *cb_private);
 
 /**********************************************************************/
 /****************************** FUNCTIONS *****************************/
@@ -260,9 +256,9 @@ PRErrorCallbackNewTableFn(const struct PRErrorTable* table,
 **  valid for the duration of the process.  Never returns NULL.
 **
 ***********************************************************************/
-NSPR_API(const char*)
-PR_ErrorToString(PRErrorCode code,
+NSPR_API(const char *) PR_ErrorToString(PRErrorCode code,
     PRLanguageCode language);
+
 
 /***********************************************************************
 ** FUNCTION:    PR_ErrorToName
@@ -274,8 +270,8 @@ PR_ErrorToString(PRErrorCode code,
 **  Does not work for error table 0, the system error codes.
 **
 ***********************************************************************/
-NSPR_API(const char*)
-PR_ErrorToName(PRErrorCode code);
+NSPR_API(const char *) PR_ErrorToName(PRErrorCode code);
+
 
 /***********************************************************************
 ** FUNCTION:    PR_ErrorLanguages
@@ -288,8 +284,8 @@ PR_ErrorToName(PRErrorCode code);
 **  with a null pointer.
 **
 ***********************************************************************/
-NSPR_API(const char* const*)
-PR_ErrorLanguages(void);
+NSPR_API(const char * const *) PR_ErrorLanguages(void);
+
 
 /***********************************************************************
 ** FUNCTION:    PR_ErrorInstallTable
@@ -301,8 +297,8 @@ PR_ErrorLanguages(void);
 **  NOT THREAD SAFE!
 **  
 ***********************************************************************/
-NSPR_API(PRErrorCode)
-PR_ErrorInstallTable(const struct PRErrorTable* table);
+NSPR_API(PRErrorCode) PR_ErrorInstallTable(const struct PRErrorTable *table);
+
 
 /***********************************************************************
 ** FUNCTION:    PR_ErrorInstallCallback
@@ -317,11 +313,10 @@ PR_ErrorInstallTable(const struct PRErrorTable* table);
 **  NOT THREAD SAFE!
 **
 ***********************************************************************/
-NSPR_API(void)
-PR_ErrorInstallCallback(const char* const* languages,
-    PRErrorCallbackLookupFn* lookup,
-    PRErrorCallbackNewTableFn* newtable,
-    struct PRErrorCallbackPrivate* cb_private);
+NSPR_API(void) PR_ErrorInstallCallback(const char * const * languages,
+			      PRErrorCallbackLookupFn *lookup, 
+			      PRErrorCallbackNewTableFn *newtable,
+			      struct PRErrorCallbackPrivate *cb_private);
 
 PR_END_EXTERN_C
 

@@ -40,19 +40,20 @@
 
 #include <string>
 
-class CLogFile {
+class CLogFile
+{
 private:
-    char szFileName[256];
-    XP_HFILE hFile;
+  char szFileName[256];
+  XP_HFILE hFile;
 
 public:
-    CLogFile();
-    ~CLogFile();
+  CLogFile();
+  ~CLogFile();
 
-    BOOL create(char* filename, BOOL delete_existing = FALSE);
-    void close();
-    DWORD write(const std::string& buf);
-    void flush();
+  BOOL create(char * filename, BOOL delete_existing = FALSE);
+  void close();
+  DWORD write(const std::string& buf);
+  void flush();
 };
 
 #endif // __LOGFILE_H__

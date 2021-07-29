@@ -35,7 +35,6 @@
 #include "public/web/WebDOMEvent.h"
 #include "public/web/WebDocument.h"
 #include "public/web/WebSerializedScriptValue.h"
-
 #if BLINK_IMPLEMENTATION
 #include "core/events/MessageEvent.h"
 #endif

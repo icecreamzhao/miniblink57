@@ -296,11 +296,9 @@ CanvasRenderingContext* HTMLCanvasElement::getCanvasRenderingContext(
 
 bool HTMLCanvasElement::shouldBeDirectComposited() const
 {
-    //   return (m_context && m_context->isAccelerated()) ||
-    //          (hasImageBuffer() && buffer()->isExpensiveToPaint()) ||
-    //          (!!m_surfaceLayerBridge);
-    DebugBreak();
-    return false;
+    return (m_context && m_context->isAccelerated()) || (hasImageBuffer() && buffer()->isExpensiveToPaint()) 
+        // || (!!m_surfaceLayerBridge)
+        ;
 }
 
 bool HTMLCanvasElement::isPaintable() const
@@ -880,21 +878,21 @@ bool HTMLCanvasElement::shouldAccelerate(AccelerationCriteria criteria) const
 
 namespace {
 
-    class UnacceleratedSurfaceFactory
-        : public RecordingImageBufferFallbackSurfaceFactory {
-    public:
-        virtual std::unique_ptr<ImageBufferSurface> createSurface(
-            const IntSize& size,
-            OpacityMode opacityMode,
-            sk_sp<SkColorSpace> colorSpace,
-            SkColorType colorType)
-        {
-            return WTF::wrapUnique(new UnacceleratedImageBufferSurface(
-                size, opacityMode, InitializeImagePixels, colorSpace, colorType));
-        }
+class UnacceleratedSurfaceFactory
+    : public RecordingImageBufferFallbackSurfaceFactory {
+public:
+    virtual std::unique_ptr<ImageBufferSurface> createSurface(
+        const IntSize& size,
+        OpacityMode opacityMode,
+        sk_sp<SkColorSpace> colorSpace,
+        SkColorType colorType)
+    {
+        return WTF::wrapUnique(new UnacceleratedImageBufferSurface(
+            size, opacityMode, InitializeImagePixels, colorSpace, colorType));
+    }
 
-        virtual ~UnacceleratedSurfaceFactory() { }
-    };
+    virtual ~UnacceleratedSurfaceFactory() {}
+};
 
 } // namespace
 

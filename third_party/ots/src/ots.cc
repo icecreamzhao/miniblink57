@@ -19,6 +19,8 @@
 // The OpenType Font File
 // http://www.microsoft.com/typography/otspec/cmap.htm
 
+extern "C" int uncompress_xp(Bytef * dest, uLongf * destLen, const Bytef * source, uLong sourceLen);
+
 namespace {
 
 // Generate a message with or without a table tag, when 'header' is the OpenTypeFile pointer
@@ -513,11 +515,12 @@ bool GetTableData(const uint8_t* data,
         *table_length = table.uncompressed_length;
         *table_data = (*arena).Allocate(*table_length);
         uLongf dest_len = *table_length;
-        int r = uncompress((Bytef*)*table_data, &dest_len,
+        int r = uncompress_xp((Bytef*)*table_data, &dest_len,
             data + table.offset, table.length);
         if (r != Z_OK || dest_len != *table_length) {
             return false;
         }
+        //*(int*)1 = 1;
     } else {
         // Uncompressed table. We can process directly from memory.
         *table_data = data + table.offset;

@@ -156,16 +156,14 @@ private:
 template <typename T>
 UnretainedWrapper<T, SameThreadAffinity> unretained(T* value)
 {
-    static_assert(!WTF::IsGarbageCollectedType<T>::value,
-        "WTF::unretained() + GCed type is forbidden");
+    static_assert(!WTF::IsGarbageCollectedType<T>::value, "WTF::unretained() + GCed type is forbidden");
     return UnretainedWrapper<T, SameThreadAffinity>(value);
 }
 
 template <typename T>
 UnretainedWrapper<T, CrossThreadAffinity> crossThreadUnretained(T* value)
 {
-    static_assert(!WTF::IsGarbageCollectedType<T>::value,
-        "crossThreadUnretained() + GCed type is forbidden");
+    static_assert(!WTF::IsGarbageCollectedType<T>::value, "crossThreadUnretained() + GCed type is forbidden");
     return UnretainedWrapper<T, CrossThreadAffinity>(value);
 }
 
@@ -213,8 +211,7 @@ struct ParamStorageTraits<UnretainedWrapper<T, threadAffinity>> {
     typedef UnretainedWrapper<T, threadAffinity> StorageType;
 };
 
-template <typename Signature,
-    FunctionThreadAffinity threadAffinity = SameThreadAffinity>
+template <typename Signature, FunctionThreadAffinity threadAffinity = SameThreadAffinity>
 class Function;
 
 template <typename R, typename... Args, FunctionThreadAffinity threadAffinity>
@@ -238,8 +235,7 @@ public:
 
     bool isCancelled() const { return m_callback.IsCancelled(); }
 
-    friend base::Callback<R(Args...)> convertToBaseCallback(
-        std::unique_ptr<Function> function)
+    friend base::Callback<R(Args...)> convertToBaseCallback(std::unique_ptr<Function> function)
     {
         if (function)
             return std::move(function->m_callback);
@@ -255,30 +251,20 @@ private:
     base::Callback<R(Args...)> m_callback;
 };
 
-template <FunctionThreadAffinity threadAffinity,
-    typename FunctionType,
-    typename... BoundParameters>
-std::unique_ptr<
-    Function<base::MakeUnboundRunType<FunctionType, BoundParameters...>,
-        threadAffinity>>
+template <FunctionThreadAffinity threadAffinity, typename FunctionType, typename... BoundParameters>
+std::unique_ptr<Function<base::MakeUnboundRunType<FunctionType, BoundParameters...>, threadAffinity> >
 bindInternal(FunctionType function, BoundParameters&&... boundParameters)
 {
     using UnboundRunType = base::MakeUnboundRunType<FunctionType, BoundParameters...>;
-    return WTF::wrapUnique(new Function<UnboundRunType,
-        threadAffinity>(base::Bind(
-        function,
-        typename ParamStorageTraits<typename std::decay<BoundParameters>::type>::
-            StorageType(std::forward<BoundParameters>(boundParameters))...)));
+    return WTF::wrapUnique(new Function<UnboundRunType, threadAffinity>(
+        base::Bind(function, typename ParamStorageTraits<typename std::decay<BoundParameters>::type>::StorageType(std::forward<BoundParameters>(boundParameters))...)));
 }
 
 template <typename FunctionType, typename... BoundParameters>
-std::unique_ptr<
-    Function<base::MakeUnboundRunType<FunctionType, BoundParameters...>,
-        SameThreadAffinity>>
+std::unique_ptr<Function<base::MakeUnboundRunType<FunctionType, BoundParameters...>, SameThreadAffinity>>
 bind(FunctionType function, BoundParameters&&... boundParameters)
 {
-    return bindInternal<SameThreadAffinity>(
-        function, std::forward<BoundParameters>(boundParameters)...);
+    return bindInternal<SameThreadAffinity>(function, std::forward<BoundParameters>(boundParameters)...);
 }
 
 typedef Function<void(), SameThreadAffinity> Closure;
