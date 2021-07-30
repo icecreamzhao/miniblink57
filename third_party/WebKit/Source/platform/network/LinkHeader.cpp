@@ -4,6 +4,7 @@
 
 #include "platform/network/LinkHeader.h"
 
+#include "platform/network/LinkHeaderUtil.h"
 #include "base/strings/string_util.h"
 //#include "components/link_header_util/link_header_util.h"
 #include "wtf/text/ParsingUtilities.h"
@@ -17,8 +18,7 @@ static bool isExtensionParameter(LinkHeader::LinkParameterName name)
     return name >= LinkHeader::LinkParameterUnknown;
 }
 
-static LinkHeader::LinkParameterName parameterNameFromString(
-    base::StringPiece name)
+static LinkHeader::LinkParameterName parameterNameFromString(base::StringPiece name)
 {
     if (base::EqualsCaseInsensitiveASCII(name, "rel"))
         return LinkHeader::LinkParameterRel;
@@ -61,21 +61,21 @@ template <typename Iterator>
 LinkHeader::LinkHeader(Iterator begin, Iterator end)
     : m_isValid(true)
 {
-    //   std::string url;
-    //   std::unordered_map<std::string, base::Optional<std::string>> params;
-    //   m_isValid = link_header_util::ParseLinkHeaderValue(begin, end, &url, &params);
-    //   if (!m_isValid)
-    //     return;
-    //
-    //   m_url = String(&url[0], url.length());
-    //   for (const auto& param : params) {
-    //     LinkParameterName name = parameterNameFromString(param.first);
-    //     if (!isExtensionParameter(name) && !param.second)
-    //       m_isValid = false;
-    //     std::string value = param.second.value_or("");
-    //     setValue(name, String(&value[0], value.length()));
-    //   }
-    DebugBreak();
+    std::string url;
+    std::map<std::string, std::string> params;
+    m_isValid = ParseLinkHeaderValue(begin, end, &url, &params);
+    if (!m_isValid)
+        return;
+
+    m_url = String(&url[0], url.length());
+    for (const auto& param : params) {
+        LinkParameterName name = parameterNameFromString(param.first);
+        if (!isExtensionParameter(name) && param.second.empty())
+            m_isValid = false;
+
+        std::string value = param.second;
+        setValue(name, String(&value[0], value.length()));
+    }
 }
 
 LinkHeaderSet::LinkHeaderSet(const String& header)
@@ -83,12 +83,11 @@ LinkHeaderSet::LinkHeaderSet(const String& header)
     if (header.isNull())
         return;
 
-    //   DCHECK(header.is8Bit()) << "Headers should always be 8 bit";
-    //   std::string headerString(reinterpret_cast<const char*>(header.characters8()),
-    //                            header.length());
-    //   for (const auto& value : link_header_util::SplitLinkHeader(headerString))
-    //     m_headerSet.push_back(LinkHeader(value.first, value.second));
-    DebugBreak();
+    DCHECK(header.is8Bit()) << "Headers should always be 8 bit";
+
+    std::string headerString(reinterpret_cast<const char*>(header.characters8()), header.length());
+    for (const auto& value : SplitLinkHeader(headerString))
+        m_headerSet.push_back(LinkHeader(value.first, value.second));
 }
 
 } // namespace blink

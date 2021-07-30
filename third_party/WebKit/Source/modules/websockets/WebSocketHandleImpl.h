@@ -33,12 +33,13 @@
 
 #include "modules/websockets/WebSocketHandle.h"
 #include "mojo/public/cpp/bindings/binding.h"
-#include "public/platform/modules/websockets/websocket.mojom-blink.h"
+//#include "public/platform/modules/websockets/websocket.mojom-blink.h"
 
 namespace blink {
 
-class WebSocketHandleImpl : public WebSocketHandle,
-                            public mojom::blink::WebSocketClient {
+class WebSocketHandleImpl : public WebSocketHandle
+    //, public mojom::blink::WebSocketClient 
+{
 public:
     WebSocketHandleImpl();
     ~WebSocketHandleImpl() override;

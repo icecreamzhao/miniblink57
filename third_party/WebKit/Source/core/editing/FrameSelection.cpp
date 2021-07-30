@@ -1322,7 +1322,6 @@ DEFINE_TRACE(FrameSelection)
 
 void FrameSelection::scheduleVisualUpdate() const
 {
-    OutputDebugStringA("FrameSelection::scheduleVisualUpdate\n");
     if (Page* page = m_frame->page())
         page->animator().scheduleVisualUpdate(m_frame->localFrameRoot());
 }

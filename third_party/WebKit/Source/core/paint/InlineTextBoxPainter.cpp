@@ -598,8 +598,7 @@ void InlineTextBoxPainter::paint(const PaintInfo& paintInfo,
         TextBlobPtr* cachedTextBlob = 0;
         if (textBlobIsCacheable)
             cachedTextBlob = addToTextBlobCache(m_inlineTextBox);
-        textPainter.paint(startOffset, endOffset, length, textStyle,
-            cachedTextBlob);
+        textPainter.paint(startOffset, endOffset, length, textStyle, cachedTextBlob);
     }
 
     if ((paintSelectedTextOnly || paintSelectedTextSeparately) && selectionStart < selectionEnd) {
@@ -608,8 +607,7 @@ void InlineTextBoxPainter::paint(const PaintInfo& paintInfo,
         TextBlobPtr* cachedTextBlob = 0;
         if (textBlobIsCacheable)
             cachedTextBlob = addToTextBlobCache(m_inlineTextBox);
-        textPainter.paint(selectionStart, selectionEnd, length, selectionStyle,
-            cachedTextBlob);
+        textPainter.paint(selectionStart, selectionEnd, length, selectionStyle, cachedTextBlob);
     }
 
     // Paint decorations

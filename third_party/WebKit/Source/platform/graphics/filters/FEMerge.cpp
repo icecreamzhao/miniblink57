@@ -48,7 +48,7 @@ sk_sp<SkImageFilter> FEMerge::createImageFilter()
     for (unsigned i = 0; i < size; ++i)
         inputRefs[i] = SkiaImageFilterBuilder::build(inputEffect(i), operatingColorSpace());
     SkImageFilter::CropRect rect = getCropRect();
-    return SkMergeImageFilter::MakeN(inputRefs.get(), size, nullptr, &rect);
+    return SkMergeImageFilter::Make(inputRefs.get(), size, nullptr, &rect);
 }
 
 TextStream& FEMerge::externalRepresentation(TextStream& ts, int indent) const

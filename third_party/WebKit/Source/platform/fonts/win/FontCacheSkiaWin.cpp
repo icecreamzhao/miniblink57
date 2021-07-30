@@ -279,6 +279,16 @@ static bool typefacesMatchesFamily(const SkTypeface* tf, const AtomicString& fam
         tf->getFamilyName(&familyName);
         if (equalIgnoringCase(family, familyName))
             matchesRequestedFamily = true;
+
+#ifndef MINIBLINK_NOCHANGE
+        const unsigned char yaheiData[13] = { 0xE5, 0xBE, 0xAE, 0xE8, 0xBD, 0xAF, 0xE9, 0x9B, 0x85, 0xE9, 0xBB, 0x91, 0 }; // Î¢ÈíÑÅºÚ
+        if (equalIgnoringCase(family, "microsoft yahei") && familyName.equals((const char*)yaheiData, 13))
+            matchesRequestedFamily = true;
+
+        const unsigned char songtiData[7] = { 0xE5, 0xAE, 0x8B, 0xE4, 0xBD, 0x93, 0 }; // ËÎÌå
+        if (equalIgnoringCase(family, "simsun") && familyName.equals((const char*)songtiData, 7))
+            matchesRequestedFamily = true;
+#endif
     }
 
     return matchesRequestedFamily;

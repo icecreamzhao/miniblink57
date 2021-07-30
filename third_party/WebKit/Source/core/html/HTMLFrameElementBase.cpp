@@ -140,8 +140,7 @@ void HTMLFrameElementBase::parseAttribute(
     const AtomicString& value = params.newValue;
     if (name == srcdocAttr) {
         if (!value.isNull()) {
-            //setLocation(srcdocURL().getString());
-            DebugBreak();
+            setLocation("about:srcdoc"/*srcdocURL().getString()*/);
         } else {
             const AtomicString& srcValue = fastGetAttribute(srcAttr);
             if (!srcValue.isNull())

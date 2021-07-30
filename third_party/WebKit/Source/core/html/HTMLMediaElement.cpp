@@ -1038,28 +1038,27 @@ void HTMLMediaElement::loadSourceFromObject()
 
 void HTMLMediaElement::loadSourceFromAttribute()
 {
-    //   m_loadState = LoadingFromSrcAttr;
-    //   const AtomicString& srcValue = fastGetAttribute(srcAttr);
-    //
-    //   // If the src attribute's value is the empty string ... jump down to the
-    //   // failed step below
-    //   if (srcValue.isEmpty()) {
-    //     mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-    //     BLINK_MEDIA_LOG << "loadSourceFromAttribute(" << (void*)this
-    //                     << "), empty 'src'";
-    //     return;
-    //   }
-    //
-    //   KURL mediaURL = document().completeURL(srcValue);
-    //   if (!isSafeToLoadURL(mediaURL, Complain)) {
-    //     mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-    //     return;
-    //   }
-    //
-    //   // No type is available when the url comes from the 'src' attribute so
-    //   // MediaPlayer will have to pick a media engine based on the file extension.
-    //   loadResource(WebMediaPlayerSource(WebURL(mediaURL)), ContentType((String())));
-    DebugBreak();
+    mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+//     m_loadState = LoadingFromSrcAttr;
+//     const AtomicString& srcValue = fastGetAttribute(srcAttr);
+// 
+//     // If the src attribute's value is the empty string ... jump down to the
+//     // failed step below
+//     if (srcValue.isEmpty()) {
+//         mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+//         //BLINK_MEDIA_LOG << "loadSourceFromAttribute(" << (void*)this << "), empty 'src'";
+//         return;
+//     }
+// 
+//     KURL mediaURL = document().completeURL(srcValue);
+//     if (!isSafeToLoadURL(mediaURL, Complain)) {
+//         mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+//         return;
+//     }
+// 
+//     // No type is available when the url comes from the 'src' attribute so
+//     // MediaPlayer will have to pick a media engine based on the file extension.
+//     loadResource(WebMediaPlayerSource(WebURL(mediaURL)), ContentType((String())));
 }
 
 void HTMLMediaElement::loadNextSourceChild()

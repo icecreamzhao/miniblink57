@@ -36,6 +36,7 @@
 #include "public/platform/Platform.h"
 #include "public/platform/WebCookieJar.h"
 #include "public/platform/WebURL.h"
+#include "net/cookies/WebCookieJarCurlImpl.h"
 
 namespace blink {
 
@@ -73,12 +74,10 @@ bool cookiesEnabled(const Document* document)
 
 String cookieRequestHeaderFieldValue(const Document& document, const blink::KURL& url)
 {
-    DebugBreak();
-    return "";
-//     WebCookieJar* cookieJar = toCookieJar(&document);
-//     if (!cookieJar)
-//         return String();
-//     return cookieJar->cookieRequestHeaderFieldValue(url, document->firstPartyForCookies());
+    net::WebCookieJarImpl* cookieJar = (net::WebCookieJarImpl*)toCookieJar(&document);
+    if (!cookieJar)
+        return String();
+    return cookieJar->cookieRequestHeaderFieldValue(url, document.firstPartyForCookies());
 }
 
 } // namespace blink

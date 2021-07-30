@@ -38,6 +38,7 @@
 #include "modules/websockets/DocumentWebSocketChannel.h"
 #include "modules/websockets/WebSocketChannelClient.h"
 #include "modules/websockets/WorkerWebSocketChannel.h"
+#include "net/websocket/WebSocketChannelImpl.h"
 #include <memory>
 
 namespace blink {
@@ -57,8 +58,8 @@ WebSocketChannel* WebSocketChannel::create(ExecutionContext* context,
     }
 
     Document* document = toDocument(context);
-    return DocumentWebSocketChannel::create(document, client,
-        std::move(location));
+    //return DocumentWebSocketChannel::create(document, client, std::move(location));
+    return net::WebSocketChannelImpl::create(document, client, location->url(), location->lineNumber());
 }
 
 } // namespace blink

@@ -44,6 +44,8 @@ namespace blink {
 // if available.
 const float kMaxSizeForEmbeddedBitmap = 24.0f;
 
+static bool s_useSubpixelPositioning = false;
+
 void FontPlatformData::setupPaint(SkPaint* paint, float, const Font*) const
 {
     const float ts = m_textSize >= 0 ? m_textSize : 12;
@@ -64,26 +66,23 @@ void FontPlatformData::setupPaint(SkPaint* paint, float, const Font*) const
         flags |= SkPaint::kEmbeddedBitmapText_Flag;
 
     if (ts >= m_minSizeForAntiAlias) {
-
         // Disable subpixel text for certain older fonts at smaller sizes as
         // they tend to get quite blurry at non-integer sizes and positions.
         // For high-DPI this workaround isn't required.
-        if ((ts >= m_minSizeForSubpixel
-                || FontCache::fontCache()->deviceScaleFactor() >= 1.5)
-
+        if ((ts >= m_minSizeForSubpixel || FontCache::fontCache()->deviceScaleFactor() >= 1.5)
             // Subpixel text positioning looks pretty bad without font
             // smoothing. Disable it unless some type of font smoothing is used.
             // As most tests run without font smoothing we enable it for tests
             // to ensure we get good test coverage matching the more common
             // smoothing enabled behavior.
-            && ((textFlags & SkPaint::kAntiAlias_Flag)
-                || LayoutTestSupport::isRunningLayoutTest()))
+            && ((textFlags & SkPaint::kAntiAlias_Flag) || LayoutTestSupport::isRunningLayoutTest())
+            && s_useSubpixelPositioning
+            )
             flags |= SkPaint::kSubpixelText_Flag;
 
         SkASSERT(!(textFlags & ~textFlagsMask));
         flags |= textFlags;
     }
-
     paint->setFlags(flags);
 }
 
@@ -92,8 +91,39 @@ static bool isWebFont(const String& familyName)
     // Web-fonts have artifical names constructed to always be:
     // 1. 24 characters, followed by a '\0'
     // 2. the last two characters are '=='
-    return familyName.length() == 24
-        && '=' == familyName[22] && '=' == familyName[23];
+    return familyName.length() == 24 && '=' == familyName[22] && '=' == familyName[23];
+}
+
+// Lookup the current system settings for font smoothing.
+// We cache these values for performance, but if the browser has a way to be
+// notified when these change, we could re-query them at that time.
+static uint32_t getSystemTextFlags()
+{
+    static bool gInited;
+    static uint32_t gFlags;
+    if (!gInited) {
+        BOOL enabled;
+        gFlags = 0;
+        if (SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &enabled, 0)) {
+            if (enabled) {
+                gFlags |= SkPaint::kAntiAlias_Flag;
+
+                UINT smoothType;
+                if (SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &smoothType, 0)) {
+                    if (FE_FONTSMOOTHINGCLEARTYPE == smoothType)
+                        gFlags |= SkPaint::kLCDRenderText_Flag;
+                }
+            }
+        } else {
+            // SystemParametersInfo will fail only under full sandbox lockdown on Win8+.
+            // So, we default to settings we know are supported and look good.
+            // FIXME(eae): We should be querying the DirectWrite settings directly
+            // so we can respect the settings for users who turn off smoothing.
+            gFlags = SkPaint::kAntiAlias_Flag | SkPaint::kLCDRenderText_Flag;
+        }
+        gInited = true;
+    }
+    return gFlags;
 }
 
 static int computePaintTextFlags(String fontFamilyName)
@@ -102,6 +132,7 @@ static int computePaintTextFlags(String fontFamilyName)
         return LayoutTestSupport::isFontAntialiasingEnabledForTest() ? SkPaint::kAntiAlias_Flag : 0;
 
     int textFlags = 0;
+    textFlags = getSystemTextFlags();
     if (FontCache::fontCache()->antialiasedTextEnabled()) {
         int lcdFlag = FontCache::fontCache()->lcdTextEnabled()
             ? SkPaint::kLCDRenderText_Flag

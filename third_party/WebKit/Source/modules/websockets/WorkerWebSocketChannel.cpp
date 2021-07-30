@@ -47,6 +47,7 @@
 #include "wtf/PtrUtil.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/WTFString.h"
+#include "net/websocket/WebSocketChannelImpl.h"
 #include <memory>
 
 namespace blink {
@@ -191,14 +192,14 @@ Peer::~Peer()
     DCHECK(isMainThread());
 }
 
-bool Peer::initialize(std::unique_ptr<SourceLocation> location,
-    ExecutionContext* context)
+bool Peer::initialize(std::unique_ptr<SourceLocation> location, ExecutionContext* context)
 {
     DCHECK(isMainThread());
     if (wasContextDestroyedBeforeObserverCreation())
         return false;
     Document* document = toDocument(context);
-    m_mainWebSocketChannel = DocumentWebSocketChannel::create(document, this, std::move(location));
+    //m_mainWebSocketChannel = DocumentWebSocketChannel::create(document, this, std::move(location));
+    m_mainWebSocketChannel = net::WebSocketChannelImpl::create(document, this, location->url(), location->lineNumber());
     return true;
 }
 
