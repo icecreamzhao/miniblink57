@@ -708,6 +708,8 @@
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CanvasGradient.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CanvasPattern.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CanvasRenderingContext2D.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CloseEvent.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CloseEventInit.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CompositorWorker.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CompositorWorkerGlobalScope.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainBooleanParameters.cpp" />
@@ -777,6 +779,7 @@
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8TextDecoderOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8TextEncoder.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8URLPartial.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WebSocket.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WindowPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WorkerGlobalScopePartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WorkerNavigatorPartial.cpp" />
@@ -894,6 +897,7 @@
     <ClCompile Include="..\..\gen\blink\modules\quota\StorageEstimate.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\quota\StorageInfo.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\storage\StorageEventInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\websockets\CloseEventInit.cpp" />
     <ClCompile Include="..\..\gen\blink\platform\CharacterPropertyData.cpp" />
     <ClCompile Include="..\..\gen\blink\platform\ColorData.cpp" />
     <ClCompile Include="..\..\gen\blink\platform\FontFamilyNames.cpp" />
@@ -1154,6 +1158,11 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\storage\StorageEvent.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\storage\StorageNamespace.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\storage\StorageNamespaceController.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\CloseEvent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\DOMWebSocket.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketChannel.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketFrame.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\WorkerWebSocketChannel.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\animation\AnimationTranslationUtil.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\animation\CompositorAnimation.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\animation\CompositorAnimationHost.cpp" />
@@ -1492,6 +1501,7 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\HTTPHeaderMap.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\HTTPParsers.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\LinkHeader.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\LinkHeaderUtil.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\mime\ContentType.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\mime\MIMETypeFromURL.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\mime\MIMETypeRegistry.cpp" />
@@ -4229,6 +4239,8 @@
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CanvasGradient.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CanvasPattern.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CanvasRenderingContext2D.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CloseEvent.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CloseEventInit.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CompositorWorker.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CompositorWorkerGlobalScope.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainBooleanParameters.h" />
@@ -4380,6 +4392,7 @@
     <ClInclude Include="..\..\gen\blink\modules\mediastream\LongRange.h" />
     <ClInclude Include="..\..\gen\blink\modules\quota\StorageInfo.h" />
     <ClInclude Include="..\..\gen\blink\modules\storage\StorageEventInit.h" />
+    <ClInclude Include="..\..\gen\blink\modules\websockets\CloseEventInit.h" />
     <ClInclude Include="..\..\mbvip\common\BindJsQuery.h" />
     <ClInclude Include="..\..\mbvip\common\CallbackClosure.h" />
     <ClInclude Include="..\..\mbvip\common\CallMgr.h" />
@@ -7115,6 +7128,17 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\storage\StorageEvent.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\storage\StorageNamespace.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\storage\StorageNamespaceController.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\CloseEvent.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\DocumentWebSocketChannel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\DOMWebSocket.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\InspectorWebSocketEvents.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketChannel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketChannelClient.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketFrame.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketHandle.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketHandleClient.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketHandleImpl.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WorkerWebSocketChannel.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\animation\AnimationTranslationUtil.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\animation\AnimationUtilities.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\animation\CompositorAnimation.h" />
@@ -7487,6 +7511,7 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\HTTPHeaderMap.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\HTTPParsers.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\LinkHeader.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\LinkHeaderUtil.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\mime\ContentType.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\mime\MIMETypeFromURL.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\mime\MIMETypeRegistry.h" />
@@ -8283,6 +8308,8 @@
     <None Include="..\..\third_party\WebKit\Source\modules\quota\BUILD.gn" />
     <None Include="..\..\third_party\WebKit\Source\modules\quota\DEPS" />
     <None Include="..\..\third_party\WebKit\Source\modules\quota\OWNERS" />
+    <None Include="..\..\third_party\WebKit\Source\modules\websockets\BUILD.gn" />
+    <None Include="..\..\third_party\WebKit\Source\modules\websockets\DEPS" />
     <None Include="..\..\third_party\WebKit\Source\platform\animation\DEPS" />
     <None Include="..\..\third_party\WebKit\Source\platform\animation\OWNERS" />
     <None Include="..\..\third_party\WebKit\Source\platform\BUILD.gn" />

@@ -1153,6 +1153,12 @@
     <Filter Include="gen\blink\modules\filesystem">
       <UniqueIdentifier>{87e5e4f1-efa2-4c6d-8a6e-ad29ff16357c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\websockets">
+      <UniqueIdentifier>{21d34945-a984-45ce-b048-bb29d6fca689}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gen\blink\modules\websockets">
+      <UniqueIdentifier>{4ed3d34b-ea97-4496-ab73-51649efdaf3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -11597,6 +11603,36 @@
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-encoders\PNGImageEncoder.cpp">
       <Filter>third_party\WebKit\Source\platform\image-encoders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketFrame.cpp">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\WorkerWebSocketChannel.cpp">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\CloseEvent.cpp">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\DOMWebSocket.cpp">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketChannel.cpp">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\modules\websockets\CloseEventInit.cpp">
+      <Filter>gen\blink\modules\websockets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CloseEvent.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CloseEventInit.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WebSocket.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\LinkHeaderUtil.cpp">
+      <Filter>third_party\WebKit\Source\platform\network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -25562,6 +25598,51 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-encoders\PNGImageEncoder.h">
       <Filter>third_party\WebKit\Source\platform\image-encoders</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketChannelClient.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketFrame.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketHandle.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketHandleClient.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketHandleImpl.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WorkerWebSocketChannel.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\CloseEvent.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\DocumentWebSocketChannel.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\DOMWebSocket.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\InspectorWebSocketEvents.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\websockets\WebSocketChannel.h">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\modules\websockets\CloseEventInit.h">
+      <Filter>gen\blink\modules\websockets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CloseEvent.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CloseEventInit.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\LinkHeaderUtil.h">
+      <Filter>third_party\WebKit\Source\platform\network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="miniwebkit_blink.ico">
@@ -25786,6 +25867,12 @@
     </None>
     <None Include="..\..\mbvip\core\RenderInit.js">
       <Filter>mbvip\core</Filter>
+    </None>
+    <None Include="..\..\third_party\WebKit\Source\modules\websockets\BUILD.gn">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
+    </None>
+    <None Include="..\..\third_party\WebKit\Source\modules\websockets\DEPS">
+      <Filter>third_party\WebKit\Source\modules\websockets</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
