@@ -201,6 +201,8 @@ Document* WebSocketChannelImpl::document()
 {
     ASSERT(m_id);
     ExecutionContext* context = getExecutionContext();
+    if (!context)
+        return nullptr;
     ASSERT(context->isDocument());
     return toDocument(context);
 }
