@@ -1,5 +1,5 @@
 namespace blink {
-extern const char htmlUserAgentStyleSheet[19273];
+extern const char htmlUserAgentStyleSheet[17289];
 extern const char quirksUserAgentStyleSheet[362];
 extern const char sourceUserAgentStyleSheet[1427];
 extern const char themeChromiumAndroidUserAgentStyleSheet[1037];
