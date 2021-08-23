@@ -5,6 +5,7 @@
 #include "third_party/WebKit/public/platform/WebThread.h"
 #include "third_party/WebKit/public/platform/Platform.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
+#include "third_party/WebKit/Source/platform/CrossThreadFunctional.h"
 
 namespace content {
 
@@ -40,13 +41,13 @@ void postTaskToUiThread(const blink::WebTraceLocation& location, HWND hWnd, std:
 void postTaskToMainThread(const blink::WebTraceLocation& location, std::function<void(void)>&& closure)
 {
     std::function<void(void)>* closureDummy = new std::function<void(void)>(std::move(closure));
-    blink::Platform::current()->mainThread()->postTask(location, WTF::bind(&closureCallWrap, nullptr, WTF::unretained(closureDummy)));
+    blink::Platform::current()->mainThread()->postTask(location, blink::crossThreadBind(&closureCallWrap, nullptr, WTF::crossThreadUnretained(closureDummy)));
 }
 
 void postDelayTaskToMainThread(const blink::WebTraceLocation& location, std::function<void(void)>&& closure, long long ms)
 {
     std::function<void(void)>* closureDummy = new std::function<void(void)>(std::move(closure));
-    blink::Platform::current()->mainThread()->postDelayedTask(location, WTF::bind(&closureCallWrap, nullptr, WTF::unretained(closureDummy)), ms);
+    blink::Platform::current()->mainThread()->postDelayedTask(location, blink::crossThreadBind(&closureCallWrap, nullptr, WTF::crossThreadUnretained(closureDummy)), ms);
 }
 
 }

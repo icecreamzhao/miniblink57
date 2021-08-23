@@ -506,7 +506,7 @@ void WebPluginImpl::updateVisibility(bool isVisibility)
 
 void WebPluginImpl::updateAllLifecyclePhases(void)
 {
-    DebugBreak();
+
 }
 
 bool WebPluginImpl::acceptsInputEvents()
@@ -663,16 +663,15 @@ bool WebPluginImpl::handleKeyboardEvent(const blink::WebKeyboardEvent& evt)
 
 blink::WebInputEventResult WebPluginImpl::handleInputEvent(const blink::WebInputEvent& evt, blink::WebCursorInfo&)
 {
-//     if (m_isWindowed)
-//         return blink::WebInputEventResult::NotHandled;
-// 
-//     if (blink::WebInputEvent::isMouseEventType(evt.type) || blink::WebInputEvent::MouseWheel == evt.type)
-//         return handleMouseEvent(static_cast<const blink::WebMouseEvent&>(evt)) ? blink::WebInputEventResult::HandledSystem : blink::WebInputEventResult::NotHandled;
-// 
-//     if (blink::WebInputEvent::isKeyboardEventType(evt.type))
-//         return handleKeyboardEvent(static_cast<const blink::WebKeyboardEvent&>(evt)) ? blink::WebInputEventResult::HandledSystem : blink::WebInputEventResult::NotHandled;
+    if (m_isWindowed)
+        return blink::WebInputEventResult::NotHandled;
 
-    DebugBreak();
+    if (blink::WebInputEvent::isMouseEventType(evt.type()) || blink::WebInputEvent::MouseWheel == evt.type())
+        return handleMouseEvent(static_cast<const blink::WebMouseEvent&>(evt)) ? blink::WebInputEventResult::HandledSystem : blink::WebInputEventResult::NotHandled;
+
+    if (blink::WebInputEvent::isKeyboardEventType(evt.type()))
+        return handleKeyboardEvent(static_cast<const blink::WebKeyboardEvent&>(evt)) ? blink::WebInputEventResult::HandledSystem : blink::WebInputEventResult::NotHandled;
+
     return blink::WebInputEventResult::NotHandled;
 }
 

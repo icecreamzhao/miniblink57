@@ -61,6 +61,7 @@
 #include "wtf/text/WTFStringUtil.h"
 #include "wke/wkeWebView.h"
 #include "net/cookies/WebCookieJarCurlImpl.h"
+#include "third_party/WebKit/Source/bindings/core/v8/npruntime_impl.h"
 
 using std::min;
 
@@ -202,8 +203,7 @@ WebPluginImpl::~WebPluginImpl()
 
     platformDestroy();
 
-    //m_pluginContainer->clearScriptObjects();
-    DebugBreak();
+    m_pluginContainer->clearScriptObjects();
 
 #ifndef NDEBUG
     webPluginImplCount.decrement();
@@ -387,45 +387,44 @@ private:
 
 void WebPluginImpl::stop()
 {
-    DebugBreak();
-//     if (!m_isStarted)
-//         return;
-// 
-//     HashSetStreams streams = m_streams;
-//     HashSetStreams::iterator end = streams.end();
-//     for (HashSetStreams::iterator it = streams.begin(); it != end; ++it) {
-//         PluginStream* stream = *it;
-//         stream->stop();
-//         disconnectStream(stream);
-//     }
-// 
-//     ASSERT(m_streams.isEmpty());
-// 
-//     m_isStarted = false;
-//     
-//     // Unsubclass the window
-//     if (m_isWindowed) {
-//         WNDPROC currentWndProc = (WNDPROC)GetWindowLongPtr(platformPluginWidget(), GWLP_WNDPROC);
-// 
-//         if (currentWndProc == PluginViewWndProc)
-//             SetWindowLongPtr(platformPluginWidget(), GWLP_WNDPROC, (LONG_PTR)m_pluginWndProc);
-//     }
-// 
-//     // Clear the window
-//     m_npWindow.window = 0;
-// 
-//     if (m_plugin->pluginFuncs()->setwindow && !m_plugin->quirks().contains(PluginQuirkDontSetNullWindowHandleOnDestroy)) {
-//         WebPluginImpl::setCurrentPluginView(this);
-//         setCallingPlugin(true);
-//         m_plugin->pluginFuncs()->setwindow(m_instance, &m_npWindow);
-//         setCallingPlugin(false);
-//         WebPluginImpl::setCurrentPluginView(0);
-//     }
-// 
-//     PluginMainThreadScheduler::scheduler().unregisterPlugin(m_instance);
-// 
-//     // 这里调用destroy会有问题，如果是在_NPN_Evaluate走到这里的话。例子：http://music.yule.sohu.com/20170926/n514522612.shtml
-//     blink::Platform::current()->currentThread()->addTaskObserver(new DestroyNpTask(m_plugin->pluginFuncs()->destroy, m_instance));
+    if (!m_isStarted)
+        return;
+
+    HashSetStreams streams = m_streams;
+    HashSetStreams::iterator end = streams.end();
+    for (HashSetStreams::iterator it = streams.begin(); it != end; ++it) {
+        PluginStream* stream = *it;
+        stream->stop();
+        disconnectStream(stream);
+    }
+
+    ASSERT(m_streams.empty());
+
+    m_isStarted = false;
+    
+    // Unsubclass the window
+    if (m_isWindowed) {
+        WNDPROC currentWndProc = (WNDPROC)GetWindowLongPtr(platformPluginWidget(), GWLP_WNDPROC);
+
+        if (currentWndProc == PluginViewWndProc)
+            SetWindowLongPtr(platformPluginWidget(), GWLP_WNDPROC, (LONG_PTR)m_pluginWndProc);
+    }
+
+    // Clear the window
+    m_npWindow.window = 0;
+
+    if (m_plugin->pluginFuncs()->setwindow && !m_plugin->quirks().contains(PluginQuirkDontSetNullWindowHandleOnDestroy)) {
+        WebPluginImpl::setCurrentPluginView(this);
+        setCallingPlugin(true);
+        m_plugin->pluginFuncs()->setwindow(m_instance, &m_npWindow);
+        setCallingPlugin(false);
+        WebPluginImpl::setCurrentPluginView(0);
+    }
+
+    PluginMainThreadScheduler::scheduler().unregisterPlugin(m_instance);
+
+    // 这里调用destroy会有问题，如果是在_NPN_Evaluate走到这里的话。例子：http://music.yule.sohu.com/20170926/n514522612.shtml
+    blink::Platform::current()->currentThread()->addTaskObserver(new DestroyNpTask(m_plugin->pluginFuncs()->destroy, m_instance));
 }
 
 void WebPluginImpl::setCurrentPluginView(WebPluginImpl* pluginView)
@@ -1103,13 +1102,14 @@ static const char* const ChromeUserAgent = "Mozilla/5.0 ("
 
 const char* WebPluginImpl::userAgent()
 {
-//     if (m_plugin->quirks().contains(PluginQuirkWantsMozillaUserAgent))
-//         return MozillaUserAgent;
-//     else if (m_plugin->quirks().contains(PluginQuirkWantsChromeUserAgent))
-//         return ChromeUserAgent;
-//     if (m_userAgent.isNull())
-//         m_userAgent = m_parentFrame->loader().userAgent(m_url).utf8();
-    DebugBreak();
+    if (m_plugin->quirks().contains(PluginQuirkWantsMozillaUserAgent))
+        return MozillaUserAgent;
+    else if (m_plugin->quirks().contains(PluginQuirkWantsChromeUserAgent))
+        return ChromeUserAgent;
+
+    if (m_userAgent.isNull())
+        m_userAgent = m_parentFrame->loader().userAgent().utf8();
+
     return m_userAgent.data();
 }
 
@@ -1159,67 +1159,67 @@ NPError WebPluginImpl::getValueStatic(NPNVariable variable, void* value)
 
 NPError WebPluginImpl::getValue(NPNVariable variable, void* value)
 {
-    DebugBreak();
-    return NPERR_GENERIC_ERROR;
+//     DebugBreak();
+//     return NPERR_GENERIC_ERROR;
 
-//     NPError result;
-//     if (platformGetValue(variable, value, &result))
-//         return result;
-// 
-//     if (platformGetValueStatic(variable, value, &result))
-//         return result;
-// 
-//     switch (variable) {
-//     case NPNVWindowNPObject: {
-//         if (m_isJavaScriptPaused)
-//             return NPERR_GENERIC_ERROR;
-// 
-//         NPObject* windowScriptObject = m_parentFrame->script().windowScriptNPObject();
-// 
-//         // Return value is expected to be retained, as described here: <http://www.mozilla.org/projects/plugin/npruntime.html>
-//         if (windowScriptObject)
-//             _NPN_RetainObject(windowScriptObject);
-// 
-//         void** v = (void**)value;
-//         *v = windowScriptObject;
-// 
-//         return NPERR_NO_ERROR;
-//     }
-// 
-//     case NPNVPluginElementNPObject: {
-//         if (m_isJavaScriptPaused || !m_pluginContainer)
-//             return NPERR_GENERIC_ERROR;
-// 
-//         NPObject* pluginScriptObject = 0;
-//         WebElement element = m_pluginContainer->element();
-//         if (element.hasHTMLTagName(WebString::fromLatin1("applet")) ||
-//             element.hasHTMLTagName(WebString::fromLatin1("embed")) ||
-//             element.hasHTMLTagName(WebString::fromLatin1("object"))) {
-//             pluginScriptObject = m_pluginContainer->scriptableObjectForElement();
-//         }
-// 
-//         // Return value is expected to be retained, as described here: <http://www.mozilla.org/projects/plugin/npruntime.html>
-//         if (pluginScriptObject)
-//             _NPN_RetainObject(pluginScriptObject);
-// 
-//         void** v = (void**)value;
-//         *v = pluginScriptObject;
-// 
-//         return NPERR_NO_ERROR;
-//     }
-// 
-//     case NPNVprivateModeBool: {
-//         Page* page = m_parentFrame->page();
-//         if (!page)
-//             return NPERR_GENERIC_ERROR;
-//         //*((NPBool*)value) = page->usesEphemeralSession();
-//         *((NPBool*)value) = false; // 是否处于私人模式
-//         return NPERR_NO_ERROR;
-//     }
-// 
-//     default:
-//         return NPERR_GENERIC_ERROR;
-//     }
+    NPError result;
+    if (platformGetValue(variable, value, &result))
+        return result;
+
+    if (platformGetValueStatic(variable, value, &result))
+        return result;
+
+    switch (variable) {
+    case NPNVWindowNPObject: {
+        if (m_isJavaScriptPaused)
+            return NPERR_GENERIC_ERROR;
+
+        NPObject* windowScriptObject = m_parentFrame->script().windowScriptNPObject();
+
+        // Return value is expected to be retained, as described here: <http://www.mozilla.org/projects/plugin/npruntime.html>
+        if (windowScriptObject)
+            _NPN_RetainObject(windowScriptObject);
+
+        void** v = (void**)value;
+        *v = windowScriptObject;
+
+        return NPERR_NO_ERROR;
+    }
+
+    case NPNVPluginElementNPObject: {
+        if (m_isJavaScriptPaused || !m_pluginContainer)
+            return NPERR_GENERIC_ERROR;
+
+        NPObject* pluginScriptObject = 0;
+        WebElement element = m_pluginContainer->element();
+        if (element.hasHTMLTagName(WebString::fromLatin1("applet")) ||
+            element.hasHTMLTagName(WebString::fromLatin1("embed")) ||
+            element.hasHTMLTagName(WebString::fromLatin1("object"))) {
+            pluginScriptObject = m_pluginContainer->scriptableObjectForElement();
+        }
+
+        // Return value is expected to be retained, as described here: <http://www.mozilla.org/projects/plugin/npruntime.html>
+        if (pluginScriptObject)
+            _NPN_RetainObject(pluginScriptObject);
+
+        void** v = (void**)value;
+        *v = pluginScriptObject;
+
+        return NPERR_NO_ERROR;
+    }
+
+    case NPNVprivateModeBool: {
+        Page* page = m_parentFrame->page();
+        if (!page)
+            return NPERR_GENERIC_ERROR;
+        //*((NPBool*)value) = page->usesEphemeralSession();
+        *((NPBool*)value) = false; // 是否处于私人模式
+        return NPERR_NO_ERROR;
+    }
+
+    default:
+        return NPERR_GENERIC_ERROR;
+    }
 }
 
 NPError WebPluginImpl::getValueForURL(NPNURLVariable variable, const char* url, char** value, uint32_t* len)

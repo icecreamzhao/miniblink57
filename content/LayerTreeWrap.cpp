@@ -11,7 +11,7 @@ LayerTreeWrap::LayerTreeWrap(WebPageOcBridge* webPageOcBridge, bool isUiThreadIs
 
 LayerTreeWrap::~LayerTreeWrap()
 {
-    delete m_renderWidgetCompositor;
+    m_renderWidgetCompositor->destroy();
 }
 
 void LayerTreeWrap::setHWND(HWND hWnd)
@@ -29,9 +29,9 @@ void LayerTreeWrap::firePaintEvent(HDC hdc, const RECT& paintRect)
     m_renderWidgetCompositor->firePaintEvent(hdc, paintRect);
 }
 
-void LayerTreeWrap::fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+bool LayerTreeWrap::fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    m_renderWidgetCompositor->fireWheelEvent(hWnd, message, wParam, lParam);
+    return m_renderWidgetCompositor->fireWheelEvent(hWnd, message, wParam, lParam);
 }
 
 HDC LayerTreeWrap::getHdcLocked()

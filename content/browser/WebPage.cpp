@@ -343,6 +343,13 @@ LRESULT WebPage::fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     return 0;
 }
 
+LRESULT WebPage::fireWheelEventOnUiThread(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    if (m_pageImpl)
+        return m_pageImpl->fireWheelEventOnUiThread(hWnd, message, wParam, lParam);
+    return 0;
+}
+
 void WebPage::fireTouchEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if (m_pageImpl)

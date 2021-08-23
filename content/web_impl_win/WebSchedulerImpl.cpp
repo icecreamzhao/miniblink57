@@ -20,7 +20,10 @@ public:
 
     virtual ~IdleTaskToTask() override { delete m_task; }
 
-    virtual void run() override { m_task->run(0); }
+    virtual void run() override
+    { 
+        m_task->run(WTF::monotonicallyIncreasingTime() + 60 * 2);
+    }
 private:
     blink::WebThread::IdleTask* m_task;
 };

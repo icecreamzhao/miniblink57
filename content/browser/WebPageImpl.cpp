@@ -626,9 +626,8 @@ void WebPageImpl::onEndPaintStep2(HDC hdc, const RECT& damageRect)
 
 void WebPageImpl::onLayout()
 {
-//     if (m_webViewImpl)
-//         m_webViewImpl->layout();
-    DebugBreak();
+    if (m_webViewImpl)
+        m_webViewImpl->updateAllLifecyclePhases();
 }
 
 void WebPageImpl::onBeginMainFrame()
@@ -1557,6 +1556,13 @@ LRESULT WebPageImpl::fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPAR
             m_ccLayerTreeWrap->fireWheelEvent(hWnd, message, wParam, lParam);
     }
 
+    return 0;
+}
+
+LRESULT WebPageImpl::fireWheelEventOnUiThread(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    if (m_ccLayerTreeWrap)
+        return m_ccLayerTreeWrap->fireWheelEvent(hWnd, message, wParam, lParam) ? 1 : 0;
     return 0;
 }
 

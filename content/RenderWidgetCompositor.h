@@ -60,6 +60,7 @@ public:
     ~RenderWidgetCompositor();
 
     void init(bool isUiThreadIsolate);
+    void destroy();
 
     void onHostResized(int width, int height);
     void onHostResizedInUiThread();
@@ -150,7 +151,7 @@ public:
     void initializeLayerTreeView();
 
     void firePaintEvent(HDC hdc, const RECT& paintRect);
-    void fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    bool fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -173,7 +174,7 @@ public:
     void DeliverInputForBeginFrame() override;
 
 private:
-    void onFireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    void initStep1OnUiThread(bool isUiThreadIsolate);
 
     gfx::Size m_size;
 
@@ -185,7 +186,7 @@ private:
     HWND m_hWnd;
 
     cc::Display* m_display;
-    cc::DirectCompositorFrameSink* m_sink;
+    cc::CompositorFrameSink* m_sink;
     cc::InputHandler* m_inputHandler;
     int m_pendingSwaps;
 

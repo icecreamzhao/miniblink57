@@ -177,6 +177,7 @@ public:
     void fireTouchEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     void fireCursorEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL* handle);
     LRESULT fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT fireWheelEventOnUiThread(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireKeyUpEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireKeyDownEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool fireKeyPressEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

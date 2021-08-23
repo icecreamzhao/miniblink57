@@ -20,6 +20,7 @@
 #include "cc/surfaces/display.h"
 #include "cc/surfaces/direct_compositor_frame_sink.h"
 #include "cc/trees/layer_tree_host_in_process.h"
+#include "cc/trees/proxy.h"
 #include "content/OrigChromeMgr.h"
 #include "content/WebPageOcBridge.h"
 #include "content/WebSharedBitmapManager.h"
@@ -53,8 +54,14 @@ RenderWidgetCompositor::RenderWidgetCompositor(WebPageOcBridge* webPageOcBridge,
     m_pendingSwaps = 0;
     m_display = nullptr;
     m_inputHandler = nullptr;
+    m_layerTreeHost = nullptr;
 
     init(isUiThreadIsolate);
+}
+
+void RenderWidgetCompositor::initStep1OnUiThread(bool isUiThreadIsolate)
+{
+    
 }
 
 void RenderWidgetCompositor::init(bool isUiThreadIsolate)
@@ -67,16 +74,14 @@ void RenderWidgetCompositor::init(bool isUiThreadIsolate)
     settings.can_use_lcd_text = true;
     settings.use_distance_field_text = false;
     settings.use_zero_copy = false;
-//     settings.accelerated_animation_enabled = true;
-//     settings.use_compositor_animation_timelines = true;
-
-    cc::LayerTreeHostInProcess::InitParams params;
+    //     settings.accelerated_animation_enabled = true;
+    //     settings.use_compositor_animation_timelines = true;
 
     OrigChromeMgr* mgr = OrigChromeMgr::getInst();
-
+    cc::LayerTreeHostInProcess::InitParams params;
     params.client = this;
-//     params.shared_bitmap_manager = mgr->getSharedBitmapManager();
-//     params.gpu_memory_buffer_manager = mgr->getChildGpuMemoryBufferManager();
+    //     params.shared_bitmap_manager = mgr->getSharedBitmapManager();
+    //     params.gpu_memory_buffer_manager = mgr->getChildGpuMemoryBufferManager();
     params.task_graph_runner = mgr->getTaskGraphRunner();
     params.settings = &settings;
     params.main_task_runner = base::MessageLoop::current()->task_runner();
@@ -87,35 +92,43 @@ void RenderWidgetCompositor::init(bool isUiThreadIsolate)
 
     m_layerTreeHost = cc::LayerTreeHostInProcess::CreateThreaded(implTaskRunner, &params).release();
     m_layerTreeHost->SetVisible(true);
-    m_inputHandler = m_layerTreeHost->GetInputHandler().get();
 }
 
-static void destroyOnUiThread(cc::SurfaceIdAllocator* idAllocator, cc::OutputSurface* outputSurface, cc::OnscreenDisplayClient* displayClient)
+static void destroyOnUiThread(RenderWidgetCompositor* self)
 {
-    if (idAllocator)
-        delete idAllocator;
-    if (outputSurface)
-        delete outputSurface;
-//     if (displayClient)
-//         delete displayClient;
-    DebugBreak();
+    delete self;
 }
 
 RenderWidgetCompositor::~RenderWidgetCompositor()
 {
-    m_layerTreeHost->SetVisible(false);
+    if (m_animationHost)
+        m_animationHost->SetMutatorHostClient(nullptr);
+    
+    if (m_sink)
+        delete m_sink;
+
+    if (m_display)
+        delete m_display;
+
+    if (m_layerTreeHost)
+        delete m_layerTreeHost;
 
     if (m_animationHost)
         delete m_animationHost;
+}
 
-    DebugBreak();
-//     scoped_ptr<cc::OutputSurface> outputSurface;
-//     if (!m_layerTreeHost->output_surface_lost())
-//         outputSurface = m_layerTreeHost->ReleaseOutputSurface();
-//     delete m_layerTreeHost;
-// 
-//     OrigChromeMgr::getInst()->getUiLoop()->task_runner()->PostTask(FROM_HERE,
-//         base::Bind(&destroyOnUiThread, m_idAllocator.get(), outputSurface.release(), m_displayClient.release()));
+void RenderWidgetCompositor::destroy()
+{
+    m_layerTreeHost->SetVisible(false);
+
+    m_sink = m_layerTreeHost->ReleaseCompositorFrameSink().release();
+
+    if (m_layerTreeHost) {
+        delete m_layerTreeHost;
+        m_layerTreeHost = nullptr;
+    }
+
+    OrigChromeMgr::getInst()->getUiLoop()->task_runner()->PostTask(FROM_HERE, base::Bind(&destroyOnUiThread, this));
 }
 
 void RenderWidgetCompositor::onHostResizedInUiThread()
@@ -228,11 +241,15 @@ void RenderWidgetCompositor::setDeviceScaleFactor(float deviceScale)
 
 void RenderWidgetCompositor::setBackgroundColor(blink::WebColor color)
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->GetLayerTree()->set_background_color(color);
 }
 
 void RenderWidgetCompositor::setHasTransparentBackground(bool transparent)
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->GetLayerTree()->set_has_transparent_background(transparent);
 }
 
@@ -249,28 +266,38 @@ void RenderWidgetCompositor::setVisible(bool visible)
 
 void RenderWidgetCompositor::setPageScaleFactorAndLimits(float page_scale_factor, float minimum, float maximum)
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->GetLayerTree()->SetPageScaleFactorAndLimits(page_scale_factor, minimum, maximum);
 }
 
 void RenderWidgetCompositor::startPageScaleAnimation(const blink::WebPoint& destination, bool useAnchor, float newPageScale, double durationSec)
 {
+    if (!m_layerTreeHost)
+        return;
     base::TimeDelta duration = base::TimeDelta::FromMicroseconds((int64)(durationSec)*base::Time::kMicrosecondsPerSecond);
     m_layerTreeHost->GetLayerTree()->StartPageScaleAnimation(gfx::Vector2d(destination.x, destination.y), useAnchor, newPageScale, duration);
 }
 
 void RenderWidgetCompositor::heuristicsForGpuRasterizationUpdated(bool matches_heuristics)
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->SetHasGpuRasterizationTrigger(matches_heuristics);
 }
 
 void RenderWidgetCompositor::setNeedsAnimate()
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->SetNeedsAnimate();
     m_layerTreeHost->SetNeedsUpdateLayers();
 }
 
 void RenderWidgetCompositor::setNeedsBeginFrame()
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->SetNeedsAnimate();
 }
 
@@ -304,6 +331,8 @@ void RenderWidgetCompositor::registerViewportLayers(
     const blink::WebLayer* innerViewportScrollLayer,
     const blink::WebLayer* outerViewportScrollLayer)
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->GetLayerTree()->RegisterViewportLayers(
         // TODO(bokan): This check can probably be removed now, but it looks
         // like overscroll elasticity may still be NULL until PinchViewport
@@ -322,6 +351,8 @@ void RenderWidgetCompositor::registerViewportLayers(
 
 void RenderWidgetCompositor::clearViewportLayers()
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->GetLayerTree()->RegisterViewportLayers(
         scoped_refptr<cc::Layer>(), scoped_refptr<cc::Layer>(),
         scoped_refptr<cc::Layer>(), scoped_refptr<cc::Layer>());
@@ -362,17 +393,23 @@ cc::LayerSelection ConvertWebSelection(const blink::WebSelection& web_selection)
 
 void RenderWidgetCompositor::registerSelection(const blink::WebSelection& selection)
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->GetLayerTree()->RegisterSelection(ConvertWebSelection(selection));
 }
 
 void RenderWidgetCompositor::clearSelection()
 {
+    if (!m_layerTreeHost)
+        return;
     cc::LayerSelection empty_selection;
     m_layerTreeHost->GetLayerTree()->RegisterSelection(empty_selection);
 }
 
 int RenderWidgetCompositor::layerTreeId() const
 {
+    if (!m_layerTreeHost)
+        return -1;
     return m_layerTreeHost->GetId();
 }
 
@@ -388,6 +425,8 @@ void RenderWidgetCompositor::compositeAndReadbackAsync(blink::WebCompositeAndRea
 
 void RenderWidgetCompositor::setDeferCommits(bool defer_commits)
 {
+    if (!m_layerTreeHost)
+        return;
     m_layerTreeHost->SetDeferCommits(defer_commits);
 }
 //////////////////////////////////////////////////////////////////////////
@@ -469,7 +508,8 @@ void RenderWidgetCompositor::DidCompleteSwapBuffers()
 
 void RenderWidgetCompositor::UpdateLayerTreeHost()
 {
-
+    if (m_webPageOcBridge)
+        m_webPageOcBridge->onLayout();
 }
 
 void RenderWidgetCompositor::DidReceiveCompositorFrameAck()
@@ -567,14 +607,16 @@ void RenderWidgetCompositor::firePaintEvent(HDC hdc, const RECT& paintRect)
     if (m_softwareOutputDevice)
         m_softwareOutputDevice->firePaintEvent(hdc, paintRect);
     else {
-        //         gfx::Rect damageRect(paintRect);
-        //         m_layerTreeHost->SetNeedsRedrawRect(damageRect);
-        //         m_layerTreeHost->SetNeedsCommit();
+        // gfx::Rect damageRect(paintRect);
+        // m_layerTreeHost->SetNeedsRedrawRect(damageRect);
+        // m_layerTreeHost->SetNeedsCommit();
     }
 }
 
-void RenderWidgetCompositor::onFireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+bool RenderWidgetCompositor::fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    if (!m_inputHandler)
+        return false;
     int x = LOWORD(lParam);
     int y = HIWORD(lParam);
     POINT point = { x, y };
@@ -605,8 +647,14 @@ void RenderWidgetCompositor::onFireWheelEvent(HWND hWnd, UINT message, WPARAM wP
     }
 
     cc::ScrollStateData data;
+    data.position_x = x;
+    data.position_y = y;
     cc::ScrollState scrollState(data);
-    m_inputHandler->ScrollBegin(&scrollState, cc::InputHandler::WHEEL);
+
+    cc::InputHandler::ScrollStatus result = m_inputHandler->ScrollBegin(&scrollState, cc::InputHandler::WHEEL);
+
+    if (cc::InputHandler::SCROLL_ON_MAIN_THREAD == result.thread)
+        return true;
 
     scrollState.data()->position_x = x;
     scrollState.data()->position_y = y;
@@ -617,13 +665,8 @@ void RenderWidgetCompositor::onFireWheelEvent(HWND hWnd, UINT message, WPARAM wP
     cc::ScrollStateData dataEmpty;
     cc::ScrollState scrollStateEmpty(dataEmpty);
     m_inputHandler->ScrollEnd(&scrollStateEmpty);
-}
 
-void RenderWidgetCompositor::fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    OrigChromeMgr* mgr = OrigChromeMgr::getInst();
-    mgr->getUiLoop()->task_runner()->PostTask(FROM_HERE, 
-        base::Bind(&RenderWidgetCompositor::onFireWheelEvent, base::Unretained(this), hWnd, message, wParam, lParam));
+    return false; // 返回false表示impl线程处理完后，不需要blink线程再处理了。impl会直接滚动cc层，并且通知blink滚动消息
 }
 
 void RenderWidgetCompositor::ReturnResources(const cc::ReturnedResourceArray& resources)
@@ -652,6 +695,8 @@ void RenderWidgetCompositor::onSwapBuffers()
 void RenderWidgetCompositor::initOnUiThread()
 {
     OrigChromeMgr* mgr = OrigChromeMgr::getInst();
+
+    m_inputHandler = m_layerTreeHost->GetInputHandler().get();
 
     cc::DelayBasedTimeSource* delayBasedTimeSource = new cc::DelayBasedTimeSource(mgr->getUiLoop()->task_runner().get());
     cc::BackToBackBeginFrameSource* backToBackBeginFrameSource = new cc::BackToBackBeginFrameSource(std::unique_ptr<cc::DelayBasedTimeSource>(delayBasedTimeSource));
@@ -684,7 +729,7 @@ void RenderWidgetCompositor::initOnUiThread()
         m_display->SetVisible(true);
     }
 
-    m_sink = new cc::DirectCompositorFrameSink(kRootFrameSinkId_1, //FrameSinkId
+    cc::CompositorFrameSink* sink = new cc::DirectCompositorFrameSink(kRootFrameSinkId_1, //FrameSinkId
         surfaceManager, //SurfaceManager* surface_manager,
         m_display, //Display* display,
         nullptr, //scoped_refptr<ContextProvider> context_provider,
@@ -692,7 +737,7 @@ void RenderWidgetCompositor::initOnUiThread()
         nullptr, //gpu::GpuMemoryBufferManager* gpu_memory_buffer_manager,
         mgr->getSharedBitmapManager() //SharedBitmapManager* shared_bitmap_manager
     );
-    m_layerTreeHost->SetCompositorFrameSink(std::unique_ptr<cc::CompositorFrameSink>(m_sink));
+    m_layerTreeHost->SetCompositorFrameSink(std::unique_ptr<cc::CompositorFrameSink>(sink));
 }
 
 // cc::LayerTreeHostClient

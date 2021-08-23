@@ -985,20 +985,57 @@ LRESULT PlatformEventHandler::fireWheelEvent(HWND hWnd, UINT message, WPARAM wPa
    
     if (ctrlKey)
         modifiers |= WebInputEvent::ControlKey;
+
+    WebGestureEvent webGestureEvent;
     
-    WebMouseWheelEvent webWheelEvent;
-    webWheelEvent.setType(WebInputEvent::MouseWheel);
-    webWheelEvent.x = x;
-    webWheelEvent.y = y;
-    webWheelEvent.globalX = x;
-    webWheelEvent.globalY = y;
-    webWheelEvent.deltaX = deltaX;
-    webWheelEvent.deltaY = deltaY;
-    webWheelEvent.wheelTicksX = 0.f;
-    webWheelEvent.wheelTicksY = delta;
-    webWheelEvent.hasPreciseScrollingDeltas = true;
-    webWheelEvent.setModifiers(modifiers);
-    m_webWidget->handleInputEvent(webWheelEvent);
+    webGestureEvent.setType(WebInputEvent::GestureScrollBegin);
+    webGestureEvent.x = x;
+    webGestureEvent.y = y;
+    webGestureEvent.globalX = x;
+    webGestureEvent.globalY = y;
+
+    webGestureEvent.sourceDevice = blink::WebGestureDeviceTouchpad;
+    webGestureEvent.uniqueTouchEventId = 0;
+    webGestureEvent.resendingPluginId = -1;
+    
+    webGestureEvent.data.scrollBegin.deltaXHint = deltaX;
+    webGestureEvent.data.scrollBegin.deltaYHint = deltaY;
+    webGestureEvent.data.scrollBegin.deltaHintUnits = WebGestureEvent::Pixels;
+    webGestureEvent.data.scrollBegin.targetViewport = false;
+    webGestureEvent.data.scrollBegin.inertialPhase = WebGestureEvent::NonMomentumPhase;
+    webGestureEvent.data.scrollBegin.synthetic = true;
+    webGestureEvent.data.scrollBegin.pointerCount = 1;
+    m_webWidget->handleInputEvent(webGestureEvent);
+
+    webGestureEvent.setType(WebInputEvent::GestureScrollUpdate);
+    webGestureEvent.data.scrollUpdate.deltaX = deltaX;
+    webGestureEvent.data.scrollUpdate.deltaY = deltaY;
+    webGestureEvent.data.scrollUpdate.velocityX = x;
+    webGestureEvent.data.scrollUpdate.velocityY = y;
+    webGestureEvent.data.scrollUpdate.previousUpdateInSequencePrevented = false;
+    webGestureEvent.data.scrollUpdate.preventPropagation = false;
+    webGestureEvent.data.scrollUpdate.inertialPhase = WebGestureEvent::NonMomentumPhase;
+    m_webWidget->handleInputEvent(webGestureEvent);
+
+    webGestureEvent.setType(WebInputEvent::GestureScrollEnd);
+    webGestureEvent.data.scrollEnd.synthetic = true;
+    webGestureEvent.data.scrollEnd.inertialPhase = WebGestureEvent::NonMomentumPhase;
+    webGestureEvent.data.scrollEnd.deltaUnits = WebGestureEvent::Pixels;
+    m_webWidget->handleInputEvent(webGestureEvent);
+    
+//     WebMouseWheelEvent webWheelEvent;
+//     webWheelEvent.setType(WebInputEvent::MouseWheel);
+//     webWheelEvent.x = x;
+//     webWheelEvent.y = y;
+//     webWheelEvent.globalX = x;
+//     webWheelEvent.globalY = y;
+//     webWheelEvent.deltaX = deltaX;
+//     webWheelEvent.deltaY = deltaY;
+//     webWheelEvent.wheelTicksX = 0.f;
+//     webWheelEvent.wheelTicksY = delta;
+//     webWheelEvent.hasPreciseScrollingDeltas = true;
+//     webWheelEvent.setModifiers(modifiers);
+//     m_webWidget->handleInputEvent(webWheelEvent);
 
     return 0;
 }

@@ -2,9 +2,11 @@
 #define content_browser_ContextMeun_h
 
 #include "content/browser/WebPage.h"
+//#include "content/browser/PostTaskHelper.h"
 #include "content/web_impl_win/WebThreadImpl.h"
 #include "third_party/WebKit/Source/web/WebViewImpl.h"
 #include "third_party/WebKit/Source/platform/Timer.h"
+#include "third_party/WebKit/Source/platform/CrossThreadFunctional.h"
 #include "third_party/WebKit/Source/wtf/ThreadingPrimitives.h"
 #include "third_party/WebKit/public/web/WebContextMenuData.h"
 #include "third_party/WebKit/public/web/WebFrame.h"
@@ -376,8 +378,12 @@ public:
             UINT itemID = LOWORD(wParam);
             if (WTF::isMainThread())
                 self->onCommand(itemID);
-            else
-                blink::Platform::current()->mainThread()->postTask(FROM_HERE, WTF::bind(&ContextMenu::onCommand, unretained(self), itemID));            
+            else {
+                blink::Platform::current()->mainThread()->postTask(FROM_HERE, blink::crossThreadBind(&ContextMenu::onCommand, WTF::crossThreadUnretained(self), itemID));            
+//                 postTaskToMainThread(FROM_HERE, [self, itemID] {
+//                     self->onCommand(itemID);
+//                 });
+            }
         }
             break;
         case WM_CLOSE:

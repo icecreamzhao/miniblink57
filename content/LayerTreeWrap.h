@@ -20,7 +20,7 @@ public:
     void setHWND(HWND hWnd);
     void onHostResized(int width, int height);
     void firePaintEvent(HDC hdc, const RECT& paintRect);
-    void fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    bool fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     HDC getHdcLocked();
     void releaseHdc();
     void initializeLayerTreeView();
