@@ -27,28 +27,26 @@ public:
     // WebDiscardableMemory:
     virtual bool Lock() override
     {
-        //ASSERT(!m_isLocked);
+        CHECK(!m_isLocked);
         m_isLocked = true;
-        return false;
+        return true;
     }
 
     virtual void* data() const override
     {
-        //ASSERT(m_isLocked);
+        CHECK(m_isLocked);
         return (void*)(m_data.data());
     }
 
     virtual void Unlock() override
     {
-        //ASSERT(m_isLocked);
+        CHECK(m_isLocked);
         m_isLocked = false;
         // Force eviction to catch clients not correctly checking the return value of lock().
-        memset(m_data.data(), 0, m_data.size());
+        // memset(m_data.data(), 0, m_data.size());
     }
 
-    virtual trace_event::MemoryAllocatorDump* CreateMemoryAllocatorDump(
-        const char* name,
-        trace_event::ProcessMemoryDump* pmd) const override
+    virtual trace_event::MemoryAllocatorDump* CreateMemoryAllocatorDump(const char* name, trace_event::ProcessMemoryDump* pmd) const override
     {
         return nullptr;
     }

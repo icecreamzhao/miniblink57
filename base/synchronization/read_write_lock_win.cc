@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "base/synchronization/read_write_lock.h"
+#include "base/synchronization/sync_xp.h"
 
 namespace base {
 namespace subtle {
@@ -16,22 +17,22 @@ namespace subtle {
 
     void ReadWriteLock::ReadAcquire()
     {
-        ::AcquireSRWLockShared(&native_handle_);
+        ::AcquireSRWLockSharedXp(&native_handle_);
     }
 
     void ReadWriteLock::ReadRelease()
     {
-        ::ReleaseSRWLockShared(&native_handle_);
+        ::ReleaseSRWLockSharedXp(&native_handle_);
     }
 
     void ReadWriteLock::WriteAcquire()
     {
-        ::AcquireSRWLockExclusive(&native_handle_);
+        ::AcquireSRWLockExclusiveXp(&native_handle_);
     }
 
     void ReadWriteLock::WriteRelease()
     {
-        ::ReleaseSRWLockExclusive(&native_handle_);
+        ::ReleaseSRWLockExclusiveXp(&native_handle_);
     }
 
 } // namespace subtle

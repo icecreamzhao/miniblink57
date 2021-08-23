@@ -29,7 +29,7 @@
 #include "base/base_export.h"
 #include "base/macros.h"
 
-#ifndef _EVNTRACE_
+#ifndef _DEBUG
 
 typedef ULONG64 TRACEHANDLE, *PTRACEHANDLE;
 

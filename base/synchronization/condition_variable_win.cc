@@ -5,6 +5,7 @@
 #include "base/synchronization/condition_variable.h"
 
 #include "base/synchronization/lock.h"
+#include "base/synchronization/sync_xp.h"
 #include "base/threading/thread_restrictions.h"
 #include "base/time/time.h"
 
@@ -17,7 +18,7 @@ ConditionVariable::ConditionVariable(Lock* user_lock)
 #endif
 {
     DCHECK(user_lock);
-    InitializeConditionVariable(&cv_);
+    InitializeConditionVariableXp(&cv_);
 }
 
 ConditionVariable::~ConditionVariable()
@@ -38,7 +39,7 @@ void ConditionVariable::TimedWait(const TimeDelta& max_time)
     user_lock_->CheckHeldAndUnmark();
 #endif
 
-    if (!SleepConditionVariableSRW(&cv_, srwlock_, timeout, 0)) {
+    if (!SleepConditionVariableSRWXp(&cv_, srwlock_, timeout, 0)) {
         DCHECK_EQ(static_cast<DWORD>(ERROR_TIMEOUT), GetLastError());
     }
 
@@ -49,12 +50,12 @@ void ConditionVariable::TimedWait(const TimeDelta& max_time)
 
 void ConditionVariable::Broadcast()
 {
-    WakeAllConditionVariable(&cv_);
+    WakeAllConditionVariableXp(&cv_);
 }
 
 void ConditionVariable::Signal()
 {
-    WakeConditionVariable(&cv_);
+    WakeConditionVariableXp(&cv_);
 }
 
 } // namespace base

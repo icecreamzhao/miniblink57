@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "base/synchronization/lock_impl.h"
+#include "base/synchronization/sync_xp.h"
 
 namespace base {
 namespace internal {
@@ -16,17 +17,17 @@ namespace internal {
 
     bool LockImpl::Try()
     {
-        return !!::TryAcquireSRWLockExclusive(&native_handle_);
+        return !!::TryAcquireSRWLockExclusiveXp(&native_handle_);
     }
 
     void LockImpl::Lock()
     {
-        ::AcquireSRWLockExclusive(&native_handle_);
+        ::AcquireSRWLockExclusiveXp(&native_handle_);
     }
 
     void LockImpl::Unlock()
     {
-        ::ReleaseSRWLockExclusive(&native_handle_);
+        ::ReleaseSRWLockExclusiveXp(&native_handle_);
     }
 
 } // namespace internal

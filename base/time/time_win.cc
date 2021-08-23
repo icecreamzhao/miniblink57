@@ -535,21 +535,23 @@ ThreadTicks ThreadTicks::Now()
 ThreadTicks ThreadTicks::GetForThread(
     const base::PlatformThreadHandle& thread_handle)
 {
-    DCHECK(IsSupported());
-
-    // Get the number of TSC ticks used by the current thread.
-    ULONG64 thread_cycle_time = 0;
-    ::QueryThreadCycleTime(thread_handle.platform_handle(), &thread_cycle_time);
-
-    // Get the frequency of the TSC.
-    double tsc_ticks_per_second = TSCTicksPerSecond();
-    if (tsc_ticks_per_second == 0)
-        return ThreadTicks();
-
-    // Return the CPU time of the current thread.
-    double thread_time_seconds = thread_cycle_time / tsc_ticks_per_second;
-    return ThreadTicks(
-        static_cast<int64_t>(thread_time_seconds * Time::kMicrosecondsPerSecond));
+    DebugBreak();
+    return ThreadTicks(0);
+//     DCHECK(IsSupported());
+// 
+//     // Get the number of TSC ticks used by the current thread.
+//     ULONG64 thread_cycle_time = 0;
+//     ::QueryThreadCycleTime(thread_handle.platform_handle(), &thread_cycle_time);
+// 
+//     // Get the frequency of the TSC.
+//     double tsc_ticks_per_second = TSCTicksPerSecond();
+//     if (tsc_ticks_per_second == 0)
+//         return ThreadTicks();
+// 
+//     // Return the CPU time of the current thread.
+//     double thread_time_seconds = thread_cycle_time / tsc_ticks_per_second;
+//     return ThreadTicks(
+//         static_cast<int64_t>(thread_time_seconds * Time::kMicrosecondsPerSecond));
 }
 
 // static
