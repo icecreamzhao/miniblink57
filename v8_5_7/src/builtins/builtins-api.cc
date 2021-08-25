@@ -8,6 +8,10 @@
 #include "src/api-natives.h"
 #include "src/builtins/builtins-utils.h"
 
+namespace wke {
+extern bool g_enableSkipJsError;
+}
+
 namespace v8 {
 namespace internal {
 
@@ -242,10 +246,17 @@ MUST_USE_RESULT static Object* HandleApiCallAsFunctionOrConstructor(
   // used to create the called object.
   DCHECK(obj->map()->is_callable());
   JSFunction* constructor = JSFunction::cast(obj->map()->GetConstructor());
+
+  if (wke::g_enableSkipJsError && (!constructor || !constructor->shared() || !(constructor->shared()->IsApiFunction())))
+      return isolate->heap()->undefined_value();
+
   // TODO(ishell): turn this back to a DCHECK.
   CHECK(constructor->shared()->IsApiFunction());
   Object* handler =
       constructor->shared()->get_api_func_data()->instance_call_handler();
+  if (wke::g_enableSkipJsError && (!handler || handler->IsUndefined(isolate) || !handler->IsCallHandlerInfo()))
+    return isolate->heap()->undefined_value();
+
   DCHECK(!handler->IsUndefined(isolate));
   // TODO(ishell): remove this debugging code.
   CHECK(handler->IsCallHandlerInfo());

@@ -71,6 +71,10 @@
 #include "src/eh-frame.h"
 #endif
 
+namespace wke {
+extern bool g_enableSkipJsError;
+}
+
 namespace v8 {
 
 bool g_patchForCreateDataProperty = false; // 在属性访问器里调用CreateDataProperty会重入
@@ -117,6 +121,9 @@ MaybeHandle<JSReceiver> Object::ToObject(Isolate* isolate,
     int constructor_function_index =
         Handle<HeapObject>::cast(object)->map()->GetConstructorFunctionIndex();
     if (constructor_function_index == Map::kNoConstructorFunctionIndex) {
+      if (wke::g_enableSkipJsError)
+        return isolate->global_proxy();
+
       THROW_NEW_ERROR(isolate,
                       NewTypeError(MessageTemplate::kUndefinedOrNullToObject),
                       JSReceiver);

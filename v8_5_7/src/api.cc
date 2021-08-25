@@ -2048,6 +2048,12 @@ MaybeLocal<Value> Module::Evaluate(Local<Context> context) {
   RETURN_ESCAPED(result);
 }
 
+uint32_t ScriptCompiler::CachedDataVersionTag() {
+  return static_cast<uint32_t>(base::hash_combine(
+    /*internal::Version::Hash(),*/ internal::FlagList::Hash(),
+    static_cast<uint32_t>(internal::CpuFeatures::SupportedFeatures())));
+}
+
 MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
     Isolate* v8_isolate, Source* source, CompileOptions options,
     bool is_module) {
