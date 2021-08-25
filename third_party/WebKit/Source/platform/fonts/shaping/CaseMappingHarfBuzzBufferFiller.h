@@ -9,7 +9,7 @@
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/Unicode.h"
 
-#include <hb.h>
+#include <third_party/harfbuzz-ng/src/hb.h>
 
 namespace blink {
 

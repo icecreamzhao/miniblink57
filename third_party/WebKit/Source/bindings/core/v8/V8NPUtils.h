@@ -1,5 +1,4 @@
-/*
- * Copyright (c) 2012 Google Inc. All rights reserved.
+/* Copyright (C) 2006, 2007, 2008, 2009 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -28,52 +27,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef HarfBuzzFace_h
-#define HarfBuzzFace_h
+#ifndef V8NPUtils_h
+#define V8NPUtils_h
 
-#include "platform/fonts/UnicodeRangeSet.h"
-#include "wtf/Allocator.h"
-#include "wtf/HashMap.h"
-#include "wtf/Noncopyable.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
-#include "wtf/text/CharacterNames.h"
-
-#include <hb.h>
+#include "core/CoreExport.h"
+#include <bindings/npruntime.h>
+#include <v8.h>
 
 namespace blink {
 
-class FontPlatformData;
-struct HarfBuzzFontData;
+// Convert a V8 Value of any type (string, bool, object, etc) to a NPVariant.
+CORE_EXPORT void convertV8ObjectToNPVariant(v8::Isolate*, v8::Local<v8::Value>, NPObject*, NPVariant*);
 
-class HarfBuzzFace : public RefCounted<HarfBuzzFace> {
-    WTF_MAKE_NONCOPYABLE(HarfBuzzFace);
+// Convert a NPVariant (string, bool, object, etc) back to a V8 Value. The owner object is the NPObject which relates to the
+// object, if the object is an Object. The created NPObject will be tied to the lifetime of the owner.
+CORE_EXPORT v8::Local<v8::Value> convertNPVariantToV8Object(v8::Isolate*, const NPVariant*, NPObject*);
 
+// Helper function to create an NPN String Identifier from a v8 string.
+NPIdentifier getStringIdentifier(v8::Isolate*, v8::Local<v8::String>);
+
+// The ExceptionHandler will be notified of any exceptions thrown while
+// operating on a NPObject.
+typedef void (*ExceptionHandler)(void* data, const NPUTF8* message);
+CORE_EXPORT void pushExceptionHandler(ExceptionHandler, void* data);
+CORE_EXPORT void popExceptionHandler();
+
+// Upon destruction, an ExceptionCatcher will pass a caught exception to the
+// current ExceptionHandler.
+class ExceptionCatcher {
 public:
-    static PassRefPtr<HarfBuzzFace> create(FontPlatformData* platformData, uint64_t uniqueID)
-    {
-        return adoptRef(new HarfBuzzFace(platformData, uniqueID));
-    }
-    ~HarfBuzzFace();
-
-    // In order to support the restricting effect of unicode-range optionally a
-    // range restriction can be passed in, which will restrict which glyphs we
-    // return in the harfBuzzGetGlyph function.
-    hb_font_t* getScaledFont(PassRefPtr<UnicodeRangeSet> = nullptr) const;
-
+    ExceptionCatcher(v8::Isolate* isolate);
+    ~ExceptionCatcher();
 private:
-    HarfBuzzFace(FontPlatformData*, uint64_t);
-
-    hb_face_t* createFace();
-    void prepareHarfBuzzFontData();
-
-    FontPlatformData* m_platformData;
-    uint64_t m_uniqueID;
-    hb_font_t* m_unscaledFont;
-    HarfBuzzFontData* m_harfBuzzFontData;
+    v8::TryCatch m_tryCatch;
 };
 
 } // namespace blink
 
-#endif // HarfBuzzFace_h
+#endif // V8NPUtils_h

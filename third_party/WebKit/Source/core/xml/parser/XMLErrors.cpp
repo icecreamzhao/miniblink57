@@ -172,17 +172,16 @@ void XMLErrors::insertErrorMessageBlock()
     String errorMessages = m_errorMessages.toString();
     Element* reportElement = createXHTMLParserErrorHeader(m_document, errorMessages);
 
-    //   if (DocumentXSLT::hasTransformSourceDocument(*m_document)) {
-    //     Vector<Attribute> attributes;
-    //     attributes.push_back(Attribute(styleAttr, "white-space: normal"));
-    //     Element* paragraph = m_document->createElement(pTag, CreatedByParser);
-    //     paragraph->parserSetAttributes(attributes);
-    //     paragraph->parserAppendChild(m_document->createTextNode(
-    //         "This document was created as the result of an XSL transformation. The "
-    //         "line and column numbers given are from the transformed result."));
-    //     reportElement->parserAppendChild(paragraph);
-    //   }
-    DebugBreak();
+    if (DocumentXSLT::hasTransformSourceDocument(*m_document)) {
+        Vector<Attribute> attributes;
+        attributes.push_back(Attribute(styleAttr, "white-space: normal"));
+        Element* paragraph = m_document->createElement(pTag, CreatedByParser);
+        paragraph->parserSetAttributes(attributes);
+        paragraph->parserAppendChild(m_document->createTextNode(
+            "This document was created as the result of an XSL transformation. The "
+            "line and column numbers given are from the transformed result."));
+        reportElement->parserAppendChild(paragraph);
+    }
 
     Node* firstChild = documentElement->firstChild();
     if (firstChild)

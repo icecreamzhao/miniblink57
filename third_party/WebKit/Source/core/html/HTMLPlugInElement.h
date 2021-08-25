@@ -30,6 +30,8 @@
 
 #include <v8.h>
 
+struct NPObject;
+
 namespace blink {
 
 class HTMLImageLoader;
@@ -67,6 +69,8 @@ public:
 
     void requestPluginCreationWithoutLayoutObjectIfPossible();
     void createPluginWithoutLayoutObject();
+
+    NPObject* getNPObject();
 
 protected:
     HTMLPlugInElement(const QualifiedName& tagName,
@@ -168,6 +172,7 @@ private:
         const Vector<String>& paramValues);
 
     mutable RefPtr<SharedPersistent<v8::Object>> m_pluginWrapper;
+    NPObject* m_NPObject;
     bool m_needsWidgetUpdate;
     bool m_shouldPreferPlugInsForImages;
     // Represents |layoutObject() && layoutObject()->isEmbeddedObject() &&

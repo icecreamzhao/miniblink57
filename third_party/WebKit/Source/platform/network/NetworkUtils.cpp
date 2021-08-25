@@ -114,8 +114,10 @@ namespace NetworkUtils {
     bool isRedirectResponseCode(int responseCode)
     {
         //return net::HttpResponseHeaders::IsRedirectResponseCode(responseCode);
-        DebugBreak();
-        return false;
+
+        // Users probably want to see 300 (multiple choice) pages, so we don't count
+        // them as redirects that need to be followed.
+        return (responseCode == 301 || responseCode == 302 || responseCode == 303 || responseCode == 307 || responseCode == 308);
     }
 
 } // NetworkUtils

@@ -27,8 +27,8 @@
 #include "core/dom/ProcessingInstruction.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/PassRefPtr.h"
-#include <libxml/tree.h>
-#include <libxslt/transform.h>
+#include "third_party/libxml/src/include/libxml/tree.h"
+#include "third_party/libxslt/libxslt/transform.h"
 
 namespace blink {
 

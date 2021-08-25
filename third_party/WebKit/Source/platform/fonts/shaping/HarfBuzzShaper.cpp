@@ -31,7 +31,7 @@
 
 #include "platform/fonts/shaping/HarfBuzzShaper.h"
 
-#include "platform/Logging.h"
+//#include "platform/Logging.h"
 #include "platform/fonts/Font.h"
 #include "platform/fonts/FontFallbackIterator.h"
 #include "platform/fonts/GlyphBuffer.h"
@@ -48,7 +48,7 @@
 #include "wtf/PtrUtil.h"
 #include "wtf/text/Unicode.h"
 #include <algorithm>
-#include <hb.h>
+#include <third_party/harfbuzz-ng/src/hb.h>
 #include <memory>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
@@ -109,7 +109,7 @@ static void normalizeCharacters(const TextRun& run, unsigned length, UChar* dest
             character = zeroWidthSpaceCharacter;
 
         U16_APPEND(destination, *destinationLength, length, character, error);
-        ASSERT_UNUSED(error, !error);
+        //ASSERT_UNUSED(error, !error);
     }
 }
 
@@ -312,16 +312,18 @@ HarfBuzzShaper::CapsFeatureSettingsScopedOverlay::~CapsFeatureSettingsScopedOver
 // without hb-icu. See http://crbug.com/356929
 static inline hb_script_t ICUScriptToHBScript(UScriptCode script)
 {
-    if (UNLIKELY(script == USCRIPT_INVALID_CODE))
-        return HB_SCRIPT_INVALID;
-
-    return hb_script_from_string(uscript_getShortName(script), -1);
+    DebugBreak();
+    return HB_SCRIPT_INVALID;
+//     if (UNLIKELY(script == USCRIPT_INVALID_CODE))
+//         return HB_SCRIPT_INVALID;
+// 
+//     return hb_script_from_string(uscript_getShortName(script), -1);
 }
 
 static inline hb_direction_t TextDirectionToHBDirection(TextDirection dir, FontOrientation orientation, const SimpleFontData* fontData)
 {
     hb_direction_t harfBuzzDirection = isVerticalAnyUpright(orientation) && !fontData->isTextOrientationFallback() ? HB_DIRECTION_TTB : HB_DIRECTION_LTR;
-    return dir == RTL ? HB_DIRECTION_REVERSE(harfBuzzDirection) : harfBuzzDirection;
+    return dir == TextDirection::kRtl ? HB_DIRECTION_REVERSE(harfBuzzDirection) : harfBuzzDirection;
 }
 
 inline bool HarfBuzzShaper::shapeRange(hb_buffer_t* harfBuzzBuffer,
@@ -343,7 +345,7 @@ inline bool HarfBuzzShaper::shapeRange(hb_buffer_t* harfBuzzBuffer,
     hb_buffer_set_script(harfBuzzBuffer, ICUScriptToHBScript(currentRunScript));
     hb_buffer_set_direction(harfBuzzBuffer, TextDirectionToHBDirection(m_textRun.direction(), m_font->getFontDescription().orientation(), currentFont));
 
-    hb_font_t* hbFont = face->getScaledFont(currentFontRangeSet);
+    hb_font_t* hbFont = face->getScaledFont(currentFontRangeSet.leakRef());
     hb_shape(hbFont, harfBuzzBuffer, m_features.isEmpty() ? 0 : m_features.data(), m_features.size());
 
     return true;
@@ -553,7 +555,7 @@ PassRefPtr<ShapeResult> HarfBuzzShaper::shapeResult()
     HarfBuzzScopedPtr<hb_buffer_t> harfBuzzBuffer(hb_buffer_create(), hb_buffer_destroy);
 
     const FontDescription& fontDescription = m_font->getFontDescription();
-    const String& localeString = fontDescription.locale();
+    const String& localeString = fontDescription.getLocale();
     CString locale = localeString.latin1();
     const hb_language_t language = hb_language_from_string(locale.data(), locale.length());
 
@@ -642,9 +644,9 @@ PassRefPtr<ShapeResult> HarfBuzzShaper::shapeResult()
                 caseMapIntend = capsSupport.needsCaseChange(smallCapsBehavior);
             }
 
-            CaseMappingHarfBuzzBufferFiller(
+            CaseMappingHarfBuzzBufferFiller filler(
                 caseMapIntend,
-                fontDescription.locale(),
+                fontDescription.getLocale(),
                 harfBuzzBuffer.get(),
                 m_normalizedBuffer.get(),
                 m_normalizedBufferLength,

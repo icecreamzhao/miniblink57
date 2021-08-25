@@ -46,6 +46,69 @@
 
 namespace blink {
 
+typedef LCID(WINAPI* LocaleNameToLCIDPtr)(LPCWSTR, DWORD);
+typedef HashMap<String, LCID> NameToLCIDMap;
+
+static String removeLastComponent(const String& name)
+{
+    size_t lastSeparator = name.reverseFind('-');
+    if (lastSeparator == kNotFound)
+        return emptyString();
+    return name.left(lastSeparator);
+}
+
+static void ensureNameToLCIDMap(NameToLCIDMap& map)
+{
+    if (!map.isEmpty())
+        return;
+    // http://www.microsoft.com/resources/msdn/goglobal/default.mspx
+    // We add only locales used in layout tests for now.
+    map.add("ar", 0x0001);
+    map.add("ar-eg", 0x0C01);
+    map.add("de", 0x0007);
+    map.add("de-de", 0x0407);
+    map.add("el", 0x0008);
+    map.add("el-gr", 0x0408);
+    map.add("en", 0x0009);
+    map.add("en-gb", 0x0809);
+    map.add("en-us", 0x0409);
+    map.add("fr", 0x000C);
+    map.add("fr-fr", 0x040C);
+    map.add("he", 0x000D);
+    map.add("he-il", 0x040D);
+    map.add("hi", 0x0039);
+    map.add("hi-in", 0x0439);
+    map.add("ja", 0x0011);
+    map.add("ja-jp", 0x0411);
+    map.add("ko", 0x0012);
+    map.add("ko-kr", 0x0412);
+    map.add("ru", 0x0019);
+    map.add("ru-ru", 0x0419);
+    map.add("zh-cn", 0x0804);
+    map.add("zh-tw", 0x0404);
+}
+
+// Fallback implementation of LocaleNameToLCID API. This is used for
+// testing on Windows XP.
+// FIXME: Remove this, ensureNameToLCIDMap, and removeLastComponent when we drop
+// Windows XP support.
+static LCID WINAPI convertLocaleNameToLCID(LPCWSTR name, DWORD)
+{
+    if (!name || !name[0])
+        return LOCALE_USER_DEFAULT;
+    DEFINE_STATIC_LOCAL(NameToLCIDMap, map, ());
+    ensureNameToLCIDMap(map);
+    String localeName = String(name).replace('_', '-');
+    localeName = localeName.lower();
+    do {
+        NameToLCIDMap::const_iterator iterator = map.find(localeName);
+        if (iterator != map.end())
+            return iterator->value;
+        localeName = removeLastComponent(localeName);
+    } while (!localeName.isEmpty());
+    return LOCALE_USER_DEFAULT;
+}
+
 static String extractLanguageCode(const String& locale)
 {
     size_t dashPosition = locale.find('-');
@@ -69,7 +132,14 @@ static LCID LCIDFromLocaleInternal(LCID userDefaultLCID,
     else
         StringImpl::copyChars(buffer, locale.characters16(), locale.length());
     buffer[locale.length()] = '\0';
-    return ::LocaleNameToLCID(buffer, 0);
+
+    static LocaleNameToLCIDPtr localeNameToLCID = nullptr;
+    if (!localeNameToLCID)
+        localeNameToLCID = reinterpret_cast<LocaleNameToLCIDPtr>(::GetProcAddress(::GetModuleHandle(L"kernel32"), "LocaleNameToLCID"));
+    if (!localeNameToLCID)
+      localeNameToLCID = convertLocaleNameToLCID;
+
+    return localeNameToLCID(buffer, 0);
 }
 
 static LCID LCIDFromLocale(const String& locale, bool defaultsForLocale)

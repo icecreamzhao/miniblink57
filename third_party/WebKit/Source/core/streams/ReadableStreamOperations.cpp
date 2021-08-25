@@ -37,8 +37,7 @@ ScriptValue ReadableStreamOperations::createCountQueuingStrategy(
     v8::Local<v8::Value> args[] = {
         v8::Number::New(scriptState->isolate(), highWaterMark)
     };
-    return ScriptValue(
-        scriptState, V8ScriptRunner::callExtraOrCrash(scriptState, "createBuiltInCountQueuingStrategy", args));
+    return ScriptValue(scriptState, V8ScriptRunner::callExtraOrCrash(scriptState, "createBuiltInCountQueuingStrategy", args));
 }
 
 ScriptValue ReadableStreamOperations::getReader(ScriptState* scriptState,

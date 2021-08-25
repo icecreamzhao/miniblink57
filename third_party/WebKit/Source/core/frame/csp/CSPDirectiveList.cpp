@@ -20,6 +20,7 @@
 #include "wtf/text/ParsingUtilities.h"
 #include "wtf/text/StringUTF8Adaptor.h"
 #include "wtf/text/WTFString.h"
+#include "wtf/text/StringHash.h"
 
 namespace blink {
 
@@ -27,15 +28,21 @@ namespace {
 
     String getSha256String(const String& content)
     {
-        DigestValue digest;
-        StringUTF8Adaptor utf8Content(content);
-        bool digestSuccess = computeDigest(HashAlgorithmSha256, utf8Content.data(),
-            utf8Content.length(), digest);
-        if (!digestSuccess) {
-            return "sha256-...";
-        }
+//         DigestValue digest;
+//         StringUTF8Adaptor utf8Content(content);
+//         bool digestSuccess = computeDigest(HashAlgorithmSha256, utf8Content.data(),
+//             utf8Content.length(), digest);
+//         if (!digestSuccess) {
+//             return "sha256-...";
+//         }
+// 
+//         return "sha256-" + base64Encode(reinterpret_cast<char*>(digest.data()), digest.size(), Base64DoNotInsertLFs);
 
-        return "sha256-" + base64Encode(reinterpret_cast<char*>(digest.data()), digest.size(), Base64DoNotInsertLFs);
+        String result = "sha256-";
+        if (content.isEmpty())
+            return result;
+        result.append(String::number(StringHash::hash(content)));
+        return result;
     }
 
     template <typename CharType>

@@ -137,12 +137,15 @@ static const AtomicString& defaultLocale()
     return locale;
 }
 
-// const AtomicString& FontDescription::locale(bool includeDefault) const
-// {
-//     if (m_locale.isNull() && includeDefault)
-//         return defaultLocale();
-//     return m_locale;
-// }
+const AtomicString& FontDescription::getLocale(bool includeDefault) const
+{
+    if (!m_locale.get() || m_locale->localeString().isEmpty()) {
+        if (includeDefault)
+            return defaultLocale();
+        return nullAtom;
+    }
+    return m_locale->localeString();
+}
 
 void FontDescription::setTraits(FontTraits traits)
 {

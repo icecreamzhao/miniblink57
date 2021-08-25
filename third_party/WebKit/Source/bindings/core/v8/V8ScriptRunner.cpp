@@ -50,6 +50,10 @@
 #include <alloca.h>
 #endif
 
+namespace wke {
+extern bool g_enableSkipJsError;
+}
+
 namespace blink {
 
 namespace {
@@ -422,6 +426,101 @@ namespace {
     }
 } // namespace
 
+
+size_t gotoPosImpl(std::string* source, size_t index, bool* find, char ch, bool ignoreSpacing)
+{
+    size_t i = index;
+    for (; i < source->size() && i < index + 10; ++i) {
+        char c = source->at(i);
+        if (ch == c) {
+            *find = true;
+            return i;
+        }
+
+        if (!('A' <= c && c <= 'Z' || 'a' <= c && c <= 'z' || '0' <= c && c <= '9')
+            && !(ignoreSpacing && ' ' == c)) {
+            *find = false;
+            return i;
+        }
+    }
+
+    if (i == source->size() - 1)
+        return -1;
+
+    *find = false;
+    return i;
+}
+
+size_t gotoMinuPos(std::string* source, size_t index, bool* find)
+{
+    return gotoPosImpl(source, index, find, '-', false);
+}
+
+size_t gotoEqPos(std::string* source, size_t index, bool* find)
+{
+    return gotoPosImpl(source, index, find, '=', true);
+}
+
+void nopScript(std::string* source, size_t index, size_t len)
+{
+    for (size_t i = index; i < index + len && i < source->size(); ++i) {
+        (*source)[i] = ';';
+    }
+}
+
+// document.getElementById("content").new2-data = "aaa"; 	// Uncaught
+bool fixV8ErrorImpl(std::string* source)
+{
+    bool find = false;
+    bool findMinus = false;
+    bool findEq = false;
+    for (size_t i = 0; i < source->size() - 1; ++i) {
+        char c = source->at(i);
+        if ('.' != c)
+            continue;
+
+        size_t pos1 = gotoMinuPos(source, i + 1, &findMinus);
+        if (-1 == pos1)
+            return false;
+        if (!findMinus) {
+            i = pos1 - 1;
+            continue;
+        }
+
+        size_t pos2 = gotoEqPos(source, pos1 + 1, &findEq);
+        if (-1 == pos2)
+            return false;
+        if (!findEq) {
+            i = pos2 - 1;
+            continue;
+        }
+
+        char c1 = source->at(pos2);
+        nopScript(source, i, pos2 - i + 1);
+        i = pos2;
+        find = true;
+    }
+    return find;
+}
+
+void fixV8Error(String* source)
+{
+    if (!wke::g_enableSkipJsError)
+        return;
+
+    std::string str;
+    
+    if (!source->is8Bit()) {
+        CString utf8 = source->utf8();
+        str.assign(utf8.data(), utf8.length());
+    } else {
+        str.assign((const char*)source->characters8(), source->length());
+    }
+
+    if (fixV8ErrorImpl(&str))
+        *source = String::fromUTF8(str.c_str(), str.size());
+}
+
 v8::MaybeLocal<v8::Script> V8ScriptRunner::compileScript(
     const ScriptSourceCode& source,
     v8::Isolate* isolate,
@@ -432,8 +531,11 @@ v8::MaybeLocal<v8::Script> V8ScriptRunner::compileScript(
         V8ThrowException::throwError(isolate, "Source file too large.");
         return v8::Local<v8::Script>();
     }
-    return compileScript(
-        v8String(isolate, source.source()), source.url(), source.sourceMapUrl(),
+
+    String sourceStr = source.source();
+    fixV8Error(&sourceStr);
+
+    return compileScript(v8String(isolate, sourceStr), source.url(), source.sourceMapUrl(),
         source.startPosition(), isolate, source.resource(), source.streamer(),
         source.resource() ? source.resource()->cacheHandler() : nullptr,
         accessControlStatus, cacheOptions);

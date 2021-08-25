@@ -35,6 +35,8 @@
 #include "../platform/WebCommon.h"
 #include <v8.h>
 
+struct NPObject;
+
 namespace blink {
 
 class WebDocument;
@@ -94,6 +96,10 @@ public:
     // of the frame containing the plugin.  Returns the result of script
     // execution, if any.
     virtual WebString executeScriptURL(const WebURL&, bool popupsAllowed) = 0;
+
+    virtual void clearScriptObjects() = 0;
+
+    virtual NPObject* scriptableObjectForElement() = 0;
 
     // Loads an URL in the specified frame (or the frame containing this
     // plugin if target is empty).  If notifyNeeded is true, then upon

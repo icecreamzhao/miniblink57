@@ -48,10 +48,12 @@
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuffer.h"
 #include "wtf/text/UTF8.h"
-#include <libxslt/imports.h>
-#include <libxslt/security.h>
-#include <libxslt/variables.h>
-#include <libxslt/xsltutils.h>
+#include <third_party/libxslt/libxslt/imports.h>
+#include <third_party/libxslt/libxslt/security.h>
+#include <third_party/libxslt/libxslt/variables.h>
+#include <third_party/libxslt/libxslt/xsltutils.h>
+#include "third_party/libxml/src/include/libxml/xmlIO.h"
+#include <third_party/libxml/src/include/libxml/tree.h>
 
 namespace blink {
 
@@ -183,6 +185,7 @@ static bool saveResultToString(xmlDocPtr resultDoc,
     xsltStylesheetPtr sheet,
     String& resultString)
 {
+#ifdef LIBXML_OUTPUT_ENABLED
     xmlOutputBufferPtr outputBuf = xmlAllocOutputBuffer(0);
     if (!outputBuf)
         return false;
@@ -204,6 +207,9 @@ static bool saveResultToString(xmlDocPtr resultDoc,
     resultString = resultBuilder.toString();
 
     return true;
+#else
+    return false;
+#endif
 }
 
 static char* allocateParameterArray(const char* data)

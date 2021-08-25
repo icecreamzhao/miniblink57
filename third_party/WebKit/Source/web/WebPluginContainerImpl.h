@@ -113,6 +113,8 @@ public:
     void reportGeometry() override;
     v8::Local<v8::Object> v8ObjectForElement() override;
     WebString executeScriptURL(const WebURL&, bool popupsAllowed) override;
+    void clearScriptObjects() override;
+    NPObject* scriptableObjectForElement() override;
     void loadFrameRequest(const WebURLRequest&, const WebString& target) override;
     bool isRectTopmost(const WebRect&) override;
     void requestTouchEventType(TouchEventRequestType) override;

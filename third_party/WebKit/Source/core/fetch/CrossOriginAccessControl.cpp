@@ -160,60 +160,61 @@ CrossOriginAccessControl::AccessStatus CrossOriginAccessControl::checkAccess(
     StoredCredentials includeCredentials,
     const SecurityOrigin* securityOrigin)
 {
-    DEFINE_THREAD_SAFE_STATIC_LOCAL(
-        AtomicString, allowOriginHeaderName,
-        (new AtomicString("access-control-allow-origin")));
-    DEFINE_THREAD_SAFE_STATIC_LOCAL(
-        AtomicString, allowCredentialsHeaderName,
-        (new AtomicString("access-control-allow-credentials")));
-    DEFINE_THREAD_SAFE_STATIC_LOCAL(
-        AtomicString, allowSuboriginHeaderName,
-        (new AtomicString("access-control-allow-suborigin")));
-
-    int statusCode = response.httpStatusCode();
-    if (!statusCode)
-        return kInvalidResponse;
-
-    const AtomicString& allowOriginHeaderValue = response.httpHeaderField(allowOriginHeaderName);
-
-    // Check Suborigins, unless the Access-Control-Allow-Origin is '*', which
-    // implies that all Suborigins are okay as well.
-    if (securityOrigin->hasSuborigin() && allowOriginHeaderValue != starAtom) {
-        const AtomicString& allowSuboriginHeaderValue = response.httpHeaderField(allowSuboriginHeaderName);
-        AtomicString atomicSuboriginName(securityOrigin->suborigin()->name());
-        if (allowSuboriginHeaderValue != starAtom && allowSuboriginHeaderValue != atomicSuboriginName) {
-            return kSubOriginMismatch;
-        }
-    }
-
-    if (allowOriginHeaderValue == starAtom) {
-        // A wildcard Access-Control-Allow-Origin can not be used if credentials are
-        // to be sent, even with Access-Control-Allow-Credentials set to true.
-        if (includeCredentials == DoNotAllowStoredCredentials)
-            return kAccessAllowed;
-        if (response.isHTTP()) {
-            return kWildcardOriginNotAllowed;
-        }
-    } else if (allowOriginHeaderValue != securityOrigin->toAtomicString()) {
-        if (allowOriginHeaderValue.isNull())
-            return kMissingAllowOriginHeader;
-        if (allowOriginHeaderValue.getString().find(isOriginSeparator, 0) != kNotFound) {
-            return kMultipleAllowOriginValues;
-        }
-        KURL headerOrigin(KURL(), allowOriginHeaderValue);
-        if (!headerOrigin.isValid())
-            return kInvalidAllowOriginValue;
-
-        return kAllowOriginMismatch;
-    }
-
-    if (includeCredentials == AllowStoredCredentials) {
-        const AtomicString& allowCredentialsHeaderValue = response.httpHeaderField(allowCredentialsHeaderName);
-        if (allowCredentialsHeaderValue != "true") {
-            return kDisallowCredentialsNotSetToTrue;
-        }
-    }
     return kAccessAllowed;
+//     DEFINE_THREAD_SAFE_STATIC_LOCAL(
+//         AtomicString, allowOriginHeaderName,
+//         (new AtomicString("access-control-allow-origin")));
+//     DEFINE_THREAD_SAFE_STATIC_LOCAL(
+//         AtomicString, allowCredentialsHeaderName,
+//         (new AtomicString("access-control-allow-credentials")));
+//     DEFINE_THREAD_SAFE_STATIC_LOCAL(
+//         AtomicString, allowSuboriginHeaderName,
+//         (new AtomicString("access-control-allow-suborigin")));
+// 
+//     int statusCode = response.httpStatusCode();
+//     if (!statusCode)
+//         return kInvalidResponse;
+// 
+//     const AtomicString& allowOriginHeaderValue = response.httpHeaderField(allowOriginHeaderName);
+// 
+//     // Check Suborigins, unless the Access-Control-Allow-Origin is '*', which
+//     // implies that all Suborigins are okay as well.
+//     if (securityOrigin->hasSuborigin() && allowOriginHeaderValue != starAtom) {
+//         const AtomicString& allowSuboriginHeaderValue = response.httpHeaderField(allowSuboriginHeaderName);
+//         AtomicString atomicSuboriginName(securityOrigin->suborigin()->name());
+//         if (allowSuboriginHeaderValue != starAtom && allowSuboriginHeaderValue != atomicSuboriginName) {
+//             return kSubOriginMismatch;
+//         }
+//     }
+// 
+//     if (allowOriginHeaderValue == starAtom) {
+//         // A wildcard Access-Control-Allow-Origin can not be used if credentials are
+//         // to be sent, even with Access-Control-Allow-Credentials set to true.
+//         if (includeCredentials == DoNotAllowStoredCredentials)
+//             return kAccessAllowed;
+//         if (response.isHTTP()) {
+//             return kWildcardOriginNotAllowed;
+//         }
+//     } else if (allowOriginHeaderValue != securityOrigin->toAtomicString()) {
+//         if (allowOriginHeaderValue.isNull())
+//             return kMissingAllowOriginHeader;
+//         if (allowOriginHeaderValue.getString().find(isOriginSeparator, 0) != kNotFound) {
+//             return kMultipleAllowOriginValues;
+//         }
+//         KURL headerOrigin(KURL(), allowOriginHeaderValue);
+//         if (!headerOrigin.isValid())
+//             return kInvalidAllowOriginValue;
+// 
+//         return kAllowOriginMismatch;
+//     }
+// 
+//     if (includeCredentials == AllowStoredCredentials) {
+//         const AtomicString& allowCredentialsHeaderValue = response.httpHeaderField(allowCredentialsHeaderName);
+//         if (allowCredentialsHeaderValue != "true") {
+//             return kDisallowCredentialsNotSetToTrue;
+//         }
+//     }
+//     return kAccessAllowed;
 }
 
 void CrossOriginAccessControl::accessControlErrorString(

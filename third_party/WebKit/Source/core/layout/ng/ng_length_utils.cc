@@ -159,8 +159,9 @@ LayoutUnit ResolveBlockLength(const NGConstraintSpace& constraint_space,
     case FitContent:
         // Due to how content_size is calculated, it should always include border
         // and padding.
-        if (content_size != LayoutUnit(-1))
+        if (content_size != LayoutUnit(-1)) {
             DCHECK_GE(content_size, border_and_padding.BlockSum());
+        }
         return content_size;
     case DeviceWidth:
     case DeviceHeight:

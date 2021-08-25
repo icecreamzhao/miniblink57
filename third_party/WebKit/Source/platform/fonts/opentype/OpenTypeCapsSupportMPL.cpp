@@ -8,7 +8,7 @@
 
 #include "platform/fonts/opentype/OpenTypeCapsSupport.h"
 
-#include <hb-ot.h>
+#include <third_party/harfbuzz-ng/src/hb-ot.h>
 
 namespace blink {
 

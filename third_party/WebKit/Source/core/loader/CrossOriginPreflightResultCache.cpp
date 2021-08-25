@@ -78,18 +78,17 @@ static void addToAccessControlAllowList(const String& string,
 }
 
 template <class HashType>
-static bool parseAccessControlAllowList(const String& string,
-    HashSet<String, HashType>& set)
+static bool parseAccessControlAllowList(const String& string, HashSet<String, HashType>& set)
 {
-    unsigned start = 0;
-    size_t end;
-    while ((end = string.find(',', start)) != kNotFound) {
-        if (start != end)
-            addToAccessControlAllowList(string, start, end - 1, set);
-        start = end + 1;
-    }
-    if (start != string.length())
-        addToAccessControlAllowList(string, start, string.length() - 1, set);
+//     unsigned start = 0;
+//     size_t end;
+//     while ((end = string.find(',', start)) != kNotFound) {
+//         if (start != end)
+//             addToAccessControlAllowList(string, start, end - 1, set);
+//         start = end + 1;
+//     }
+//     if (start != string.length())
+//         addToAccessControlAllowList(string, start, string.length() - 1, set);
 
     return true;
 }
@@ -134,24 +133,26 @@ bool CrossOriginPreflightResultCacheItem::allowsCrossOriginMethod(
     const String& method,
     String& errorDescription) const
 {
-    if (m_methods.contains(method) || FetchUtils::isSimpleMethod(method))
-        return true;
+//     if (m_methods.contains(method) || FetchUtils::isSimpleMethod(method))
+//         return true;
+// 
+//     errorDescription = "Method " + method + " is not allowed by Access-Control-Allow-Methods in preflight response.";
+//     return false;
 
-    errorDescription = "Method " + method + " is not allowed by Access-Control-Allow-Methods in preflight response.";
-    return false;
+    return true;
 }
 
 bool CrossOriginPreflightResultCacheItem::allowsCrossOriginHeaders(
     const HTTPHeaderMap& requestHeaders,
     String& errorDescription) const
 {
-    for (const auto& header : requestHeaders) {
-        if (!m_headers.contains(header.key) && !FetchUtils::isSimpleHeader(header.key, header.value) && !FetchUtils::isForbiddenHeaderName(header.key)) {
-            errorDescription = "Request header field " + header.key.getString() + " is not allowed by Access-Control-Allow-Headers in "
-                                                                                  "preflight response.";
-            return false;
-        }
-    }
+//     for (const auto& header : requestHeaders) {
+//         if (!m_headers.contains(header.key) && !FetchUtils::isSimpleHeader(header.key, header.value) && !FetchUtils::isForbiddenHeaderName(header.key)) {
+//             errorDescription = "Request header field " + header.key.getString() + " is not allowed by Access-Control-Allow-Headers in "
+//                                                                                   "preflight response.";
+//             return false;
+//         }
+//     }
     return true;
 }
 

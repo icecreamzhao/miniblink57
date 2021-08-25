@@ -132,8 +132,7 @@ bool HTMLPlugInElement::requestObjectInternal(
         return false;
 
     bool useFallback;
-    if (!shouldUsePlugin(completedURL, mimeType, hasFallbackContent(),
-            useFallback)) {
+    if (!shouldUsePlugin(completedURL, mimeType, hasFallbackContent(), useFallback)) {
         // If the plugin element already contains a subframe,
         // loadOrRedirectSubframe will re-use it. Otherwise, it will create a
         // new frame and set it as the LayoutPart's widget, causing what was
@@ -239,6 +238,15 @@ void HTMLPlugInElement::requestPluginCreationWithoutLayoutObjectIfPossible()
 
     createPluginWithoutLayoutObject();
 }
+
+NPObject* HTMLPlugInElement::getNPObject()
+{
+    ASSERT(document().frame());
+    if (!m_NPObject)
+        m_NPObject = document().frame()->script().createScriptObjectForPluginElement(this);
+    return m_NPObject;
+}
+
 
 void HTMLPlugInElement::createPluginWithoutLayoutObject()
 {

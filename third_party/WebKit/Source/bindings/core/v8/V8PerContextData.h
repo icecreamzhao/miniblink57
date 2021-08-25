@@ -52,6 +52,10 @@ class Modulator;
 class V8DOMActivityLogger;
 class V8PerContextData;
 
+struct V8NPObject;
+typedef WTF::Vector<V8NPObject*> V8NPObjectVector;
+typedef WTF::HashMap<int, V8NPObjectVector> V8NPObjectMap;
+
 enum V8ContextEmbedderDataField {
     v8ContextPerContextDataIndex = static_cast<int>(gin::kPerContextDataStartIndex + gin::kEmbedderBlink),
 };
@@ -68,6 +72,8 @@ public:
     ~V8PerContextData();
 
     v8::Local<v8::Context> context() { return m_context.newLocal(m_isolate); }
+
+    V8NPObjectMap* v8NPObjectMap() { return &m_v8NPObjectMap; }
 
     // To create JS Wrapper objects, we create a cache of a 'boiler plate'
     // object, and then simply Clone that object each time we need a new one.
@@ -116,6 +122,8 @@ private:
     v8::Local<v8::Function> constructorForTypeSlowCase(const WrapperTypeInfo*);
 
     v8::Isolate* m_isolate;
+
+    V8NPObjectMap m_v8NPObjectMap;
 
     // For each possible type of wrapper, we keep a boilerplate object.
     // The boilerplate is used to create additional wrappers of the same type.

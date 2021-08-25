@@ -21,10 +21,10 @@
 #include "platform/fonts/FontPlatformData.h"
 
 #include "SkTypeface.h"
-// #include "hb-ot.h"
-// #include "hb.h"
+#include "third_party/harfbuzz-ng/src/hb-ot.h"
+#include "third_party/harfbuzz-ng/src/hb.h"
 #include "platform/fonts/FontCache.h"
-//#include "platform/fonts/shaping/HarfBuzzFace.h"
+#include "platform/fonts/shaping/HarfBuzzFace.h"
 #include "platform/text/Character.h"
 #include "wtf/ByteSwap.h"
 #include "wtf/HashMap.h"
@@ -244,63 +244,57 @@ SkTypeface* FontPlatformData::typeface() const
 
 HarfBuzzFace* FontPlatformData::harfBuzzFace() const
 {
-    //     if (!m_harfBuzzFace)
-    //         m_harfBuzzFace = HarfBuzzFace::create(const_cast<FontPlatformData*>(this), uniqueID());
-    //
-    //     return m_harfBuzzFace.get();
-    DebugBreak();
-    return nullptr;
+    if (!m_harfBuzzFace)
+        m_harfBuzzFace = HarfBuzzFace::create(const_cast<FontPlatformData*>(this), uniqueID());
+
+    return m_harfBuzzFace.get();
 }
 
-// static inline bool tableHasSpace(hb_face_t* face, hb_set_t* glyphs,
-//     hb_tag_t tag, hb_codepoint_t space)
-// {
-//     unsigned count = hb_ot_layout_table_get_lookup_count(face, tag);
-//     for (unsigned i = 0; i < count; i++) {
-//         hb_ot_layout_lookup_collect_glyphs(face, tag, i, glyphs, glyphs, glyphs,
-//             0);
-//         if (hb_set_has(glyphs, space))
-//             return true;
-//     }
-//     return false;
-// }
-
-bool FontPlatformData::hasSpaceInLigaturesOrKerning(
-    TypesettingFeatures features) const
+static inline bool tableHasSpace(hb_face_t* face, hb_set_t* glyphs, hb_tag_t tag, hb_codepoint_t space)
 {
-    DebugBreak();
+    unsigned count = hb_ot_layout_table_get_lookup_count(face, tag);
+    for (unsigned i = 0; i < count; i++) {
+        hb_ot_layout_lookup_collect_glyphs(face, tag, i, glyphs, glyphs, glyphs,
+            0);
+        if (hb_set_has(glyphs, space))
+            return true;
+    }
     return false;
-    //     HarfBuzzFace* hbFace = harfBuzzFace();
-    //     if (!hbFace)
-    //         return false;
-    //
-    //     hb_font_t* font = hbFace->getScaledFont();
-    //     ASSERT(font);
-    //     hb_face_t* face = hb_font_get_face(font);
-    //     ASSERT(face);
-    //
-    //     hb_codepoint_t space;
-    //     // If the space glyph isn't present in the font then each space character
-    //     // will be rendering using a fallback font, which grantees that it cannot
-    //     // affect the shape of the preceding word.
-    //     if (!hb_font_get_glyph(font, spaceCharacter, 0, &space))
-    //         return false;
-    //
-    //     if (!hb_ot_layout_has_substitution(face)
-    //         && !hb_ot_layout_has_positioning(face)) {
-    //         return false;
-    //     }
-    //
-    //     bool foundSpaceInTable = false;
-    //     hb_set_t* glyphs = hb_set_create();
-    //     if (features & Kerning)
-    //         foundSpaceInTable = tableHasSpace(face, glyphs, HB_OT_TAG_GPOS, space);
-    //     if (!foundSpaceInTable && (features & Ligatures))
-    //         foundSpaceInTable = tableHasSpace(face, glyphs, HB_OT_TAG_GSUB, space);
-    //
-    //     hb_set_destroy(glyphs);
-    //
-    //     return foundSpaceInTable;
+}
+
+bool FontPlatformData::hasSpaceInLigaturesOrKerning(TypesettingFeatures features) const
+{
+    HarfBuzzFace* hbFace = harfBuzzFace();
+    if (!hbFace)
+        return false;
+
+    hb_font_t* font = hbFace->getScaledFont();
+    ASSERT(font);
+    hb_face_t* face = hb_font_get_face(font);
+    ASSERT(face);
+
+    hb_codepoint_t space;
+    // If the space glyph isn't present in the font then each space character
+    // will be rendering using a fallback font, which grantees that it cannot
+    // affect the shape of the preceding word.
+    if (!hb_font_get_glyph(font, spaceCharacter, 0, &space))
+        return false;
+
+    if (!hb_ot_layout_has_substitution(face)
+        && !hb_ot_layout_has_positioning(face)) {
+        return false;
+    }
+
+    bool foundSpaceInTable = false;
+    hb_set_t* glyphs = hb_set_create();
+    if (features & Kerning)
+        foundSpaceInTable = tableHasSpace(face, glyphs, HB_OT_TAG_GPOS, space);
+    if (!foundSpaceInTable && (features & Ligatures))
+        foundSpaceInTable = tableHasSpace(face, glyphs, HB_OT_TAG_GSUB, space);
+
+    hb_set_destroy(glyphs);
+
+    return foundSpaceInTable;
 }
 
 unsigned FontPlatformData::hash() const

@@ -165,6 +165,10 @@ SecurityOrigin::SecurityOrigin()
     , m_blockLocalAccessFromLocalOrigin(false)
     , m_isUniqueOriginPotentiallyTrustworthy(false)
 {
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "SecurityOrigin::SecurityOrigin 1: %p\n", this);
+    OutputDebugStringA(output);
+    free(output);
 }
 
 SecurityOrigin::SecurityOrigin(const SecurityOrigin* other)
@@ -183,6 +187,10 @@ SecurityOrigin::SecurityOrigin(const SecurityOrigin* other)
     , m_isUniqueOriginPotentiallyTrustworthy(
           other->m_isUniqueOriginPotentiallyTrustworthy)
 {
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "SecurityOrigin::SecurityOrigin 2: %p\n", this);
+    OutputDebugStringA(output);
+    free(output);
 }
 
 PassRefPtr<SecurityOrigin> SecurityOrigin::create(const KURL& url)

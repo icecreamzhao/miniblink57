@@ -11,7 +11,7 @@
 #include "platform/fonts/shaping/CaseMappingHarfBuzzBufferFiller.h"
 #include "platform/fonts/shaping/HarfBuzzFace.h"
 
-#include <hb.h>
+#include <third_party/harfbuzz-ng/src/hb.h>
 
 namespace blink {
 

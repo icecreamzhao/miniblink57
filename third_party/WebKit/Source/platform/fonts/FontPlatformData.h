@@ -167,7 +167,7 @@ private:
     FontRenderStyle m_style;
 #endif
 
-    //mutable RefPtr<HarfBuzzFace> m_harfBuzzFace;
+    mutable RefPtr<HarfBuzzFace> m_harfBuzzFace;
     bool m_isHashTableDeletedValue;
 #if OS(WIN)
     int m_paintTextFlags;

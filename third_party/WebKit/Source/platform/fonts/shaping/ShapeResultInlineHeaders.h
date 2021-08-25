@@ -36,7 +36,7 @@
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 
-//#include <hb.h>
+#include <third_party/harfbuzz-ng/src/hb.h>
 
 namespace blink {
 
@@ -60,7 +60,7 @@ struct ShapeResult::RunInfo {
     USING_FAST_MALLOC(RunInfo);
 
 public:
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     RunInfo(const SimpleFontData* font, hb_direction_t dir, hb_script_t script,
         unsigned startIndex, unsigned numGlyphs, unsigned numCharacters)
         : m_fontData(const_cast<SimpleFontData*>(font))
@@ -85,7 +85,7 @@ public:
     }
 #endif
 
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     bool rtl() const
     {
         return HB_DIRECTION_IS_BACKWARD(m_direction);
@@ -115,7 +115,7 @@ public:
     }
 
     RefPtr<SimpleFontData> m_fontData;
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     hb_direction_t m_direction;
     hb_script_t m_script;
 #endif

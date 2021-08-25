@@ -41,10 +41,10 @@
 #include "wtf/PtrUtil.h"
 #include <memory>
 
-#include <hb-ot.h>
-#include <hb.h>
+#include <third_party/harfbuzz-ng/src/hb-ot.h>
+#include <third_party/harfbuzz-ng/src/hb.h>
 #if OS(MACOSX)
-#include <hb-coretext.h>
+#include <third_party/harfbuzz-ng/src/hb-coretext.h>
 #endif
 
 #include <SkPaint.h>
@@ -115,7 +115,7 @@ public:
 private:
     explicit HbFontCacheEntry(hb_font_t* font)
         : m_hbFont(HbFontUniquePtr(font))
-        , m_hbFontData(wrapUnique(new HarfBuzzFontData())) {};
+        , m_hbFontData(WTF::wrapUnique(new HarfBuzzFontData())) {};
 
     HbFontUniquePtr m_hbFont;
     std::unique_ptr<HarfBuzzFontData> m_hbFontData;

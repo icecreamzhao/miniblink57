@@ -520,12 +520,10 @@ bool BoxBorderPainter::paintBorderFastPath(GraphicsContext& context,
         if (firstEdge().borderStyle() == BorderStyleSolid) {
             if (m_isUniformWidth && !m_outer.isRounded()) {
                 // 4-side, solid, uniform-width, rectangular border => one drawRect()
-                drawSolidBorderRect(context, m_outer.rect(), firstEdge().width,
-                    firstEdge().color);
+                drawSolidBorderRect(context, m_outer.rect(), firstEdge().width, firstEdge().color);
             } else {
                 // 4-side, solid border => one drawDRRect()
-                drawBleedAdjustedDRRect(context, m_bleedAvoidance, m_outer, m_inner,
-                    firstEdge().color);
+                drawBleedAdjustedDRRect(context, m_bleedAvoidance, m_outer, m_inner, firstEdge().color);
             }
         } else {
             // 4-side, double border => 2x drawDRRect()

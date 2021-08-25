@@ -279,11 +279,13 @@ static void copyASCIIByString(const String& src, char* dest)
 static void appendASCII(const String& base, const char* rel, size_t len, CharBuffer& buffer)
 {
     buffer.resize(base.length() + len + 1);
-    if (base.is8Bit())
-        memcpy(buffer.data(), base.characters8(), base.length());
-    else {
-        copyASCII(base.characters16(), base.length(), buffer.data());
-        notImplemented();
+    if (!base.isEmpty()) {
+        if (base.is8Bit())
+            memcpy(buffer.data(), base.characters8(), base.length());
+        else {
+            copyASCII(base.characters16(), base.length(), buffer.data());
+            notImplemented();
+        }
     }
     memcpy(buffer.data() + base.length(), rel, len);
     buffer[buffer.size() - 1] = '\0';
@@ -1051,8 +1053,18 @@ String decodeURLEscapeSequences(const String& str)
     return decodeURLEscapeSequences(str, UTF8Encoding());
 }
 
-String decodeURLEscapeSequences(const String& str, const TextEncoding& encoding)
+String decodeURLEscapeSequences(const String& strUrl, const TextEncoding& encoding)
 {
+    if (strUrl.isEmpty())
+        return strUrl;
+    const String* strPtr = &strUrl;
+    String strA;
+    if (!strUrl.is8Bit()) {
+        strA = String(strA.utf8().data());
+        strPtr = &strA;
+    }
+    const String& str = *strPtr;
+
     Vector<LChar> result;
 
     CharBuffer buffer;

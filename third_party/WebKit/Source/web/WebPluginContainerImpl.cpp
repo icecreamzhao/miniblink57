@@ -530,6 +530,19 @@ WebString WebPluginContainerImpl::executeScriptURL(const WebURL& url,
     return toCoreString(v8::Local<v8::String>::Cast(result));
 }
 
+void WebPluginContainerImpl::clearScriptObjects()
+{
+    if (!frame())
+        return;
+
+    frame()->script().cleanupScriptObjectsForPlugin(this);
+}
+
+NPObject* WebPluginContainerImpl::scriptableObjectForElement()
+{
+    return m_element->getNPObject();
+}
+
 void WebPluginContainerImpl::loadFrameRequest(const WebURLRequest& request,
     const WebString& target)
 {

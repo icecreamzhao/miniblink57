@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2012 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,7 @@
 #include "wtf/HashSet.h"
 #include "wtf/Vector.h"
 #include "wtf/text/CharacterNames.h"
-#include <hb.h>
+#include <third_party/harfbuzz-ng/src/hb.h>
 #include <memory>
 #include <unicode/uscript.h>
 

@@ -152,8 +152,7 @@ namespace {
 
 } // namespace
 
-void V8Initializer::messageHandlerInMainThread(v8::Local<v8::Message> message,
-    v8::Local<v8::Value> data)
+void V8Initializer::messageHandlerInMainThread(v8::Local<v8::Message> message, v8::Local<v8::Value> data)
 {
     ASSERT(isMainThread());
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
@@ -167,31 +166,31 @@ void V8Initializer::messageHandlerInMainThread(v8::Local<v8::Message> message,
         return;
 
     ExecutionContext* context = scriptState->getExecutionContext();
+    std::unique_ptr<SourceLocation> locationToPrint = SourceLocation::fromMessage(isolate, message, context);
+
+    context->addConsoleMessage(ConsoleMessage::create(
+      JSMessageSource,
+      MessageLevelFromNonFatalErrorLevel(message->ErrorLevel()),
+      toCoreStringWithNullCheck(message->Get()), std::move(locationToPrint)));
+
+    int errorLevel = message->ErrorLevel();
+    if (errorLevel != v8::Isolate::kMessageError)
+      return;
+
     std::unique_ptr<SourceLocation> location = SourceLocation::fromMessage(isolate, message, context);
-
-    if (message->ErrorLevel() != v8::Isolate::kMessageError) {
-        context->addConsoleMessage(ConsoleMessage::create(
-            JSMessageSource,
-            MessageLevelFromNonFatalErrorLevel(message->ErrorLevel()),
-            toCoreStringWithNullCheck(message->Get()), std::move(location)));
-        return;
-    }
-
     AccessControlStatus accessControlStatus = NotSharableCrossOrigin;
     if (message->IsOpaque())
         accessControlStatus = OpaqueResource;
     else if (message->IsSharedCrossOrigin())
         accessControlStatus = SharableCrossOrigin;
 
-    ErrorEvent* event = ErrorEvent::create(toCoreStringWithNullCheck(message->Get()),
-        std::move(location), &scriptState->world());
+    ErrorEvent* event = ErrorEvent::create(toCoreStringWithNullCheck(message->Get()), std::move(location), &scriptState->world());
 
     String messageForConsole = extractMessageForConsole(isolate, data);
     if (!messageForConsole.isEmpty())
         event->setUnsanitizedMessage("Uncaught " + messageForConsole);
 
-    V8ErrorHandler::storeExceptionOnErrorEventWrapper(
-        scriptState, event, data, scriptState->context()->Global());
+    V8ErrorHandler::storeExceptionOnErrorEventWrapper(scriptState, event, data, scriptState->context()->Global());
     context->dispatchErrorEvent(event, accessControlStatus);
 }
 

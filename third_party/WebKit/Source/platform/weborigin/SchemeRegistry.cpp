@@ -57,6 +57,14 @@ namespace {
             //     for (auto& scheme : url::GetCORSEnabledSchemes())
             //       CORSEnabledSchemes.add(scheme.c_str());
             //DebugBreak();
+
+            const char* schemes[] = {"http", "https", "file", nullptr};
+            for (size_t i = 0; schemes[i] != nullptr; ++i) {
+                localSchemes.add(schemes[i]);
+                secureSchemes.add(schemes[i]);
+                //schemesWithUniqueOrigins.add(schemes[i]);
+                CORSEnabledSchemes.add(schemes[i]);
+            }
         }
         ~URLSchemesRegistry() = default;
 
@@ -230,11 +238,12 @@ void SchemeRegistry::registerURLSchemeAsNotAllowingJavascriptURLs(
 bool SchemeRegistry::shouldTreatURLSchemeAsNotAllowingJavascriptURLs(
     const String& scheme)
 {
-    DCHECK_EQ(scheme, scheme.lower());
-    if (scheme.isEmpty())
-        return false;
-    return getURLSchemesRegistry().notAllowingJavascriptURLsSchemes.contains(
-        scheme);
+//     DCHECK_EQ(scheme, scheme.lower());
+//     if (scheme.isEmpty())
+//         return false;
+//     return getURLSchemesRegistry().notAllowingJavascriptURLsSchemes.contains(
+//         scheme);
+    return true;
 }
 
 void SchemeRegistry::registerURLSchemeAsCORSEnabled(const String& scheme)
@@ -245,10 +254,11 @@ void SchemeRegistry::registerURLSchemeAsCORSEnabled(const String& scheme)
 
 bool SchemeRegistry::shouldTreatURLSchemeAsCORSEnabled(const String& scheme)
 {
-    DCHECK_EQ(scheme, scheme.lower());
-    if (scheme.isEmpty())
-        return false;
-    return getURLSchemesRegistry().CORSEnabledSchemes.contains(scheme);
+//     DCHECK_EQ(scheme, scheme.lower());
+//     if (scheme.isEmpty())
+//         return false;
+//     return getURLSchemesRegistry().CORSEnabledSchemes.contains(scheme);
+    return true;
 }
 
 String SchemeRegistry::listOfCORSEnabledURLSchemes()

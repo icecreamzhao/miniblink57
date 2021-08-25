@@ -230,22 +230,23 @@ bool MIMETypeRegistry::isSupportedImageMIMEType(const String& mimeType)
     return supportedImageResourceMIMETypes->contains(extension);
 }
 
-bool MIMETypeRegistry::isSupportedImageResourceMIMEType(
-    const String& mimeType)
+bool MIMETypeRegistry::isSupportedImageResourceMIMEType(const String& mimeType)
 {
     return isSupportedImageMIMEType(mimeType);
 }
 
-bool MIMETypeRegistry::isSupportedImagePrefixedMIMEType(
-    const String& mimeType)
+bool MIMETypeRegistry::isSupportedImagePrefixedMIMEType(const String& mimeType)
 {
     //   std::string asciiMimeType = ToLowerASCIIOrEmpty(mimeType);
     //   return (mime_util::IsSupportedImageMimeType(asciiMimeType) ||
     //           (base::StartsWith(asciiMimeType, "image/",
     //                             base::CompareCase::SENSITIVE) &&
     //            mime_util::IsSupportedNonImageMimeType(asciiMimeType)));
-    DebugBreak();
-    return false;
+
+//     return Platform::current()->getMimeRegistry()->supportsImagePrefixedMIMEType(mimeType.lower())
+//         != WebMimeRegistry::IsNotSupported;
+
+    return isSupportedImageMIMEType(mimeType) || (mimeType.startsWith("image/") && isSupportedNonImageMIMEType(mimeType));
 }
 
 bool MIMETypeRegistry::isSupportedImageMIMETypeForEncoding(

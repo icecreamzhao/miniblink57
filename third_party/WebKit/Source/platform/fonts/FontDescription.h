@@ -200,7 +200,7 @@ public:
     FontSmoothingMode fontSmoothing() const { return static_cast<FontSmoothingMode>(m_fields.m_fontSmoothing); }
     TextRenderingMode textRendering() const { return static_cast<TextRenderingMode>(m_fields.m_textRendering); }
     //UScriptCode script() const { return static_cast<UScriptCode>(m_fields.m_script); }
-    //const AtomicString& locale(bool includeDefault = true) const;
+    const AtomicString& getLocale(bool includeDefault = true) const;
     const LayoutLocale* locale(bool includeDefault = true) const { return m_locale.get(); }
     const LayoutLocale& localeOrDefault() const
     {

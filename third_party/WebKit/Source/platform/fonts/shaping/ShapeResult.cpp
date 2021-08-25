@@ -35,12 +35,12 @@
 #include "platform/fonts/shaping/ShapeResultInlineHeaders.h"
 #include "platform/fonts/shaping/ShapeResultSpacing.h"
 #include "wtf/PtrUtil.h"
-//#include <hb.h>
+#include <third_party/harfbuzz-ng/src/hb.h>
 #include <memory>
 
 namespace blink {
 
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
 
 float ShapeResult::RunInfo::xPositionForVisualOffset(unsigned offset, AdjustMidCluster adjustMidCluster) const
 {
@@ -157,9 +157,9 @@ ShapeResult::ShapeResult(const ShapeResult& other)
     , m_hasVerticalOffsets(other.m_hasVerticalOffsets)
 {
     m_runs.reserveCapacity(other.m_runs.size());
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     for (const auto& run : other.m_runs)
-        m_runs.append(wrapUnique(new ShapeResult::RunInfo(*run)));
+        m_runs.append(WTF::wrapUnique(new ShapeResult::RunInfo(*run)));
 #endif
     notImplemented();
 }
@@ -170,7 +170,7 @@ ShapeResult::~ShapeResult()
 
 size_t ShapeResult::byteSize() const
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     size_t selfByteSize = sizeof(this);
     for (unsigned i = 0; i < m_runs.size(); ++i) {
         selfByteSize += m_runs[i]->byteSize();
@@ -185,8 +185,8 @@ int ShapeResult::offsetForPosition(float targetX, bool includePartialGlyphs) con
 {
     int charactersSoFar = 0;
     float currentX = 0;
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    if (m_direction == RTL) {
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
+    if (m_direction == (unsigned int)TextDirection::kRtl) {
         charactersSoFar = m_numCharacters;
         for (unsigned i = 0; i < m_runs.size(); ++i) {
             if (!m_runs[i])
@@ -218,15 +218,13 @@ int ShapeResult::offsetForPosition(float targetX, bool includePartialGlyphs) con
 
     return charactersSoFar;
 #endif // MINIBLINK_NOT_IMPLEMENTED
-    notImplemented();
-    return 0;
 }
 
 void ShapeResult::fallbackFonts(HashSet<const SimpleFontData*>* fallback) const
 {
     ASSERT(fallback);
     ASSERT(m_primaryFont);
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     for (unsigned i = 0; i < m_runs.size(); ++i) {
         if (m_runs[i] && m_runs[i]->m_fontData != m_primaryFont
             && !m_runs[i]->m_fontData->isTextOrientationFallbackOf(m_primaryFont.get())) {
@@ -234,12 +232,11 @@ void ShapeResult::fallbackFonts(HashSet<const SimpleFontData*>* fallback) const
         }
     }
 #endif // MINIBLINK_NOT_IMPLEMENTED
-    notImplemented();
 }
 
 void ShapeResult::applySpacing(ShapeResultSpacing& spacing, const TextRun& textRun)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     float offsetX, offsetY;
     float& offset = spacing.isVerticalOffset() ? offsetY : offsetX;
     float totalSpace = 0;
@@ -293,7 +290,7 @@ PassRefPtr<ShapeResult> ShapeResult::applySpacingToCopy(
     return result.release();
 }
 
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
 static inline float harfBuzzPositionToFloat(hb_position_t value)
 {
     return static_cast<float>(value) / (1 << 16);
@@ -304,7 +301,7 @@ void ShapeResult::insertRun(std::unique_ptr<ShapeResult::RunInfo> runToInsert,
     unsigned startGlyph, unsigned numGlyphs, hb_buffer_t* harfBuzzBuffer)
 {
     ASSERT(numGlyphs > 0);
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     std::unique_ptr<ShapeResult::RunInfo> run(std::move(runToInsert));
     ASSERT(numGlyphs == run->m_glyphData.size());
 
@@ -375,15 +372,15 @@ void ShapeResult::insertRun(std::unique_ptr<ShapeResult::RunInfo> runToInsert,
     notImplemented();
 }
 
-#ifndef MINIBLINK_NOT_IMPLEMENTED
-
-PassRefPtr<ShapeResult> ShapeResult::createForTabulationCharacters(const Font* font,
-    const TextRun& textRun, float positionOffset, unsigned count)
-{
-    DebugBreak();
-    return nullptr;
-}
-
-#endif
+// #ifndef MINIBLINK_NOT_IMPLEMENTED
+// 
+// PassRefPtr<ShapeResult> ShapeResult::createForTabulationCharacters(const Font* font,
+//     const TextRun& textRun, float positionOffset, unsigned count)
+// {
+//     DebugBreak();
+//     return nullptr;
+// }
+// 
+// #endif
 
 } // namespace blink

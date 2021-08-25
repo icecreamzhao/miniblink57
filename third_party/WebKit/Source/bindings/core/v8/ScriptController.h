@@ -44,6 +44,12 @@
 #include "wtf/text/TextPosition.h"
 #include <v8.h>
 
+#ifndef DISABLE_NPAPI
+#include "wtf/HashMap.h"
+#include "third_party/npapi/bindings/npruntime.h"
+struct NPObject;
+#endif
+
 namespace blink {
 
 class DOMWrapperWorld;
@@ -52,6 +58,9 @@ class KURL;
 class ScriptSourceCode;
 class SecurityOrigin;
 class Widget;
+#ifndef DISABLE_NPAPI
+class HTMLPlugInElement;
+#endif
 
 typedef WTF::Vector<v8::Extension*> V8Extensions;
 
@@ -144,6 +153,17 @@ public:
         return m_windowProxyManager.get();
     }
 
+#ifndef DISABLE_NPAPI
+    void* createPluginWrapper(void* widget);
+    void cleanupScriptObjectsForPlugin(void* nativeHandle);
+    NPObject* createScriptObjectForPluginElement(HTMLPlugInElement*);
+    NPObject* windowScriptNPObject();
+
+    // Creates a property of the global object of a frame.
+    bool bindToWindowObject(LocalFrame*, const String& key, NPObject*);
+    ~ScriptController();
+#endif
+
 private:
     explicit ScriptController(LocalFrame*);
 
@@ -154,6 +174,20 @@ private:
         ExecuteScriptPolicy);
 
     Member<LocalWindowProxyManager> m_windowProxyManager;
+
+#ifndef DISABLE_NPAPI
+    void clearScriptObjects();
+
+    typedef WTF::HashMap<void*, NPObject*> PluginObjectMap;
+
+    // A mapping between Widgets and their corresponding script object.
+    // This list is used so that when the plugin dies, we can immediately
+    // invalidate all sub-objects which are associated with that plugin.
+    // The frame keeps a NPObject reference for each item on the list.
+    PluginObjectMap* m_pluginObjects;
+
+    NPObject* m_windowScriptNPObject;
+#endif
 };
 
 } // namespace blink

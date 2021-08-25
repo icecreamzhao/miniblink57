@@ -119,16 +119,13 @@ static inline bool isAcceleratedCanvas(const LayoutObject* layoutObject)
     return false;
 }
 
-static inline bool isCanvasControlledByOffscreen(
-    const LayoutObject* layoutObject)
+static inline bool isCanvasControlledByOffscreen(const LayoutObject* layoutObject)
 {
-    if (layoutObject->isCanvas()) {
-        //     HTMLCanvasElement* canvas = toHTMLCanvasElement(layoutObject->node());
-        //     if (canvas->surfaceLayerBridge())
-        //       return true;
-        DebugBreak();
-        return false;
-    }
+//     if (layoutObject->isCanvas()) {
+//         HTMLCanvasElement* canvas = toHTMLCanvasElement(layoutObject->node());
+//         if (canvas->surfaceLayerBridge())
+//             return true;
+//     }
     return false;
 }
 
