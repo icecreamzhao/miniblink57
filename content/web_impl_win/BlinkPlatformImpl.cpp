@@ -329,10 +329,10 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
     blink::networkStateNotifier().setOnLine(true);
 
     platform->m_defaultGcTimer = new blink::Timer<BlinkPlatformImpl>(platform, &BlinkPlatformImpl::garbageCollectedTimer);
-    platform->m_defaultGcTimer->start(40, 40, FROM_HERE);
+    platform->m_defaultGcTimer->start(40 * 10, 40 * 10, FROM_HERE);
 
     platform->m_resTimer = new blink::Timer<BlinkPlatformImpl>(platform, &BlinkPlatformImpl::resourceGarbageCollectedTimer);
-    platform->m_resTimer->start(120, 120, FROM_HERE);
+    platform->m_resTimer->start(120 * 10, 120 * 10, FROM_HERE);
 
     WTF::PartitionAllocHooks::setAllocationHook(onAllocationHook);
     WTF::PartitionAllocHooks::setFreeHook(onFreeHook);
@@ -874,13 +874,16 @@ void readJsFile(const char* path, std::vector<char>* buffer)
 
 blink::WebData BlinkPlatformImpl::loadResource(const char* name)
 {
-    if (0 == strcmp("html.css", name))
+    if (0 == strcmp("html.css", name)) {
+//         std::vector<char> buffer;
+//         readJsFile("G:\\mycode\\miniblink57\\third_party\\WebKit\\Source\\core\\css\\html.css", &buffer);
+//         return blink::WebData(&buffer[0], buffer.size());
         return blink::WebData(blink::htmlUserAgentStyleSheet, sizeof(blink::htmlUserAgentStyleSheet));
-    else if (0 == strcmp("quirks.css", name))
+    } else if (0 == strcmp("quirks.css", name)) {
         return blink::WebData(blink::quirksUserAgentStyleSheet, sizeof(blink::quirksUserAgentStyleSheet));
-    else if (0 == strcmp("themeWin.css", name))
+    } else if (0 == strcmp("themeWin.css", name)) {
         return blink::WebData(blink::themeWinUserAgentStyleSheet, sizeof(blink::themeWinUserAgentStyleSheet));
-    else if (0 == strcmp("svg.css", name))
+    } else if (0 == strcmp("svg.css", name))
         return blink::WebData(blink::svgUserAgentStyleSheet, sizeof(blink::svgUserAgentStyleSheet));
 //     else if (0 == strcmp("themeChromiumSkia.css", name))
 //         return blink::WebData(blink::themeChromiumSkiaUserAgentStyleSheet, sizeof(blink::themeChromiumSkiaUserAgentStyleSheet));
@@ -1162,7 +1165,7 @@ blink::WebClipboard* BlinkPlatformImpl::clipboard()
 }
 
 // Plugins -------------------------------------------------------------
-void BlinkPlatformImpl::getPluginList(bool refresh, blink::WebPluginListBuilder* builder)
+void BlinkPlatformImpl::getPluginList(bool refresh, const blink::WebSecurityOrigin& mainFrameOrigin, blink::WebPluginListBuilder* builder)
 {
 //     builder->addPlugin(blink::WebString::fromUTF8("Shockwave Flash"), blink::WebString::fromUTF8("flashPlugin"), blink::WebString::fromUTF8(".swf"));
 //     builder->addMediaTypeToLastPlugin(blink::WebString::fromUTF8("application/x-shockwave-flash"), blink::WebString::fromUTF8("flashPlugin"));

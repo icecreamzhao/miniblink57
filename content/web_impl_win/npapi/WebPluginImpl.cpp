@@ -466,83 +466,81 @@ void WebPluginImpl::performRequest(PluginRequest* request)
     Vector<char> requestUrlBuf = ensureStringToUTF8(requestURL.string(), true);
     
     //UserGestureIndicator gestureIndicator(request->shouldAllowPopups() ? DefinitelyProcessingUserGesture : PossiblyProcessingUserGesture);
-    DebugBreak();
 
-//     if (jsString.isNull()) {
-//         // if this is not a targeted request, create a stream for it. otherwise,
-//         // just pass it off to the loader
-//         if (targetFrameName.isEmpty()) {
-//             PluginStream* stream = PluginStream::create(this, m_parentFrame, request->frameLoadRequest().resourceRequest(), request->sendNotification(), request->notifyData(), plugin()->pluginFuncs(), instance(), m_plugin->quirks());            
-//             m_streams.add((stream));
-//             stream->start();
-//         } else {
-//             // If the target frame is our frame, we could destroy the
-//             // WebPluginImpl, so we protect it. <rdar://problem/6991251>
-//             RefPtr<WebPluginImpl> protect(this);
-// 
-//             FrameLoadRequest frameRequest(m_parentFrame->document(), request->frameLoadRequest().resourceRequest());
-//             frameRequest.setFrameName(targetFrameName);
-//             //frameRequest.setShouldCheckNewWindowPolicy(true);
-//             m_parentFrame->loader().load(frameRequest);
-// 
-//             // FIXME: <rdar://problem/4807469> This should be sent when the document has finished loading
-//             if (request->sendNotification()) {
-//                 WebPluginImpl::setCurrentPluginView(this);
-//                 //JSC::JSLock::DropAllLocks dropAllLocks(JSDOMWindowBase::commonVM());
-//                 setCallingPlugin(true);
-//                 m_plugin->pluginFuncs()->urlnotify(m_instance, requestUrlBuf.data(), NPRES_DONE, request->notifyData());
-//                 setCallingPlugin(false);
-//                 WebPluginImpl::setCurrentPluginView(0);
-//             }
-//         }
-//         return;
-//     }
-// 
-//     // Targeted JavaScript requests are only allowed on the frame that contains the JavaScript plugin
-//     // and this has been made sure in ::load.
-//     ASSERT(targetFrameName.isEmpty() || m_parentFrame->tree().find(targetFrameName) == m_parentFrame);
-//     
-//     // Executing a script can cause the plugin view to be destroyed, so we keep a reference to it.
-//     RefPtr<WebPluginImpl> protector(this);
-//     v8::HandleScope handleScope(toIsolate(m_parentFrame));
-//     blink::ScriptSourceCode jsCode(jsString);
-//     v8::Local<v8::Value> result = m_parentFrame->script().executeScriptInMainWorldAndReturnValue(jsCode);
-// 
-//     if (targetFrameName.isNull()) {
-//         String resultString;
-// 
-//         CString cstr;        
-//         if (result->IsString()) {
-// #if V8_MAJOR_VERSION > 5
-//             v8::Local<v8::String> v8String = result->ToString(toIsolate(m_parentFrame));
-// #else
-//             v8::Local<v8::String> v8String = result->ToString();
-// #endif
-//             resultString = v8StringToWebCoreString<String>(v8String, blink::Externalize);
-//             cstr = resultString.utf8();
-//         }
-// 
-//         PluginStream* stream = PluginStream::create(this, m_parentFrame, request->frameLoadRequest().resourceRequest(), request->sendNotification(), request->notifyData(), plugin()->pluginFuncs(), instance(), m_plugin->quirks());
-//         m_streams.add(stream);
-//         stream->sendJavaScriptStream(requestURL, cstr);
-//     }
+    if (jsString.isNull()) {
+        // if this is not a targeted request, create a stream for it. otherwise,
+        // just pass it off to the loader
+        if (targetFrameName.isEmpty()) {
+            PluginStream* stream = PluginStream::create(this, m_parentFrame, request->frameLoadRequest().resourceRequest(), request->sendNotification(), request->notifyData(), plugin()->pluginFuncs(), instance(), m_plugin->quirks());            
+            m_streams.insert(stream);
+            stream->start();
+        } else {
+            // If the target frame is our frame, we could destroy the
+            // WebPluginImpl, so we protect it. <rdar://problem/6991251>
+            RefPtr<WebPluginImpl> protect(this);
+
+            FrameLoadRequest frameRequest(m_parentFrame->document(), request->frameLoadRequest().resourceRequest());
+            frameRequest.setFrameName(targetFrameName);
+            //frameRequest.setShouldCheckNewWindowPolicy(true);
+            m_parentFrame->loader().load(frameRequest);
+
+            // FIXME: <rdar://problem/4807469> This should be sent when the document has finished loading
+            if (request->sendNotification()) {
+                WebPluginImpl::setCurrentPluginView(this);
+                //JSC::JSLock::DropAllLocks dropAllLocks(JSDOMWindowBase::commonVM());
+                setCallingPlugin(true);
+                m_plugin->pluginFuncs()->urlnotify(m_instance, requestUrlBuf.data(), NPRES_DONE, request->notifyData());
+                setCallingPlugin(false);
+                WebPluginImpl::setCurrentPluginView(0);
+            }
+        }
+        return;
+    }
+
+    // Targeted JavaScript requests are only allowed on the frame that contains the JavaScript plugin
+    // and this has been made sure in ::load.
+    ASSERT(targetFrameName.isEmpty() || m_parentFrame->tree().find(targetFrameName) == m_parentFrame);
+    
+    // Executing a script can cause the plugin view to be destroyed, so we keep a reference to it.
+    RefPtr<WebPluginImpl> protector(this);
+    v8::HandleScope handleScope(toIsolate(m_parentFrame));
+    blink::ScriptSourceCode jsCode(jsString);
+    v8::Local<v8::Value> result = m_parentFrame->script().executeScriptInMainWorldAndReturnValue(jsCode);
+
+    if (targetFrameName.isNull()) {
+        String resultString;
+
+        CString cstr;        
+        if (result->IsString()) {
+#if V8_MAJOR_VERSION > 5
+            v8::Local<v8::String> v8String = result->ToString(toIsolate(m_parentFrame));
+#else
+            v8::Local<v8::String> v8String = result->ToString();
+#endif
+            resultString = v8StringToWebCoreString<String>(v8String, blink::Externalize);
+            cstr = resultString.utf8();
+        }
+
+        PluginStream* stream = PluginStream::create(this, m_parentFrame, request->frameLoadRequest().resourceRequest(), request->sendNotification(), request->notifyData(), plugin()->pluginFuncs(), instance(), m_plugin->quirks());
+        m_streams.insert(stream);
+        stream->sendJavaScriptStream(requestURL, cstr);
+    }
 }
 
 void WebPluginImpl::requestTimerFired(blink::TimerBase*)
 {
-    DebugBreak();
-//     ASSERT(!m_requests.isEmpty());
-//     ASSERT(!m_isJavaScriptPaused);
-// 
-//     PassOwnPtr<PluginRequest> request = m_requests[0].release();
-//     m_requests.remove(0);
-//     
-//     // Schedule a new request before calling performRequest since the call to
-//     // performRequest can cause the plugin view to be deleted.
-//     if (!m_requests.isEmpty())
-//         m_requestTimer.startOneShot(0, FROM_HERE);
-// 
-//     performRequest(request.get());
+    ASSERT(!m_requests.isEmpty());
+    ASSERT(!m_isJavaScriptPaused);
+
+    PassOwnPtr<PluginRequest> request = m_requests[0].release();
+    m_requests.remove(0);
+    
+    // Schedule a new request before calling performRequest since the call to
+    // performRequest can cause the plugin view to be deleted.
+    if (!m_requests.isEmpty())
+        m_requestTimer.startOneShot(0, FROM_HERE);
+
+    performRequest(request.get());
 }
 
 void WebPluginImpl::scheduleRequest(PassOwnPtr<PluginRequest> request)
@@ -770,9 +768,13 @@ NPObject* WebPluginImpl::npObject()
 void WebPluginImpl::disconnectStream(PluginStream* stream)
 {
 //     ASSERT(m_streams.contains(stream));
-// 
 //     m_streams.remove(stream);
-    DebugBreak();
+    HashSetStreams::iterator it = m_streams.find(stream);
+    if (it == m_streams.end()) {
+        ASSERT(false);
+        return;
+    }
+    m_streams.erase(it);
 }
 
 void WebPluginImpl::setParameters(const WebVector<WebString>& paramNames, const WebVector<WebString>& paramValues)

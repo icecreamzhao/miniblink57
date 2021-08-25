@@ -75,6 +75,8 @@ public:
     // WebLayerTreeView implementation.
     virtual void setRootLayer(const blink::WebLayer& layer) override;
     virtual void clearRootLayer() override;
+
+    virtual cc::AnimationHost* compositorAnimationHost() override;
     /*virtual*/ void attachCompositorAnimationTimeline(blink::CompositorAnimationTimeline* compositorTimeline) /*override*/;
     /*virtual*/ void detachCompositorAnimationTimeline(blink::CompositorAnimationTimeline* compositorTimeline) /*override*/;
     virtual void setViewportSize(const blink::WebSize& deviceViewportSize) override;

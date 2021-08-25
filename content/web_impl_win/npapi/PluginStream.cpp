@@ -43,6 +43,7 @@
 #include "third_party/WebKit/Source/wtf/text/WTFString.h"
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
 #include "third_party/WebKit/Source/wtf/RefCountedLeakCounter.h"
+#include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
 
 #define interface struct
 #define PURE = 0
@@ -131,16 +132,15 @@ void PluginStream::deref()
 
 void PluginStream::start()
 {
-//     ASSERT(!m_loadManually);
-// 
-//     blink::WebLocalFrameImpl* localFrame = blink::WebLocalFrameImpl::fromFrame(m_frame);
-//     if (!localFrame || !localFrame->client())
-//         return;
-//     localFrame->client()->willSendRequest(localFrame, blink::createUniqueIdentifier(), m_resourceRequest, blink::WebURLResponse());
-// 
-//     m_loader = adoptPtr(Platform::current()->createURLLoader());
-//     m_loader->loadAsynchronously(m_resourceRequest, this);
-    DebugBreak();
+    ASSERT(!m_loadManually);
+
+    blink::WebLocalFrameImpl* localFrame = blink::WebLocalFrameImpl::fromFrame(m_frame);
+    if (!localFrame || !localFrame->client())
+        return;
+    localFrame->client()->willSendRequest(localFrame, m_resourceRequest);
+
+    m_loader = adoptPtr(Platform::current()->createURLLoader());
+    m_loader->loadAsynchronously(m_resourceRequest, this);
 }
 
 void PluginStream::stop()
@@ -431,27 +431,26 @@ void PluginStream::deliverData()
 
 void PluginStream::sendJavaScriptStream(const KURL& requestURL, const CString& resultString)
 {
-    DebugBreak();
-//     WebURLResponse response(requestURL);
-//     response.setExpectedContentLength(resultString.length());
-//     response.setMIMEType(WebString::fromLatin1("text/plain"));
-//     didReceiveResponse(0, response);
-// 
-//     if (m_streamState == StreamStopped)
-//         return;
-// 
-//     if (!resultString.isNull()) {
-//         didReceiveData(0, resultString.data(), resultString.length(), 0);
-//         if (m_streamState == StreamStopped)
-//             return;
-//     }
-// 
-//     if (m_loader) {
-//         m_loader->cancel();
-//         m_loader = nullptr;
-//     }
-// 
-//     destroyStream(resultString.isNull() ? NPRES_NETWORK_ERR : NPRES_DONE);
+    WebURLResponse response(requestURL);
+    response.setExpectedContentLength(resultString.length());
+    response.setMIMEType(WebString::fromLatin1("text/plain"));
+    didReceiveResponse(response);
+
+    if (m_streamState == StreamStopped)
+        return;
+
+    if (!resultString.isNull()) {
+        didReceiveData(resultString.data(), resultString.length());
+        if (m_streamState == StreamStopped)
+            return;
+    }
+
+    if (m_loader) {
+        m_loader->cancel();
+        m_loader = nullptr;
+    }
+
+    destroyStream(resultString.isNull() ? NPRES_NETWORK_ERR : NPRES_DONE);
 }
 
 bool PluginStream::willFollowRedirect(blink::WebURLRequest& newRequest, const blink::WebURLResponse& redirectResponse)
@@ -478,25 +477,24 @@ void PluginStream::didReceiveData(const char* data, int dataLength)
     // If the plug-in cancels the stream in deliverData it could be deleted, 
     // so protect it here.
 
-//     RefPtr<PluginStream> protect(this);
-// 
-//     if (m_transferMode != NP_ASFILEONLY) {
-//         if (!m_deliveryData)
-//             m_deliveryData = adoptPtr(new std::vector<char>());
-// 
-//         int oldSize = m_deliveryData->size();
-//         m_deliveryData->resize(oldSize + dataLength);
-//         memcpy(m_deliveryData->data() + oldSize, data, dataLength);
-// 
-//         deliverData();
-//     }
-// 
-//     if (m_streamState != StreamStopped && (m_tempFileHandle != INVALID_HANDLE_VALUE)) {
-//         int bytesWritten = writeToFile(m_tempFileHandle, data, dataLength);
-//         if (bytesWritten != dataLength)
-//             cancelAndDestroyStream(NPRES_NETWORK_ERR);
-//     }
-    DebugBreak();
+    RefPtr<PluginStream> protect(this);
+
+    if (m_transferMode != NP_ASFILEONLY) {
+        if (!m_deliveryData)
+            m_deliveryData = adoptPtr(new std::vector<char>());
+
+        int oldSize = m_deliveryData->size();
+        m_deliveryData->resize(oldSize + dataLength);
+        memcpy(m_deliveryData->data() + oldSize, data, dataLength);
+
+        deliverData();
+    }
+
+    if (m_streamState != StreamStopped && (m_tempFileHandle != INVALID_HANDLE_VALUE)) {
+        int bytesWritten = writeToFile(m_tempFileHandle, data, dataLength);
+        if (bytesWritten != dataLength)
+            cancelAndDestroyStream(NPRES_NETWORK_ERR);
+    }
 }
 
 void PluginStream::didFail(const WebURLError&, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLengt)

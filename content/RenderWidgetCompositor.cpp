@@ -208,6 +208,11 @@ void RenderWidgetCompositor::finishAllRendering()
     //m_layerTreeHost->FinishAllRendering();
 }
 
+cc::AnimationHost* RenderWidgetCompositor::compositorAnimationHost()
+{
+    return m_animationHost;
+}
+
 void RenderWidgetCompositor::attachCompositorAnimationTimeline(blink::CompositorAnimationTimeline* compositorTimeline)
 {
     DCHECK(compositorTimeline);

@@ -116,7 +116,7 @@ public:
     virtual blink::WebClipboard* clipboard() override;
 
     // Plugin --------------------------------------------------------------
-    void getPluginList(bool refresh, blink::WebPluginListBuilder* builder) /*override*/;
+    void getPluginList(bool refresh, const blink::WebSecurityOrigin& mainFrameOrigin, blink::WebPluginListBuilder* builder) override;
 
     // fileUtilities -------------------------------------------------------
     virtual blink::WebFileUtilities* fileUtilities() override;

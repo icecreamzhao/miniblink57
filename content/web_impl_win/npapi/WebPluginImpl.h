@@ -48,6 +48,7 @@
 #include "third_party/WebKit/Source/wtf/Vector.h"
 #include "third_party/WebKit/Source/wtf/text/CString.h"
 #include "third_party/WebKit/Source/wtf/HashFunctions.h"
+#include "third_party/WebKit/Source/wtf/HashSet.h"
 #include "third_party/npapi/bindings/npruntime.h"
 #include <v8.h>
 #include <windows.h>

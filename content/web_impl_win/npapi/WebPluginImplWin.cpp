@@ -38,6 +38,7 @@
 #include "third_party/WebKit/public/platform/Platform.h"
 #include "third_party/WebKit/public/platform/WebInputEvent.h"
 #include "third_party/WebKit/public/platform/WebMouseEvent.h"
+#include "third_party/WebKit/public/platform/WebMouseWheelEvent.h"
 #include "skia/ext/bitmap_platform_device_win.h"
 #include "skia/ext/platform_canvas.h"
 #include "wke/wkeGlobalVar.h"
@@ -516,85 +517,83 @@ bool WebPluginImpl::acceptsInputEvents()
 
 bool WebPluginImpl::handleMouseEvent(const blink::WebMouseEvent& evt)
 {
-    DebugBreak();
-    return false;
-//     ASSERT(m_plugin && !m_isWindowed);
-// 
-//     bool isDefaultHandled = false;
-//     NPEvent npEvent;
-// 
-//     //blink::IntPoint p = contentsToNativeWindow(m_pluginContainer, blink::IntPoint(evt.x, evt.y));
-//     blink::IntPoint documentScrollOffsetRelativeToViewOrigin;// = contentsToNativeWindow(m_pluginContainer, blink::IntPoint());
-//     blink::IntPoint p(evt.windowX - documentScrollOffsetRelativeToViewOrigin.x(), evt.windowY - documentScrollOffsetRelativeToViewOrigin.y());
-// 
-//     npEvent.lParam = MAKELPARAM(p.x(), p.y());
-//     npEvent.wParam = 0;
-// 
-//     if (evt.modifiers & WebInputEvent::ControlKey)
-//         npEvent.wParam |= MK_CONTROL;
-//     if (evt.modifiers & WebInputEvent::ShiftKey)
-//         npEvent.wParam |= MK_SHIFT;
-// 
-//     if (evt.type == blink::WebInputEvent::Type::MouseMove
-//         || evt.type == blink::WebInputEvent::Type::MouseLeave
-//         || evt.type == blink::WebInputEvent::Type::MouseEnter) {
-//         npEvent.event = WM_MOUSEMOVE;
-//         if (evt.button != blink::WebMouseEvent::Button::ButtonNone) {
-//             switch (evt.button) {
-//             case blink::WebMouseEvent::Button::ButtonLeft:
-//                 npEvent.wParam |= MK_LBUTTON;
-//                 break;
-//             case blink::WebMouseEvent::Button::ButtonMiddle:
-//                 npEvent.wParam |= MK_MBUTTON;
-//                 break;
-//             case blink::WebMouseEvent::Button::ButtonRight:
-//                 npEvent.wParam |= MK_RBUTTON;
-//                 break;
-//             case blink::WebMouseEvent::Button::ButtonNone:
-//                 break;
-//             }
-//         }
-//     } else if (evt.type == blink::WebInputEvent::Type::MouseDown) {
-//         focusPluginElement();
-// 
-//         switch (evt.button) {
-//         case blink::WebMouseEvent::Button::ButtonLeft:
-//             npEvent.event = WM_LBUTTONDOWN;
-//             break;
-//         case blink::WebMouseEvent::Button::ButtonMiddle:
-//             npEvent.event = WM_MBUTTONDOWN;
-//             break;
-//         case blink::WebMouseEvent::Button::ButtonRight:
-//             npEvent.event = WM_RBUTTONDOWN;
-//             break;
-//         }
-//     } else if (evt.type == blink::WebInputEvent::Type::MouseUp) {
-//         switch (evt.button) {
-//         case blink::WebMouseEvent::Button::ButtonLeft:
-//             npEvent.event = WM_LBUTTONUP;
-//             break;
-//         case blink::WebMouseEvent::Button::ButtonMiddle:
-//             npEvent.event = WM_MBUTTONUP;
-//             break;
-//         case blink::WebMouseEvent::Button::ButtonRight:
-//             npEvent.event = WM_RBUTTONUP;
-//             break;
-//         }
-//     } else if (evt.type == blink::WebInputEvent::Type::MouseWheel) {
-//         const blink::WebMouseWheelEvent& wheelEvt = static_cast<const blink::WebMouseWheelEvent&>(evt);
-//         npEvent.event = WM_MOUSEWHEEL;
-//         npEvent.wParam = MAKEWPARAM(wheelEvt.deltaX, wheelEvt.deltaY);
-//     } else
-//         return isDefaultHandled;
-// 
-//     // FIXME: Consider back porting the http://webkit.org/b/58108 fix here.
-//     if (dispatchNPEvent(npEvent))
-//         isDefaultHandled = true;
-//     
-// 
-//     // Currently, Widget::setCursor is always called after this function in EventHandler.cpp
-//     // and since we don't want that we set ignoreNextSetCursor to true here to prevent that.
-//     return isDefaultHandled;
+    ASSERT(m_plugin && !m_isWindowed);
+
+    bool isDefaultHandled = false;
+    NPEvent npEvent;
+
+    //blink::IntPoint p = contentsToNativeWindow(m_pluginContainer, blink::IntPoint(evt.x, evt.y));
+    blink::IntPoint documentScrollOffsetRelativeToViewOrigin;// = contentsToNativeWindow(m_pluginContainer, blink::IntPoint());
+    blink::IntPoint p(evt.windowX - documentScrollOffsetRelativeToViewOrigin.x(), evt.windowY - documentScrollOffsetRelativeToViewOrigin.y());
+
+    npEvent.lParam = MAKELPARAM(p.x(), p.y());
+    npEvent.wParam = 0;
+
+    if (evt.modifiers() & WebInputEvent::ControlKey)
+        npEvent.wParam |= MK_CONTROL;
+    if (evt.modifiers() & WebInputEvent::ShiftKey)
+        npEvent.wParam |= MK_SHIFT;
+
+    if (evt.type() == blink::WebInputEvent::Type::MouseMove
+        || evt.type() == blink::WebInputEvent::Type::MouseLeave
+        || evt.type() == blink::WebInputEvent::Type::MouseEnter) {
+        npEvent.event = WM_MOUSEMOVE;
+        if (evt.button != blink::WebMouseEvent::Button::NoButton) {
+            switch (evt.button) {
+            case blink::WebMouseEvent::Button::Left:
+                npEvent.wParam |= MK_LBUTTON;
+                break;
+            case blink::WebMouseEvent::Button::Middle:
+                npEvent.wParam |= MK_MBUTTON;
+                break;
+            case blink::WebMouseEvent::Button::Right:
+                npEvent.wParam |= MK_RBUTTON;
+                break;
+            case blink::WebMouseEvent::Button::NoButton:
+                break;
+            }
+        }
+    } else if (evt.type() == blink::WebInputEvent::Type::MouseDown) {
+        focusPluginElement();
+
+        switch (evt.button) {
+        case blink::WebMouseEvent::Button::Left:
+            npEvent.event = WM_LBUTTONDOWN;
+            break;
+        case blink::WebMouseEvent::Button::Middle:
+            npEvent.event = WM_MBUTTONDOWN;
+            break;
+        case blink::WebMouseEvent::Button::Right:
+            npEvent.event = WM_RBUTTONDOWN;
+            break;
+        }
+    } else if (evt.type() == blink::WebInputEvent::Type::MouseUp) {
+        switch (evt.button) {
+        case blink::WebMouseEvent::Button::Left:
+            npEvent.event = WM_LBUTTONUP;
+            break;
+        case blink::WebMouseEvent::Button::Middle:
+            npEvent.event = WM_MBUTTONUP;
+            break;
+        case blink::WebMouseEvent::Button::Right:
+            npEvent.event = WM_RBUTTONUP;
+            break;
+        }
+    } else if (evt.type() == blink::WebInputEvent::Type::MouseWheel) {
+        const blink::WebMouseWheelEvent& wheelEvt = static_cast<const blink::WebMouseWheelEvent&>(evt);
+        npEvent.event = WM_MOUSEWHEEL;
+        npEvent.wParam = MAKEWPARAM(wheelEvt.deltaX, wheelEvt.deltaY);
+    } else
+        return isDefaultHandled;
+
+    // FIXME: Consider back porting the http://webkit.org/b/58108 fix here.
+    if (dispatchNPEvent(npEvent))
+        isDefaultHandled = true;
+    
+
+    // Currently, Widget::setCursor is always called after this function in EventHandler.cpp
+    // and since we don't want that we set ignoreNextSetCursor to true here to prevent that.
+    return isDefaultHandled;
 }
 
 bool WebPluginImpl::handleKeyboardCharEventForEmulateIme(int windowsKeyCode)

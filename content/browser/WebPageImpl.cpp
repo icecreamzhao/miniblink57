@@ -1552,8 +1552,8 @@ LRESULT WebPageImpl::fireWheelEvent(HWND hWnd, UINT message, WPARAM wParam, LPAR
         m_popup->fireWheelEvent(message, wParam, lParam);
     else {
         m_platformEventHandler->fireWheelEvent(hWnd, message, wParam, lParam);
-        if (m_ccLayerTreeWrap)
-            m_ccLayerTreeWrap->fireWheelEvent(hWnd, message, wParam, lParam);
+//         if (m_ccLayerTreeWrap)
+//             m_ccLayerTreeWrap->fireWheelEvent(hWnd, message, wParam, lParam);
     }
 
     return 0;
