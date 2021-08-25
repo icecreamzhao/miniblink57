@@ -130,7 +130,7 @@ typedef enum _mbSettingMask {
 
 typedef void(MB_CALL_TYPE* mbOnBlinkThreadInitCallback)(void* param);
 
-#define kMbVersion 20200319
+#define kMbVersion 20210809
 #define kMbMaxVersion 20600319
 
 typedef struct _mbSettings {
@@ -987,19 +987,12 @@ MB_FOR_EACH_DEFINE_FUNCTION(MB_DEFINE_ITERATOR0, MB_DEFINE_ITERATOR1, MB_DEFINE_
 typedef void (MB_CALL_TYPE *FN_mbInit)(const mbSettings* settings);
 
 #ifdef _WIN64
-__declspec(selectany) const wchar_t* kMbDllPath = L"mb_x64.dll";
 __declspec(selectany) const wchar_t* kMbMainDllPath = L"miniblink_x64.dll";
 #else
-__declspec(selectany) const wchar_t* kMbDllPath = L"mb.dll";
 __declspec(selectany) const wchar_t* kMbMainDllPath = L"node.dll";
 #endif
 
 __declspec(selectany) HMODULE g_hMiniblinkMod = nullptr;
-
-inline void mbSetMbDllPath(const wchar_t* dllPath)
-{
-    kMbDllPath = dllPath;
-}
 
 inline void mbSetMbMainDllPath(const wchar_t* dllPath)
 {
@@ -1009,8 +1002,7 @@ inline void mbSetMbMainDllPath(const wchar_t* dllPath)
 inline void mbFillFuncPtr()
 {
     if (!g_hMiniblinkMod) {
-        LoadLibraryW(kMbMainDllPath);
-        g_hMiniblinkMod = LoadLibraryW(kMbDllPath);
+        g_hMiniblinkMod = LoadLibraryW(kMbMainDllPath);
     }
 
     if (!mbCreateWebView) {
@@ -1023,8 +1015,7 @@ inline void mbInit(const mbSettings* settings)
 {
     bool needFill = nullptr == g_hMiniblinkMod;
     if (!g_hMiniblinkMod) {
-        LoadLibraryW(kMbMainDllPath);
-        g_hMiniblinkMod = LoadLibraryW(kMbDllPath);
+        g_hMiniblinkMod = LoadLibraryW(kMbMainDllPath);
     }
     FN_mbInit mbInitExFunc = (FN_mbInit)GetProcAddress(g_hMiniblinkMod, "mbInit");
     mbInitExFunc(settings);

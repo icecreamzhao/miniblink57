@@ -18,6 +18,10 @@
 #endif
 #endif
 #include "wke/wkedefine.h"
+
+#include "base/json/json_reader.h"
+#include "base/values.h"
+
 #include <shlwapi.h>
 #include <process.h>
 #include <vector>
@@ -28,6 +32,10 @@
 #define USE_ORIG_CC 1
 
 extern HMODULE g_hModule;
+
+namespace wke {
+extern bool g_enableSkipJsError;
+}
 
 namespace common {
 
@@ -713,6 +721,21 @@ unsigned int ThreadCall::blinkThread(void* param)
     return 0;
 }
 
+void ThreadCall::setConfigOfSetting(const mbSettings* settings)
+{
+    std::unique_ptr<base::Value> json = base::JSONReader::Read(base::StringPiece(settings->config));
+    if (!json.get())
+        return;
+
+    base::DictionaryValue* json_value = nullptr;
+    if (!json->GetAsDictionary(&json_value))
+        return;
+
+    bool enableSkipJs = false;
+    if (json_value->GetBoolean("enableSkipJs", &enableSkipJs) && enableSkipJs)
+        wke::g_enableSkipJsError = true;
+}
+
 void ThreadCall::createBlinkThread(const mbSettings* settings)
 {
     InitBlinkInfo initBlinkInfo;
@@ -726,6 +749,10 @@ void ThreadCall::createBlinkThread(const mbSettings* settings)
 
         if (settings->mask & MB_ENABLE_ENABLE_SWIFTSHAER)
             m_compositorTpye = kCompositorTpyeSwiftShader;
+
+        if (settings->version >= kMbVersion && settings->config) {
+            setConfigOfSetting(settings);
+        }
     }
 
 #ifdef _WIN64

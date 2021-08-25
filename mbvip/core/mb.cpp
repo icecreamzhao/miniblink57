@@ -1292,6 +1292,11 @@ BOOL MB_CALL_TYPE mbFireContextMenuEvent(mbWebView webviewHandle, int x, int y, 
 BOOL MB_CALL_TYPE mbFireMouseWheelEvent(mbWebView webviewHandle, int x, int y, int delta, unsigned int flags)
 {
     checkThreadCallIsValid(__FUNCTION__);
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview->getWkeWebView())
+        return true;
+    if (!wkeFireMouseWheelEventOnUiThread(webview->getWkeWebView(), x, y, delta, flags))
+        return true;
     common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [x, y, delta, flags](mb::MbWebView* webview) {
         wkeFireMouseWheelEvent(webview->getWkeWebView(), x, y, delta, flags);
     });

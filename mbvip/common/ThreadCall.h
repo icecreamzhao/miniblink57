@@ -98,6 +98,7 @@ private:
     static void initializeOffScreenTimerWindow();
     static LRESULT CALLBACK timerWindowWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+    static void setConfigOfSetting(const mbSettings* settings);
     static void createBlinkThread(const mbSettings* settings);
     static void createMediaThread();
     static void callSyncAndWait(TaskAsyncData* asyncData);
