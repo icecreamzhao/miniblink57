@@ -97,6 +97,7 @@ public:
     // done with the same input.
     KURL(const CString& canonicalSpec, const url_parse::Parsed&, bool isValid);
 #endif
+    ~KURL();
 
     String strippedForUseAsReferrer() const;
     String strippedForUseAsHref() const;
@@ -279,6 +280,8 @@ private:
     int m_pathEnd;
     int m_queryEnd;
     int m_fragmentEnd;
+
+    mutable KURL* m_innerURL;
 #endif
 };
 

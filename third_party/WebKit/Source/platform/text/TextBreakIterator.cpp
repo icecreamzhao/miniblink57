@@ -1,25 +1,25 @@
 /*
- * (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2010 Apple Inc. All rights
- * reserved.
- * Copyright (C) 2007-2009 Torch Mobile, Inc.
- * Copyright (C) 2011 Google Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
+* (C) 1999 Lars Knoll (knoll@kde.org)
+* Copyright (C) 2004, 2005, 2006, 2007, 2008, 2010 Apple Inc. All rights
+* reserved.
+* Copyright (C) 2007-2009 Torch Mobile, Inc.
+* Copyright (C) 2011 Google Inc. All rights reserved.
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Library General Public
+* License as published by the Free Software Foundation; either
+* version 2 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Library General Public License for more details.
+*
+* You should have received a copy of the GNU Library General Public License
+* along with this library; see the file COPYING.LIB.  If not, write to
+* the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+* Boston, MA 02110-1301, USA.
+*/
 
 #include "platform/text/TextBreakIterator.h"
 
@@ -206,52 +206,55 @@ static const unsigned char asciiLineBreakTable[][(asciiLineBreakTableLastChar - 
 // static_assert(WTF_ARRAY_LENGTH(breakAllLineBreakClassTable) == BA_LB_COUNT,
 //               "breakAllLineBreakClassTable should be consistent");
 
-static inline bool shouldBreakAfter(UChar lastCh, UChar ch, UChar nextCh) {
-  // Don't allow line breaking between '-' and a digit if the '-' may mean a
-  // minus sign in the context, while allow breaking in 'ABCD-1234' and
-  // '1234-5678' which may be in long URLs.
-  if (ch == '-' && isASCIIDigit(nextCh))
-    return isASCIIAlphanumeric(lastCh);
+static inline bool shouldBreakAfter(UChar lastCh, UChar ch, UChar nextCh)
+{
+    // Don't allow line breaking between '-' and a digit if the '-' may mean a
+    // minus sign in the context, while allow breaking in 'ABCD-1234' and
+    // '1234-5678' which may be in long URLs.
+    if (ch == '-' && isASCIIDigit(nextCh))
+        return isASCIIAlphanumeric(lastCh);
 
-  // If both ch and nextCh are ASCII characters, use a lookup table for enhanced
-  // speed and for compatibility with other browsers (see comments for
-  // asciiLineBreakTable for details).
-  if (ch >= asciiLineBreakTableFirstChar && ch <= asciiLineBreakTableLastChar &&
-      nextCh >= asciiLineBreakTableFirstChar &&
-      nextCh <= asciiLineBreakTableLastChar) {
-    const unsigned char* tableRow =
-        asciiLineBreakTable[ch - asciiLineBreakTableFirstChar];
-    int nextChIndex = nextCh - asciiLineBreakTableFirstChar;
-    return tableRow[nextChIndex / 8] & (1 << (nextChIndex % 8));
-  }
-  // Otherwise defer to the Unicode algorithm by returning false.
-  return false;
+    // If both ch and nextCh are ASCII characters, use a lookup table for enhanced
+    // speed and for compatibility with other browsers (see comments for
+    // asciiLineBreakTable for details).
+    if (ch >= asciiLineBreakTableFirstChar && ch <= asciiLineBreakTableLastChar &&
+        nextCh >= asciiLineBreakTableFirstChar &&
+        nextCh <= asciiLineBreakTableLastChar) {
+        const unsigned char* tableRow =
+            asciiLineBreakTable[ch - asciiLineBreakTableFirstChar];
+        int nextChIndex = nextCh - asciiLineBreakTableFirstChar;
+        return tableRow[nextChIndex / 8] & (1 << (nextChIndex % 8));
+    }
+    // Otherwise defer to the Unicode algorithm by returning false.
+    return false;
 }
 
-static inline ULineBreak lineBreakPropertyValue(UChar lastCh, UChar ch) {
-  if (ch == '+')  // IE tailors '+' to AL-like class when break-all is enabled.
+static inline ULineBreak lineBreakPropertyValue(UChar lastCh, UChar ch)
+{
+    if (ch == '+')  // IE tailors '+' to AL-like class when break-all is enabled.
+        return U_LB_ALPHABETIC;
+    //   UChar32 ch32 = U16_IS_LEAD(lastCh) && U16_IS_TRAIL(ch)
+    //                      ? U16_GET_SUPPLEMENTARY(lastCh, ch)
+    //                      : ch;
+    //   return static_cast<ULineBreak>(u_getIntPropertyValue(ch32, UCHAR_LINE_BREAK));
+    DebugBreak();
     return U_LB_ALPHABETIC;
-//   UChar32 ch32 = U16_IS_LEAD(lastCh) && U16_IS_TRAIL(ch)
-//                      ? U16_GET_SUPPLEMENTARY(lastCh, ch)
-//                      : ch;
-//   return static_cast<ULineBreak>(u_getIntPropertyValue(ch32, UCHAR_LINE_BREAK));
-  DebugBreak();
-  return U_LB_ALPHABETIC;
 }
 
-static inline bool shouldBreakAfterBreakAll(ULineBreak lastLineBreak,
-                                            ULineBreak lineBreak) {
-//   if (lineBreak >= 0 && lineBreak < BA_LB_COUNT && lastLineBreak >= 0 &&
-//       lastLineBreak < BA_LB_COUNT) {
-//     const unsigned char* tableRow = breakAllLineBreakClassTable[lastLineBreak];
-//     return tableRow[lineBreak / 8] & (1 << (lineBreak % 8));
-//   }
-  DebugBreak();
-  return false;
+static inline bool shouldBreakAfterBreakAll(ULineBreak lastLineBreak, ULineBreak lineBreak)
+{
+    //   if (lineBreak >= 0 && lineBreak < BA_LB_COUNT && lastLineBreak >= 0 &&
+    //       lastLineBreak < BA_LB_COUNT) {
+    //     const unsigned char* tableRow = breakAllLineBreakClassTable[lastLineBreak];
+    //     return tableRow[lineBreak / 8] & (1 << (lineBreak % 8));
+    //   }
+    DebugBreak();
+    return false;
 }
 
-inline bool needsLineBreakIterator(UChar ch) {
-  return ch > asciiLineBreakTableLastChar && ch != noBreakSpaceCharacter;
+inline bool needsLineBreakIterator(UChar ch)
+{
+    return ch > asciiLineBreakTableLastChar && ch != noBreakSpaceCharacter;
 }
 
 // template <typename CharacterType, LineBreakType lineBreakType>
@@ -314,134 +317,139 @@ inline bool needsLineBreakIterator(UChar ch) {
 // }
 
 template<typename CharacterType>
-static inline int nextBreakablePosition(LazyLineBreakIterator& lazyBreakIterator, const CharacterType* str, unsigned length, int pos) {
-  int len = static_cast<int>(length);
-  int nextBreak = -1;
+static inline int nextBreakablePosition(LazyLineBreakIterator& lazyBreakIterator, const CharacterType* str, unsigned length, int pos)
+{
+    int len = static_cast<int>(length);
+    int nextBreak = -1;
 
-  CharacterType lastLastCh = pos > 1 ? str[pos - 2] : static_cast<CharacterType>(lazyBreakIterator.secondToLastCharacter());
-  CharacterType lastCh = pos > 0 ? str[pos - 1] : static_cast<CharacterType>(lazyBreakIterator.lastCharacter());
-  unsigned priorContextLength = lazyBreakIterator.priorContextLength();
-  for (int i = pos; i < len; i++) {
-    CharacterType ch = str[i];
+    CharacterType lastLastCh = pos > 1 ? str[pos - 2] : static_cast<CharacterType>(lazyBreakIterator.secondToLastCharacter());
+    CharacterType lastCh = pos > 0 ? str[pos - 1] : static_cast<CharacterType>(lazyBreakIterator.lastCharacter());
+    unsigned priorContextLength = lazyBreakIterator.priorContextLength();
+    for (int i = pos; i < len; i++) {
+        CharacterType ch = str[i];
 
-    if (isBreakableSpace(ch) || shouldBreakAfter(lastLastCh, lastCh, ch))
-      return i;
+        if (isBreakableSpace(ch) || shouldBreakAfter(lastLastCh, lastCh, ch))
+            return i;
 
-    if (needsLineBreakIterator(ch) || needsLineBreakIterator(lastCh)) {
-      if (nextBreak < i) {
-        // Don't break if positioned at start of primary context and there is no prior context.
-        if (i || priorContextLength) {
-          TextBreakIterator* breakIterator = lazyBreakIterator.get(priorContextLength);
-          if (breakIterator) {
-            nextBreak = breakIterator->following(i - 1 + priorContextLength);
-            if (nextBreak >= 0) {
-              nextBreak -= priorContextLength;
+        if (needsLineBreakIterator(ch) || needsLineBreakIterator(lastCh)) {
+            if (nextBreak < i) {
+                // Don't break if positioned at start of primary context and there is no prior context.
+                if (i || priorContextLength) {
+                    TextBreakIterator* breakIterator = lazyBreakIterator.get(priorContextLength);
+                    if (breakIterator) {
+                        nextBreak = breakIterator->following(i - 1 + priorContextLength);
+                        if (nextBreak >= 0) {
+                            nextBreak -= priorContextLength;
+                        }
+                    }
+                }
             }
-          }
+            if (i == nextBreak && !isBreakableSpace(lastCh))
+                return i;
         }
-      }
-      if (i == nextBreak && !isBreakableSpace(lastCh))
-        return i;
+
+        lastLastCh = lastCh;
+        lastCh = ch;
     }
 
-    lastLastCh = lastCh;
-    lastCh = ch;
-  }
-
-  return len;
+    return len;
 }
 
-static inline bool shouldKeepAfter(UChar lastCh, UChar ch, UChar nextCh) {
-//   UChar preCh = U_MASK(u_charType(ch)) & U_GC_M_MASK ? lastCh : ch;
-//   return U_MASK(u_charType(preCh)) & (U_GC_L_MASK | U_GC_N_MASK) &&
-//          !WTF::Unicode::hasLineBreakingPropertyComplexContext(preCh) &&
-//          U_MASK(u_charType(nextCh)) & (U_GC_L_MASK | U_GC_N_MASK) &&
-//          !WTF::Unicode::hasLineBreakingPropertyComplexContext(nextCh);
-  DebugBreak();
-  return false;
+static inline bool shouldKeepAfter(UChar lastCh, UChar ch, UChar nextCh)
+{
+    UChar preCh = U_MASK(u_charType(ch)) & U_GC_M_MASK ? lastCh : ch;
+
+    return U_MASK(u_charType(preCh)) & (U_GC_L_MASK | U_GC_N_MASK) &&
+           !WTF::Unicode::hasLineBreakingPropertyComplexContext(preCh) &&
+           U_MASK(u_charType(nextCh)) & (U_GC_L_MASK | U_GC_N_MASK) &&
+           !WTF::Unicode::hasLineBreakingPropertyComplexContext(nextCh);
 }
 
-static inline bool isUnicodeCategoryLetterOrNumber(UChar lastCh, UChar ch) {
-  UChar32 ch32 = U16_IS_LEAD(lastCh) && U16_IS_TRAIL(ch) ? U16_GET_SUPPLEMENTARY(lastCh, ch) : ch;
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-  return (U_MASK(u_charType(ch32)) & (U_GC_L_MASK | U_GC_N_MASK));
+static inline bool isUnicodeCategoryLetterOrNumber(UChar lastCh, UChar ch)
+{
+    UChar32 ch32 = U16_IS_LEAD(lastCh) && U16_IS_TRAIL(ch) ? U16_GET_SUPPLEMENTARY(lastCh, ch) : ch;
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
+    return (U_MASK(u_charType(ch32)) & (U_GC_L_MASK | U_GC_N_MASK));
+#else
+    if (ch32 >= L'a' && ch32 <= L'z' || ch32 >= L'A' && ch32 <= L'Z' || ch32 >= L'0' && ch32 <= L'9')
+        return true;
+    return false;
 #endif // MINIBLINK_NOT_IMPLEMENTED
-  if (ch32 >= L'a' && ch32 <= L'z' || ch32 >= L'A' && ch32 <= L'Z' || ch32 >= L'0' && ch32 <= L'9')
-    return true;
-  return false;
 }
 
 template<typename CharacterType>
-static inline int nextBreakablePositionBreakAllInternal(LazyLineBreakIterator& lazyBreakIterator, const CharacterType* str, unsigned length, int pos) {
-  int len = static_cast<int>(length);
-  CharacterType lastLastCh = pos > 1 ? str[pos - 2] : static_cast<CharacterType>(lazyBreakIterator.secondToLastCharacter());
-  CharacterType lastCh = pos > 0 ? str[pos - 1] : static_cast<CharacterType>(lazyBreakIterator.lastCharacter());
-  bool lastIsLetterOrNumber = isUnicodeCategoryLetterOrNumber(lastLastCh, lastCh);
-  for (int i = pos; i < len; ++i) {
-    CharacterType ch = str[i];
+static inline int nextBreakablePositionBreakAllInternal(LazyLineBreakIterator& lazyBreakIterator, const CharacterType* str, unsigned length, int pos)
+{
+    int len = static_cast<int>(length);
+    CharacterType lastLastCh = pos > 1 ? str[pos - 2] : static_cast<CharacterType>(lazyBreakIterator.secondToLastCharacter());
+    CharacterType lastCh = pos > 0 ? str[pos - 1] : static_cast<CharacterType>(lazyBreakIterator.lastCharacter());
+    bool lastIsLetterOrNumber = isUnicodeCategoryLetterOrNumber(lastLastCh, lastCh);
+    for (int i = pos; i < len; ++i) {
+        CharacterType ch = str[i];
 
-    if (isBreakableSpace(ch) || shouldBreakAfter(lastLastCh, lastCh, ch))
-      return i;
+        if (isBreakableSpace(ch) || shouldBreakAfter(lastLastCh, lastCh, ch))
+            return i;
 
-    if (!U16_IS_LEAD(ch)) {
-      bool isLetterOrNumber = isUnicodeCategoryLetterOrNumber(lastCh, ch);
-      if (isLetterOrNumber && lastIsLetterOrNumber)
-        return i > pos && U16_IS_TRAIL(ch) ? i - 1 : i;
-      lastIsLetterOrNumber = isLetterOrNumber;
+        if (!U16_IS_LEAD(ch)) {
+            bool isLetterOrNumber = isUnicodeCategoryLetterOrNumber(lastCh, ch);
+            if (isLetterOrNumber && lastIsLetterOrNumber)
+                return i > pos && U16_IS_TRAIL(ch) ? i - 1 : i;
+            lastIsLetterOrNumber = isLetterOrNumber;
+        }
+
+        lastLastCh = lastCh;
+        lastCh = ch;
     }
-
-    lastLastCh = lastCh;
-    lastCh = ch;
-  }
-  return len;
+    return len;
 }
 
 static inline int nextBreakablePositionKeepAllInternal(
     LazyLineBreakIterator& lazyBreakIterator,
     const UChar* str,
     unsigned length,
-    int pos) {
-  int len = static_cast<int>(length);
-  int nextBreak = -1;
+    int pos)
+{
+    int len = static_cast<int>(length);
+    int nextBreak = -1;
 
-  UChar lastLastCh =
-      pos > 1 ? str[pos - 2]
-              : static_cast<UChar>(lazyBreakIterator.secondToLastCharacter());
-  UChar lastCh = pos > 0
-                     ? str[pos - 1]
-                     : static_cast<UChar>(lazyBreakIterator.lastCharacter());
-  unsigned priorContextLength = lazyBreakIterator.priorContextLength();
-  for (int i = pos; i < len; i++) {
-    UChar ch = str[i];
+    UChar lastLastCh =
+        pos > 1 ? str[pos - 2]
+        : static_cast<UChar>(lazyBreakIterator.secondToLastCharacter());
+    UChar lastCh = pos > 0
+        ? str[pos - 1]
+        : static_cast<UChar>(lazyBreakIterator.lastCharacter());
+    unsigned priorContextLength = lazyBreakIterator.priorContextLength();
+    for (int i = pos; i < len; i++) {
+        UChar ch = str[i];
 
-    if (isBreakableSpace(ch) || shouldBreakAfter(lastLastCh, lastCh, ch))
-      return i;
+        if (isBreakableSpace(ch) || shouldBreakAfter(lastLastCh, lastCh, ch))
+            return i;
 
-    if (!shouldKeepAfter(lastLastCh, lastCh, ch) &&
-        (needsLineBreakIterator(ch) || needsLineBreakIterator(lastCh))) {
-      if (nextBreak < i) {
-        // Don't break if positioned at start of primary context and there is no
-        // prior context.
-        if (i || priorContextLength) {
-          TextBreakIterator* breakIterator =
-              lazyBreakIterator.get(priorContextLength);
-          if (breakIterator) {
-            nextBreak = breakIterator->following(i - 1 + priorContextLength);
-            if (nextBreak >= 0) {
-              nextBreak -= priorContextLength;
+        if (!shouldKeepAfter(lastLastCh, lastCh, ch) &&
+            (needsLineBreakIterator(ch) || needsLineBreakIterator(lastCh))) {
+            if (nextBreak < i) {
+                // Don't break if positioned at start of primary context and there is no
+                // prior context.
+                if (i || priorContextLength) {
+                    TextBreakIterator* breakIterator =
+                        lazyBreakIterator.get(priorContextLength);
+                    if (breakIterator) {
+                        nextBreak = breakIterator->following(i - 1 + priorContextLength);
+                        if (nextBreak >= 0) {
+                            nextBreak -= priorContextLength;
+                        }
+                    }
+                }
             }
-          }
+            if (i == nextBreak && !isBreakableSpace(lastCh))
+                return i;
         }
-      }
-      if (i == nextBreak && !isBreakableSpace(lastCh))
-        return i;
+
+        lastLastCh = lastCh;
+        lastCh = ch;
     }
 
-    lastLastCh = lastCh;
-    lastCh = ch;
-  }
-
-  return len;
+    return len;
 }
 
 // template <LineBreakType lineBreakType>
@@ -456,27 +464,30 @@ static inline int nextBreakablePositionKeepAllInternal(
 //       lazyBreakIterator, string.characters16(), string.length(), pos);
 // }
 
-int LazyLineBreakIterator::nextBreakablePositionIgnoringNBSP(int pos) {
-  //return nextBreakablePosition<LineBreakType::Normal>(*this, m_string, pos);
-  if (m_string.is8Bit())
-    return nextBreakablePosition<LChar>(*this, m_string.characters8(), m_string.length(), pos);
-  return nextBreakablePosition<UChar>(*this, m_string.characters16(), m_string.length(), pos);
+int LazyLineBreakIterator::nextBreakablePositionIgnoringNBSP(int pos)
+{
+    //return nextBreakablePosition<LineBreakType::Normal>(*this, m_string, pos);
+    if (m_string.is8Bit())
+        return nextBreakablePosition<LChar>(*this, m_string.characters8(), m_string.length(), pos);
+    return nextBreakablePosition<UChar>(*this, m_string.characters16(), m_string.length(), pos);
 }
 
-int LazyLineBreakIterator::nextBreakablePositionBreakAll(int pos) {
-  //return nextBreakablePosition<LineBreakType::BreakAll>(*this, m_string, pos);
-  if (m_string.is8Bit())
-    return nextBreakablePositionBreakAllInternal<LChar>(*this, m_string.characters8(), m_string.length(), pos);
-  return nextBreakablePositionBreakAllInternal<UChar>(*this, m_string.characters16(), m_string.length(), pos);
+int LazyLineBreakIterator::nextBreakablePositionBreakAll(int pos)
+{
+    //return nextBreakablePosition<LineBreakType::BreakAll>(*this, m_string, pos);
+    if (m_string.is8Bit())
+        return nextBreakablePositionBreakAllInternal<LChar>(*this, m_string.characters8(), m_string.length(), pos);
+    return nextBreakablePositionBreakAllInternal<UChar>(*this, m_string.characters16(), m_string.length(), pos);
 }
 
-int LazyLineBreakIterator::nextBreakablePositionKeepAll(int pos) {
-//   if (m_string.is8Bit())
-//     return nextBreakablePosition<LChar, LineBreakType::Normal>(*this, m_string.characters8(), m_string.length(), pos);
-//   return nextBreakablePositionKeepAllInternal(*this, m_string.characters16(), m_string.length(), pos);
-  if (m_string.is8Bit())
-    return nextBreakablePosition<LChar>(*this, m_string.characters8(), m_string.length(), pos);
-  return nextBreakablePositionKeepAllInternal(*this, m_string.characters16(), m_string.length(), pos);
+int LazyLineBreakIterator::nextBreakablePositionKeepAll(int pos)
+{
+    //   if (m_string.is8Bit())
+    //     return nextBreakablePosition<LChar, LineBreakType::Normal>(*this, m_string.characters8(), m_string.length(), pos);
+    //   return nextBreakablePositionKeepAllInternal(*this, m_string.characters16(), m_string.length(), pos);
+    if (m_string.is8Bit())
+        return nextBreakablePosition<LChar>(*this, m_string.characters8(), m_string.length(), pos);
+    return nextBreakablePositionKeepAllInternal(*this, m_string.characters16(), m_string.length(), pos);
 }
 
 }  // namespace blink

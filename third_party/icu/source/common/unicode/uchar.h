@@ -145,6 +145,83 @@ typedef enum UCharCategory {
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_SK_MASK U_MASK(U_MODIFIER_SYMBOL)
 
+
+#define U_GC_CN_MASK    U_MASK(U_GENERAL_OTHER_TYPES)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_LU_MASK    U_MASK(U_UPPERCASE_LETTER)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_LL_MASK    U_MASK(U_LOWERCASE_LETTER)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_LT_MASK    U_MASK(U_TITLECASE_LETTER)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_LM_MASK    U_MASK(U_MODIFIER_LETTER)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_LO_MASK    U_MASK(U_OTHER_LETTER)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_MN_MASK    U_MASK(U_NON_SPACING_MARK)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_ME_MASK    U_MASK(U_ENCLOSING_MARK)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_MC_MASK    U_MASK(U_COMBINING_SPACING_MARK)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_ND_MASK    U_MASK(U_DECIMAL_DIGIT_NUMBER)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_NL_MASK    U_MASK(U_LETTER_NUMBER)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_NO_MASK    U_MASK(U_OTHER_NUMBER)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_ZS_MASK    U_MASK(U_SPACE_SEPARATOR)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_ZL_MASK    U_MASK(U_LINE_SEPARATOR)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_ZP_MASK    U_MASK(U_PARAGRAPH_SEPARATOR)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_CC_MASK    U_MASK(U_CONTROL_CHAR)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_CF_MASK    U_MASK(U_FORMAT_CHAR)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_CO_MASK    U_MASK(U_PRIVATE_USE_CHAR)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_CS_MASK    U_MASK(U_SURROGATE)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_PD_MASK    U_MASK(U_DASH_PUNCTUATION)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_PS_MASK    U_MASK(U_START_PUNCTUATION)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_PE_MASK    U_MASK(U_END_PUNCTUATION)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_PC_MASK    U_MASK(U_CONNECTOR_PUNCTUATION)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_PO_MASK    U_MASK(U_OTHER_PUNCTUATION)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_SM_MASK    U_MASK(U_MATH_SYMBOL)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_SC_MASK    U_MASK(U_CURRENCY_SYMBOL)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_SK_MASK    U_MASK(U_MODIFIER_SYMBOL)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_SO_MASK    U_MASK(U_OTHER_SYMBOL)
+
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_PI_MASK    U_MASK(U_INITIAL_PUNCTUATION)
+/** Mask constant for a UCharCategory. @stable ICU 2.1 */
+#define U_GC_PF_MASK    U_MASK(U_FINAL_PUNCTUATION)
+
+
+/** Mask constant for multiple UCharCategory bits (L Letters). @stable ICU 2.1 */
+#define U_GC_L_MASK \
+            (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK|U_GC_LM_MASK|U_GC_LO_MASK)
+
+/** Mask constant for multiple UCharCategory bits (N Numbers). @stable ICU 2.1 */
+#define U_GC_N_MASK (U_GC_ND_MASK|U_GC_NL_MASK|U_GC_NO_MASK)
+
 /**
 * Line Break constants.
 *

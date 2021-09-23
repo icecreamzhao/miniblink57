@@ -96,16 +96,14 @@ void TextTrackLoader::dataReceived(Resource* resource,
     m_cueParser->parseBytes(data, length);
 }
 
-void TextTrackLoader::corsPolicyPreventedLoad(SecurityOrigin* securityOrigin,
-    const KURL& url)
+void TextTrackLoader::corsPolicyPreventedLoad(SecurityOrigin* securityOrigin, const KURL& url)
 {
     String consoleMessage(
-        "Text track from origin '" + SecurityOrigin::create(url)->toString() + "' has been blocked from loading: Not at same origin as the document, "
-                                                                               "and parent of track element does not have a 'crossorigin' attribute. "
-                                                                               "Origin '"
+        "Text track from origin '" + SecurityOrigin::create(url)->toString() + 
+        "' has been blocked from loading: Not at same origin as the document, "
+        "and parent of track element does not have a 'crossorigin' attribute. Origin '"
         + securityOrigin->toString() + "' is therefore not allowed access.");
-    document().addConsoleMessage(ConsoleMessage::create(
-        SecurityMessageSource, ErrorMessageLevel, consoleMessage));
+    document().addConsoleMessage(ConsoleMessage::create(SecurityMessageSource, ErrorMessageLevel, consoleMessage));
     m_state = Failed;
 }
 
@@ -124,8 +122,7 @@ void TextTrackLoader::notifyFinished(Resource* resource)
     cancelLoad();
 }
 
-bool TextTrackLoader::load(const KURL& url,
-    CrossOriginAttributeValue crossOrigin)
+bool TextTrackLoader::load(const KURL& url, CrossOriginAttributeValue crossOrigin)
 {
     cancelLoad();
 
@@ -133,8 +130,7 @@ bool TextTrackLoader::load(const KURL& url,
         FetchInitiatorTypeNames::texttrack);
 
     if (crossOrigin != CrossOriginAttributeNotSet) {
-        cueRequest.setCrossOriginAccessControl(document().getSecurityOrigin(),
-            crossOrigin);
+        cueRequest.setCrossOriginAccessControl(document().getSecurityOrigin(), crossOrigin);
     } else if (!document().getSecurityOrigin()->canRequestNoSuborigin(url)) {
         // Text track elements without 'crossorigin' set on the parent are "No
         // CORS"; report error if not same-origin.

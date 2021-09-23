@@ -33,6 +33,9 @@
 #include "platform/weborigin/Suborigin.h"
 #include <memory>
 
+// #pragma optimize("", off)
+// #pragma clang optimize off
+
 namespace blink {
 
 DOMWindow::DOMWindow(Frame& frame)
@@ -320,7 +323,21 @@ String DOMWindow::crossDomainAccessErrorMessage(
     KURL targetURL = isLocalDOMWindow() ? document()->url()
                                         : KURL(KURL(), targetOrigin->toString());
     if (frame()->securityContext()->isSandboxed(SandboxOrigin) || callingWindow->document()->isSandboxed(SandboxOrigin)) {
-        message = "Blocked a frame at \"" + SecurityOrigin::create(activeURL)->toString() + "\" from accessing a frame at \"" + SecurityOrigin::create(targetURL)->toString() + "\". ";
+        message = "Blocked a frame at \"" + 
+            SecurityOrigin::create(activeURL)->toString() + 
+            "\" from accessing a frame at \"" + 
+            SecurityOrigin::create(targetURL)->toString() + 
+            "\". ";
+
+//         String activeUrlStr = SecurityOrigin::create(activeURL)->toString();
+//         String targetrlStr = SecurityOrigin::create(targetURL)->toString();
+// 
+//         message = "Blocked a frame at \"" +
+//             activeUrlStr +
+//             "\" from accessing a frame at \"" +
+//             targetrlStr +
+//             "\". ";
+
         if (frame()->securityContext()->isSandboxed(SandboxOrigin) && callingWindow->document()->isSandboxed(SandboxOrigin))
             return "Sandbox access violation: " + message + " Both frames are sandboxed and lack the \"allow-same-origin\" "
                                                             "flag.";

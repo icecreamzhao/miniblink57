@@ -24,6 +24,10 @@
 #include "wtf/text/StringUTF8Adaptor.h"
 #include "wtf/text/WTFString.h"
 
+namespace wke {
+extern bool g_disableCspCheck;
+}
+
 namespace blink {
 
 // FIXME: This should probably use common functions with ContentSecurityPolicy.
@@ -112,6 +116,9 @@ bool SubresourceIntegrity::CheckSubresourceIntegrity(const Element& element,
     const KURL& resourceUrl,
     const Resource& resource)
 {
+    if (wke::g_disableCspCheck)
+        return true;
+
     Document& document = element.document();
     String attribute = element.fastGetAttribute(HTMLNames::integrityAttr);
     if (attribute.isEmpty())
@@ -136,6 +143,8 @@ bool SubresourceIntegrity::CheckSubresourceIntegrity(
     const KURL& resourceUrl,
     const Resource& resource)
 {
+    if (wke::g_disableCspCheck)
+        return true;
     Document& document = element.document();
 
     if (!resource.isEligibleForIntegrityCheck(document.getSecurityOrigin())) {
@@ -165,6 +174,8 @@ bool SubresourceIntegrity::CheckSubresourceIntegrity(
     ExecutionContext& executionContext,
     String& errorMessage)
 {
+    if (wke::g_disableCspCheck)
+        return true;
     IntegrityMetadataSet metadataSet;
     IntegrityParseResult integrityParseResult = parseIntegrityAttribute(
         integrityMetadata, metadataSet, &executionContext);
@@ -185,6 +196,8 @@ bool SubresourceIntegrity::CheckSubresourceIntegrity(
     ExecutionContext& executionContext,
     String& errorMessage)
 {
+    if (wke::g_disableCspCheck)
+        return true;
     if (!metadataSet.size())
         return true;
 

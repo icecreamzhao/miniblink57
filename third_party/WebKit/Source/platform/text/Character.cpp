@@ -44,6 +44,7 @@
 // #define MUTEX_H  // Prevent compile failure of utrie2.h on Windows
 // #include <utrie2.h>
 // #endif
+#include "third_party/icu/source/common/unicode/uchar.h"
 
 using namespace WTF;
 using namespace Unicode;
@@ -130,10 +131,7 @@ bool Character::isCJKIdeographOrSymbol(UChar32 c)
 
 bool Character::isCJKIdeographOrSymbolBase(UChar32 c)
 {
-    //     return isCJKIdeographOrSymbol(c) &&
-    //            !(U_GET_GC_MASK(c) & (U_GC_M_MASK | U_GC_LM_MASK | U_GC_SK_MASK));
-    DebugBreak();
-    return false;
+    return isCJKIdeographOrSymbol(c) && !(U_GET_GC_MASK(c) & (U_GC_M_MASK | U_GC_LM_MASK | U_GC_SK_MASK));
 }
 
 bool Character::isGraphemeExtended(UChar32 c)

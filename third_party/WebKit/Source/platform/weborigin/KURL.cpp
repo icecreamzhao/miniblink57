@@ -344,6 +344,7 @@ void KURL::invalidate()
     m_pathAfterLastSlash = 0;
     m_queryEnd = 0;
     m_fragmentEnd = 0;
+    m_innerURL = nullptr;
 }
 
 KURL::KURL(ParsedURLStringTag tag, const char* url)
@@ -353,7 +354,13 @@ KURL::KURL(ParsedURLStringTag tag, const char* url)
     ASSERT(m_string.is8Bit());
 }
 
-bool needInserFileHead(const String& url)
+KURL::~KURL()
+{
+    if (m_innerURL)
+        delete m_innerURL;
+}
+
+static bool needInserFileHead(const String& url)
 {
     if (WTF::kNotFound != url.find("file:/"))
         return false;
@@ -372,6 +379,7 @@ bool needInserFileHead(const String& url)
 
 KURL::KURL(ParsedURLStringTag, const String& url)
 {
+    m_innerURL = nullptr;
     bool fixed = false;
     String fixSchemeUrl;
 
@@ -416,11 +424,13 @@ KURL::KURL(ParsedURLStringTag, const String& url)
 
 KURL::KURL(const KURL& base, const String& relative)
 {
+    m_innerURL = nullptr;
     init(base, relative, UTF8Encoding());
 }
 
 KURL::KURL(const KURL& base, const String& relative, const TextEncoding& encoding)
 {
+    m_innerURL = nullptr;
     // For UTF-{7,16,32}, we want to use UTF-8 for the query part as
     // we do when submitting a form. A form with GET method
     // has its contents added to a URL as query params and it makes sense
@@ -2167,8 +2177,31 @@ String KURL::elidedString() const
 
 const KURL* KURL::innerURL() const
 {
-    notImplemented();
-    return 0;
+    if ((const KURL*)1 == m_innerURL)
+        return this;
+
+    if (m_innerURL)
+        return m_innerURL;
+
+    size_t pos = string().find(':');
+    if (pos == WTF::kNotFound) {
+        m_innerURL = (KURL*)1;
+        return this;
+    }
+
+    String innerUrl = string().substring(pos + 1);
+    pos = innerUrl.find(':');
+    if (pos == WTF::kNotFound) {
+        m_innerURL = (KURL*)1;
+        return this;
+    }
+
+    m_innerURL = new KURL(ParsedURLString, innerUrl);
+    if (!m_innerURL->isValid()) {
+        delete m_innerURL;
+        m_innerURL = (KURL*)1;
+    }
+    return m_innerURL;
 }
 
 bool KURL::isAboutBlankURL() const

@@ -41,6 +41,9 @@
 #include "WebInputMethodController.h"
 #include <v8.h>
 
+struct NPObject;
+struct _NPP;
+
 namespace blink {
 
 class WebDragData;
@@ -96,6 +99,9 @@ public:
     {
         return v8::Local<v8::Object>();
     }
+
+    virtual NPObject* scriptableObject() { return 0; }
+    virtual _NPP* pluginNPP() { return 0; }
 
     virtual bool supportsKeyboardFocus() const { return false; }
     virtual bool supportsEditCommands() const { return false; }

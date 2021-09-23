@@ -33,6 +33,10 @@
 #include "wtf/StdLibExtras.h"
 #include <memory>
 
+namespace wke {
+extern bool g_disableCspCheck;
+}
+
 namespace blink {
 
 // These values are at the discretion of the user agent.
@@ -133,26 +137,30 @@ bool CrossOriginPreflightResultCacheItem::allowsCrossOriginMethod(
     const String& method,
     String& errorDescription) const
 {
-//     if (m_methods.contains(method) || FetchUtils::isSimpleMethod(method))
-//         return true;
-// 
-//     errorDescription = "Method " + method + " is not allowed by Access-Control-Allow-Methods in preflight response.";
-//     return false;
+    if (wke::g_disableCspCheck)
+        return true;
 
-    return true;
+    if (m_methods.contains(method) || FetchUtils::isSimpleMethod(method))
+        return true;
+
+    errorDescription = "Method " + method + " is not allowed by Access-Control-Allow-Methods in preflight response.";
+    return false;
 }
 
 bool CrossOriginPreflightResultCacheItem::allowsCrossOriginHeaders(
     const HTTPHeaderMap& requestHeaders,
     String& errorDescription) const
 {
-//     for (const auto& header : requestHeaders) {
-//         if (!m_headers.contains(header.key) && !FetchUtils::isSimpleHeader(header.key, header.value) && !FetchUtils::isForbiddenHeaderName(header.key)) {
-//             errorDescription = "Request header field " + header.key.getString() + " is not allowed by Access-Control-Allow-Headers in "
-//                                                                                   "preflight response.";
-//             return false;
-//         }
-//     }
+    if (wke::g_disableCspCheck)
+        return true;
+
+    for (const auto& header : requestHeaders) {
+        if (!m_headers.contains(header.key) && !FetchUtils::isSimpleHeader(header.key, header.value) && !FetchUtils::isForbiddenHeaderName(header.key)) {
+            errorDescription = "Request header field " + header.key.getString() + " is not allowed by Access-Control-Allow-Headers in "
+                                                                                  "preflight response.";
+            return false;
+        }
+    }
     return true;
 }
 

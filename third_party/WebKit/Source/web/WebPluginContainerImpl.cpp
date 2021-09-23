@@ -34,6 +34,7 @@
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/ScriptSourceCode.h"
 #include "bindings/core/v8/V8Element.h"
+#include "bindings/core/v8/V8NPObject.h"
 #include "core/HTMLNames.h"
 #include "core/clipboard/DataObject.h"
 #include "core/clipboard/DataTransfer.h"
@@ -680,8 +681,7 @@ WebLayer* WebPluginContainerImpl::platformLayer() const
     return m_webLayer;
 }
 
-v8::Local<v8::Object> WebPluginContainerImpl::scriptableObject(
-    v8::Isolate* isolate)
+v8::Local<v8::Object> WebPluginContainerImpl::scriptableObject(v8::Isolate* isolate)
 {
     // With Oilpan, on plugin element detach dispose() will be called to safely
     // clear out references, including the pre-emptive destruction of the plugin.
@@ -690,14 +690,26 @@ v8::Local<v8::Object> WebPluginContainerImpl::scriptableObject(
     if (!m_webPlugin)
         return v8::Local<v8::Object>();
 
+//     v8::Local<v8::Object> object = m_webPlugin->v8ScriptableObject(isolate);
+// 
+//     // If the plugin has been destroyed and the reference on the stack is the
+//     // only one left, then don't return the scriptable object.
+//     if (!m_webPlugin)
+//         return v8::Local<v8::Object>();
+// 
+//     return object;
+
     v8::Local<v8::Object> object = m_webPlugin->v8ScriptableObject(isolate);
+    if (!object.IsEmpty()) {
+        // WebPlugin implementation can't provide the obsolete NPObject at the same time:
+        ASSERT(!m_webPlugin->scriptableObject());
+        return object;
+    }
 
-    // If the plugin has been destroyed and the reference on the stack is the
-    // only one left, then don't return the scriptable object.
-    if (!m_webPlugin)
-        return v8::Local<v8::Object>();
-
-    return object;
+    NPObject* npObject = m_webPlugin->scriptableObject();
+    if (npObject)
+        return createV8ObjectForNPObject(isolate, npObject, 0);
+    return v8::Local<v8::Object>();
 }
 
 bool WebPluginContainerImpl::supportsKeyboardFocus() const

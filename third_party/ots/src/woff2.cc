@@ -8,15 +8,19 @@
 #include <cassert>
 #include <cstdlib>
 #include <vector>
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
 #include <zlib.h>
 #endif
-#include "third_party/brotli/src/brotli/dec/decode.h"
+#include "brotli/dec/decode.h"
 
 #include "opentype-sanitiser.h"
 #include "ots-memory-stream.h"
 #include "ots.h"
 #include "woff2.h"
+#include <winsock.h>
+#include <limits>
+#undef max
+#undef min
 
 namespace {
 
@@ -885,7 +889,7 @@ bool ConvertWOFF2ToTTF(uint8_t* result, size_t result_length,
         return OTS_FAILURE();
     }
 
-    if (!IsValidVersionTag(ntohl(flavor))) {
+    if (!IsValidVersionTag(/*ntohl*/(flavor))) {
         return OTS_FAILURE();
     }
 

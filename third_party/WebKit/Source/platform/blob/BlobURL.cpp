@@ -64,8 +64,7 @@ KURL BlobURL::createBlobURL(const String& originString)
     ASSERT(!originString.isEmpty());
     String urlString = "blob:" + originString + '/' + createCanonicalUUIDString();
     //return KURL::createIsolated(ParsedURLString, urlString);
-    DebugBreak();
-    return KURL();
+    return KURL(ParsedURLString, urlString).copy();
 }
 
 } // namespace blink

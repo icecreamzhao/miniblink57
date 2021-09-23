@@ -56,11 +56,12 @@ std::unique_ptr<ScriptRegexp> EmailInputType::createEmailRegexp()
         new ScriptRegexp(emailPattern, TextCaseUnicodeInsensitive));
 }
 
-String EmailInputType::convertEmailAddressToASCII(const ScriptRegexp& regexp,
-    const String& address)
+String EmailInputType::convertEmailAddressToASCII(const ScriptRegexp& regexp, const String& address)
 {
-    DebugBreak();
-    return "";
+    String address16 = address;
+    address16.ensure16Bit();
+    return address16;
+
     //   if (address.containsOnlyASCII())
     //     return address;
     //
@@ -217,60 +218,53 @@ bool EmailInputType::typeMismatch() const
     return typeMismatchFor(element().value());
 }
 
+#define U_IS_LEAD(c) (((c)&0xfffffc00)==0xd800)
+
 String EmailInputType::typeMismatchText() const
 {
-    DebugBreak();
-    return "";
-    //   String invalidAddress = findInvalidAddress(element().value());
-    //   DCHECK(!invalidAddress.isNull());
-    //   if (invalidAddress.isEmpty())
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForEmailEmpty);
-    //   String atSign = String("@");
-    //   size_t atIndex = invalidAddress.find('@');
-    //   if (atIndex == kNotFound)
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForEmailNoAtSign, atSign,
-    //         invalidAddress);
-    //   // We check validity against an ASCII value because of difficulty to check
-    //   // invalid characters. However we should show Unicode value.
-    //   String unicodeAddress = convertEmailAddressToUnicode(invalidAddress);
-    //   String localPart = invalidAddress.left(atIndex);
-    //   String domain = invalidAddress.substring(atIndex + 1);
-    //   if (localPart.isEmpty())
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForEmailEmptyLocal, atSign,
-    //         unicodeAddress);
-    //   if (domain.isEmpty())
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForEmailEmptyDomain, atSign,
-    //         unicodeAddress);
-    //   size_t invalidCharIndex = localPart.find(isInvalidLocalPartCharacter);
-    //   if (invalidCharIndex != kNotFound) {
-    //     unsigned charLength = U_IS_LEAD(localPart[invalidCharIndex]) ? 2 : 1;
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForEmailInvalidLocal, atSign,
-    //         localPart.substring(invalidCharIndex, charLength));
-    //   }
-    //   invalidCharIndex = domain.find(isInvalidDomainCharacter);
-    //   if (invalidCharIndex != kNotFound) {
-    //     unsigned charLength = U_IS_LEAD(domain[invalidCharIndex]) ? 2 : 1;
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForEmailInvalidDomain, atSign,
-    //         domain.substring(invalidCharIndex, charLength));
-    //   }
-    //   if (!checkValidDotUsage(domain)) {
-    //     size_t atIndexInUnicode = unicodeAddress.find('@');
-    //     DCHECK_NE(atIndexInUnicode, kNotFound);
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForEmailInvalidDots,
-    //         String("."), unicodeAddress.substring(atIndexInUnicode + 1));
-    //   }
-    //   if (element().multiple())
-    //     return locale().queryString(
-    //         WebLocalizedString::ValidationTypeMismatchForMultipleEmail);
-    //   return locale().queryString(
-    //       WebLocalizedString::ValidationTypeMismatchForEmail);
+    String invalidAddress = findInvalidAddress(element().value());
+    DCHECK(!invalidAddress.isNull());
+    if (invalidAddress.isEmpty())
+        return locale().queryString(WebLocalizedString::ValidationTypeMismatchForEmailEmpty);
+
+    String atSign = String("@");
+    size_t atIndex = invalidAddress.find('@');
+    if (atIndex == kNotFound)
+        return locale().queryString(WebLocalizedString::ValidationTypeMismatchForEmailNoAtSign, atSign, invalidAddress);
+
+    // We check validity against an ASCII value because of difficulty to check
+    // invalid characters. However we should show Unicode value.
+    String unicodeAddress = convertEmailAddressToUnicode(invalidAddress);
+    String localPart = invalidAddress.left(atIndex);
+    String domain = invalidAddress.substring(atIndex + 1);
+    if (localPart.isEmpty())
+        return locale().queryString(WebLocalizedString::ValidationTypeMismatchForEmailEmptyLocal, atSign, unicodeAddress);
+    if (domain.isEmpty())
+        return locale().queryString(WebLocalizedString::ValidationTypeMismatchForEmailEmptyDomain, atSign, unicodeAddress);
+
+    size_t invalidCharIndex = localPart.find(isInvalidLocalPartCharacter);
+    if (invalidCharIndex != kNotFound) {
+        unsigned charLength = U_IS_LEAD(localPart[invalidCharIndex]) ? 2 : 1;
+        return locale().queryString(
+            WebLocalizedString::ValidationTypeMismatchForEmailInvalidLocal, atSign,
+            localPart.substring(invalidCharIndex, charLength));
+    }
+    invalidCharIndex = domain.find(isInvalidDomainCharacter);
+    if (invalidCharIndex != kNotFound) {
+        unsigned charLength = U_IS_LEAD(domain[invalidCharIndex]) ? 2 : 1;
+        return locale().queryString(
+            WebLocalizedString::ValidationTypeMismatchForEmailInvalidDomain, atSign,
+            domain.substring(invalidCharIndex, charLength));
+    }
+    if (!checkValidDotUsage(domain)) {
+        size_t atIndexInUnicode = unicodeAddress.find('@');
+        DCHECK_NE(atIndexInUnicode, kNotFound);
+        return locale().queryString(WebLocalizedString::ValidationTypeMismatchForEmailInvalidDots, String("."), unicodeAddress.substring(atIndexInUnicode + 1));
+    }
+    if (element().multiple())
+        return locale().queryString(WebLocalizedString::ValidationTypeMismatchForMultipleEmail);
+
+    return locale().queryString(WebLocalizedString::ValidationTypeMismatchForEmail);
 }
 
 bool EmailInputType::supportsSelectionAPI() const

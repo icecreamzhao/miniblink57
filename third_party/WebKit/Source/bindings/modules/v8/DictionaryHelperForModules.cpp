@@ -36,10 +36,10 @@ template bool DictionaryHelper::get(const Dictionary&,
     const StringView& key,
     Member<PasswordCredential>& value);
 
-PasswordCredential* V8PasswordCredential::toImplWithTypeCheck(class v8::Isolate*, class v8::Local<class v8::Value>)
-{
-    DebugBreak();
-    return nullptr;
-}
+// PasswordCredential* V8PasswordCredential::toImplWithTypeCheck(class v8::Isolate*, class v8::Local<class v8::Value>)
+// {
+//     DebugBreak();
+//     return nullptr;
+// }
 
 } // namespace blink
