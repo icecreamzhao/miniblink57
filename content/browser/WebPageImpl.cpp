@@ -2521,8 +2521,8 @@ bool WebPageImpl::initSetting()
     //settings->setPinchOverlayScrollbarThickness(8);
     //settings->setSpatialNavigationEnabled(true);
     settings->setLocalStorageEnabled(true);
-    settings->setMinimumFontSize(10);
-    settings->setMinimumLogicalFontSize(10);
+    settings->setMinimumFontSize(12);
+    settings->setMinimumLogicalFontSize(12);
     settings->setDefaultFontSize(16);
     settings->setDefaultFixedFontSize(16);
     settings->setPluginsEnabled(true);

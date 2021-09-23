@@ -626,38 +626,36 @@ bool WebPluginImpl::handleKeyboardCharEventForEmulateIme(int windowsKeyCode)
 
 bool WebPluginImpl::handleKeyboardEvent(const blink::WebKeyboardEvent& evt)
 {
-    DebugBreak();
-    return false;
-//     if (!m_pluginIme && m_plugin->quirks().contains(PluginQuirkEmulateIme))
-//         m_pluginIme = new WebPluginIMEWin();
-//     WebPluginIMEWin::ScopedLock lock(m_pluginIme);
-// 
-//     ASSERT(m_plugin && !m_isWindowed);
-//     bool isDefaultHandled = false;
-//     NPEvent npEvent;
-// 
-//     npEvent.wParam = evt.windowsKeyCode;
-// 
-//     if (evt.type == blink::WebInputEvent::Type::KeyDown) {
-//         npEvent.event = WM_KEYDOWN;
-//         npEvent.lParam = 0;
-//     } else if (evt.type == blink::WebInputEvent::Type::Char) {
-//         if (!m_plugin->quirks().contains(PluginQuirkEmulateIme)) {
-//             npEvent.event = WM_CHAR;
-//             npEvent.lParam = 1;
-//             npEvent.wParam = evt.windowsKeyCode;
-//             dispatchNPEvent(npEvent);
-//         }
-//         isDefaultHandled = true;
-//     } else if (evt.type == blink::WebInputEvent::Type::KeyUp) {
-//         npEvent.event = WM_KEYUP;
-//         npEvent.lParam = 0x8000;
-//     } else
-//         return isDefaultHandled;
-// 
-//     if (dispatchNPEvent(npEvent))
-//         return true;
-//     return isDefaultHandled;
+    if (!m_pluginIme && m_plugin->quirks().contains(PluginQuirkEmulateIme))
+        m_pluginIme = new WebPluginIMEWin();
+    WebPluginIMEWin::ScopedLock lock(m_pluginIme);
+
+    ASSERT(m_plugin && !m_isWindowed);
+    bool isDefaultHandled = false;
+    NPEvent npEvent;
+
+    npEvent.wParam = evt.windowsKeyCode;
+
+    if (evt.type() == blink::WebInputEvent::Type::KeyDown) {
+        npEvent.event = WM_KEYDOWN;
+        npEvent.lParam = 0;
+    } else if (evt.type() == blink::WebInputEvent::Type::Char) {
+        if (!m_plugin->quirks().contains(PluginQuirkEmulateIme)) {
+            npEvent.event = WM_CHAR;
+            npEvent.lParam = 1;
+            npEvent.wParam = evt.windowsKeyCode;
+            dispatchNPEvent(npEvent);
+        }
+        isDefaultHandled = true;
+    } else if (evt.type() == blink::WebInputEvent::Type::KeyUp) {
+        npEvent.event = WM_KEYUP;
+        npEvent.lParam = 0x8000;
+    } else
+        return isDefaultHandled;
+
+    if (dispatchNPEvent(npEvent))
+        return true;
+    return isDefaultHandled;
 }
 
 blink::WebInputEventResult WebPluginImpl::handleInputEvent(const blink::WebInputEvent& evt, blink::WebCursorInfo&)

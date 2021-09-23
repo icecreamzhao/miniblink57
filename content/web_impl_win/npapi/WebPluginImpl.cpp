@@ -589,9 +589,8 @@ static KURL makeURL(const KURL& baseURL, const char* relativeURLString)
     String urlString = relativeURLString;
 
     // Strip return characters.
-//     urlString.replaceWithLiteral('\n', "");
-//     urlString.replaceWithLiteral('\r', "");
-    DebugBreak();
+    urlString.replace('\n', "");
+    urlString.replace('\r', ""); // replaceWithLiteral
 
     return KURL(baseURL, urlString);
 }
@@ -1044,8 +1043,7 @@ NPError WebPluginImpl::handlePost(const char* url, const char* target, uint32_t 
     frameLoadRequest.resourceRequest().setHTTPMethod("POST");
     frameLoadRequest.resourceRequest().setURL(makeURL(m_parentFrame->document()->baseURL(), url));
     frameLoadRequest.resourceRequest().addHTTPHeaderFields(headerFields);
-    //frameLoadRequest.resourceRequest().setHTTPBody(FormData::create(postData, postDataLength));
-    DebugBreak();
+    frameLoadRequest.resourceRequest().setHTTPBody(blink::EncodedFormData::create(postData, postDataLength));
     frameLoadRequest.setFrameName(target);
 
     return load(frameLoadRequest, sendNotification, notifyData);
@@ -1382,8 +1380,9 @@ struct _NPP* WebPluginImpl::pluginNPP()
 
 v8::Local<v8::Object> WebPluginImpl::v8ScriptableObject(v8::Isolate*) 
 {
+    return v8::Local<v8::Object>();
 //     if (!m_pluginContainer)
-         return v8::Local<v8::Object>();
+//         return v8::Local<v8::Object>();
 // 
 //     return m_pluginContainer->v8ObjectForElement();
 }

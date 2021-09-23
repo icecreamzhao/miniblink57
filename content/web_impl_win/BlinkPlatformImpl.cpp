@@ -337,6 +337,8 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
     WTF::PartitionAllocHooks::setAllocationHook(onAllocationHook);
     WTF::PartitionAllocHooks::setFreeHook(onFreeHook);
 
+    blink::FontCache::setSmallCaptionFontMetrics(L"ËÎÌו", 12);
+
     //v8::V8::SetFlagsFromString("--turbo", strlen("--turbo"));
     //v8::V8::SetFlagsFromString("--block_concurrent_recompilation", sizeof("--block_concurrent_recompilation") - 1);
     //v8::V8::SetFlagsFromString("--scavenge_reclaim_unmodified_objects", strlen("--scavenge_reclaim_unmodified_objects"));

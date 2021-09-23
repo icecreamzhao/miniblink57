@@ -221,126 +221,124 @@ LRESULT CALLBACK PopupMenuWin::popupMenuWndProc(HWND hWnd, UINT message, WPARAM 
 
 LRESULT PopupMenuWin::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    DebugBreak();
-    return 0;
-//     LRESULT lResult = 0;
-//     BOOL bHandle = FALSE;
-//     POINT ptCursor = { 0 };
-//     PlatformEventHandler::MouseEvtInfo info = { false, false, nullptr };
-//     HWND hFocusWnd = nullptr;
-//     PlatformEventHandler* eventHandler = m_platformEventHandler;
-//     blink::WebPagePopup* popupImpl = m_popupImpl;
-//     PopupMenuWin* self = this;
-//     int id = m_id;
-// 
-// //     String out = String::format("PopupMenuWin wndProc: %x %04x\n", hWnd, message);
-// //     OutputDebugStringA(out.utf8().data());
-// 
-//     switch (message) {
-//     case WM_NCDESTROY:
-//         OutputDebugStringA("PopupMenuWin::wndProc WM_NCDESTROY\n");
-//         break;
-//     case WM_CAPTURECHANGED: { // 在多线程环境下，收不到WM_LBUTTONUP消息，只能这里来模拟
-//         ::GetCursorPos(&ptCursor);
-//         ::ScreenToClient(hWnd, &ptCursor);
-//         lParam = MAKELONG(ptCursor.x, ptCursor.y);
-// 
-//         postTaskToMainThread(FROM_HERE, [self, id, eventHandler, hWnd, lParam, info] {
-//             if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
-//                 return;
-//             BOOL bHandle = FALSE;
-//             eventHandler->fireMouseEvent(hWnd, WM_LBUTTONDOWN, 0, lParam, info, &bHandle);
-//             eventHandler->fireMouseEvent(hWnd, WM_LBUTTONUP, 0, lParam, info, &bHandle);
-//             self->hide();
-//         });
-// 
-//         if (bHandle)
-//             return 0;
-//     }
-//         break;
-//     case WM_MOUSEMOVE:
-//     case WM_LBUTTONDOWN:
-//     case WM_LBUTTONUP: 
-//         if (!m_initialize)
-//             break;
-// 
-//         postTaskToMainThread(FROM_HERE, [eventHandler, id, hWnd, message, wParam, lParam, info] {
-//             if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
-//                 return;
-//             BOOL bHandle = FALSE;
-//             eventHandler->fireMouseEvent(hWnd, message, wParam, lParam, info, &bHandle);
-//         });
-//         if (bHandle)
-//             return 0;
-//         break;
-//     
-//     case WM_PMW_MOUSEHWHEEL:
-//     case WM_MOUSEWHEEL: 
-//         postTaskToMainThread(FROM_HERE, [eventHandler, id, hWnd, message, wParam, lParam] {
-//             if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
-//                 return;
-//             eventHandler->fireWheelEvent(hWnd, message, wParam, lParam);
-//         });
-//         break;
-// 
-//     case WM_SYSKEYDOWN:
-//     case WM_KEYDOWN: 
-//         if (!m_initialize)
-//             break;
-// 
-//         postTaskToMainThread(FROM_HERE, [popupImpl, id, hWnd, message, wParam, lParam] {
-//             if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
-//                 return;
-//             WebKeyboardEvent keyEvent = PlatformEventHandler::buildKeyboardEvent(WebInputEvent::RawKeyDown, message, wParam, lParam);
-//             bool handled = popupImpl->handleInputEvent(keyEvent);
-//         });
-//         if (bHandle)
-//             return 0;
-//         break;
-//     
-//     case WM_PAINT: {
-//         PAINTSTRUCT paintInfo;
-//         ::BeginPaint(popupHandle(), &paintInfo);
-//         paint(paintInfo.hdc, paintInfo.rcPaint);
-//         ::EndPaint(popupHandle(), &paintInfo);
-//         lResult = 0;
-//         break;
-//     }
-//     case WM_PRINTCLIENT:
-//         //paint(clientRect(), (HDC)wParam);
-//         break;
-//     case WM_GETOBJECT:
-//         break;
-// 
-//     case WM_TIMER:
-//         hFocusWnd = ::GetForegroundWindow();
-//         m_lastFocusWnd = hFocusWnd;
-//         break;
-//     case WM_PMW_KILLFOCUS:
-//     case WM_KILLFOCUS: {
-//         postTaskToMainThread(FROM_HERE, [self, id] {
-//             if (!net::ActivatingObjCheck::inst()->isActivating(id))
-//                 return;
-//             self->hide();
-//         });
-//     }
-//         break;
-//     case WM_INIT_MENU: {
-//         postTaskToMainThread(FROM_HERE, [self, id] {
-//             if (!net::ActivatingObjCheck::inst()->isActivating(id))
-//                 return;
-//             self->initialize();
-//         });
-//     }
-//         break;
-//     case WM_MOUSEACTIVATE:
-//         lResult = MA_NOACTIVATE; // 这句很重要！
-//         break;
-//     default:
-//         lResult = ::DefWindowProc(hWnd, message, wParam, lParam);
-//     }
-// 
-//     return lResult;
+    LRESULT lResult = 0;
+    BOOL bHandle = FALSE;
+    POINT ptCursor = { 0 };
+    PlatformEventHandler::MouseEvtInfo info = { false, false, nullptr };
+    HWND hFocusWnd = nullptr;
+    PlatformEventHandler* eventHandler = m_platformEventHandler;
+    blink::WebPagePopup* popupImpl = m_popupImpl;
+    PopupMenuWin* self = this;
+    int id = m_id;
+
+//     String out = String::format("PopupMenuWin wndProc: %x %04x\n", hWnd, message);
+//     OutputDebugStringA(out.utf8().data());
+
+    switch (message) {
+    case WM_NCDESTROY:
+        OutputDebugStringA("PopupMenuWin::wndProc WM_NCDESTROY\n");
+        break;
+    case WM_CAPTURECHANGED: { // 在多线程环境下，收不到WM_LBUTTONUP消息，只能这里来模拟
+        ::GetCursorPos(&ptCursor);
+        ::ScreenToClient(hWnd, &ptCursor);
+        lParam = MAKELONG(ptCursor.x, ptCursor.y);
+
+        postTaskToMainThread(FROM_HERE, [self, id, eventHandler, hWnd, lParam, info] {
+            if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
+                return;
+            BOOL bHandle = FALSE;
+            eventHandler->fireMouseEvent(hWnd, WM_LBUTTONDOWN, 0, lParam, info, &bHandle);
+            eventHandler->fireMouseEvent(hWnd, WM_LBUTTONUP, 0, lParam, info, &bHandle);
+            self->hide();
+        });
+
+        if (bHandle)
+            return 0;
+    }
+        break;
+    case WM_MOUSEMOVE:
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONUP: 
+        if (!m_initialize)
+            break;
+
+        postTaskToMainThread(FROM_HERE, [eventHandler, id, hWnd, message, wParam, lParam, info] {
+            if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
+                return;
+            BOOL bHandle = FALSE;
+            eventHandler->fireMouseEvent(hWnd, message, wParam, lParam, info, &bHandle);
+        });
+        if (bHandle)
+            return 0;
+        break;
+    
+    case WM_PMW_MOUSEHWHEEL:
+    case WM_MOUSEWHEEL: 
+        postTaskToMainThread(FROM_HERE, [eventHandler, id, hWnd, message, wParam, lParam] {
+            if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
+                return;
+            eventHandler->fireWheelEvent(hWnd, message, wParam, lParam);
+        });
+        break;
+
+    case WM_SYSKEYDOWN:
+    case WM_KEYDOWN: 
+        if (!m_initialize)
+            break;
+
+        postTaskToMainThread(FROM_HERE, [popupImpl, id, hWnd, message, wParam, lParam] {
+            if (!m_initialize || !net::ActivatingObjCheck::inst()->isActivating(id))
+                return;
+            WebKeyboardEvent keyEvent = PlatformEventHandler::buildKeyboardEvent(WebInputEvent::RawKeyDown, message, wParam, lParam);
+            popupImpl->handleInputEvent(keyEvent);
+        });
+        if (bHandle)
+            return 0;
+        break;
+    
+    case WM_PAINT: {
+        PAINTSTRUCT paintInfo;
+        ::BeginPaint(popupHandle(), &paintInfo);
+        paint(paintInfo.hdc, paintInfo.rcPaint);
+        ::EndPaint(popupHandle(), &paintInfo);
+        lResult = 0;
+        break;
+    }
+    case WM_PRINTCLIENT:
+        //paint(clientRect(), (HDC)wParam);
+        break;
+    case WM_GETOBJECT:
+        break;
+
+    case WM_TIMER:
+        hFocusWnd = ::GetForegroundWindow();
+        m_lastFocusWnd = hFocusWnd;
+        break;
+    case WM_PMW_KILLFOCUS:
+    case WM_KILLFOCUS: {
+        postTaskToMainThread(FROM_HERE, [self, id] {
+            if (!net::ActivatingObjCheck::inst()->isActivating(id))
+                return;
+            self->hide();
+        });
+    }
+        break;
+    case WM_INIT_MENU: {
+        postTaskToMainThread(FROM_HERE, [self, id] {
+            if (!net::ActivatingObjCheck::inst()->isActivating(id))
+                return;
+            self->initialize();
+        });
+    }
+        break;
+    case WM_MOUSEACTIVATE:
+        lResult = MA_NOACTIVATE; // 这句很重要！
+        break;
+    default:
+        lResult = ::DefWindowProc(hWnd, message, wParam, lParam);
+    }
+
+    return lResult;
 }
 
 void PopupMenuWin::beginMainFrame()
@@ -624,28 +622,27 @@ WebWidget* PopupMenuWin::createWnd()
 
 void PopupMenuWin::initialize()
 {
-    DebugBreak();
-//     g_popupMenuMutex.lock();
-//     if (m_initialize) {
-//         g_popupMenuMutex.unlock();
-//         return;
-//     }
-//     m_initialize = true;
-//     g_popupMenuMutex.unlock();
-//     
+    g_popupMenuMutex.lock();
+    if (m_initialize) {
+        g_popupMenuMutex.unlock();
+        return;
+    }
+    m_initialize = true;
+    g_popupMenuMutex.unlock();
+    
 // #ifndef NO_USE_ORIG_CHROME
-//     if (OrigChromeMgr::getInst())
-//         m_ccLayerTreeWrap = new LayerTreeWrap(this, true);
+    if (OrigChromeMgr::getInst())
+        m_ccLayerTreeWrap = new LayerTreeWrap(this, true);
 //     else
 // #endif
 //         m_layerTreeHost = new mc::LayerTreeHost(this, nullptr);
-// 
-//     m_popupImpl = WebPagePopup::create(this);
-//     m_platformEventHandler = new PlatformEventHandler(m_popupImpl, nullptr);
-// 
+
+    m_popupImpl = WebPagePopup::create(this);
+    m_platformEventHandler = new PlatformEventHandler(m_popupImpl, nullptr);
+
 //     if (m_layerTreeHost)
 //         m_layerTreeHost->setWebGestureCurveTarget(m_webViewImpl);
-//     m_popupImpl->setFocus(true);
+    m_popupImpl->setFocus(true);
 }
 
 WebWidget* PopupMenuWin::create(PopupMenuWinClient* client, HWND hWnd, blink::IntPoint offset, WebViewImpl* webViewImpl, WebPopupType type, PopupMenuWin** result)

@@ -677,7 +677,7 @@ void WebFrameClientImpl::willSendRequest(WebLocalFrame* webFrame, WebURLRequest&
 
     // Add an empty HTTP origin header for non GET methods if none is currently
     // present.
-    request.addHTTPOriginIfNeeded(WebSecurityOrigin());
+    //request.addHTTPOriginIfNeeded(WebSecurityOrigin());
 
     // This is an instance where we embed a copy of the routing id
     // into the data portion of the message. This can cause problems if we

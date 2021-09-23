@@ -114,8 +114,8 @@ public:
     virtual blink::WebPluginContainer* container() const override;
     /*virtual*/ void containerDidDetachFromParent() /*override*/;
 
-    /*virtual*/ NPObject* scriptableObject() /*override*/;
-    /*virtual*/ struct _NPP* pluginNPP() /*override*/;
+    virtual NPObject* scriptableObject() override;
+    virtual _NPP* pluginNPP() override;
 
     // The same as scriptableObject() but allows to expose scriptable interface
     // through plain v8 object instead of NPObject.

@@ -48,12 +48,18 @@ static String getVersionInfo(const LPVOID versionInfoData, const String& info)
 {
     LPVOID buffer;
     UINT bufferLength;
-    String subInfo = "\\StringfileInfo\\040904E4\\" + info;
+    String subInfo = "\\StringfileInfo\\040904E4\\" + info; // english
     bool retval = VerQueryValueW(versionInfoData,
         const_cast<UChar*>(subInfo.charactersWithNullTermination().data()),
         &buffer, &bufferLength);
-    if (!retval || bufferLength == 0)
-        return String();
+    if (!retval || bufferLength == 0) {
+        subInfo = "\\StringfileInfo\\080404b0\\" + info; // chinese
+        retval = VerQueryValueW(versionInfoData,
+            const_cast<UChar*>(subInfo.charactersWithNullTermination().data()),
+            &buffer, &bufferLength);
+        if (!retval || bufferLength == 0)
+            return String();
+    }
 
     // Subtract 1 from the length; we don't want the trailing null character.
     return String(reinterpret_cast<UChar*>(buffer), bufferLength - 1);
