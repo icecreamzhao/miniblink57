@@ -71,11 +71,16 @@ void trace(Visitor*, ScriptWrappable*)
 {
 }
 
+static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+{
+    //visitor->traceWrappers(scriptWrappable->toImpl<Animation>());
+}
+
 } // namespace
 
 const WrapperTypeInfo* npObjectTypeInfo()
 {
-    static const WrapperTypeInfo typeInfo = { gin::kEmbedderBlink, nullptr, trace, nullptr, 0, nullptr, "NPObject", nullptr, 
+    static const WrapperTypeInfo typeInfo = { gin::kEmbedderBlink, nullptr, trace, traceWrappers, 0, nullptr, "NPObject", nullptr, 
         WrapperTypeInfo::WrapperTypeObjectPrototype, WrapperTypeInfo::ObjectClassId, WrapperTypeInfo::NotInheritFromEventTarget, 
         WrapperTypeInfo::Dependent};
     return &typeInfo;
