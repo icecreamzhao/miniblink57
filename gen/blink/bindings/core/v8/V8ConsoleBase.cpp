@@ -15,6 +15,7 @@
 #include "core/dom/Document.h"
 #include "core/frame/UseCounter.h"
 #include "platform/RuntimeEnabledFeatures.h"
+#include "third_party/WebKit/Source/core/page/ChromeClient.h"
 #include "wtf/GetPtr.h"
 #include "wtf/RefPtr.h"
 
@@ -30,9 +31,68 @@ static void logMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
         return;
 
     v8::Local<v8::String> stringInfo = value->ToString();
-    v8::String::Utf8Value utf8(stringInfo);
-    OutputDebugStringA(*utf8);
-    OutputDebugStringA("\n");
+    v8::String::Utf8Value stringInfoUtf8(stringInfo);
+//     OutputDebugStringA(*utf8);
+//     OutputDebugStringA("\n");
+
+    int lineNumber = 0;
+    String stack;
+    String url;
+
+    const v8::StackTrace::StackTraceOptions options = static_cast<v8::StackTrace::StackTraceOptions>(
+        v8::StackTrace::kLineNumber
+        | v8::StackTrace::kColumnOffset
+        | v8::StackTrace::kScriptId
+        | v8::StackTrace::kScriptNameOrSourceURL
+        | v8::StackTrace::kFunctionName);
+
+    int stackNum = 50;
+    v8::HandleScope handleScope(info.GetIsolate());
+    v8::Local<v8::StackTrace> stackTrace(v8::StackTrace::CurrentStackTrace(info.GetIsolate(), stackNum, options));
+    int count = stackTrace->GetFrameCount();
+
+    for (int i = 0; i < count; ++i) {
+        v8::Local<v8::StackFrame> stackFrame = stackTrace->GetFrame(i);
+        int frameCount = stackTrace->GetFrameCount();
+        int line = stackFrame->GetLineNumber();
+        v8::Local<v8::String> scriptName = stackFrame->GetScriptNameOrSourceURL();
+        v8::Local<v8::String> funcName = stackFrame->GetFunctionName();
+
+        std::string scriptNameWTF;
+        std::string funcNameWTF;
+
+        if (!scriptName.IsEmpty()) {
+            v8::String::Utf8Value scriptNameUtf8(scriptName);
+            scriptNameWTF = *scriptNameUtf8;
+        }
+
+        if (!funcName.IsEmpty()) {
+            v8::String::Utf8Value funcNameUtf8(funcName);
+            funcNameWTF = *funcNameUtf8;
+        }
+
+        stack.append(String::format("line:%d, [", line));
+
+        if (!scriptNameWTF.empty()) {
+            stack.append(scriptNameWTF.c_str());
+        }
+        stack.append("] , [");
+
+        if (!funcNameWTF.empty()) {
+            stack.append(funcNameWTF.c_str());
+        }
+        stack.append("]\n");
+
+        if (0 == i) {
+            lineNumber = line;
+            url = scriptNameWTF.c_str();
+        }
+    }
+    stack.append("\n");
+
+    Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+    document.frame()->chromeClient().addMessageToConsole(document.frame(), ConsoleAPIMessageSource, LogMessageLevel, String(*stringInfoUtf8), lineNumber, url, stack);
+
 }
 
 static void addFunction(v8::Isolate* isolate, v8::Local<v8::FunctionTemplate> tmpl, const char* name, v8::FunctionCallback callback)
@@ -51,7 +111,20 @@ static void installV8ConsoleBaseTemplate(v8::Local<v8::FunctionTemplate> functio
 
     functionTemplate->SetClassName(v8::String::NewFromUtf8(isolate, "Console"));
 
+    addFunction(isolate, functionTemplate, "assert", logMethodCallback);
+    addFunction(isolate, functionTemplate, "clear", logMethodCallback);
+    addFunction(isolate, functionTemplate, "count", logMethodCallback);
+    addFunction(isolate, functionTemplate, "error", logMethodCallback);
+    addFunction(isolate, functionTemplate, "group", logMethodCallback);
+    addFunction(isolate, functionTemplate, "groupCollapsed", logMethodCallback);
+    addFunction(isolate, functionTemplate, "groupEnd", logMethodCallback);
+    addFunction(isolate, functionTemplate, "info", logMethodCallback);
     addFunction(isolate, functionTemplate, "log", logMethodCallback);
+    addFunction(isolate, functionTemplate, "table", logMethodCallback);
+    addFunction(isolate, functionTemplate, "time", logMethodCallback);
+    addFunction(isolate, functionTemplate, "warn", logMethodCallback);
+    addFunction(isolate, functionTemplate, "timeEnd", logMethodCallback);
+    addFunction(isolate, functionTemplate, "trace", logMethodCallback);
 
     //     v8::Local<v8::ObjectTemplate> instanceTemplate = functionTemplate->InstanceTemplate();
     //     ALLOW_UNUSED_LOCAL(instanceTemplate);
