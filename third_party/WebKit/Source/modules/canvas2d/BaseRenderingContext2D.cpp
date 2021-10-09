@@ -908,9 +908,8 @@ void BaseRenderingContext2D::clearRect(double x,
         return;
 
     SkPaint clearPaint;
-    clearPaint.setBlendMode(SkBlendMode::kClear);
+    clearPaint.setXfermodeMode(SkXfermode::kClear_Mode);
     clearPaint.setStyle(SkPaint::kFill_Style);
-    clearPaint.setColor(0xffffffff);
     FloatRect rect(x, y, width, height);
 
     if (rectContainsTransformedRect(rect, clipBounds)) {
@@ -1139,8 +1138,7 @@ void BaseRenderingContext2D::drawImageInternal(SkCanvas* c,
 
     if (!imageSource->isVideoElement()) {
         imagePaint.setAntiAlias(shouldDrawImageAntialiased(dstRect));
-        image->draw(c, imagePaint, dstRect, srcRect, DoNotRespectImageOrientation,
-            Image::DoNotClampImageToSourceRect, drawImageColorBehavior());
+        image->draw(c, imagePaint, dstRect, srcRect, DoNotRespectImageOrientation, Image::DoNotClampImageToSourceRect, drawImageColorBehavior());
     } else {
         c->save();
         c->clipRect(dstRect);
