@@ -124,8 +124,16 @@ public:
 
         FrameView* view = m_overlay->overlayMainFrame()->view();
         DCHECK(!view->needsLayout());
-        view->paint(graphicsContext,
-            CullRect(IntRect(0, 0, view->width(), view->height())));
+        view->paint(graphicsContext, CullRect(IntRect(0, 0, view->width(), view->height())));
+
+//         if (graphicsContext.canvas()) {
+//             FloatRect paintRect(0, 0, 20, 30);
+//             graphicsContext.setStrokeStyle(SolidStroke);
+//             graphicsContext.setStrokeColor(0xff000000 | (::GetTickCount() /*+ base::RandInt(0, 0x1223345)*/));
+//             // graphicsContext->drawLine(IntPoint(paintRect.x(), paintRect.y()), IntPoint(paintRect.maxX(), paintRect.maxY()));
+//             // graphicsContext->drawLine(IntPoint(paintRect.maxX(), paintRect.y()), IntPoint(paintRect.x(), paintRect.maxY()));
+//             graphicsContext.strokeRect(paintRect, 2);
+//         }
     }
 
 private:
@@ -536,29 +544,21 @@ Page* InspectorOverlay::overlayPage()
     Page::PageClients pageClients;
     fillWithEmptyClients(pageClients);
     DCHECK(!m_overlayChromeClient);
-    m_overlayChromeClient = InspectorOverlayChromeClient::create(
-        m_frameImpl->frame()->host()->chromeClient(), *this);
+    m_overlayChromeClient = InspectorOverlayChromeClient::create(m_frameImpl->frame()->host()->chromeClient(), *this);
     pageClients.chromeClient = m_overlayChromeClient.get();
     m_overlayPage = Page::create(pageClients);
 
     Settings& settings = m_frameImpl->frame()->host()->settings();
     Settings& overlaySettings = m_overlayPage->settings();
 
-    overlaySettings.genericFontFamilySettings().updateStandard(
-        settings.genericFontFamilySettings().standard());
-    overlaySettings.genericFontFamilySettings().updateSerif(
-        settings.genericFontFamilySettings().serif());
-    overlaySettings.genericFontFamilySettings().updateSansSerif(
-        settings.genericFontFamilySettings().sansSerif());
-    overlaySettings.genericFontFamilySettings().updateCursive(
-        settings.genericFontFamilySettings().cursive());
-    overlaySettings.genericFontFamilySettings().updateFantasy(
-        settings.genericFontFamilySettings().fantasy());
-    overlaySettings.genericFontFamilySettings().updatePictograph(
-        settings.genericFontFamilySettings().pictograph());
+    overlaySettings.genericFontFamilySettings().updateStandard(settings.genericFontFamilySettings().standard());
+    overlaySettings.genericFontFamilySettings().updateSerif(settings.genericFontFamilySettings().serif());
+    overlaySettings.genericFontFamilySettings().updateSansSerif(settings.genericFontFamilySettings().sansSerif());
+    overlaySettings.genericFontFamilySettings().updateCursive(settings.genericFontFamilySettings().cursive());
+    overlaySettings.genericFontFamilySettings().updateFantasy(settings.genericFontFamilySettings().fantasy());
+    overlaySettings.genericFontFamilySettings().updatePictograph(settings.genericFontFamilySettings().pictograph());
     overlaySettings.setMinimumFontSize(settings.getMinimumFontSize());
-    overlaySettings.setMinimumLogicalFontSize(
-        settings.getMinimumLogicalFontSize());
+    overlaySettings.setMinimumLogicalFontSize(settings.getMinimumLogicalFontSize());
     overlaySettings.setScriptEnabled(true);
     overlaySettings.setPluginsEnabled(false);
     overlaySettings.setLoadsImagesAutomatically(true);
@@ -567,8 +567,7 @@ Page* InspectorOverlay::overlayPage()
     // through some non-composited paint function.
     overlaySettings.setAcceleratedCompositingEnabled(false);
 
-    LocalFrame* frame = LocalFrame::create(&dummyFrameLoaderClient,
-        &m_overlayPage->frameHost(), 0);
+    LocalFrame* frame = LocalFrame::create(&dummyFrameLoaderClient, &m_overlayPage->frameHost(), 0);
     frame->setView(FrameView::create(*frame));
     frame->init();
     FrameLoader& loader = frame->loader();
@@ -576,10 +575,8 @@ Page* InspectorOverlay::overlayPage()
     frame->view()->setTransparent(true);
 
     const WebData& overlayPageHTMLResource = Platform::current()->loadResource("InspectorOverlayPage.html");
-    RefPtr<SharedBuffer> data = SharedBuffer::create(
-        overlayPageHTMLResource.data(), overlayPageHTMLResource.size());
-    loader.load(FrameLoadRequest(
-        0, blankURL(), SubstituteData(data, "text/html", "UTF-8", KURL(), ForceSynchronousLoad)));
+    RefPtr<SharedBuffer> data = SharedBuffer::create(overlayPageHTMLResource.data(), overlayPageHTMLResource.size());
+    loader.load(FrameLoadRequest(0, blankURL(), SubstituteData(data, "text/html", "UTF-8", KURL(), ForceSynchronousLoad)));
     v8::Isolate* isolate = toIsolate(frame);
     ScriptState* scriptState = ScriptState::forMainWorld(frame);
     DCHECK(scriptState);
@@ -587,10 +584,7 @@ Page* InspectorOverlay::overlayPage()
     v8::Local<v8::Object> global = scriptState->context()->Global();
     v8::Local<v8::Value> overlayHostObj = ToV8(m_overlayHost.get(), global, isolate);
     DCHECK(!overlayHostObj.IsEmpty());
-    global
-        ->Set(scriptState->context(),
-            v8AtomicString(isolate, "InspectorOverlayHost"), overlayHostObj)
-        .ToChecked();
+    global->Set(scriptState->context(),v8AtomicString(isolate, "InspectorOverlayHost"), overlayHostObj).ToChecked();
 
 #if OS(WIN)
     evaluateInOverlay("setPlatform", "windows");
@@ -656,11 +650,34 @@ void InspectorOverlay::evaluateInOverlay(
     std::unique_ptr<protocol::ListValue> command = protocol::ListValue::create();
     command->pushValue(protocol::StringValue::create(method));
     command->pushValue(std::move(argument));
-    toLocalFrame(overlayPage()->mainFrame())
-        ->script()
-        .executeScriptInMainWorld(
-            "dispatch(" + command->serialize() + ")",
-            ScriptController::ExecuteScriptWhenScriptsDisabled);
+    toLocalFrame(overlayPage()->mainFrame())->script().executeScriptInMainWorld("dispatch(" + command->serialize() + ")", ScriptController::ExecuteScriptWhenScriptsDisabled);
+
+//     if (method == "drawHighlight") {
+//         const char* js =
+//             "dispatch([\"drawHighlight\",{\"paths\":["
+//             "{\"path\":[\"M\",0,0,\"L\",1080,0,\"L\",1080,656,\"L\",0,656,\"Z\"],\"fillColor\":\"rgba(111, 168, 220, 0.658823529411765)\"},"
+//             "{\"path\":[\"M\",0,0,\"L\",1080,0,\"L\",1080,656,\"L\",0,656,\"Z\"],\"fillColor\":\"rgba(147, 196, 125, 0.549019607843137)\"},"
+//             "{\"path\":[\"M\",0,0,\"L\",1080,0,\"L\",1080,656,\"L\",0,656,\"Z\"],\"fillColor\":\"rgba(255, 229, 153, 0.658823529411765)\"},"
+//             "{\"path\":[\"M\",0,0,\"L\",1080,0,\"L\",1080,656,\"L\",0,656,\"Z\"],\"fillColor\":\"rgba(246, 178, 107, 0.658823529411765)\"}],"
+//             "\"showRulers\":false,\"showExtensionLines\":false,\"elementInfo\":{\"tagName\":\"html\",\"idValue\":\"\",\"nodeWidth\":\"1080\",\"nodeHeight\":\"656\"}}]);";
+//         toLocalFrame(overlayPage()->mainFrame())->script().executeScriptInMainWorld(js, ScriptController::ExecuteScriptWhenScriptsDisabled);
+// 
+//         js =
+//             "window.context.beginPath();"
+//             "window.context.lineTo(200, 200);"
+//             "window.context.lineTo(500, 200);"
+//             "window.context.lineTo(500, 100);"
+//             "window.context.lineTo(700, 250);"
+//             "window.context.lineTo(500, 400);"
+//             "window.context.lineTo(500, 300);"
+//             "window.context.lineTo(200, 300);"
+//             "window.context.closePath();"
+//             "window.context.fillStyle = 'rgba(250,200,0,0.4)';"
+//             "window.context.fill();";
+//         toLocalFrame(overlayPage()->mainFrame())->script().executeScriptInMainWorld(js, ScriptController::ExecuteScriptWhenScriptsDisabled);
+//     } else
+//         toLocalFrame(overlayPage()->mainFrame())->script().executeScriptInMainWorld("dispatch(" + command->serialize() + ")", ScriptController::ExecuteScriptWhenScriptsDisabled);
+
 }
 
 String InspectorOverlay::evaluateInOverlayForTest(const String& script)

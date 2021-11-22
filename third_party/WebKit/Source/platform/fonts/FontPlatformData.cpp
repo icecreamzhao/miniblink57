@@ -268,10 +268,15 @@ bool FontPlatformData::hasSpaceInLigaturesOrKerning(TypesettingFeatures features
     if (!hbFace)
         return false;
 
-    hb_font_t* font = hbFace->getScaledFont();
-    ASSERT(font);
-    hb_face_t* face = hb_font_get_face(font);
+//     hb_font_t* font = hbFace->getScaledFont();
+//     ASSERT(font);
+//     hb_face_t* face = hb_font_get_face(font);
+//     ASSERT(face);
+
+    hb_face_t* face = hbFace->face();
     ASSERT(face);
+    hb_font_t* font = hbFace->createFont();
+    ASSERT(font);
 
     hb_codepoint_t space;
     // If the space glyph isn't present in the font then each space character
@@ -293,6 +298,7 @@ bool FontPlatformData::hasSpaceInLigaturesOrKerning(TypesettingFeatures features
         foundSpaceInTable = tableHasSpace(face, glyphs, HB_OT_TAG_GSUB, space);
 
     hb_set_destroy(glyphs);
+    hb_font_destroy(font);
 
     return foundSpaceInTable;
 }

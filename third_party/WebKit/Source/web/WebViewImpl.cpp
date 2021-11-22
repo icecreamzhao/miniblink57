@@ -158,7 +158,7 @@
 #include "web/DedicatedWorkerMessagingProxyProviderImpl.h"
 #include "web/DevToolsEmulator.h"
 #include "web/FullscreenController.h"
-//#include "web/InspectorOverlay.h"
+#include "web/InspectorOverlay.h"
 #include "web/LinkHighlightImpl.h"
 #include "web/PageOverlay.h"
 #include "web/PrerendererClientImpl.h"
@@ -167,7 +167,7 @@
 #include "web/SpeechRecognitionClientProxy.h"
 #include "web/StorageQuotaClientImpl.h"
 #include "web/ValidationMessageClientImpl.h"
-//#include "web/WebDevToolsAgentImpl.h"
+#include "web/WebDevToolsAgentImpl.h"
 #include "web/WebInputEventConversion.h"
 #include "web/WebInputMethodControllerImpl.h"
 #include "web/WebLocalFrameImpl.h"
@@ -508,9 +508,8 @@ WebDevToolsAgentImpl* WebViewImpl::mainFrameDevToolsAgentImpl()
 
 InspectorOverlay* WebViewImpl::inspectorOverlay()
 {
-    //   if (WebDevToolsAgentImpl* devtools = mainFrameDevToolsAgentImpl())
-    //     return devtools->overlay();
-    DebugBreak();
+    if (WebDevToolsAgentImpl* devtools = mainFrameDevToolsAgentImpl())
+        return devtools->overlay();
     return nullptr;
 }
 
@@ -872,7 +871,7 @@ WebInputEventResult WebViewImpl::handleGestureEvent(
         // experience.
         WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl();
         VisualViewport& visualViewport = page()->frameHost().visualViewport();
-        bool screencastEnabled = false; //devTools && devTools->screencastEnabled();
+        bool screencastEnabled = devTools && devTools->screencastEnabled();
         if (event.data.tap.width > 0 && !visualViewport.shouldDisableDesktopWorkarounds() && !screencastEnabled) {
             IntRect boundingBox(visualViewport.viewportToRootFrame(
                 IntRect(event.x - event.data.tap.width / 2,
@@ -2055,12 +2054,12 @@ void WebViewImpl::updateAllLifecyclePhases()
     PageWidgetDelegate::updateAllLifecyclePhases(*m_page,
         *mainFrameImpl()->frame());
 
-    //   if (InspectorOverlay* overlay = inspectorOverlay()) {
-    //     overlay->updateAllLifecyclePhases();
-    //     // TODO(chrishtr): integrate paint into the overlay's lifecycle.
-    //     if (overlay->pageOverlay() && overlay->pageOverlay()->graphicsLayer())
-    //       overlay->pageOverlay()->graphicsLayer()->paint(nullptr);
-    //   }
+    if (InspectorOverlay* overlay = inspectorOverlay()) {
+        overlay->updateAllLifecyclePhases();
+        // TODO(chrishtr): integrate paint into the overlay's lifecycle.
+        if (overlay->pageOverlay() && overlay->pageOverlay()->graphicsLayer())
+            overlay->pageOverlay()->graphicsLayer()->paint(nullptr);
+    }
     if (m_pageColorOverlay)
         m_pageColorOverlay->graphicsLayer()->paint(nullptr);
 
@@ -2216,10 +2215,10 @@ WebInputEventResult WebViewImpl::handleInputEvent(
     if (m_devToolsEmulator->handleInputEvent(inputEvent))
         return WebInputEventResult::HandledSuppressed;
 
-    //   if (InspectorOverlay* overlay = inspectorOverlay()) {
-    //     if (overlay->handleInputEvent(inputEvent))
-    //       return WebInputEventResult::HandledSuppressed;
-    //   }
+    if (InspectorOverlay* overlay = inspectorOverlay()) {
+        if (overlay->handleInputEvent(inputEvent))
+            return WebInputEventResult::HandledSuppressed;
+    }
 
     // Report the event to be NOT processed by WebKit, so that the browser can
     // handle it appropriately.
@@ -4044,8 +4043,8 @@ void WebViewImpl::setRootGraphicsLayer(GraphicsLayer* graphicsLayer)
         m_layerTreeView->setDeferCommits(true);
         m_layerTreeView->clearRootLayer();
         m_layerTreeView->clearViewportLayers();
-        //     if (WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl())
-        //       devTools->rootLayerCleared();
+        if (WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl())
+            devTools->rootLayerCleared();
     }
 }
 
@@ -4066,8 +4065,8 @@ void WebViewImpl::setRootLayer(WebLayer* layer)
         m_layerTreeView->setDeferCommits(true);
         m_layerTreeView->clearRootLayer();
         m_layerTreeView->clearViewportLayers();
-        //     if (WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl())
-        //       devTools->rootLayerCleared();
+        if (WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl())
+            devTools->rootLayerCleared();
     }
 }
 
@@ -4133,8 +4132,8 @@ void WebViewImpl::initializeLayerTreeView()
         }
     }
 
-    //   if (WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl())
-    //     devTools->layerTreeViewChanged(m_layerTreeView);
+    if (WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl())
+        devTools->layerTreeViewChanged(m_layerTreeView);
 
     m_page->settings().setAcceleratedCompositingEnabled(m_layerTreeView);
     if (m_layerTreeView)
@@ -4358,11 +4357,11 @@ void WebViewImpl::updatePageOverlays()
 {
     if (m_pageColorOverlay)
         m_pageColorOverlay->update();
-    //   if (InspectorOverlay* overlay = inspectorOverlay()) {
-    //     PageOverlay* inspectorPageOverlay = overlay->pageOverlay();
-    //     if (inspectorPageOverlay)
-    //       inspectorPageOverlay->update();
-    //   }
+    if (InspectorOverlay* overlay = inspectorOverlay()) {
+        PageOverlay* inspectorPageOverlay = overlay->pageOverlay();
+        if (inspectorPageOverlay)
+            inspectorPageOverlay->update();
+    }
 }
 
 float WebViewImpl::deviceScaleFactor() const

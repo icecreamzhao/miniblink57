@@ -71,8 +71,7 @@ struct NamedColor {
     unsigned ARGBValue;
 };
 
-PLATFORM_EXPORT const NamedColor* findColor(register const char* str,
-    register unsigned len);
+PLATFORM_EXPORT const NamedColor* findColor(/*register*/ const char* str, /*register*/ unsigned len);
 
 class PLATFORM_EXPORT Color {
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();

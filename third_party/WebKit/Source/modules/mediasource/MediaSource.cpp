@@ -304,8 +304,7 @@ bool MediaSource::isTypeSupported(const String& type)
     // does not make sense for a MediaSource to support a type the
     // HTMLMediaElement knows it cannot play.
     if (HTMLMediaElement::supportsType(contentType) == MIMETypeRegistry::IsNotSupported) {
-        BLINK_MSLOG << __func__ << "(" << type
-                    << ") -> false (not supported by HTMLMediaElement)";
+        BLINK_MSLOG << __func__ << "(" << type << ") -> false (not supported by HTMLMediaElement)";
         return false;
     }
 
@@ -316,10 +315,8 @@ bool MediaSource::isTypeSupported(const String& type)
     // 5. If the MediaSource does not support the specified combination of media
     //    type, media subtype, and codecs then return false.
     // 6. Return true.
-    bool result = MIMETypeRegistry::isSupportedMediaSourceMIMEType(
-        contentType.type(), codecs);
-    BLINK_MSLOG << __func__ << "(" << type << ") -> "
-                << (result ? "true" : "false");
+    bool result = MIMETypeRegistry::isSupportedMediaSourceMIMEType(contentType.type(), codecs);
+    BLINK_MSLOG << __func__ << "(" << type << ") -> " << (result ? "true" : "false");
     return result;
 }
 

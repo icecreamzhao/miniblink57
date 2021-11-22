@@ -25,6 +25,13 @@
 
 namespace blink {
 
+ScriptWrappableVisitor::ScriptWrappableVisitor(v8::Isolate* isolate)
+    //: Visitor(/*ThreadState**/ThreadState::current(), /*VisitorMarkingMode*/VisitorMarkingMode::GlobalMarking)
+    : m_isolate(isolate)
+    , m_isTracingDone(false)
+{
+}
+
 ScriptWrappableVisitor::~ScriptWrappableVisitor() { }
 
 void ScriptWrappableVisitor::TracePrologue()
@@ -41,9 +48,14 @@ void ScriptWrappableVisitor::TracePrologue()
     CHECK(m_markingDeque.isEmpty());
     CHECK(m_verifierDeque.isEmpty());
     m_tracingInProgress = true;
+    m_isTracingDone = false;
 }
 
-void ScriptWrappableVisitor::EnterFinalPause()
+void ScriptWrappableVisitor::EnterFinalPause(
+#if V8_MAJOR_VERSION >= 7
+    v8::EmbedderHeapTracer::EmbedderStackState
+#endif
+    )
 {
     CHECK(ThreadState::current());
     CHECK(!ThreadState::current()->isWrapperTracingForbidden());
@@ -80,6 +92,15 @@ size_t ScriptWrappableVisitor::NumberOfWrappersToTrace()
     CHECK(ThreadState::current());
     return m_markingDeque.size();
 }
+
+#if V8_MAJOR_VERSION >= 7
+
+bool ScriptWrappableVisitor::IsTracingDone(void)
+{
+    return m_isTracingDone;
+}
+
+#endif
 
 void ScriptWrappableVisitor::performCleanup()
 {
@@ -155,27 +176,22 @@ void ScriptWrappableVisitor::performLazyCleanup(double deadlineSeconds)
     m_shouldCleanup = false;
 }
 
-void ScriptWrappableVisitor::RegisterV8Reference(
-    const std::pair<void*, void*>& internalFields)
+void ScriptWrappableVisitor::RegisterV8Reference(const std::pair<void*, void*>& internalFields)
 {
-    if (!m_tracingInProgress) {
+    if (!m_tracingInProgress)
         return;
-    }
 
     WrapperTypeInfo* wrapperTypeInfo = reinterpret_cast<WrapperTypeInfo*>(internalFields.first);
-    if (wrapperTypeInfo->ginEmbedder != gin::GinEmbedder::kEmbedderBlink) {
+    if (wrapperTypeInfo->ginEmbedder != gin::GinEmbedder::kEmbedderBlink)
         return;
-    }
+    
     DCHECK(wrapperTypeInfo->wrapperClassId == WrapperTypeInfo::NodeClassId || wrapperTypeInfo->wrapperClassId == WrapperTypeInfo::ObjectClassId);
 
     ScriptWrappable* scriptWrappable = reinterpret_cast<ScriptWrappable*>(internalFields.second);
-
     wrapperTypeInfo->traceWrappers(this, scriptWrappable);
 }
 
-void ScriptWrappableVisitor::RegisterV8References(
-    const std::vector<std::pair<void*, void*>>&
-        internalFieldsOfPotentialWrappers)
+void ScriptWrappableVisitor::RegisterV8References(const std::vector<std::pair<void*, void*>>& internalFieldsOfPotentialWrappers)
 {
     CHECK(ThreadState::current());
     // TODO(hlopko): Visit the vector in the V8 instead of passing it over if
@@ -185,24 +201,39 @@ void ScriptWrappableVisitor::RegisterV8References(
     }
 }
 
-bool ScriptWrappableVisitor::AdvanceTracing(
-    double deadlineInMs,
-    v8::EmbedderHeapTracer::AdvanceTracingActions actions)
+bool ScriptWrappableVisitor::AdvanceTracing(double deadlineInMs
+#if V8_MAJOR_VERSION < 7
+    , v8::EmbedderHeapTracer::AdvanceTracingActions actions
+#endif
+    )
 {
+    constexpr int kObjectsBeforeInterrupt = 100;
     // Do not drain the marking deque in a state where we can generally not
     // perform a GC. This makes sure that TraceTraits and friends find
     // themselves in a well-defined environment, e.g., properly set up vtables.
     CHECK(ThreadState::current());
     CHECK(!ThreadState::current()->isWrapperTracingForbidden());
     CHECK(m_tracingInProgress);
+    m_isTracingDone = true;
+    const bool result = V8_MAJOR_VERSION >= 7;
+
     WTF::AutoReset<bool>(&m_advancingTracing, true);
-    while (actions.force_completion == v8::EmbedderHeapTracer::ForceCompletionAction::FORCE_COMPLETION || WTF::monotonicallyIncreasingTimeMS() < deadlineInMs) {
-        if (m_markingDeque.isEmpty()) {
-            return false;
+    while (
+#if V8_MAJOR_VERSION < 7
+        actions.force_completion == v8::EmbedderHeapTracer::ForceCompletionAction::FORCE_COMPLETION ||
+#endif
+        WTF::monotonicallyIncreasingTimeMS() < deadlineInMs) {
+        for (int objects = 0; objects++ < kObjectsBeforeInterrupt;) {
+            if (m_markingDeque.isEmpty()) {
+                return result;
+            }
+            
+            WrapperMarkingData data = m_markingDeque.takeFirst();
+            data.traceWrappers(this);
         }
-        m_markingDeque.takeFirst().traceWrappers(this);
     }
-    return true;
+
+    return result;
 }
 
 bool ScriptWrappableVisitor::markWrapperHeader(HeapObjectHeader* header) const
@@ -219,39 +250,31 @@ bool ScriptWrappableVisitor::markWrapperHeader(HeapObjectHeader* header) const
     return true;
 }
 
-void ScriptWrappableVisitor::markWrappersInAllWorlds(
-    const ScriptWrappable* scriptWrappable) const
+void ScriptWrappableVisitor::markWrappersInAllWorlds(const ScriptWrappable* scriptWrappable) const
 {
-    DOMWrapperWorld::markWrappersInAllWorlds(
-        const_cast<ScriptWrappable*>(scriptWrappable), this);
+    DOMWrapperWorld::markWrappersInAllWorlds(const_cast<ScriptWrappable*>(scriptWrappable), this);
 }
 
-void ScriptWrappableVisitor::writeBarrier(
-    const void* srcObject,
-    const TraceWrapperV8Reference<v8::Value>* dstObject)
+void ScriptWrappableVisitor::writeBarrier(const void* srcObject, const TraceWrapperV8Reference<v8::Value>* dstObject)
 {
-    if (!RuntimeEnabledFeatures::traceWrappablesEnabled()) {
+    if (!RuntimeEnabledFeatures::traceWrappablesEnabled())
         return;
-    }
-    if (!srcObject || !dstObject || dstObject->isEmpty()) {
+    
+    if (!srcObject || !dstObject || dstObject->isEmpty())
         return;
-    }
+    
     // We only require a write barrier if |srcObject|  is already marked. Note
     // that this implicitly disables the write barrier when the GC is not
     // active as object will not be marked in this case.
     if (!HeapObjectHeader::fromPayload(srcObject)->isWrapperHeaderMarked()) {
         return;
     }
-    currentVisitor(ThreadState::current()->isolate())
-        ->markWrapper(
-            &(const_cast<TraceWrapperV8Reference<v8::Value>*>(dstObject)->get()));
+    currentVisitor(ThreadState::current()->isolate())->markWrapper(&(const_cast<TraceWrapperV8Reference<v8::Value>*>(dstObject)->get()));
 }
 
-void ScriptWrappableVisitor::traceWrappers(
-    const TraceWrapperV8Reference<v8::Value>& tracedWrapper) const
+void ScriptWrappableVisitor::traceWrappers(const TraceWrapperV8Reference<v8::Value>& tracedWrapper) const
 {
-    markWrapper(
-        &(const_cast<TraceWrapperV8Reference<v8::Value>&>(tracedWrapper).get()));
+    markWrapper(&(const_cast<TraceWrapperV8Reference<v8::Value>&>(tracedWrapper).get()));
 }
 
 void ScriptWrappableVisitor::markWrapper(
@@ -323,5 +346,76 @@ WrapperVisitor* ScriptWrappableVisitor::currentVisitor(v8::Isolate* isolate)
 {
     return V8PerIsolateData::from(isolate)->scriptWrappableVisitor();
 }
+
+bool ScriptWrappableVisitor::pushToMarkingDeque(
+    void (*traceWrappersCallback)(const WrapperVisitor*, const void*),
+    void (*trace)(Visitor*, void*),
+    HeapObjectHeader* (*heapObjectHeaderCallback)(const void*),
+    void (*missedWriteBarrierCallback)(void),
+    const void* object) const
+{
+    if (!m_tracingInProgress)
+        return false;
+
+    m_markingDeque.append(WrapperMarkingData(traceWrappersCallback, trace, heapObjectHeaderCallback, object));
+#if DCHECK_IS_ON()
+    if (!m_advancingTracing) {
+        m_verifierDeque.append(WrapperMarkingData(traceWrappersCallback, trace, heapObjectHeaderCallback, object));
+    }
+#endif
+    return true;
+}
+
+// void ScriptWrappableVisitor::mark(const void*, TraceCallback)
+// {
+// 
+// }
+// 
+// void ScriptWrappableVisitor::markHeader(HeapObjectHeader*, TraceCallback)
+// {
+// 
+// }
+// 
+// void ScriptWrappableVisitor::registerDelayedMarkNoTracing(const void*)
+// {
+// 
+// }
+// 
+// void ScriptWrappableVisitor::registerWeakMembers(const void*, const void*, WeakCallback)
+// {
+// 
+// }
+// 
+// void ScriptWrappableVisitor::registerWeakTable(const void*, EphemeronCallback, EphemeronCallback)
+// {
+// 
+// }
+// 
+// #if DCHECK_IS_ON()
+// bool ScriptWrappableVisitor::weakTableRegistered(const void*)
+// {
+//     return true;
+// }
+// #endif
+// 
+// bool ScriptWrappableVisitor::ensureMarked(const void*)
+// {
+//     return true;
+// }
+// 
+// void ScriptWrappableVisitor::registerMovingObjectReference(MovableReference*)
+// {
+// 
+// }
+// 
+// void ScriptWrappableVisitor::registerMovingObjectCallback(MovableReference, MovingObjectCallback, void*)
+// {
+// 
+// }
+// 
+// void ScriptWrappableVisitor::registerWeakCellWithCallback(void**, WeakCallback)
+// {
+// 
+// }
 
 } // namespace blink

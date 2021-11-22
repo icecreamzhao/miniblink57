@@ -221,6 +221,12 @@ void DevToolsHost::sendMessageToEmbedder(const String& message)
         m_client->sendMessageToEmbedder(escapeUnicodeNonCharacters(message));
 }
 
+void DevToolsHost::sendMessageToBackend(const String& message)
+{
+    if (m_client)
+        m_client->sendMessageToBackend(escapeUnicodeNonCharacters(message));
+}
+
 void DevToolsHost::showContextMenu(LocalFrame* targetFrame,
     float x,
     float y,

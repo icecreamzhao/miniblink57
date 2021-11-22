@@ -42,8 +42,14 @@ bool ScriptModule::instantiate(ScriptState* scriptState)
     DCHECK(!isNull());
     v8::Local<v8::Context> context = scriptState->context();
     // TODO(adamk): pass in a real callback.
-    return m_module->newLocal(scriptState->isolate())
-        ->Instantiate(context, &dummyCallback);
+#if V8_MAJOR_VERSION >= 7
+    v8::Maybe<bool> result = m_module->newLocal(scriptState->isolate())->InstantiateModule(context, &dummyCallback);
+    if (result.IsNothing())
+        return false;
+    return result.ToChecked();
+#else
+    return m_module->newLocal(scriptState->isolate())->Instantiate(context, &dummyCallback);
+#endif  
 }
 
 void ScriptModule::evaluate(ScriptState* scriptState)

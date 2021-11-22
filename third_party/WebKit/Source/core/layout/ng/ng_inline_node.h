@@ -9,6 +9,7 @@
 #include "core/layout/ng/ng_layout_input_node.h"
 #include "platform/fonts/FontFallbackPriority.h"
 #include "platform/fonts/shaping/ShapeResult.h"
+#include "platform/fonts/shaping/ShapeResultInlineHeaders.h"
 #include "platform/heap/Handle.h"
 #include "platform/text/TextDirection.h"
 #include "wtf/text/WTFString.h"

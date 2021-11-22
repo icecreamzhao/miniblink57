@@ -4,7 +4,7 @@
 
 #include "core/inspector/V8InspectorString.h"
 
-//#include "core/inspector/protocol/Protocol.h"
+#include "core/inspector/protocol/Protocol.h"
 
 namespace blink {
 
@@ -24,9 +24,7 @@ v8_inspector::StringView toV8InspectorStringView(const StringView& string)
 std::unique_ptr<v8_inspector::StringBuffer> toV8InspectorStringBuffer(
     const StringView& string)
 {
-    //return v8_inspector::StringBuffer::create(toV8InspectorStringView(string));
-    DebugBreak();
-    return nullptr;
+    return v8_inspector::StringBuffer::create(toV8InspectorStringView(string));
 }
 
 String toCoreString(const v8_inspector::StringView& string)
@@ -47,24 +45,22 @@ String toCoreString(std::unique_ptr<v8_inspector::StringBuffer> buffer)
 
 namespace protocol {
 
-    class Value {
-    };
+//     class Value {
+//     };
 
     // static
     std::unique_ptr<protocol::Value> StringUtil::parseJSON(const String& string)
     {
-        //   if (string.isNull())
-        //     return nullptr;
-        //   if (string.is8Bit()) {
-        //     return parseJSONCharacters(
-        //         reinterpret_cast<const uint8_t*>(string.characters8()),
-        //         string.length());
-        //   }
-        //   return parseJSONCharacters(
-        //       reinterpret_cast<const uint16_t*>(string.characters16()),
-        //       string.length());
-        DebugBreak();
-        return nullptr;
+        if (string.isNull())
+            return nullptr;
+        if (string.is8Bit()) {
+            return parseJSONCharacters(
+                reinterpret_cast<const uint8_t*>(string.characters8()),
+                string.length());
+        }
+        return parseJSONCharacters(
+            reinterpret_cast<const uint16_t*>(string.characters16()),
+            string.length());
     }
 
 } // namespace protocol

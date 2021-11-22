@@ -41,6 +41,7 @@ public:
 
     bool pushToMarkingDeque(
         void (*traceWrappersCallback)(const WrapperVisitor*, const void*),
+        void (*traceCallback)(Visitor*, void*),
         HeapObjectHeader* (*heapObjectHeaderCallback)(const void*),
         void (*missedWriteBarrierCallback)(void),
         const void* object) const override

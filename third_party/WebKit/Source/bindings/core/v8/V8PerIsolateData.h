@@ -50,6 +50,7 @@ class ThreadDebugger;
 class V8PrivateProperty;
 class WebTaskRunner;
 struct WrapperTypeInfo;
+class UnifiedHeapController;
 
 typedef WTF::Vector<DOMDataStore*> DOMDataStoreList;
 
@@ -182,6 +183,17 @@ public:
         return m_scriptWrappableVisitor.get();
     }
 
+#if V8_MAJOR_VERSION >= 7
+    UnifiedHeapController* getUnifiedHeapController(v8::Isolate* isolate);
+
+    v8::EmbedderHeapTracer* getEmbedderHeapTracer(v8::Isolate* isolate)
+    {
+        return (v8::EmbedderHeapTracer*)(getUnifiedHeapController(isolate));
+    }
+
+    std::vector<std::pair<void*, void*>>* leakV8References();
+#endif
+
 private:
     explicit V8PerIsolateData(WebTaskRunner*);
     ~V8PerIsolateData();
@@ -224,6 +236,10 @@ private:
 
     bool m_isHandlingRecursionLevelError;
     bool m_isReportingException;
+
+#if V8_MAJOR_VERSION >= 7
+    std::unique_ptr<UnifiedHeapController> m_unifiedHeapController;
+#endif
 
     Vector<std::unique_ptr<EndOfScopeTask>> m_endOfScopeTasks;
     std::unique_ptr<ThreadDebugger> m_threadDebugger;

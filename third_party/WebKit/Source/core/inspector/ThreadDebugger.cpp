@@ -19,7 +19,7 @@
 #include "bindings/core/v8/V8ScriptRunner.h"
 #include "core/dom/DocumentUserGestureToken.h"
 #include "core/inspector/ConsoleMessage.h"
-//#include "core/inspector/InspectorDOMDebuggerAgent.h"
+#include "core/inspector/InspectorDOMDebuggerAgent.h"
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/inspector/V8InspectorString.h"
 #include "platform/ScriptForbiddenScope.h"
@@ -31,9 +31,9 @@ namespace blink {
 
 ThreadDebugger::ThreadDebugger(v8::Isolate* isolate)
     : m_isolate(isolate)
-    , m_v8Inspector(nullptr)
-    , // (v8_inspector::V8Inspector::create(isolate, this)),
-    m_v8TracingCpuProfiler(v8::TracingCpuProfiler::Create(isolate))
+    //, m_v8Inspector(nullptr)
+    , m_v8Inspector(v8_inspector::V8Inspector::create(isolate, this))
+    //m_v8TracingCpuProfiler(v8::TracingCpuProfiler::Create(isolate))
 {
 }
 
@@ -49,8 +49,8 @@ ThreadDebugger* ThreadDebugger::from(v8::Isolate* isolate)
 }
 
 // static
-MessageLevel ThreadDebugger::consoleAPITypeToMessageLevel(
-    v8_inspector::V8ConsoleAPIType type)
+#if V8_MAJOR_VERSION < 7
+MessageLevel ThreadDebugger::consoleAPITypeToMessageLevel(v8_inspector::V8ConsoleAPIType type)
 {
     switch (type) {
     case v8_inspector::V8ConsoleAPIType::kDebug:
@@ -68,57 +68,77 @@ MessageLevel ThreadDebugger::consoleAPITypeToMessageLevel(
     }
 }
 
+#else
+
+MessageLevel ThreadDebugger::consoleAPITypeToMessageLevel(v8::Isolate::MessageErrorLevel type)
+{
+    switch (type) {
+    case v8::Isolate::kMessageDebug:
+        return DebugMessageLevel;
+    case v8::Isolate::kMessageLog:
+        return LogMessageLevel;
+    case v8::Isolate::kMessageInfo:
+        return InfoMessageLevel;
+    case v8::Isolate::kMessageWarning:
+        return WarningMessageLevel;
+    case v8::Isolate::kMessageError:
+        return ErrorMessageLevel;
+    default:
+        return LogMessageLevel;
+    }
+}
+#endif
+
 void ThreadDebugger::willExecuteScript(v8::Isolate* isolate, int scriptId)
 {
-    //   if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
-    //     debugger->v8Inspector()->willExecuteScript(isolate->GetCurrentContext(),
-    //                                                scriptId);
+//     if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
+//         debugger->v8Inspector()->willExecuteScript(isolate->GetCurrentContext(), scriptId);
 }
 
 void ThreadDebugger::didExecuteScript(v8::Isolate* isolate)
 {
-    //   if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
-    //     debugger->v8Inspector()->didExecuteScript(isolate->GetCurrentContext());
+//     if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
+//         debugger->v8Inspector()->didExecuteScript(isolate->GetCurrentContext());
 }
 
 void ThreadDebugger::idleStarted(v8::Isolate* isolate)
 {
-    //   if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
-    //     debugger->v8Inspector()->idleStarted();
+    if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
+        debugger->v8Inspector()->idleStarted();
 }
 
 void ThreadDebugger::idleFinished(v8::Isolate* isolate)
 {
-    //   if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
-    //     debugger->v8Inspector()->idleFinished();
+    if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
+        debugger->v8Inspector()->idleFinished();
 }
 
 void ThreadDebugger::asyncTaskScheduled(const String& operationName,
     void* task,
     bool recurring)
 {
-    //   m_v8Inspector->asyncTaskScheduled(toV8InspectorStringView(operationName),
-    //                                     task, recurring);
+    m_v8Inspector->asyncTaskScheduled(toV8InspectorStringView(operationName),
+        task, recurring);
 }
 
 void ThreadDebugger::asyncTaskCanceled(void* task)
 {
-    //m_v8Inspector->asyncTaskCanceled(task);
+    m_v8Inspector->asyncTaskCanceled(task);
 }
 
 void ThreadDebugger::allAsyncTasksCanceled()
 {
-    //m_v8Inspector->allAsyncTasksCanceled();
+    m_v8Inspector->allAsyncTasksCanceled();
 }
 
 void ThreadDebugger::asyncTaskStarted(void* task)
 {
-    //m_v8Inspector->asyncTaskStarted(task);
+    m_v8Inspector->asyncTaskStarted(task);
 }
 
 void ThreadDebugger::asyncTaskFinished(void* task)
 {
-    //m_v8Inspector->asyncTaskFinished(task);
+    m_v8Inspector->asyncTaskFinished(task);
 }
 
 unsigned ThreadDebugger::promiseRejected(
@@ -127,30 +147,29 @@ unsigned ThreadDebugger::promiseRejected(
     v8::Local<v8::Value> exception,
     std::unique_ptr<SourceLocation> location)
 {
-    //   const String defaultMessage = "Uncaught (in promise)";
-    //   String message = errorMessage;
-    //   if (message.isEmpty())
-    //     message = defaultMessage;
-    //   else if (message.startsWith("Uncaught "))
-    //     message = message.substring(0, 8) + " (in promise)" + message.substring(8);
-    //
-    //   reportConsoleMessage(toExecutionContext(context), JSMessageSource,
-    //                        ErrorMessageLevel, message, location.get());
-    //   String url = location->url();
-    //   return v8Inspector()->exceptionThrown(
-    //       context, toV8InspectorStringView(defaultMessage), exception,
-    //       toV8InspectorStringView(message), toV8InspectorStringView(url),
-    //       location->lineNumber(), location->columnNumber(),
-    //       location->takeStackTrace(), location->scriptId());
-    return 0;
+    const String defaultMessage = "Uncaught (in promise)";
+    String message = errorMessage;
+    if (message.isEmpty())
+        message = defaultMessage;
+    else if (message.startsWith("Uncaught "))
+        message = message.substring(0, 8) + " (in promise)" + message.substring(8);
+
+    reportConsoleMessage(toExecutionContext(context), JSMessageSource,
+        ErrorMessageLevel, message, location.get());
+    String url = location->url();
+    return v8Inspector()->exceptionThrown(
+        context, toV8InspectorStringView(defaultMessage), exception,
+        toV8InspectorStringView(message), toV8InspectorStringView(url),
+        location->lineNumber(), location->columnNumber(),
+        location->takeStackTrace(), location->scriptId());
 }
 
 void ThreadDebugger::promiseRejectionRevoked(v8::Local<v8::Context> context,
     unsigned promiseRejectionId)
 {
-    //   const String message = "Handler added to rejected promise";
-    //   v8Inspector()->exceptionRevoked(context, promiseRejectionId,
-    //                                   toV8InspectorStringView(message));
+    const String message = "Handler added to rejected promise";
+    v8Inspector()->exceptionRevoked(context, promiseRejectionId,
+                                    toV8InspectorStringView(message));
 }
 
 void ThreadDebugger::beginUserGesture()
@@ -170,17 +189,16 @@ std::unique_ptr<v8_inspector::StringBuffer> ThreadDebugger::valueSubtype(
     static const char kNode[] = "node";
     static const char kArray[] = "array";
     static const char kError[] = "error";
-    //   if (V8Node::hasInstance(value, m_isolate))
-    //     return toV8InspectorStringBuffer(kNode);
-    //   if (V8NodeList::hasInstance(value, m_isolate) ||
-    //       V8DOMTokenList::hasInstance(value, m_isolate) ||
-    //       V8HTMLCollection::hasInstance(value, m_isolate) ||
-    //       V8HTMLAllCollection::hasInstance(value, m_isolate)) {
-    //     return toV8InspectorStringBuffer(kArray);
-    //   }
-    //   if (V8DOMException::hasInstance(value, m_isolate))
-    //     return toV8InspectorStringBuffer(kError);
-    DebugBreak();
+    if (V8Node::hasInstance(value, m_isolate))
+        return toV8InspectorStringBuffer(kNode);
+    if (V8NodeList::hasInstance(value, m_isolate) ||
+        V8DOMTokenList::hasInstance(value, m_isolate) ||
+        V8HTMLCollection::hasInstance(value, m_isolate) ||
+        V8HTMLAllCollection::hasInstance(value, m_isolate)) {
+        return toV8InspectorStringBuffer(kArray);
+    }
+    if (V8DOMException::hasInstance(value, m_isolate))
+        return toV8InspectorStringBuffer(kError);
     return nullptr;
 }
 
@@ -421,9 +439,7 @@ void ThreadDebugger::getEventListenersCallback(
     // listener compilation.
     if (groupId)
         debugger->muteMetrics(groupId);
-    //   InspectorDOMDebuggerAgent::eventListenersInfoForTarget(isolate, info[0],
-    //                                                          listenerInfo);
-    DebugBreak();
+    InspectorDOMDebuggerAgent::eventListenersInfoForTarget(isolate, info[0], listenerInfo);
     if (groupId)
         debugger->unmuteMetrics(groupId);
 
@@ -465,18 +481,14 @@ void ThreadDebugger::consoleTime(const v8_inspector::StringView& title)
 {
     // TODO(dgozman): we can save on a copy here if trace macro would take a
     // pointer with length.
-    //   TRACE_EVENT_COPY_ASYNC_BEGIN0("blink.console",
-    //                                 toCoreString(title).utf8().data(), this);
-    DebugBreak();
+    TRACE_EVENT_COPY_ASYNC_BEGIN0("blink.console", toCoreString(title).utf8().data(), this);
 }
 
 void ThreadDebugger::consoleTimeEnd(const v8_inspector::StringView& title)
 {
     // TODO(dgozman): we can save on a copy here if trace macro would take a
     // pointer with length.
-    //   TRACE_EVENT_COPY_ASYNC_END0("blink.console",
-    //                               toCoreString(title).utf8().data(), this);
-    DebugBreak();
+    TRACE_EVENT_COPY_ASYNC_END0("blink.console", toCoreString(title).utf8().data(), this);
 }
 
 void ThreadDebugger::consoleTimeStamp(const v8_inspector::StringView& title)
@@ -484,11 +496,9 @@ void ThreadDebugger::consoleTimeStamp(const v8_inspector::StringView& title)
     v8::Isolate* isolate = m_isolate;
     // TODO(dgozman): we can save on a copy here if TracedValue would take a
     // StringView.
-    //   TRACE_EVENT_INSTANT1(
-    //       "devtools.timeline", "TimeStamp", TRACE_EVENT_SCOPE_THREAD, "data",
-    //       InspectorTimeStampEvent::data(currentExecutionContext(isolate),
-    //                                     toCoreString(title)));
-    DebugBreak();
+    TRACE_EVENT_INSTANT1(
+        "devtools.timeline", "TimeStamp", TRACE_EVENT_SCOPE_THREAD, "data",
+        InspectorTimeStampEvent::data(currentExecutionContext(isolate), toCoreString(title)));
 }
 
 void ThreadDebugger::startRepeatingTimer(

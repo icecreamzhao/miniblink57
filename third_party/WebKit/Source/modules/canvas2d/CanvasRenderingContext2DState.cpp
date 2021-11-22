@@ -466,6 +466,10 @@ void CanvasRenderingContext2DState::setGlobalComposite(SkBlendMode mode)
     m_strokePaint.setBlendMode(mode);
     m_fillPaint.setBlendMode(mode);
     m_imagePaint.setBlendMode(mode);
+
+    //m_strokePaint.setXfermodeMode(SkXfermode::kDstOut_Mode);
+    //m_fillPaint.setXfermodeMode(SkXfermode::kDstOut_Mode);
+    //m_imagePaint.setXfermodeMode(SkXfermode::kDstOut_Mode);
 }
 
 SkBlendMode CanvasRenderingContext2DState::globalComposite() const

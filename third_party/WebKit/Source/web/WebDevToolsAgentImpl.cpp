@@ -59,12 +59,12 @@
 #include "core/layout/api/LayoutViewItem.h"
 #include "core/page/FocusController.h"
 #include "core/page/Page.h"
-#include "modules/accessibility/InspectorAccessibilityAgent.h"
-#include "modules/cachestorage/InspectorCacheStorageAgent.h"
-#include "modules/device_orientation/DeviceOrientationInspectorAgent.h"
-#include "modules/indexeddb/InspectorIndexedDBAgent.h"
-#include "modules/storage/InspectorDOMStorageAgent.h"
-#include "modules/webdatabase/InspectorDatabaseAgent.h"
+// #include "modules/accessibility/InspectorAccessibilityAgent.h"
+// #include "modules/cachestorage/InspectorCacheStorageAgent.h"
+// #include "modules/device_orientation/DeviceOrientationInspectorAgent.h"
+// #include "modules/indexeddb/InspectorIndexedDBAgent.h"
+// #include "modules/storage/InspectorDOMStorageAgent.h"
+// #include "modules/webdatabase/InspectorDatabaseAgent.h"
 #include "platform/CrossThreadFunctional.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/graphics/GraphicsContext.h"
@@ -355,8 +355,7 @@ void WebDevToolsAgentImpl::initializeSession(int sessionId,
     m_session->append(
         InspectorApplicationCacheAgent::create(m_inspectedFrames.get()));
 
-    m_session->append(new InspectorIndexedDBAgent(m_inspectedFrames.get(),
-        m_session->v8Session()));
+    //m_session->append(new InspectorIndexedDBAgent(m_inspectedFrames.get(), m_session->v8Session()));
 
     InspectorWorkerAgent* workerAgent = new InspectorWorkerAgent(m_inspectedFrames.get());
     m_session->append(workerAgent);
@@ -394,11 +393,11 @@ void WebDevToolsAgentImpl::initializeSession(int sessionId,
         // TODO(dgozman): migrate each of the following agents to frame once module
         // is ready.
         Page* page = m_webLocalFrameImpl->viewImpl()->page();
-        m_session->append(InspectorDatabaseAgent::create(page));
-        m_session->append(DeviceOrientationInspectorAgent::create(page));
-        m_session->append(new InspectorAccessibilityAgent(page, m_domAgent));
-        m_session->append(InspectorDOMStorageAgent::create(page));
-        m_session->append(InspectorCacheStorageAgent::create());
+//         m_session->append(InspectorDatabaseAgent::create(page));
+//         m_session->append(DeviceOrientationInspectorAgent::create(page));
+//         m_session->append(new InspectorAccessibilityAgent(page, m_domAgent));
+//         m_session->append(InspectorDOMStorageAgent::create(page));
+//         m_session->append(InspectorCacheStorageAgent::create());
     }
 
     if (m_overlay)

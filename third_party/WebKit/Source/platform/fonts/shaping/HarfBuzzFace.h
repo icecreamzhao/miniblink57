@@ -31,47 +31,44 @@
 #ifndef HarfBuzzFace_h
 #define HarfBuzzFace_h
 
-#include "platform/fonts/UnicodeRangeSet.h"
-#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
-#include "wtf/Noncopyable.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
-#include "wtf/text/CharacterNames.h"
 
-#include <third_party/harfbuzz-ng/src/hb.h>
+#include "third_party/harfbuzz-ng/src/hb.h"
 
 namespace blink {
 
 class FontPlatformData;
-struct HarfBuzzFontData;
 
 class HarfBuzzFace : public RefCounted<HarfBuzzFace> {
-    WTF_MAKE_NONCOPYABLE(HarfBuzzFace);
-
 public:
+    static const hb_tag_t vertTag;
+    static const hb_tag_t vrt2Tag;
+
     static PassRefPtr<HarfBuzzFace> create(FontPlatformData* platformData, uint64_t uniqueID)
     {
         return adoptRef(new HarfBuzzFace(platformData, uniqueID));
     }
     ~HarfBuzzFace();
 
-    // In order to support the restricting effect of unicode-range optionally a
-    // range restriction can be passed in, which will restrict which glyphs we
-    // return in the harfBuzzGetGlyph function.
-    hb_font_t* getScaledFont(PassRefPtr<UnicodeRangeSet> = nullptr) const;
+    hb_font_t* createFont() const;
+    hb_face_t* face() const { return m_face; }
+
+    void setScriptForVerticalGlyphSubstitution(hb_buffer_t*);
 
 private:
     HarfBuzzFace(FontPlatformData*, uint64_t);
 
     hb_face_t* createFace();
-    void prepareHarfBuzzFontData();
 
     FontPlatformData* m_platformData;
     uint64_t m_uniqueID;
-    hb_font_t* m_unscaledFont;
-    HarfBuzzFontData* m_harfBuzzFontData;
+    hb_face_t* m_face;
+    WTF::HashMap<uint32_t, uint16_t>* m_glyphCacheForFaceCacheEntry;
+
+    hb_script_t m_scriptForVerticalText;
 };
 
 } // namespace blink

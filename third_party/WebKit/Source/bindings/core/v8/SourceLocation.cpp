@@ -82,12 +82,12 @@ std::unique_ptr<SourceLocation> SourceLocation::fromMessage(
     v8::Local<v8::StackTrace> stack = message->GetStackTrace();
     std::unique_ptr<v8_inspector::V8StackTrace> stackTrace = nullptr;
     V8PerIsolateData* data = V8PerIsolateData::from(isolate);
-    //   if (data && data->threadDebugger())
-    //     stackTrace = data->threadDebugger()->v8Inspector()->createStackTrace(stack);
+    if (data && data->threadDebugger())
+        stackTrace = data->threadDebugger()->v8Inspector()->createStackTrace(stack);
 
     int scriptId = message->GetScriptOrigin().ScriptID()->Value();
     if (!stack.IsEmpty() && stack->GetFrameCount() > 0) {
-        int topScriptId = stack->GetFrame(0)->GetScriptId();
+        int topScriptId = stack->GetFrame(isolate, 0)->GetScriptId();
         if (topScriptId == scriptId)
             scriptId = 0;
     }
@@ -199,12 +199,10 @@ std::unique_ptr<SourceLocation> SourceLocation::clone() const
         m_stackTrace ? m_stackTrace->clone() : nullptr, m_scriptId));
 }
 
-// std::unique_ptr<v8_inspector::protocol::Runtime::API::StackTrace>
-// SourceLocation::buildInspectorObject() const {
-//   //return m_stackTrace ? m_stackTrace->buildInspectorObject() : nullptr;
-//   DebugBreak();
-//   return nullptr;
-// }
+std::unique_ptr<v8_inspector::protocol::Runtime::API::StackTrace>
+SourceLocation::buildInspectorObject() const {
+    return m_stackTrace ? m_stackTrace->buildInspectorObject() : nullptr;
+}
 
 String SourceLocation::toString() const
 {

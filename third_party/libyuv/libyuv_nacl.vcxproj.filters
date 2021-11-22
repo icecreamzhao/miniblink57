@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client">
+      <UniqueIdentifier>{A9537671-E7FD-2F0E-DE29-6155260B6944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client\build">
+      <UniqueIdentifier>{D5519164-BF26-36DA-740B-76CEFC1827F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client">
+      <UniqueIdentifier>{A9537671-E7FD-2F0E-DE29-6155260B6944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client\build">
+      <UniqueIdentifier>{D5519164-BF26-36DA-740B-76CEFC1827F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{57CA55B8-BCC5-4000-CE3A-58972F82E9CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build">
+      <UniqueIdentifier>{D5519164-BF26-36DA-740B-76CEFC1827F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\gypfiles-msvs-ninja">
+      <UniqueIdentifier>{250B29D1-AB05-28B3-8332-9864198B3092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\gypfiles-msvs-ninja\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\gypfiles-msvs-ninja\third_party\libyuv">
+      <UniqueIdentifier>{0E97A143-93C4-73A8-45FF-C908142E1EB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client">
+      <UniqueIdentifier>{A9537671-E7FD-2F0E-DE29-6155260B6944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client\toolchain">
+      <UniqueIdentifier>{A1380BF2-B2E4-A638-7882-599BD9BAE887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client\toolchain\win_x86">
+      <UniqueIdentifier>{47F03B19-AA7A-005C-1115-62AC53031C80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\native_client\toolchain\win_x86\pnacl_newlib">
+      <UniqueIdentifier>{E4581D44-A3E7-32A3-8310-EC6884814066}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\libyuv.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\basic_types.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\compare.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\convert.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\convert_argb.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\convert_from.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\convert_from_argb.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\cpu_id.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\mjpeg_decoder.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\planar_functions.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\rotate.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\rotate_argb.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\rotate_row.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\row.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\scale.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\scale_argb.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\scale_row.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\version.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libyuv\video_common.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <ClCompile Include="source\compare.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\compare_common.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\compare_gcc.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\compare_neon.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\compare_neon64.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\compare_win.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\convert.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\convert_argb.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\convert_from.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\convert_from_argb.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\convert_jpeg.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\convert_to_argb.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\convert_to_i420.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpu_id.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\mjpeg_decoder.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\mjpeg_validate.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\planar_functions.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_any.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_argb.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_common.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_gcc.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_mips.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_neon.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_neon64.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\rotate_win.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\row_any.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\row_common.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\row_gcc.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\row_mips.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\row_neon.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\row_neon64.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\row_win.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_any.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_argb.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_common.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_gcc.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_mips.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_neon.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_neon64.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scale_win.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\video_common.cc">
+      <Filter>source</Filter>
+    </ClCompile>
+    <None Include="libyuv_nacl.gyp"/>
+    <None Include="..\..\native_client\build\build_nexe.py">
+      <Filter>..\..\native_client\build</Filter>
+    </None>
+    <None Include="..\..\native_client\build\build_nexe_tools.py">
+      <Filter>..\..\native_client\build</Filter>
+    </None>
+    <ClInclude Include="include\libyuv\compare_row.h">
+      <Filter>include\libyuv</Filter>
+    </ClInclude>
+    <None Include="..\..\build\gypfiles-msvs-ninja\third_party\libyuv\pnacl_newlib.libyuv_nacl.source_list.gypcmd">
+      <Filter>..\..\build\gypfiles-msvs-ninja\third_party\libyuv</Filter>
+    </None>
+    <None Include="..\..\native_client\toolchain\win_x86\pnacl_newlib\pnacl_newlib.json">
+      <Filter>..\..\native_client\toolchain\win_x86\pnacl_newlib</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -69,8 +69,7 @@ public:
     String toString() const;
 
     // Could be null when stack trace is unknown.
-    //   std::unique_ptr<v8_inspector::protocol::Runtime::API::StackTrace>
-    //   buildInspectorObject() const;
+    std::unique_ptr<v8_inspector::protocol::Runtime::API::StackTrace> buildInspectorObject() const;
 
 private:
     SourceLocation(const String& url,

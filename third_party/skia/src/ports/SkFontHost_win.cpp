@@ -625,7 +625,7 @@ static inline float FIXED2float(FIXED x)
 
 static BYTE compute_quality(const SkScalerContext::Rec& rec)
 {
-    return ANTIALIASED_QUALITY; // weolar
+    return CLEARTYPE_QUALITY; // weolar
 
     switch (rec.fMaskFormat) {
     case SkMask::kBW_Format:

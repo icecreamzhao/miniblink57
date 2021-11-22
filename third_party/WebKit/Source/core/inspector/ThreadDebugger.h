@@ -69,9 +69,11 @@ protected:
         v8::Local<v8::Array>,
         int index,
         v8::Local<v8::Value>);
-    static MessageLevel consoleAPITypeToMessageLevel(
-        v8_inspector::V8ConsoleAPIType);
-
+#if V8_MAJOR_VERSION < 7
+    static MessageLevel consoleAPITypeToMessageLevel(v8_inspector::V8ConsoleAPIType);
+#else
+    static MessageLevel consoleAPITypeToMessageLevel(v8::Isolate::MessageErrorLevel);
+#endif
     v8::Isolate* m_isolate;
 
 private:
@@ -104,7 +106,7 @@ private:
         const v8::FunctionCallbackInfo<v8::Value>&);
 
     std::unique_ptr<v8_inspector::V8Inspector> m_v8Inspector;
-    std::unique_ptr<v8::TracingCpuProfiler> m_v8TracingCpuProfiler;
+    //std::unique_ptr<v8::TracingCpuProfiler> m_v8TracingCpuProfiler;
     Vector<std::unique_ptr<Timer<ThreadDebugger>>> m_timers;
     Vector<v8_inspector::V8InspectorClient::TimerCallback> m_timerCallbacks;
     Vector<void*> m_timerData;

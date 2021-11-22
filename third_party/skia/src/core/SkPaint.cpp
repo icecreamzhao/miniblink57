@@ -477,7 +477,6 @@ void SkPaint::setBlendMode(SkBlendMode mode)
 
     GEN_SKBLENDMODE_LIST(SET_MODE);
 #undef SET_MODE
-    setXfermodeMode(SkXfermode::kSrcOver_Mode);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

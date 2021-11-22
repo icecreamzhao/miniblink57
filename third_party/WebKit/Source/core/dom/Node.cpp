@@ -1885,8 +1885,9 @@ void Node::showTreeForThisAcrossFrame() const
         rootNode = parentOrShadowHostOrFrameOwner(rootNode);
     std::stringstream stream;
     printSubTreeAcrossFrame(rootNode, this, "", stream);
-    LOG(INFO) << "\n"
-              << stream.str();
+    //LOG(INFO) << "\n" << stream.str();
+    stream << "\n";
+    OutputDebugStringA(stream.str().c_str());
 }
 
 #endif

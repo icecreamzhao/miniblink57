@@ -110,6 +110,10 @@ public:
     Glyph zeroGlyph() const { return m_zeroGlyph; }
     void setZeroGlyph(Glyph zeroGlyph) { m_zeroGlyph = zeroGlyph; }
 
+    Glyph zeroWidthSpaceGlyph() const { return m_zeroWidthSpaceGlyph; }
+    void setZeroWidthSpaceGlyph(Glyph spaceGlyph) { m_zeroWidthSpaceGlyph = spaceGlyph; }
+    bool isZeroWidthSpaceGlyph(Glyph glyph) const { return glyph == m_zeroWidthSpaceGlyph && glyph; }
+
     const SimpleFontData* fontDataForCharacter(UChar32) const override;
 
     Glyph glyphForCharacter(UChar32) const;
@@ -157,6 +161,8 @@ private:
     Glyph m_spaceGlyph;
     float m_spaceWidth;
     Glyph m_zeroGlyph;
+
+    Glyph m_zeroWidthSpaceGlyph;
 
     GlyphData m_missingGlyphData;
 

@@ -96,8 +96,8 @@
 #include "web/DevToolsEmulator.h"
 #include "web/SharedWorkerRepositoryClientImpl.h"
 #include "web/WebDataSourceImpl.h"
-//#include "web/WebDevToolsAgentImpl.h"
-//#include "web/WebDevToolsFrontendImpl.h"
+#include "web/WebDevToolsAgentImpl.h"
+#include "web/WebDevToolsFrontendImpl.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebPluginContainerImpl.h"
 #include "web/WebViewImpl.h"
@@ -157,8 +157,8 @@ void FrameLoaderClientImpl::dispatchDidClearWindowObjectInMainWorld()
     WebDevToolsFrontendImpl* devToolsFrontend = m_webFrame->top()->isWebLocalFrame()
         ? toWebLocalFrameImpl(m_webFrame->top())->devToolsFrontend()
         : nullptr;
-    //   if (devToolsFrontend)
-    //     devToolsFrontend->didClearWindowObject(m_webFrame);
+    if (devToolsFrontend)
+        devToolsFrontend->didClearWindowObject(m_webFrame);
 }
 
 void FrameLoaderClientImpl::documentElementAvailable()
@@ -435,8 +435,8 @@ void FrameLoaderClientImpl::dispatchDidStartProvisionalLoad()
 {
     if (m_webFrame->client())
         m_webFrame->client()->didStartProvisionalLoad(m_webFrame);
-    //   if (WebDevToolsAgentImpl* devTools = devToolsAgent())
-    //     devTools->didStartProvisionalLoad(m_webFrame->frame());
+    if (WebDevToolsAgentImpl* devTools = devToolsAgent())
+        devTools->didStartProvisionalLoad(m_webFrame->frame());
 }
 
 void FrameLoaderClientImpl::dispatchDidReceiveTitle(const String& title)
@@ -465,8 +465,8 @@ void FrameLoaderClientImpl::dispatchDidCommitLoad(
         m_webFrame->client()->didCommitProvisionalLoad(
             m_webFrame, WebHistoryItem(item),
             static_cast<WebHistoryCommitType>(commitType));
-    //   if (WebDevToolsAgentImpl* devTools = devToolsAgent())
-    //     devTools->didCommitLoadForLocalFrame(m_webFrame->frame());
+    if (WebDevToolsAgentImpl* devTools = devToolsAgent())
+        devTools->didCommitLoadForLocalFrame(m_webFrame->frame());
 }
 
 void FrameLoaderClientImpl::dispatchDidFailProvisionalLoad(
@@ -568,7 +568,7 @@ NavigationPolicy FrameLoaderClientImpl::decidePolicyForNavigation(
     // TODO(ananta)
     // We should extract the network cache state into a global component which
     // can be queried here and wherever necessary.
-    navigationInfo.isCacheDisabled = false; // devToolsAgent() ? devToolsAgent()->cacheDisabled() : false;
+    navigationInfo.isCacheDisabled = devToolsAgent() ? devToolsAgent()->cacheDisabled() : false;
     if (form)
         navigationInfo.form = WebFormElement(form);
 
@@ -806,20 +806,15 @@ std::unique_ptr<WebMediaPlayer> FrameLoaderClientImpl::createWebMediaPlayer(
     const WebMediaPlayerSource& source,
     WebMediaPlayerClient* client)
 {
-    //   WebLocalFrameImpl* webFrame =
-    //       WebLocalFrameImpl::fromFrame(htmlMediaElement.document().frame());
-    //
-    //   if (!webFrame || !webFrame->client())
-    //     return nullptr;
-    //
-    //   HTMLMediaElementEncryptedMedia& encryptedMedia =
-    //       HTMLMediaElementEncryptedMedia::from(htmlMediaElement);
-    //   WebString sinkId(HTMLMediaElementAudioOutputDevice::sinkId(htmlMediaElement));
-    //   return WTF::wrapUnique(webFrame->client()->createMediaPlayer(
-    //       source, client, &encryptedMedia, encryptedMedia.contentDecryptionModule(),
-    //       sinkId));
-    DebugBreak();
-    return nullptr;
+    WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(htmlMediaElement.document().frame());
+
+    if (!webFrame || !webFrame->client())
+        return nullptr;
+
+    WebString sinkId(HTMLMediaElementAudioOutputDevice::sinkId(htmlMediaElement));
+//     HTMLMediaElementEncryptedMedia& encryptedMedia = HTMLMediaElementEncryptedMedia::from(htmlMediaElement);
+//     return WTF::wrapUnique(webFrame->client()->createMediaPlayer(source, client, &encryptedMedia, encryptedMedia.contentDecryptionModule(), sinkId));
+    return WTF::wrapUnique(webFrame->client()->createMediaPlayer(source, client, nullptr, nullptr, sinkId));
 }
 
 WebRemotePlaybackClient* FrameLoaderClientImpl::createWebRemotePlaybackClient(HTMLMediaElement& htmlMediaElement)
@@ -1058,8 +1053,7 @@ WebEffectiveConnectionType FrameLoaderClientImpl::getEffectiveConnectionType()
 
 WebDevToolsAgentImpl* FrameLoaderClientImpl::devToolsAgent()
 {
-    return WebLocalFrameImpl::fromFrame(m_webFrame->frame()->localFrameRoot())
-        ->devToolsAgentImpl();
+    return WebLocalFrameImpl::fromFrame(m_webFrame->frame()->localFrameRoot())->devToolsAgentImpl();
 }
 
 KURL FrameLoaderClientImpl::overrideFlashEmbedWithHTML(const KURL& url)

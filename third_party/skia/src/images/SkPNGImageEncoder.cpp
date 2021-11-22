@@ -16,7 +16,7 @@
 #include "SkUtils.h"
 #include "transform_scanline.h"
 
-#include "png.h"
+#include "G:/mycode/miniblink57/third_party/libpng/png.h"
 
 /* These were dropped in libpng >= 1.4 */
 #ifndef png_infopp_NULL

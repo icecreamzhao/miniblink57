@@ -307,19 +307,15 @@ static int findFirstOf(const LChar* s, int sLen, int startPos, const char* toFin
     return -1;
 }
 
-#ifndef NDEBUG
 static void checkEncodedString(const String& url)
 {
+#ifndef NDEBUG
     for (unsigned i = 0; i < url.length(); ++i)
         ASSERT(!(url[i] & ~0x7F));
 
-    ASSERT(!url.length() || isSchemeFirstChar(url[0]));
-}
-#else
-static inline void checkEncodedString(const String&)
-{
-}
+    //ASSERT(!url.length() || isSchemeFirstChar(url[0]));
 #endif
+}
 
 void KURL::initialize()
 {
@@ -1690,6 +1686,8 @@ String encodeWithURLEscapeSequences(const String& notEncodedString)
 // the output buffer. The result will not be null terminated.
 static void appendEncodedHostname(LCharBuffer& buffer, const LChar* str, unsigned strLen)
 {
+    if (0 == strLen)
+        return;
     // Needs to be big enough to hold an IDN-encoded name.
     // For host names bigger than this, we won't do IDN encoding, which is almost certainly OK.
     const unsigned hostnameBufferLength = 2048;

@@ -110,7 +110,7 @@ private:
     bool m_textAutosizingEnabled : 1;
 
 #ifdef TENCENT_FITSCREEN
-    bool m_fitScreenEnabled = true;
+    bool m_fitScreenEnabled = false;
     bool m_autoDetectToOpenFitScreenEnabled = true;
     bool m_frameFlatteningEnabled = false;
 #endif

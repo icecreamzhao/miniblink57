@@ -1031,205 +1031,202 @@ void HTMLMediaElement::loadSourceFromObject()
 
     // No type is available when the resource comes from the 'srcObject'
     // attribute.
-    //   loadResource(WebMediaPlayerSource(WebMediaStream(m_srcObject)),
-    //                ContentType((String())));
-    DebugBreak();
+
+    loadResource(WebMediaPlayerSource(WebMediaStream(m_srcObject)), ContentType((String())));
 }
 
 void HTMLMediaElement::loadSourceFromAttribute()
 {
-    mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-//     m_loadState = LoadingFromSrcAttr;
-//     const AtomicString& srcValue = fastGetAttribute(srcAttr);
-// 
-//     // If the src attribute's value is the empty string ... jump down to the
-//     // failed step below
-//     if (srcValue.isEmpty()) {
-//         mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-//         //BLINK_MEDIA_LOG << "loadSourceFromAttribute(" << (void*)this << "), empty 'src'";
-//         return;
-//     }
-// 
-//     KURL mediaURL = document().completeURL(srcValue);
-//     if (!isSafeToLoadURL(mediaURL, Complain)) {
-//         mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-//         return;
-//     }
-// 
-//     // No type is available when the url comes from the 'src' attribute so
-//     // MediaPlayer will have to pick a media engine based on the file extension.
-//     loadResource(WebMediaPlayerSource(WebURL(mediaURL)), ContentType((String())));
+    //mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+
+    m_loadState = LoadingFromSrcAttr;
+    const AtomicString& srcValue = fastGetAttribute(srcAttr);
+
+    // If the src attribute's value is the empty string ... jump down to the
+    // failed step below
+    if (srcValue.isEmpty()) {
+        mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+        //BLINK_MEDIA_LOG << "loadSourceFromAttribute(" << (void*)this << "), empty 'src'";
+        return;
+    }
+
+    KURL mediaURL = document().completeURL(srcValue);
+    if (!isSafeToLoadURL(mediaURL, Complain)) {
+        mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+        return;
+    }
+
+    // No type is available when the url comes from the 'src' attribute so
+    // MediaPlayer will have to pick a media engine based on the file extension.
+    loadResource(WebMediaPlayerSource(WebURL(mediaURL)), ContentType((String())));
 }
 
 void HTMLMediaElement::loadNextSourceChild()
 {
-    //   ContentType contentType((String()));
-    //   KURL mediaURL = selectNextSourceChild(&contentType, Complain);
-    //   if (!mediaURL.isValid()) {
-    //     waitForSourceChange();
-    //     return;
-    //   }
-    //
-    //   // Reset the MediaPlayer and MediaSource if any
-    //   resetMediaPlayerAndMediaSource();
-    //
-    //   m_loadState = LoadingFromSourceElement;
-    //   loadResource(WebMediaPlayerSource(WebURL(mediaURL)), contentType);
-    DebugBreak();
+    ContentType contentType((String()));
+    KURL mediaURL = selectNextSourceChild(&contentType, Complain);
+    if (!mediaURL.isValid()) {
+        waitForSourceChange();
+        return;
+    }
+
+    // Reset the MediaPlayer and MediaSource if any
+    resetMediaPlayerAndMediaSource();
+
+    m_loadState = LoadingFromSourceElement;
+    loadResource(WebMediaPlayerSource(WebURL(mediaURL)), contentType);
 }
 
 void HTMLMediaElement::loadResource(const WebMediaPlayerSource& source,
     const ContentType& contentType)
 {
-    //   DCHECK(isMainThread());
-    //   KURL url;
-    //   if (source.isURL()) {
-    //     url = source.getAsURL();
-    //     DCHECK(isSafeToLoadURL(url, Complain));
-    //     BLINK_MEDIA_LOG << "loadResource(" << (void*)this << ", "
-    //                     << urlForLoggingMedia(url) << ", " << contentType.raw()
-    //                     << ")";
-    //   }
-    //
-    //   LocalFrame* frame = document().frame();
-    //   if (!frame) {
-    //     mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-    //     return;
-    //   }
-    //
-    //   // The resource fetch algorithm
-    //   setNetworkState(kNetworkLoading);
-    //
-    //   // Set m_currentSrc *before* changing to the cache url, the fact that we are
-    //   // loading from the app cache is an internal detail not exposed through the
-    //   // media element API.
-    //   m_currentSrc = url;
-    //
-    //   if (m_audioSourceNode)
-    //     m_audioSourceNode->onCurrentSrcChanged(m_currentSrc);
-    //
-    //   BLINK_MEDIA_LOG << "loadResource(" << (void*)this << ") - m_currentSrc -> "
-    //                   << urlForLoggingMedia(m_currentSrc);
-    //
-    //   startProgressEventTimer();
-    //
-    //   // Reset display mode to force a recalculation of what to show because we are
-    //   // resetting the player.
-    //   setDisplayMode(Unknown);
-    //
-    //   setPlayerPreload();
-    //
-    //   if (fastHasAttribute(mutedAttr))
-    //     m_muted = true;
-    //
-    //   DCHECK(!m_mediaSource);
-    //
-    //   bool attemptLoad = true;
-    //
-    //   m_mediaSource = HTMLMediaSource::lookup(url.getString());
-    //   if (m_mediaSource && !m_mediaSource->attachToElement(this)) {
-    //     // Forget our reference to the MediaSource, so we leave it alone
-    //     // while processing remainder of load failure.
-    //     m_mediaSource = nullptr;
-    //     attemptLoad = false;
-    //   }
-    //
-    //   bool canLoadResource = source.isMediaStream() || canLoadURL(url, contentType);
-    //   if (attemptLoad && canLoadResource) {
-    //     DCHECK(!webMediaPlayer());
-    //
-    //     // Conditionally defer the load if effective preload is 'none'.
-    //     // Skip this optional deferral for MediaStream sources or any blob URL,
-    //     // including MediaSource blob URLs.
-    //     if (!source.isMediaStream() && !url.protocolIs("blob") &&
-    //         effectivePreloadType() == WebMediaPlayer::PreloadNone) {
-    //       BLINK_MEDIA_LOG << "loadResource(" << (void*)this
-    //                       << ") : Delaying load because preload == 'none'";
-    //       deferLoad();
-    //     } else {
-    //       startPlayerLoad();
-    //     }
-    //   } else {
-    //     mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-    //   }
-    //
-    //   // If there is no poster to display, allow the media engine to render video
-    //   // frames as soon as they are available.
-    //   updateDisplayState();
-    //
-    //   if (layoutObject())
-    //     layoutObject()->updateFromElement();
-    DebugBreak();
+    DCHECK(isMainThread());
+    KURL url;
+    if (source.isURL()) {
+        url = source.getAsURL();
+        DCHECK(isSafeToLoadURL(url, Complain));
+        BLINK_MEDIA_LOG << "loadResource(" << (void*)this << ", "
+            << urlForLoggingMedia(url) << ", " << contentType.raw()
+            << ")";
+    }
+
+    LocalFrame* frame = document().frame();
+    if (!frame) {
+        mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+        return;
+    }
+
+    // The resource fetch algorithm
+    setNetworkState(kNetworkLoading);
+
+    // Set m_currentSrc *before* changing to the cache url, the fact that we are
+    // loading from the app cache is an internal detail not exposed through the
+    // media element API.
+    m_currentSrc = url;
+
+    if (m_audioSourceNode)
+        m_audioSourceNode->onCurrentSrcChanged(m_currentSrc);
+
+    BLINK_MEDIA_LOG << "loadResource(" << (void*)this << ") - m_currentSrc -> "
+        << urlForLoggingMedia(m_currentSrc);
+
+    startProgressEventTimer();
+
+    // Reset display mode to force a recalculation of what to show because we are
+    // resetting the player.
+    setDisplayMode(Unknown);
+
+    setPlayerPreload();
+
+    if (fastHasAttribute(mutedAttr))
+        m_muted = true;
+
+    DCHECK(!m_mediaSource);
+
+    bool attemptLoad = true;
+
+    m_mediaSource = HTMLMediaSource::lookup(url.getString());
+    if (m_mediaSource && !m_mediaSource->attachToElement(this)) {
+        // Forget our reference to the MediaSource, so we leave it alone
+        // while processing remainder of load failure.
+        m_mediaSource = nullptr;
+        attemptLoad = false;
+    }
+
+    bool canLoadResource = source.isMediaStream() || canLoadURL(url, contentType);
+    if (attemptLoad && canLoadResource) {
+        DCHECK(!webMediaPlayer());
+
+        // Conditionally defer the load if effective preload is 'none'.
+        // Skip this optional deferral for MediaStream sources or any blob URL,
+        // including MediaSource blob URLs.
+        if (!source.isMediaStream() && !url.protocolIs("blob") &&
+            effectivePreloadType() == WebMediaPlayer::PreloadNone) {
+            BLINK_MEDIA_LOG << "loadResource(" << (void*)this
+                << ") : Delaying load because preload == 'none'";
+            deferLoad();
+        } else {
+            startPlayerLoad();
+        }
+    } else {
+        mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+    }
+
+    // If there is no poster to display, allow the media engine to render video
+    // frames as soon as they are available.
+    updateDisplayState();
+
+    if (layoutObject())
+        layoutObject()->updateFromElement();
 }
 
 void HTMLMediaElement::startPlayerLoad(const KURL& playerProvidedUrl)
 {
     DCHECK(!m_webMediaPlayer);
 
-    //   WebMediaPlayerSource source;
-    //   if (m_srcObject) {
-    //     source = WebMediaPlayerSource(WebMediaStream(m_srcObject));
-    //   } else {
-    //     // Filter out user:pass as those two URL components aren't
-    //     // considered for media resource fetches (including for the CORS
-    //     // use-credentials mode.) That behavior aligns with Gecko, with IE
-    //     // being more restrictive and not allowing fetches to such URLs.
-    //     //
-    //     // Spec reference: http://whatwg.org/c/#concept-media-load-resource
-    //     //
-    //     // FIXME: when the HTML spec switches to specifying resource
-    //     // fetches in terms of Fetch (http://fetch.spec.whatwg.org), and
-    //     // along with that potentially also specifying a setting for its
-    //     // 'authentication flag' to control how user:pass embedded in a
-    //     // media resource URL should be treated, then update the handling
-    //     // here to match.
-    //     KURL requestURL =
-    //         playerProvidedUrl.isNull() ? KURL(m_currentSrc) : playerProvidedUrl;
-    //     if (!requestURL.user().isEmpty())
-    //       requestURL.setUser(String());
-    //     if (!requestURL.pass().isEmpty())
-    //       requestURL.setPass(String());
-    //
-    //     KURL kurl(ParsedURLString, requestURL);
-    //     source = WebMediaPlayerSource(WebURL(kurl));
-    //   }
-    //
-    //   LocalFrame* frame = document().frame();
-    //   // TODO(srirama.m): Figure out how frame can be null when
-    //   // coming from executeDeferredLoad()
-    //   if (!frame) {
-    //     mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-    //     return;
-    //   }
-    //
-    //   m_webMediaPlayer =
-    //       frame->loader().client()->createWebMediaPlayer(*this, source, this);
-    //   if (!m_webMediaPlayer) {
-    //     mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
-    //     return;
-    //   }
-    //
-    //   if (layoutObject())
-    //     layoutObject()->setShouldDoFullPaintInvalidation();
-    //   // Make sure if we create/re-create the WebMediaPlayer that we update our
-    //   // wrapper.
-    //   m_audioSourceProvider.wrap(m_webMediaPlayer->getAudioSourceProvider());
-    //   m_webMediaPlayer->setVolume(effectiveMediaVolume());
-    //
-    //   m_webMediaPlayer->setPoster(posterImageURL());
-    //
-    //   m_webMediaPlayer->setPreload(effectivePreloadType());
-    //
-    //   m_webMediaPlayer->requestRemotePlaybackDisabled(
-    //       fastHasAttribute(disableremoteplaybackAttr));
-    //
-    //   m_webMediaPlayer->load(loadType(), source, corsMode());
-    //
-    //   if (isFullscreen())
-    //     m_webMediaPlayer->enteredFullscreen();
-    //
-    //   m_webMediaPlayer->becameDominantVisibleContent(m_mostlyFillingViewport);
-    DebugBreak();
+    WebMediaPlayerSource source;
+    if (m_srcObject) {
+        source = WebMediaPlayerSource(WebMediaStream(m_srcObject));
+    } else {
+        // Filter out user:pass as those two URL components aren't
+        // considered for media resource fetches (including for the CORS
+        // use-credentials mode.) That behavior aligns with Gecko, with IE
+        // being more restrictive and not allowing fetches to such URLs.
+        //
+        // Spec reference: http://whatwg.org/c/#concept-media-load-resource
+        //
+        // FIXME: when the HTML spec switches to specifying resource
+        // fetches in terms of Fetch (http://fetch.spec.whatwg.org), and
+        // along with that potentially also specifying a setting for its
+        // 'authentication flag' to control how user:pass embedded in a
+        // media resource URL should be treated, then update the handling
+        // here to match.
+        KURL requestURL =
+            playerProvidedUrl.isNull() ? KURL(m_currentSrc) : playerProvidedUrl;
+        if (!requestURL.user().isEmpty())
+            requestURL.setUser(String());
+        if (!requestURL.pass().isEmpty())
+            requestURL.setPass(String());
+
+        KURL kurl(ParsedURLString, requestURL);
+        source = WebMediaPlayerSource(WebURL(kurl));
+    }
+
+    LocalFrame* frame = document().frame();
+    // TODO(srirama.m): Figure out how frame can be null when
+    // coming from executeDeferredLoad()
+    if (!frame) {
+        mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+        return;
+    }
+
+    m_webMediaPlayer =
+        frame->loader().client()->createWebMediaPlayer(*this, source, this);
+    if (!m_webMediaPlayer) {
+        mediaLoadingFailed(WebMediaPlayer::NetworkStateFormatError);
+        return;
+    }
+
+    if (layoutObject())
+        layoutObject()->setShouldDoFullPaintInvalidation();
+    // Make sure if we create/re-create the WebMediaPlayer that we update our
+    // wrapper.
+    m_audioSourceProvider.wrap(m_webMediaPlayer->getAudioSourceProvider());
+    m_webMediaPlayer->setVolume(effectiveMediaVolume());
+
+    m_webMediaPlayer->setPoster(posterImageURL());
+
+    m_webMediaPlayer->setPreload(effectivePreloadType());
+
+    m_webMediaPlayer->requestRemotePlaybackDisabled(
+        fastHasAttribute(disableremoteplaybackAttr));
+
+    m_webMediaPlayer->load(loadType(), source, corsMode());
+
+    if (isFullscreen())
+        m_webMediaPlayer->enteredFullscreen();
+
+    m_webMediaPlayer->becameDominantVisibleContent(m_mostlyFillingViewport);
 }
 
 void HTMLMediaElement::setPlayerPreload()
@@ -1722,8 +1719,7 @@ void HTMLMediaElement::setReadyState(ReadyState state)
         // the earliest possible position.
         setOfficialPlaybackPosition(earliestPossiblePosition());
 
-        //m_duration = m_webMediaPlayer->duration();
-        DebugBreak();
+        m_duration = m_webMediaPlayer->duration();
 
         scheduleEvent(EventTypeNames::durationchange);
 
@@ -3183,14 +3179,13 @@ void HTMLMediaElement::durationChanged()
     BLINK_MEDIA_LOG << "durationChanged(" << (void*)this << ")";
 
     // durationChanged() is triggered by media player.
-    //   CHECK(m_webMediaPlayer);
-    //   double newDuration = m_webMediaPlayer->duration();
-    //
-    //   // If the duration is changed such that the *current playback position* ends
-    //   // up being greater than the time of the end of the media resource, then the
-    //   // user agent must also seek to the time of the end of the media resource.
-    //   durationChanged(newDuration, currentPlaybackPosition() > newDuration);
-    DebugBreak();
+    CHECK(m_webMediaPlayer);
+    double newDuration = m_webMediaPlayer->duration();
+
+    // If the duration is changed such that the *current playback position* ends
+    // up being greater than the time of the end of the media resource, then the
+    // user agent must also seek to the time of the end of the media resource.
+    durationChanged(newDuration, currentPlaybackPosition() > newDuration);
 }
 
 void HTMLMediaElement::durationChanged(double duration, bool requestSeek)
@@ -3489,9 +3484,8 @@ void HTMLMediaElement::
 {
     getAudioSourceProvider().setClient(nullptr);
     if (m_webMediaPlayer) {
-        //     m_audioSourceProvider.wrap(nullptr);
-        //     m_webMediaPlayer.reset();
-        DebugBreak();
+        m_audioSourceProvider.wrap(nullptr);
+        m_webMediaPlayer.reset();
     }
 }
 
@@ -4247,20 +4241,19 @@ void HTMLMediaElement::AudioSourceProviderImpl::provideInput(
 {
     DCHECK(bus);
 
-    //   MutexTryLocker tryLocker(provideInputLock);
-    //   if (!tryLocker.locked() || !m_webAudioSourceProvider || !m_client.get()) {
-    //     bus->zero();
-    //     return;
-    //   }
-    //
-    //   // Wrap the AudioBus channel data using WebVector.
-    //   size_t n = bus->numberOfChannels();
-    //   WebVector<float*> webAudioData(n);
-    //   for (size_t i = 0; i < n; ++i)
-    //     webAudioData[i] = bus->channel(i)->mutableData();
-    //
-    //   m_webAudioSourceProvider->provideInput(webAudioData, framesToProcess);
-    DebugBreak();
+    MutexTryLocker tryLocker(provideInputLock);
+    if (!tryLocker.locked() || !m_webAudioSourceProvider || !m_client.get()) {
+        bus->zero();
+        return;
+    }
+
+    // Wrap the AudioBus channel data using WebVector.
+    size_t n = bus->numberOfChannels();
+    WebVector<float*> webAudioData(n);
+    for (size_t i = 0; i < n; ++i)
+        webAudioData[i] = bus->channel(i)->mutableData();
+
+    m_webAudioSourceProvider->provideInput(webAudioData, framesToProcess);
 }
 
 void HTMLMediaElement::AudioClientImpl::setFormat(size_t numberOfChannels,
@@ -4310,9 +4303,8 @@ void HTMLMediaElement::checkViewportIntersectionTimerFired(TimerBase*)
 
     if (!isMostlyFillingViewport) {
         m_mostlyFillingViewport = isMostlyFillingViewport;
-        //     if (m_webMediaPlayer)
-        //       m_webMediaPlayer->becameDominantVisibleContent(m_mostlyFillingViewport);
-        DebugBreak();
+        if (m_webMediaPlayer)
+            m_webMediaPlayer->becameDominantVisibleContent(m_mostlyFillingViewport);
         return;
     }
 
@@ -4323,24 +4315,8 @@ void HTMLMediaElement::checkViewportIntersectionTimerFired(TimerBase*)
 void HTMLMediaElement::viewportFillDebouncerTimerFired(TimerBase*)
 {
     m_mostlyFillingViewport = true;
-    //   if (m_webMediaPlayer)
-    //     m_webMediaPlayer->becameDominantVisibleContent(m_mostlyFillingViewport);
-    DebugBreak();
-}
-
-WebMediaPlayerSource::WebMediaPlayerSource()
-{
-    DebugBreak();
-}
-
-WebMediaPlayerSource::~WebMediaPlayerSource()
-{
-    DebugBreak();
-}
-
-void WebMediaStream::reset()
-{
-    DebugBreak();
+    if (m_webMediaPlayer)
+        m_webMediaPlayer->becameDominantVisibleContent(m_mostlyFillingViewport);
 }
 
 } // namespace blink

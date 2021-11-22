@@ -221,7 +221,7 @@
 #include "web/TextFinder.h"
 #include "web/WebAssociatedURLLoaderImpl.h"
 #include "web/WebDataSourceImpl.h"
-//#include "web/WebDevToolsAgentImpl.h"
+#include "web/WebDevToolsAgentImpl.h"
 #include "web/WebFrameWidgetImpl.h"
 #include "web/WebPluginContainerImpl.h"
 #include "web/WebRemoteFrameImpl.h"
@@ -1639,7 +1639,7 @@ DEFINE_TRACE(WebLocalFrameImpl)
 {
     visitor->trace(m_frameLoaderClientImpl);
     visitor->trace(m_frame);
-    //  visitor->trace(m_devToolsAgent);
+    visitor->trace(m_devToolsAgent);
     visitor->trace(m_textFinder);
     visitor->trace(m_printContext);
     visitor->trace(m_contextMenuNode);
@@ -2022,16 +2022,13 @@ WebAutofillClient* WebLocalFrameImpl::autofillClient()
 void WebLocalFrameImpl::setDevToolsAgentClient(
     WebDevToolsAgentClient* devToolsClient)
 {
-    //   DCHECK(devToolsClient);
-    //   m_devToolsAgent = WebDevToolsAgentImpl::create(this, devToolsClient);
-    DebugBreak();
+    DCHECK(devToolsClient);
+    m_devToolsAgent = WebDevToolsAgentImpl::create(this, devToolsClient);
 }
 
 WebDevToolsAgent* WebLocalFrameImpl::devToolsAgent()
 {
-    //return m_devToolsAgent.get();
-    DebugBreak();
-    return nullptr;
+    return m_devToolsAgent.get();
 }
 
 WebLocalFrameImpl* WebLocalFrameImpl::localRoot()
@@ -2366,8 +2363,8 @@ void WebLocalFrameImpl::setTickmarks(const WebVector<WebRect>& tickmarks)
 
 void WebLocalFrameImpl::willBeDetached()
 {
-    //   if (m_devToolsAgent)
-    //     m_devToolsAgent->willBeDestroyed();
+    if (m_devToolsAgent)
+        m_devToolsAgent->willBeDestroyed();
 }
 
 void WebLocalFrameImpl::willDetachParent()

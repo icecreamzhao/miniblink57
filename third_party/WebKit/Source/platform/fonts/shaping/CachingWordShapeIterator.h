@@ -29,7 +29,7 @@
 #include "platform/fonts/Font.h"
 #include "platform/fonts/SimpleFontData.h"
 #include "platform/fonts/shaping/CachingWordShapeIterator.h"
-//#include "platform/fonts/shaping/HarfBuzzShaper.h"
+#include "platform/fonts/shaping/HarfBuzzShaper.h"
 #include "platform/fonts/shaping/ShapeCache.h"
 #include "platform/fonts/shaping/ShapeResultSpacing.h"
 #include "wtf/Allocator.h"
@@ -83,22 +83,21 @@ private:
             ShapeCacheEntry());
         if (cacheEntry && cacheEntry->m_shapeResult)
             return cacheEntry->m_shapeResult;
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-//         HarfBuzzShaper shaper(font, wordRun);
-//         RefPtr<const ShapeResult> shapeResult = shaper.shapeResult();
-//         if (!shapeResult)
-//             return nullptr;
-//
-//         if (cacheEntry)
-//             cacheEntry->m_shapeResult = shapeResult;
-//
-//         return shapeResult.release();
+#if 1 //def MINIBLINK_NOT_IMPLEMENTED
+        HarfBuzzShaper shaper(font, wordRun);
+        RefPtr<const ShapeResult> shapeResult = shaper.shapeResult();
+        if (!shapeResult)
+            return nullptr;
+
+        if (cacheEntry)
+            cacheEntry->m_shapeResult = shapeResult;
+
+        return shapeResult.release();
 #endif
         return nullptr;
     }
 
-    PassRefPtr<const ShapeResult> shapeWord(const TextRun& wordRun,
-        const Font* font)
+    PassRefPtr<const ShapeResult> shapeWord(const TextRun& wordRun, const Font* font)
     {
         if (LIKELY(!m_spacing.hasSpacing()))
             return shapeWordWithoutSpacing(wordRun, font);
@@ -204,8 +203,7 @@ private:
         if (UNLIKELY(m_textRun[m_startIndex] == tabulationCharacter)) {
             for (unsigned i = m_startIndex + 1;; i++) {
                 if (i == length || m_textRun[i] != tabulationCharacter) {
-                    *wordResult = ShapeResult::createForTabulationCharacters(
-                        m_font, m_textRun, m_widthSoFar, i - m_startIndex);
+                    *wordResult = ShapeResult::createForTabulationCharacters(m_font, m_textRun, m_widthSoFar, i - m_startIndex);
                     m_startIndex = i;
                     break;
                 }

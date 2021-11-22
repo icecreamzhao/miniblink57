@@ -44,7 +44,8 @@ public:
     virtual ~InspectorFrontendClient() { }
 
     virtual void sendMessageToEmbedder(const String&) = 0;
-
+    virtual void sendMessageToBackend(const String&) = 0;
+    
     virtual bool isUnderTest() = 0;
 
     virtual void showContextMenu(LocalFrame* targetFrame,

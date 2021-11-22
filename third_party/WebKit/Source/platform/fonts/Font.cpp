@@ -416,39 +416,37 @@ CodePath Font::codePath(const TextRunPaintInfo& runInfo) const
 {
     // TODO(eae): Disable the always use complex text feature on Android for now as
     // it caused a memory regression for webview. crbug.com/577306
-    // #if !OS(ANDROID)
-    //     if (RuntimeEnabledFeatures::alwaysUseComplexTextEnabled()
-    //         || LayoutTestSupport::alwaysUseComplexTextForTest()) {
-    //         return ComplexPath;
-    //     }
-    // #endif
-    //
-    //     const TextRun& run = runInfo.run;
-    //
-    //     if (getFontDescription().getTypesettingFeatures())
-    //         return ComplexPath;
-    //
-    //     if (m_fontDescription.featureSettings() && m_fontDescription.featureSettings()->size() > 0)
-    //         return ComplexPath;
-    //
-    //     if (m_fontDescription.isVerticalBaseline())
-    //         return ComplexPath;
-    //
-    //     if (m_fontDescription.widthVariant() != RegularWidth)
-    //         return ComplexPath;
-    //
-    //     // FIXME: This really shouldn't be needed but for some reason the
-    //     // TextRendering setting doesn't propagate to typesettingFeatures in time
-    //     // for the prefs width calculation.
-    //     if (getFontDescription().textRendering() == OptimizeLegibility || getFontDescription().textRendering() == GeometricPrecision)
-    //         return ComplexPath;
-    //
-    //     if (run.is8Bit())
-    //         return SimplePath;
-    //
-    //     // Start from 0 since drawing and highlighting also measure the characters before run->from.
-    //     return Character::characterRangeCodePath(run.characters16(), run.length());
-    return SimplePath;
+// #if !OS(ANDROID)
+//     if (RuntimeEnabledFeatures::alwaysUseComplexTextEnabled() || LayoutTestSupport::alwaysUseComplexTextForTest()) {
+//         return ComplexPath;
+//     }
+// #endif
+    
+    const TextRun& run = runInfo.run;
+    
+    if (getFontDescription().getTypesettingFeatures())
+        return ComplexPath;
+    
+    if (m_fontDescription.featureSettings() && m_fontDescription.featureSettings()->size() > 0)
+        return ComplexPath;
+    
+    if (m_fontDescription.isVerticalBaseline())
+        return ComplexPath;
+    
+    if (m_fontDescription.widthVariant() != RegularWidth)
+        return ComplexPath;
+    
+    // FIXME: This really shouldn't be needed but for some reason the
+    // TextRendering setting doesn't propagate to typesettingFeatures in time
+    // for the prefs width calculation.
+    if (getFontDescription().textRendering() == OptimizeLegibility || getFontDescription().textRendering() == GeometricPrecision)
+        return ComplexPath;
+    
+    if (run.is8Bit())
+        return SimplePath;
+    
+    // Start from 0 since drawing and highlighting also measure the characters before run->from.
+    return Character::characterRangeCodePath(run.characters16(), run.length());
 }
 
 bool Font::canShapeWordByWord() const

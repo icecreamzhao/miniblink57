@@ -420,10 +420,16 @@ Response InspectorAnimationAgent::resolveAnimation(
     static const char kAnimationObjectGroup[] = "animation";
     m_v8Session->releaseObjectGroup(
         toV8InspectorStringView(kAnimationObjectGroup));
+
     *result = m_v8Session->wrapObject(
         scriptState->context(),
         ToV8(animation, scriptState->context()->Global(), scriptState->isolate()),
-        toV8InspectorStringView(kAnimationObjectGroup));
+        toV8InspectorStringView(kAnimationObjectGroup)
+#if V8_MAJOR_VERSION >= 7
+        , false
+#endif
+    );
+
     if (!*result)
         return Response::Error("Element not associated with a document.");
     return Response::OK();

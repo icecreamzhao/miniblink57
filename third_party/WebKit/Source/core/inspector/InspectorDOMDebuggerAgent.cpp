@@ -536,14 +536,23 @@ InspectorDOMDebuggerAgent::buildObjectForEventListener(
                                                                       .setColumnNumber(columnNumber)
                                                                       .build();
     if (objectGroupId.length()) {
-        value->setHandler(
-            m_v8Session->wrapObject(context, function, objectGroupId));
-        value->setOriginalHandler(
-            m_v8Session->wrapObject(context, info.handler, objectGroupId));
+        value->setHandler(m_v8Session->wrapObject(context, function, objectGroupId
+#if V8_MAJOR_VERSION >= 7
+            , false
+#endif
+        ));
+        value->setOriginalHandler(m_v8Session->wrapObject(context, info.handler, objectGroupId
+#if V8_MAJOR_VERSION >= 7
+            , false
+#endif
+        ));
         v8::Local<v8::Function> removeFunction;
         if (info.removeFunction.ToLocal(&removeFunction))
-            value->setRemoveFunction(
-                m_v8Session->wrapObject(context, removeFunction, objectGroupId));
+            value->setRemoveFunction(m_v8Session->wrapObject(context, removeFunction, objectGroupId
+#if V8_MAJOR_VERSION >= 7
+                , false
+#endif
+            ));
     }
     return value;
 }

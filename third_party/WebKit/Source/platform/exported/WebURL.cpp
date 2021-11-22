@@ -32,6 +32,7 @@
 
 #include "platform/weborigin/KURL.h"
 #include "wtf/text/StringView.h"
+#include "url/gurl.h"
 
 namespace blink {
 
@@ -65,6 +66,22 @@ WebURL::operator KURL() const
 {
     //return KURL(m_string, /*m_parsed,*/ m_isValid);
     return KURL(ParsedURLString, (String)m_string);
+}
+
+WebURL::WebURL(const WebURL& url)
+    : m_string(url.m_string)
+    ,
+    //m_parsed(url.m_parsed),
+    m_isValid(url.m_isValid)
+{
+}
+
+WebURL& WebURL::operator=(const WebURL& url)
+{
+    m_string = url.m_string;
+    //m_parsed = url.m_parsed;
+    m_isValid = url.m_isValid;
+    return *this;
 }
 
 } // namespace blink

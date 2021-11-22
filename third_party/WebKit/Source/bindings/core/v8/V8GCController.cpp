@@ -160,15 +160,15 @@ public:
     {
     }
 
-    void VisitPersistentHandle(v8::Persistent<v8::Value>* value,
-        uint16_t classId) override
+    void VisitPersistentHandle(v8::Persistent<v8::Value>* value, uint16_t classId) override
     {
         if (classId != WrapperTypeInfo::NodeClassId && classId != WrapperTypeInfo::ObjectClassId)
             return;
 
+#if V8_MAJOR_VERSION < 7
         if (value->IsIndependent())
             return;
-
+#endif
         v8::Local<v8::Object> wrapper = v8::Local<v8::Object>::New(
             m_isolate, v8::Persistent<v8::Object>::Cast(*value));
         DCHECK(V8DOMWrapper::hasInternalFieldsSet(wrapper));
@@ -190,6 +190,14 @@ public:
                 ++m_domObjectsWithPendingActivity;
             }
         }
+
+#if V8_MAJOR_VERSION >= 7
+        ScriptWrappable* scriptWrap = toScriptWrappable(wrapper);
+        v8::EmbedderHeapTracer* tracer = V8PerIsolateData::from(m_isolate)->getEmbedderHeapTracer(m_isolate);
+
+        v8::TracedGlobal<v8::Value> traceObj(m_isolate, wrapper.As<v8::Value>());
+        tracer->RegisterEmbedderReference(traceObj);
+#endif
 
         if (classId == WrapperTypeInfo::NodeClassId) {
             DCHECK(V8Node::hasInstance(wrapper, m_isolate));
@@ -223,17 +231,16 @@ public:
         for (size_t i = 0; i < m_groupsWhichNeedRetainerInfo.size(); ++i) {
             Node* root = m_groupsWhichNeedRetainerInfo[i];
             if (root != alreadyAdded) {
-                profiler->SetRetainedObjectInfo(
-                    v8::UniqueId(reinterpret_cast<intptr_t>(root)),
-                    new RetainedDOMInfo(root));
+#if V8_MAJOR_VERSION < 7
+                profiler->SetRetainedObjectInfo(v8::UniqueId(reinterpret_cast<intptr_t>(root)), new RetainedDOMInfo(root));
+#endif
                 alreadyAdded = root;
             }
         }
-        if (m_liveRootGroupIdSet) {
-            profiler->SetRetainedObjectInfo(
-                liveRootId(),
-                new SuspendableObjectsInfo(m_domObjectsWithPendingActivity));
-        }
+#if V8_MAJOR_VERSION < 7
+        if (m_liveRootGroupIdSet)
+            profiler->SetRetainedObjectInfo(liveRootId(), new SuspendableObjectsInfo(m_domObjectsWithPendingActivity));
+#endif
     }
 
 private:
@@ -460,8 +467,7 @@ void V8GCController::collectGarbage(v8::Isolate* isolate, bool onlyMinorGC)
     builder.append("if (gc) gc(");
     builder.append(onlyMinorGC ? "true" : "false");
     builder.append(")");
-    V8ScriptRunner::compileAndRunInternalScript(
-        v8String(isolate, builder.toString()), isolate);
+    V8ScriptRunner::compileAndRunInternalScript(v8String(isolate, builder.toString()), isolate);
     scriptState->disposePerContextData();
 }
 
@@ -495,10 +501,114 @@ private:
     Visitor* m_visitor;
 };
 
-void V8GCController::traceDOMWrappers(v8::Isolate* isolate, Visitor* visitor)
+#if V8_MAJOR_VERSION >= 7
+
+// for third_party\WebKit\Source\bindings\core\v8\WrapperTypeInfo.h
+template <typename T, int offset>
+inline T* getInternalField(const v8::TracedGlobal<v8::Object>& global)
 {
-    DOMWrapperTracer tracer(visitor);
+    ASSERT(offset < v8::Object::InternalFieldCount(global));
+    return reinterpret_cast<T*>(v8::Object::GetAlignedPointerFromInternalField(global, offset));
+}
+
+void* toUntypedWrappable(const v8::PersistentBase<v8::Object>& wrapper)
+{
+    return getInternalField<void, v8DOMWrapperObjectIndex>(wrapper);
+}
+
+void* toUntypedWrappable(const v8::TracedGlobal<v8::Object>& wrapper)
+{
+    return getInternalField<void, v8DOMWrapperObjectIndex>(wrapper);
+}
+
+const WrapperTypeInfo* toWrapperTypeInfo(const v8::TracedGlobal<v8::Object>& wrapper)
+{
+    return getInternalField<WrapperTypeInfo, v8DOMWrapperTypeIndex>(wrapper);
+}
+
+bool isDOMWrapperClassId(uint16_t class_id)
+{
+    return class_id == WrapperTypeInfo::NodeClassId || class_id == WrapperTypeInfo::ObjectClassId
+        //|| class_id == WrapperTypeInfo::kCustomWrappableId
+        ;
+}
+
+// Visitor forwarding all DOM wrapper handles to the provided Blink visitor.
+class DOMWrapperForwardingVisitor final
+    : public v8::PersistentHandleVisitor
+    , public v8::EmbedderHeapTracer::TracedGlobalHandleVisitor {
+public:
+    explicit DOMWrapperForwardingVisitor(Visitor* visitor) : m_visitor(visitor)
+    {
+        ASSERT(m_visitor);
+    }
+
+    void VisitPersistentHandle(v8::Persistent<v8::Value>* value, uint16_t class_id) final
+    {
+        // TODO(mlippautz): There should be no more v8::Persistent that have a class
+        // id set.
+        VisitHandle(value, class_id);
+    }
+
+    void VisitTracedGlobalHandle(const v8::TracedGlobal<v8::Value>& value) final
+    {
+        VisitHandle(&value, value.WrapperClassId());
+    }
+
+private:
+    template <typename T>
+    void VisitHandle(T* value, uint16_t class_id)
+    {
+        if (!isDOMWrapperClassId(class_id))
+            return;
+
+        WrapperTypeInfo* wrapperTypeInfo = const_cast<WrapperTypeInfo*>(toWrapperTypeInfo(value->template As<v8::Object>()));
+
+        // WrapperTypeInfo pointer may have been cleared before termination GCs on
+        // worker threads.
+        if (!wrapperTypeInfo)
+            return;
+
+        ScriptWrappable* scriptWrap = (ScriptWrappable*)toUntypedWrappable(value->template As<v8::Object>());
+        wrapperTypeInfo->trace(m_visitor, scriptWrap);
+    }
+
+    Visitor* const m_visitor;
+};
+
+#endif // end if V8_MAJOR_VERSION >= 7
+
+void V8GCController::traceDOMWrappers(v8::Isolate* isolate, Visitor* parentVisitor)
+{
+#if V8_MAJOR_VERSION >= 7
+    std::vector<std::pair<void*, void*>>* v8References = V8PerIsolateData::from(isolate)->leakV8References();
+    for (size_t i = 0; v8References && i < v8References->size(); ++i) {
+        std::pair<void*, void*> internalFields = v8References->at(i);
+        WrapperTypeInfo* wrapperTypeInfo = reinterpret_cast<WrapperTypeInfo*>(internalFields.first);
+
+        void* scriptWrappablePtr = internalFields.second;
+        ScriptWrappable* scriptWrappable = (ScriptWrappable*)scriptWrappablePtr;
+
+        if (wrapperTypeInfo->ginEmbedder != gin::GinEmbedder::kEmbedderBlink)
+            continue;
+
+        wrapperTypeInfo->trace(parentVisitor, scriptWrappable);
+    }
+    if (v8References)
+        delete v8References;
+
+    DOMWrapperForwardingVisitor visitor(parentVisitor);
+    isolate->VisitHandlesWithClassIds(&visitor);
+
+    v8::EmbedderHeapTracer* tracer = V8PerIsolateData::from(isolate)->getEmbedderHeapTracer(isolate);
+    // There may be no tracer during tear down garbage collections.
+    // Not all threads have a tracer attached.
+    if (tracer)
+        tracer->IterateTracedGlobalHandles(&visitor);
+#else
+    DOMWrapperTracer tracer(parentVisitor);
     isolate->VisitHandlesWithClassIds(&tracer);
+#endif
 }
 
 class PendingActivityVisitor : public v8::PersistentHandleVisitor {

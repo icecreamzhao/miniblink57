@@ -19,6 +19,7 @@
 #include "platform/network/HTTPParsers.h"
 #include "wtf/text/StringUTF8Adaptor.h"
 #include "wtf/text/WTFString.h"
+#include "net/DataURL.h"
 
 namespace {
 
@@ -85,30 +86,40 @@ namespace NetworkUtils {
         //     return SharedBuffer::create(data.data(), data.size());
         //   }
 
-        String urlString = url.string();
+      String mimeTypeStr;
+      String charsetStr;
+      Vector<char> data;
+      if (!net::parseDataURL(url, mimeTypeStr, charsetStr, data))
+          return nullptr;
+      
+      mimeType = AtomicString(mimeTypeStr);
+      charset = AtomicString(charsetStr);
+      return SharedBuffer::create(data.data(), data.size());
 
-        int index = urlString.find(',');
-        if (index == -1) {
-            return nullptr;
-        }
-
-        String mediaType = urlString.substring(5, index - 5);
-        CString data = urlString.substring(index + 1).utf8();
-
-        bool base64 = mediaType.endsWith(";base64", WTF::TextCaseASCIIInsensitive);
-        if (base64)
-            mediaType = mediaType.left(mediaType.length() - 7);
-
-        if (mediaType.isEmpty())
-            mediaType = "text/plain";
-
-        mimeType = AtomicString(extractMIMETypeFromMediaType(WTF::AtomicString(mediaType)));
-        charset = AtomicString(extractCharsetFromMediaType(WTF::AtomicString(mediaType)));
-
-        if (charset.isEmpty())
-            charset = "US-ASCII";
-
-        return SharedBuffer::create(data.data(), data.length());
+//         String urlString = url.string();
+// 
+//         int index = urlString.find(',');
+//         if (index == -1) {
+//             return nullptr;
+//         }
+// 
+//         String mediaType = urlString.substring(5, index - 5);
+//         CString data = urlString.substring(index + 1).utf8();
+// 
+//         bool base64 = mediaType.endsWith(";base64", WTF::TextCaseASCIIInsensitive);
+//         if (base64)
+//             mediaType = mediaType.left(mediaType.length() - 7);
+// 
+//         if (mediaType.isEmpty())
+//             mediaType = "text/plain";
+// 
+//         mimeType = AtomicString(extractMIMETypeFromMediaType(WTF::AtomicString(mediaType)));
+//         charset = AtomicString(extractCharsetFromMediaType(WTF::AtomicString(mediaType)));
+// 
+//         if (charset.isEmpty())
+//             charset = "US-ASCII";
+// 
+//         return SharedBuffer::create(data.data(), data.length());
     }
 
     bool isRedirectResponseCode(int responseCode)

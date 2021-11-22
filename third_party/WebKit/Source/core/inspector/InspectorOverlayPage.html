@@ -61,7 +61,7 @@ body.platform-linux {
     background-color: rgba(0, 0, 0, 0.31);
 }
 
-#canvas {
+#canvas, #labels-canvas {
     pointer-events: none;
 }
 
@@ -76,17 +76,6 @@ body.platform-linux {
     display: flex;
     align-items: center;
     cursor: default;
-    overflow: hidden;
-}
-
-#paused-in-debugger {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-#reloading-blanket {
-    background-color: rgb(255, 255, 255);
 }
 
 .controls-line > * {
@@ -101,8 +90,6 @@ body.platform-linux {
     margin-left: -1px;
     margin-right: 0;
     padding: 0;
-    flex-shrink: 0;
-    flex-grow: 0;
 }
 
 .controls-line .button:hover {
@@ -159,89 +146,10 @@ body.platform-linux {
     color: rgb(153, 69, 0);
 }
 
-/* Material */
-.hidden {
-    display: none !important;
-}
-
-.tooltip-content,
-.material-tooltip-arrow {
+.editor-anchor {
+    height: 12px;
+    width: 12px;
     position: absolute;
-    z-index: 10;
-    -webkit-user-select: none;
-}
-
-.tooltip-content {
-    background-color: #333740;
-    font-size: 11px;
-    line-height: 14px;
-    padding: 5px 8px;
-    border-radius: 3px;
-    color: white;
-    box-sizing: border-box;
-    max-width: calc(100% - 4px);
-    border: 1px solid hsla(0, 0%, 100%, 0.3);
-    z-index: 1;
-    background-clip: padding-box;
-    will-change: transform;
-    text-rendering: optimizeLegibility;
-    pointer-events: none;
-}
-
-.element-info {
-    display: flex;
-    align-content: stretch;
-}
-
-.material-tooltip-arrow {
-    border: solid;
-    border-color: #333740 transparent;
-    border-width: 0 8px 8px 8px;
-    z-index: 2;
-    margin-top: 1px;
-}
-
-.material-tooltip-arrow.tooltip-arrow-top {
-    border-width: 8px 8px 0 8px;
-    margin-top: -1px;
-}
-
-.element-description {
-    flex: 1 1;
-    word-wrap: break-word;
-    word-break: break-all;
-}
-
-.dimensions {
-    border-left: 1px solid hsl(0, 0%, 50%);
-    padding-left: 7px;
-    margin-left: 7px;
-    float: right;
-    flex: 0 0 auto;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    color: hsl(0, 0%, 85%);
-}
-
-.material-node-width {
-    margin-right: 2px;
-}
-
-.material-node-height {
-    margin-left: 2px;
-}
-
-.material-tag-name {
-    color: hsl(304, 77%, 70%);
-}
-
-.material-node-id {
-    color: hsl(27, 100%, 70%);
-}
-
-.material-class-name {
-    color: hsl(202,92%,77%);
 }
 
 </style>
@@ -259,13 +167,7 @@ function drawPausedInDebuggerMessage(message)
     document.body.classList.add("dimmed");
 }
 
-function showReloadingBlanket()
-{
-    var element = document.getElementById("reloading-blanket");
-    element.style.display = "block";
-}
-
-function _drawGrid(context, rulerAtRight, rulerAtBottom)
+function _drawGrid(rulerAtRight, rulerAtBottom)
 {
     if (window._gridPainted)
         return;
@@ -273,9 +175,7 @@ function _drawGrid(context, rulerAtRight, rulerAtBottom)
 
     context.save();
 
-    var pageFactor = pageZoomFactor * pageScaleFactor;
-    var scrollX = window.scrollX * pageScaleFactor;
-    var scrollY = window.scrollY * pageScaleFactor;
+    var pageFactor = pageZoomFactor;
     function zoom(x)
     {
         return Math.round(x * pageFactor);
@@ -401,24 +301,27 @@ function _drawGrid(context, rulerAtRight, rulerAtBottom)
     context.restore();
 }
 
-function drawViewSize()
+function drawViewSize(drawViewSizeWithGrid)
 {
+    var drawGridBoolean = drawViewSizeWithGrid === "true";
     var text = viewportSize.width + "px \u00D7 " + viewportSize.height + "px";
     context.save();
     context.font = "20px ";
     switch (platform) {
-    case "windows": context.font = "14px Consolas, Lucida Console"; break;
-    case "mac": context.font = "14px Menlo, Monaco"; break;
+    case "windows": context.font = "14px Consolas"; break;
+    case "mac": context.font = "14px Menlo"; break;
     case "linux": context.font = "14px dejavu sans mono"; break;
     }
 
     var frameWidth = canvasWidth;
     var textWidth = context.measureText(text).width;
     context.fillStyle = gridBackgroundColor;
-    context.fillRect(frameWidth - textWidth - 12, 0, frameWidth, 25);
+    context.fillRect(frameWidth - textWidth - 12, drawGridBoolean ? 15 : 0, frameWidth, 25);
     context.fillStyle = darkGridColor;
-    context.fillText(text, frameWidth - textWidth - 6, 18);
+    context.fillText(text, frameWidth - textWidth - 6, drawGridBoolean ? 33 : 18);
     context.restore();
+    if (drawGridBoolean)
+        _drawGrid();
 }
 
 function resetCanvas(canvasElement)
@@ -435,7 +338,6 @@ function reset(resetData)
 {
     window.viewportSize = resetData.viewportSize;
     window.deviceScaleFactor = resetData.deviceScaleFactor;
-    window.pageScaleFactor = resetData.pageScaleFactor;
     window.pageZoomFactor = resetData.pageZoomFactor;
     window.scrollX = Math.round(resetData.scrollX);
     window.scrollY = Math.round(resetData.scrollY);
@@ -444,25 +346,30 @@ function reset(resetData)
     window.context = canvas.getContext("2d");
     resetCanvas(canvas);
 
+    window.labelsCanvas = document.getElementById("labels-canvas");
+    resetCanvas(labelsCanvas);
+
     window.canvasWidth = viewportSize.width;
     window.canvasHeight = viewportSize.height;
 
     window._controlsVisible = false;
     document.querySelector(".controls-line").style.visibility = "hidden";
     document.getElementById("element-title").style.visibility = "hidden";
-    document.getElementById("reloading-blanket").style.display = "none";
-    document.getElementById("tooltip-container").removeChildren();
-
+    var editor = document.getElementById("editor");
+    editor.style.visibility = "hidden";
+    editor.textContent = "";
     document.body.classList.remove("dimmed");
-
     window._gridPainted = false;
 }
 
-function _drawElementTitle(context, elementInfo, bounds)
+function _drawElementTitle(elementInfo, bounds)
 {
     document.getElementById("tag-name").textContent = elementInfo.tagName;
     document.getElementById("node-id").textContent = elementInfo.idValue ? "#" + elementInfo.idValue : "";
-    document.getElementById("class-name").textContent = (elementInfo.className || "").trimEnd(50);
+    var className = elementInfo.className;
+    if (className && className.length > 50)
+       className = className.substring(0, 50) + "\u2026";
+    document.getElementById("class-name").textContent = className || "";
     document.getElementById("node-width").textContent = elementInfo.nodeWidth;
     document.getElementById("node-height").textContent = elementInfo.nodeHeight;
     var elementTitle = document.getElementById("element-title");
@@ -528,77 +435,7 @@ function _drawElementTitle(context, elementInfo, bounds)
     elementTitle.style.left = (boxX + 3) + "px";
 }
 
-function _createElementDescription(elementInfo)
-{
-    var elementInfoElement = createElement("div", "element-info");
-    var descriptionElement = elementInfoElement.createChild("div", "element-description monospace");
-    var tagNameElement = descriptionElement.createChild("b").createChild("span", "material-tag-name");
-    tagNameElement.textContent = elementInfo.tagName;
-    var nodeIdElement = descriptionElement.createChild("span", "material-node-id");
-    nodeIdElement.textContent = elementInfo.idValue ? "#" + elementInfo.idValue : "";
-    nodeIdElement.classList.toggle("hidden", !elementInfo.idValue);
-
-    var classNameElement = descriptionElement.createChild("span", "material-class-name");
-    classNameElement.textContent = (elementInfo.className || "").trim(50);
-    classNameElement.classList.toggle("hidden", !elementInfo.className);
-    var dimensionsElement = elementInfoElement.createChild("div", "dimensions");
-    dimensionsElement.createChild("span", "material-node-width").textContent = Math.round(elementInfo.nodeWidth * 100) / 100;
-    dimensionsElement.createTextChild("\u00d7");
-    dimensionsElement.createChild("span", "material-node-height").textContent = Math.round(elementInfo.nodeHeight * 100) / 100;
-    return elementInfoElement;
-}
-
-function _drawMaterialElementTitle(elementInfo, bounds)
-{
-    var tooltipContainer = document.getElementById("tooltip-container");
-    tooltipContainer.removeChildren();
-    _createMaterialTooltip(tooltipContainer, bounds, _createElementDescription(elementInfo), true);
-}
-
-function _createMaterialTooltip(parentElement, bounds, contentElement, withArrow)
-{
-    var tooltipContainer = parentElement.createChild("div");
-    var tooltipContent = tooltipContainer.createChild("div", "tooltip-content");
-    tooltipContent.appendChild(contentElement);
-
-    var titleWidth = tooltipContent.offsetWidth;
-    var titleHeight = tooltipContent.offsetHeight;
-    var arrowRadius = 8;
-    var pageMargin = 2;
-
-    var boxX = Math.min(bounds.minX, canvasWidth - titleWidth - pageMargin);
-
-    var boxY = bounds.minY - arrowRadius - titleHeight;
-    var onTop = true;
-    if (boxY < 0) {
-        boxY = Math.min(canvasHeight - titleHeight, bounds.maxY + arrowRadius);
-        onTop = false;
-    } else if (bounds.minY > canvasHeight) {
-        boxY = canvasHeight - arrowRadius - titleHeight;
-    }
-
-    tooltipContent.style.top = boxY + "px";
-    tooltipContent.style.left = boxX + "px";
-    if (!withArrow)
-        return;
-
-    var tooltipArrow = tooltipContainer.createChild("div", "material-tooltip-arrow");
-    // Left align arrow to the tooltip but ensure it is pointing to the element.
-    var tooltipBorderRadius = 2;
-    var arrowX = boxX + arrowRadius + tooltipBorderRadius;
-    if (arrowX < bounds.minX)
-        arrowX = bounds.minX + arrowRadius;
-    // Hide arrow if element is completely off the sides of the page.
-    var arrowHidden = arrowX < pageMargin + tooltipBorderRadius || arrowX + arrowRadius * 2 > canvasWidth - pageMargin - tooltipBorderRadius;
-    tooltipArrow.classList.toggle("hidden", arrowHidden);
-    if (!arrowHidden) {
-        tooltipArrow.classList.toggle("tooltip-arrow-top", onTop);
-        tooltipArrow.style.top = (onTop ? boxY + titleHeight : boxY - arrowRadius) + "px";
-        tooltipArrow.style.left = arrowX + "px";
-    }
-}
-
-function _drawRulers(context, bounds, rulerAtRight, rulerAtBottom)
+function _drawRulers(bounds, rulerAtRight, rulerAtBottom)
 {
     context.save();
     var width = canvasWidth;
@@ -642,7 +479,7 @@ function _drawRulers(context, bounds, rulerAtRight, rulerAtBottom)
     context.restore();
 }
 
-function drawPath(context, commands, fillColor, outlineColor, bounds)
+function drawPath(commands, fillColor, outlineColor, bounds)
 {
     var commandsIndex = 0;
 
@@ -663,50 +500,94 @@ function drawPath(context, commands, fillColor, outlineColor, bounds)
             bounds.rightmostXForY[y] = Math.max(bounds.rightmostXForY[y] || Number.MIN_VALUE, x);
             bounds.topmostYForX[x] = Math.min(bounds.topmostYForX[x] || Number.MAX_VALUE, y);
             bounds.bottommostYForX[x] = Math.max(bounds.bottommostYForX[x] || Number.MIN_VALUE, y);
+
             points.push(x, y);
         }
         return points;
     }
 
     context.save();
+    context.beginPath();
+
     var commandsLength = commands.length;
-    var path = new Path2D();
     while (commandsIndex < commandsLength) {
         switch (commands[commandsIndex++]) {
         case "M":
-            path.moveTo.apply(path, extractPoints(1));
+            context.moveTo.apply(context, extractPoints(1));
             break;
         case "L":
-            path.lineTo.apply(path, extractPoints(1));
+            context.lineTo.apply(context, extractPoints(1));
             break;
         case "C":
-            path.bezierCurveTo.apply(path, extractPoints(3));
+            context.bezierCurveTo.apply(context, extractPoints(3));
             break;
         case "Q":
-            path.quadraticCurveTo.apply(path, extractPoints(2));
+            context.quadraticCurveTo.apply(context, extractPoints(2));
             break;
         case "Z":
-            path.closePath();
+            context.closePath();
             break;
         }
     }
-    path.closePath();
+    context.closePath();
     context.lineWidth = 0;
     context.fillStyle = fillColor;
-    context.fill(path);
+    context.fill();
 
-    if (outlineColor) {
-        context.lineWidth = 2;
-        context.strokeStyle = outlineColor;
-        context.stroke(path);
-    }
+//    if (outlineColor) {
+//        context.lineWidth = 2;
+//        context.strokeStyle = outlineColor;
+//        context.stroke();
+//    }
 
     context.restore();
-    return path;
 }
 
-function emptyBounds()
-{
+//setTimeout(function() {
+//    var resetData = {};
+//    resetData.viewportSize = {"width": 800, "height": 600};
+//    resetData.deviceScaleFactor = 1;
+//    resetData.pageZoomFactor = 1;
+//    resetData.scrollX = 0;
+//    resetData.scrollY = 0;
+//    
+//    reset(resetData);
+//    drawHighlight(1);
+//}, 1000);
+
+function drawHighlight(highlight)
+{    
+//    var highlight = {"paths":[
+//    {"path":["M",9,85,"L",309,85,"L",309,235,"L",9,235,"Z"],"fillColor":"rgba(111, 68, 220, 0.01)","name":"content"},
+//    {"path":["M",9,85,"L",309,85,"L",309,235,"L",9,235,"Z"],"fillColor":"rgba(147, 196, 125, 0.01)","name":"padding"},
+//    {"path":["M",8,84,"L",310,84,"L",310,236,"L",8,236,"Z"],"fillColor":"rgba(255, 229, 153, 0.01)","name":"border"},
+//    {"path":["M",8,84,"L",310,84,"L",310,236,"L",8,236,"Z"],"fillColor":"rgba(246, 178, 107, 0.01)","name":"margin"}
+//    ],
+//    "showRulers":false,"showExtensionLines":false,
+//    "elementInfo":{"tagName":"canvas","idValue":"canvas1","nodeWidth":"302","nodeHeight":"152"},"displayAsMaterial":true};
+
+//    var highlight = {"paths":[
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(111, 168, 220, 0.658823529411765)"},
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(147, 196, 125, 0.549019607843137)"},
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(255, 229, 153, 0.658823529411765)"},
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(246, 178, 107, 0.658823529411765)"}],
+//    "showRulers":false,"showExtensionLines":false,"elementInfo":{"tagName":"canvas","idValue":"canvas1","nodeWidth":"302","nodeHeight":"152"}}
+//    
+//    context.save();
+//    
+//    window.context.beginPath();
+//    window.context.lineTo(200, 200);
+//    window.context.lineTo(500, 200);
+//    window.context.lineTo(500, 100);
+//    window.context.lineTo(700, 250);
+//    window.context.lineTo(500, 400);
+//    window.context.lineTo(500, 300);
+//    window.context.lineTo(200, 300);
+//    window.context.closePath();
+//    
+//    window.context.fillStyle = 'rgba(250,200,0,0.4)';
+//    window.context.fill();
+
     var bounds = {
         minX: Number.MAX_VALUE,
         minY: Number.MAX_VALUE,
@@ -717,45 +598,36 @@ function emptyBounds()
         topmostYForX: {},
         bottommostYForX: {}
     };
-    return bounds;
-}
-
-function drawHighlight(highlight, context)
-{
-    context = context || window.context;
-    context.save();
-
-    var bounds = emptyBounds();
 
     for (var paths = highlight.paths.slice(); paths.length;) {
         var path = paths.pop();
-        drawPath(context, path.path, path.fillColor, path.outlineColor, bounds);
+        drawPath(path.path, path.fillColor, path.outlineColor, bounds);
         if (paths.length) {
             context.save();
-            context.globalCompositeOperation = "destination-out";
-            drawPath(context, paths[paths.length - 1].path, "red", null, bounds);
+            //context.globalCompositeOperation = "destination-out";
+            drawPath(paths[paths.length - 1].path, "red", null, bounds);
             context.restore();
         }
     }
 
-    var rulerAtRight = highlight.paths.length && highlight.showRulers && bounds.minX < 20 && bounds.maxX + 20 < canvasWidth;
-    var rulerAtBottom = highlight.paths.length && highlight.showRulers && bounds.minY < 20 && bounds.maxY + 20 < canvasHeight;
-
-    if (highlight.showRulers)
-        _drawGrid(context, rulerAtRight, rulerAtBottom);
-
-    if (highlight.paths.length) {
-        if (highlight.showExtensionLines)
-            _drawRulers(context, bounds, rulerAtRight, rulerAtBottom);
-
-        if (highlight.elementInfo && highlight.displayAsMaterial)
-           _drawMaterialElementTitle(highlight.elementInfo, bounds);
-        else if (highlight.elementInfo)
-           _drawElementTitle(context, highlight.elementInfo, bounds);
-    }
+//    var rulerAtRight = highlight.paths.length && highlight.showRulers && bounds.minX < 20 && bounds.maxX + 20 < canvasWidth;
+//    var rulerAtBottom = highlight.paths.length && highlight.showRulers && bounds.minY < 20 && bounds.maxY + 20 < canvasHeight;
+//
+//    if (highlight.showRulers)
+//        _drawGrid(rulerAtRight, rulerAtBottom);
+//
+//    if (highlight.paths.length) {
+//        if (highlight.showExtensionLines)
+//            _drawRulers(bounds, rulerAtRight, rulerAtBottom);
+//
+//        if (highlight.elementInfo)
+//           _drawElementTitle(highlight.elementInfo, bounds);
+//     }
     context.restore();
+    
+    //window.context.fillStyle = "rgba(250,200,0,0.5)";
+    //window.context.fillRect(150, 150, 200, 200);
 
-    return { bounds: bounds };
 }
 
 function setPlatform(platform)
@@ -772,7 +644,9 @@ function dispatch(message)
 
 function log(text)
 {
-    document.getElementById("log").createChild("div").textContent = text;
+    var logEntry = document.createElement("div");
+    logEntry.textContent = text;
+    document.getElementById("log").appendChild(logEntry);
 }
 
 function onResumeClick()
@@ -800,65 +674,219 @@ function onDocumentKeyDown(event)
 {
     if (!window._controlsVisible)
         return;
-    if (event.key == "F8" || eventHasCtrlOrMeta(event) && event.keyCode == 220 /* backslash */)
+    if (event.keyIdentifier == "F8" || eventHasCtrlOrMeta(event) && event.keyCode == 220 /* backslash */)
         InspectorOverlayHost.resume();
-    else if (event.key == "F10" || eventHasCtrlOrMeta(event) && event.keyCode == 222 /* single quote */)
+    else if (event.keyIdentifier == "F10" || eventHasCtrlOrMeta(event) && event.keyCode == 222 /* single quote */)
         InspectorOverlayHost.stepOver();
 }
 
-Element.prototype.createChild = function(tagName, className)
+function showLayoutEditor(info)
 {
-    var element = createElement(tagName, className);
-    element.addEventListener("click", function(e) { e.stopPropagation(); }, false);
-    this.appendChild(element);
-    return element;
+    var editorElement = document.getElementById("editor");
+    editorElement.style.visibility = "visible";
+    var anchors = info.anchors;
+    for (var i = 0; i < anchors.length; ++i) {
+        var anchorInfo = anchors[i];
+        editorElement.appendChild(createAnchor(anchorInfo));
+        if (anchorInfo.propertyName === window.draggedPropertyName)
+            showLabel(anchorInfo);
+    }
 }
 
-Element.prototype.createTextChild = function(text)
+function createAnchor(anchorInfo)
 {
-    var element = document.createTextNode(text);
-    this.appendChild(element);
-    return element;
+    var handleWidth = 5;
+    context.save();
+    context.shadowColor = "rgba(0, 0, 0, 0.34)";
+    context.shadowBlur = 2;
+    context.fillStyle = anchorColorForProperty(anchorInfo.propertyName);
+    context.beginPath();
+    context.arc(anchorInfo.x, anchorInfo.y, handleWidth, 0, 2 * Math.PI);
+    context.fill();
+    context.restore();
+
+    var anchorElement = document.createElement("div");
+    anchorElement.className = "editor-anchor";
+    anchorElement.style.left = anchorInfo.x - handleWidth + "px";
+    anchorElement.style.top = anchorInfo.y - handleWidth + "px";
+    anchorElement.addEventListener("mousedown", onAnchorMouseDown.bind(null, anchorInfo));
+    anchorElement.addEventListener("mouseenter", onAnchorMouseEnter.bind(null, anchorInfo));
+    anchorElement.addEventListener("mouseleave", onAnchorMouseLeave.bind(null, anchorInfo));
+    return anchorElement;
 }
 
-Element.prototype.removeChildren = function()
+function calculateDelta(deltaVector, moveDelta)
 {
-    if (this.firstChild)
-        this.textContent = "";
+    return (deltaVector.x * moveDelta.x + deltaVector.y * moveDelta.y) / Math.sqrt(deltaVector.x * deltaVector.x + deltaVector.y * deltaVector.y);
 }
 
-function createElement(tagName, className)
+function onAnchorMouseDown(anchorInfo, event)
 {
-    var element = document.createElement(tagName);
-    if (className)
-        element.className = className;
-    return element;
+    // Only drag upon left button. Right will likely cause a context menu. So will ctrl-click on mac.
+    if (event.button || (window.platform == "mac" && event.ctrlKey))
+        return;
+
+    event.preventDefault();
+    window.boundDragMove = onDragMove.bind(null, new Point(event.screenX, event.screenY), anchorInfo.deltaVector);
+    document.addEventListener("mousemove", boundDragMove);
+    document.addEventListener("mouseup", onDragEnd);
+    InspectorOverlayHost.startPropertyChange(anchorInfo.propertyName);
+    window.draggedPropertyName = anchorInfo.propertyName;
+    resetCanvas(labelsCanvas);
+    showLabel(anchorInfo);
 }
 
-String.prototype.trimEnd = function(maxLength)
+function onDragMove(mouseDownPoint, deltaVector, event)
 {
-    if (this.length <= maxLength)
-        return String(this);
-    return this.substr(0, maxLength - 1) + "\u2026";
+    if (event.buttons !== 1) {
+        onDragEnd(event);
+        return;
+    }
+    event.preventDefault();
+    InspectorOverlayHost.changeProperty(calculateDelta(deltaVector, new Point(event.screenX - mouseDownPoint.x, event.screenY - mouseDownPoint.y)));
+}
+
+function showLabel(anchorInfo)
+{
+    var context =  labelsCanvas.getContext("2d");
+    var secondaryColor = "rgba(255, 255, 255, 0.7)";
+    var labelColor = labelColorForProperty(anchorInfo.propertyName);
+    _drawLabel(context, anchorInfo.x, anchorInfo.y, labelColor, [
+        {string: anchorInfo.propertyName + ": ", color: secondaryColor},
+        {string: anchorInfo.propertyValue.value, color: "white"},
+        {string: "\u2009" + anchorInfo.propertyValue.unit, color: secondaryColor}
+    ], anchorInfo.deltaVector.x < 0);
+}
+
+function onDragEnd(event)
+{
+    document.removeEventListener("mousemove", boundDragMove);
+    delete window.boundDragMove;
+    delete window.draggedPropertyName;
+    document.removeEventListener("mouseup", onDragEnd);
+    event.preventDefault();
+    InspectorOverlayHost.endPropertyChange();
+    resetCanvas(labelsCanvas);
+}
+
+function onAnchorMouseEnter(anchorInfo)
+{
+    if (window.draggedPropertyName)
+        return;
+
+    resetCanvas(labelsCanvas);
+    showLabel(anchorInfo);
+}
+
+function onAnchorMouseLeave()
+{
+    if (window.draggedPropertyName)
+        return;
+
+    resetCanvas(labelsCanvas);
+}
+
+function Point(x, y)
+{
+    this.x = x;
+    this.y = y;
+}
+
+function _drawLabel(context, anchorX, anchorY, labelColor, textDescription, toLeft)
+{
+    var paddingX = 6;
+    var paddingY = 4;
+    var borderRadius = 2;
+    var arrowWidth = 6;
+    var offsetX = 6;
+    var fontSize = 10;
+
+    var wholeString = "";
+    for (var part of textDescription)
+        wholeString += part.string;
+
+    context.save();
+    context.font = fontSize + "px Arial, Roboto";
+    
+    var textWidth = context.measureText(wholeString).width;
+    var fullWidth = textWidth + offsetX + arrowWidth + paddingX;
+    var height = fontSize + paddingY;
+    var fitRight = anchorX + fullWidth < viewportSize.width;
+    var fitLeft = anchorX - fullWidth > 0;
+    var mirror = !fitLeft || (!toLeft && fitRight);
+
+    var arrowX = -offsetX;
+    var arrowY = 0;
+    var right = arrowX - arrowWidth;
+    var top = arrowY - height / 2;
+    var bottom = arrowY + height / 2;
+    var left = -fullWidth;
+
+    context.save();
+    context.translate(anchorX, anchorY);
+    if (mirror)
+      context.scale(-1, 1);
+
+    context.fillStyle = labelColor;
+    context.shadowColor = "rgba(0, 0, 0, 0.34)";
+    context.shadowOffsetY = 1;
+    context.shadowBlur = 1;  
+    context.beginPath();
+    context.moveTo(arrowX, arrowY);
+    context.lineTo(right, bottom);
+    context.lineTo(left + borderRadius, bottom);
+    context.quadraticCurveTo(left, bottom, left, bottom - borderRadius);
+    context.lineTo(left, top + borderRadius);
+    context.quadraticCurveTo(left, top, left + borderRadius, top);
+    context.lineTo(right, top);
+    context.lineTo(arrowX, arrowY);
+    context.closePath();
+    context.fill();
+    context.restore();
+
+    var textX = 0;
+    if (mirror) 
+        textX = anchorX - right + paddingX / 2;
+    else
+        textX = anchorX + left + paddingX / 2;
+    
+    var textY = anchorY + top + fontSize;
+    for (var part of textDescription) {
+        context.fillStyle = part.color;
+        context.fillText(part.string, textX, textY);
+        textX += context.measureText(part.string).width;
+    }
+    context.restore();      
+}
+
+function labelColorForProperty(propertyName)
+{
+    return "rgb(91, 181, 0)";
+}
+
+function anchorColorForProperty(propertyName)
+{
+    return "rgb(107, 213, 0)";
 }
 
 window.addEventListener("DOMContentLoaded", onLoaded);
 document.addEventListener("keydown", onDocumentKeyDown);
+
 </script>
 </head>
 <body class="fill">
-</body>
-<canvas id="canvas" class="fill"></canvas>
-<div id="element-title">
-  <span id="tag-name"></span><span id="node-id"></span><span id="class-name"></span>
-  <span id="node-width"></span><span class="px">px</span><span class="px"> &#xD7; </span><span id="node-height"></span><span class="px">px</span>
-</div>
-<div id="tooltip-container"></div>
-<div id="reloading-blanket" class="fill" style="display: none"></div>
 <div class="controls-line">
     <div class="message-box"><div id="paused-in-debugger"></div></div>
     <div class="button" id="resume-button" title="Resume script execution (F8)."><div class="glyph"></div></div>
     <div class="button" id="step-over-button" title="Step over next function call (F10)."><div class="glyph"></div></div>
 </div>
+</body>
+<canvas id="canvas" class="fill"></canvas>
+<canvas id="labels-canvas" class="fill"></canvas>
+<div id="element-title">
+  <span id="tag-name"></span><span id="node-id"></span><span id="class-name"></span>
+  <span id="node-width"></span><span class="px">px</span><span class="px"> &#xD7; </span><span id="node-height"></span><span class="px">px</span>
+</div>
+<div id="editor" class="fill"></div>
 <div id="log"></div>
 </html>

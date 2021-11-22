@@ -1327,25 +1327,27 @@ ScriptValueSerializer::StateBase*
 ScriptValueSerializer::writeWasmCompiledModule(v8::Local<v8::Object> object,
     StateBase* next)
 {
-    CHECK(RuntimeEnabledFeatures::webAssemblySerializationEnabled());
-    // TODO (mtrofin): explore mechanism avoiding data copying / buffer resizing.
-    v8::Local<v8::WasmCompiledModule> wasmModule = object.As<v8::WasmCompiledModule>();
-    v8::Local<v8::String> wireBytes = wasmModule->GetWasmWireBytes();
-    DCHECK(wireBytes->IsOneByte());
-
-    v8::WasmCompiledModule::SerializedModule data = wasmModule->Serialize();
-    m_writer.append(WasmModuleTag);
-    uint32_t wireBytesLength = static_cast<uint32_t>(wireBytes->Length());
-    // We place a tag so we may evolve the format in which we store the
-    // wire bytes. We plan to move them to a blob.
-    // We want to control how we write the string, though, so we explicitly
-    // call writeRawStringBytes.
-    m_writer.append(RawBytesTag);
-    m_writer.doWriteUint32(wireBytesLength);
-    m_writer.ensureSpace(wireBytesLength);
-    m_writer.writeRawStringBytes(wireBytes);
-    m_writer.doWriteUint32(static_cast<uint32_t>(data.second));
-    m_writer.append(data.first.get(), static_cast<int>(data.second));
+//     CHECK(RuntimeEnabledFeatures::webAssemblySerializationEnabled());
+//     // TODO (mtrofin): explore mechanism avoiding data copying / buffer resizing.
+//     v8::Local<v8::WasmCompiledModule> wasmModule = object.As<v8::WasmCompiledModule>();
+//     v8::Local<v8::String> wireBytes = wasmModule->GetWasmWireBytes();
+//     DCHECK(wireBytes->IsOneByte());
+// 
+//     v8::WasmCompiledModule::SerializedModule data = wasmModule->Serialize();
+//     m_writer.append(WasmModuleTag);
+//     uint32_t wireBytesLength = static_cast<uint32_t>(wireBytes->Length());
+//     // We place a tag so we may evolve the format in which we store the
+//     // wire bytes. We plan to move them to a blob.
+//     // We want to control how we write the string, though, so we explicitly
+//     // call writeRawStringBytes.
+//     m_writer.append(RawBytesTag);
+//     m_writer.doWriteUint32(wireBytesLength);
+//     m_writer.ensureSpace(wireBytesLength);
+//     m_writer.writeRawStringBytes(wireBytes);
+//     m_writer.doWriteUint32(static_cast<uint32_t>(data.second));
+//     m_writer.append(data.first.get(), static_cast<int>(data.second));
+//     return nullptr;
+    DebugBreak();
     return nullptr;
 }
 
@@ -1910,7 +1912,7 @@ bool SerializedScriptValueReader::readStringObject(
     v8::Local<v8::Value> stringValue;
     if (!readString(&stringValue) || !stringValue->IsString())
         return false;
-    *value = v8::StringObject::New(stringValue.As<v8::String>());
+    *value = v8::StringObject::New(isolate(), stringValue.As<v8::String>());
     return true;
 }
 
@@ -2065,43 +2067,45 @@ DOMArrayBuffer* SerializedScriptValueReader::doReadArrayBuffer()
 bool SerializedScriptValueReader::readWasmCompiledModule(
     v8::Local<v8::Value>* value)
 {
-    CHECK(RuntimeEnabledFeatures::webAssemblySerializationEnabled());
-    // First, read the tag of the wire bytes.
-    SerializationTag wireBytesFormat = InvalidTag;
-    if (!readTag(&wireBytesFormat))
-        return false;
-    DCHECK(wireBytesFormat == RawBytesTag);
-    // Just like when writing, we don't rely on the default string serialization
-    // mechanics for the wire bytes. We don't even want a string, because
-    // that would lead to a memory copying API implementation on the V8 side.
-    uint32_t wireBytesSize = 0;
-    uint32_t compiledBytesSize = 0;
-    if (!doReadUint32(&wireBytesSize))
-        return false;
-    if (m_position + wireBytesSize > m_length)
-        return false;
-    const uint8_t* wireBytesStart = m_buffer + m_position;
-    m_position += wireBytesSize;
-
-    if (!doReadUint32(&compiledBytesSize))
-        return false;
-    if (m_position + compiledBytesSize > m_length)
-        return false;
-    const uint8_t* compiledBytesStart = m_buffer + m_position;
-    m_position += compiledBytesSize;
-
-    v8::WasmCompiledModule::CallerOwnedBuffer wireBytes = {
-        wireBytesStart, static_cast<size_t>(wireBytesSize)
-    };
-
-    v8::WasmCompiledModule::CallerOwnedBuffer compiledBytes = {
-        compiledBytesStart, static_cast<size_t>(compiledBytesSize)
-    };
-
-    v8::MaybeLocal<v8::WasmCompiledModule> retval = v8::WasmCompiledModule::DeserializeOrCompile(isolate(), compiledBytes,
-        wireBytes);
-
-    return retval.ToLocal(value);
+//     CHECK(RuntimeEnabledFeatures::webAssemblySerializationEnabled());
+//     // First, read the tag of the wire bytes.
+//     SerializationTag wireBytesFormat = InvalidTag;
+//     if (!readTag(&wireBytesFormat))
+//         return false;
+//     DCHECK(wireBytesFormat == RawBytesTag);
+//     // Just like when writing, we don't rely on the default string serialization
+//     // mechanics for the wire bytes. We don't even want a string, because
+//     // that would lead to a memory copying API implementation on the V8 side.
+//     uint32_t wireBytesSize = 0;
+//     uint32_t compiledBytesSize = 0;
+//     if (!doReadUint32(&wireBytesSize))
+//         return false;
+//     if (m_position + wireBytesSize > m_length)
+//         return false;
+//     const uint8_t* wireBytesStart = m_buffer + m_position;
+//     m_position += wireBytesSize;
+// 
+//     if (!doReadUint32(&compiledBytesSize))
+//         return false;
+//     if (m_position + compiledBytesSize > m_length)
+//         return false;
+//     const uint8_t* compiledBytesStart = m_buffer + m_position;
+//     m_position += compiledBytesSize;
+// 
+//     v8::WasmCompiledModule::CallerOwnedBuffer wireBytes = {
+//         wireBytesStart, static_cast<size_t>(wireBytesSize)
+//     };
+// 
+//     v8::WasmCompiledModule::CallerOwnedBuffer compiledBytes = {
+//         compiledBytesStart, static_cast<size_t>(compiledBytesSize)
+//     };
+// 
+//     v8::MaybeLocal<v8::WasmCompiledModule> retval = v8::WasmCompiledModule::DeserializeOrCompile(isolate(), compiledBytes,
+//         wireBytes);
+// 
+//     return retval.ToLocal(value);
+    DebugBreak();
+    return false;
 }
 
 bool SerializedScriptValueReader::readArrayBuffer(v8::Local<v8::Value>* value)

@@ -72,7 +72,8 @@ void WebDevToolsFrontendImpl::didClearWindowObject(WebLocalFrameImpl* frame)
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
         // Use higher limit for DevTools isolate so that it does not OOM when
         // profiling large heaps.
-        isolate->IncreaseHeapLimitForDebugging();
+        //isolate->IncreaseHeapLimitForDebugging();
+
         ScriptState* scriptState = ScriptState::forMainWorld(m_webFrame->frame());
         DCHECK(scriptState);
         ScriptState::Scope scope(scriptState);
@@ -106,6 +107,12 @@ void WebDevToolsFrontendImpl::sendMessageToEmbedder(const String& message)
 {
     if (m_client)
         m_client->sendMessageToEmbedder(message);
+}
+
+void WebDevToolsFrontendImpl::sendMessageToBackend(const String& message)
+{
+    if (m_client)
+        m_client->sendMessageToBackend(message);
 }
 
 bool WebDevToolsFrontendImpl::isUnderTest()

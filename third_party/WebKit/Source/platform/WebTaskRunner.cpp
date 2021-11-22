@@ -129,7 +129,8 @@ TaskHandle::TaskHandle(RefPtr<Runner> runner)
 // crbug.com/679915 for more details.
 void WebTaskRunner::postTask(const WebTraceLocation& location, std::unique_ptr<CrossThreadClosure> task)
 {
-    toSingleThreadTaskRunner()->PostTask(location, base::Bind(&runCrossThreadClosure, base::Passed(&task)));
+    SingleThreadTaskRunner* runner = toSingleThreadTaskRunner();
+    runner->PostTask(location, base::Bind(&runCrossThreadClosure, base::Passed(&task)));
 }
 
 void WebTaskRunner::postDelayedTask(const WebTraceLocation& location, std::unique_ptr<CrossThreadClosure> task, long long delayMs)

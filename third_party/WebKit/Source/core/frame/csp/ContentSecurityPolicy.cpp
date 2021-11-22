@@ -581,37 +581,38 @@ bool checkDigest(const String& source,
     uint8_t hashAlgorithmsUsed,
     const CSPDirectiveListVector& policies)
 {
-    // Any additions or subtractions from this struct should also modify the
-    // respective entries in the kSupportedPrefixes array in
-    // SourceListDirective::parseHash().
-    static const struct {
-        ContentSecurityPolicyHashAlgorithm cspHashAlgorithm;
-        HashAlgorithm algorithm;
-    } kAlgorithmMap[] = {
-        { ContentSecurityPolicyHashAlgorithmSha1, HashAlgorithmSha1 },
-        { ContentSecurityPolicyHashAlgorithmSha256, HashAlgorithmSha256 },
-        { ContentSecurityPolicyHashAlgorithmSha384, HashAlgorithmSha384 },
-        { ContentSecurityPolicyHashAlgorithmSha512, HashAlgorithmSha512 }
-    };
-
-    // Only bother normalizing the source/computing digests if there are any
-    // checks to be done.
-    if (hashAlgorithmsUsed == ContentSecurityPolicyHashAlgorithmNone)
-        return false;
-
-    StringUTF8Adaptor utf8Source(source);
-
-    for (const auto& algorithmMap : kAlgorithmMap) {
-        DigestValue digest;
-        if (algorithmMap.cspHashAlgorithm & hashAlgorithmsUsed) {
-            bool digestSuccess = computeDigest(algorithmMap.algorithm, utf8Source.data(),
-                utf8Source.length(), digest);
-            if (digestSuccess && isAllowedByAll<allowed>(policies, CSPHashValue(algorithmMap.cspHashAlgorithm, digest), type))
-                return true;
-        }
-    }
-
-    return false;
+    return true;
+//     // Any additions or subtractions from this struct should also modify the
+//     // respective entries in the kSupportedPrefixes array in
+//     // SourceListDirective::parseHash().
+//     static const struct {
+//         ContentSecurityPolicyHashAlgorithm cspHashAlgorithm;
+//         HashAlgorithm algorithm;
+//     } kAlgorithmMap[] = {
+//         { ContentSecurityPolicyHashAlgorithmSha1, HashAlgorithmSha1 },
+//         { ContentSecurityPolicyHashAlgorithmSha256, HashAlgorithmSha256 },
+//         { ContentSecurityPolicyHashAlgorithmSha384, HashAlgorithmSha384 },
+//         { ContentSecurityPolicyHashAlgorithmSha512, HashAlgorithmSha512 }
+//     };
+// 
+//     // Only bother normalizing the source/computing digests if there are any
+//     // checks to be done.
+//     if (hashAlgorithmsUsed == ContentSecurityPolicyHashAlgorithmNone)
+//         return false;
+// 
+//     StringUTF8Adaptor utf8Source(source);
+// 
+//     for (const auto& algorithmMap : kAlgorithmMap) {
+//         DigestValue digest;
+//         if (algorithmMap.cspHashAlgorithm & hashAlgorithmsUsed) {
+//             bool digestSuccess = computeDigest(algorithmMap.algorithm, utf8Source.data(),
+//                 utf8Source.length(), digest);
+//             if (digestSuccess && isAllowedByAll<allowed>(policies, CSPHashValue(algorithmMap.cspHashAlgorithm, digest), type))
+//                 return true;
+//         }
+//     }
+// 
+//     return false;
 }
 
 bool ContentSecurityPolicy::allowJavaScriptURLs(
@@ -751,15 +752,13 @@ bool ContentSecurityPolicy::allowScriptFromSource(
 bool ContentSecurityPolicy::allowScriptWithHash(const String& source,
     InlineType type) const
 {
-    return checkDigest<&CSPDirectiveList::allowScriptHash>(
-        source, type, m_scriptHashAlgorithmsUsed, m_policies);
+    return checkDigest<&CSPDirectiveList::allowScriptHash>(source, type, m_scriptHashAlgorithmsUsed, m_policies);
 }
 
 bool ContentSecurityPolicy::allowStyleWithHash(const String& source,
     InlineType type) const
 {
-    return checkDigest<&CSPDirectiveList::allowStyleHash>(
-        source, type, m_styleHashAlgorithmsUsed, m_policies);
+    return checkDigest<&CSPDirectiveList::allowStyleHash>(source, type, m_styleHashAlgorithmsUsed, m_policies);
 }
 
 bool ContentSecurityPolicy::allowRequestWithoutIntegrity(

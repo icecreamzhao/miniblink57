@@ -28,6 +28,7 @@
 #define ShapeCache_h
 
 #include "platform/fonts/shaping/ShapeResult.h"
+#include "platform/fonts/shaping/ShapeResultInlineHeaders.h"
 #include "platform/text/TextRun.h"
 #include "wtf/Forward.h"
 #include "wtf/HashFunctions.h"

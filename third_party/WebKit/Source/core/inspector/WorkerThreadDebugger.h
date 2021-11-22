@@ -77,7 +77,11 @@ private:
     v8::MaybeLocal<v8::Value> memoryInfo(v8::Isolate*,
         v8::Local<v8::Context>) override;
     void consoleAPIMessage(int contextGroupId,
+#if V8_MAJOR_VERSION < 7
         v8_inspector::V8ConsoleAPIType,
+#else
+        v8::Isolate::MessageErrorLevel,
+#endif
         const v8_inspector::StringView& message,
         const v8_inspector::StringView& url,
         unsigned lineNumber,

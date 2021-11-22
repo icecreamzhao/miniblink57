@@ -196,31 +196,19 @@ bool V0CustomElementConstructorBuilder::createConstructor(
         v8Type = v8::Null(isolate);
 
     v8::Local<v8::Object> data = v8::Object::New(isolate);
-    V8HiddenValue::setHiddenValue(m_scriptState.get(), data,
-        V8HiddenValue::customElementDocument(isolate),
-        ToV8(document, context->Global(), isolate));
-    V8HiddenValue::setHiddenValue(
-        m_scriptState.get(), data,
-        V8HiddenValue::customElementNamespaceURI(isolate),
-        v8String(isolate, descriptor.namespaceURI()));
-    V8HiddenValue::setHiddenValue(m_scriptState.get(), data,
-        V8HiddenValue::customElementTagName(isolate),
-        v8TagName);
-    V8HiddenValue::setHiddenValue(m_scriptState.get(), data,
-        V8HiddenValue::customElementType(isolate),
-        v8Type);
+    V8HiddenValue::setHiddenValue(m_scriptState.get(), data, V8HiddenValue::customElementDocument(isolate), ToV8(document, context->Global(), isolate));
+    V8HiddenValue::setHiddenValue(m_scriptState.get(), data, V8HiddenValue::customElementNamespaceURI(isolate), v8String(isolate, descriptor.namespaceURI()));
+    V8HiddenValue::setHiddenValue(m_scriptState.get(), data, V8HiddenValue::customElementTagName(isolate), v8TagName);
+    V8HiddenValue::setHiddenValue(m_scriptState.get(), data, V8HiddenValue::customElementType(isolate), v8Type);
 
     v8::Local<v8::FunctionTemplate> constructorTemplate = v8::FunctionTemplate::New(isolate);
     constructorTemplate->SetCallHandler(constructCustomElement, data);
     if (!constructorTemplate->GetFunction(context).ToLocal(&m_constructor)) {
-        V0CustomElementException::throwException(
-            V0CustomElementException::ContextDestroyedRegisteringDefinition,
-            definition->descriptor().type(), exceptionState);
+        V0CustomElementException::throwException(V0CustomElementException::ContextDestroyedRegisteringDefinition, definition->descriptor().type(), exceptionState);
         return false;
     }
 
-    m_constructor->SetName(v8Type->IsNull() ? v8TagName
-                                            : v8Type.As<v8::String>());
+    m_constructor->SetName(v8Type->IsNull() ? v8TagName : v8Type.As<v8::String>());
 
     v8::Local<v8::String> prototypeKey = v8String(isolate, "prototype");
     if (!v8CallBoolean(m_constructor->HasOwnProperty(context, prototypeKey)))
@@ -243,17 +231,11 @@ bool V0CustomElementConstructorBuilder::createConstructor(
     if (!m_prototype->Get(context, constructorKey).ToLocal(&constructorPrototype))
         return false;
 
-    if (!v8CallBoolean(
-            m_constructor->SetPrototype(context, constructorPrototype)))
+    if (!v8CallBoolean(m_constructor->SetPrototype(context, constructorPrototype)))
         return false;
 
-    V8HiddenValue::setHiddenValue(
-        m_scriptState.get(), m_prototype,
-        V8HiddenValue::customElementIsInterfacePrototypeObject(isolate),
-        v8::True(isolate));
-    if (!v8CallBoolean(m_prototype->DefineOwnProperty(
-            context, v8String(isolate, "constructor"), m_constructor,
-            v8::DontEnum)))
+    V8HiddenValue::setHiddenValue(m_scriptState.get(), m_prototype, V8HiddenValue::customElementIsInterfacePrototypeObject(isolate), v8::True(isolate));
+    if (!v8CallBoolean(m_prototype->DefineOwnProperty(context, v8String(isolate, "constructor"), m_constructor, v8::DontEnum)))
         return false;
 
     return true;
@@ -264,20 +246,14 @@ bool V0CustomElementConstructorBuilder::prototypeIsValid(
     ExceptionState& exceptionState) const
 {
     if (m_prototype->InternalFieldCount() || !V8HiddenValue::getHiddenValue(m_scriptState.get(), m_prototype, V8HiddenValue::customElementIsInterfacePrototypeObject(m_scriptState->isolate())).IsEmpty()) {
-        V0CustomElementException::throwException(
-            V0CustomElementException::PrototypeInUse, type, exceptionState);
+        V0CustomElementException::throwException(V0CustomElementException::PrototypeInUse, type, exceptionState);
         return false;
     }
 
     v8::PropertyAttribute propertyAttribute;
-    if (!v8Call(m_prototype->GetPropertyAttributes(
-                    m_scriptState->context(),
-                    v8String(m_scriptState->isolate(), "constructor")),
-            propertyAttribute)
-        || (propertyAttribute & v8::DontDelete)) {
-        V0CustomElementException::throwException(
-            V0CustomElementException::ConstructorPropertyNotConfigurable, type,
-            exceptionState);
+    if (!v8Call(m_prototype->GetPropertyAttributes(m_scriptState->context(), v8String(m_scriptState->isolate(), "constructor")), propertyAttribute) || 
+        (propertyAttribute & v8::DontDelete)) {
+        V0CustomElementException::throwException(V0CustomElementException::ConstructorPropertyNotConfigurable, type, exceptionState);
         return false;
     }
 
@@ -288,8 +264,7 @@ bool V0CustomElementConstructorBuilder::didRegisterDefinition() const
 {
     ASSERT(!m_constructor.IsEmpty());
 
-    return m_callbacks->setBinding(
-        V0CustomElementBinding::create(m_scriptState->isolate(), m_prototype));
+    return m_callbacks->setBinding(V0CustomElementBinding::create(m_scriptState->isolate(), m_prototype));
 }
 
 ScriptValue V0CustomElementConstructorBuilder::bindingsReturnValue() const
@@ -320,37 +295,24 @@ static void constructCustomElement(
     v8::Isolate* isolate = info.GetIsolate();
 
     if (!info.IsConstructCall()) {
-        V8ThrowException::throwTypeError(
-            isolate, "DOM object constructor cannot be called as a function.");
+        V8ThrowException::throwTypeError(isolate, "DOM object constructor cannot be called as a function.");
         return;
     }
 
     if (info.Length() > 0) {
-        V8ThrowException::throwTypeError(
-            isolate, "This constructor should be called without arguments.");
+        V8ThrowException::throwTypeError(isolate, "This constructor should be called without arguments.");
         return;
     }
 
     ScriptState* scriptState = ScriptState::current(isolate);
     v8::Local<v8::Object> data = v8::Local<v8::Object>::Cast(info.Data());
-    Document* document = V8Document::toImpl(
-        V8HiddenValue::getHiddenValue(
-            scriptState, data, V8HiddenValue::customElementDocument(isolate))
-            .As<v8::Object>());
-    TOSTRING_VOID(V8StringResource<>, namespaceURI,
-        V8HiddenValue::getHiddenValue(
-            scriptState, data,
-            V8HiddenValue::customElementNamespaceURI(isolate)));
-    TOSTRING_VOID(
-        V8StringResource<>, tagName,
-        V8HiddenValue::getHiddenValue(
-            scriptState, data, V8HiddenValue::customElementTagName(isolate)));
-    v8::Local<v8::Value> maybeType = V8HiddenValue::getHiddenValue(
-        scriptState, data, V8HiddenValue::customElementType(isolate));
+    Document* document = V8Document::toImpl(V8HiddenValue::getHiddenValue(scriptState, data, V8HiddenValue::customElementDocument(isolate)).As<v8::Object>());
+    TOSTRING_VOID(V8StringResource<>, namespaceURI, V8HiddenValue::getHiddenValue(scriptState, data, V8HiddenValue::customElementNamespaceURI(isolate)));
+    TOSTRING_VOID(V8StringResource<>, tagName, V8HiddenValue::getHiddenValue(scriptState, data, V8HiddenValue::customElementTagName(isolate)));
+    v8::Local<v8::Value> maybeType = V8HiddenValue::getHiddenValue(scriptState, data, V8HiddenValue::customElementType(isolate));
     TOSTRING_VOID(V8StringResource<>, type, maybeType);
 
-    ExceptionState exceptionState(
-        info.GetIsolate(), ExceptionState::ConstructionContext, "CustomElement");
+    ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CustomElement");
     V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
     Element* element = document->createElementNS(
         namespaceURI, tagName,

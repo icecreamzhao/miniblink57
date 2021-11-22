@@ -33,7 +33,7 @@
 
 #include "WebCommon.h"
 #include "WebString.h"
-//#include "url/third_party/mozilla/url_parse.h"
+#include "url/third_party/mozilla/url_parse.h"
 #include "third_party/WebKit/public/platform/WebCString.h"
 
 #if !INSIDE_BLINK
@@ -53,21 +53,9 @@ public:
     {
     }
 
-    WebURL(const WebURL& url)
-        : m_string(url.m_string)
-        ,
-        //m_parsed(url.m_parsed),
-        m_isValid(url.m_isValid)
-    {
-    }
+    WebURL(const WebURL& url);
 
-    WebURL& operator=(const WebURL& url)
-    {
-        m_string = url.m_string;
-        //m_parsed = url.m_parsed;
-        m_isValid = url.m_isValid;
-        return *this;
-    }
+    WebURL& operator=(const WebURL& url);
 
     const WebString& string() const { return m_string; }
 
@@ -78,7 +66,7 @@ public:
         return WebCString(spec.data(), spec.length());
     }
 
-    //const url::Parsed& parsed() const { return m_parsed; }
+    const url::Parsed& parsed() const { return m_parsed; }
 
     bool isValid() const { return m_isValid; }
 
@@ -93,6 +81,15 @@ public:
     BLINK_PLATFORM_EXPORT WebURL& operator=(const KURL&);
     BLINK_PLATFORM_EXPORT operator KURL() const;
 #else
+//     WebURL(const GURL& url);
+//     WebURL& operator=(const GURL& url);
+//     operator GURL() const;
+    operator GURL() const
+    {
+        //return isNull() ? GURL() : GURL(m_string.utf8(), m_parsed, m_isValid);
+        return isNull() ? GURL() : GURL(m_string.utf8());
+    }
+
     WebURL(const GURL& url)
         : m_string(WebString::fromUTF8(url.possibly_invalid_spec()))
         ,
@@ -106,17 +103,14 @@ public:
         m_string = WebString::fromUTF8(url.possibly_invalid_spec());
         //m_parsed = url.parsed_for_possibly_invalid_spec();
         m_isValid = url.is_valid();
+
         return *this;
     }
-
-//   operator GURL() const {
-//     return isNull() ? GURL() : GURL(m_string.utf8(), m_parsed, m_isValid);
-//   }
 #endif
 
 private:
     WebString m_string;
-    //url::Parsed m_parsed;
+    url::Parsed m_parsed;
     bool m_isValid;
 };
 

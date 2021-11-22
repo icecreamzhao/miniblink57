@@ -176,9 +176,8 @@ public:
     template <typename T>
     ALWAYS_INLINE void markAndPushToMarkingDeque(const T* traceable) const
     {
-        if (pushToMarkingDeque(TraceTrait<T>::traceMarkedWrapper,
-                TraceTrait<T>::heapObjectHeader,
-                WrapperVisitor::missedWriteBarrier<T>, traceable)) {
+        if (pushToMarkingDeque(TraceTrait<T>::traceMarkedWrapper, TraceTrait<T>::trace,
+            TraceTrait<T>::heapObjectHeader, WrapperVisitor::missedWriteBarrier<T>, traceable)) {
             TraceTrait<T>::markWrapperNoTracing(this, traceable);
         }
     }
@@ -187,6 +186,7 @@ protected:
     // Returns true if pushing to the marking deque was successful.
     virtual bool pushToMarkingDeque(
         void (*traceWrappersCallback)(const WrapperVisitor*, const void*),
+        void (*traceCallback)(Visitor*, void*),
         HeapObjectHeader* (*heapObjectHeaderCallback)(const void*),
         void (*missedWriteBarrierCallback)(void),
         const void*) const = 0;

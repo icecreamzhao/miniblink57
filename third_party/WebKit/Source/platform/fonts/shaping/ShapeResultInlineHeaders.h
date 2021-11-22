@@ -46,62 +46,33 @@ class SimpleFontData;
 class HarfBuzzShaper;
 
 struct HarfBuzzRunGlyphData {
-    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     uint16_t glyph;
     uint16_t characterIndex;
     float advance;
     FloatSize offset;
 };
 
-enum AdjustMidCluster { AdjustToStart,
-    AdjustToEnd };
-
 struct ShapeResult::RunInfo {
-    USING_FAST_MALLOC(RunInfo);
-
-public:
-#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     RunInfo(const SimpleFontData* font, hb_direction_t dir, hb_script_t script,
         unsigned startIndex, unsigned numGlyphs, unsigned numCharacters)
-        : m_fontData(const_cast<SimpleFontData*>(font))
-        , m_direction(dir)
-        , m_script(script)
-        , m_glyphData(numGlyphs)
-        , m_startIndex(startIndex)
-        , m_numCharacters(numCharacters)
-        , m_width(0.0f)
+        : m_fontData(font), m_direction(dir), m_script(script)
+        , m_startIndex(startIndex), m_numCharacters(numCharacters)
+        , m_numGlyphs(numGlyphs)
     {
+        m_glyphData.resize(m_numGlyphs);
     }
 
-    RunInfo(const RunInfo& other)
-        : m_fontData(other.m_fontData)
-        , m_direction(other.m_direction)
-        , m_script(other.m_script)
-        , m_glyphData(other.m_glyphData)
-        , m_startIndex(other.m_startIndex)
-        , m_numCharacters(other.m_numCharacters)
-        , m_width(other.m_width)
-    {
-    }
-#endif
-
-#if 1 // def MINIBLINK_NOT_IMPLEMENTED
-    bool rtl() const
-    {
-        return HB_DIRECTION_IS_BACKWARD(m_direction);
-    }
-#else
-    bool rtl() const
-    {
-        return false;
-    }
-#endif
-
-    float xPositionForVisualOffset(unsigned, AdjustMidCluster) const;
-    float xPositionForOffset(unsigned, AdjustMidCluster) const;
-    int characterIndexForXPosition(float, bool includePartialGlyphs) const;
+    bool rtl() const { return HB_DIRECTION_IS_BACKWARD(m_direction); }
+    float xPositionForVisualOffset(unsigned offset) const;
+    float xPositionForOffset(unsigned) const;
+    int characterIndexForXPosition(float) const;
     void setGlyphAndPositions(unsigned index, uint16_t glyphId, float advance,
         float offsetX, float offsetY);
+
+    void addAdvance(unsigned index, float advance)
+    {
+        m_glyphData[index].advance += advance;
+    }
 
     size_t glyphToCharacterIndex(size_t i) const
     {
@@ -114,17 +85,97 @@ public:
         return sizeof(this) + m_glyphData.size() * sizeof(HarfBuzzRunGlyphData);
     }
 
-    RefPtr<SimpleFontData> m_fontData;
-#if 1 // def MINIBLINK_NOT_IMPLEMENTED
+    const SimpleFontData* m_fontData;
     hb_direction_t m_direction;
     hb_script_t m_script;
-#endif
     Vector<HarfBuzzRunGlyphData> m_glyphData;
     unsigned m_startIndex;
     unsigned m_numCharacters;
+    unsigned m_numGlyphs;
     float m_width;
 };
 
+// 
+// struct HarfBuzzRunGlyphData {
+//     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+//     uint16_t glyph;
+//     uint16_t characterIndex;
+//     float advance;
+//     FloatSize offset;
+// };
+// 
+// enum AdjustMidCluster { AdjustToStart,
+//     AdjustToEnd };
+// 
+// struct ShapeResult::RunInfo {
+//     USING_FAST_MALLOC(RunInfo);
+// 
+// public:
+// #if 1 // def MINIBLINK_NOT_IMPLEMENTED
+//     RunInfo(const SimpleFontData* font, hb_direction_t dir, hb_script_t script,
+//         unsigned startIndex, unsigned numGlyphs, unsigned numCharacters)
+//         : m_fontData(const_cast<SimpleFontData*>(font))
+//         , m_direction(dir)
+//         , m_script(script)
+//         , m_glyphData(numGlyphs)
+//         , m_startIndex(startIndex)
+//         , m_numCharacters(numCharacters)
+//         , m_width(0.0f)
+//     {
+//     }
+// 
+//     RunInfo(const RunInfo& other)
+//         : m_fontData(other.m_fontData)
+//         , m_direction(other.m_direction)
+//         , m_script(other.m_script)
+//         , m_glyphData(other.m_glyphData)
+//         , m_startIndex(other.m_startIndex)
+//         , m_numCharacters(other.m_numCharacters)
+//         , m_width(other.m_width)
+//     {
+//     }
+// #endif
+// 
+// #if 1 // def MINIBLINK_NOT_IMPLEMENTED
+//     bool rtl() const
+//     {
+//         return HB_DIRECTION_IS_BACKWARD(m_direction);
+//     }
+// #else
+//     bool rtl() const
+//     {
+//         return false;
+//     }
+// #endif
+// 
+//     float xPositionForVisualOffset(unsigned, AdjustMidCluster) const;
+//     float xPositionForOffset(unsigned, AdjustMidCluster) const;
+//     int characterIndexForXPosition(float, bool includePartialGlyphs) const;
+//     void setGlyphAndPositions(unsigned index, uint16_t glyphId, float advance,
+//         float offsetX, float offsetY);
+// 
+//     size_t glyphToCharacterIndex(size_t i) const
+//     {
+//         return m_startIndex + m_glyphData[i].characterIndex;
+//     }
+// 
+//     // For memory reporting.
+//     size_t byteSize() const
+//     {
+//         return sizeof(this) + m_glyphData.size() * sizeof(HarfBuzzRunGlyphData);
+//     }
+// 
+//     RefPtr<SimpleFontData> m_fontData;
+// #if 1 // def MINIBLINK_NOT_IMPLEMENTED
+//     hb_direction_t m_direction;
+//     hb_script_t m_script;
+// #endif
+//     Vector<HarfBuzzRunGlyphData> m_glyphData;
+//     unsigned m_startIndex;
+//     unsigned m_numCharacters;
+//     float m_width;
+// };
+// 
 } // namespace blink
 
 #endif // ShapeResultInlineHeaders_h

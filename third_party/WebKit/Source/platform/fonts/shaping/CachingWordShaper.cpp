@@ -53,7 +53,7 @@ float CachingWordShaper::width(const Font* font, const TextRun& run,
             }
             width += wordResult->width();
             if (fallbackFonts)
-                wordResult->fallbackFonts(fallbackFonts);
+                wordResult->fallbackFonts(fallbackFonts, font->primaryFont());
         }
     }
 
@@ -71,7 +71,7 @@ static inline float shapeResultsForRun(ShapeCache* shapeCache, const Font* font,
         if (wordResult) {
             totalWidth += wordResult->width();
             if (fallbackFonts)
-                wordResult->fallbackFonts(fallbackFonts);
+                wordResult->fallbackFonts(fallbackFonts, font->primaryFont());
             resultsBuffer->appendResult(wordResult.release());
         }
     }

@@ -2306,9 +2306,11 @@ InspectorDOMAgent::resolveNode(Node* node, const String& objectGroup)
         return nullptr;
 
     ScriptState::Scope scope(scriptState);
-    return m_v8Session->wrapObject(scriptState->context(),
-        nodeV8Value(scriptState->context(), node),
-        toV8InspectorStringView(objectGroup));
+    return m_v8Session->wrapObject(scriptState->context(),nodeV8Value(scriptState->context(), node), toV8InspectorStringView(objectGroup)
+#if V8_MAJOR_VERSION >= 7
+        , false
+#endif
+    );
 }
 
 Response InspectorDOMAgent::pushDocumentUponHandlelessOperation()

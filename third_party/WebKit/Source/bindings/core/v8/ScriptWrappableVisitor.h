@@ -24,11 +24,13 @@ class TraceWrapperV8Reference;
 
 class WrapperMarkingData {
 public:
-    WrapperMarkingData(void (*traceWrappersCallback)(const WrapperVisitor*,
-                           const void*),
+    WrapperMarkingData(
+        void (*traceWrappersCallback)(const WrapperVisitor*, const void*),
+        void (*traceCallback)(Visitor*, void*),
         HeapObjectHeader* (*heapObjectHeaderCallback)(const void*),
         const void* object)
         : m_traceWrappersCallback(traceWrappersCallback)
+        , m_traceCallback(traceCallback)
         , m_heapObjectHeaderCallback(heapObjectHeaderCallback)
         , m_rawObjectPointer(object)
     {
@@ -41,6 +43,13 @@ public:
     {
         if (m_rawObjectPointer) {
             m_traceWrappersCallback(visitor, m_rawObjectPointer);
+        }
+    }
+
+    inline void trace(Visitor* visitor)
+    {
+        if (m_rawObjectPointer) {
+            m_traceCallback(visitor, const_cast<void*>(m_rawObjectPointer));
         }
     }
 
@@ -68,6 +77,7 @@ private:
     }
 
     void (*m_traceWrappersCallback)(const WrapperVisitor*, const void*);
+    void (*m_traceCallback)(Visitor*, void*);
     HeapObjectHeader* (*m_heapObjectHeaderCallback)(const void*);
     const void* m_rawObjectPointer;
 
@@ -81,13 +91,15 @@ private:
 // repeatedly it will call AdvanceTracing, and at the end it will call
 // TraceEpilogue. Everytime V8 finds new wrappers, it will let the tracer
 // know using RegisterV8References.
-class CORE_EXPORT ScriptWrappableVisitor : public v8::EmbedderHeapTracer,
-                                           public WrapperVisitor {
+class CORE_EXPORT ScriptWrappableVisitor 
+    : public v8::EmbedderHeapTracer
+    , public WrapperVisitor
+    // , public Visitor 
+{
     DISALLOW_IMPLICIT_CONSTRUCTORS(ScriptWrappableVisitor);
 
 public:
-    ScriptWrappableVisitor(v8::Isolate* isolate)
-        : m_isolate(isolate) {};
+    ScriptWrappableVisitor(v8::Isolate* isolate);
     ~ScriptWrappableVisitor() override;
 
     // Replace all dead objects in the marking deque with nullptr after oilpan
@@ -139,15 +151,36 @@ public:
         visitor->markAndPushToMarkingDeque(dstObject);
     }
 
-    void RegisterV8References(const std::vector<std::pair<void*, void*>>&
-            internalFieldsOfPotentialWrappers) override;
+    void RegisterV8References(const std::vector<std::pair<void*, void*>>& internalFieldsOfPotentialWrappers) override;
     void RegisterV8Reference(const std::pair<void*, void*>& internalFields);
-    bool AdvanceTracing(double deadlineInMs,
-        v8::EmbedderHeapTracer::AdvanceTracingActions) override;
+    bool AdvanceTracing(double deadlineInMs
+#if V8_MAJOR_VERSION < 7
+        , v8::EmbedderHeapTracer::AdvanceTracingActions
+#endif
+    ) override;
     void TraceEpilogue() override;
-    void AbortTracing() override;
-    void EnterFinalPause() override;
+    void AbortTracing() /*override*/;
+    void EnterFinalPause() /*override*/;
     size_t NumberOfWrappersToTrace() /*override*/;
+
+#if V8_MAJOR_VERSION >= 7
+    bool IsTracingDone(void) override;
+    void EnterFinalPause(v8::EmbedderHeapTracer::EmbedderStackState) override;
+#endif
+
+    // Visitor
+//     virtual void mark(const void*, TraceCallback) override;
+//     virtual void markHeader(HeapObjectHeader*, TraceCallback) override;
+//     virtual void registerDelayedMarkNoTracing(const void*) override;
+//     virtual void registerWeakMembers(const void*, const void*, WeakCallback) override;
+//     virtual void registerWeakTable(const void*, EphemeronCallback, EphemeronCallback) override;
+// #if DCHECK_IS_ON()
+//     virtual bool weakTableRegistered(const void*) override;
+// #endif
+//     virtual bool ensureMarked(const void*) override;
+//     virtual void registerMovingObjectReference(MovableReference*) override;
+//     virtual void registerMovingObjectCallback(MovableReference, MovingObjectCallback, void*) override;
+//     virtual void registerWeakCellWithCallback(void**, WeakCallback) override;
 
     void dispatchTraceWrappers(const TraceWrapperBase*) const override;
 #define DECLARE_DISPATCH_TRACE_WRAPPERS(className) \
@@ -178,26 +211,13 @@ public:
         return &m_headersToUnmark;
     }
 
-protected:
+protected:    
     bool pushToMarkingDeque(
         void (*traceWrappersCallback)(const WrapperVisitor*, const void*),
+        void (*trace)(Visitor*, void*),
         HeapObjectHeader* (*heapObjectHeaderCallback)(const void*),
         void (*missedWriteBarrierCallback)(void),
-        const void* object) const override
-    {
-        if (!m_tracingInProgress)
-            return false;
-
-        m_markingDeque.append(WrapperMarkingData(traceWrappersCallback,
-            heapObjectHeaderCallback, object));
-#if DCHECK_IS_ON()
-        if (!m_advancingTracing) {
-            m_verifierDeque.append(WrapperMarkingData(
-                traceWrappersCallback, heapObjectHeaderCallback, object));
-        }
-#endif
-        return true;
-    }
+        const void* object) const override;
 
 private:
     // Returns true if wrapper tracing is currently in progress, i.e.,
@@ -251,6 +271,8 @@ private:
     //   invalidateDeadObjectsInMarkingDeque.
     mutable WTF::Vector<HeapObjectHeader*> m_headersToUnmark;
     v8::Isolate* m_isolate;
+
+    bool m_isTracingDone;
 };
 
 } // namespace blink

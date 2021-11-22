@@ -102,7 +102,11 @@ private:
     bool canExecuteScripts(int contextGroupId) override;
     void runIfWaitingForDebugger(int contextGroupId) override;
     void consoleAPIMessage(int contextGroupId,
+#if V8_MAJOR_VERSION < 7
         v8_inspector::V8ConsoleAPIType,
+#else
+        v8::Isolate::MessageErrorLevel,
+#endif
         const v8_inspector::StringView& message,
         const v8_inspector::StringView& url,
         unsigned lineNumber,

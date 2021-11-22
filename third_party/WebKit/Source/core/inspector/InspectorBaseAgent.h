@@ -33,7 +33,7 @@
 
 #include "core/CoreExport.h"
 #include "core/InstrumentingAgents.h"
-//#include "core/inspector/protocol/Protocol.h"
+#include "core/inspector/protocol/Protocol.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/text/WTFString.h"
@@ -56,26 +56,24 @@ public:
     virtual void didCommitLoadForLocalFrame(LocalFrame*) { }
     virtual void flushPendingProtocolNotifications() { }
 
-    virtual void init(InstrumentingAgents*,
-        protocol::UberDispatcher*,
-        protocol::DictionaryValue*)
-        = 0;
+    virtual void init(InstrumentingAgents*, protocol::UberDispatcher*, protocol::DictionaryValue*) = 0;
     virtual void dispose() = 0;
 };
 
 template <typename DomainMetainfo>
-class InspectorBaseAgent : public InspectorAgent,
-                           public DomainMetainfo::BackendClass {
+class InspectorBaseAgent : public InspectorAgent
+    , public DomainMetainfo::BackendClass 
+{
 public:
     ~InspectorBaseAgent() override { }
 
     void init(InstrumentingAgents* instrumentingAgents,
         protocol::UberDispatcher* dispatcher,
-        protocol::DictionaryValue* state) override
+        protocol::DictionaryValue* state
+        ) override
     {
         m_instrumentingAgents = instrumentingAgents;
-        m_frontend.reset(
-            new typename DomainMetainfo::FrontendClass(dispatcher->channel()));
+        m_frontend.reset(new typename DomainMetainfo::FrontendClass(dispatcher->channel()));
         DomainMetainfo::DispatcherClass::wire(dispatcher, this);
 
         m_state = state->getObject(DomainMetainfo::domainName);

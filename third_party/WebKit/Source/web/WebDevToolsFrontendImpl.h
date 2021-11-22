@@ -54,7 +54,8 @@ public:
     void didClearWindowObject(WebLocalFrameImpl*);
 
     void sendMessageToEmbedder(const WTF::String&) override;
-
+    void sendMessageToBackend(const WTF::String&) override;
+    
     bool isUnderTest() override;
 
     void showContextMenu(LocalFrame*,

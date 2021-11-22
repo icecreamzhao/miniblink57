@@ -212,7 +212,11 @@ void WorkerThreadDebugger::runIfWaitingForDebugger(int contextGroupId)
 
 void WorkerThreadDebugger::consoleAPIMessage(
     int contextGroupId,
+#if V8_MAJOR_VERSION < 7
     v8_inspector::V8ConsoleAPIType type,
+#else
+    v8::Isolate::MessageErrorLevel type,
+#endif
     const v8_inspector::StringView& message,
     const v8_inspector::StringView& url,
     unsigned lineNumber,
@@ -222,8 +226,9 @@ void WorkerThreadDebugger::consoleAPIMessage(
     DCHECK(m_workerThreads.contains(contextGroupId));
     WorkerThread* workerThread = m_workerThreads.get(contextGroupId);
 
-    if (type == v8_inspector::V8ConsoleAPIType::kClear)
-        workerThread->consoleMessageStorage()->clear();
+//     if (type == v8::Isolate::kMessageClear)
+//         workerThread->consoleMessageStorage()->clear();
+
     std::unique_ptr<SourceLocation> location = SourceLocation::create(toCoreString(url), lineNumber, columnNumber,
         stackTrace ? stackTrace->clone() : nullptr, 0);
     workerThread->workerReportingProxy().reportConsoleMessage(

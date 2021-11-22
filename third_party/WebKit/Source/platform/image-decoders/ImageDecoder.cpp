@@ -118,7 +118,7 @@ std::unique_ptr<ImageDecoder> ImageDecoder::create(
         //decoder.reset(new WEBPImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
         break;
     case SniffResult::ICO:
-        //decoder.reset(new ICOImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
+        decoder.reset(new ICOImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
         break;
     case SniffResult::BMP:
         decoder.reset(new BMPImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));

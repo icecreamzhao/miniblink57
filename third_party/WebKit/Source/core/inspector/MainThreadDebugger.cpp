@@ -319,7 +319,11 @@ void MainThreadDebugger::runIfWaitingForDebugger(int contextGroupId)
 
 void MainThreadDebugger::consoleAPIMessage(
     int contextGroupId,
+#if V8_MAJOR_VERSION < 7
     v8_inspector::V8ConsoleAPIType type,
+#else
+    v8::Isolate::MessageErrorLevel type,
+#endif
     const v8_inspector::StringView& message,
     const v8_inspector::StringView& url,
     unsigned lineNumber,
@@ -329,8 +333,9 @@ void MainThreadDebugger::consoleAPIMessage(
     LocalFrame* frame = WeakIdentifierMap<LocalFrame>::lookup(contextGroupId);
     if (!frame)
         return;
-    if (type == v8_inspector::V8ConsoleAPIType::kClear && frame->host())
-        frame->host()->consoleMessageStorage().clear();
+//     if (type == v8_inspector::V8ConsoleAPIType::kClear && frame->host())
+//         frame->host()->consoleMessageStorage().clear();
+
     // TODO(dgozman): we can save a copy of message and url here by making
     // FrameConsole work with StringView.
     std::unique_ptr<SourceLocation> location = SourceLocation::create(toCoreString(url), lineNumber, columnNumber,
@@ -338,6 +343,85 @@ void MainThreadDebugger::consoleAPIMessage(
     frame->console().reportMessageToClient(ConsoleAPIMessageSource,
         consoleAPITypeToMessageLevel(type),
         toCoreString(message), location.get());
+
+    //--
+
+    String messageStr = String::format("console:[%d] [", lineNumber);
+
+    if (message.is8Bit())
+        messageStr.append(StringView((const char*)message.characters8(), message.length()));
+    else
+        messageStr.append(StringView((const UChar*)message.characters16(), message.length()));
+
+    messageStr.append("][");
+
+    if (stackTrace) {
+        std::unique_ptr<v8_inspector::StringBuffer> stackBuf = stackTrace->toString();
+        v8_inspector::StringView stackView = stackBuf->string();
+
+        if (stackView.is8Bit())
+            messageStr.append(StringView((const char*)stackView.characters8(), stackView.length()));
+        else
+            messageStr.append(StringView((const UChar*)stackView.characters16(), stackView.length()));
+    }
+
+    messageStr.append("]\n");
+    //OutputDebugStringW(messageStr.charactersWithNullTermination().data());
+
+    if (kNotFound != messageStr.find("__callstack__")) {
+        const v8::StackTrace::StackTraceOptions options = static_cast<v8::StackTrace::StackTraceOptions>(
+            v8::StackTrace::kLineNumber
+            | v8::StackTrace::kColumnOffset
+            | v8::StackTrace::kScriptId
+            | v8::StackTrace::kScriptNameOrSourceURL
+            | v8::StackTrace::kFunctionName);
+
+        int stackNum = 50;
+        v8::HandleScope handleScope(m_isolate);
+        v8::Local<v8::StackTrace> stackTrace(v8::StackTrace::CurrentStackTrace(m_isolate, stackNum, options));
+        int count = stackTrace->GetFrameCount();
+
+        char* output = (char*)malloc(0x100);
+        sprintf(output, "MainThreadDebugger::consoleAPIMessage: %d\n", count);
+        OutputDebugStringA(output);
+        free(output);
+
+        for (int i = 0; i < count; ++i) {
+            v8::Local<v8::StackFrame> stackFrame = stackTrace->GetFrame(m_isolate, i);
+            int frameCount = stackTrace->GetFrameCount();
+            int line = stackFrame->GetLineNumber();
+            v8::Local<v8::String> scriptName = stackFrame->GetScriptNameOrSourceURL();
+            v8::Local<v8::String> funcName = stackFrame->GetFunctionName();
+
+            std::string scriptNameWTF;
+            std::string funcNameWTF;
+
+            if (!scriptName.IsEmpty()) {
+                v8::String::Utf8Value scriptNameUtf8(scriptName);
+                scriptNameWTF = *scriptNameUtf8;
+            }
+
+            if (!funcName.IsEmpty()) {
+                v8::String::Utf8Value funcNameUtf8(funcName);
+                funcNameWTF = *funcNameUtf8;
+            }
+            std::vector<char> output;
+            output.resize(1000);
+            sprintf(&output[0], "line:%d, [", line);
+            OutputDebugStringA(&output[0]);
+
+            if (!scriptNameWTF.empty()) {
+                OutputDebugStringA(scriptNameWTF.c_str());
+            }
+            OutputDebugStringA("] , [");
+
+            if (!funcNameWTF.empty()) {
+                OutputDebugStringA(funcNameWTF.c_str());
+            }
+            OutputDebugStringA("]\n");
+        }
+        OutputDebugStringA("\n");
+    }
 }
 
 v8::MaybeLocal<v8::Value> MainThreadDebugger::memoryInfo(

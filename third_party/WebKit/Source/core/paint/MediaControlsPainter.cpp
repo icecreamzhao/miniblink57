@@ -47,8 +47,8 @@ static MediaControlImageMap* gMediaControlImageMap = 0;
 // Slider thumb sizes, shard between time and volume.
 static const int mediaSliderThumbTouchWidth = 36; // Touch zone size.
 static const int mediaSliderThumbTouchHeight = 48;
-static const int mediaSliderThumbPaintWidth = 12; // Painted area.
-static const int mediaSliderThumbPaintHeight = 12;
+static const int mediaSliderThumbPaintWidth = 40; // Painted area.
+static const int mediaSliderThumbPaintHeight = 28;
 
 // Overlay play button size.
 static const int mediaOverlayPlayButtonWidth = 48;
@@ -129,23 +129,46 @@ bool MediaControlsPainter::paintMediaMuteButton(const LayoutObject& object,
     const PaintInfo& paintInfo,
     const IntRect& rect)
 {
+//     const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+//     if (!mediaElement)
+//         return false;
+// 
+//     static Image* soundNotMuted = platformResource("mediaplayerSoundNotMuted");
+//     static Image* soundMuted = platformResource("mediaplayerSoundMuted");
+// 
+//     if (!hasSource(mediaElement) || !mediaElement->hasAudio())
+//         return paintMediaButton(paintInfo.context, rect, soundMuted, &object, false);
+//     
+// 
+//     if (mediaElement->muted() || mediaElement->volume() <= 0)
+//         return paintMediaButton(paintInfo.context, rect, soundMuted, &object, true);
+// 
+//     return paintMediaButton(paintInfo.context, rect, soundNotMuted, &object, true);
+
     const HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
-    static Image* soundNotMuted = platformResource("mediaplayerSoundNotMuted");
-    static Image* soundMuted = platformResource("mediaplayerSoundMuted");
+    // The new UI uses "muted" and "not muted" only.
+    static Image* soundLevel3 = platformResource("mediaplayerSoundLevel3");
+    static Image* soundLevel2 = platformResource("mediaplayerSoundLevel2");
+    static Image* soundLevel1 = platformResource("mediaplayerSoundLevel1");
+    static Image* soundLevel0 = platformResource("mediaplayerSoundLevel0");
+    static Image* soundDisabled = platformResource("mediaplayerSoundDisabled");
 
-    if (!hasSource(mediaElement) || !mediaElement->hasAudio()) {
-        return paintMediaButton(paintInfo.context, rect, soundMuted, &object,
-            false);
-    }
+    if (!hasSource(mediaElement) || !mediaElement->hasAudio())
+        return paintMediaButton(paintInfo.context, rect, soundDisabled, false);
 
     if (mediaElement->muted() || mediaElement->volume() <= 0)
-        return paintMediaButton(paintInfo.context, rect, soundMuted, &object, true);
+        return paintMediaButton(paintInfo.context, rect, soundLevel0);
 
-    return paintMediaButton(paintInfo.context, rect, soundNotMuted, &object,
-        true);
+    if (mediaElement->volume() <= 0.33)
+        return paintMediaButton(paintInfo.context, rect, soundLevel1);
+
+    if (mediaElement->volume() <= 0.66)
+        return paintMediaButton(paintInfo.context, rect, soundLevel2);
+
+    return paintMediaButton(paintInfo.context, rect, soundLevel3);
 }
 
 bool MediaControlsPainter::paintMediaPlayButton(const LayoutObject& object,
@@ -263,17 +286,11 @@ static void paintSliderRangeHighlight(const IntRect& rect,
     gradient->applyToPaint(gradientPaint, SkMatrix::I());
 
     if (startOffset < borderRadius && endOffset < borderRadius)
-        context.drawRRect(
-            FloatRoundedRect(highlightRect, radii, radii, radii, radii),
-            gradientPaint);
+        context.drawRRect(FloatRoundedRect(highlightRect, radii, radii, radii, radii), gradientPaint);
     else if (startOffset < borderRadius)
-        context.drawRRect(FloatRoundedRect(highlightRect, radii, FloatSize(0, 0),
-                              radii, FloatSize(0, 0)),
-            gradientPaint);
+        context.drawRRect(FloatRoundedRect(highlightRect, radii, FloatSize(0, 0), radii, FloatSize(0, 0)), gradientPaint);
     else if (endOffset < borderRadius)
-        context.drawRRect(FloatRoundedRect(highlightRect, FloatSize(0, 0), radii,
-                              FloatSize(0, 0), radii),
-            gradientPaint);
+        context.drawRRect(FloatRoundedRect(highlightRect, FloatSize(0, 0), radii, FloatSize(0, 0), radii), gradientPaint);
     else
         context.drawRect(highlightRect, gradientPaint);
 }
@@ -345,16 +362,14 @@ void MediaControlsPainter::paintMediaSliderInternal(const LayoutObject& object,
         Color endColor = Color(0x42, 0x85, 0xf4);
 
         if (currentPosition > startPosition) {
-            paintSliderRangeHighlight(rect, style, context, startPosition,
-                currentPosition, startColor, endColor);
+            paintSliderRangeHighlight(rect, style, context, startPosition, currentPosition, startColor, endColor);
         }
 
         // Draw dark grey highlight after current time.
         startColor = endColor = Color(0x5a, 0x5a, 0x5a);
 
         if (endPosition > currentPosition) {
-            paintSliderRangeHighlight(rect, style, context, currentPosition,
-                endPosition, startColor, endColor);
+            paintSliderRangeHighlight(rect, style, context, currentPosition, endPosition, startColor, endColor);
         }
         return;
     }
@@ -400,6 +415,8 @@ bool MediaControlsPainter::paintMediaSliderThumb(const LayoutObject& object,
     const ComputedStyle& style = object.styleRef();
     adjustMediaSliderThumbPaintSize(rect, style, paintRect);
     return paintMediaButton(paintInfo.context, paintRect, mediaSliderThumb);
+
+    return true;
 }
 
 bool MediaControlsPainter::paintMediaVolumeSlider(const LayoutObject& object,
@@ -462,18 +479,25 @@ bool MediaControlsPainter::paintMediaFullscreenButton(
     const PaintInfo& paintInfo,
     const IntRect& rect)
 {
+//     const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+//     if (!mediaElement)
+//         return false;
+// 
+//     static Image* mediaEnterFullscreenButton = platformResource("mediaplayerEnterFullscreen");
+//     static Image* mediaExitFullscreenButton = platformResource("mediaplayerExitFullscreen");
+// 
+//     Image* image = (mediaControlElementType(object.node()) == MediaExitFullscreenButton)
+//         ? mediaExitFullscreenButton
+//         : mediaEnterFullscreenButton;
+//     const bool isEnabled = hasSource(mediaElement);
+//     return paintMediaButton(paintInfo.context, rect, image, &object, isEnabled);
+
     const HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
-    static Image* mediaEnterFullscreenButton = platformResource("mediaplayerEnterFullscreen");
-    static Image* mediaExitFullscreenButton = platformResource("mediaplayerExitFullscreen");
-
-    Image* image = (mediaControlElementType(object.node()) == MediaExitFullscreenButton)
-        ? mediaExitFullscreenButton
-        : mediaEnterFullscreenButton;
-    const bool isEnabled = hasSource(mediaElement);
-    return paintMediaButton(paintInfo.context, rect, image, &object, isEnabled);
+    static Image* mediaFullscreenButton = platformResource("mediaplayerFullscreen");
+    return paintMediaButton(paintInfo.context, rect, mediaFullscreenButton);
 }
 
 bool MediaControlsPainter::paintMediaToggleClosedCaptionsButton(

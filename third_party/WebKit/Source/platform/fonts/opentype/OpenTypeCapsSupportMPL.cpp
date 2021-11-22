@@ -16,7 +16,8 @@ bool OpenTypeCapsSupport::supportsOpenTypeFeature(
     hb_script_t script,
     uint32_t tag) const
 {
-    hb_face_t* face = hb_font_get_face(m_harfBuzzFace->getScaledFont());
+    //hb_face_t* face = hb_font_get_face(m_harfBuzzFace->getScaledFont());
+    hb_face_t* face = m_harfBuzzFace->face();
     ASSERT(face);
 
     ASSERT((tag == HB_TAG('s', 'm', 'c', 'p')

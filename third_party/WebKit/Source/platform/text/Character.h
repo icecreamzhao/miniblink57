@@ -35,6 +35,7 @@
 #include "platform/text/CharacterProperty.h"
 #include "platform/text/TextDirection.h"
 #include "platform/text/TextRun.h"
+#include "platform/text/TextPath.h"
 #include "wtf/ASCIICType.h"
 #include "wtf/Allocator.h"
 #include "wtf/HashSet.h"
@@ -53,6 +54,9 @@ public:
     {
         return character >= lowerBound && character <= upperBound;
     }
+
+    static CodePath characterRangeCodePath(const LChar*, unsigned) { return SimplePath; }
+    static CodePath characterRangeCodePath(const UChar*, unsigned len);
 
     static inline bool isUnicodeVariationSelector(UChar32 character)
     {

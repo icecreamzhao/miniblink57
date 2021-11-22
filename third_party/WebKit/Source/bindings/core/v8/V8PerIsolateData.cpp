@@ -32,6 +32,9 @@
 #include "bindings/core/v8/V8ObjectConstructor.h"
 #include "bindings/core/v8/V8PrivateProperty.h"
 #include "bindings/core/v8/V8ScriptRunner.h"
+#if V8_MAJOR_VERSION >= 7
+#include "platform/heap/UnifiedHeapController.h"
+#endif
 #include "core/frame/Deprecation.h"
 #include "core/inspector/MainThreadDebugger.h"
 #include "platform/ScriptForbiddenScope.h"
@@ -64,6 +67,9 @@ V8PerIsolateData::V8PerIsolateData(WebTaskRunner* taskRunner)
     , m_useCounterDisabled(false)
     , m_isHandlingRecursionLevelError(false)
     , m_isReportingException(false)
+#if V8_MAJOR_VERSION >= 7
+    , m_unifiedHeapController((new UnifiedHeapController(ThreadState::current())))
+#endif
 {
     // FIXME: Remove once all v8::Isolate::GetCurrent() calls are gone.
     isolate()->Enter();
@@ -87,6 +93,9 @@ v8::Isolate* V8PerIsolateData::initialize(WebTaskRunner* taskRunner)
     V8PerIsolateData* data = new V8PerIsolateData(taskRunner);
     v8::Isolate* isolate = data->isolate();
     isolate->SetData(gin::kEmbedderBlink, data);
+#if V8_MAJOR_VERSION >= 7
+    isolate->SetEmbedderHeapTracer(data->m_unifiedHeapController.get());
+#endif
     return isolate;
 }
 
@@ -429,5 +438,20 @@ void V8PerIsolateData::addActiveScriptWrappable(
 
     m_activeScriptWrappables->add(wrappable);
 }
+
+#if V8_MAJOR_VERSION >= 7
+
+UnifiedHeapController* V8PerIsolateData::getUnifiedHeapController(v8::Isolate* isolate)
+{
+    m_unifiedHeapController->attachIsolate(isolate);
+    return m_unifiedHeapController.get();
+}
+
+std::vector<std::pair<void*, void*>>* V8PerIsolateData::leakV8References()
+{
+    return m_unifiedHeapController->leakV8References();
+}
+
+#endif
 
 } // namespace blink

@@ -40,7 +40,8 @@ public:
     WebDevToolsFrontendClient() { }
 
     virtual void sendMessageToEmbedder(const WebString&) { }
-
+    virtual void sendMessageToBackend(const WebString&) { }
+    
     virtual bool isUnderTest() { return false; }
 
 protected:

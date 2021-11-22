@@ -70,6 +70,7 @@ public:
         float y,
         const Vector<ContextMenuItem>& items);
     void sendMessageToEmbedder(const String& message);
+    void sendMessageToBackend(const String& message);
 
     String getSelectionBackgroundColor();
     String getSelectionForegroundColor();

@@ -198,9 +198,15 @@ void V8LazyEventListener::compileScript(ScriptState* scriptState,
         // exception because we're not running any program code.  Instead,
         // it should be reported as an ErrorEvent.
         v8::TryCatch block(isolate());
+#if V8_MAJOR_VERSION >= 7
+        wrappedFunction = v8::ScriptCompiler::CompileFunctionInContext(
+            scriptState->context(), &source, 1, &parameterName, 3,
+            scopes).ToLocalChecked();
+#else
         wrappedFunction = v8::ScriptCompiler::CompileFunctionInContext(
             isolate(), &source, scriptState->context(), 1, &parameterName, 3,
             scopes);
+#endif
         if (block.HasCaught()) {
             m_wasCompilationFailed = true; // Do not compile the same code twice.
             fireErrorEvent(scriptState->context(), executionContext, block.Message());
