@@ -309,7 +309,7 @@ static void parseMimeIfNeeded(WebURLLoaderManager* manager, WebURLLoaderInternal
 
     if (dataLengt > 6 && 0 == memcmp(data, "%PDF-", 5)) {
         job->m_response.setMIMEType(blink::WebString::fromUTF8("application/pdf"));
-        manager->handleDidReceiveResponse(job);
+        //manager->handleDidReceiveResponse(job);
     }
 }
 
@@ -459,7 +459,7 @@ void WebURLLoaderManager::handleDidFinishLoading(WebURLLoaderInternal* job, doub
 
     setBlobDataLengthByTempPath(job);
     if (WebURLLoaderInternal::kCacheForDownloadYes != job->m_cacheForDownloadOpt) {
-        handleDidSentData(job, job->m_totalBytesToBeSent, job->m_totalBytesToBeSent);
+        //handleDidSentData(job, job->m_totalBytesToBeSent, job->m_totalBytesToBeSent);
         job->client()->didFinishLoading(finishTime, totalEncodedDataLength, 0);
 
         CurlCacheManager::getInstance()->didFinishLoading(*job);
@@ -1181,7 +1181,7 @@ public:
             return;
 
         KURL url = job->firstRequest()->url();
-        handleDataURL(job->loader(), job->client(), url, m_useStreamOnResponse);
+        handleDataURL(job->loader(), job->client(), url, m_useStreamOnResponse, false);
     }
 
 private:
@@ -1408,7 +1408,7 @@ void WebURLLoaderManager::dispatchSynchronousJob(WebURLLoaderInternal* job)
 
     KURL url = job->firstRequest()->url();
     if (url.protocolIsData() && job->client()) {
-        handleDataURL(job->loader(), job->client(), url, job->firstRequest()->useStreamOnResponse());
+        handleDataURL(job->loader(), job->client(), url, job->firstRequest()->useStreamOnResponse(), true);
         delete job;
         return;
     }

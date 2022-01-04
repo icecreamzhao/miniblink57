@@ -6,6 +6,7 @@
 #include "third_party/WebKit/public/platform/WebHTTPBody.h"
 #include "third_party/WebKit/Source/platform/weborigin/KURL.h"
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
+#include "third_party/WebKit/Source/platform/FileMetadata.h"
 #include "net/BlobResourceLoader.h"
 #include "net/FileSystem.h"
 #include "net/WebURLLoaderManager.h"
@@ -111,7 +112,6 @@ private:
             m_elementDataOffset = 0;
             m_elementIndex++;
         }
-
         return readedLength;
     }
 
@@ -141,7 +141,7 @@ private:
         std::wstring subPath = element.filePath.substr(0, sizeof(blobDownloadPath) / sizeof(wchar_t) - 1);
         if (subPath == blobDownloadPath)
             return readBlobDownloadFile(ptr, blockSize, numberOfBlocks, element, outBuf);
-        
+
         if (!m_file) {
             m_file = _wfopen(element.filePath.c_str(), L"rb");
 
@@ -191,19 +191,29 @@ private:
             needReadLength = maxBufferLength;
 
         fseek(m_file, m_elementDataOffset, SEEK_SET);
-        if (!ptr) {
+
+        if (outBuf)
             outBuf->resize(needReadLength);
+        if (!ptr && 0 != needReadLength)
             ptr = &outBuf->at(0);
-        }
-        readedLength = fread(ptr, 1, needReadLength, m_file);
+        
+        if (ptr && 0 != needReadLength)
+            readedLength = fread(ptr, 1, needReadLength, m_file);
         m_allReadLength += readedLength;
-        if (!readedLength && ferror(m_file)) {
+        if (!readedLength || ferror(m_file)) {
             readFileFinish(L"FlattenHTTPBodyElementStream.ferror Fail:", element.filePath.c_str());
             // FIXME: show a user error?
             return 0;
         }
 
-        if (feof(m_file) || m_elementDataLength == readedLength) {
+        bool isEnd = feof(m_file);
+        if (isEnd || m_elementDataLength == readedLength) {
+//             char* output = (char*)malloc(0x100);
+//             sprintf(output, "isEnd: %d, m_elementDataLength: %d, readedLength:%d, tempSize:%d, element.fileLength:%d, fileSizeLow:%d\n", 
+//                 isEnd, m_elementDataLength, readedLength, tempSize, (long)element.fileLength, fileSizeLow);
+//             MessageBoxA(0, output, 0, 0);
+//             free(output);
+
             RELEASE_ASSERT(readedLength <= maxBufferLength);
             RELEASE_ASSERT(m_elementDataOffset - m_originalDataOffset + readedLength == m_totalFileReadLength);
             RELEASE_ASSERT(m_elementDataLength - readedLength == 0);
@@ -221,7 +231,6 @@ private:
 //         sprintf_s(output, 0x99, "readFile: %d, allSize:%d\n", readedLength, allSize);
 //         OutputDebugStringA(output);
 //         free(output);
-
         return readedLength;
     }
 

@@ -193,6 +193,8 @@ public:
             error.reason = -1;
             error.localizedDescription = WebString::fromUTF8("black list");
             WebURLLoaderManager::sharedInstance()->handleDidFail(job, error);
+            if (!job->isCancelled())
+                WebURLLoaderManager::sharedInstance()->doCancel(job, kNormalCancelled);
             RELEASE_ASSERT(job->isCancelled());
         }
         releaseJobWithoutCurl(manager, job, jobId);

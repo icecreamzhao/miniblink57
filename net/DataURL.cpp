@@ -50,7 +50,16 @@ static void cancelBodyStreaming(SharedMemoryDataConsumerHandle::Writer* bodyStre
     delete bodyStreamWriter;
 }
 
-void handleDataURL(blink::WebURLLoader* handle, blink::WebURLLoaderClient* client, const blink::KURL& kurl, bool useStreamOnResponse)
+void finishHandleDataURL(bool isSync, std::function<void(void)>&& closure)
+{
+    if (isSync) {
+        closure();
+        return;
+    }
+    content::postTaskToMainThread(FROM_HERE, std::move(closure));
+}
+
+void handleDataURL(blink::WebURLLoader* handle, blink::WebURLLoaderClient* client, const blink::KURL& kurl, bool useStreamOnResponse, bool isSync)
 {
     Vector<char>* data = new Vector<char>();
     String mimeType;
@@ -81,19 +90,13 @@ void handleDataURL(blink::WebURLLoader* handle, blink::WebURLLoaderClient* clien
     SharedMemoryDataConsumerHandle::Writer* bodyStreamWriter = nullptr;
     SharedMemoryDataConsumerHandle* readHandle = new SharedMemoryDataConsumerHandle(mode, WTF::bind(&cancelBodyStreaming, WTF::unretained(bodyStreamWriter)), &bodyStreamWriter);
 
-    content::postTaskToMainThread(FROM_HERE, [handle, client, readHandle, response, data, bodyStreamWriter] {
+    finishHandleDataURL(isSync, [handle, client, readHandle, response, data, bodyStreamWriter] {
         client->didReceiveResponse(*response,  std::unique_ptr<blink::WebDataConsumerHandle>(readHandle));
         client->didReceiveData(data->data(), data->size());
 
         bodyStreamWriter->addData(std::unique_ptr<RequestPeer::ReceivedData>(new FixedReceivedData(data->data(), data->size(), 0)));
         bodyStreamWriter->close();
         delete bodyStreamWriter;
-
-//         content::postTaskToMainThread(FROM_HERE, [handle, client, readHandle, response, data] {
-//             client->didFinishLoading(handle, currentTime(), data->size());
-//             delete response;
-//             delete data;
-//         });
 
         client->didFinishLoading(currentTime(), data->size(), 0);
         delete response;
