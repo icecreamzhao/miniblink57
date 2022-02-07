@@ -107,8 +107,7 @@ void Display::Initialize(DisplayClient* client,
     }
 }
 
-void Display::SetLocalFrameId(const LocalFrameId& id,
-    float device_scale_factor)
+void Display::SetLocalFrameId(const LocalFrameId& id, float device_scale_factor)
 {
     if (current_surface_id_.local_frame_id() == id && device_scale_factor_ == device_scale_factor) {
         return;

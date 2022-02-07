@@ -373,10 +373,10 @@ namespace {
         {
             // Source and dest stride can be zero since we're only copying
             // one row at a time.
-            int stride = 0;
-            int rows = 1;
-            libyuv::HalfFloatPlane(src, stride, dst, stride, libyuv_multiplier_, num,
-                rows);
+//             int stride = 0;
+//             int rows = 1;
+//             libyuv::HalfFloatPlane(src, stride, dst, stride, libyuv_multiplier_, num, rows);
+            DebugBreak();
         }
 
     private:
@@ -721,7 +721,7 @@ void VideoResourceUpdater::CopyPlaneTexture(
     gl->WaitSyncTokenCHROMIUM(mailbox_holder.sync_token.GetConstData());
     uint32_t src_texture_id = gl->CreateAndConsumeTextureCHROMIUM(
         mailbox_holder.texture_target, mailbox_holder.mailbox.name);
-    gl->CopySubTextureCHROMIUM(src_texture_id, 0, lock.texture_id(), 0, 0, 0, 0,
+    gl->CopySubTextureCHROMIUM(src_texture_id, /*0,*/ lock.texture_id(), /*0,*/ 0, 0, 0,
         0, output_plane_resource_size.width(),
         output_plane_resource_size.height(), false, false,
         false);
