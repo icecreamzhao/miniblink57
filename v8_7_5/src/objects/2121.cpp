@@ -1,0 +1,5 @@
+int xx;
+void mad()
+{
+  
+}
