@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="content">
+      <UniqueIdentifier>{A9D4FE42-E93B-D185-8B1E-57B26E07FF60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video">
+      <UniqueIdentifier>{DFFDFF99-C119-15B3-BAA0-B802B19184B0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="content/animated_content_sampler_unittest.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <CustomBuild Include="content/capture_resolution_chooser_unittest.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <CustomBuild Include="content/smooth_event_sampler_unittest.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <CustomBuild Include="content/video_capture_oracle_unittest.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <CustomBuild Include="video/fake_video_capture_device_unittest.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <CustomBuild Include="video/video_capture_device_unittest.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

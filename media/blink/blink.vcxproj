@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9828799F-B69C-2355-3F9B-A1C912507D95}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>blink</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../..;../../build/Release/gen;../../third_party/khronos;../../gpu;../../third_party/wtl/include;../../third_party/libwebp;../../skia/config;../../skia/ext;../../third_party/skia/include/c;../../third_party/skia/include/config;../../third_party/skia/include/core;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/lazy;../../third_party/skia/include/pathops;../../third_party/skia/include/pdf;../../third_party/skia/include/pipe;../../third_party/skia/include/ports;../../third_party/skia/include/utils;../../third_party/skia/include/gpu;../../third_party/skia/src/gpu;../../third_party/skia/src/sksl;../../third_party/icu/source/common;../../third_party/icu/source/i18n;../../third_party/mesa/src/include;../../third_party/libwebm/source;../../third_party/protobuf/src;../../build/Release/gen/protoc_out;../../third_party/protobuf/src;../../third_party/boringssl/src/include;../../third_party/WebKit;../../build/Release/gen/third_party/WebKit;../../v8/include;../../build/Release/gen/v8/include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob2 /Oy- /d2Zi+ /Zc:inline /Gw /Oi /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>MEDIA_BLINK_IMPLEMENTATION;V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;OFFICIAL_BUILD;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;USE_EGL;SK_IGNORE_DW_GRAY_FIX;SK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS;SK_SUPPORT_GPU=1;GR_GL_FUNCTION_TYPE=__stdcall;U_USING_ICU_NAMESPACE=0;U_ENABLE_DYLOAD=0;U_STATIC_IMPLEMENTATION;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE;MESA_EGL_NO_X11_HEADERS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="active_loader.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/active_loader.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/active_loader.obj</Outputs>
+    </CustomBuild>
+    <None Include="active_loader.h" />
+    <CustomBuild Include="buffered_data_source_host_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/buffered_data_source_host_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/buffered_data_source_host_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="buffered_data_source_host_impl.h" />
+    <CustomBuild Include="cache_util.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/cache_util.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/cache_util.obj</Outputs>
+    </CustomBuild>
+    <None Include="cache_util.h" />
+    <None Include="cdm_result_promise.h" />
+    <CustomBuild Include="cdm_result_promise_helper.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/cdm_result_promise_helper.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/cdm_result_promise_helper.obj</Outputs>
+    </CustomBuild>
+    <None Include="cdm_result_promise_helper.h" />
+    <CustomBuild Include="cdm_session_adapter.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/cdm_session_adapter.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/cdm_session_adapter.obj</Outputs>
+    </CustomBuild>
+    <None Include="cdm_session_adapter.h" />
+    <None Include="interval_map.h" />
+    <CustomBuild Include="key_system_config_selector.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/key_system_config_selector.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/key_system_config_selector.obj</Outputs>
+    </CustomBuild>
+    <None Include="key_system_config_selector.h" />
+    <None Include="lru.h" />
+    <None Include="media_blink_export.h" />
+    <CustomBuild Include="multibuffer.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/multibuffer.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/multibuffer.obj</Outputs>
+    </CustomBuild>
+    <None Include="multibuffer.h" />
+    <CustomBuild Include="multibuffer_data_source.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/multibuffer_data_source.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/multibuffer_data_source.obj</Outputs>
+    </CustomBuild>
+    <None Include="multibuffer_data_source.h" />
+    <CustomBuild Include="multibuffer_reader.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/multibuffer_reader.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/multibuffer_reader.obj</Outputs>
+    </CustomBuild>
+    <None Include="multibuffer_reader.h" />
+    <CustomBuild Include="new_session_cdm_result_promise.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/new_session_cdm_result_promise.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/new_session_cdm_result_promise.obj</Outputs>
+    </CustomBuild>
+    <None Include="new_session_cdm_result_promise.h" />
+    <CustomBuild Include="resource_multibuffer_data_provider.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/resource_multibuffer_data_provider.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/resource_multibuffer_data_provider.obj</Outputs>
+    </CustomBuild>
+    <None Include="resource_multibuffer_data_provider.h" />
+    <CustomBuild Include="texttrack_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/texttrack_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/texttrack_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="texttrack_impl.h" />
+    <CustomBuild Include="url_index.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/url_index.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/url_index.obj</Outputs>
+    </CustomBuild>
+    <None Include="url_index.h" />
+    <CustomBuild Include="video_frame_compositor.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/video_frame_compositor.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/video_frame_compositor.obj</Outputs>
+    </CustomBuild>
+    <None Include="video_frame_compositor.h" />
+    <CustomBuild Include="watch_time_reporter.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/watch_time_reporter.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/watch_time_reporter.obj</Outputs>
+    </CustomBuild>
+    <None Include="watch_time_reporter.h" />
+    <CustomBuild Include="webaudiosourceprovider_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webaudiosourceprovider_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webaudiosourceprovider_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webaudiosourceprovider_impl.h" />
+    <CustomBuild Include="webcontentdecryptionmodule_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webcontentdecryptionmodule_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webcontentdecryptionmodule_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webcontentdecryptionmodule_impl.h" />
+    <CustomBuild Include="webcontentdecryptionmoduleaccess_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webcontentdecryptionmoduleaccess_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webcontentdecryptionmoduleaccess_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webcontentdecryptionmoduleaccess_impl.h" />
+    <CustomBuild Include="webcontentdecryptionmodulesession_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webcontentdecryptionmodulesession_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webcontentdecryptionmodulesession_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webcontentdecryptionmodulesession_impl.h" />
+    <CustomBuild Include="webencryptedmediaclient_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webencryptedmediaclient_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webencryptedmediaclient_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webencryptedmediaclient_impl.h" />
+    <CustomBuild Include="webinbandtexttrack_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webinbandtexttrack_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webinbandtexttrack_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webinbandtexttrack_impl.h" />
+    <None Include="webmediaplayer_delegate.h" />
+    <CustomBuild Include="webmediaplayer_params.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webmediaplayer_params.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webmediaplayer_params.obj</Outputs>
+    </CustomBuild>
+    <None Include="webmediaplayer_params.h" />
+    <CustomBuild Include="webmediaplayer_util.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webmediaplayer_util.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webmediaplayer_util.obj</Outputs>
+    </CustomBuild>
+    <None Include="webmediaplayer_util.h" />
+    <CustomBuild Include="webmediasource_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webmediasource_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webmediasource_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webmediasource_impl.h" />
+    <CustomBuild Include="websourcebuffer_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/websourcebuffer_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/websourcebuffer_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="websourcebuffer_impl.h" />
+    <CustomBuild Include="webmediaplayer_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/blink/blink/webmediaplayer_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/blink/blink/webmediaplayer_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="webmediaplayer_impl.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) obj/media/blink/media_blink.lib" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean obj/media/blink/media_blink.lib" />
+  </Target>
+</Project>

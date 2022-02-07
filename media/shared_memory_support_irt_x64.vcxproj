@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="GN|x64">
+      <Configuration>GN</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A7CBA169-769C-F738-EF63-7045B6089BCC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>shared_memory_support</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../../../../build/Debug/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../../../..;../../../../../build/Debug/irt_x64/gen;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-fno-strict-aliasing -fcolor-diagnostics -integrated-as -m64 -march=x86-64 -fasynchronous-unwind-tables -fomit-frame-pointer -fno-threadsafe-statics -fvisibility-inlines-hidden -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std=gnu++11 -Wall -Werror -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -Wno-c++11-narrowing -Wno-covered-switch-default -Wno-deprecated-register -Wno-unneeded-internal-declaration -Wno-inconsistent-missing-override -Os -ffunction-sections -fdata-sections -fno-omit-frame-pointer -g2 -fno-rtti -fno-exceptions -fvisibility=hidden %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>V8_DEPRECATION_WARNINGS;USE_OPENSSL_CERTS=1;NO_TCMALLOC;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;_FILE_OFFSET_BITS=64;_LARGEFILE_SOURCE;_LARGEFILE64_SOURCE;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;_DEBUG;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;DYNAMIC_ANNOTATIONS_PREFIX=NACL_;USE_PULSEAUDIO;DLOPEN_PULSEAUDIO;MEDIA_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="../../../../../media/base/audio_bus.cc">
+      <Command>call ninja.exe -C $(OutDir) irt_x64/obj/media/shared_memory_support/audio_bus.o</Command>
+      <Outputs>$(OutDir)irt_x64/obj/media/shared_memory_support/audio_bus.o</Outputs>
+    </CustomBuild>
+    <None Include="../../../../../media/base/audio_bus.h" />
+    <CustomBuild Include="../../../../../media/base/audio_latency.cc">
+      <Command>call ninja.exe -C $(OutDir) irt_x64/obj/media/shared_memory_support/audio_latency.o</Command>
+      <Outputs>$(OutDir)irt_x64/obj/media/shared_memory_support/audio_latency.o</Outputs>
+    </CustomBuild>
+    <None Include="../../../../../media/base/audio_latency.h" />
+    <CustomBuild Include="../../../../../media/base/audio_parameters.cc">
+      <Command>call ninja.exe -C $(OutDir) irt_x64/obj/media/shared_memory_support/audio_parameters.o</Command>
+      <Outputs>$(OutDir)irt_x64/obj/media/shared_memory_support/audio_parameters.o</Outputs>
+    </CustomBuild>
+    <None Include="../../../../../media/base/audio_parameters.h" />
+    <CustomBuild Include="../../../../../media/base/audio_point.cc">
+      <Command>call ninja.exe -C $(OutDir) irt_x64/obj/media/shared_memory_support/audio_point.o</Command>
+      <Outputs>$(OutDir)irt_x64/obj/media/shared_memory_support/audio_point.o</Outputs>
+    </CustomBuild>
+    <None Include="../../../../../media/base/audio_point.h" />
+    <None Include="../../../../../media/base/audio_sample_types.h" />
+    <CustomBuild Include="../../../../../media/base/channel_layout.cc">
+      <Command>call ninja.exe -C $(OutDir) irt_x64/obj/media/shared_memory_support/channel_layout.o</Command>
+      <Outputs>$(OutDir)irt_x64/obj/media/shared_memory_support/channel_layout.o</Outputs>
+    </CustomBuild>
+    <None Include="../../../../../media/base/channel_layout.h" />
+    <None Include="../../../../../media/base/limits.h" />
+    <None Include="../../../../../media/base/media_export.h" />
+    <CustomBuild Include="../../../../../media/base/vector_math.cc">
+      <Command>call ninja.exe -C $(OutDir) irt_x64/obj/media/shared_memory_support/vector_math.o</Command>
+      <Outputs>$(OutDir)irt_x64/obj/media/shared_memory_support/vector_math.o</Outputs>
+    </CustomBuild>
+    <None Include="../../../../../media/base/vector_math.h" />
+    <None Include="../../../../../media/base/vector_math_testing.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) irt_x64/obj/media/libshared_memory_support.a" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean irt_x64/obj/media/libshared_memory_support.a" />
+  </Target>
+</Project>

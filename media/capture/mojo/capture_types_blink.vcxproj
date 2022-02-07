@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2A2986D2-F142-18A2-404A-2245A64DC908}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>capture_types_blink</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../..;../../../build/Debug/gen;../../../third_party/WebKit/Source;../../../third_party/WebKit;../../../build/Debug/gen/blink;../../../build/Debug/gen/third_party/WebKit;../../../third_party/WebKit/Source/wtf/os-win32;../../../third_party/icu/source/common;../../../third_party/icu/source/i18n;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob0 /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;4305;4324;4714;4800;4996;4344;4706;4291;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;COMPONENT_BUILD;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;_DEBUG;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;USING_V8_SHARED;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;ENABLE_LAYOUT_UNIT_IN_INLINE_BOXES=0;ENABLE_OILPAN=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;WTF_USE_CONCATENATED_IMPULSE_RESPONSES=1;WTF_USE_WEBAUDIO_FFMPEG=1;WTF_USE_DEFAULT_RENDER_THEME=1;U_USING_ICU_NAMESPACE=0;U_ENABLE_DYLOAD=0;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="../../../build/Debug/gen/media/capture/mojo/video_capture_types.mojom-blink.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/mojo/capture_types_blink/video_capture_types.mojom-blink.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/mojo/capture_types_blink/video_capture_types.mojom-blink.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/capture/mojo/video_capture_types.mojom-blink.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) $(ProjectName)" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean $(ProjectName)" />
+  </Target>
+</Project>

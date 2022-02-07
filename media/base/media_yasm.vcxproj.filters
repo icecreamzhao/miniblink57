@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..\..\build\Release\obj\media\base\media_yasm">
+      <UniqueIdentifier>{0A22D6F5-80C2-E3CF-4BA6-9714677BDEFC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\obj\media\base">
+      <UniqueIdentifier>{F5145281-AAB1-5F4B-4F6E-3709AA96C3B5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\obj\media">
+      <UniqueIdentifier>{653E1729-B621-1855-1327-15481E6208B5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\obj">
+      <UniqueIdentifier>{A36374EE-C595-84DA-6A45-A30D8D433B9D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release">
+      <UniqueIdentifier>{89096691-F1A1-FA6F-B455-BDB155902957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build">
+      <UniqueIdentifier>{BDA1F720-C781-E372-4272-6376E80329A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{A8A4AA46-5437-4AB8-6540-F14ED994B38E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{78245A82-158D-7D20-54A6-7C428D0A7B36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/convert_rgb_to_yuv_ssse3.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/convert_yuv_to_rgb_sse.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/convert_yuva_to_argb_mmx.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/empty_register_state_mmx.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/linear_scale_yuv_to_rgb_mmx.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/linear_scale_yuv_to_rgb_sse.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/scale_yuv_to_rgb_mmx.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="../../build/Release/obj/media/base/media_yasm/scale_yuv_to_rgb_sse.o">
+      <Filter>..\..\build\Release\obj\media\base\media_yasm</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

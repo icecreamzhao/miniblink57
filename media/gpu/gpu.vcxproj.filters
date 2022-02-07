@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="fake_video_decode_accelerator.cc" />
+    <None Include="fake_video_decode_accelerator.h" />
+    <CustomBuild Include="gpu_video_accelerator_util.cc" />
+    <None Include="gpu_video_accelerator_util.h" />
+    <CustomBuild Include="gpu_video_decode_accelerator_factory.cc" />
+    <None Include="gpu_video_decode_accelerator_factory.h" />
+    <None Include="gpu_video_decode_accelerator_helpers.h" />
+    <CustomBuild Include="shared_memory_region.cc" />
+    <None Include="shared_memory_region.h" />
+    <None Include="accelerated_video_decoder.h" />
+    <CustomBuild Include="h264_decoder.cc" />
+    <None Include="h264_decoder.h" />
+    <CustomBuild Include="h264_dpb.cc" />
+    <None Include="h264_dpb.h" />
+    <CustomBuild Include="d3d11_h264_accelerator.cc" />
+    <None Include="d3d11_h264_accelerator.h" />
+    <CustomBuild Include="d3d11_video_decode_accelerator_win.cc" />
+    <None Include="d3d11_video_decode_accelerator_win.h" />
+    <CustomBuild Include="dxva_picture_buffer_win.cc" />
+    <None Include="dxva_picture_buffer_win.h" />
+    <CustomBuild Include="dxva_video_decode_accelerator_win.cc" />
+    <None Include="dxva_video_decode_accelerator_win.h" />
+    <CustomBuild Include="media_foundation_video_encode_accelerator_win.cc" />
+    <None Include="media_foundation_video_encode_accelerator_win.h" />
+  </ItemGroup>
+</Project>

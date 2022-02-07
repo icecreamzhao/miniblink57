@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..\..\..\build\Release\gen\media\mojo\interfaces">
+      <UniqueIdentifier>{31780505-D806-7238-A509-B427E1E53D05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Release\gen\media\mojo">
+      <UniqueIdentifier>{22A965CB-5BFC-F614-4D47-C414547E7AA0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Release\gen\media">
+      <UniqueIdentifier>{EAB04AEA-EF63-DF96-A9AD-8068F00DD8A7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Release\gen">
+      <UniqueIdentifier>{18354653-1C0F-15FF-9E8D-E2370A96877A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Release">
+      <UniqueIdentifier>{53CD76C2-5431-FEE3-3825-D5F4A29C235D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build">
+      <UniqueIdentifier>{2EA9A752-CA54-BCC6-50BF-D2CCDABA23F6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..">
+      <UniqueIdentifier>{BC2D405D-5A7E-241B-15FC-441581082017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{A8A4AA46-5437-4AB8-6540-F14ED994B38E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{78245A82-158D-7D20-54A6-7C428D0A7B36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\media\base">
+      <UniqueIdentifier>{AD1BBD48-9496-F7AB-969E-1C48068D7FBC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\media">
+      <UniqueIdentifier>{E11ADCDE-E6FE-B6A0-CC9C-8C84B28D11DB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\media\base\ipc">
+      <UniqueIdentifier>{BBB6D0D9-3F5B-165F-1A38-DFC10111319A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/audio_decoder.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/audio_decoder.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/audio_output.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/audio_output.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/audio_parameters.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/audio_parameters.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/content_decryption_module.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/content_decryption_module.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/decryptor.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/decryptor.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/demuxer_stream.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/demuxer_stream.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/interface_factory.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/interface_factory.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/media_service.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/media_service.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/media_types.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/media_types.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/output_protection.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/output_protection.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/provision_fetcher.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/provision_fetcher.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/renderer.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/renderer.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/video_decoder.mojom.cc">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/video_decoder.mojom.h">
+      <Filter>..\..\..\build\Release\gen\media\mojo\interfaces</Filter>
+    </None>
+    <None Include="../../../media/base/audio_parameters.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/ipc/media_param_traits.h">
+      <Filter>..\..\..\media\base\ipc</Filter>
+    </None>
+    <None Include="../../../media/base/cdm_key_information.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/cdm_promise.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/eme_constants.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/content_decryption_module.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/ipc/media_param_traits_macros.h">
+      <Filter>..\..\..\media\base\ipc</Filter>
+    </None>
+    <None Include="../../../media/base/decryptor.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/ipc/media_param_traits_macros.h">
+      <Filter>..\..\..\media\base\ipc</Filter>
+    </None>
+    <None Include="../../../media/base/demuxer_stream.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/ipc/media_param_traits_macros.h">
+      <Filter>..\..\..\media\base\ipc</Filter>
+    </None>
+    <None Include="../../../media/base/audio_codecs.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/buffering_state.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/channel_layout.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/decode_status.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/encryption_scheme.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/sample_format.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/subsample_entry.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/video_codecs.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/video_types.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="../../../media/base/ipc/media_param_traits_macros.h">
+      <Filter>..\..\..\media\base\ipc</Filter>
+    </None>
+    <None Include="../../../media/base/pipeline_status.h">
+      <Filter>..\..\..\media\base</Filter>
+    </None>
+    <None Include="pipeline_statistics_struct_traits.h" />
+  </ItemGroup>
+</Project>

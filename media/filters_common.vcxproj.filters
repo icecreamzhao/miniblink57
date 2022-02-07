@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="filters">
+      <UniqueIdentifier>{792205BC-615E-5347-DCF1-1B9A1ADFD531}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="filters/file_data_source.h">
+      <Filter>filters</Filter>
+    </None>
+    <None Include="filters/blocking_url_protocol.h">
+      <Filter>filters</Filter>
+    </None>
+    <None Include="filters/ffmpeg_glue.h">
+      <Filter>filters</Filter>
+    </None>
+  </ItemGroup>
+</Project>

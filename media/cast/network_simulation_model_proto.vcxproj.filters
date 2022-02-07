@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..\..\build\Debug\gen\media\cast\test\proto">
+      <UniqueIdentifier>{2843A66B-0BAB-93A5-9D1E-20B533EC7A19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\gen\media\cast\test">
+      <UniqueIdentifier>{55559D99-4B2F-74E4-3F83-A8CD8763DC76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\gen\media\cast">
+      <UniqueIdentifier>{C828349B-10F4-F6A6-7E20-26164CEF7A7B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\gen\media">
+      <UniqueIdentifier>{6ECCA04A-DE82-D50E-064E-E8DA2B86CF0F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\gen">
+      <UniqueIdentifier>{75A0C33E-08A4-7455-2378-432A6FA54FE8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug">
+      <UniqueIdentifier>{700E9493-0373-D3B6-79E6-56B06453D187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build">
+      <UniqueIdentifier>{BDA1F720-C781-E372-4272-6376E80329A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{A8A4AA46-5437-4AB8-6540-F14ED994B38E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{78245A82-158D-7D20-54A6-7C428D0A7B36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\pyproto\media\cast\test\proto">
+      <UniqueIdentifier>{9EBFD347-F0D4-3035-A291-25515938591B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\pyproto\media\cast\test">
+      <UniqueIdentifier>{D11F0B4B-8999-D118-7B50-5F5495AA436E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\pyproto\media\cast">
+      <UniqueIdentifier>{D13B5B53-8175-7D4E-D9A7-AD2D7D804381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\pyproto\media">
+      <UniqueIdentifier>{F0AC931D-A03C-483A-6B0A-8694D68280FE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Debug\pyproto">
+      <UniqueIdentifier>{217ED111-F42B-5156-E22A-B613C351BBF1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../build/Debug/gen/media/cast/test/proto/network_simulation_model.pb.h">
+      <Filter>..\..\build\Debug\gen\media\cast\test\proto</Filter>
+    </None>
+    <CustomBuild Include="../../build/Debug/gen/media/cast/test/proto/network_simulation_model.pb.cc">
+      <Filter>..\..\build\Debug\gen\media\cast\test\proto</Filter>
+    </CustomBuild>
+    <None Include="../../build/Debug/pyproto/media/cast/test/proto/network_simulation_model_pb2.py">
+      <Filter>..\..\build\Debug\pyproto\media\cast\test\proto</Filter>
+    </None>
+  </ItemGroup>
+</Project>

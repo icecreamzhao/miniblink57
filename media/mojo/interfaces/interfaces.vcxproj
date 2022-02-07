@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{54206C70-784A-A804-1501-3CA5BAB9C729}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>interfaces</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../..;../../../build/Release/gen;../../../third_party/khronos;../../../gpu;../../../third_party/wtl/include;../../../third_party/ced/src;../../../third_party/icu/source/common;../../../third_party/icu/source/i18n;../../../third_party/libwebm/source;../../../skia/config;../../../skia/ext;../../../third_party/skia/include/c;../../../third_party/skia/include/config;../../../third_party/skia/include/core;../../../third_party/skia/include/effects;../../../third_party/skia/include/images;../../../third_party/skia/include/lazy;../../../third_party/skia/include/pathops;../../../third_party/skia/include/pdf;../../../third_party/skia/include/pipe;../../../third_party/skia/include/ports;../../../third_party/skia/include/utils;../../../third_party/skia/include/gpu;../../../third_party/skia/src/gpu;../../../third_party/skia/src/sksl;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob2 /Oy- /d2Zi+ /Zc:inline /Gw /Oi /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;USE_PROPRIETARY_CODECS;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;OFFICIAL_BUILD;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;USE_EGL;U_USING_ICU_NAMESPACE=0;U_ENABLE_DYLOAD=0;U_STATIC_IMPLEMENTATION;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE;SK_IGNORE_DW_GRAY_FIX;SK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS;SK_SUPPORT_GPU=1;GR_GL_FUNCTION_TYPE=__stdcall;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/audio_decoder.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/audio_decoder.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/audio_decoder.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/audio_decoder.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/audio_output.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/audio_output.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/audio_output.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/audio_output.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/audio_parameters.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/audio_parameters.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/audio_parameters.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/audio_parameters.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/content_decryption_module.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/content_decryption_module.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/content_decryption_module.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/content_decryption_module.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/decryptor.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/decryptor.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/decryptor.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/decryptor.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/demuxer_stream.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/demuxer_stream.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/demuxer_stream.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/demuxer_stream.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/interface_factory.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/interface_factory.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/interface_factory.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/interface_factory.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/media_service.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/media_service.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/media_service.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/media_service.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/media_types.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/media_types.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/media_types.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/media_types.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/output_protection.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/output_protection.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/output_protection.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/output_protection.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/provision_fetcher.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/provision_fetcher.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/provision_fetcher.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/provision_fetcher.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/renderer.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/renderer.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/renderer.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/renderer.mojom.h" />
+    <CustomBuild Include="../../../build/Release/gen/media/mojo/interfaces/video_decoder.mojom.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces/video_decoder.mojom.obj</Command>
+      <Outputs>$(OutDir)obj/media/mojo/interfaces/interfaces/video_decoder.mojom.obj</Outputs>
+    </CustomBuild>
+    <None Include="../../../build/Release/gen/media/mojo/interfaces/video_decoder.mojom.h" />
+    <None Include="../../../media/base/audio_parameters.h" />
+    <None Include="../../../media/base/ipc/media_param_traits.h" />
+    <None Include="../../../media/base/cdm_key_information.h" />
+    <None Include="../../../media/base/cdm_promise.h" />
+    <None Include="../../../media/base/eme_constants.h" />
+    <None Include="../../../media/base/content_decryption_module.h" />
+    <None Include="../../../media/base/ipc/media_param_traits_macros.h" />
+    <None Include="../../../media/base/decryptor.h" />
+    <None Include="../../../media/base/demuxer_stream.h" />
+    <None Include="../../../media/base/audio_codecs.h" />
+    <None Include="../../../media/base/buffering_state.h" />
+    <None Include="../../../media/base/channel_layout.h" />
+    <None Include="../../../media/base/decode_status.h" />
+    <None Include="../../../media/base/encryption_scheme.h" />
+    <None Include="../../../media/base/sample_format.h" />
+    <None Include="../../../media/base/subsample_entry.h" />
+    <None Include="../../../media/base/video_codecs.h" />
+    <None Include="../../../media/base/video_types.h" />
+    <None Include="../../../media/base/pipeline_status.h" />
+    <None Include="pipeline_statistics_struct_traits.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) obj/media/mojo/interfaces/interfaces.stamp" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean obj/media/mojo/interfaces/interfaces.stamp" />
+  </Target>
+</Project>

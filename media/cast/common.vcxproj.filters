@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{07AEAFC7-2F39-B64B-2877-3FB44E06BFBE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logging">
+      <UniqueIdentifier>{9B707920-F1A4-1F32-0FFD-E7D9F01B5105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logging\proto">
+      <UniqueIdentifier>{FFE89E9D-A40C-92D7-6FCC-9E6BEB3B9BCD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="cast_config.cc" />
+    <None Include="cast_config.h" />
+    <CustomBuild Include="cast_environment.cc" />
+    <None Include="cast_environment.h" />
+    <CustomBuild Include="common/clock_drift_smoother.cc">
+      <Filter>common</Filter>
+    </CustomBuild>
+    <None Include="common/clock_drift_smoother.h">
+      <Filter>common</Filter>
+    </None>
+    <None Include="common/expanded_value_base.h">
+      <Filter>common</Filter>
+    </None>
+    <CustomBuild Include="common/frame_id.cc">
+      <Filter>common</Filter>
+    </CustomBuild>
+    <None Include="common/frame_id.h">
+      <Filter>common</Filter>
+    </None>
+    <CustomBuild Include="common/rtp_time.cc">
+      <Filter>common</Filter>
+    </CustomBuild>
+    <None Include="common/rtp_time.h">
+      <Filter>common</Filter>
+    </None>
+    <CustomBuild Include="common/transport_encryption_handler.cc">
+      <Filter>common</Filter>
+    </CustomBuild>
+    <None Include="common/transport_encryption_handler.h">
+      <Filter>common</Filter>
+    </None>
+    <None Include="constants.h" />
+    <CustomBuild Include="logging/encoding_event_subscriber.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/encoding_event_subscriber.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/log_deserializer.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/log_deserializer.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/log_event_dispatcher.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/log_event_dispatcher.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/log_serializer.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/log_serializer.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/logging_defines.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/logging_defines.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/proto/proto_utils.cc">
+      <Filter>logging\proto</Filter>
+    </CustomBuild>
+    <None Include="logging/raw_event_subscriber.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/raw_event_subscriber_bundle.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/raw_event_subscriber_bundle.h">
+      <Filter>logging</Filter>
+    </None>
+    <None Include="logging/receiver_time_offset_estimator.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/receiver_time_offset_estimator_impl.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/receiver_time_offset_estimator_impl.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/simple_event_subscriber.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/simple_event_subscriber.h">
+      <Filter>logging</Filter>
+    </None>
+    <CustomBuild Include="logging/stats_event_subscriber.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <None Include="logging/stats_event_subscriber.h">
+      <Filter>logging</Filter>
+    </None>
+  </ItemGroup>
+</Project>

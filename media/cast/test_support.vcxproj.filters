@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="test">
+      <UniqueIdentifier>{DF44A234-9BB1-A451-D75B-D95B649E9002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\utility">
+      <UniqueIdentifier>{06773DE6-2F29-245A-2965-D6210E764678}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="test/fake_receiver_time_offset_estimator.cc">
+      <Filter>test</Filter>
+    </CustomBuild>
+    <None Include="test/fake_receiver_time_offset_estimator.h">
+      <Filter>test</Filter>
+    </None>
+    <CustomBuild Include="test/loopback_transport.cc">
+      <Filter>test</Filter>
+    </CustomBuild>
+    <None Include="test/loopback_transport.h">
+      <Filter>test</Filter>
+    </None>
+    <CustomBuild Include="test/skewed_single_thread_task_runner.cc">
+      <Filter>test</Filter>
+    </CustomBuild>
+    <None Include="test/skewed_single_thread_task_runner.h">
+      <Filter>test</Filter>
+    </None>
+    <CustomBuild Include="test/skewed_tick_clock.cc">
+      <Filter>test</Filter>
+    </CustomBuild>
+    <None Include="test/skewed_tick_clock.h">
+      <Filter>test</Filter>
+    </None>
+    <CustomBuild Include="test/utility/audio_utility.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/audio_utility.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/barcode.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/barcode.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/default_config.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/default_config.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/in_process_receiver.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/in_process_receiver.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/input_builder.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/input_builder.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/net_utility.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/net_utility.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/standalone_cast_environment.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/standalone_cast_environment.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/test_util.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/test_util.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/udp_proxy.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/udp_proxy.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/utility/video_utility.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <None Include="test/utility/video_utility.h">
+      <Filter>test\utility</Filter>
+    </None>
+    <CustomBuild Include="test/fake_media_source.cc">
+      <Filter>test</Filter>
+    </CustomBuild>
+    <None Include="test/fake_media_source.h">
+      <Filter>test</Filter>
+    </None>
+  </ItemGroup>
+</Project>

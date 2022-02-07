@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="metrics.cc" />
+    <None Include="metrics.h" />
+    <CustomBuild Include="remote_demuxer_stream_adapter.cc" />
+    <None Include="remote_demuxer_stream_adapter.h" />
+    <CustomBuild Include="remote_renderer_impl.cc" />
+    <None Include="remote_renderer_impl.h" />
+    <CustomBuild Include="remoting_cdm.cc" />
+    <None Include="remoting_cdm.h" />
+    <CustomBuild Include="remoting_cdm_context.cc" />
+    <None Include="remoting_cdm_context.h" />
+    <CustomBuild Include="remoting_cdm_controller.cc" />
+    <None Include="remoting_cdm_controller.h" />
+    <CustomBuild Include="remoting_cdm_factory.cc" />
+    <None Include="remoting_cdm_factory.h" />
+    <CustomBuild Include="remoting_interstitial_ui.cc" />
+    <None Include="remoting_interstitial_ui.h" />
+    <CustomBuild Include="remoting_renderer_controller.cc" />
+    <None Include="remoting_renderer_controller.h" />
+    <CustomBuild Include="remoting_renderer_factory.cc" />
+    <None Include="remoting_renderer_factory.h" />
+    <CustomBuild Include="remoting_sink_observer.cc" />
+    <None Include="remoting_sink_observer.h" />
+    <CustomBuild Include="remoting_source_impl.cc" />
+    <None Include="remoting_source_impl.h" />
+    <None Include="triggers.h" />
+  </ItemGroup>
+</Project>

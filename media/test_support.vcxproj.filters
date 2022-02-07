@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="renderers">
+      <UniqueIdentifier>{8576DE8B-FE4E-8470-DB90-C55EFFB2995A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video">
+      <UniqueIdentifier>{DFFDFF99-C119-15B3-BAA0-B802B19184B0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="renderers/mock_gpu_memory_buffer_video_frame_pool.cc">
+      <Filter>renderers</Filter>
+    </CustomBuild>
+    <None Include="renderers/mock_gpu_memory_buffer_video_frame_pool.h">
+      <Filter>renderers</Filter>
+    </None>
+    <CustomBuild Include="renderers/mock_gpu_video_accelerator_factories.cc">
+      <Filter>renderers</Filter>
+    </CustomBuild>
+    <None Include="renderers/mock_gpu_video_accelerator_factories.h">
+      <Filter>renderers</Filter>
+    </None>
+    <CustomBuild Include="video/mock_video_decode_accelerator.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/mock_video_decode_accelerator.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/mock_video_encode_accelerator.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/mock_video_encode_accelerator.h">
+      <Filter>video</Filter>
+    </None>
+  </ItemGroup>
+</Project>

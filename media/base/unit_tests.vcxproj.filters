@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="simd">
+      <UniqueIdentifier>{0394451E-EA0C-72A4-10B6-0384BC9CFDC2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="audio_block_fifo_unittest.cc" />
+    <CustomBuild Include="audio_buffer_converter_unittest.cc" />
+    <CustomBuild Include="audio_buffer_queue_unittest.cc" />
+    <CustomBuild Include="audio_buffer_unittest.cc" />
+    <CustomBuild Include="audio_bus_unittest.cc" />
+    <CustomBuild Include="audio_converter_unittest.cc" />
+    <CustomBuild Include="audio_discard_helper_unittest.cc" />
+    <CustomBuild Include="audio_fifo_unittest.cc" />
+    <CustomBuild Include="audio_hash_unittest.cc" />
+    <CustomBuild Include="audio_latency_unittest.cc" />
+    <CustomBuild Include="audio_parameters_unittest.cc" />
+    <CustomBuild Include="audio_point_unittest.cc" />
+    <CustomBuild Include="audio_pull_fifo_unittest.cc" />
+    <CustomBuild Include="audio_push_fifo_unittest.cc" />
+    <CustomBuild Include="audio_renderer_mixer_input_unittest.cc" />
+    <CustomBuild Include="audio_renderer_mixer_unittest.cc" />
+    <CustomBuild Include="audio_sample_types_unittest.cc" />
+    <CustomBuild Include="audio_shifter_unittest.cc" />
+    <CustomBuild Include="audio_timestamp_helper_unittest.cc" />
+    <CustomBuild Include="bind_to_current_loop_unittest.cc" />
+    <CustomBuild Include="bit_reader_unittest.cc" />
+    <None Include="callback_holder.h" />
+    <CustomBuild Include="callback_holder_unittest.cc" />
+    <CustomBuild Include="channel_mixer_unittest.cc" />
+    <CustomBuild Include="channel_mixing_matrix_unittest.cc" />
+    <CustomBuild Include="container_names_unittest.cc" />
+    <CustomBuild Include="data_buffer_unittest.cc" />
+    <CustomBuild Include="decoder_buffer_queue_unittest.cc" />
+    <CustomBuild Include="decoder_buffer_unittest.cc" />
+    <CustomBuild Include="djb2_unittest.cc" />
+    <CustomBuild Include="fake_demuxer_stream_unittest.cc" />
+    <CustomBuild Include="feedback_signal_accumulator_unittest.cc" />
+    <CustomBuild Include="gmock_callback_support_unittest.cc" />
+    <CustomBuild Include="key_systems_unittest.cc" />
+    <CustomBuild Include="media_url_demuxer_unittest.cc" />
+    <CustomBuild Include="mime_util_unittest.cc" />
+    <CustomBuild Include="moving_average_unittest.cc" />
+    <CustomBuild Include="multi_channel_resampler_unittest.cc" />
+    <CustomBuild Include="null_video_sink_unittest.cc" />
+    <CustomBuild Include="pipeline_impl_unittest.cc" />
+    <CustomBuild Include="ranges_unittest.cc" />
+    <CustomBuild Include="seekable_buffer_unittest.cc" />
+    <CustomBuild Include="serial_runner_unittest.cc" />
+    <CustomBuild Include="silent_sink_suspender_unittest.cc" />
+    <CustomBuild Include="sinc_resampler_unittest.cc" />
+    <CustomBuild Include="stream_parser_unittest.cc" />
+    <CustomBuild Include="text_ranges_unittest.cc" />
+    <CustomBuild Include="text_renderer_unittest.cc" />
+    <CustomBuild Include="time_delta_interpolator_unittest.cc" />
+    <CustomBuild Include="user_input_monitor_unittest.cc" />
+    <CustomBuild Include="vector_math_unittest.cc" />
+    <CustomBuild Include="video_codecs_unittest.cc" />
+    <CustomBuild Include="video_decoder_config_unittest.cc" />
+    <CustomBuild Include="video_frame_pool_unittest.cc" />
+    <CustomBuild Include="video_frame_unittest.cc" />
+    <CustomBuild Include="video_util_unittest.cc" />
+    <CustomBuild Include="wall_clock_time_source_unittest.cc" />
+    <CustomBuild Include="yuv_convert_unittest.cc" />
+    <CustomBuild Include="audio_video_metadata_extractor_unittest.cc" />
+    <CustomBuild Include="media_file_checker_unittest.cc" />
+    <CustomBuild Include="simd/convert_rgb_to_yuv_unittest.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9F42480F-DFAC-0132-428D-03C0844575F1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>test_support</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../..;../../build/Debug/gen;../../testing/gtest/include;../../third_party/khronos;../../gpu;../../third_party/wtl/include;../../third_party/ced/src;../../third_party/icu/source/common;../../third_party/icu/source/i18n;../../third_party/libwebm/source;../../skia/config;../../skia/ext;../../third_party/skia/include/c;../../third_party/skia/include/config;../../third_party/skia/include/core;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/lazy;../../third_party/skia/include/pathops;../../third_party/skia/include/pdf;../../third_party/skia/include/pipe;../../third_party/skia/include/ports;../../third_party/skia/include/utils;../../third_party/skia/include/gpu;../../third_party/skia/src/gpu;../../third_party/skia/src/sksl;../../testing/gmock_custom;../../testing/gmock/include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob0 /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;COMPONENT_BUILD;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;_DEBUG;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;GTEST_HAS_POSIX_RE=0;GTEST_LANG_CXX11=1;USE_EGL;U_USING_ICU_NAMESPACE=0;U_ENABLE_DYLOAD=0;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE;SK_IGNORE_DW_GRAY_FIX;SK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS;SKIA_DLL;GR_GL_IGNORE_ES3_MSAA=0;SK_SUPPORT_GPU=1;GR_GL_FUNCTION_TYPE=__stdcall;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="fake_audio_render_callback.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/fake_audio_render_callback.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/fake_audio_render_callback.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_audio_render_callback.h" />
+    <CustomBuild Include="fake_audio_renderer_sink.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/fake_audio_renderer_sink.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/fake_audio_renderer_sink.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_audio_renderer_sink.h" />
+    <CustomBuild Include="fake_demuxer_stream.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/fake_demuxer_stream.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/fake_demuxer_stream.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_demuxer_stream.h" />
+    <CustomBuild Include="fake_media_resources.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/fake_media_resources.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/fake_media_resources.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_media_resources.h" />
+    <CustomBuild Include="fake_single_thread_task_runner.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/fake_single_thread_task_runner.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/fake_single_thread_task_runner.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_single_thread_task_runner.h" />
+    <CustomBuild Include="fake_text_track_stream.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/fake_text_track_stream.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/fake_text_track_stream.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_text_track_stream.h" />
+    <None Include="gmock_callback_support.h" />
+    <CustomBuild Include="mock_audio_renderer_sink.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/mock_audio_renderer_sink.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/mock_audio_renderer_sink.obj</Outputs>
+    </CustomBuild>
+    <None Include="mock_audio_renderer_sink.h" />
+    <CustomBuild Include="mock_demuxer_host.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/mock_demuxer_host.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/mock_demuxer_host.obj</Outputs>
+    </CustomBuild>
+    <None Include="mock_demuxer_host.h" />
+    <CustomBuild Include="mock_filters.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/mock_filters.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/mock_filters.obj</Outputs>
+    </CustomBuild>
+    <None Include="mock_filters.h" />
+    <CustomBuild Include="mock_media_log.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/mock_media_log.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/mock_media_log.obj</Outputs>
+    </CustomBuild>
+    <None Include="mock_media_log.h" />
+    <CustomBuild Include="test_data_util.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/test_data_util.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/test_data_util.obj</Outputs>
+    </CustomBuild>
+    <None Include="test_data_util.h" />
+    <CustomBuild Include="test_helpers.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/test_support/test_helpers.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/test_support/test_helpers.obj</Outputs>
+    </CustomBuild>
+    <None Include="test_helpers.h" />
+    <None Include="test_random.h" />
+    <None Include="vector_math_testing.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) $(ProjectName)" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean $(ProjectName)" />
+  </Target>
+</Project>

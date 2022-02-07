@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="buffered_data_source_host_impl_unittest.cc" />
+    <CustomBuild Include="cache_util_unittest.cc" />
+    <CustomBuild Include="interval_map_unittest.cc" />
+    <CustomBuild Include="key_system_config_selector_unittest.cc" />
+    <CustomBuild Include="lru_unittest.cc" />
+    <CustomBuild Include="mock_webassociatedurlloader.cc" />
+    <None Include="mock_webassociatedurlloader.h" />
+    <CustomBuild Include="multibuffer_data_source_unittest.cc" />
+    <CustomBuild Include="multibuffer_unittest.cc" />
+    <CustomBuild Include="resource_multibuffer_data_provider_unittest.cc" />
+    <CustomBuild Include="run_all_unittests.cc" />
+    <CustomBuild Include="test_response_generator.cc" />
+    <None Include="test_response_generator.h" />
+    <CustomBuild Include="url_index_unittest.cc" />
+    <CustomBuild Include="video_frame_compositor_unittest.cc" />
+    <CustomBuild Include="watch_time_reporter_unittest.cc" />
+    <CustomBuild Include="webaudiosourceprovider_impl_unittest.cc" />
+    <CustomBuild Include="webmediaplayer_impl_unittest.cc" />
+  </ItemGroup>
+</Project>

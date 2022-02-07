@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="audio_unittest_util.cc" />
+    <None Include="audio_unittest_util.h" />
+    <CustomBuild Include="mock_audio_manager.cc" />
+    <None Include="mock_audio_manager.h" />
+    <CustomBuild Include="mock_audio_source_callback.cc" />
+    <None Include="mock_audio_source_callback.h" />
+    <CustomBuild Include="test_audio_input_controller_factory.cc" />
+    <None Include="test_audio_input_controller_factory.h" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="cdm">
+      <UniqueIdentifier>{9294957D-588B-CD2B-973A-0DF38A5AE20B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="device_monitors">
+      <UniqueIdentifier>{DE0BFBF8-FBBF-713D-807D-3D55EDF7DD15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="filters">
+      <UniqueIdentifier>{792205BC-615E-5347-DCF1-1B9A1ADFD531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="formats\common">
+      <UniqueIdentifier>{667731A9-EC1C-8608-25C4-5FCBF7BC03DE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="formats">
+      <UniqueIdentifier>{862EFC13-CF88-CD55-6906-1018278AD756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="formats\webm">
+      <UniqueIdentifier>{24CF0E3C-31D1-74A6-72BF-F4897CF31E30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="muxers">
+      <UniqueIdentifier>{8D16B361-8EE6-FFAD-DC5B-867D62B664CC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderers">
+      <UniqueIdentifier>{8576DE8B-FE4E-8470-DB90-C55EFFB2995A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video">
+      <UniqueIdentifier>{DFFDFF99-C119-15B3-BAA0-B802B19184B0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="cdm/aes_decryptor_unittest.cc">
+      <Filter>cdm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="cdm/external_clear_key_test_helper.cc">
+      <Filter>cdm</Filter>
+    </CustomBuild>
+    <None Include="cdm/external_clear_key_test_helper.h">
+      <Filter>cdm</Filter>
+    </None>
+    <CustomBuild Include="cdm/json_web_key_unittest.cc">
+      <Filter>cdm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="cdm/simple_cdm_allocator.cc">
+      <Filter>cdm</Filter>
+    </CustomBuild>
+    <None Include="cdm/simple_cdm_allocator.h">
+      <Filter>cdm</Filter>
+    </None>
+    <CustomBuild Include="cdm/simple_cdm_allocator_unittest.cc">
+      <Filter>cdm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="cdm/simple_cdm_buffer.cc">
+      <Filter>cdm</Filter>
+    </CustomBuild>
+    <None Include="cdm/simple_cdm_buffer.h">
+      <Filter>cdm</Filter>
+    </None>
+    <CustomBuild Include="device_monitors/system_message_window_win_unittest.cc">
+      <Filter>device_monitors</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/audio_clock_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/audio_decoder_selector_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/audio_renderer_algorithm_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/audio_timestamp_validator_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/chunk_demuxer_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/decrypting_audio_decoder_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/decrypting_demuxer_stream_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/decrypting_video_decoder_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/fake_video_decoder.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <None Include="filters/fake_video_decoder.h">
+      <Filter>filters</Filter>
+    </None>
+    <CustomBuild Include="filters/fake_video_decoder_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/file_data_source_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/frame_processor_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/h264_bit_reader_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/h264_parser_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/ivf_parser_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/jpeg_parser_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/memory_data_source_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/pipeline_controller_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/source_buffer_state_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/source_buffer_stream_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/video_cadence_estimator_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/video_decoder_selector_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/video_frame_stream_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/video_renderer_algorithm_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/vp8_bool_decoder_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/vp8_parser_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/vp9_parser_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/vp9_raw_bits_reader_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/common/offset_byte_queue_unittest.cc">
+      <Filter>formats\common</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/webm/cluster_builder.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <None Include="formats/webm/cluster_builder.h">
+      <Filter>formats\webm</Filter>
+    </None>
+    <CustomBuild Include="formats/webm/opus_packet_builder.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <None Include="formats/webm/opus_packet_builder.h">
+      <Filter>formats\webm</Filter>
+    </None>
+    <CustomBuild Include="formats/webm/tracks_builder.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <None Include="formats/webm/tracks_builder.h">
+      <Filter>formats\webm</Filter>
+    </None>
+    <CustomBuild Include="formats/webm/webm_cluster_parser_unittest.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/webm/webm_content_encodings_client_unittest.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/webm/webm_crypto_helpers_unittest.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/webm/webm_parser_unittest.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/webm/webm_stream_parser_unittest.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/webm/webm_tracks_parser_unittest.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="formats/webm/webm_webvtt_parser_unittest.cc">
+      <Filter>formats\webm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="muxers/webm_muxer_unittest.cc">
+      <Filter>muxers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="renderers/audio_renderer_impl_unittest.cc">
+      <Filter>renderers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="renderers/renderer_impl_unittest.cc">
+      <Filter>renderers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="renderers/skcanvas_video_renderer_unittest.cc">
+      <Filter>renderers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="renderers/video_renderer_impl_unittest.cc">
+      <Filter>renderers</Filter>
+    </CustomBuild>
+    <CustomBuild Include="video/gpu_memory_buffer_video_frame_pool_unittest.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <CustomBuild Include="video/h264_poc_unittest.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <CustomBuild Include="cdm/cdm_adapter_unittest.cc">
+      <Filter>cdm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/audio_decoder_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/audio_file_reader_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/blocking_url_protocol_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/ffmpeg_demuxer_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/ffmpeg_glue_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/in_memory_url_protocol_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+    <CustomBuild Include="filters/ffmpeg_video_decoder_unittest.cc">
+      <Filter>filters</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

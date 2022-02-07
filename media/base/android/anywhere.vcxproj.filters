@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="media_codec_bridge.cc" />
+    <None Include="media_codec_bridge.h" />
+    <None Include="media_codec_direction.h" />
+    <CustomBuild Include="media_codec_loop.cc" />
+    <None Include="media_codec_loop.h" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="external_clear_key">
+      <UniqueIdentifier>{0CF35F90-EE4C-A0DA-18DE-43EB6DB8D9BA}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="cdm_file_io_test.cc" />
+    <None Include="cdm_file_io_test.h" />
+    <CustomBuild Include="external_clear_key/cdm_video_decoder.cc">
+      <Filter>external_clear_key</Filter>
+    </CustomBuild>
+    <None Include="external_clear_key/cdm_video_decoder.h">
+      <Filter>external_clear_key</Filter>
+    </None>
+    <CustomBuild Include="external_clear_key/clear_key_cdm.cc">
+      <Filter>external_clear_key</Filter>
+    </CustomBuild>
+    <None Include="external_clear_key/clear_key_cdm.h">
+      <Filter>external_clear_key</Filter>
+    </None>
+    <None Include="external_clear_key/clear_key_cdm_common.h">
+      <Filter>external_clear_key</Filter>
+    </None>
+    <CustomBuild Include="external_clear_key/ffmpeg_cdm_audio_decoder.cc">
+      <Filter>external_clear_key</Filter>
+    </CustomBuild>
+    <None Include="external_clear_key/ffmpeg_cdm_audio_decoder.h">
+      <Filter>external_clear_key</Filter>
+    </None>
+    <CustomBuild Include="external_clear_key/ffmpeg_cdm_video_decoder.cc">
+      <Filter>external_clear_key</Filter>
+    </CustomBuild>
+    <None Include="external_clear_key/ffmpeg_cdm_video_decoder.h">
+      <Filter>external_clear_key</Filter>
+    </None>
+  </ItemGroup>
+</Project>

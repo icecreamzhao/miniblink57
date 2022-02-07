@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="demuxer_stream_provider_shim.cc" />
+    <None Include="demuxer_stream_provider_shim.h" />
+    <CustomBuild Include="gpu_mojo_media_client.cc" />
+    <None Include="gpu_mojo_media_client.h" />
+    <CustomBuild Include="interface_factory_impl.cc" />
+    <None Include="interface_factory_impl.h" />
+    <None Include="media_mojo_export.h" />
+    <CustomBuild Include="media_service.cc" />
+    <None Include="media_service.h" />
+    <CustomBuild Include="media_service_factory.cc" />
+    <None Include="media_service_factory.h" />
+    <CustomBuild Include="mojo_audio_decoder_service.cc" />
+    <None Include="mojo_audio_decoder_service.h" />
+    <CustomBuild Include="mojo_cdm_allocator.cc" />
+    <None Include="mojo_cdm_allocator.h" />
+    <CustomBuild Include="mojo_cdm_promise.cc" />
+    <None Include="mojo_cdm_promise.h" />
+    <CustomBuild Include="mojo_cdm_service.cc" />
+    <None Include="mojo_cdm_service.h" />
+    <CustomBuild Include="mojo_cdm_service_context.cc" />
+    <None Include="mojo_cdm_service_context.h" />
+    <CustomBuild Include="mojo_decryptor_service.cc" />
+    <None Include="mojo_decryptor_service.h" />
+    <CustomBuild Include="mojo_demuxer_stream_adapter.cc" />
+    <None Include="mojo_demuxer_stream_adapter.h" />
+    <CustomBuild Include="mojo_media_client.cc" />
+    <None Include="mojo_media_client.h" />
+    <CustomBuild Include="mojo_provision_fetcher.cc" />
+    <None Include="mojo_provision_fetcher.h" />
+    <CustomBuild Include="mojo_renderer_service.cc" />
+    <None Include="mojo_renderer_service.h" />
+    <CustomBuild Include="mojo_video_decoder_service.cc" />
+    <None Include="mojo_video_decoder_service.h" />
+    <None Include="strong_binding_set.h" />
+    <CustomBuild Include="test_mojo_media_client.cc" />
+    <None Include="test_mojo_media_client.h" />
+  </ItemGroup>
+</Project>

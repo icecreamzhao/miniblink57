@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C5E3C3F4-8EF3-5F5B-1175-5468234CCE5E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>capture</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../..;../../build/Release/gen;../../third_party/khronos;../../gpu;../../third_party/wtl/include;../../third_party/ced/src;../../third_party/icu/source/common;../../third_party/icu/source/i18n;../../third_party/libwebm/source;../../skia/config;../../skia/ext;../../third_party/skia/include/c;../../third_party/skia/include/config;../../third_party/skia/include/core;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/lazy;../../third_party/skia/include/pathops;../../third_party/skia/include/pdf;../../third_party/skia/include/pipe;../../third_party/skia/include/ports;../../third_party/skia/include/utils;../../third_party/skia/include/gpu;../../third_party/skia/src/gpu;../../third_party/skia/src/sksl;../../third_party/libyuv/include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob2 /Oy- /d2Zi+ /Zc:inline /Gw /Oi /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>CAPTURE_IMPLEMENTATION;V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;OFFICIAL_BUILD;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;MEDIA_IMPLEMENTATION;USE_EGL;U_USING_ICU_NAMESPACE=0;U_ENABLE_DYLOAD=0;U_STATIC_IMPLEMENTATION;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE;SK_IGNORE_DW_GRAY_FIX;SK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS;SK_SUPPORT_GPU=1;GR_GL_FUNCTION_TYPE=__stdcall;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="capture_export.h" />
+    <CustomBuild Include="content/animated_content_sampler.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/animated_content_sampler.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/animated_content_sampler.obj</Outputs>
+    </CustomBuild>
+    <None Include="content/animated_content_sampler.h" />
+    <CustomBuild Include="content/capture_resolution_chooser.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/capture_resolution_chooser.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/capture_resolution_chooser.obj</Outputs>
+    </CustomBuild>
+    <None Include="content/capture_resolution_chooser.h" />
+    <CustomBuild Include="content/screen_capture_device_core.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/screen_capture_device_core.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/screen_capture_device_core.obj</Outputs>
+    </CustomBuild>
+    <None Include="content/screen_capture_device_core.h" />
+    <CustomBuild Include="content/smooth_event_sampler.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/smooth_event_sampler.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/smooth_event_sampler.obj</Outputs>
+    </CustomBuild>
+    <None Include="content/smooth_event_sampler.h" />
+    <CustomBuild Include="content/thread_safe_capture_oracle.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/thread_safe_capture_oracle.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/thread_safe_capture_oracle.obj</Outputs>
+    </CustomBuild>
+    <None Include="content/thread_safe_capture_oracle.h" />
+    <CustomBuild Include="content/video_capture_oracle.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_oracle.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_oracle.obj</Outputs>
+    </CustomBuild>
+    <None Include="content/video_capture_oracle.h" />
+    <CustomBuild Include="video/fake_video_capture_device.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/fake_video_capture_device.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/fake_video_capture_device.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/fake_video_capture_device.h" />
+    <CustomBuild Include="video/fake_video_capture_device_factory.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/fake_video_capture_device_factory.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/fake_video_capture_device_factory.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/fake_video_capture_device_factory.h" />
+    <CustomBuild Include="video/file_video_capture_device.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/file_video_capture_device.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/file_video_capture_device.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/file_video_capture_device.h" />
+    <CustomBuild Include="video/file_video_capture_device_factory.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/file_video_capture_device_factory.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/file_video_capture_device_factory.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/file_video_capture_device_factory.h" />
+    <None Include="video/scoped_result_callback.h" />
+    <CustomBuild Include="video/shared_memory_buffer_tracker.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/shared_memory_buffer_tracker.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/shared_memory_buffer_tracker.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/shared_memory_buffer_tracker.h" />
+    <None Include="video/video_capture_buffer_handle.h" />
+    <None Include="video/video_capture_buffer_pool.h" />
+    <CustomBuild Include="video/video_capture_buffer_pool_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_buffer_pool_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_buffer_pool_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/video_capture_buffer_pool_impl.h" />
+    <None Include="video/video_capture_buffer_tracker.h" />
+    <None Include="video/video_capture_buffer_tracker_factory.h" />
+    <CustomBuild Include="video/video_capture_buffer_tracker_factory_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_buffer_tracker_factory_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_buffer_tracker_factory_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/video_capture_buffer_tracker_factory_impl.h" />
+    <CustomBuild Include="video/video_capture_device.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_device.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_device.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/video_capture_device.h" />
+    <CustomBuild Include="video/video_capture_device_client.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_device_client.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_device_client.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/video_capture_device_client.h" />
+    <CustomBuild Include="video/video_capture_device_descriptor.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_device_descriptor.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_device_descriptor.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/video_capture_device_descriptor.h" />
+    <CustomBuild Include="video/video_capture_device_factory.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_device_factory.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_device_factory.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/video_capture_device_factory.h" />
+    <None Include="video/video_capture_jpeg_decoder.h" />
+    <None Include="video/video_frame_receiver.h" />
+    <CustomBuild Include="video/win/capability_list_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/capability_list_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/capability_list_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/capability_list_win.h" />
+    <CustomBuild Include="video/win/filter_base_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/filter_base_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/filter_base_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/filter_base_win.h" />
+    <CustomBuild Include="video/win/pin_base_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/pin_base_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/pin_base_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/pin_base_win.h" />
+    <None Include="video/win/sink_filter_observer_win.h" />
+    <CustomBuild Include="video/win/sink_filter_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/sink_filter_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/sink_filter_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/sink_filter_win.h" />
+    <CustomBuild Include="video/win/sink_input_pin_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/sink_input_pin_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/sink_input_pin_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/sink_input_pin_win.h" />
+    <CustomBuild Include="video/win/video_capture_device_factory_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_device_factory_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_device_factory_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/video_capture_device_factory_win.h" />
+    <CustomBuild Include="video/win/video_capture_device_mf_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_device_mf_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_device_mf_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/video_capture_device_mf_win.h" />
+    <CustomBuild Include="video/win/video_capture_device_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_device_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_device_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/win/video_capture_device_win.h" />
+    <CustomBuild Include="video_capture_types.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capture_types.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capture_types.obj</Outputs>
+    </CustomBuild>
+    <None Include="video_capture_types.h" />
+    <CustomBuild Include="video_capturer_source.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/video_capturer_source.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/video_capturer_source.obj</Outputs>
+    </CustomBuild>
+    <None Include="video_capturer_source.h" />
+    <CustomBuild Include="video/blob_utils.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/capture/capture/blob_utils.obj</Command>
+      <Outputs>$(OutDir)obj/media/capture/capture/blob_utils.obj</Outputs>
+    </CustomBuild>
+    <None Include="video/blob_utils.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) obj/media/capture/capture.lib" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean obj/media/capture/capture.lib" />
+  </Target>
+</Project>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..\..\build\Release\gen\media\cast\logging\proto">
+      <UniqueIdentifier>{0305D704-0183-8322-77A7-30F2684CB98B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\gen\media\cast\logging">
+      <UniqueIdentifier>{90FFDF93-0B6E-B3F1-B546-C4A7EDB895D1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\gen\media\cast">
+      <UniqueIdentifier>{6AC8C416-02B4-FF07-844B-947F4C8B5EC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\gen\media">
+      <UniqueIdentifier>{52FE3314-F982-C3CB-9B14-7CA4A30E463D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\gen">
+      <UniqueIdentifier>{29E660F0-E1CB-E947-C1D7-880A6332202B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release">
+      <UniqueIdentifier>{89096691-F1A1-FA6F-B455-BDB155902957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build">
+      <UniqueIdentifier>{BDA1F720-C781-E372-4272-6376E80329A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{A8A4AA46-5437-4AB8-6540-F14ED994B38E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{78245A82-158D-7D20-54A6-7C428D0A7B36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\pyproto\media\cast\logging\proto">
+      <UniqueIdentifier>{977A6998-6817-4AB8-CC98-A4946CB555BA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\pyproto\media\cast\logging">
+      <UniqueIdentifier>{9C206E1E-C1E9-4A91-496B-5DCE97D76524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\pyproto\media\cast">
+      <UniqueIdentifier>{2833FFCE-7606-0B90-9EF9-3E45933C6EDA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\pyproto\media">
+      <UniqueIdentifier>{590128B6-539B-310C-C1BC-4488CFD66DFB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\pyproto">
+      <UniqueIdentifier>{61D64583-FBC3-3A25-B8F0-32F7E5AD86B5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../build/Release/gen/media/cast/logging/proto/raw_events.pb.h">
+      <Filter>..\..\build\Release\gen\media\cast\logging\proto</Filter>
+    </None>
+    <CustomBuild Include="../../build/Release/gen/media/cast/logging/proto/raw_events.pb.cc">
+      <Filter>..\..\build\Release\gen\media\cast\logging\proto</Filter>
+    </CustomBuild>
+    <None Include="../../build/Release/pyproto/media/cast/logging/proto/raw_events_pb2.py">
+      <Filter>..\..\build\Release\pyproto\media\cast\logging\proto</Filter>
+    </None>
+  </ItemGroup>
+</Project>

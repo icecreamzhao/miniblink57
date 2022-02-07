@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..\..\..\build\Debug\gen\media\mojo\interfaces">
+      <UniqueIdentifier>{D7770E92-E3A6-DFB3-0D63-F295FCB98DBB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Debug\gen\media\mojo">
+      <UniqueIdentifier>{E65F17FC-D82B-C10D-937C-A58A9B991677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Debug\gen\media">
+      <UniqueIdentifier>{18DBB2ED-C2C2-2488-5911-35A6B69FA19A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Debug\gen">
+      <UniqueIdentifier>{96CB43C6-03A8-F0FA-70AD-0D91AC9535C5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build\Debug">
+      <UniqueIdentifier>{D17A82A3-218C-9675-ADBF-02EADCBA04F3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\build">
+      <UniqueIdentifier>{2EA9A752-CA54-BCC6-50BF-D2CCDABA23F6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..">
+      <UniqueIdentifier>{BC2D405D-5A7E-241B-15FC-441581082017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{A8A4AA46-5437-4AB8-6540-F14ED994B38E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{78245A82-158D-7D20-54A6-7C428D0A7B36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/audio_decoder.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/audio_decoder.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/audio_output.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/audio_output.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/audio_parameters.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/audio_parameters.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/content_decryption_module.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/content_decryption_module.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/decryptor.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/decryptor.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/demuxer_stream.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/demuxer_stream.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/interface_factory.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/interface_factory.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/media_service.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/media_service.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/media_types.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/media_types.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/output_protection.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/output_protection.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/provision_fetcher.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/provision_fetcher.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/renderer.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/renderer.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+    <CustomBuild Include="../../../build/Debug/gen/media/mojo/interfaces/video_decoder.mojom-blink.cc">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </CustomBuild>
+    <None Include="../../../build/Debug/gen/media/mojo/interfaces/video_decoder.mojom-blink.h">
+      <Filter>..\..\..\build\Debug\gen\media\mojo\interfaces</Filter>
+    </None>
+  </ItemGroup>
+</Project>

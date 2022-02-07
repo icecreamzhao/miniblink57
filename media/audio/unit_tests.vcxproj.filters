@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win">
+      <UniqueIdentifier>{A2FD7ED2-524A-B7B7-B76C-D928BB55947B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="audio_input_controller_unittest.cc" />
+    <CustomBuild Include="audio_input_device_unittest.cc" />
+    <CustomBuild Include="audio_input_unittest.cc" />
+    <CustomBuild Include="audio_manager_unittest.cc" />
+    <CustomBuild Include="audio_output_controller_unittest.cc" />
+    <CustomBuild Include="audio_output_device_unittest.cc" />
+    <CustomBuild Include="audio_output_proxy_unittest.cc" />
+    <CustomBuild Include="audio_power_monitor_unittest.cc" />
+    <CustomBuild Include="audio_streams_tracker_unittest.cc" />
+    <CustomBuild Include="fake_audio_worker_unittest.cc" />
+    <CustomBuild Include="simple_sources_unittest.cc" />
+    <CustomBuild Include="virtual_audio_input_stream_unittest.cc" />
+    <CustomBuild Include="virtual_audio_output_stream_unittest.cc" />
+    <CustomBuild Include="win/audio_device_listener_win_unittest.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <CustomBuild Include="win/audio_low_latency_input_win_unittest.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <CustomBuild Include="win/audio_low_latency_output_win_unittest.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <CustomBuild Include="win/audio_output_win_unittest.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <CustomBuild Include="win/core_audio_util_win_unittest.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

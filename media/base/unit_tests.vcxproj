@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6E712AD2-1C8D-2563-8B55-8CCA3B7AF9FB}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>unit_tests</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../..;../../build/Debug/gen;../../testing/gtest/include;../../third_party/khronos;../../gpu;../../third_party/wtl/include;../../third_party/ced/src;../../third_party/icu/source/common;../../third_party/icu/source/i18n;../../skia/config;../../skia/ext;../../third_party/skia/include/c;../../third_party/skia/include/config;../../third_party/skia/include/core;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/lazy;../../third_party/skia/include/pathops;../../third_party/skia/include/pdf;../../third_party/skia/include/pipe;../../third_party/skia/include/ports;../../third_party/skia/include/utils;../../third_party/skia/include/gpu;../../third_party/skia/src/gpu;../../third_party/skia/src/sksl;../../third_party/mesa/src/include;../../third_party/libwebm/source;../../testing/gmock_custom;../../testing/gmock/include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob0 /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;COMPONENT_BUILD;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;_DEBUG;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;GTEST_HAS_POSIX_RE=0;GTEST_LANG_CXX11=1;USE_EGL;U_USING_ICU_NAMESPACE=0;U_ENABLE_DYLOAD=0;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE;SK_IGNORE_DW_GRAY_FIX;SK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS;SKIA_DLL;GR_GL_IGNORE_ES3_MSAA=0;SK_SUPPORT_GPU=1;GR_GL_FUNCTION_TYPE=__stdcall;MESA_EGL_NO_X11_HEADERS;UNIT_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="audio_block_fifo_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_block_fifo_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_block_fifo_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_buffer_converter_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_buffer_converter_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_buffer_converter_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_buffer_queue_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_buffer_queue_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_buffer_queue_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_buffer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_buffer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_buffer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_bus_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_bus_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_bus_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_converter_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_converter_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_converter_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_discard_helper_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_discard_helper_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_discard_helper_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_fifo_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_fifo_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_fifo_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_hash_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_hash_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_hash_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_latency_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_latency_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_latency_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_parameters_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_parameters_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_parameters_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_point_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_point_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_point_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_pull_fifo_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_pull_fifo_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_pull_fifo_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_push_fifo_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_push_fifo_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_push_fifo_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_renderer_mixer_input_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_renderer_mixer_input_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_renderer_mixer_input_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_renderer_mixer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_renderer_mixer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_renderer_mixer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_sample_types_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_sample_types_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_sample_types_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_shifter_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_shifter_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_shifter_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_timestamp_helper_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_timestamp_helper_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_timestamp_helper_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="bind_to_current_loop_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/bind_to_current_loop_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/bind_to_current_loop_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="bit_reader_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/bit_reader_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/bit_reader_unittest.obj</Outputs>
+    </CustomBuild>
+    <None Include="callback_holder.h" />
+    <CustomBuild Include="callback_holder_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/callback_holder_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/callback_holder_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="channel_mixer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/channel_mixer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/channel_mixer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="channel_mixing_matrix_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/channel_mixing_matrix_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/channel_mixing_matrix_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="container_names_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/container_names_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/container_names_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="data_buffer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/data_buffer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/data_buffer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="decoder_buffer_queue_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/decoder_buffer_queue_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/decoder_buffer_queue_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="decoder_buffer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/decoder_buffer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/decoder_buffer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="djb2_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/djb2_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/djb2_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="fake_demuxer_stream_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/fake_demuxer_stream_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/fake_demuxer_stream_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="feedback_signal_accumulator_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/feedback_signal_accumulator_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/feedback_signal_accumulator_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="gmock_callback_support_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/gmock_callback_support_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/gmock_callback_support_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="key_systems_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/key_systems_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/key_systems_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="media_url_demuxer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/media_url_demuxer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/media_url_demuxer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="mime_util_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/mime_util_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/mime_util_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="moving_average_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/moving_average_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/moving_average_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="multi_channel_resampler_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/multi_channel_resampler_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/multi_channel_resampler_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="null_video_sink_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/null_video_sink_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/null_video_sink_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="pipeline_impl_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/pipeline_impl_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/pipeline_impl_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="ranges_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/ranges_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/ranges_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="seekable_buffer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/seekable_buffer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/seekable_buffer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="serial_runner_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/serial_runner_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/serial_runner_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="silent_sink_suspender_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/silent_sink_suspender_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/silent_sink_suspender_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="sinc_resampler_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/sinc_resampler_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/sinc_resampler_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="stream_parser_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/stream_parser_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/stream_parser_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="text_ranges_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/text_ranges_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/text_ranges_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="text_renderer_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/text_renderer_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/text_renderer_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="time_delta_interpolator_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/time_delta_interpolator_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/time_delta_interpolator_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="user_input_monitor_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/user_input_monitor_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/user_input_monitor_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="vector_math_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/vector_math_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/vector_math_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="video_codecs_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/video_codecs_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/video_codecs_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="video_decoder_config_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/video_decoder_config_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/video_decoder_config_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="video_frame_pool_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/video_frame_pool_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/video_frame_pool_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="video_frame_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/video_frame_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/video_frame_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="video_util_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/video_util_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/video_util_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="wall_clock_time_source_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/wall_clock_time_source_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/wall_clock_time_source_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="yuv_convert_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/yuv_convert_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/yuv_convert_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="audio_video_metadata_extractor_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/audio_video_metadata_extractor_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/audio_video_metadata_extractor_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="media_file_checker_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/media_file_checker_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/media_file_checker_unittest.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="simd/convert_rgb_to_yuv_unittest.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/base/unit_tests/convert_rgb_to_yuv_unittest.obj</Command>
+      <Outputs>$(OutDir)obj/media/base/unit_tests/convert_rgb_to_yuv_unittest.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) $(ProjectName)" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean $(ProjectName)" />
+  </Target>
+</Project>

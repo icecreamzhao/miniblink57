@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sounds">
+      <UniqueIdentifier>{64ADB876-BF04-9F55-AFF0-EC460AC246C8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="win">
+      <UniqueIdentifier>{A2FD7ED2-524A-B7B7-B76C-D928BB55947B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="agc_audio_stream.h" />
+    <CustomBuild Include="audio_device_description.cc" />
+    <None Include="audio_device_description.h" />
+    <CustomBuild Include="audio_device_name.cc" />
+    <None Include="audio_device_name.h" />
+    <CustomBuild Include="audio_device_thread.cc" />
+    <None Include="audio_device_thread.h" />
+    <CustomBuild Include="audio_features.cc" />
+    <None Include="audio_features.h" />
+    <None Include="audio_file_writer.h" />
+    <CustomBuild Include="audio_input_controller.cc" />
+    <None Include="audio_input_controller.h" />
+    <CustomBuild Include="audio_input_device.cc" />
+    <None Include="audio_input_device.h" />
+    <CustomBuild Include="audio_input_ipc.cc" />
+    <None Include="audio_input_ipc.h" />
+    <None Include="audio_io.h" />
+    <CustomBuild Include="audio_manager.cc" />
+    <None Include="audio_manager.h" />
+    <CustomBuild Include="audio_manager_base.cc" />
+    <None Include="audio_manager_base.h" />
+    <CustomBuild Include="audio_output_controller.cc" />
+    <None Include="audio_output_controller.h" />
+    <CustomBuild Include="audio_output_device.cc" />
+    <None Include="audio_output_device.h" />
+    <CustomBuild Include="audio_output_dispatcher.cc" />
+    <None Include="audio_output_dispatcher.h" />
+    <CustomBuild Include="audio_output_dispatcher_impl.cc" />
+    <None Include="audio_output_dispatcher_impl.h" />
+    <CustomBuild Include="audio_output_ipc.cc" />
+    <None Include="audio_output_ipc.h" />
+    <CustomBuild Include="audio_output_proxy.cc" />
+    <None Include="audio_output_proxy.h" />
+    <CustomBuild Include="audio_output_resampler.cc" />
+    <None Include="audio_output_resampler.h" />
+    <CustomBuild Include="audio_output_stream_sink.cc" />
+    <None Include="audio_output_stream_sink.h" />
+    <CustomBuild Include="audio_power_monitor.cc" />
+    <None Include="audio_power_monitor.h" />
+    <None Include="audio_source_diverter.h" />
+    <CustomBuild Include="audio_streams_tracker.cc" />
+    <None Include="audio_streams_tracker.h" />
+    <CustomBuild Include="clockless_audio_sink.cc" />
+    <None Include="clockless_audio_sink.h" />
+    <CustomBuild Include="fake_audio_input_stream.cc" />
+    <None Include="fake_audio_input_stream.h" />
+    <CustomBuild Include="fake_audio_log_factory.cc" />
+    <None Include="fake_audio_log_factory.h" />
+    <CustomBuild Include="fake_audio_manager.cc" />
+    <None Include="fake_audio_manager.h" />
+    <CustomBuild Include="fake_audio_output_stream.cc" />
+    <None Include="fake_audio_output_stream.h" />
+    <CustomBuild Include="fake_audio_worker.cc" />
+    <None Include="fake_audio_worker.h" />
+    <CustomBuild Include="null_audio_sink.cc" />
+    <None Include="null_audio_sink.h" />
+    <CustomBuild Include="sample_rates.cc" />
+    <None Include="sample_rates.h" />
+    <CustomBuild Include="scoped_task_runner_observer.cc" />
+    <None Include="scoped_task_runner_observer.h" />
+    <CustomBuild Include="simple_sources.cc" />
+    <None Include="simple_sources.h" />
+    <CustomBuild Include="sounds/audio_stream_handler.cc">
+      <Filter>sounds</Filter>
+    </CustomBuild>
+    <None Include="sounds/audio_stream_handler.h">
+      <Filter>sounds</Filter>
+    </None>
+    <CustomBuild Include="sounds/sounds_manager.cc">
+      <Filter>sounds</Filter>
+    </CustomBuild>
+    <None Include="sounds/sounds_manager.h">
+      <Filter>sounds</Filter>
+    </None>
+    <CustomBuild Include="sounds/wav_audio_handler.cc">
+      <Filter>sounds</Filter>
+    </CustomBuild>
+    <None Include="sounds/wav_audio_handler.h">
+      <Filter>sounds</Filter>
+    </None>
+    <CustomBuild Include="virtual_audio_input_stream.cc" />
+    <None Include="virtual_audio_input_stream.h" />
+    <CustomBuild Include="virtual_audio_output_stream.cc" />
+    <None Include="virtual_audio_output_stream.h" />
+    <CustomBuild Include="virtual_audio_sink.cc" />
+    <None Include="virtual_audio_sink.h" />
+    <CustomBuild Include="win/audio_device_listener_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/audio_device_listener_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/audio_low_latency_input_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/audio_low_latency_input_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/audio_low_latency_output_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/audio_low_latency_output_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/audio_manager_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/audio_manager_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/avrt_wrapper_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/avrt_wrapper_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/core_audio_util_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/core_audio_util_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/device_enumeration_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/device_enumeration_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/wavein_input_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/wavein_input_win.h">
+      <Filter>win</Filter>
+    </None>
+    <CustomBuild Include="win/waveout_output_win.cc">
+      <Filter>win</Filter>
+    </CustomBuild>
+    <None Include="win/waveout_output_win.h">
+      <Filter>win</Filter>
+    </None>
+  </ItemGroup>
+</Project>
