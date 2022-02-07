@@ -37,12 +37,12 @@ namespace internal {
     struct OptionalStorage {
         // Initializing |empty_| here instead of using default member initializing
         // to avoid errors in g++ 4.8.
-        const OptionalStorage()
+        /*const*/ OptionalStorage()
             : empty_('\0')
         {
         }
 
-        const explicit OptionalStorage(const T& value)
+        /*const*/ explicit OptionalStorage(const T& value)
             : is_null_(false)
             , value_(value)
         {
@@ -85,12 +85,12 @@ namespace internal {
     struct OptionalStorage<T, true> {
         // Initializing |empty_| here instead of using default member initializing
         // to avoid errors in g++ 4.8.
-        const OptionalStorage()
+        /*const*/ OptionalStorage()
             : empty_('\0')
         {
         }
 
-        const explicit OptionalStorage(const T& value)
+        /*const*/ explicit OptionalStorage(const T& value)
             : is_null_(false)
             , value_(value)
         {
@@ -146,9 +146,9 @@ class Optional {
 public:
     using value_type = T;
 
-    const Optional() { }
+    /*const*/ Optional() { }
 
-    const Optional(base::nullopt_t) { }
+    /*const*/ Optional(base::nullopt_t) { }
 
     Optional(const Optional& other)
     {
@@ -162,7 +162,7 @@ public:
             Init(std::move(other.value()));
     }
 
-    const Optional(const T& value)
+    /*const*/ Optional(const T& value)
         : storage_(value)
     {
     }

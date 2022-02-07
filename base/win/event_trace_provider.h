@@ -21,7 +21,7 @@
 #undef max
 #undef min
 
-#ifndef _DEBUG
+#if 1 // ndef _DEBUG
 
 typedef struct  _TRACE_GUID_REGISTRATION {
     LPCGUID Guid;            // Guid of data block being registered or updated.

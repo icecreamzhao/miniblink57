@@ -5,24 +5,14 @@
 #include <windows.h>
 #include <intrin.h>
 
-//#pragma optimize("", off)
-//#pragma clang optimize off
 #pragma pack(push, 4)
 
-#if 1 // def SUPPORT_XP_CODE
+#ifndef _WIN64
 
-#ifdef _WIN64
-#define InterlockedBitTestAndSetPointer(ptr,val) InterlockedBitTestAndSet64((PLONGLONG)ptr,(LONGLONG)val)
-#define InterlockedAddPointer(ptr,val) InterlockedAdd64((PLONGLONG)ptr,(LONGLONG)val)
-#define InterlockedAndPointer(ptr,val) InterlockedAnd64((PLONGLONG)ptr,(LONGLONG)val)
-#define InterlockedOrPointer(ptr,val) InterlockedOr64((PLONGLONG)ptr,(LONGLONG)val)
-#error "not support x64
-#else
 #define InterlockedBitTestAndSetPointer(ptr,val) InterlockedBitTestAndSet((PLONG)ptr,(LONG)val)
 #define InterlockedAddPointer(ptr,val) InterlockedAdd((PLONG)ptr,(LONG)val)
 #define InterlockedAndPointer(ptr,val) InterlockedAnd((PLONG)ptr,(LONG)val)
 #define InterlockedOrPointer(ptr,val) InterlockedOr((PLONG)ptr,(LONG)val)
-#endif
 
 inline BOOL SleepConditionVariableCSXp(PCONDITION_VARIABLE condVar, PCRITICAL_SECTION criticalSection, DWORD timeout);
 inline BOOL SleepConditionVariableSRWXp(PCONDITION_VARIABLE condVar, PSRWLOCK SRWLock, DWORD dwMilliseconds, ULONG Flags);
@@ -45,7 +35,7 @@ inline void CV_ASSERT(BOOL b, const char* debugString)
     DebugBreak();
 }
 
-static inline DWORD runOnceBeginInitialize(INIT_ONCE *once, ULONG flags, void** context)
+static inline DWORD runOnceBeginInitialize(INIT_ONCE* once, ULONG flags, void** context)
 {
     if (flags & RTL_RUN_ONCE_CHECK_ONLY) {
         ULONG_PTR val = (ULONG_PTR)once->Ptr;
@@ -111,7 +101,7 @@ static inline DWORD runOnceComplete(INIT_ONCE *once, ULONG flags, void* context)
 
         switch (val & 3) { // get low 2 bit
         case 1:  /* in progress */
-            if (InterlockedCompareExchange((long volatile *)&once->Ptr, (long)context, (long)val) != (long)val)
+            if (InterlockedCompareExchangePointer(&once->Ptr, context, (void*)val) != (void*)val)
                 break;
 
 //             val &= ~3;// low 2 bit to 0, get ptr
@@ -127,7 +117,7 @@ static inline DWORD runOnceComplete(INIT_ONCE *once, ULONG flags, void* context)
         case 3:  /* in progress, async */
             if (!(flags & RTL_RUN_ONCE_ASYNC))
                 return STATUS_INVALID_PARAMETER;
-            if (InterlockedCompareExchange((long volatile *)&once->Ptr, (long)context, (long)val) != (long)val)
+            if (InterlockedCompareExchangePointer(&once->Ptr, context, (void*)val) != (void*)val)
                 break;
             return S_OK;
 
@@ -157,7 +147,7 @@ inline BOOL InitOnceExecuteOnceXp(INIT_ONCE *once, PINIT_ONCE_FN func, void *par
     return !runOnceExecuteOnce(once, func, param, context);
 }
 
-inline BOOL InitOnceBeginInitializeXp(LPINIT_ONCE lpInitOnce, DWORD dwFlags, PBOOL fPending, LPVOID* lpContext)
+inline BOOL InitOnceBeginInitializeXp(INIT_ONCE* lpInitOnce, DWORD dwFlags, PBOOL fPending, LPVOID* lpContext)
 {
     long hr = S_OK;
     BOOL result = FALSE;
@@ -173,7 +163,7 @@ inline BOOL InitOnceBeginInitializeXp(LPINIT_ONCE lpInitOnce, DWORD dwFlags, PBO
     return result;
 }
 
-inline BOOL InitOnceCompleteXp(LPINIT_ONCE lpInitOnce, DWORD dwFlags, LPVOID lpContext)
+inline BOOL InitOnceCompleteXp(INIT_ONCE* lpInitOnce, DWORD dwFlags, LPVOID lpContext)
 {
     long hr = S_OK;
     BOOL result = FALSE;
@@ -407,7 +397,7 @@ static inline void acquireSRWLockShared(PRTL_SRWLOCK SRWLock)
     LONG_PTR CurrentValue, NewValue;
     PXP_SRWLOCK_WAITBLOCK First, Shared, FirstWait;
 
-    unsigned int addr = (unsigned int)(&StackWaitBlock);
+    ULONG_PTR addr = (ULONG_PTR)(&StackWaitBlock);
     CV_ASSERT((addr & 0xf) == 0, "acquireSRWLockShared StackWaitBlock is not align\n");
 
     while (1) {
@@ -621,7 +611,7 @@ static inline void acquireSRWLockExclusive(PRTL_SRWLOCK SRWLock)
     __declspec(align(16)) XP_SRWLOCK_WAITBLOCK StackWaitBlock;
     PXP_SRWLOCK_WAITBLOCK First, Last;
 
-    unsigned int addr = (unsigned int)(&StackWaitBlock);
+    ULONG_PTR addr = (ULONG_PTR)(&StackWaitBlock);
     CV_ASSERT((addr & 0xf) == 0, "acquireSRWLockExclusive StackWaitBlock is not align\n");
 
     if (InterlockedBitTestAndSet((LONG volatile *)&SRWLock->Ptr, XP_SRWLOCK_OWNED_BIT)) {
@@ -768,13 +758,13 @@ static inline void unlockCriticalSectionOrSRWLock(PCRITICAL_SECTION criticalSect
 #if USE_WIN7_RWLOCK
             ReleaseSRWLockExclusive(SRWLock);
 #else
-            ReleaseSRWLockExclusiveXp(SRWLock);
+            ReleaseSRWLockExclusiveXp((PRTL_SRWLOCK)SRWLock);
 #endif
         } else {
 #if USE_WIN7_RWLOCK
             ReleaseSRWLockShared(SRWLock);
 #else
-            ReleaseSRWLockSharedXp(SRWLock);
+            ReleaseSRWLockSharedXp((PRTL_SRWLOCK)SRWLock);
 #endif
         }
     } else {
@@ -789,13 +779,13 @@ static inline void lockCriticalSectionOrSRWLock(PCRITICAL_SECTION criticalSectio
 #if USE_WIN7_RWLOCK
             AcquireSRWLockExclusive(SRWLock);
 #else
-            AcquireSRWLockExclusiveXp(SRWLock);
+            AcquireSRWLockExclusiveXp((PRTL_SRWLOCK)SRWLock);
 #endif
         } else {
 #if USE_WIN7_RWLOCK
             AcquireSRWLockShared(SRWLock);
 #else
-            AcquireSRWLockSharedXp(SRWLock);
+            AcquireSRWLockSharedXp((PRTL_SRWLOCK)SRWLock);
 #endif
         }
     } else {
@@ -807,7 +797,7 @@ static inline void lockCriticalSectionOrSRWLock(PCRITICAL_SECTION criticalSectio
 #define kCondVarLockedAddr ((ULONG_PTR)3)
 
 typedef struct _CondVarWaitEntry {
-    int evt;
+    LONG evt;
     DWORD debugCount;
     struct _CondVarWaitEntry* nextPtr;
     struct _CondVarWaitEntry* lastPtr;
@@ -857,22 +847,22 @@ static void checkAddr(void* addr)
 
 static inline CondVarWaitEntry* lockAndGetRealAddr(PCONDITION_VARIABLE condVar)
 {
-    PVOID temp = NULL;
-    PVOID ptr = condVar->Ptr;
-    CV_ASSERT(ptr != (PVOID)kCondVarLockedFlag, "lockAndGetRealAddr fail 1\n");
+    void* temp = NULL;
+    void* ptr = condVar->Ptr;
+    CV_ASSERT(ptr != (void*)kCondVarLockedFlag, "lockAndGetRealAddr fail 1\n");
 
-    PVOID randAddr = (PVOID)((GetCurrentThreadId() << 5) | kCondVarLockedFlag);
-    PVOID lockedAddr = NULL;
-    PVOID realUnlockedAddr = NULL;
-    PVOID debugRec = NULL;
+    void* randAddr = (void*)((GetCurrentThreadId() << 5) | kCondVarLockedFlag);
+    void* lockedAddr = NULL;
+    void* realUnlockedAddr = NULL;
+    void* debugRec = NULL;
 
     while (TRUE) {
         ptr = condVar->Ptr;
-        lockedAddr = (PVOID)((ULONG_PTR)ptr | kCondVarLockedFlag);
-        realUnlockedAddr = (PVOID)((ULONG_PTR)lockedAddr & 0xfffffff0);
+        lockedAddr = (void*)((ULONG_PTR)ptr | kCondVarLockedFlag);
+        realUnlockedAddr = (void*)((ULONG_PTR)lockedAddr & 0xfffffff0);
         CV_ASSERT(randAddr != realUnlockedAddr, "lockAndGetRealAddr fail 2\n");
 
-        temp = (PVOID)InterlockedCompareExchange((long volatile *)&condVar->Ptr, (long)randAddr, (long)realUnlockedAddr);
+        temp = (void*)InterlockedCompareExchangePointer(&condVar->Ptr, randAddr, (void*)realUnlockedAddr);
         debugRec = condVar->Ptr;
         if (condVar->Ptr == randAddr)
             break;
@@ -960,7 +950,7 @@ static inline BOOL internalSleep(PCONDITION_VARIABLE condVar, PCRITICAL_SECTION 
     entry->debugCount = count;
 
     CondVarWaitEntry* ptr = lockAndGetRealAddr(condVar);
-    CV_ASSERT(!ptr || (condVar->Ptr == (PVOID)(kCondVarLockedAddr)), "internalSleep fail, lock var is error\n");
+    CV_ASSERT(!ptr || (condVar->Ptr == (void*)(kCondVarLockedAddr)), "internalSleep fail, lock var is error\n");
 
     if (ptr) {
         if (ptr->lastPtr) {
@@ -971,7 +961,7 @@ static inline BOOL internalSleep(PCONDITION_VARIABLE condVar, PCRITICAL_SECTION 
         entry->nextPtr = ptr;
     }
     
-    InterlockedExchange((long volatile *)&condVar->Ptr, (long)entry);
+    InterlockedExchangePointer(&condVar->Ptr, (void*)entry);
     unlockCriticalSectionOrSRWLock(criticalSection, SRWLock, SRWFlags);
     
     if (!waitCondVar(entry, timeout)) {
@@ -982,7 +972,7 @@ static inline BOOL internalSleep(PCONDITION_VARIABLE condVar, PCRITICAL_SECTION 
     lockCriticalSectionOrSRWLock(criticalSection, SRWLock, SRWFlags);
     ptr = lockAndGetRealAddr(condVar);
 
-    CV_ASSERT(!!ptr && condVar->Ptr == (PVOID)(kCondVarLockedAddr), "internalSleep fail 3\n");
+    CV_ASSERT(!!ptr && condVar->Ptr == (void*)(kCondVarLockedAddr), "internalSleep fail 3\n");
 
     CondVarWaitEntry* newHead = removeCondVarEntryFromList(ptr, entry, count);
 
@@ -995,11 +985,11 @@ static inline BOOL internalSleep(PCONDITION_VARIABLE condVar, PCRITICAL_SECTION 
     CV_ASSERT(!((ULONG_PTR)(newHead) & 0xf), "internalSleep, newHead is not align\n");
     checkEntrysIsValid(newHead, entry);
 
-    InterlockedExchange((long volatile *)&condVar->Ptr, (long)newHead);
+    InterlockedExchangePointer(&condVar->Ptr, newHead);
 
     entry->evt = 0xebebebeb;
-    entry->lastPtr = (CondVarWaitEntry*)0xebebebeb;
-    entry->nextPtr = (CondVarWaitEntry*)0xebebebeb;
+    entry->lastPtr = (CondVarWaitEntry*)(UINT_PTR)0xebebebeb;
+    entry->nextPtr = (CondVarWaitEntry*)(UINT_PTR)0xebebebeb;
 
     return TRUE;
 }
@@ -1014,12 +1004,12 @@ static inline void wakeAllConditionVariable(PCONDITION_VARIABLE condVar)
 
     CondVarWaitEntry* head = ptr;
     do {
-        InterlockedExchange((long volatile *)&head->evt, 1);
+        InterlockedExchange(&head->evt, 1);
         
         head = head->nextPtr;
     } while (head);
 
-    InterlockedExchange((long volatile *)&condVar->Ptr, (long)ptr);
+    InterlockedExchangePointer(&condVar->Ptr, ptr);
 }
 
 static inline void wakeConditionVariable(PCONDITION_VARIABLE condVar)
@@ -1031,30 +1021,16 @@ static inline void wakeConditionVariable(PCONDITION_VARIABLE condVar)
     CV_ASSERT(!!ptr, "wakeConditionVariable fail 1\n");
 
     CondVarWaitEntry* head = ptr;
-    InterlockedExchange((long volatile *)&head->evt, 1);
+    InterlockedExchange(&head->evt, 1);
 
-    InterlockedExchange((long volatile *)&condVar->Ptr, (long)ptr);
+    InterlockedExchangePointer(&condVar->Ptr, ptr);
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 inline BOOL SleepConditionVariableCSXp(PCONDITION_VARIABLE condVar, PCRITICAL_SECTION criticalSection, DWORD timeout)
 {
 #if USE_WIN7_CV
     return SleepConditionVariableCS(condVar, criticalSection, timeout);
 #else
-    typedef BOOL(__stdcall* PFN_SleepConditionVariableCS)(PCONDITION_VARIABLE condVar, PCRITICAL_SECTION criticalSection, DWORD timeout);
-    static PFN_SleepConditionVariableCS s_SleepConditionVariableCS = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_SleepConditionVariableCS = (PFN_SleepConditionVariableCS)GetProcAddress(handle, "SleepConditionVariableCS");
-        s_is_init = TRUE;
-    }
-
-    if (s_SleepConditionVariableCS)
-        return s_SleepConditionVariableCS(condVar, criticalSection, timeout);
-
     return internalSleep(condVar, criticalSection, (PSRWLOCK)0, 0, timeout);
 #endif
 }
@@ -1064,18 +1040,6 @@ inline BOOL SleepConditionVariableSRWXp(PCONDITION_VARIABLE condVar, PSRWLOCK SR
 #if USE_WIN7_CV
     return SleepConditionVariableSRW(condVar, SRWLock, dwMilliseconds, Flags);
 #else
-    typedef BOOL(__stdcall* PFN_SleepConditionVariableSRW)(PCONDITION_VARIABLE condVar, PSRWLOCK SRWLock, DWORD dwMilliseconds, ULONG Flags);
-    static PFN_SleepConditionVariableSRW s_SleepConditionVariableSRW = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_SleepConditionVariableSRW = (PFN_SleepConditionVariableSRW)GetProcAddress(handle, "SleepConditionVariableSRW");
-        s_is_init = TRUE;
-    }
-
-    if (s_SleepConditionVariableSRW)
-        return s_SleepConditionVariableSRW(condVar, SRWLock, dwMilliseconds, Flags);
-
     return internalSleep(condVar, (PCRITICAL_SECTION)0, SRWLock, Flags, dwMilliseconds);
 #endif
 }
@@ -1085,18 +1049,6 @@ inline void WakeAllConditionVariableXp(PCONDITION_VARIABLE condVar)
 #if USE_WIN7_CV
     WakeAllConditionVariable(condVar);
 #else
-    typedef void(__stdcall* PFN_WakeAllConditionVariable)(PCONDITION_VARIABLE condVar);
-    static PFN_WakeAllConditionVariable s_WakeAllConditionVariable = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_WakeAllConditionVariable = (PFN_WakeAllConditionVariable)GetProcAddress(handle, "WakeAllConditionVariable");
-        s_is_init = TRUE;
-    }
-
-    if (s_WakeAllConditionVariable)
-        return s_WakeAllConditionVariable(condVar);
-
     wakeAllConditionVariable(condVar);
 #endif
 }
@@ -1106,18 +1058,6 @@ inline void WakeConditionVariableXp(PCONDITION_VARIABLE condVar)
 #if USE_WIN7_CV
     WakeConditionVariable(condVar);
 #else
-    typedef void(__stdcall* PFN_WakeConditionVariable)(PCONDITION_VARIABLE condVar);
-    static PFN_WakeConditionVariable s_WakeConditionVariable = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_WakeConditionVariable = (PFN_WakeConditionVariable)GetProcAddress(handle, "WakeConditionVariable");
-        s_is_init = TRUE;
-    }
-
-    if (s_WakeConditionVariable)
-        return s_WakeConditionVariable(condVar);
-
     wakeConditionVariable(condVar);
 #endif
 }
@@ -1127,18 +1067,6 @@ inline void InitializeConditionVariableXp(PCONDITION_VARIABLE condVar)
 #if USE_WIN7_CV
     InitializeConditionVariable(condVar);
 #else
-    typedef void(__stdcall* PFN_InitializeConditionVariable)(PCONDITION_VARIABLE condVar);
-    static PFN_InitializeConditionVariable s_InitializeConditionVariable = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_InitializeConditionVariable = (PFN_InitializeConditionVariable)GetProcAddress(handle, "InitializeConditionVariable");
-        s_is_init = TRUE;
-    }
-
-    if (s_InitializeConditionVariable)
-        return s_InitializeConditionVariable(condVar);
-
     condVar->Ptr = NULL;
 #endif
 }
@@ -1147,38 +1075,15 @@ inline void InitializeConditionVariableXp(PCONDITION_VARIABLE condVar)
 
 inline void InitializeSRWLockXp(PRTL_SRWLOCK SRWLock)
 {
-    typedef void(__stdcall* PFN_InitializeSRWLock)(PRTL_SRWLOCK SRWLock);
-    static PFN_InitializeSRWLock s_InitializeSRWLock = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_InitializeSRWLock = (PFN_InitializeSRWLock)GetProcAddress(handle, "InitializeSRWLock");
-        s_is_init = TRUE;
-    }
-
-    if (s_InitializeSRWLock)
-        return s_InitializeSRWLock(SRWLock);
-
     SRWLock->Ptr = NULL;
 }
 
 inline void AcquireSRWLockSharedXp(PRTL_SRWLOCK SRWLock)
 {
 #if USE_WIN7_RWLOCK
+    //acquireSRWLockShared(SRWLock);
     AcquireSRWLockShared(SRWLock);
 #else
-    typedef void(__stdcall* PFN_AcquireSRWLockShared)(PRTL_SRWLOCK SRWLock);
-    static PFN_AcquireSRWLockShared s_AcquireSRWLockShared = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_AcquireSRWLockShared = (PFN_AcquireSRWLockShared)GetProcAddress(handle, "AcquireSRWLockShared");
-        s_is_init = TRUE;
-    }
-
-    if (s_AcquireSRWLockShared)
-        return s_AcquireSRWLockShared(SRWLock);
-
     while (TRUE) {
         long temp = (long)InterlockedCompareExchange((long volatile *)&SRWLock->Ptr, (long)1, (long)0);
         if (temp == 0)
@@ -1195,18 +1100,6 @@ inline void ReleaseSRWLockExclusiveXp(PRTL_SRWLOCK SRWLock)
     //releaseSRWLockExclusive(SRWLock);
     ReleaseSRWLockExclusive(SRWLock);
 #else
-    typedef void(__stdcall* PFN_ReleaseSRWLockExclusive)(PRTL_SRWLOCK SRWLock);
-    static PFN_ReleaseSRWLockExclusive s_ReleaseSRWLockExclusive = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_ReleaseSRWLockExclusive = (PFN_ReleaseSRWLockExclusive)GetProcAddress(handle, "ReleaseSRWLockExclusive");
-        s_is_init = TRUE;
-    }
-
-    if (s_ReleaseSRWLockExclusive)
-        return s_ReleaseSRWLockExclusive(SRWLock);
-
     InterlockedExchange((long volatile *)&SRWLock->Ptr, 0);
 #endif
 }
@@ -1214,20 +1107,9 @@ inline void ReleaseSRWLockExclusiveXp(PRTL_SRWLOCK SRWLock)
 inline void AcquireSRWLockExclusiveXp(PRTL_SRWLOCK SRWLock)
 {
 #if USE_WIN7_RWLOCK
+    //acquireSRWLockExclusive(SRWLock);
     AcquireSRWLockExclusive(SRWLock);
 #else
-    typedef void(__stdcall* PFN_AcquireSRWLockExclusive)(PRTL_SRWLOCK SRWLock);
-    static PFN_AcquireSRWLockExclusive s_AcquireSRWLockExclusive = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_AcquireSRWLockExclusive = (PFN_AcquireSRWLockExclusive)GetProcAddress(handle, "AcquireSRWLockExclusive");
-        s_is_init = TRUE;
-    }
-
-    if (s_AcquireSRWLockExclusive)
-        return s_AcquireSRWLockExclusive(SRWLock);
-
     AcquireSRWLockSharedXp(SRWLock);
 #endif
 }
@@ -1238,18 +1120,6 @@ inline void ReleaseSRWLockSharedXp(PRTL_SRWLOCK SRWLock)
     //releaseSRWLockShared(SRWLock);
     ReleaseSRWLockShared(SRWLock);
 #else
-    typedef void(__stdcall* PFN_ReleaseSRWLockShared)(PRTL_SRWLOCK SRWLock);
-    static PFN_ReleaseSRWLockShared s_ReleaseSRWLockShared = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_ReleaseSRWLockShared = (PFN_ReleaseSRWLockShared)GetProcAddress(handle, "ReleaseSRWLockShared");
-        s_is_init = TRUE;
-    }
-
-    if (s_ReleaseSRWLockShared)
-        return s_ReleaseSRWLockShared(SRWLock);
-
     ReleaseSRWLockExclusiveXp(SRWLock);
 #endif
 }
@@ -1259,18 +1129,6 @@ inline BOOL TryAcquireSRWLockExclusiveXp(volatile PSRWLOCK SRWLock)
 #if USE_WIN7_RWLOCK
     return TryAcquireSRWLockExclusive(SRWLock);
 #else
-    typedef char(__stdcall* PFN_TryAcquireSRWLockExclusive)(PSRWLOCK SRWLock);
-    static PFN_TryAcquireSRWLockExclusive s_TryAcquireSRWLockExclusive = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_TryAcquireSRWLockExclusive = (PFN_TryAcquireSRWLockExclusive)GetProcAddress(handle, "TryAcquireSRWLockExclusive");
-        s_is_init = TRUE;
-    }
-
-    if (s_TryAcquireSRWLockExclusive)
-        return s_TryAcquireSRWLockExclusive(SRWLock) != 0 ? 1 : 0;
-
     return _interlockedbittestandset((long volatile *)SRWLock, 0) == 0;
 #endif
 }
@@ -1280,24 +1138,12 @@ inline BOOL TryAcquireSRWLockSharedXp(volatile PSRWLOCK SRWLock)
 #if USE_WIN7_RWLOCK
   return TryAcquireSRWLockShared(SRWLock);
 #else
-    typedef char(__stdcall* PFN_TryAcquireSRWLockShared)(PSRWLOCK SRWLock);
-    static PFN_TryAcquireSRWLockShared s_TryAcquireSRWLockShared = NULL;
-    static BOOL s_is_init = FALSE;
-    if (!s_is_init) {
-        HMODULE handle = GetModuleHandleW(L"Kernel32.dll");
-        s_TryAcquireSRWLockShared = (PFN_TryAcquireSRWLockShared)GetProcAddress(handle, "TryAcquireSRWLockShared");
-        s_is_init = TRUE;
-    }
-
-    if (s_TryAcquireSRWLockShared)
-        return s_TryAcquireSRWLockShared(SRWLock) != 0 ? 1 : 0;
-
-    return _interlockedbittestandset((long volatile *)SRWLock, 0) == 0;
+  return _interlockedbittestandset((long volatile *)SRWLock, 0) == 0;
 #endif
 }
 
 
-// BOOL InitOnceExecuteOnceXP(INIT_ONCE volatile* once, PINIT_ONCE_FN init_fn, PVOID parameter, LPVOID* context)
+// BOOL InitOnceExecuteOnceXP(INIT_ONCE volatile* once, PINIT_ONCE_FN init_fn, void* parameter, LPVOID* context)
 // {
 //     LONG* once_control = (LONG*)(&(once->Ptr));
 //     // xp_compatible
@@ -1322,7 +1168,7 @@ inline BOOL TryAcquireSRWLockSharedXp(volatile PSRWLOCK SRWLock)
 //     return TRUE;
 // }
 
-// inline BOOL InitOnceExecuteOnceXp(PINIT_ONCE inOnce, PINIT_ONCE_FN initFunc, PVOID arg, LPVOID* context)
+// inline BOOL InitOnceExecuteOnceXp(PINIT_ONCE inOnce, PINIT_ONCE_FN initFunc, void* arg, LPVOID* context)
 // {
 //     volatile LONG* once = (LONG *)inOnce;
 // 
@@ -1382,9 +1228,9 @@ inline BOOL TryAcquireSRWLockSharedXp(volatile PSRWLOCK SRWLock)
 #define TryAcquireSRWLockSharedXp TryAcquireSRWLockShared
 #define InitOnceExecuteOnceXp InitOnceExecuteOnce
 
-#endif // SUPPORT_XP_CODE
+#endif // _WIN64
 
-// #pragma pack(pop)
-// #pragma optimize("", on)
+#pragma pack(pop)
+#pragma optimize("", on)
 
 #endif // patch_code_sync_xp_h
