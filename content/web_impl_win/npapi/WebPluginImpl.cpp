@@ -149,6 +149,7 @@ WebPluginImpl::WebPluginImpl(WebLocalFrame* parentFrame, const blink::WebPluginP
     , m_isJavaScriptPaused(false)
     , m_haveCalledSetWindow(false)
     , m_memoryCanvas(nullptr)
+    , m_memoryPixels(nullptr)
     , m_wkeWebview(nullptr)
     , m_cutOutsRectsDirty(true)
     , m_pluginIme(nullptr)
@@ -1067,29 +1068,35 @@ void WebPluginImpl::invalidateWindowlessPluginRect(const IntRect& rect)
 
 void WebPluginImpl::paintMissingPluginIcon(blink::WebCanvas* canvas, const IntRect& rect)
 {
-    DebugBreak();
-//     if (!s_nullPluginImage)
-//         s_nullPluginImage = Image::loadPlatformResource("nullPlugin");
-// 
-//     WebPluginContainerImpl* container = (WebPluginContainerImpl*)m_pluginContainer;
-//     if (!container)
-//         return;
-//     OwnPtr<GraphicsContext> context = GraphicsContext::deprecatedCreateWithCanvas(canvas, GraphicsContext::NothingDisabled);
-// 
-//     IntRect imageRect(container->frameRect().x(), container->frameRect().y(), s_nullPluginImage->width(), s_nullPluginImage->height());
-// 
-//     int xOffset = (container->frameRect().width() - imageRect.width()) / 2;
-//     int yOffset = (container->frameRect().height() - imageRect.height()) / 2;
-// 
-//     imageRect.move(xOffset, yOffset);
-// 
-//     if (!rect.intersects(imageRect))
-//         return;
-// 
+    if (!s_nullPluginImage)
+        s_nullPluginImage = Image::loadPlatformResource("nullPlugin");
+
+    WebPluginContainerImpl* container = (WebPluginContainerImpl*)m_pluginContainer;
+    if (!container)
+        return;
+    //OwnPtr<GraphicsContext> context = GraphicsContext::CreateWithCanvas(canvas, GraphicsContext::NothingDisabled);
+
+    IntRect imageRect(container->frameRect().x(), container->frameRect().y(), s_nullPluginImage->width(), s_nullPluginImage->height());
+
+    int xOffset = (container->frameRect().width() - imageRect.width()) / 2;
+    int yOffset = (container->frameRect().height() - imageRect.height()) / 2;
+
+    imageRect.move(xOffset, yOffset);
+
+    if (!rect.intersects(imageRect))
+        return;
+
 //     context->save();
 //     context->clip(toFrameView(container->parent())->windowClipRect());
 //     context->drawImage(s_nullPluginImage.get(), imageRect);
 //     context->restore();
+
+    canvas->save();
+
+    sk_sp<SkImage> skImage = s_nullPluginImage->imageForCurrentFrame(ColorBehavior::ignore());
+    canvas->drawImage(skImage, imageRect.x(), imageRect.y());
+
+    canvas->restore();
 }
 
 static const char* MozillaUserAgent = "Mozilla/5.0 ("

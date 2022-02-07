@@ -7,6 +7,7 @@
 #if ENABLE_NODEJS
 #include "third_party/WebKit/Source/wtf/HashMap.h"
 #endif
+#include "base/memory/linked_ptr.h"
 
 namespace cef {
 class BrowserHostImpl;
@@ -14,6 +15,10 @@ class BrowserImpl;
 }
 
 struct NodeBindingInMbCore;
+
+namespace media {
+class UrlIndex;
+}
 
 using namespace blink;
 
@@ -238,6 +243,11 @@ public:
     //////////////////////////////////////////////////////////////////////////
     void setWebPage(WebPage* webPage);
     WebPage* webPage();
+
+    void setFrame(WebLocalFrame* frame)
+    {
+        m_frame = frame;
+    }
     //////////////////////////////////////////////////////////////////////////
 
     bool isLoading() const { return m_loading; }
@@ -267,6 +277,7 @@ private:
 
     WebLocalFrame* m_frame;
 
+    linked_ptr<media::UrlIndex> m_urlIndex;
 #if ENABLE_NODEJS
     WTF::HashMap<WebFrame*, NodeBindingInMbCore*> m_nodebindings;
 #endif

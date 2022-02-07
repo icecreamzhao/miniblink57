@@ -75,6 +75,7 @@ public:
     /*virtual*/ void didUpdateLayoutSize(const blink::WebSize& newSize) /*override*/;
     virtual void scheduleAnimation() override;
     virtual void setWindowRect(const blink::WebRect&) override;
+    virtual blink::WebRect windowRect() override;
     /*virtual*/ blink::WebLayerTreeView* layerTreeView() /*override*/;
     virtual blink::WebLayerTreeView* initializeLayerTreeView() override;
     virtual void show(blink::WebNavigationPolicy) override;
@@ -142,7 +143,7 @@ protected:
     double m_lastFrameTimeMonotonic;
     blink::WebPagePopup* m_popupImpl;
     mc::LayerTreeHost* m_layerTreeHost;
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
     LayerTreeWrap* m_ccLayerTreeWrap;
 #endif
     blink::WebFrameClient* m_webFrameClient;

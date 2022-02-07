@@ -205,6 +205,7 @@ WebPageImpl::WebPageImpl(COLORREF bdColor)
     WebLocalFrameImpl* webLocalFrameImpl = (WebLocalFrameImpl*)WebLocalFrame::create(WebTreeScopeType::Document, m_webFrameClient);
     m_webViewImpl = WebViewImpl::create(this, blink::WebPageVisibilityStateVisible);
     m_webViewImpl->setMainFrame(webLocalFrameImpl);
+    m_webFrameClient->setFrame(webLocalFrameImpl);
 
     content::BlinkPlatformImpl* platform = (content::BlinkPlatformImpl*)blink::Platform::current();
     float zoom = platform->getZoom();
@@ -586,22 +587,18 @@ WebView* WebPageImpl::createView(WebLocalFrame* creator,
 
 DevToolsAgent* WebPageImpl::createOrGetDevToolsAgent()
 {
-    DebugBreak();
-    return nullptr;
-//     if (m_devToolsAgent)
-//         return m_devToolsAgent;
-//     m_devToolsAgent = new DevToolsAgent(m_pagePtr, (blink::WebLocalFrame*)m_webViewImpl->mainFrame());
-//     return m_devToolsAgent;    
+    if (m_devToolsAgent)
+        return m_devToolsAgent;
+    m_devToolsAgent = new DevToolsAgent(m_pagePtr, (blink::WebLocalFrame*)m_webViewImpl->mainFrame());
+    return m_devToolsAgent;    
 }
 
 DevToolsClient* WebPageImpl::createOrGetDevToolsClient()
 {
-    DebugBreak();
-    return nullptr;
-//     if (m_devToolsClient)
-//         return m_devToolsClient;
-//     m_devToolsClient = new DevToolsClient(m_pagePtr, (blink::WebLocalFrame*)m_webViewImpl->mainFrame());
-//     return m_devToolsClient;
+    if (m_devToolsClient)
+        return m_devToolsClient;
+    m_devToolsClient = new DevToolsClient(m_pagePtr, (blink::WebLocalFrame*)m_webViewImpl->mainFrame());
+    return m_devToolsClient;
 }
 
 void WebPageImpl::onBeginPaint(HDC hdc, const RECT& damageRect)
@@ -779,7 +776,7 @@ void WebPageImpl::showDebugNodeData()
 {
 #ifndef NDEBUG
     //m_webViewImpl->mainFrameImpl()->frame()->document()->showTreeForThis();
-    DebugBreak();
+    m_webViewImpl->mainFrameImpl()->frame()->document()->showTreeForThisAcrossFrame();
 #endif
 }
 
@@ -1855,36 +1852,40 @@ static wkeWebDragData* webDropDataToWkeDragData(const blink::WebDragData& data)
     return result;
 }
 
-// void WebPageImpl::startDragging(blink::WebLocalFrame* frame, const blink::WebDragData& data,
-//     blink::WebDragOperationsMask mask, const blink::WebImage& image, const blink::WebPoint& dragImageOffset)
-// {
-//     if (!m_enableDragDrop)
-//         return;
-//     BlinkPlatformImpl::AutoDisableGC autoDisableGC;
-// 
-//     wkeWebDragData* dragDate = webDropDataToWkeDragData(data);
-// 
-//     wkeStartDraggingCallback callback = m_pagePtr->wkeHandler().startDraggingCallback;
-//     if (!callback) {
-//         m_dragHandle->startDragging(frame, dragDate, mask, image, dragImageOffset);
-//         return;
-//     }
-// 
-//     void* param = m_pagePtr->wkeHandler().startDraggingCallbackParam;
-//     wkePoint offset = { dragImageOffset.x, dragImageOffset.y };
-// 
-//     onEnterDragSimulate();
-//     CheckReEnter::decrementEnterCount();
-// 
+void WebPageImpl::startDragging(blink::WebReferrerPolicy policy,
+    const blink::WebDragData& data,
+    blink::WebDragOperationsMask mask,
+    const blink::WebImage& image,
+    const blink::WebPoint& dragImageOffset)
+{
+    if (!m_enableDragDrop)
+        return;
+    BlinkPlatformImpl::AutoDisableGC autoDisableGC;
+
+    wkeWebDragData* dragDate = webDropDataToWkeDragData(data);
+
+    wkeStartDraggingCallback callback = m_pagePtr->wkeHandler().startDraggingCallback;
+    if (!callback) {
+        m_dragHandle->startDragging(/*frame*/nullptr, dragDate, mask, image, dragImageOffset);
+        return;
+    }
+
+    void* param = m_pagePtr->wkeHandler().startDraggingCallbackParam;
+    wkePoint offset = { dragImageOffset.x, dragImageOffset.y };
+
+    onEnterDragSimulate();
+    CheckReEnter::decrementEnterCount();
+
+    DebugBreak();
 //     callback(m_pagePtr->wkeWebView(), param,
 //         wke::CWebView::frameIdTowkeWebFrameHandle(m_pagePtr, getFrameIdByBlinkFrame(frame)),
 //         dragDate, (wkeWebDragOperationsMask)mask, nullptr, &offset);
-// 
-//     CheckReEnter::incrementEnterCount();
-//     onLeaveDragSimulate();
-// 
-//     destroyWkeDragData(dragDate);
-// }
+
+    CheckReEnter::incrementEnterCount();
+    onLeaveDragSimulate();
+
+    destroyWkeDragData(dragDate);
+}
 
 void WebPageImpl::loadHistoryItem(int64 frameId, const WebHistoryItem& item, WebHistoryLoadType type, WebCachePolicy policy)
 {

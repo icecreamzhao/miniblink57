@@ -672,18 +672,17 @@ void WebPage::gc()
 
 void WebPage::onDocumentReady()
 {
-//     if (m_pageImpl->m_devToolsClient)
-//         m_pageImpl->m_devToolsClient->onDocumentReady();
+    if (m_pageImpl->m_devToolsClient)
+        m_pageImpl->m_devToolsClient->onDocumentReady();
 }
 
 void WebPage::connetDevTools(WebPage* frontEnd, WebPage* embedder)
 {
-//     DevToolsAgent* devToolsAgent = embedder->m_pageImpl->createOrGetDevToolsAgent();
-//     DevToolsClient* devToolsClient = frontEnd->m_pageImpl->createOrGetDevToolsClient();
-// 
-//     devToolsAgent->setDevToolsClient(devToolsClient);
-//     devToolsClient->setDevToolsAgent(devToolsAgent);
-    DebugBreak();
+    DevToolsAgent* devToolsAgent = embedder->m_pageImpl->createOrGetDevToolsAgent();
+    DevToolsClient* devToolsClient = frontEnd->m_pageImpl->createOrGetDevToolsClient();
+
+    devToolsAgent->setDevToolsClient(devToolsClient);
+    devToolsClient->setDevToolsAgent(devToolsAgent);
 }
 
 bool WebPage::isDevtoolsConneted() const

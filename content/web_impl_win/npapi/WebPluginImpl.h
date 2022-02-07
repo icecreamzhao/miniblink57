@@ -50,6 +50,7 @@
 #include "third_party/WebKit/Source/wtf/HashFunctions.h"
 #include "third_party/WebKit/Source/wtf/HashSet.h"
 #include "third_party/npapi/bindings/npruntime.h"
+#include "third_party/skia/include/core/SkImageInfo.h"
 #include <v8.h>
 #include <windows.h>
 
@@ -433,6 +434,9 @@ private:
     static WebPluginImpl* s_currentPluginView;
 
     SkCanvas* m_memoryCanvas;
+    void* m_memoryPixels;
+    SIZE m_memoryCanvasSize;
+
     wke::CWebView* m_wkeWebview;
 
     Vector<blink::IntRect> m_cutOutsRects;

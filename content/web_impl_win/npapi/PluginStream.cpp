@@ -457,7 +457,6 @@ bool PluginStream::willFollowRedirect(blink::WebURLRequest& newRequest, const bl
 {
     // FIXME: We should notify the plug-in with NPP_URLRedirectNotify here.
     //callback(WTF::move(request));
-    DebugBreak();
     return false;
 }
 

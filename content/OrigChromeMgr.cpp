@@ -1,5 +1,6 @@
 ﻿
 #include "content/OrigChromeMgr.h"
+#include "content/media/audio_renderer_mixer_manager.h"
 #include "base/at_exit.h"
 #include "base/bind.h"
 #include "base/command_line.h"
@@ -9,20 +10,22 @@
 #include "content/RasterWorkerPool.h"
 #include "content/WebSharedBitmapManager.h"
 #include "content/gpu/ChildGpuMemoryBufferManager.h"
-// #include "content/media/audio_renderer_mixer_manager.h"
+#include "content/media/audio_renderer_mixer_manager.h"
 // #include "gpu/blink/webgraphicscontext3d_in_process_command_buffer_impl.h"
-// #include "media/audio/audio_manager.h"
-// #include "media/audio/audio_manager_base.h"
-// #include "media/audio/fake_audio_log_factory.h"
-// #include "media/base/audio_hardware_config.h"
-// #include "media/base/media_log.h"
-// #include "media/base/media_permission.h"
-// #include "media/blink/webmediaplayer_impl.h"
-// #include "media/blink/webmediaplayer_params.h"
-// #include "media/renderers/default_renderer_factory.h"
+#include "media/audio/audio_manager.h"
+#include "media/audio/audio_manager_base.h"
+#include "media/audio/fake_audio_log_factory.h"
+#include "media/audio/audio_device_description.h"
+#include "media/base/media_log.h"
+#include "media/base/media_permission.h"
+#include "media/blink/webmediaplayer_impl.h"
+#include "media/blink/webmediaplayer_params.h"
+#include "media/renderers/default_renderer_factory.h"
+
 #include "third_party/WebKit/public/platform/WebContentDecryptionModule.h"
 #include "third_party/WebKit/public/web/WebLocalFrame.h"
 //#include "third_party/WebKit/public/web/WebSecurityOrigin.h"
+#include "third_party/WebKit/public/platform/WebMediaPlayerSource.h"
 #include "ui/gl/gl_surface.h"
 #include <Shlwapi.h>
 
@@ -263,32 +266,32 @@ base::Thread* OrigChromeMgr::getOrCreateCompositorThread()
 void OrigChromeMgr::createMediaThreadIfNeeded()
 {
     //DCHECK(message_loop() == base::MessageLoop::current());
-//     if (m_mediaThread)
-//         return;
-// 
-//     std::vector<WCHAR> fullpath;
-//     fullpath.resize(MAX_PATH + 1);
-//     memset(fullpath.data(), 0, sizeof(wchar_t) * (MAX_PATH + 1));
-//     ::GetModuleFileNameW(NULL, fullpath.data(), MAX_PATH);
-//     ::PathRemoveFileSpecW(fullpath.data());
-// 
-//     std::wstring name = fullpath.data();
-//     name += L"\\plugins\\ffmpeg\\ffmpeg.dll";
-//     m_hFfmpeg = LoadLibraryW(name.c_str());
-//     if (!m_hFfmpeg)
-//         return;
-// 
-//     m_mediaThread = (new base::Thread("MediaThread"));
-//     m_mediaThread->Start();
-// 
-//     m_mediaIoThread = (new base::Thread("MediaIoThread"));
-//     m_mediaIoThread->Start();
-// 
-//     m_audioManager = (media::AudioManager::CreateWithHangTimer(new media::FakeAudioLogFactory(), /*io_thread_->task_runner()*/ m_mediaThread->task_runner()));
-// 
-//     media::AudioParameters outputParams = m_audioManager->GetDefaultOutputStreamParameters();
-//     media::AudioParameters inputParams = m_audioManager->GetInputStreamParameters(media::AudioManagerBase::kDefaultDeviceId);
-//     m_audioHardwareConfig = new media::AudioHardwareConfig(inputParams, outputParams);
+    if (m_mediaThread)
+        return;
+
+    std::vector<WCHAR> fullpath;
+    fullpath.resize(MAX_PATH + 1);
+    memset(fullpath.data(), 0, sizeof(wchar_t) * (MAX_PATH + 1));
+    ::GetModuleFileNameW(NULL, fullpath.data(), MAX_PATH);
+    ::PathRemoveFileSpecW(fullpath.data());
+
+    std::wstring name = fullpath.data();
+    name += L"\\plugins\\ffmpeg\\ffmpeg.dll";
+    m_hFfmpeg = LoadLibraryW(name.c_str());
+    if (!m_hFfmpeg)
+        return;
+
+    m_mediaThread = (new base::Thread("MediaThread"));
+    m_mediaThread->Start();
+
+    m_mediaIoThread = (new base::Thread("MediaIoThread"));
+    m_mediaIoThread->Start();
+
+    m_audioManager = media::AudioManager::Create(m_mediaIoThread->task_runner(), m_mediaThread->task_runner(), new media::FakeAudioLogFactory());
+
+    media::AudioParameters outputParams = m_audioManager->GetDefaultOutputStreamParameters();
+    media::AudioParameters inputParams = m_audioManager->GetInputStreamParameters(media::AudioDeviceDescription::kDefaultDeviceId);
+    //m_audioHardwareConfig = new media::AudioHardwareConfig(inputParams, outputParams);
 }
 
 blink::WebCompositorSupport* OrigChromeMgr::createWebCompositorSupport()
@@ -329,49 +332,148 @@ int64_t adjustAmountOfExternalAllocatedMemory(int64_t)
 
 AudioRendererMixerManager* OrigChromeMgr::getAudioRendererMixerManager()
 {
-//     if (!m_audioRendererMixerManager)
-//         m_audioRendererMixerManager = (new AudioRendererMixerManager());
-//     return m_audioRendererMixerManager;
+    if (!m_audioRendererMixerManager)
+        m_audioRendererMixerManager = (new AudioRendererMixerManager());
+    return m_audioRendererMixerManager;
+}
+
+static media::GpuVideoAcceleratorFactories* getGpuFactoriesCb()
+{
     DebugBreak();
     return nullptr;
 }
 
-blink::WebMediaPlayer* OrigChromeMgr::createWebMediaPlayer(blink::WebLocalFrame* frame, const blink::WebURL& url, blink::WebMediaPlayerClient* client)
+class EmptyAudioRendererSink
+    : public media::SwitchableAudioRendererSink {
+public:
+    void Initialize(const media::AudioParameters& params, media::AudioRendererSink::RenderCallback* callback) override
+    {
+        DebugBreak();
+    }
+
+    void Start() override
+    {
+        DebugBreak();
+    }
+    void Stop() override
+    {
+
+    }
+    void Pause() override
+    {
+        DebugBreak();
+    }
+    void Play() override
+    {
+        DebugBreak();
+    }
+    bool SetVolume(double volume) override
+    {
+        DebugBreak();
+        return false;
+    }
+
+    media::AudioParameters DummyParams()
+    {
+        return media::AudioParameters(
+            media::AudioParameters::AUDIO_FAKE, media::CHANNEL_LAYOUT_STEREO,
+            media::AudioParameters::kAudioCDSampleRate, 16,
+            media::AudioParameters::kAudioCDSampleRate / 10);
+    }
+
+    media::OutputDeviceInfo GetOutputDeviceInfo() override
+    {
+        return media::OutputDeviceInfo();
+    }
+
+    bool CurrentThreadIsRenderingThread() override
+    {
+        DebugBreak();
+        return false;
+    }
+
+    void SwitchOutputDevice(const std::string& device_id,
+        const url::Origin& security_origin,
+        const media::OutputDeviceStatusCB& callback) override
+    {
+        DebugBreak();
+    }
+
+protected:
+    ~EmptyAudioRendererSink() override
+    {
+    }
+};
+
+blink::WebMediaPlayer* OrigChromeMgr::createWebMediaPlayer(
+    //blink::WebLocalFrame* frame, const blink::WebURL& url, blink::WebMediaPlayerClient* client
+    blink::WebLocalFrame* frame,
+    const blink::WebMediaPlayerSource& source,
+    blink::WebMediaPlayerClient* client,
+    blink::WebMediaPlayerEncryptedMediaClient*,
+    blink::WebContentDecryptionModule*,
+    const blink::WebString& sinkId,
+    linked_ptr<media::UrlIndex> urlIndex
+    )
 {
-    return nullptr;
-//     if (!m_inst)
-//         return nullptr;
-//     AudioRendererMixerManager* audioRendererMixerManager = m_inst->getAudioRendererMixerManager();
-//     std::string origin = frame->securityOrigin().toString().utf8();
-//     media::RestartableAudioRendererSink* sink = reinterpret_cast<media::RestartableAudioRendererSink*>(audioRendererMixerManager->CreateInput(0, "", origin));
-// 
-//     scoped_refptr<media::RestartableAudioRendererSink> audio_renderer_sink(sink);
-//     media::WebMediaPlayerParams::Context3DCB context_3d_cb;
-// 
-//     m_inst->createMediaThreadIfNeeded();
-//     if (!m_inst->m_hFfmpeg)
-//         return nullptr;
-// 
-//     scoped_refptr<base::SingleThreadTaskRunner> mediaThreadTaskRunner = m_inst->m_mediaThread->task_runner();
-//     scoped_refptr<base::SingleThreadTaskRunner> compositorTaskRunner = m_inst->m_uiLoop->task_runner();
-// 
-//     blink::WebContentDecryptionModule* initialCdm = nullptr;
-//     scoped_refptr<media::MediaLog> media_log(new media::MediaLog());
-// 
-//     m_inst->m_rasterWorkerPool->AddRef(); // WebMediaPlayerImpl::~WebMediaPlayerImpl will release
-// 
-//     media::WebMediaPlayerParams params(
-//         media::WebMediaPlayerParams::DeferLoadCB(),
-//         audio_renderer_sink, media_log, mediaThreadTaskRunner,
-//         m_inst->m_rasterWorkerPool,
-//         compositorTaskRunner, context_3d_cb,
-//         base::Bind(&adjustAmountOfExternalAllocatedMemory), // base::Bind(&v8::Isolate::AdjustAmountOfExternalAllocatedMemory, base::Unretained(blink::mainThreadIsolate())),
-//         m_inst->getMediaPermission(), initialCdm);
-// 
-//     scoped_ptr<media::RendererFactory> media_renderer_factory;
-//     media_renderer_factory.reset(new media::DefaultRendererFactory(media_log, /*render_thread->GetGpuFactories()*/ nullptr, *(m_inst->m_audioHardwareConfig)));
-// 
-//     return new media::WebMediaPlayerImpl(frame, client, nullptr, base::WeakPtr<media::WebMediaPlayerDelegate>(), media_renderer_factory.Pass(), nullptr, params);
+    //return nullptr;
+    if (!m_inst)
+        return nullptr;
+    AudioRendererMixerManager* audioRendererMixerManager = m_inst->getAudioRendererMixerManager();
+    std::string origin = "";// frame->securityOrigin().toString().utf8();
+    media::SwitchableAudioRendererSink* sink = reinterpret_cast<media::SwitchableAudioRendererSink*>(audioRendererMixerManager->CreateInput(0, "", origin));
+
+    //     scoped_refptr<media::SwitchableAudioRendererSink> audio_renderer_sink =
+//         AudioDeviceFactory::NewSwitchableAudioRendererSink(
+//             AudioDeviceFactory::kSourceMediaElement, routing_id_, 0,
+//             sink_id.utf8(), frame_->getSecurityOrigin());
+
+    scoped_refptr<media::SwitchableAudioRendererSink> audio_renderer_sink(/*new EmptyAudioRendererSink()*/sink);
+
+    media::WebMediaPlayerParams::Context3DCB context_3d_cb;
+
+    m_inst->createMediaThreadIfNeeded();
+    if (!m_inst->m_hFfmpeg)
+        return nullptr;
+
+    scoped_refptr<base::SingleThreadTaskRunner> mediaThreadTaskRunner = m_inst->m_mediaThread->task_runner();
+    scoped_refptr<base::SingleThreadTaskRunner> compositorTaskRunner = m_inst->m_uiLoop->task_runner();
+
+    blink::WebContentDecryptionModule* initialCdm = nullptr;
+    scoped_refptr<media::MediaLog> media_log(new media::MediaLog());
+
+    m_inst->m_rasterWorkerPool->AddRef(); // WebMediaPlayerImpl::~WebMediaPlayerImpl will release
+
+    media::WebMediaPlayerParams params(
+        media::WebMediaPlayerParams::DeferLoadCB(),
+        audio_renderer_sink, 
+        media_log, 
+        mediaThreadTaskRunner,
+        m_inst->m_rasterWorkerPool,
+        compositorTaskRunner, 
+        context_3d_cb,
+        base::Bind(&adjustAmountOfExternalAllocatedMemory), // base::Bind(&v8::Isolate::AdjustAmountOfExternalAllocatedMemory, base::Unretained(blink::mainThreadIsolate())),
+        initialCdm, 
+        /*surface_manager*/nullptr, 
+        nullptr/*base::WeakPtr<MediaObserver>*/
+    );
+
+    media::DefaultRendererFactory::GetGpuFactoriesCB getGpuFactoriesCB = base::Bind(getGpuFactoriesCb);
+    getGpuFactoriesCB.Reset();
+
+    std::unique_ptr<media::RendererFactory> media_renderer_factory;
+    media_renderer_factory.reset(new media::DefaultRendererFactory(
+        media_log, /*render_thread->GetGpuFactories()*/ nullptr, getGpuFactoriesCB));
+
+    return new media::WebMediaPlayerImpl(
+        frame, 
+        client, 
+        nullptr, 
+        base::WeakPtr<media::WebMediaPlayerDelegate>(), 
+        std::move(media_renderer_factory), 
+        urlIndex, 
+        params        
+    );
 }
 
 // blink::WebGraphicsContext3D* OrigChromeMgr::createOffscreenGraphicsContext3D(

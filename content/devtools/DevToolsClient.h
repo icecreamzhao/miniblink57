@@ -51,7 +51,7 @@ public:
 private:
     // WebDevToolsFrontendClient implementation.
     virtual void sendMessageToEmbedder(const blink::WebString& message) override;
-    /*virtual*/ void sendMessageToBackend(const blink::WebString& message) /*override*/;
+    virtual void sendMessageToBackend(const blink::WebString& message) override;
     bool isUnderTest() override;
 
     void closeDefersLoading();
@@ -70,7 +70,7 @@ private:
     DevToolsProtocolDispatcher* m_devToolsProtocolDispatcher;
     WebPage* m_page;
     int m_id;
-    Vector<blink::LocalFrame*> m_defersLoadingframes;
+    //Vector<blink::LocalFrame*> m_defersLoadingframes;
 };
 
 }  // namespace content

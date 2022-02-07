@@ -2,9 +2,11 @@
 #ifndef content_browser_OrigChromeMgr_h
 #define content_browser_OrigChromeMgr_h
 
+#include "media/audio/audio_manager.h"
 //#include "third_party/WebKit/public/platform/WebGraphicsContext3D.h"
 #include "third_party/WebKit/public/platform/WebThread.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
+#include "base/memory/linked_ptr.h"
 #include <map>
 
 namespace base {
@@ -23,11 +25,16 @@ class WebLocalFrame;
 class WebMediaPlayer;
 class WebMediaPlayerClient;
 class WebURL;
+class WebMediaPlayerSource;
+class WebMediaPlayerEncryptedMediaClient;
+class WebContentDecryptionModule;
+class WebString;
 }
 
 namespace media {
 class AudioManager;
 class AudioHardwareConfig;
+class UrlIndex;
 }
 
 typedef void(__stdcall* OrigTaskType)();
@@ -70,7 +77,18 @@ public:
 //         blink::WebGLInfo* glInfo);
 
     static blink::WebCompositorSupport* createWebCompositorSupport();
-    static blink::WebMediaPlayer* createWebMediaPlayer(blink::WebLocalFrame* frame, const blink::WebURL& url, blink::WebMediaPlayerClient* client);
+
+    //static blink::WebMediaPlayer* createWebMediaPlayer(blink::WebLocalFrame* frame, const blink::WebURL& url, blink::WebMediaPlayerClient* client);
+
+    static blink::WebMediaPlayer* createWebMediaPlayer(
+        blink::WebLocalFrame* frame,
+        const blink::WebMediaPlayerSource& source,
+        blink::WebMediaPlayerClient*,
+        blink::WebMediaPlayerEncryptedMediaClient*,
+        blink::WebContentDecryptionModule*,
+        const blink::WebString& sinkId,
+        linked_ptr<media::UrlIndex> urlIndex
+    );
 
     static void runUntilIdle();
     static void runUntilIdleWithoutMsgPeek();
@@ -100,7 +118,7 @@ public:
 
     base::Thread* getMediaIoThread() const { return m_mediaIoThread; }
 
-    media::AudioManager* getAudioManager() const { return m_audioManager; }
+    media::AudioManager* getAudioManager() const { return m_audioManager.get(); }
 
     base::Thread* getOrCreateCompositorThread();
 
@@ -125,7 +143,7 @@ private:
     TaskObserverMap m_taskObserverMap;
 
     MediaPermissionDispatcherImpl* m_mediaPermissionDispatcherImpl;
-    media::AudioManager* m_audioManager;
+    media::ScopedAudioManagerPtr m_audioManager;
     media::AudioHardwareConfig* m_audioHardwareConfig;
     AudioRendererMixerManager* m_audioRendererMixerManager;
     void* m_hFfmpeg;

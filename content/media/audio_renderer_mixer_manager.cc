@@ -10,9 +10,10 @@
 #include "base/bind_helpers.h"
 #include "content/media/audio_device_factory.h"
 #include "media/audio/audio_output_device.h"
-#include "media/base/audio_hardware_config.h"
+#include "media/base/audio_latency.h"
 #include "media/base/audio_renderer_mixer.h"
 #include "media/base/audio_renderer_mixer_input.h"
+#include "url/gurl.h"
 
 namespace content {
 
@@ -33,8 +34,17 @@ media::AudioRendererMixerInput* AudioRendererMixerManager::CreateInput(
     const std::string& device_id,
     const /*url::Origin*/ std::string& security_origin)
 {
-    return new media::AudioRendererMixerInput(base::Bind(&AudioRendererMixerManager::GetMixer, base::Unretained(this), source_render_frame_id),
-        base::Bind(&AudioRendererMixerManager::RemoveMixer, base::Unretained(this), source_render_frame_id), device_id, security_origin);
+//     return new media::AudioRendererMixerInput(
+//         base::Bind(&AudioRendererMixerManager::GetMixer, base::Unretained(this), source_render_frame_id),
+//         base::Bind(&AudioRendererMixerManager::RemoveMixer, base::Unretained(this), source_render_frame_id), 
+//         device_id, 
+//         security_origin
+//     );
+    return new media::AudioRendererMixerInput(this,
+        source_render_frame_id,
+        device_id,
+        url::Origin(GURL(security_origin)),
+        media::AudioLatency::LATENCY_EXACT_MS);
 }
 
 void AudioRendererMixerManager::SetAudioRendererSinkForTesting(
@@ -43,13 +53,20 @@ void AudioRendererMixerManager::SetAudioRendererSinkForTesting(
     sink_for_testing_ = sink;
 }
 
+static void UmaLogCb(int)
+{
+
+}
+
 media::AudioRendererMixer* AudioRendererMixerManager::GetMixer(
     int source_render_frame_id,
     const media::AudioParameters& params,
+    media::AudioLatency::LatencyType latency,
     const std::string& device_id,
-    const std::string& security_origin,
+    const url::Origin& security,
     media::OutputDeviceStatus* device_status)
 {
+    std::string security_origin = security.GetURL().spec();
     // Effects are not passed through to output creation, so ensure none are set.
     DCHECK_EQ(params.effects(), media::AudioParameters::NO_EFFECTS);
 
@@ -65,13 +82,11 @@ media::AudioRendererMixer* AudioRendererMixerManager::GetMixer(
         return it->second.mixer;
     }
 
-    scoped_refptr<media::AudioRendererSink> sink = sink_for_testing_
-        ? sink_for_testing_
-        : AudioDeviceFactory::NewOutputDevice(source_render_frame_id, 0,
-            device_id, security_origin)
-              .get();
+    scoped_refptr<media::AudioRendererSink> sink = sink_for_testing_ ? 
+        sink_for_testing_ : 
+        AudioDeviceFactory::NewOutputDevice(source_render_frame_id, 0, device_id, security_origin).get();
 
-    media::OutputDeviceStatus new_device_status = sink->GetOutputDevice()->GetDeviceStatus();
+    media::OutputDeviceStatus new_device_status = sink->GetOutputDeviceInfo().device_status();
     if (device_status)
         *device_status = new_device_status;
     if (new_device_status != media::OUTPUT_DEVICE_STATUS_OK) {
@@ -79,7 +94,7 @@ media::AudioRendererMixer* AudioRendererMixerManager::GetMixer(
         return nullptr;
     }
 
-    media::AudioParameters hardware_params = sink->GetOutputDevice()->GetOutputParameters();
+    media::AudioParameters hardware_params = sink->GetOutputDeviceInfo().output_params();
 
     // On ChromeOS we can rely on the playback device to handle resampling, so
     // don't waste cycles on it here.
@@ -90,9 +105,9 @@ media::AudioRendererMixer* AudioRendererMixerManager::GetMixer(
         ? hardware_params.sample_rate()
         : params.sample_rate();
 #endif
-
+    int preferred_buffer_size = hardware_params.frames_per_buffer();
     int buffer_size = hardware_params.format() != media::AudioParameters::AUDIO_FAKE
-        ? media::AudioHardwareConfig::GetHighLatencyBufferSize(hardware_params)
+        ? media::AudioLatency::GetHighLatencyBufferSize(sample_rate, preferred_buffer_size)
         : params.frames_per_buffer();
 
     // Create output parameters based on the audio hardware configuration for
@@ -105,7 +120,7 @@ media::AudioRendererMixer* AudioRendererMixerManager::GetMixer(
     if (!output_params.IsValid())
         output_params = params;
 
-    media::AudioRendererMixer* mixer = new media::AudioRendererMixer(params, output_params, sink);
+    media::AudioRendererMixer* mixer = new media::AudioRendererMixer(output_params, sink, base::Bind(UmaLogCb));
     AudioRendererMixerReference mixer_reference = { mixer, 1 };
     mixers_[key] = mixer_reference;
     return mixer;
@@ -141,6 +156,34 @@ AudioRendererMixerManager::MixerKey::MixerKey(
     , device_id(device_id)
     , security_origin(security_origin)
 {
+}
+
+media::OutputDeviceInfo AudioRendererMixerManager::GetOutputDeviceInfo(
+    int owner_id,
+    int session_id,
+    const std::string& device_id,
+    const url::Origin& security_origin)
+{
+    return media::OutputDeviceInfo("", media::OUTPUT_DEVICE_STATUS_OK, media::AudioParameters());
+}
+
+void AudioRendererMixerManager::ReturnMixer(media::AudioRendererMixer* mixer)
+{
+    base::AutoLock auto_lock(mixers_lock_);
+
+    AudioRendererMixerMap::iterator it = mixers_.begin();
+    for (; it != mixers_.end(); ++it) {
+        if (it->second.mixer != mixer)
+            continue;
+        
+        // Only remove the mixer if AudioRendererMixerManager is the last owner.
+        it->second.ref_count--;
+        if (it->second.ref_count == 0) {
+            delete it->second.mixer;
+            mixers_.erase(it);
+        }
+        break;
+    }
 }
 
 } // namespace content

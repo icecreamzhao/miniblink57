@@ -99,6 +99,12 @@ static void destroyOnUiThread(RenderWidgetCompositor* self)
     delete self;
 }
 
+static void preDestroyOnUiThread(cc::Display* display, int* waiter)
+{
+    display->SetVisible(false);
+    *waiter = 1;
+}
+
 RenderWidgetCompositor::~RenderWidgetCompositor()
 {
     if (m_animationHost)
@@ -110,24 +116,31 @@ RenderWidgetCompositor::~RenderWidgetCompositor()
     if (m_display)
         delete m_display;
 
-    if (m_layerTreeHost)
-        delete m_layerTreeHost;
-
     if (m_animationHost)
         delete m_animationHost;
 }
 
 void RenderWidgetCompositor::destroy()
 {
-    m_layerTreeHost->SetVisible(false);
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "RenderWidgetCompositor::destroy: %p, display:%p\n", this, m_display);
+    OutputDebugStringA(output);
+    free(output);
 
+    if (m_display) {
+        int waiter = 0;
+        OrigChromeMgr::getInst()->getUiLoop()->task_runner()->PostTask(FROM_HERE, base::Bind(&preDestroyOnUiThread, m_display, &waiter));
+        while (1 != waiter)
+            ::Sleep(1);
+    }
+
+    m_layerTreeHost->SetVisible(false);
     m_sink = m_layerTreeHost->ReleaseCompositorFrameSink().release();
 
     if (m_layerTreeHost) {
         delete m_layerTreeHost;
         m_layerTreeHost = nullptr;
     }
-
     OrigChromeMgr::getInst()->getUiLoop()->task_runner()->PostTask(FROM_HERE, base::Bind(&destroyOnUiThread, this));
 }
 

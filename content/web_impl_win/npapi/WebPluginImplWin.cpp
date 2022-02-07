@@ -397,6 +397,12 @@ void WebPluginImpl::updatePluginWidget(const IntRect& windowRect, const IntRect&
         if (m_memoryCanvas)
             delete m_memoryCanvas;
         m_memoryCanvas = skia::CreatePlatformCanvas(m_windowRect.width(), m_windowRect.height(), !m_isTransparent);
+
+        size_t rowBytes;
+        SkImageInfo memoryImageInfo;
+        m_memoryPixels = m_memoryCanvas->accessTopLayerPixels(&memoryImageInfo, &rowBytes);
+        m_memoryCanvasSize.cx = memoryImageInfo.width();
+        m_memoryCanvasSize.cy = memoryImageInfo.height();
     }
 }
 
@@ -751,6 +757,46 @@ void WebPluginImpl::paintWindowedPluginIntoContext(GraphicsContext& context, con
     DebugBreak();
 }
 
+static void doOrNormal(DWORD dwKey, LPVOID pBuff, int nLen)
+{
+    if (nLen <= 0 || nLen % 4) {
+        return;
+    }
+    for (DWORD* pSrc = (DWORD*)pBuff; nLen > 0; nLen -= 4, pSrc++) {
+        *pSrc |= dwKey;
+    }
+}
+
+static void doOrSSE(DWORD dwKey, LPVOID pBuff, int nLen)
+{
+#ifndef _WIN64
+    int nSSELen = nLen >> 4;
+    if (nSSELen) {
+        __asm {
+            push ecx;
+            push eax;
+            movss xmm1, [dwKey];
+            shufps xmm1, xmm1, 0;
+            mov	eax, [pBuff];
+            mov ecx, [nSSELen];
+xor_process:
+            movups xmm0, [eax];
+            orps xmm0, xmm1;
+            movups[eax], xmm0;
+            add eax, 10h;
+            dec ecx;
+            jnz xor_process;
+            pop eax;;
+            pop ecx;
+            emms;
+        }
+    }
+    doOrNormal(dwKey, (BYTE*)pBuff + (nSSELen << 4), nLen - (nSSELen << 4));
+#else
+    doOrNormal(dwKey, pBuff, nLen);
+#endif
+}
+
 void WebPluginImpl::paint(blink::WebCanvas* canvas, const blink::WebRect& rect)
 {
     if (!m_isStarted) {
@@ -778,8 +824,8 @@ void WebPluginImpl::paint(blink::WebCanvas* canvas, const blink::WebRect& rect)
         return;
 
     SkPaint clearPaint;
-    clearPaint.setARGB(0xff, 0xFF, 0xFF, 0xFF);
-    clearPaint.setXfermodeMode(SkXfermode::kClear_Mode);
+    clearPaint.setARGB(0xFF, 0xFF, 0xFF, 0xFF);
+    clearPaint.setXfermodeMode(SkXfermode::kSrc_Mode);
 
     SkRect skrc;
     blink::IntRect r = container->frameRect();
@@ -802,6 +848,9 @@ void WebPluginImpl::paint(blink::WebCanvas* canvas, const blink::WebRect& rect)
     }
 
     paintIntoTransformedContext(hMemoryDC);
+
+    if (m_memoryPixels)
+        doOrSSE(0xff000000, m_memoryPixels, m_memoryCanvasSize.cx * m_memoryCanvasSize.cy * 4);
 
     if (!m_isWindowed)
         ::SetWorldTransform(hMemoryDC, &originalTransform);

@@ -7,13 +7,16 @@
 
 #include "base/rand_util.h"
 
+#include "third_party/WebKit/Source/platform/graphics/Color.h"
+#include "third_party/WebKit/Source/platform/heap/Persistent.h"
+#include "third_party/WebKit/Source/platform/geometry/IntRect.h"
+#include "third_party/WebKit/Source/wtf/ThreadingPrimitives.h"
 #include "third_party/WebKit/public/web/WebViewClient.h"
 #include "third_party/WebKit/public/web/WebHistoryCommitType.h"
 #include "third_party/WebKit/public/web/WebHistoryItem.h"
 #include "third_party/WebKit/public/platform/WebURLRequest.h"
-#include "third_party/WebKit/Source/platform/graphics/Color.h"
+#include "third_party/WebKit/public/platform/WebThread.h"
 #include "third_party/WebKit/public/platform/WebCursorInfo.h"
-
 #ifdef ENABLE_MC
 #include "mc/trees/LayerTreeHost.h"
 #include "mc/trees/LayerTreeHostClient.h"
@@ -32,6 +35,8 @@ namespace blink {
 struct Referrer;
 class WebViewImpl;
 class WebHistoryItem;
+class IntRect;
+class WebThread;
 enum class WebCachePolicy;
 struct WebFileChooserParams;
 }
@@ -130,8 +135,13 @@ public:
     //virtual bool handleCurrentKeyboardEvent() override;
 
     // Called when a drag-n-drop operation should begin.
-//     virtual void startDragging(blink::WebLocalFrame* frame, const blink::WebDragData& data, 
-//         blink::WebDragOperationsMask mask, const blink::WebImage& image, const blink::WebPoint& dragImageOffset) override;
+    virtual void startDragging(
+        blink::WebReferrerPolicy policy,
+        const blink::WebDragData& data,
+        blink::WebDragOperationsMask mask,
+        const blink::WebImage& image,
+        const blink::WebPoint& dragImageOffset
+    ) override;
 
     // Return a compositing view used for this widget. This is owned by the
     // WebWidgetClient.

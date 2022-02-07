@@ -32,6 +32,8 @@ public:
     explicit SingleThreadTaskRunnerImpl(WebThreadImpl* thread)
     {
         m_thread = thread;
+        m_validThreadId = base::kInvalidThreadId;
+        BindToCurrentThread();
     }
 
     void SingleThreadTaskRunnerImpl::BindToCurrentThread()
@@ -81,7 +83,7 @@ WebTaskRunnerImpl::WebTaskRunnerImpl(WebThreadImpl* threadImpl)
     : m_thread(threadImpl)
     , m_taskRunner(new SingleThreadTaskRunnerImpl(threadImpl))
 {
-    //m_taskRunner->AddRef();
+    m_taskRunner->AddRef();
 }
 
 WebTaskRunnerImpl::~WebTaskRunnerImpl()

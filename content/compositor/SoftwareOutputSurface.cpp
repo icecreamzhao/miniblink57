@@ -46,7 +46,7 @@ void SoftwareOutputSurface::EnsureBackbuffer()
 
 void SoftwareOutputSurface::DiscardBackbuffer(void)
 {
-    DebugBreak();
+
 }
 
 void SoftwareOutputSurface::BindFramebuffer(void)

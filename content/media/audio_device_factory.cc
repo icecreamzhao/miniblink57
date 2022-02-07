@@ -12,12 +12,13 @@
 #include "media/audio/audio_output_controller.h"
 #include "media/audio/audio_output_device.h"
 #include "media/base/audio_bus.h"
-#include "media/base/output_device.h"
+//#include "media/base/output_device.h"
 //#include "url/origin.h"
 #include "base/memory/shared_memory.h"
 #include "base/process/process.h"
 #include "base/threading/thread.h"
 #include "content/OrigChromeMgr.h"
+#include "url/gurl.h"
 
 namespace content {
 
@@ -34,7 +35,7 @@ public:
     ~AudioOutputIPCImpl() override;
 
     // media::AudioOutputIPC implementation.
-    void RequestDeviceAuthorization(media::AudioOutputIPCDelegate* delegate, int session_id, const std::string& device_id, const std::string& security_origin) override;
+    void RequestDeviceAuthorization(media::AudioOutputIPCDelegate* delegate, int session_id, const std::string& device_id, const url::Origin& security_origin) override;
     void CreateStream(media::AudioOutputIPCDelegate* delegate, const media::AudioParameters& params) override;
     void PlayStream() override;
     void PauseStream() override;
@@ -74,7 +75,7 @@ void AudioOutputIPCImpl::RequestDeviceAuthorization(
     media::AudioOutputIPCDelegate* delegate,
     int session_id,
     const std::string& device_id,
-    const std::string& security_origin)
+    const url::Origin& security_origin)
 {
     //     DCHECK(filter_->io_task_runner_->BelongsToCurrentThread());
     //     DCHECK(delegate);
@@ -87,7 +88,7 @@ void AudioOutputIPCImpl::RequestDeviceAuthorization(
     //         url::Origin(security_origin)));
 
     media::AudioParameters outputParams = OrigChromeMgr::getInst()->getAudioManager()->GetDefaultOutputStreamParameters();
-    delegate->OnDeviceAuthorized(media::OUTPUT_DEVICE_STATUS_OK, outputParams);
+    delegate->OnDeviceAuthorized(media::OUTPUT_DEVICE_STATUS_OK, outputParams, device_id);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,12 +99,12 @@ public:
         int render_frame_id,
         const media::AudioParameters& params,
         const std::string& output_device_id,
-        scoped_ptr<base::SharedMemory> shared_memory,
-        scoped_ptr<media::AudioOutputController::SyncReader> reader)
+        std::unique_ptr<base::SharedMemory> shared_memory,
+        std::unique_ptr<media::AudioOutputController::SyncReader> reader)
         : stream_id_(stream_id)
         , render_frame_id_(render_frame_id)
-        , shared_memory_(shared_memory.Pass())
-        , reader_(reader.Pass())
+        , shared_memory_(std::move(shared_memory))
+        , reader_(std::move(reader))
         , controller_(media::AudioOutputController::Create(OrigChromeMgr::getInst()->getAudioManager(), this, params, output_device_id, reader_.get()))
         , playing_(false)
     {
@@ -137,7 +138,7 @@ public:
 
 private:
     // media::AudioOutputController::EventHandler implementation.
-    void OnCreated() override
+    void OnControllerCreated() override
     {
         //         BrowserThread::PostTask(
         //             BrowserThread::IO,
@@ -146,7 +147,7 @@ private:
         //DebugBreak();
     }
 
-    void OnPlaying() override
+    void OnControllerPlaying() override
     {
         //         BrowserThread::PostTask(
         //             BrowserThread::IO,
@@ -159,7 +160,7 @@ private:
         set_playing(true);
     }
 
-    void OnPaused() override
+    void OnControllerPaused() override
     {
         //         BrowserThread::PostTask(
         //             BrowserThread::IO,
@@ -171,7 +172,7 @@ private:
         set_playing(false);
     }
 
-    void OnError() override
+    void OnControllerError() override
     {
         //         BrowserThread::PostTask(
         //             BrowserThread::IO,
@@ -187,10 +188,10 @@ private:
     const int render_frame_id_;
 
     // Shared memory for transmission of the audio data.  Used by |reader_|.
-    const scoped_ptr<base::SharedMemory> shared_memory_;
+    const std::unique_ptr<base::SharedMemory> shared_memory_;
 
     // The synchronous reader to be used by |controller_|.
-    const scoped_ptr<media::AudioOutputController::SyncReader> reader_;
+    const std::unique_ptr<media::AudioOutputController::SyncReader> reader_;
 
     // The AudioOutputController that manages the audio stream.
     const scoped_refptr<media::AudioOutputController> controller_;
@@ -221,7 +222,7 @@ public:
 #endif
         buffer_index_(0)
     {
-        DCHECK_EQ(packet_size_, media::AudioBus::CalculateMemorySize(params));
+        DCHECK_EQ(packet_size_, sizeof(media::AudioOutputBufferParameters) + media::AudioBus::CalculateMemorySize(params));
         output_bus_ = media::AudioBus::WrapMemory(params, shared_memory->memory());
         output_bus_->Zero();
     }
@@ -248,13 +249,22 @@ public:
     }
 
     // media::AudioOutputController::SyncReader implementations.
-    void UpdatePendingBytes(uint32 bytes) override
+    void UpdatePendingBytes(uint32 bytes) /*override*/
     {
         // Zero out the entire output buffer to avoid stuttering/repeating-buffers
         // in the anomalous case if the renderer is unable to keep up with real-time.
         output_bus_->Zero();
         socket_->Send(&bytes, sizeof(bytes));
         ++buffer_index_;
+    }
+
+    void RequestMoreData(base::TimeDelta delay, base::TimeTicks delay_timestamp, int prior_frames_skipped) override
+    {
+        int64_t bytes64 = delay.ToInternalValue();
+        uint32 bytes = (uint32)(bytes64);
+        if (base::TimeDelta::Max() == delay)
+            bytes = kuint32max;
+        UpdatePendingBytes(bytes);
     }
 
     void Read(media::AudioBus* dest) override
@@ -356,14 +366,14 @@ private:
     const bool mute_audio_;
 
     // Socket for transmitting audio data.
-    scoped_ptr<base::CancelableSyncSocket> socket_;
+    std::unique_ptr<base::CancelableSyncSocket> socket_;
 
     // Socket to be used by the renderer. The reference is released after
     // PrepareForeignSocketHandle() is called and ran successfully.
-    scoped_ptr<base::CancelableSyncSocket> foreign_socket_;
+    std::unique_ptr<base::CancelableSyncSocket> foreign_socket_;
 
     // Shared memory wrapper used for transferring audio data to Read() callers.
-    scoped_ptr<media::AudioBus> output_bus_;
+    std::unique_ptr<media::AudioBus> output_bus_;
 
     // Maximum amount of audio data which can be transferred in one Read() call.
     const int packet_size_;
@@ -395,14 +405,14 @@ void AudioOutputIPCImpl::CreateStream(media::AudioOutputIPCDelegate* delegate, c
     static const char kDefaultDeviceId[] = "default";
 
     // Create the shared memory and share with the renderer process.
-    uint32 shared_memory_size = media::AudioBus::CalculateMemorySize(params);
-    scoped_ptr<base::SharedMemory> shared_memory(new base::SharedMemory());
+    uint32 shared_memory_size = sizeof(media::AudioOutputBufferParameters) + media::AudioBus::CalculateMemorySize(params);
+    std::unique_ptr<base::SharedMemory> shared_memory(new base::SharedMemory());
     if (!shared_memory->CreateAndMapAnonymous(shared_memory_size)) {
         DebugBreak();
         return;
     }
 
-    scoped_ptr<AudioSyncReader> reader(new AudioSyncReader(shared_memory.get(), params));
+    std::unique_ptr<AudioSyncReader> reader(new AudioSyncReader(shared_memory.get(), params));
     if (!reader->Init()) {
         DebugBreak();
         return;
@@ -415,7 +425,7 @@ void AudioOutputIPCImpl::CreateStream(media::AudioOutputIPCDelegate* delegate, c
         return;
     }
 
-    entry_ = new AudioEntry(/*stream_id*/ 0, /*render_frame_id*/ 0, params, kDefaultDeviceId, shared_memory.Pass(), reader.Pass());
+    entry_ = new AudioEntry(/*stream_id*/ 0, /*render_frame_id*/ 0, params, kDefaultDeviceId, std::move(shared_memory), std::move(reader));
 
     base::SharedMemoryHandle foreign_memory_handle;
     if (!entry_->shared_memory()->ShareToProcess(base::Process::Current().Handle(), &foreign_memory_handle)) {
@@ -495,11 +505,13 @@ scoped_refptr<media::AudioOutputDevice> AudioDeviceFactory::NewOutputDevice(
             return device;
     }
 
+    base::TimeDelta authorization_timeout = base::TimeDelta::Max();
+
     //AudioMessageFilter* const filter = AudioMessageFilter::Get();
     scoped_refptr<media::AudioOutputDevice> device = new media::AudioOutputDevice(
-        scoped_ptr<media::AudioOutputIPC>(new AudioOutputIPCImpl()), // filter->CreateAudioOutputIPC(render_frame_id),
+        std::unique_ptr<media::AudioOutputIPC>(new AudioOutputIPCImpl()), // filter->CreateAudioOutputIPC(render_frame_id),
         OrigChromeMgr::getInst()->getMediaIoThread()->task_runner(), // filter->io_task_runner(),
-        session_id, device_id, security_origin);
+        session_id, device_id, url::Origin(GURL(security_origin)), authorization_timeout);
     device->RequestDeviceAuthorization();
     return device;
 }

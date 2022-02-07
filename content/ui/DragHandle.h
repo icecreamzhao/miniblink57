@@ -77,7 +77,7 @@ public:
     IDataObject* getDragData() const { return m_dragData.get(); }
 
 private:
-    void postMainThreadTask(const blink::WebTraceLocation& location, WTF::PassOwnPtr<WTF::Function<void()>> func);
+    void postMainThreadTask(const blink::WebTraceLocation& location, std::function<void(void)>&& closure);
     void runMainThreadTasks();
     void simulateDrag();
 
@@ -106,7 +106,7 @@ private:
     COMPtr<IDataObject> m_tempDataObjectForSimulate;
 
     WTF::Mutex m_tasksLock;
-    std::vector<blink::Task*> m_tasks;
+    std::vector<std::function<void(void)>*> m_tasks;
 };
 
 }

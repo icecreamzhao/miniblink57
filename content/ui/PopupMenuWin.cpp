@@ -39,7 +39,7 @@
 #ifdef ENABLE_MC
 #include "mc/trees/LayerTreeHost.h"
 #endif
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
 #include "content/OrigChromeMgr.h"
 #include "content/LayerTreeWrap.h"
 #endif
@@ -88,7 +88,7 @@ PopupMenuWin::PopupMenuWin(PopupMenuWinClient* client, HWND hWnd, IntPoint offse
     m_lastFrameTimeMonotonic = 0;
     m_memoryCanvas = nullptr;
     m_layerTreeHost = nullptr;
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
     m_ccLayerTreeWrap = nullptr;
 #endif
     m_webViewImpl = webViewImpl;
@@ -143,7 +143,7 @@ void PopupMenuWin::closeWidgetSoon()
     net::ActivatingObjCheck::inst()->remove(m_id);
     g_popupMenuMutex.unlock();
 
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
     if (m_ccLayerTreeWrap)
         delete m_ccLayerTreeWrap;
     m_ccLayerTreeWrap = nullptr;
@@ -350,77 +350,79 @@ void PopupMenuWin::beginMainFrame()
         return;
     m_allowBeginFrame = false;
     
-//     if (m_layerTreeHost) {
-//         updataSize(false);
-//         updataMcLayerTreeHost();
-//     } else 
-//         updataSize(true);
-    DebugBreak();
+    if (m_layerTreeHost) {
+        updataSize(false);
+        updataMcLayerTreeHost();
+    } else 
+        updataSize(true);
 }
 
 void PopupMenuWin::updataMcLayerTreeHost()
 {
-//     m_layerTreeHost->beginRecordActions(true);
-// 
-//     double lastFrameTimeMonotonic = WTF::currentTime();
-//     WebBeginFrameArgs frameTime(m_lastFrameTimeMonotonic, 0, lastFrameTimeMonotonic - m_lastFrameTimeMonotonic);
-//     m_popupImpl->beginFrame(frameTime);
-//     m_popupImpl->layout();
-//     m_lastFrameTimeMonotonic = lastFrameTimeMonotonic;
-// 
-//     if (0)
-//         m_layerTreeHost->showDebug();
-// 
-//     m_layerTreeHost->recordDraw();
-// 
-//     m_layerTreeHost->preDrawFrame();
-//     updataPaint();
-//     m_layerTreeHost->postDrawFrame();
-// 
-//     m_layerTreeHost->endRecordActions();
-    DebugBreak();
+#ifdef ENABLE_MC
+    m_layerTreeHost->beginRecordActions(true);
+
+    double lastFrameTimeMonotonic = WTF::currentTime();
+    WebBeginFrameArgs frameTime(m_lastFrameTimeMonotonic, 0, lastFrameTimeMonotonic - m_lastFrameTimeMonotonic);
+    m_popupImpl->beginFrame(frameTime);
+    m_popupImpl->layout();
+    m_lastFrameTimeMonotonic = lastFrameTimeMonotonic;
+
+    if (0)
+        m_layerTreeHost->showDebug();
+
+    m_layerTreeHost->recordDraw();
+
+    m_layerTreeHost->preDrawFrame();
+    updataPaint();
+    m_layerTreeHost->postDrawFrame();
+
+    m_layerTreeHost->endRecordActions();
+#endif
 }
 
 void PopupMenuWin::updataSize(bool needShow)
 {
-    DebugBreak();
-//     if (!m_initialize || !m_hPopup)
-//         return;
-// 
-//     HWND hParentWnd = m_hParentWnd;
-//     HWND hPopup = m_hPopup;
-//     if (!m_needResize) {
-//         postTaskToUiThread(FROM_HERE, m_hParentWnd, [hPopup, needShow] {
-//             if (needShow)
-//                 ::ShowWindow(hPopup, SW_SHOWNOACTIVATE);
-//         });
-//         return;
-//     }
-//     m_needResize = false;
-//     
-//     bool allowBeginFrame = m_allowBeginFrame;
-//     blink::IntSize size(m_rect.width(), m_rect.height());
-// 
-//     if (m_layerTreeHost)
-//         m_layerTreeHost->setViewportSize(size);
-// #ifndef NO_USE_ORIG_CHROME
-//     if (m_ccLayerTreeWrap)
-//         m_ccLayerTreeWrap->onHostResized(size.width(), size.height());
-// #endif
-// 
-//     m_popupImpl->resize(size);
-//     m_allowBeginFrame = allowBeginFrame;
-// 
-//     POINT pos = { m_rect.x() + m_offset.x(), m_rect.y() + m_offset.y() };
-//     
-//     int width = m_rect.width();
-//     int height = m_rect.height();
-//     postTaskToUiThread(FROM_HERE, m_hParentWnd, [pos, hPopup, hParentWnd, needShow, width, height] {
-//         //::ClientToScreen(hParentWnd, (LPPOINT)&pos);
-//         ::SetWindowPos(hPopup, HWND_TOP, pos.x, pos.y, width, height, /*SWP_SHOWWINDOW |*/ SWP_NOACTIVATE);
-//         if (needShow)
-//             ::ShowWindow(hPopup, SW_SHOWNOACTIVATE);
-//     });
+    if (!m_initialize || !m_hPopup)
+        return;
+
+    HWND hParentWnd = m_hParentWnd;
+    HWND hPopup = m_hPopup;
+    if (!m_needResize) {
+        postTaskToUiThread(FROM_HERE, m_hParentWnd, [hPopup, needShow] {
+            if (needShow)
+                ::ShowWindow(hPopup, SW_SHOWNOACTIVATE);
+        });
+        return;
+    }
+    m_needResize = false;
+    
+    bool allowBeginFrame = m_allowBeginFrame;
+    blink::IntSize size(m_rect.width(), m_rect.height());
+
+#ifdef ENABLE_MC
+    if (m_layerTreeHost)
+        m_layerTreeHost->setViewportSize(size);
+#endif
+
+#if 1 // ndef NO_USE_ORIG_CHROME
+    if (m_ccLayerTreeWrap)
+        m_ccLayerTreeWrap->onHostResized(size.width(), size.height());
+#endif
+
+    m_popupImpl->resize(size);
+    m_allowBeginFrame = allowBeginFrame;
+
+    POINT pos = { m_rect.x() + m_offset.x(), m_rect.y() + m_offset.y() };
+    
+    int width = m_rect.width();
+    int height = m_rect.height();
+    postTaskToUiThread(FROM_HERE, m_hParentWnd, [pos, hPopup, hParentWnd, needShow, width, height] {
+        ::ClientToScreen(hParentWnd, (LPPOINT)&pos);
+        ::SetWindowPos(hPopup, HWND_TOP, pos.x, pos.y, width, height, /*SWP_SHOWWINDOW |*/ SWP_NOACTIVATE);
+        if (needShow)
+            ::ShowWindow(hPopup, SW_SHOWNOACTIVATE);
+    });
 }
 
 void PopupMenuWin::show(WebNavigationPolicy)
@@ -443,7 +445,7 @@ void PopupMenuWin::hide()
 
 void PopupMenuWin::paint(HDC hdc, const RECT& rcPaint)
 {
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
     if (m_ccLayerTreeWrap)
         m_ccLayerTreeWrap->firePaintEvent(hdc, rcPaint);
 #endif
@@ -455,45 +457,46 @@ void PopupMenuWin::paint(HDC hdc, const RECT& rcPaint)
 
 void PopupMenuWin::updataPaint()
 {
-    DebugBreak();
-//     if (!m_initialize)
-//         return;
-// 
-//     if (!m_memoryCanvas || m_hasResize) {
-//         m_hasResize = false;
-// 
-//         if (m_memoryCanvas)
-//             delete m_memoryCanvas;
-//         m_memoryCanvas = skia::CreatePlatformCanvas(m_rect.width(), m_rect.height(), !false);
-//     }
-// 
-//     IntRect clip(0, 0, m_rect.width(), m_rect.height());
-// 
-//     HDC hMemoryDC = skia::BeginPlatformPaint(m_hParentWnd, m_memoryCanvas);
-//     m_memoryCanvas->save();
-// 
-//     SkPaint paint;
-//     paint.setAntiAlias(true);
-//     m_memoryCanvas->drawPaint(paint);
-//     m_layerTreeHost->drawToCanvas(m_memoryCanvas, clip);
-//     m_memoryCanvas->restore();
-// 
-//     COLORREF color = ::GetPixel(hMemoryDC, 1, 1);
-// 
-//     bool canShow = false;
-//     if (m_hPopup && 0 != color) {
-//         canShow = true;
-// 
-//         HDC hdc = GetDC(m_hPopup);
-//         RECT rc = { 0, 0, m_rect.width(), m_rect.height() };
-//         skia::DrawToNativeContext(m_memoryCanvas, hdc, 0, 0, &rc);
-//         ::ReleaseDC(m_hPopup, hdc);
-//     }
-//     skia::EndPlatformPaint(m_memoryCanvas);
-// 
-//     if (m_isVisible && canShow) {
-//         updataSize(true);
-//     }
+    if (!m_initialize)
+        return;
+
+    if (!m_memoryCanvas || m_hasResize) {
+        m_hasResize = false;
+
+        if (m_memoryCanvas)
+            delete m_memoryCanvas;
+        m_memoryCanvas = skia::CreatePlatformCanvas(m_rect.width(), m_rect.height(), !false);
+    }
+
+    IntRect clip(0, 0, m_rect.width(), m_rect.height());
+
+    HDC hMemoryDC = skia::BeginPlatformPaint(m_hParentWnd, m_memoryCanvas);
+    m_memoryCanvas->save();
+
+    SkPaint paint;
+    paint.setAntiAlias(true);
+    m_memoryCanvas->drawPaint(paint);
+#ifdef ENABLE_MC
+    m_layerTreeHost->drawToCanvas(m_memoryCanvas, clip);
+#endif
+    m_memoryCanvas->restore();
+
+    COLORREF color = ::GetPixel(hMemoryDC, 1, 1);
+
+    bool canShow = false;
+    if (m_hPopup && 0 != color) {
+        canShow = true;
+
+        HDC hdc = GetDC(m_hPopup);
+        RECT rc = { 0, 0, m_rect.width(), m_rect.height() };
+        skia::DrawToNativeContext(m_memoryCanvas, hdc, 0, 0, &rc);
+        ::ReleaseDC(m_hPopup, hdc);
+    }
+    skia::EndPlatformPaint(m_memoryCanvas);
+
+    if (m_isVisible && canShow) {
+        updataSize(true);
+    }
 }
 
 static void initWndStyle(HWND hPopup)
@@ -544,7 +547,7 @@ void PopupMenuWin::asynCreateWndOnMainThread()
 
     m_client->onPopupMenuCreate(m_hPopup);
 
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
     if (m_ccLayerTreeWrap)
         m_ccLayerTreeWrap->setHWND(m_hPopup);
 #endif
@@ -607,7 +610,7 @@ WebWidget* PopupMenuWin::createWnd()
             postTaskToMainThread(FROM_HERE, [self, id, hPopup] {
                 if (!net::ActivatingObjCheck::inst()->isActivating(id))
                     return;
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
                 if (self->m_ccLayerTreeWrap)
                     self->m_ccLayerTreeWrap->setHWND(hPopup);
 #endif
@@ -636,6 +639,9 @@ void PopupMenuWin::initialize()
 //     else
 // #endif
 //         m_layerTreeHost = new mc::LayerTreeHost(this, nullptr);
+
+    if (m_ccLayerTreeWrap)
+        m_ccLayerTreeWrap->onHostResized(1, 1);
 
     m_popupImpl = WebPagePopup::create(this);
     m_platformEventHandler = new PlatformEventHandler(m_popupImpl, nullptr);
@@ -705,9 +711,28 @@ void PopupMenuWin::setWindowRect(const WebRect& r)
     m_rect = r;
     trimWidthHeight(m_rect);
 
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "PopupMenuWin::setWindowRect: %d %d\n", m_rect.x(), m_rect.y());
+    OutputDebugStringA(output);
+    free(output);
+
     m_needResize = true;
     m_hasResize = true;
     postCommit();
+}
+
+WebRect PopupMenuWin::windowRect()
+{
+//     POINT pos = { m_rect.x(), m_rect.y() };
+//     ::ClientToScreen(m_hParentWnd, &pos);
+// 
+//     char* output = (char*)malloc(0x100);
+//     sprintf_s(output, 0x99, "PopupMenuWin::windowRect: %d %d, %d %d\n", pos.x, pos.y, m_rect.x(), m_rect.y());
+//     OutputDebugStringA(output);
+//     free(output);
+// 
+//     return WebRect(pos.x, pos.y, m_rect.width(), m_rect.height());
+    return m_rect;
 }
 
 void PopupMenuWin::scheduleAnimation()
@@ -717,25 +742,25 @@ void PopupMenuWin::scheduleAnimation()
 
 blink::WebLayerTreeView* PopupMenuWin::initializeLayerTreeView()
 {
-    DebugBreak();
-#ifndef NO_USE_ORIG_CHROME
-    if (m_ccLayerTreeWrap)
+#if 1 // ndef NO_USE_ORIG_CHROME
+    if (m_ccLayerTreeWrap) {
         m_ccLayerTreeWrap->initializeLayerTreeView();
+        return m_ccLayerTreeWrap->layerTreeView();
+    }
 #endif
     return nullptr;
 }
 
 blink::WebLayerTreeView* PopupMenuWin::layerTreeView()
 {
-    DebugBreak();
-    return nullptr;
-
     //g_popupMenuIniting = false;
-// #ifndef NO_USE_ORIG_CHROME
-//     if (m_ccLayerTreeWrap)
-//         return m_ccLayerTreeWrap->layerTreeView();
-// #endif
-//     return m_layerTreeHost;
+#if 1 // ndef NO_USE_ORIG_CHROME
+    if (m_ccLayerTreeWrap)
+        return m_ccLayerTreeWrap->layerTreeView();
+    return nullptr;
+#else
+    return m_layerTreeHost;
+#endif
 }
 
 bool PopupMenuWin::initSetting()
@@ -743,7 +768,7 @@ bool PopupMenuWin::initSetting()
     return true;
 }
 
-#ifndef NO_USE_ORIG_CHROME
+#if 1 // ndef NO_USE_ORIG_CHROME
 
 void PopupMenuWin::onBeginPaint(HDC hdc, const RECT& damageRect)
 {
@@ -795,24 +820,21 @@ void PopupMenuWin::onEndPaintStep2(HDC hdc, const RECT& damageRect)
 
 void PopupMenuWin::onLayout()
 {
-//     if (m_popupImpl)
-//         m_popupImpl->layout();
-    DebugBreak();
+    if (m_popupImpl)
+        m_popupImpl->updateAllLifecyclePhases();
 }
 
 void PopupMenuWin::onBeginMainFrame()
 {
-//     if (!m_webViewImpl)
-//         return;
-// 
-//     double lastFrameTimeMonotonic = WTF::monotonicallyIncreasingTime();
-// 
-//     WebBeginFrameArgs frameArgs(lastFrameTimeMonotonic, 0, lastFrameTimeMonotonic - m_lastFrameTimeMonotonic);
-//     m_popupImpl->beginFrame(frameArgs);
-//     m_popupImpl->layout();
-// 
-//     m_lastFrameTimeMonotonic = lastFrameTimeMonotonic;
-    DebugBreak();
+    if (!m_webViewImpl)
+        return;
+
+    double lastFrameTimeMonotonic = WTF::monotonicallyIncreasingTime();
+
+    m_popupImpl->beginFrame(m_lastFrameTimeMonotonic);
+    m_popupImpl->updateAllLifecyclePhases();
+
+    m_lastFrameTimeMonotonic = lastFrameTimeMonotonic;
 }
 
 COLORREF PopupMenuWin::getBackgroundColor()

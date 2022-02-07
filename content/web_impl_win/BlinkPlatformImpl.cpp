@@ -52,6 +52,7 @@
 #include "gen/blink/platform/RuntimeEnabledFeatures.h"
 #include "ui/gfx/win/dpi.h"
 #include "gin/public/isolate_holder.h"
+#include "gin/public/v8_platform.h"
 #include "gin/array_buffer.h"
 #include "net/ActivatingObjCheck.h"
 #include "net/WebURLLoaderManager.h"
@@ -82,7 +83,7 @@ double g_autoRecordActionsTime = 0;
 
 //#include "base/process/InjectTool.h"
 
-extern size_t g_v8MemSize;
+size_t g_v8MemSize;
 size_t g_blinkMemSize = 0;
 size_t g_skiaMemSize = 0;
 
@@ -226,6 +227,7 @@ static WebThreadImpl* currentTlsThread()
 
 static void setRuntimeEnabledFeatures()
 {
+    blink::RuntimeEnabledFeatures::setTraceWrappablesEnabled(true);
     blink::RuntimeEnabledFeatures::setAccelerated2dCanvasEnabled(false);
     blink::RuntimeEnabledFeatures::setDisplayList2dCanvasEnabled(false);
     blink::RuntimeEnabledFeatures::setForceDisplayList2dCanvasEnabled(false);
@@ -306,39 +308,6 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
       OrigChromeMgr::init();
 #endif
 
-    setRuntimeEnabledFeatures();
-
-    //gfx::win::InitDeviceScaleFactor();
-    BlinkPlatformImpl* platform = new BlinkPlatformImpl();
-    //blink::Platform::initialize(platform);
-    gin::IsolateHolder::Initialize(gin::IsolateHolder::kNonStrictMode, gin::ArrayBufferAllocator::SharedInstance());
-    blink::initialize(platform/*blink::Platform::current()*/);
-    //initializeOffScreenTimerWindow();
-
-    // Maximum allocation size allowed for image scaling filters that
-    // require pre-scaling. Skia will fallback to a filter that doesn't
-    // require pre-scaling if the default filter would require an
-    // allocation that exceeds this limit.
-    const size_t kImageCacheSingleAllocationByteLimit = 64 * 1024 * 1024;
-    SkGraphics::SetResourceCacheSingleAllocationByteLimit(kImageCacheSingleAllocationByteLimit);
-
-    sk_sp<SkFontMgr> fontMgr(SkFontMgr_New_GDI());
-    blink::WebFontRendering::setSkiaFontManager(fontMgr);
-
-    blink::networkStateNotifier().setWebConnection(blink::WebConnectionTypeWifi, 0);
-    blink::networkStateNotifier().setOnLine(true);
-
-    platform->m_defaultGcTimer = new blink::Timer<BlinkPlatformImpl>(platform, &BlinkPlatformImpl::garbageCollectedTimer);
-    platform->m_defaultGcTimer->start(40 * 10, 40 * 10, FROM_HERE);
-
-    platform->m_resTimer = new blink::Timer<BlinkPlatformImpl>(platform, &BlinkPlatformImpl::resourceGarbageCollectedTimer);
-    platform->m_resTimer->start(120 * 10, 120 * 10, FROM_HERE);
-
-    WTF::PartitionAllocHooks::setAllocationHook(onAllocationHook);
-    WTF::PartitionAllocHooks::setFreeHook(onFreeHook);
-
-    blink::FontCache::setSmallCaptionFontMetrics(L"ËÎÌו", 12);
-
     //v8::V8::SetFlagsFromString("--turbo", strlen("--turbo"));
     //v8::V8::SetFlagsFromString("--block_concurrent_recompilation", sizeof("--block_concurrent_recompilation") - 1);
     //v8::V8::SetFlagsFromString("--scavenge_reclaim_unmodified_objects", strlen("--scavenge_reclaim_unmodified_objects"));
@@ -358,12 +327,56 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
         "--no_untrusted_code_mitigations",
         "--no_single_threaded_gc",
         "--harmony_await_optimization",
+
+        "--no_concurrent_marking",
+        "--no_parallel_marking",
+
+        "--no_incremental_marking",
+        "--no_incremental_marking_wrappers",
         nullptr
     };
     for (size_t i = 0; v8flags[i]; i++) {
         v8::V8::SetFlagsFromString(v8flags[i], strlen(v8flags[i]));
     }
 #endif
+
+    setRuntimeEnabledFeatures();
+
+    //gfx::win::InitDeviceScaleFactor();
+    BlinkPlatformImpl* platform = new BlinkPlatformImpl();
+    //blink::Platform::initialize(platform);
+    gin::IsolateHolder::Initialize(gin::IsolateHolder::kNonStrictMode, gin::ArrayBufferAllocator::SharedInstance());
+
+    //ThreadState::current()->enterGCForbiddenScope();
+    blink::initialize(platform);
+    //initializeOffScreenTimerWindow();
+    //ThreadState::current()->leaveGCForbiddenScope();
+
+    // Maximum allocation size allowed for image scaling filters that
+    // require pre-scaling. Skia will fallback to a filter that doesn't
+    // require pre-scaling if the default filter would require an
+    // allocation that exceeds this limit.
+    const size_t kImageCacheSingleAllocationByteLimit = 64 * 1024 * 1024;
+    SkGraphics::SetResourceCacheSingleAllocationByteLimit(kImageCacheSingleAllocationByteLimit);
+
+    sk_sp<SkFontMgr> fontMgr(SkFontMgr_New_GDI());
+    blink::WebFontRendering::setSkiaFontManager(fontMgr);
+
+    blink::networkStateNotifier().setWebConnection(blink::WebConnectionTypeWifi, 0);
+    blink::networkStateNotifier().setOnLine(true);
+
+    //gin::V8Platform::Get()->CallOnForegroundThread(nullptr, nullptr); // init
+
+    platform->m_defaultGcTimer = new blink::Timer<BlinkPlatformImpl>(platform, &BlinkPlatformImpl::garbageCollectedTimer);
+    platform->m_defaultGcTimer->start(40 * 10, 40 * 10, FROM_HERE);
+
+    platform->m_resTimer = new blink::Timer<BlinkPlatformImpl>(platform, &BlinkPlatformImpl::resourceGarbageCollectedTimer);
+    platform->m_resTimer->start(120 * 10, 120 * 10, FROM_HERE);
+
+    WTF::PartitionAllocHooks::setAllocationHook(onAllocationHook);
+    WTF::PartitionAllocHooks::setFreeHook(onFreeHook);
+
+    blink::FontCache::setSmallCaptionFontMetrics(L"ËÎÌו", 12);
 }
 
 BlinkPlatformImpl::BlinkPlatformImpl() 
@@ -920,12 +933,8 @@ blink::WebData BlinkPlatformImpl::loadResource(const char* name)
 //         return blink::WebData(&buffer[0], buffer.size());
         return blink::WebData((const char*)content::DocumentXMLTreeViewerCss, sizeof(content::DocumentXMLTreeViewerCss));
     } else if (0 == strcmp("view-source.css", name)) {
-//         std::vector<char> buffer;
-//         readJsFile("E:\\mycode\\mb49-gee\\third_party\\WebKit\\Source\\core\\css\\view-source.css", &buffer);
-//         return blink::WebData(&buffer[0], buffer.size());
         return blink::WebData((const char*)content::ViewSourceCss, sizeof(content::ViewSourceCss));
     }
-
     //////////////////////////////////////////////////////////////////////////
     else if (0 == strcmp("calendarPicker.css", name))
         return blink::WebData((const char*)content::calendarPickerCss, sizeof(content::calendarPickerCss));
@@ -959,9 +968,13 @@ blink::WebData BlinkPlatformImpl::loadResource(const char* name)
         return blink::WebData((const char*)content::DebuggerScriptSourceJs, sizeof(content::DebuggerScriptSourceJs));
     } else if (0 == strcmp("InjectedScriptSource.js", name))
         return blink::WebData((const char*)content::InjectedScriptSourceJs, sizeof(content::InjectedScriptSourceJs));
-    else if (0 == strcmp("InspectorOverlayPage.html", name))
+    else if (0 == strcmp("InspectorOverlayPage.html", name)) {
+//         std::vector<char> buffer;
+//         readJsFile("G:\\mycode\\miniblink57\\third_party\\WebKit\\Source\\core\\inspector\\InspectorOverlayPage.html", &buffer);
+//         return blink::WebData(&buffer[0], buffer.size());
+
         return blink::WebData((const char*)content::InspectorOverlayPageHtml, sizeof(content::InspectorOverlayPageHtml));
-    else if (0 == strcmp("xhtmlmp.css", name)) {
+    } else if (0 == strcmp("xhtmlmp.css", name)) {
         char xhtmlmpCss[] = "@viewport {width: auto;min-zoom: 0.25;max-zoom: 5;}";
         return blink::WebData(xhtmlmpCss, sizeof(xhtmlmpCss));
     }
