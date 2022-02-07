@@ -34,11 +34,9 @@
 //#include <shlwapi.h>
 
 namespace net {
-
 void WKE_CALL_TYPE WSCI_setHook(void* j, void* hook);
 void WKE_CALL_TYPE WSCI_sendText(void* j, char* buf, size_t len);
 void WKE_CALL_TYPE WSCI_sendBlob(void* j, char* buf, size_t len);
-
 }
 
 namespace wke {
@@ -86,7 +84,7 @@ bool setDebugConfig(wkeWebView webview, const char* debugString, const char* par
         g_disableDownloadMask |= kDisableCssDownload;
         return true;
     }
-    
+
     content::WebPage* webpage = nullptr;
     blink::WebViewImpl* webViewImpl = nullptr;
     blink::WebSettingsImpl* settings = nullptr;

@@ -40,6 +40,7 @@ extern bool g_headlessEnable;
 extern bool g_backKeydownEnable;
 extern bool g_jsClickEnable;
 extern bool g_enableNativeSetCapture;
+extern bool g_disableCspCheck;
 
 extern int g_outerWidth;
 extern int g_outerHeight;

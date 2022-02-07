@@ -22,6 +22,10 @@
 #include "wke/wkeWebView.h"
 #include "wke/wkeUtil.h"
 
+namespace wke {
+bool g_enableSkipJsError = false;
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 struct JsExecStateInfo {
@@ -1985,6 +1989,45 @@ void onCreateGlobalObjectInSubFrame(content::WebFrameClientImpl* client, blink::
     setWkeWebViewToV8Context(client, context);
 }
 
+void namedPropertySetterCustom(v8::Local<v8::Name>, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<v8::Value>&)
+{
+    OutputDebugStringA("namedPropertySetterCustom\n");
+}
+
+static void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+    v8::Local<v8::String> nameString;
+    v8::Local<v8::Symbol> s;
+    v8::Local<v8::Value> nameV;
+    int length = 0;
+
+    if (name->IsSymbol()) {
+        s = name.As<v8::Symbol>();
+        nameV = s->Name();
+        if (nameV->IsString()) {
+            nameString = nameV.As<v8::String>();
+            length = nameString->Length();
+        } else
+            return;
+    } else if (name->IsString()) {
+        nameString = name.As<v8::String>();
+    } else
+        return;
+
+    length = nameString->Utf8Length(info.GetIsolate()) + 1;
+    char* utf8Chars = reinterpret_cast<char*>(malloc(length));
+    memset(utf8Chars, 0, length);
+    nameString->WriteUtf8(info.GetIsolate(), utf8Chars, length, 0, v8::String::HINT_MANY_WRITES_EXPECTED);
+    std::string output = "namedProperty:";
+    output += utf8Chars;
+    output += "\n";
+    free(utf8Chars);
+
+    //info.GetReturnValue().Set(obj); // 
+
+    OutputDebugStringA(output.c_str());
+}
+
 void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink::WebLocalFrame* frame, v8::Local<v8::Context> context, int extensionGroup, int worldId)
 {
     content::WebPage* webPage = client->webPage();
@@ -2034,7 +2077,7 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
         "        return ret;\n"
         "    }\n"
         "}\n"
-        "window.fixErrObj = { src: 1, getChildren: function() {} };\n"
+        "//window.fixErrObj = { src: 1234567, getChildren: function() {} };\n"
         ;
 
     blink::WebScriptSource injectSource(blink::WebString::fromUTF8(injectCode));
@@ -2065,6 +2108,19 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
             }
         }
     }
+
+    //--
+    if (wke::g_enableSkipJsError) {
+        v8::Local<v8::ObjectTemplate> templ = v8::ObjectTemplate::New(isolate);
+        templ->SetHandler(v8::NamedPropertyHandlerConfiguration(namedPropertyGetterCallback, namedPropertySetterCustom));
+        v8::Local<v8::Object> obj = templ->NewInstance(context).ToLocalChecked();
+
+        v8::Local<v8::Object> globalObject = context->Global();
+        v8::Local<v8::String> name = v8::String::NewFromUtf8(isolate, "fixErrObj", v8::NewStringType::kNormal, -1).ToLocalChecked();
+
+        globalObject->Set(name, obj);
+    }
+    //--
 }
 
 static void deletePersistentJsValue(jsValue v)

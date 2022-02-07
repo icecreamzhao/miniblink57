@@ -244,6 +244,7 @@ void WKE_CALL_TYPE wkeSetCspCheckEnable(wkeWebView webView, bool b)
 {
     //WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     //blink::RuntimeEnabledFeatures::setCspCheckEnabled(b);
+    wke::g_disableCspCheck = b;
 }
 
 void WKE_CALL_TYPE wkeSetNpapiPluginsEnabled(wkeWebView webView, bool b)
@@ -577,8 +578,11 @@ void WKE_CALL_TYPE wkeSetTransparent(wkeWebView webView, bool transparent)
 
 void WKE_CALL_TYPE wkeSetUserAgent(wkeWebView webView, const utf8* userAgent)
 {
-    WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
-    webView->setUserAgent(userAgent);
+    //WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
+    //webView->setUserAgent(userAgent);
+    wke::checkThreadCallIsValid(__FUNCTION__);
+    content::BlinkPlatformImpl* platform = (content::BlinkPlatformImpl*)blink::Platform::current();
+    platform->setUserAgent((const char*)userAgent);
 }
 
 const utf8* WKE_CALL_TYPE wkeGetUserAgent(wkeWebView webView)
@@ -1057,8 +1061,12 @@ BOOL WKE_CALL_TYPE wkeFireContextMenuEvent(wkeWebView webView, int x, int y, uns
 
 BOOL WKE_CALL_TYPE wkeFireMouseWheelEvent(wkeWebView webView, int x, int y, int delta, unsigned int flags)
 {
-    WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, false);
     return webView->fireMouseWheelEvent(x, y, delta, flags);
+}
+
+BOOL WKE_CALL_TYPE wkeFireMouseWheelEventOnUiThread(wkeWebView webView, int x, int y, int delta, unsigned int flags)
+{
+    return webView->fireMouseWheelEventOnUiThread(x, y, delta, flags);
 }
 
 BOOL WKE_CALL_TYPE wkeFireKeyUpEvent(wkeWebView webView, unsigned int virtualKeyCode, unsigned int flags, bool systemKey)
@@ -1094,7 +1102,6 @@ void WKE_CALL_TYPE wkeSetFocus(wkeWebView webView)
 
     if (webView->windowHandle())
         ::SetFocus(webView->windowHandle());
-    //OutputDebugStringA("wkeSetFocus\n");
 }
 
 void WKE_CALL_TYPE wkeKillFocus(wkeWebView webView)
@@ -1103,7 +1110,6 @@ void WKE_CALL_TYPE wkeKillFocus(wkeWebView webView)
     if (!webView)
         return;
     webView->killFocus();
-    //OutputDebugStringA("killFocus\n");
 }
 
 wkeRect WKE_CALL_TYPE wkeGetCaretRect(wkeWebView webView)

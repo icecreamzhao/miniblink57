@@ -1106,6 +1106,7 @@ public:
     ITERATOR5(BOOL, wkeFireMouseEvent, wkeWebView webView, unsigned int message, int x, int y, unsigned int flags, "") \
     ITERATOR4(BOOL, wkeFireContextMenuEvent, wkeWebView webView, int x, int y, unsigned int flags, "") \
     ITERATOR5(BOOL, wkeFireMouseWheelEvent, wkeWebView webView, int x, int y, int delta, unsigned int flags, "") \
+    ITERATOR5(BOOL, wkeFireMouseWheelEventOnUiThread, wkeWebView webView, int x, int y, int delta, unsigned int flags, "") \
     ITERATOR4(BOOL, wkeFireKeyUpEvent, wkeWebView webView, unsigned int virtualKeyCode, unsigned int flags, bool systemKey, "") \
     ITERATOR4(BOOL, wkeFireKeyDownEvent, wkeWebView webView, unsigned int virtualKeyCode, unsigned int flags, bool systemKey, "") \
     ITERATOR4(BOOL, wkeFireKeyPressEvent, wkeWebView webView, unsigned int charCode, unsigned int flags, bool systemKey, "") \

@@ -839,6 +839,31 @@ bool CWebView::fireMouseWheelEvent(int x, int y, int wheelDelta, unsigned int fl
     return handled;
 }
 
+bool CWebView::fireMouseWheelEventOnUiThread(int x, int y, int wheelDelta, unsigned int flags)
+{
+    BOOL handled = TRUE;
+    WPARAM wParam = 0;
+
+    POINT screenPoint = { x, y };
+    ::ClientToScreen(m_webPage->getHWND(), &screenPoint);
+    LPARAM lParam = MAKELPARAM(screenPoint.x, screenPoint.y);
+    if (flags & WKE_CONTROL)
+        wParam |= MK_CONTROL;
+    if (flags & WKE_SHIFT)
+        wParam |= MK_SHIFT;
+
+    if (flags & WKE_LBUTTON)
+        wParam |= MK_LBUTTON;
+    if (flags & WKE_MBUTTON)
+        wParam |= MK_MBUTTON;
+    if (flags & WKE_RBUTTON)
+        wParam |= MK_RBUTTON;
+
+    wParam = MAKEWPARAM(wParam, wheelDelta);
+
+    return m_webPage->fireWheelEventOnUiThread(m_webPage->getHWND(), WM_MOUSEWHEEL, wParam, lParam) == 0 ? false : true;
+}
+
 bool CWebView::fireKeyUpEvent(unsigned int virtualKeyCode, unsigned int flags, bool systemKey)
 {
     WPARAM wParam = virtualKeyCode;

@@ -244,6 +244,7 @@ public:
     virtual bool fireKeyDownEvent(unsigned int virtualKeyCode, unsigned int flags, bool systemKey) override;
     virtual bool fireKeyPressEvent(unsigned int charCode, unsigned int flags, bool systemKey) override;
     bool fireWindowsMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
+    bool fireMouseWheelEventOnUiThread(int x, int y, int delta, unsigned int flags);
 
     virtual void setFocus() override;
     virtual void killFocus() override;
