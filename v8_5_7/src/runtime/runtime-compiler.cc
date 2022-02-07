@@ -437,6 +437,8 @@ static Object* CompileGlobalEval(Isolate* isolate, Handle<String> source,
     return isolate->heap()->exception();
   }
 
+  //std::unique_ptr<char[]> flat = source->ToCString();
+
   // Deal with a normal eval call with a string argument. Compile it
   // and return the compiled function bound in the local context.
   static const ParseRestriction restriction = NO_PARSE_RESTRICTION;
