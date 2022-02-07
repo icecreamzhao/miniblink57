@@ -184,4 +184,29 @@ bool ICCProfile::IsValidProfileLength(size_t length)
     return length >= kMinProfileLength && length <= kMaxProfileLength;
 }
 
+ICCProfile ICCProfile::FromSkColorSpace(sk_sp<SkColorSpace> color_space)
+{
+    ICCProfile icc_profile;
+
+    Cache& cache = g_cache.Get();
+    base::AutoLock lock(cache.lock);
+
+    // Linearly search the cached ICC profiles to find one with the same data.
+    // If it exists, re-use its id and touch it in the cache.
+    for (auto iter = cache.id_to_icc_profile_mru.begin();
+        iter != cache.id_to_icc_profile_mru.end(); ++iter) {
+        sk_sp<SkColorSpace> iter_color_space =
+            iter->second.color_space_.ToSkColorSpace();
+        if (SkColorSpace::Equals(color_space.get(), iter_color_space.get())) {
+            icc_profile = iter->second;
+            cache.id_to_icc_profile_mru.Get(icc_profile.id_);
+            return icc_profile;
+        }
+    }
+
+    // TODO(ccameron): Support constructing ICC profiles from arbitrary
+    // SkColorSpace objects.
+    return icc_profile;
+}
+
 } // namespace gfx

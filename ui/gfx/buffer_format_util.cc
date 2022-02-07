@@ -11,12 +11,15 @@
 namespace gfx {
 namespace {
 
-    const BufferFormat kBufferFormats[] = { BufferFormat::ATC,
+    const BufferFormat kBufferFormats[] = { 
+        BufferFormat::ATC,
         BufferFormat::ATCIA,
         BufferFormat::DXT1,
         BufferFormat::DXT5,
         BufferFormat::ETC1,
         BufferFormat::R_8,
+        BufferFormat::RG_88, // weolar
+        BufferFormat::BGR_565,
         BufferFormat::RGBA_4444,
         BufferFormat::RGBX_8888,
         BufferFormat::RGBA_8888,
