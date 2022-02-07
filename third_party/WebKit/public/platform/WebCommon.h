@@ -83,7 +83,7 @@ namespace blink {
 typedef int32_t WebUChar32;
 
 // UTF-16 character type
-#if defined(WIN32)
+#if defined(WIN32) || __WCHAR_MAX__ == 0xffff
 typedef wchar_t WebUChar;
 #else
 typedef unsigned short WebUChar;

@@ -105,12 +105,10 @@ public:
     {
     }
 
-    void VisitPersistentHandle(v8::Persistent<v8::Value>* value,
-        uint16_t classId) override
+    void VisitPersistentHandle(v8::Persistent<v8::Value>* value, uint16_t classId) override
     {
-        if (classId != WrapperTypeInfo::NodeClassId && classId != WrapperTypeInfo::ObjectClassId) {
-            return;
-        }
+        if (classId != WrapperTypeInfo::NodeClassId && classId != WrapperTypeInfo::ObjectClassId)
+            return;        
 
         // MinorGC does not collect objects because it may be expensive to
         // update references during minorGC
@@ -119,8 +117,7 @@ public:
             return;
         }
 
-        v8::Local<v8::Object> wrapper = v8::Local<v8::Object>::New(
-            m_isolate, v8::Persistent<v8::Object>::Cast(*value));
+        v8::Local<v8::Object> wrapper = v8::Local<v8::Object>::New(m_isolate, v8::Persistent<v8::Object>::Cast(*value));
         ASSERT(V8DOMWrapper::hasInternalFieldsSet(wrapper));
         if (toWrapperTypeInfo(wrapper)->isActiveScriptWrappable() && toScriptWrappable(wrapper)->hasPendingActivity()) {
             v8::Persistent<v8::Object>::Cast(*value).MarkActive();
@@ -192,11 +189,11 @@ public:
         }
 
 #if V8_MAJOR_VERSION >= 7
-        ScriptWrappable* scriptWrap = toScriptWrappable(wrapper);
-        v8::EmbedderHeapTracer* tracer = V8PerIsolateData::from(m_isolate)->getEmbedderHeapTracer(m_isolate);
-
-        v8::TracedGlobal<v8::Value> traceObj(m_isolate, wrapper.As<v8::Value>());
-        tracer->RegisterEmbedderReference(traceObj);
+//         ScriptWrappable* scriptWrap = toScriptWrappable(wrapper);
+//         v8::EmbedderHeapTracer* tracer = V8PerIsolateData::from(m_isolate)->getEmbedderHeapTracer(m_isolate);
+// 
+//         v8::TracedGlobal<v8::Value> traceObj(m_isolate, wrapper.As<v8::Value>());
+//         tracer->RegisterEmbedderReference(traceObj);
 #endif
 
         if (classId == WrapperTypeInfo::NodeClassId) {

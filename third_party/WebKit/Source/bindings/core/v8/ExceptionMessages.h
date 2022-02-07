@@ -169,9 +169,9 @@ private:
     template <typename NumType>
     static String formatPotentiallyNonFiniteNumber(NumType number)
     {
-        if (std::isnan(number))
+        if (/*std::*/isnan(number))
             return "NaN";
-        if (std::isinf(number))
+        if (/*std::*/isinf(number))
             return number > 0 ? "Infinity" : "-Infinity";
         if (number > 1e20 || number < -1e20)
             return String::format("%e", number);

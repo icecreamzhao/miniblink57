@@ -92,7 +92,7 @@ private:
     void parentObjectDestroyedInternal();
 
     Persistent<ExecutionContext> m_executionContext;
-    //Persistent<WorkerInspectorProxy> m_workerInspectorProxy;
+    Persistent<WorkerInspectorProxy> m_workerInspectorProxy;
     Persistent<ParentFrameTaskRunners> m_parentFrameTaskRunners;
 
     std::unique_ptr<WorkerThread> m_workerThread;

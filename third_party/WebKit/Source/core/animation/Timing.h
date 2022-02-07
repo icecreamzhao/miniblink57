@@ -71,19 +71,19 @@ public:
 
     void assertValid() const
     {
-        DCHECK(std::isfinite(startDelay));
-        DCHECK(std::isfinite(endDelay));
-        DCHECK(std::isfinite(iterationStart));
+        DCHECK(/*std::*/isfinite(startDelay));
+        DCHECK(/*std::*/isfinite(endDelay));
+        DCHECK(/*std::*/isfinite(iterationStart));
         DCHECK_GE(iterationStart, 0);
         DCHECK_GE(iterationCount, 0);
-        DCHECK(std::isnan(iterationDuration) || iterationDuration >= 0);
-        DCHECK(std::isfinite(playbackRate));
+        DCHECK(/*std::*/isnan(iterationDuration) || iterationDuration >= 0);
+        DCHECK(/*std::*/isfinite(playbackRate));
         DCHECK(timingFunction);
     }
 
     bool operator==(const Timing& other) const
     {
-        return startDelay == other.startDelay && endDelay == other.endDelay && fillMode == other.fillMode && iterationStart == other.iterationStart && iterationCount == other.iterationCount && ((std::isnan(iterationDuration) && std::isnan(other.iterationDuration)) || iterationDuration == other.iterationDuration) && playbackRate == other.playbackRate && direction == other.direction && dataEquivalent(timingFunction.get(), other.timingFunction.get());
+        return startDelay == other.startDelay && endDelay == other.endDelay && fillMode == other.fillMode && iterationStart == other.iterationStart && iterationCount == other.iterationCount && ((/*std::*/isnan(iterationDuration) && /*std::*/isnan(other.iterationDuration)) || iterationDuration == other.iterationDuration) && playbackRate == other.playbackRate && direction == other.direction && dataEquivalent(timingFunction.get(), other.timingFunction.get());
     }
 
     bool operator!=(const Timing& other) const { return !(*this == other); }

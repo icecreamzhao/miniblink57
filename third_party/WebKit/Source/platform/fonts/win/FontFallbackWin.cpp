@@ -39,7 +39,7 @@
 #include "wtf/text/StringHash.h"
 #include "wtf/text/WTFString.h"
 #include <limits>
-//#include <unicode/uchar.h>
+#include "third_party/icu/source/common/unicode/uchar.h"
 
 namespace blink {
 
@@ -309,8 +309,7 @@ namespace {
         // Initialize the locale-dependent mapping.
         // Since Chrome synchronizes the ICU default locale with its UI locale,
         // this ICU locale tells the current UI locale of Chrome.
-        UScriptCode hanScript = USCRIPT_INVALID_CODE; // scriptCodeForHanFromLocale(icu::Locale::getDefault().getName(), '_');
-        DebugBreak();
+        UScriptCode hanScript = scriptCodeForHanFromLocale(/*icu::Locale::getDefault().getName()*/"zh-CN", '_');
         // For other locales, use the simplified Chinese font for Han.
         const UChar* localeFamily = scriptFontMap[hanScript == USCRIPT_COMMON
                 ? USCRIPT_SIMPLIFIED_HAN
@@ -338,106 +337,103 @@ namespace {
     // FIXME: make this more efficient with a wider coverage
     UScriptCode getScriptBasedOnUnicodeBlock(int ucs4)
     {
-        //     UBlockCode block = ublock_getCode(ucs4);
-        //     switch (block) {
-        //     case UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION:
-        //         return USCRIPT_HAN;
-        //     case UBLOCK_HIRAGANA:
-        //     case UBLOCK_KATAKANA:
-        //         return USCRIPT_KATAKANA_OR_HIRAGANA;
-        //     case UBLOCK_ARABIC:
-        //         return USCRIPT_ARABIC;
-        //     case UBLOCK_THAI:
-        //         return USCRIPT_THAI;
-        //     case UBLOCK_GREEK:
-        //         return USCRIPT_GREEK;
-        //     case UBLOCK_DEVANAGARI:
-        //         // For Danda and Double Danda (U+0964, U+0965), use a Devanagari
-        //         // font for now although they're used by other scripts as well.
-        //         // Without a context, we can't do any better.
-        //         return USCRIPT_DEVANAGARI;
-        //     case UBLOCK_ARMENIAN:
-        //         return USCRIPT_ARMENIAN;
-        //     case UBLOCK_GEORGIAN:
-        //         return USCRIPT_GEORGIAN;
-        //     case UBLOCK_KANNADA:
-        //         return USCRIPT_KANNADA;
-        //     case UBLOCK_GOTHIC:
-        //         return USCRIPT_GOTHIC;
-        //     default:
-        //         return USCRIPT_COMMON;
-        //     }
-        DebugBreak();
+        UBlockCode block = ublock_getCode(ucs4);
+        switch (block) {
+        case UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION:
+            return USCRIPT_HAN;
+        case UBLOCK_HIRAGANA:
+        case UBLOCK_KATAKANA:
+            return USCRIPT_KATAKANA_OR_HIRAGANA;
+        case UBLOCK_ARABIC:
+            return USCRIPT_ARABIC;
+        case UBLOCK_THAI:
+            return USCRIPT_THAI;
+        case UBLOCK_GREEK:
+            return USCRIPT_GREEK;
+        case UBLOCK_DEVANAGARI:
+            // For Danda and Double Danda (U+0964, U+0965), use a Devanagari
+            // font for now although they're used by other scripts as well.
+            // Without a context, we can't do any better.
+            return USCRIPT_DEVANAGARI;
+        case UBLOCK_ARMENIAN:
+            return USCRIPT_ARMENIAN;
+        case UBLOCK_GEORGIAN:
+            return USCRIPT_GEORGIAN;
+        case UBLOCK_KANNADA:
+            return USCRIPT_KANNADA;
+        case UBLOCK_GOTHIC:
+            return USCRIPT_GOTHIC;
+        default:
+            return USCRIPT_COMMON;
+        }
         return USCRIPT_COMMON;
     }
 
     UScriptCode getScript(int ucs4)
     {
-        //     UErrorCode err = U_ZERO_ERROR;
-        //     UScriptCode script = uscript_getScript(ucs4, &err);
-        //     // If script is invalid, common or inherited or there's an error,
-        //     // infer a script based on the unicode block of a character.
-        //     if (script <= USCRIPT_INHERITED || U_FAILURE(err))
-        //         script = getScriptBasedOnUnicodeBlock(ucs4);
-        //     return script;
-        DebugBreak();
-        return USCRIPT_COMMON;
+        UErrorCode err = U_ZERO_ERROR;
+        UScriptCode script = uscript_getScript(ucs4, &err);
+        // If script is invalid, common or inherited or there's an error,
+        // infer a script based on the unicode block of a character.
+        if (script <= USCRIPT_INHERITED || U_FAILURE(err))
+            script = getScriptBasedOnUnicodeBlock(ucs4);
+        return script;
     }
 
-    // const UChar* getFontBasedOnUnicodeBlock(UBlockCode blockCode, SkFontMgr* fontManager)
-    // {
-    //     static const UChar* emojiFonts[] = {L"Segoe UI Emoji", L"Segoe UI Symbol"};
-    //     static const UChar* mathFonts[] = {L"Cambria Math", L"Segoe UI Symbol", L"Code2000"};
-    //     static const UChar* symbolFont = L"Segoe UI Symbol";
-    //     static const UChar* emojiFont = 0;
-    //     static const UChar* mathFont = 0;
-    //     static bool initialized = false;
-    //     if (!initialized) {
-    //         for (size_t i = 0; i < WTF_ARRAY_LENGTH(emojiFonts); i++) {
-    //             if (isFontPresent(emojiFonts[i], fontManager)) {
-    //                 emojiFont = emojiFonts[i];
-    //                 break;
-    //             }
-    //         }
-    //         for (size_t i = 0; i < WTF_ARRAY_LENGTH(mathFonts); i++) {
-    //             if (isFontPresent(mathFonts[i], fontManager)) {
-    //                 mathFont = mathFonts[i];
-    //                 break;
-    //             }
-    //         }
-    //         initialized = true;
-    //     }
-    //
-    //     switch (blockCode) {
-    //     case UBLOCK_EMOTICONS:
-    //     case UBLOCK_ENCLOSED_ALPHANUMERIC_SUPPLEMENT:
-    //         return emojiFont;
-    //     case UBLOCK_PLAYING_CARDS:
-    //     case UBLOCK_MISCELLANEOUS_SYMBOLS:
-    //     case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS:
-    //     case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS:
-    //     case UBLOCK_TRANSPORT_AND_MAP_SYMBOLS:
-    //     case UBLOCK_ALCHEMICAL_SYMBOLS:
-    //     case UBLOCK_DINGBATS:
-    //     case UBLOCK_GOTHIC:
-    //         return symbolFont;
-    //     case UBLOCK_ARROWS:
-    //     case UBLOCK_MATHEMATICAL_OPERATORS:
-    //     case UBLOCK_MISCELLANEOUS_TECHNICAL:
-    //     case UBLOCK_GEOMETRIC_SHAPES:
-    //     case UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A:
-    //     case UBLOCK_SUPPLEMENTAL_ARROWS_A:
-    //     case UBLOCK_SUPPLEMENTAL_ARROWS_B:
-    //     case UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B:
-    //     case UBLOCK_SUPPLEMENTAL_MATHEMATICAL_OPERATORS:
-    //     case UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS:
-    //     case UBLOCK_ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS:
-    //     case UBLOCK_GEOMETRIC_SHAPES_EXTENDED:
-    //         return mathFont;
-    //     default:
-    //         return 0;
-    //     };
-    // }
+    const UChar* getFontBasedOnUnicodeBlock(UBlockCode blockCode, SkFontMgr* fontManager)
+    {
+        static const UChar* emojiFonts[] = { L"Segoe UI Emoji", L"Segoe UI Symbol" };
+        static const UChar* mathFonts[] = { L"Cambria Math", L"Segoe UI Symbol", L"Code2000" };
+        static const UChar* symbolFont = L"Segoe UI Symbol";
+        static const UChar* emojiFont = 0;
+        static const UChar* mathFont = 0;
+        static bool initialized = false;
+        if (!initialized) {
+            for (size_t i = 0; i < WTF_ARRAY_LENGTH(emojiFonts); i++) {
+                if (isFontPresent(emojiFonts[i], fontManager)) {
+                    emojiFont = emojiFonts[i];
+                    break;
+                }
+            }
+            for (size_t i = 0; i < WTF_ARRAY_LENGTH(mathFonts); i++) {
+                if (isFontPresent(mathFonts[i], fontManager)) {
+                    mathFont = mathFonts[i];
+                    break;
+                }
+            }
+            initialized = true;
+        }
+
+        switch (blockCode) {
+        case UBLOCK_EMOTICONS:
+        case UBLOCK_ENCLOSED_ALPHANUMERIC_SUPPLEMENT:
+            return emojiFont;
+        case UBLOCK_PLAYING_CARDS:
+        case UBLOCK_MISCELLANEOUS_SYMBOLS:
+        case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS:
+        case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS:
+        case UBLOCK_TRANSPORT_AND_MAP_SYMBOLS:
+        case UBLOCK_ALCHEMICAL_SYMBOLS:
+        case UBLOCK_DINGBATS:
+        case UBLOCK_GOTHIC:
+            return symbolFont;
+        case UBLOCK_ARROWS:
+        case UBLOCK_MATHEMATICAL_OPERATORS:
+        case UBLOCK_MISCELLANEOUS_TECHNICAL:
+        case UBLOCK_GEOMETRIC_SHAPES:
+        case UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A:
+        case UBLOCK_SUPPLEMENTAL_ARROWS_A:
+        case UBLOCK_SUPPLEMENTAL_ARROWS_B:
+        case UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B:
+        case UBLOCK_SUPPLEMENTAL_MATHEMATICAL_OPERATORS:
+        case UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS:
+        case UBLOCK_ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS:
+        case UBLOCK_GEOMETRIC_SHAPES_EXTENDED:
+            return mathFont;
+        default:
+            return 0;
+        };
+    }
 
 } // namespace
 
@@ -492,66 +488,66 @@ const UChar* getFallbackFamily(UChar32 character,
     FontFallbackPriority fallbackPriority,
     SkFontMgr* fontManager)
 {
-    //     ASSERT(character);
-    //     ASSERT(fontManager);
-    //     UBlockCode block = fallbackPriority == FontFallbackPriority::EmojiEmoji ?
-    //         UBLOCK_EMOTICONS : ublock_getCode(character);
-    //     const UChar* family = getFontBasedOnUnicodeBlock(block, fontManager);
-    //     if (family) {
-    //         if (scriptChecked)
-    //             *scriptChecked = USCRIPT_INVALID_CODE;
-    //         return family;
-    //     }
-    //
-    //     UScriptCode script = getScript(character);
-    //
-    //     // For the full-width ASCII characters (U+FF00 - U+FF5E), use the font for
-    //     // Han (determined in a locale-dependent way above). Full-width ASCII
-    //     // characters are rather widely used in Japanese and Chinese documents and
-    //     // they're fully covered by Chinese, Japanese and Korean fonts.
-    //     if (0xFF00 < character && character < 0xFF5F)
-    //         script = USCRIPT_HAN;
-    //
-    //     if (script == USCRIPT_COMMON)
-    //         script = getScriptBasedOnUnicodeBlock(character);
-    //
-    //     // For unified-Han scripts, try the lang attribute, system, or
-    //     // accept-languages.
-    //     if (script == USCRIPT_HAN)
-    //         script = scriptForHan(contentScript, contentLocale);
-    //
-    //     family = getFontFamilyForScript(script, generic, fontManager);
-    //     // Another lame work-around to cover non-BMP characters.
-    //     // If the font family for script is not found or the character is
-    //     // not in BMP (> U+FFFF), we resort to the hard-coded list of
-    //     // fallback fonts for now.
-    //     if (!family || character > 0xFFFF) {
-    //         int plane = character >> 16;
-    //         switch (plane) {
-    //         case 1:
-    //             family = L"code2001";
-    //             break;
-    //         case 2:
-    //             // Use a Traditional Chinese ExtB font if in Traditional Chinese locale.
-    //             // Otherwise, use a Simplified Chinese ExtB font. Windows Japanese
-    //             // fonts do support a small subset of ExtB (that are included in JIS X 0213),
-    //             // but its coverage is rather sparse.
-    //             // Eventually, this should be controlled by lang/xml:lang.
-    //             if (icu::Locale::getDefault() == icu::Locale::getTraditionalChinese())
-    //                 family = L"pmingliu-extb";
-    //             else
-    //                 family = L"simsun-extb";
-    //             break;
-    //         default:
-    //             family = L"lucida sans unicode";
-    //         }
-    //     }
-    //
-    //     if (scriptChecked)
-    //         *scriptChecked = script;
-    //     return family;
+    ASSERT(character);
+    ASSERT(fontManager);
+    UBlockCode block = fallbackPriority == FontFallbackPriority::EmojiEmoji ?
+        UBLOCK_EMOTICONS : ublock_getCode(character);
+    const UChar* family = getFontBasedOnUnicodeBlock(block, fontManager);
+    if (family) {
+        if (scriptChecked)
+            *scriptChecked = USCRIPT_INVALID_CODE;
+        return family;
+    }
 
-    return L"simsun-extb";
+    UScriptCode script = getScript(character);
+
+    // For the full-width ASCII characters (U+FF00 - U+FF5E), use the font for
+    // Han (determined in a locale-dependent way above). Full-width ASCII
+    // characters are rather widely used in Japanese and Chinese documents and
+    // they're fully covered by Chinese, Japanese and Korean fonts.
+    if (0xFF00 < character && character < 0xFF5F)
+        script = USCRIPT_HAN;
+
+    if (script == USCRIPT_COMMON)
+        script = getScriptBasedOnUnicodeBlock(character);
+
+    // For unified-Han scripts, try the lang attribute, system, or
+    // accept-languages.
+    if (script == USCRIPT_HAN)
+        script = scriptForHan(contentScript, contentLocale);
+
+    family = getFontFamilyForScript(script, generic, fontManager);
+    // Another lame work-around to cover non-BMP characters.
+    // If the font family for script is not found or the character is
+    // not in BMP (> U+FFFF), we resort to the hard-coded list of
+    // fallback fonts for now.
+    if (!family || character > 0xFFFF) {
+        int plane = character >> 16;
+        switch (plane) {
+        case 1:
+            family = L"code2001";
+            break;
+        case 2:
+            // Use a Traditional Chinese ExtB font if in Traditional Chinese locale.
+            // Otherwise, use a Simplified Chinese ExtB font. Windows Japanese
+            // fonts do support a small subset of ExtB (that are included in JIS X 0213),
+            // but its coverage is rather sparse.
+            // Eventually, this should be controlled by lang/xml:lang.
+            if (false/*icu::Locale::getDefault() == icu::Locale::getTraditionalChinese()*/)
+                family = L"pmingliu-extb";
+            else
+                family = L"simsun-extb";
+            break;
+        default:
+            family = L"lucida sans unicode";
+        }
+    }
+
+    if (scriptChecked)
+        *scriptChecked = script;
+    return family;
+
+    //return L"simsun-extb";
 }
 
 } // namespace blink

@@ -216,34 +216,10 @@ public:
     int pixelSnappedWidth() const { return m_frameRect.pixelSnappedWidth(); }
     int pixelSnappedHeight() const { return m_frameRect.pixelSnappedHeight(); }
 
-    void setX(LayoutUnit x)
-    {
-        if (x == m_frameRect.x())
-            return;
-        m_frameRect.setX(x);
-        locationChanged();
-    }
-    void setY(LayoutUnit y)
-    {
-        if (y == m_frameRect.y())
-            return;
-        m_frameRect.setY(y);
-        locationChanged();
-    }
-    void setWidth(LayoutUnit width)
-    {
-        if (width == m_frameRect.width())
-            return;
-        m_frameRect.setWidth(width);
-        sizeChanged();
-    }
-    void setHeight(LayoutUnit height)
-    {
-        if (height == m_frameRect.height())
-            return;
-        m_frameRect.setHeight(height);
-        sizeChanged();
-    }
+    void setX(LayoutUnit x);
+    void setY(LayoutUnit y);
+    void setWidth(LayoutUnit width);
+    void setHeight(LayoutUnit height);
 
     LayoutUnit logicalLeft() const
     {
@@ -303,57 +279,18 @@ public:
         return borderAndPaddingLogicalHeight() + scrollbarLogicalHeight() + lineHeight(true, isHorizontalWritingMode() ? HorizontalLine : VerticalLine, PositionOfInteriorLineBoxes);
     }
 
-    void setLogicalLeft(LayoutUnit left)
-    {
-        if (style()->isHorizontalWritingMode())
-            setX(left);
-        else
-            setY(left);
-    }
-    void setLogicalTop(LayoutUnit top)
-    {
-        if (style()->isHorizontalWritingMode())
-            setY(top);
-        else
-            setX(top);
-    }
-    void setLogicalLocation(const LayoutPoint& location)
-    {
-        if (style()->isHorizontalWritingMode())
-            setLocation(location);
-        else
-            setLocation(location.transposedPoint());
-    }
-    void setLogicalWidth(LayoutUnit size)
-    {
-        if (style()->isHorizontalWritingMode())
-            setWidth(size);
-        else
-            setHeight(size);
-    }
-    void setLogicalHeight(LayoutUnit size)
-    {
-        if (style()->isHorizontalWritingMode())
-            setHeight(size);
-        else
-            setWidth(size);
-    }
+    void setLogicalLeft(LayoutUnit left);
+    void setLogicalTop(LayoutUnit top);
+    void setLogicalLocation(const LayoutPoint& location);
+    void setLogicalWidth(LayoutUnit size);
+    void setLogicalHeight(LayoutUnit size);
 
-    LayoutPoint location() const { return m_frameRect.location(); }
-    LayoutSize locationOffset() const
-    {
-        return LayoutSize(m_frameRect.x(), m_frameRect.y());
-    }
-    LayoutSize size() const { return m_frameRect.size(); }
-    IntSize pixelSnappedSize() const { return m_frameRect.pixelSnappedSize(); }
+    LayoutPoint location() const;
+    LayoutSize locationOffset() const;
+    LayoutSize size() const;
+    IntSize pixelSnappedSize() const;
 
-    void setLocation(const LayoutPoint& location)
-    {
-        if (location == m_frameRect.location())
-            return;
-        m_frameRect.setLocation(location);
-        locationChanged();
-    }
+    void setLocation(const LayoutPoint& location);
 
     // The ancestor box that this object's location and physicalLocation are
     // relative to.
@@ -366,30 +303,14 @@ public:
     // LayoutUnits for scrollbars.
     void setLocationAndUpdateOverflowControlsIfNeeded(const LayoutPoint&);
 
-    void setSize(const LayoutSize& size)
-    {
-        if (size == m_frameRect.size())
-            return;
-        m_frameRect.setSize(size);
-        sizeChanged();
-    }
-    void move(LayoutUnit dx, LayoutUnit dy)
-    {
-        if (!dx && !dy)
-            return;
-        m_frameRect.move(dx, dy);
-        locationChanged();
-    }
+    void setSize(const LayoutSize& size);
+    void move(LayoutUnit dx, LayoutUnit dy);
 
     // This function is in the container's coordinate system, meaning
     // that it includes the logical top/left offset and the
     // inline-start/block-start margins.
-    LayoutRect frameRect() const { return m_frameRect; }
-    void setFrameRect(const LayoutRect& rect)
-    {
-        setLocation(rect.location());
-        setSize(rect.size());
-    }
+    LayoutRect frameRect() const;
+    void setFrameRect(const LayoutRect& rect);
 
     // Note that those functions have their origin at this box's CSS border box.
     // As such their location doesn't account for 'top'/'left'.

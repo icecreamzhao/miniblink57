@@ -467,8 +467,7 @@ bool SimpleFontData::fillGlyphPage(GlyphPage* pageToFill, unsigned offset, unsig
 
 bool SimpleFontData::canRenderCombiningCharacterSequence(const UChar*, size_t) const
 {
-    DebugBreak();
-    return false;
+    return true;
 }
 
 } // namespace blink

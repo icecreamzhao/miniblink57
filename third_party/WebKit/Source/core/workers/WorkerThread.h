@@ -291,7 +291,7 @@ private:
 
     long long m_forcibleTerminationDelayInMs;
 
-    //std::unique_ptr<InspectorTaskRunner> m_inspectorTaskRunner;
+    std::unique_ptr<InspectorTaskRunner> m_inspectorTaskRunner;
 
     RefPtr<WorkerLoaderProxy> m_workerLoaderProxy;
     WorkerReportingProxy& m_workerReportingProxy;
@@ -302,7 +302,7 @@ private:
 
     CrossThreadPersistent<ConsoleMessageStorage> m_consoleMessageStorage;
     CrossThreadPersistent<WorkerOrWorkletGlobalScope> m_globalScope;
-    //CrossThreadPersistent<WorkerInspectorController> m_workerInspectorController;
+    CrossThreadPersistent<WorkerInspectorController> m_workerInspectorController;
 
     // Signaled when the thread completes termination on the worker thread.
     std::unique_ptr<WaitableEvent> m_shutdownEvent;

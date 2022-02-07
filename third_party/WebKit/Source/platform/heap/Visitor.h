@@ -40,6 +40,8 @@
 #include "wtf/TypeTraits.h"
 #include <memory>
 
+#pragma GCC diagnostic ignored "-Winconsistent-missing-override"
+
 namespace blink {
 
 template <typename T>

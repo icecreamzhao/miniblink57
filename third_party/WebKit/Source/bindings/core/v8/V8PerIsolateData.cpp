@@ -39,6 +39,7 @@
 #include "core/inspector/MainThreadDebugger.h"
 #include "platform/ScriptForbiddenScope.h"
 #include "public/platform/Platform.h"
+#include "gin/v8_task_runner.h"
 #include "wtf/LeakAnnotations.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
@@ -47,6 +48,19 @@
 namespace blink {
 
 static V8PerIsolateData* mainThreadPerIsolateData = 0;
+static DWORD s_threadLocalV8PerIsolateData = 0;
+
+gin::IsolateHolder* initIsolateHolder(V8PerIsolateData* data)
+{
+    if (isMainThread())
+        mainThreadPerIsolateData = data;
+
+    if (0 == s_threadLocalV8PerIsolateData)
+        s_threadLocalV8PerIsolateData = ::TlsAlloc();
+    ::TlsSetValue(s_threadLocalV8PerIsolateData, data);
+
+    return new gin::IsolateHolder();
+}
 
 static void beforeCallEnteredCallback(v8::Isolate* isolate)
 {
@@ -59,7 +73,12 @@ static void microtasksCompletedCallback(v8::Isolate* isolate)
 }
 
 V8PerIsolateData::V8PerIsolateData(WebTaskRunner* taskRunner)
-    : m_isolateHolder(WTF::makeUnique<gin::IsolateHolder>(/*taskRunner ? taskRunner->toSingleThreadTaskRunner() : nullptr*/))
+    : m_thread(blink::Platform::current()->currentThread())
+#if V8_MAJOR_VERSION >= 7
+    , m_unifiedHeapController((new UnifiedHeapController(ThreadState::current())))
+    , m_threadRunner(std::make_shared<gin::V8ForegroundTaskRunner>(m_thread))
+#endif
+    , m_isolateHolder(initIsolateHolder(this))
     , m_stringCache(WTF::wrapUnique(new StringCache(isolate())))
     , m_hiddenValue(V8HiddenValue::create())
     , m_privateProperty(V8PrivateProperty::create())
@@ -67,16 +86,12 @@ V8PerIsolateData::V8PerIsolateData(WebTaskRunner* taskRunner)
     , m_useCounterDisabled(false)
     , m_isHandlingRecursionLevelError(false)
     , m_isReportingException(false)
-#if V8_MAJOR_VERSION >= 7
-    , m_unifiedHeapController((new UnifiedHeapController(ThreadState::current())))
-#endif
+
 {
     // FIXME: Remove once all v8::Isolate::GetCurrent() calls are gone.
     isolate()->Enter();
     isolate()->AddBeforeCallEnteredCallback(&beforeCallEnteredCallback);
     isolate()->AddMicrotasksCompletedCallback(&microtasksCompletedCallback);
-    if (isMainThread())
-        mainThreadPerIsolateData = this;
     isolate()->SetUseCounterCallback(&useCounterCallback);
 }
 
@@ -440,7 +455,6 @@ void V8PerIsolateData::addActiveScriptWrappable(
 }
 
 #if V8_MAJOR_VERSION >= 7
-
 UnifiedHeapController* V8PerIsolateData::getUnifiedHeapController(v8::Isolate* isolate)
 {
     m_unifiedHeapController->attachIsolate(isolate);
@@ -452,6 +466,16 @@ std::vector<std::pair<void*, void*>>* V8PerIsolateData::leakV8References()
     return m_unifiedHeapController->leakV8References();
 }
 
+std::shared_ptr<v8::TaskRunner> V8PerIsolateData::getThreadRunner(v8::Isolate* isolate)
+{
+    V8PerIsolateData* self = nullptr;
+    if (isolate)
+        self = static_cast<V8PerIsolateData*>(isolate->GetData(gin::kEmbedderBlink));
+    
+    if (!self)
+        self = (V8PerIsolateData*)::TlsGetValue(s_threadLocalV8PerIsolateData);
+    return self->m_threadRunner;
+}
 #endif
 
 } // namespace blink

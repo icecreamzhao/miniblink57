@@ -87,9 +87,7 @@ void WorkerBackingThread::initialize()
     if (m_isOwningThread)
         Platform::current()->didStartWorkerThread();
 
-    //   V8PerIsolateData::from(m_isolate)->setThreadDebugger(
-    //       WTF::makeUnique<WorkerThreadDebugger>(m_isolate));
-    DebugBreak();
+    V8PerIsolateData::from(m_isolate)->setThreadDebugger(WTF::makeUnique<WorkerThreadDebugger>(m_isolate));
 }
 
 void WorkerBackingThread::shutdown()

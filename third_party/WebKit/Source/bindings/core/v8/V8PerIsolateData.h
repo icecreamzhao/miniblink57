@@ -38,8 +38,16 @@
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/Vector.h"
-#include <memory>
 #include <v8.h>
+#include <memory>
+
+namespace gin {
+class V8ForegroundTaskRunner;
+}
+
+namespace v8 {
+class TaskRunner;
+}
 
 namespace blink {
 
@@ -99,8 +107,7 @@ public:
     {
         ASSERT(isolate);
         ASSERT(isolate->GetData(gin::kEmbedderBlink));
-        return static_cast<V8PerIsolateData*>(
-            isolate->GetData(gin::kEmbedderBlink));
+        return static_cast<V8PerIsolateData*>(isolate->GetData(gin::kEmbedderBlink));
     }
 
     static void willBeDestroyed(v8::Isolate*);
@@ -192,6 +199,7 @@ public:
     }
 
     std::vector<std::pair<void*, void*>>* leakV8References();
+    static std::shared_ptr<v8::TaskRunner> getThreadRunner(v8::Isolate* isolate); // for V8Platform::GetForegroundTaskRunner;
 #endif
 
 private:
@@ -211,6 +219,11 @@ private:
         v8::Local<v8::Value>,
         V8FunctionTemplateMap&);
 
+    WebThread* m_thread;
+#if V8_MAJOR_VERSION >= 7
+    std::unique_ptr<UnifiedHeapController> m_unifiedHeapController;
+    std::shared_ptr<gin::V8ForegroundTaskRunner> m_threadRunner;
+#endif
     std::unique_ptr<gin::IsolateHolder> m_isolateHolder;
 
     // m_interfaceTemplateMapFor{,Non}MainWorld holds function templates for
@@ -236,10 +249,6 @@ private:
 
     bool m_isHandlingRecursionLevelError;
     bool m_isReportingException;
-
-#if V8_MAJOR_VERSION >= 7
-    std::unique_ptr<UnifiedHeapController> m_unifiedHeapController;
-#endif
 
     Vector<std::unique_ptr<EndOfScopeTask>> m_endOfScopeTasks;
     std::unique_ptr<ThreadDebugger> m_threadDebugger;

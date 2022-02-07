@@ -62,6 +62,7 @@ void ScriptState::detachGlobalObject()
 void ScriptState::disposePerContextData()
 {
     m_perContextData = nullptr;
+    m_context.get().SetWrapperClassId(0); // 这可以让VisitPersistentHandle不用注册到RegisterV8References
 }
 
 ScriptValue ScriptState::getFromExtrasExports(const char* name)

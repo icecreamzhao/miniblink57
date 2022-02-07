@@ -2239,8 +2239,7 @@ void StyleResolver::applyProperties(
     }
 }
 
-template <CSSPropertyPriority priority,
-    StyleResolver::ShouldUpdateNeedsApplyPass shouldUpdateNeedsApplyPass>
+template <CSSPropertyPriority priority, StyleResolver::ShouldUpdateNeedsApplyPass shouldUpdateNeedsApplyPass>
 void StyleResolver::applyMatchedProperties(StyleResolverState& state,
     const MatchedPropertiesRange& range,
     bool isImportant,
@@ -2269,6 +2268,7 @@ void StyleResolver::applyMatchedProperties(StyleResolverState& state,
         state.setApplyPropertyToVisitedLinkStyle(false);
         return;
     }
+
     for (const auto& matchedProperties : range) {
         applyProperties<priority, shouldUpdateNeedsApplyPass>(
             state, matchedProperties.properties.get(), isImportant, inheritedOnly,

@@ -386,7 +386,7 @@ inline LimitType clampTo(ValueType value,
     LimitType min = defaultMinimumForClamp<LimitType>(),
     LimitType max = defaultMaximumForClamp<LimitType>())
 {
-    DCHECK(!std::isnan(static_cast<double>(value)));
+    DCHECK(!/*std::*/isnan(static_cast<double>(value)));
     DCHECK_LE(min, max); // This also ensures |min| and |max| aren't NaN.
     return ClampToHelper<LimitType, ValueType>::clampTo(value, min, max);
 }
@@ -417,7 +417,7 @@ inline size_t lowestCommonMultiple(size_t a, size_t b)
 // Calculate d % 2^{64}.
 inline void doubleToInteger(double d, unsigned long long& value)
 {
-    if (std::isnan(d) || std::isinf(d)) {
+    if (/*std::*/isnan(d) || /*std::*/isinf(d)) {
         value = 0;
     } else {
         // -2^{64} < fmodValue < 2^{64}.

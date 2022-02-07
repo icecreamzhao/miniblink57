@@ -24,16 +24,13 @@ namespace {
 ThreadedMessagingProxyBase::ThreadedMessagingProxyBase(
     ExecutionContext* executionContext)
     : m_executionContext(executionContext)
-    ,
-    //m_workerInspectorProxy(WorkerInspectorProxy::create()),
-    m_parentFrameTaskRunners(ParentFrameTaskRunners::create(
-        toDocument(m_executionContext.get())->frame()))
+    , m_workerInspectorProxy(WorkerInspectorProxy::create())
+    , m_parentFrameTaskRunners(ParentFrameTaskRunners::create(toDocument(m_executionContext.get())->frame()))
     , m_mayBeDestroyed(false)
     , m_askedToTerminate(false)
 {
     DCHECK(isParentContextThread());
     s_liveMessagingProxyCount++;
-    DebugBreak();
 }
 
 ThreadedMessagingProxyBase::~ThreadedMessagingProxyBase()
@@ -110,10 +107,8 @@ void ThreadedMessagingProxyBase::reportConsoleMessage(
     DCHECK(isParentContextThread());
     if (m_askedToTerminate)
         return;
-    //   if (m_workerInspectorProxy)
-    //     m_workerInspectorProxy->addConsoleMessageFromWorker(level, message,
-    //                                                         std::move(location));
-    DebugBreak();
+    if (m_workerInspectorProxy)
+        m_workerInspectorProxy->addConsoleMessageFromWorker(level, message, std::move(location));
 }
 
 void ThreadedMessagingProxyBase::workerThreadCreated()
@@ -153,8 +148,7 @@ void ThreadedMessagingProxyBase::workerThreadTerminated()
     // object may still exist, and it assumes that the proxy exists, too.
     m_askedToTerminate = true;
     m_workerThread = nullptr;
-    //m_workerInspectorProxy->workerThreadTerminated();
-    DebugBreak();
+    m_workerInspectorProxy->workerThreadTerminated();
     if (m_mayBeDestroyed)
         delete this;
 }
@@ -170,24 +164,20 @@ void ThreadedMessagingProxyBase::terminateGlobalScope()
     if (m_workerThread)
         m_workerThread->terminate();
 
-    //m_workerInspectorProxy->workerThreadTerminated();
-    DebugBreak();
+    m_workerInspectorProxy->workerThreadTerminated();
 }
 
 void ThreadedMessagingProxyBase::postMessageToPageInspector(
     const String& message)
 {
     DCHECK(isParentContextThread());
-    //   if (m_workerInspectorProxy)
-    //     m_workerInspectorProxy->dispatchMessageFromWorker(message);
-    DebugBreak();
+    if (m_workerInspectorProxy)
+        m_workerInspectorProxy->dispatchMessageFromWorker(message);
 }
 
 WorkerInspectorProxy* ThreadedMessagingProxyBase::workerInspectorProxy()
 {
-    //return m_workerInspectorProxy.get();
-    DebugBreak();
-    return nullptr;
+    return m_workerInspectorProxy.get();
 }
 
 bool ThreadedMessagingProxyBase::isParentContextThread() const

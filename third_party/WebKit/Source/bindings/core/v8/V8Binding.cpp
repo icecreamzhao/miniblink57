@@ -769,15 +769,11 @@ ExecutionContext* toExecutionContext(v8::Local<v8::Context> context)
     v8::Local<v8::Object> windowWrapper = V8Window::findInstanceInPrototypeChain(global, context->GetIsolate());
     if (!windowWrapper.IsEmpty())
         return V8Window::toImpl(windowWrapper)->getExecutionContext();
-    v8::Local<v8::Object> workerWrapper = V8WorkerGlobalScope::findInstanceInPrototypeChain(global,
-        context->GetIsolate());
-    if (!workerWrapper.IsEmpty()) {
-        //return V8WorkerGlobalScope::toImpl(workerWrapper)->getExecutionContext();
-        DebugBreak();
-        return nullptr;
-    }
-    v8::Local<v8::Object> workletWrapper = V8WorkletGlobalScope::findInstanceInPrototypeChain(global,
-        context->GetIsolate());
+    v8::Local<v8::Object> workerWrapper = V8WorkerGlobalScope::findInstanceInPrototypeChain(global, context->GetIsolate());
+    if (!workerWrapper.IsEmpty())
+        return V8WorkerGlobalScope::toImpl(workerWrapper)->getExecutionContext();
+    
+    v8::Local<v8::Object> workletWrapper = V8WorkletGlobalScope::findInstanceInPrototypeChain(global, context->GetIsolate());
     if (!workletWrapper.IsEmpty())
         return V8WorkletGlobalScope::toImpl(workletWrapper);
     // FIXME: Is this line of code reachable?

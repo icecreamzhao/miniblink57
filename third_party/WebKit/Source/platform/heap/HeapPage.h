@@ -593,7 +593,7 @@ public:
     // populate the negative page cache.
     bool contains(Address) override;
 #endif
-    virtual size_t size()
+    virtual size_t size() override
     {
         return pageHeaderSize() + sizeof(HeapObjectHeader) + m_payloadSize;
     }

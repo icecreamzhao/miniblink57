@@ -42,6 +42,7 @@
 #ifndef QCHAR_H
 #define QCHAR_H
 
+#include "base/basictypes.h"
 #include "QtGlobal.h"
 
 struct QLatin1Char {

@@ -32,7 +32,7 @@
 #include "core/inspector/ConsoleMessageStorage.h"
 #include "core/inspector/InspectorInstrumentation.h"
 #include "core/inspector/InspectorTaskRunner.h"
-//#include "core/inspector/WorkerInspectorController.h"
+#include "core/inspector/WorkerInspectorController.h"
 #include "core/inspector/WorkerThreadDebugger.h"
 #include "core/origin_trials/OriginTrialContext.h"
 #include "core/workers/ParentFrameTaskRunners.h"
@@ -224,41 +224,38 @@ void WorkerThread::appendDebuggerTask(
     DCHECK(isMainThread());
     if (isInShutdown())
         return;
-    //   m_inspectorTaskRunner->appendTask(crossThreadBind(
-    //       &WorkerThread::performDebuggerTaskOnWorkerThread,
-    //       crossThreadUnretained(this), WTF::passed(std::move(task))));
-    //   {
-    //     MutexLocker lock(m_threadStateMutex);
-    //     if (isolate() && m_threadState != ThreadState::ReadyToShutdown)
-    //       m_inspectorTaskRunner->interruptAndRunAllTasksDontWait(isolate());
-    //   }
-    //   workerBackingThread().backingThread().postTask(
-    //       BLINK_FROM_HERE,
-    //       crossThreadBind(&WorkerThread::performDebuggerTaskDontWaitOnWorkerThread,
-    //                       crossThreadUnretained(this)));
-    DebugBreak();
+    m_inspectorTaskRunner->appendTask(crossThreadBind(
+        &WorkerThread::performDebuggerTaskOnWorkerThread,
+        crossThreadUnretained(this), WTF::passed(std::move(task))));
+    {
+        MutexLocker lock(m_threadStateMutex);
+        if (isolate() && m_threadState != ThreadState::ReadyToShutdown)
+            m_inspectorTaskRunner->interruptAndRunAllTasksDontWait(isolate());
+    }
+    workerBackingThread().backingThread().postTask(
+        BLINK_FROM_HERE,
+        crossThreadBind(&WorkerThread::performDebuggerTaskDontWaitOnWorkerThread,
+            crossThreadUnretained(this)));
 }
 
 void WorkerThread::startRunningDebuggerTasksOnPauseOnWorkerThread()
 {
     DCHECK(isCurrentThread());
-    //   if (m_workerInspectorController)
-    //     m_workerInspectorController->flushProtocolNotifications();
-    //   m_pausedInDebugger = true;
-    //   ThreadDebugger::idleStarted(isolate());
-    //   std::unique_ptr<CrossThreadClosure> task;
-    //   do {
-    //     {
-    //       SafePointScope safePointScope(BlinkGC::HeapPointersOnStack);
-    //       task =
-    //           m_inspectorTaskRunner->takeNextTask(InspectorTaskRunner::WaitForTask);
-    //     }
-    //     if (task)
-    //       (*task)();
-    //     // Keep waiting until execution is resumed.
-    //   } while (task && m_pausedInDebugger);
-    //   ThreadDebugger::idleFinished(isolate());
-    DebugBreak();
+    if (m_workerInspectorController)
+        m_workerInspectorController->flushProtocolNotifications();
+    m_pausedInDebugger = true;
+    ThreadDebugger::idleStarted(isolate());
+    std::unique_ptr<CrossThreadClosure> task;
+    do {
+        {
+            SafePointScope safePointScope(BlinkGC::HeapPointersOnStack);
+            task = m_inspectorTaskRunner->takeNextTask(InspectorTaskRunner::WaitForTask);
+        }
+        if (task)
+            (*task)();
+        // Keep waiting until execution is resumed.
+    } while (task && m_pausedInDebugger);
+    ThreadDebugger::idleFinished(isolate());
 }
 
 void WorkerThread::stopRunningDebuggerTasksOnPauseOnWorkerThread()
@@ -276,9 +273,7 @@ WorkerOrWorkletGlobalScope* WorkerThread::globalScope()
 WorkerInspectorController* WorkerThread::workerInspectorController()
 {
     DCHECK(isCurrentThread());
-    //return m_workerInspectorController.get();
-    DebugBreak();
-    return nullptr;
+    return m_workerInspectorController.get();
 }
 
 unsigned WorkerThread::workerThreadCount()
@@ -323,9 +318,8 @@ WorkerThread::WorkerThread(PassRefPtr<WorkerLoaderProxy> workerLoaderProxy,
     WorkerReportingProxy& workerReportingProxy)
     : m_workerThreadId(getNextWorkerThreadId())
     , m_forcibleTerminationDelayInMs(kForcibleTerminationDelayInMs)
-    ,
-    //m_inspectorTaskRunner(WTF::makeUnique<InspectorTaskRunner>()),
-    m_workerLoaderProxy(workerLoaderProxy)
+    , m_inspectorTaskRunner(WTF::makeUnique<InspectorTaskRunner>())
+    , m_workerLoaderProxy(workerLoaderProxy)
     , m_workerReportingProxy(workerReportingProxy)
     , m_shutdownEvent(WTF::wrapUnique(
           new WaitableEvent(WaitableEvent::ResetPolicy::Manual,
@@ -393,8 +387,7 @@ void WorkerThread::terminateInternal(TerminationMode mode)
     }
 
     m_workerThreadLifecycleContext->notifyContextDestroyed();
-    //m_inspectorTaskRunner->kill();
-    DebugBreak();
+    m_inspectorTaskRunner->kill();
 
     workerBackingThread().backingThread().postTask(
         BLINK_FROM_HERE,
@@ -504,8 +497,7 @@ void WorkerThread::initializeOnWorkerThread(
         m_consoleMessageStorage = new ConsoleMessageStorage();
         m_globalScope = createWorkerGlobalScope(std::move(startupData));
         m_workerReportingProxy.didCreateWorkerGlobalScope(globalScope());
-        //m_workerInspectorController = WorkerInspectorController::create(this);
-        DebugBreak();
+        m_workerInspectorController = WorkerInspectorController::create(this);
 
         // TODO(nhiroki): Handle a case where the script controller fails to
         // initialize the context.
@@ -555,17 +547,15 @@ void WorkerThread::prepareForShutdownOnWorkerThread()
             setExitCode(lock, ExitCode::GracefullyTerminated);
     }
 
-    DebugBreak();
-    //m_inspectorTaskRunner->kill();
+    m_inspectorTaskRunner->kill();
     workerReportingProxy().willDestroyWorkerGlobalScope();
     InspectorInstrumentation::allAsyncTasksCanceled(globalScope());
 
     globalScope()->notifyContextDestroyed();
-    //   if (m_workerInspectorController) {
-    //     m_workerInspectorController->dispose();
-    //     m_workerInspectorController.clear();
-    //   }
-    DebugBreak();
+    if (m_workerInspectorController) {
+        m_workerInspectorController->dispose();
+        m_workerInspectorController.clear();
+    }
 
     globalScope()->dispose();
     m_consoleMessageStorage.clear();
@@ -617,43 +607,41 @@ void WorkerThread::performDebuggerTaskOnWorkerThread(
     std::unique_ptr<CrossThreadClosure> task)
 {
     DCHECK(isCurrentThread());
-    //   InspectorTaskRunner::IgnoreInterruptsScope scope(m_inspectorTaskRunner.get());
-    //   {
-    //     MutexLocker lock(m_threadStateMutex);
-    //     DCHECK_EQ(ThreadState::Running, m_threadState);
-    //     m_runningDebuggerTask = true;
-    //   }
-    //   ThreadDebugger::idleFinished(isolate());
-    //   {
-    //     DEFINE_THREAD_SAFE_STATIC_LOCAL(
-    //         CustomCountHistogram, scopedUsCounter,
-    //         new CustomCountHistogram("WorkerThread.DebuggerTask.Time", 0, 10000000,
-    //                                  50));
-    //     ScopedUsHistogramTimer timer(scopedUsCounter);
-    //     (*task)();
-    //   }
-    //   ThreadDebugger::idleStarted(isolate());
-    //   {
-    //     MutexLocker lock(m_threadStateMutex);
-    //     m_runningDebuggerTask = false;
-    //     if (!m_requestedToTerminate)
-    //       return;
-    //     // termiante() was called while a debugger task is running. Shutdown
-    //     // sequence will start soon.
-    //   }
-    //   // Stop further debugger tasks from running after this point.
-    //   m_inspectorTaskRunner->kill();
-    DebugBreak();
+    InspectorTaskRunner::IgnoreInterruptsScope scope(m_inspectorTaskRunner.get());
+    {
+        MutexLocker lock(m_threadStateMutex);
+        DCHECK_EQ(ThreadState::Running, m_threadState);
+        m_runningDebuggerTask = true;
+    }
+    ThreadDebugger::idleFinished(isolate());
+    {
+        DEFINE_THREAD_SAFE_STATIC_LOCAL(
+            CustomCountHistogram, scopedUsCounter,
+            new CustomCountHistogram("WorkerThread.DebuggerTask.Time", 0, 10000000,
+                50));
+        ScopedUsHistogramTimer timer(scopedUsCounter);
+        (*task)();
+    }
+    ThreadDebugger::idleStarted(isolate());
+    {
+        MutexLocker lock(m_threadStateMutex);
+        m_runningDebuggerTask = false;
+        if (!m_requestedToTerminate)
+            return;
+        // termiante() was called while a debugger task is running. Shutdown
+        // sequence will start soon.
+    }
+    // Stop further debugger tasks from running after this point.
+    m_inspectorTaskRunner->kill();
 }
 
 void WorkerThread::performDebuggerTaskDontWaitOnWorkerThread()
 {
     DCHECK(isCurrentThread());
-    //   std::unique_ptr<CrossThreadClosure> task =
-    //       m_inspectorTaskRunner->takeNextTask(InspectorTaskRunner::DontWaitForTask);
-    //   if (task)
-    //     (*task)();
-    DebugBreak();
+    std::unique_ptr<CrossThreadClosure> task =
+        m_inspectorTaskRunner->takeNextTask(InspectorTaskRunner::DontWaitForTask);
+    if (task)
+        (*task)();
 }
 
 void WorkerThread::setThreadState(const MutexLocker& lock,

@@ -38,7 +38,7 @@
 #include "public/web/WebContentSettingsClient.h"
 #include "public/web/WebFrameClient.h"
 #include "public/web/WebWorkerContentSettingsClientProxy.h"
-#include "web/IndexedDBClientImpl.h"
+//#include "web/IndexedDBClientImpl.h"
 #include "web/LocalFileSystemClient.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebViewImpl.h"
@@ -47,22 +47,15 @@
 
 namespace blink {
 
-InProcessWorkerMessagingProxy*
-DedicatedWorkerMessagingProxyProviderImpl::createWorkerMessagingProxy(
-    Worker* worker)
+InProcessWorkerMessagingProxy* DedicatedWorkerMessagingProxyProviderImpl::createWorkerMessagingProxy(Worker* worker)
 {
     if (worker->getExecutionContext()->isDocument()) {
         Document* document = toDocument(worker->getExecutionContext());
         WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(document->frame());
         WorkerClients* workerClients = WorkerClients::create();
-        provideIndexedDBClientToWorker(workerClients,
-            IndexedDBClientImpl::create(*workerClients));
-        provideLocalFileSystemToWorker(workerClients,
-            LocalFileSystemClient::create());
-        provideContentSettingsClientToWorker(
-            workerClients,
-            WTF::wrapUnique(
-                webFrame->client()->createWorkerContentSettingsClientProxy()));
+        //provideIndexedDBClientToWorker(workerClients, IndexedDBClientImpl::create(*workerClients));
+        provideLocalFileSystemToWorker(workerClients, LocalFileSystemClient::create());
+        provideContentSettingsClientToWorker(workerClients, WTF::wrapUnique(webFrame->client()->createWorkerContentSettingsClientProxy()));
         // FIXME: call provideServiceWorkerContainerClientToWorker here when we
         // support ServiceWorker in dedicated workers (http://crbug.com/371690)
         return new DedicatedWorkerMessagingProxy(worker, workerClients);

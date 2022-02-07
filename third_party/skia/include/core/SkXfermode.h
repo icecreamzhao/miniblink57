@@ -184,12 +184,12 @@ public:
 
     static SkXfermode::Mode SkBlendModeToSkXfermodeMode(SkBlendMode mode)
     {
-#define _SET_MODE_(x)               \
-    if (SkBlendMode::##x## == mode) \
-        return (SkXfermode::##x##_Mode);
-
-        GEN_SKBLENDMODE_LIST(_SET_MODE_);
-#undef _SET_MODE_
+// #define _SET_MODE_(x)               \
+//     if (SkBlendMode::##x## == mode) \
+//         return (SkXfermode::##x##_Mode);
+// 
+//         GEN_SKBLENDMODE_LIST(_SET_MODE_);
+// #undef _SET_MODE_
 
         *(int*)1 = 1;
         return SkXfermode::kSrcOver_Mode;

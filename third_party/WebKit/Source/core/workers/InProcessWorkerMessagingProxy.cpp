@@ -99,27 +99,25 @@ void InProcessWorkerMessagingProxy::startWorkerGlobalScope(
         : document->contentSecurityPolicy();
     DCHECK(csp);
 
-    //   WorkerThreadStartMode startMode =
-    //       workerInspectorProxy()->workerStartMode(document);
-    //   std::unique_ptr<WorkerSettings> workerSettings =
-    //       WTF::wrapUnique(new WorkerSettings(document->settings()));
-    //   WorkerV8Settings workerV8Settings(WorkerV8Settings::Default());
-    //   workerV8Settings.m_heapLimitMode = WorkerV8Settings::HeapLimitMode::Default;
-    DebugBreak();
-    //       toIsolate(document)->IsHeapLimitIncreasedForDebugging()
-    //           ? WorkerV8Settings::HeapLimitMode::IncreasedForDebugging
-    //           : WorkerV8Settings::HeapLimitMode::Default;
-    //   std::unique_ptr<WorkerThreadStartupData> startupData =
-    //       WorkerThreadStartupData::create(
-    //           scriptURL, userAgent, sourceCode, nullptr, startMode,
-    //           csp->headers().get(), referrerPolicy, starterOrigin,
-    //           m_workerClients.release(), document->addressSpace(),
-    //           OriginTrialContext::getTokens(document).get(),
-    //           std::move(workerSettings), workerV8Settings);
-    //
-    //   initializeWorkerThread(std::move(startupData));
-    //   workerInspectorProxy()->workerThreadCreated(document, workerThread(),
-    //                                               scriptURL);
+    WorkerThreadStartMode startMode = workerInspectorProxy()->workerStartMode(document);
+    std::unique_ptr<WorkerSettings> workerSettings = WTF::wrapUnique(new WorkerSettings(document->settings()));
+    WorkerV8Settings workerV8Settings(WorkerV8Settings::Default());
+    workerV8Settings.m_heapLimitMode = WorkerV8Settings::HeapLimitMode::Default;
+
+    toIsolate(document)->IsHeapLimitIncreasedForDebugging()
+        ? WorkerV8Settings::HeapLimitMode::IncreasedForDebugging
+        : WorkerV8Settings::HeapLimitMode::Default;
+    std::unique_ptr<WorkerThreadStartupData> startupData =
+        WorkerThreadStartupData::create(
+            scriptURL, userAgent, sourceCode, nullptr, startMode,
+            csp->headers().get(), referrerPolicy, starterOrigin,
+            m_workerClients.release(), document->addressSpace(),
+            OriginTrialContext::getTokens(document).get(),
+            std::move(workerSettings), workerV8Settings);
+
+    initializeWorkerThread(std::move(startupData));
+    workerInspectorProxy()->workerThreadCreated(document, workerThread(),
+        scriptURL);
 }
 
 void InProcessWorkerMessagingProxy::postMessageToWorkerObject(

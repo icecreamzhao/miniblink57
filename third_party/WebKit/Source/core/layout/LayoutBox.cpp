@@ -5735,4 +5735,136 @@ bool LayoutBox::shouldClipOverflow() const
     return hasOverflowClip() || styleRef().containsPaint() || hasControlClip();
 }
 
+void LayoutBox::setX(LayoutUnit x)
+{
+    if (x == m_frameRect.x())
+        return;
+    m_frameRect.setX(x);
+    locationChanged();
+}
+
+void LayoutBox::setY(LayoutUnit y)
+{
+    if (y == m_frameRect.y())
+        return;
+    m_frameRect.setY(y);
+    locationChanged();
+}
+
+void LayoutBox::setWidth(LayoutUnit width)
+{
+    if (width == m_frameRect.width())
+        return;
+    m_frameRect.setWidth(width);
+    sizeChanged();
+}
+
+void LayoutBox::setHeight(LayoutUnit height)
+{
+    if (height == m_frameRect.height())
+        return;
+
+    if (height.toInt() == 960 / 64)
+        OutputDebugStringA("");
+
+    m_frameRect.setHeight(height);
+    sizeChanged();
+}
+
+void LayoutBox::setLogicalLeft(LayoutUnit left)
+{
+    if (style()->isHorizontalWritingMode())
+        setX(left);
+    else
+        setY(left);
+}
+
+void LayoutBox::setLogicalTop(LayoutUnit top)
+{
+    if (style()->isHorizontalWritingMode())
+        setY(top);
+    else
+        setX(top);
+}
+
+void LayoutBox::setLogicalLocation(const LayoutPoint& location)
+{
+    if (style()->isHorizontalWritingMode())
+        setLocation(location);
+    else
+        setLocation(location.transposedPoint());
+}
+
+void LayoutBox::setLogicalWidth(LayoutUnit size)
+{
+    if (style()->isHorizontalWritingMode())
+        setWidth(size);
+    else
+        setHeight(size);
+}
+
+void LayoutBox::setLogicalHeight(LayoutUnit size)
+{
+    if (style()->isHorizontalWritingMode())
+        setHeight(size);
+    else
+        setWidth(size);
+}
+
+LayoutPoint LayoutBox::location() const
+{
+    return m_frameRect.location();
+}
+
+LayoutSize LayoutBox::locationOffset() const
+{
+    return LayoutSize(m_frameRect.x(), m_frameRect.y());
+}
+
+LayoutSize LayoutBox::size() const
+{
+    return m_frameRect.size();
+}
+
+IntSize LayoutBox::pixelSnappedSize() const
+{
+    return m_frameRect.pixelSnappedSize();
+}
+
+void LayoutBox::setLocation(const LayoutPoint& location)
+{
+    if (location == m_frameRect.location())
+        return;
+    m_frameRect.setLocation(location);
+    locationChanged();
+}
+
+void LayoutBox::setSize(const LayoutSize& size)
+{
+    if (size == m_frameRect.size())
+        return;
+    m_frameRect.setSize(size);
+    sizeChanged();
+}
+
+void LayoutBox::move(LayoutUnit dx, LayoutUnit dy)
+{
+    if (!dx && !dy)
+        return;
+    m_frameRect.move(dx, dy);
+    locationChanged();
+}
+
+LayoutRect LayoutBox::frameRect() const
+{
+    return m_frameRect;
+}
+
+void LayoutBox::setFrameRect(const LayoutRect& rect)
+{
+    setLocation(rect.location());
+    setSize(rect.size());
+}
+
+
 } // namespace blink

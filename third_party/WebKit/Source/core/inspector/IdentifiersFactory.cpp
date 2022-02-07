@@ -64,14 +64,12 @@ String IdentifiersFactory::frameId(LocalFrame* frame)
 LocalFrame* IdentifiersFactory::frameById(InspectedFrames* inspectedFrames,
     const String& frameId)
 {
-    //   bool ok;
-    //   int id = removeProcessIdPrefixFrom(frameId, &ok);
-    //   if (!ok)
-    //     return nullptr;
-    //   LocalFrame* frame = WeakIdentifierMap<LocalFrame>::lookup(id);
-    //   return frame && inspectedFrames->contains(frame) ? frame : nullptr;
-    DebugBreak();
-    return nullptr;
+    bool ok;
+    int id = removeProcessIdPrefixFrom(frameId, &ok);
+    if (!ok)
+        return nullptr;
+    LocalFrame* frame = WeakIdentifierMap<LocalFrame>::lookup(id);
+    return frame && inspectedFrames->contains(frame) ? frame : nullptr;
 }
 
 // static
@@ -85,15 +83,13 @@ String IdentifiersFactory::loaderId(DocumentLoader* loader)
 DocumentLoader* IdentifiersFactory::loaderById(InspectedFrames* inspectedFrames,
     const String& loaderId)
 {
-    //   bool ok;
-    //   int id = removeProcessIdPrefixFrom(loaderId, &ok);
-    //   if (!ok)
-    //     return nullptr;
-    //   DocumentLoader* loader = WeakIdentifierMap<DocumentLoader>::lookup(id);
-    //   LocalFrame* frame = loader->frame();
-    //   return frame && inspectedFrames->contains(frame) ? loader : nullptr;
-    DebugBreak();
-    return nullptr;
+    bool ok;
+    int id = removeProcessIdPrefixFrom(loaderId, &ok);
+    if (!ok)
+        return nullptr;
+    DocumentLoader* loader = WeakIdentifierMap<DocumentLoader>::lookup(id);
+    LocalFrame* frame = loader->frame();
+    return frame && inspectedFrames->contains(frame) ? loader : nullptr;
 }
 
 // static

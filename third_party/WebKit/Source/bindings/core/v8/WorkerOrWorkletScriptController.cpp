@@ -135,11 +135,9 @@ void WorkerOrWorkletScriptController::disposeContextIfNeeded()
         return;
 
     if (m_globalScope->isWorkerGlobalScope() || m_globalScope->isThreadedWorkletGlobalScope()) {
-        //     ScriptState::Scope scope(m_scriptState.get());
-        //     WorkerThreadDebugger* debugger = WorkerThreadDebugger::from(m_isolate);
-        //     debugger->contextWillBeDestroyed(m_globalScope->thread(),
-        //                                      m_scriptState->context());
-        DebugBreak();
+        ScriptState::Scope scope(m_scriptState.get());
+        WorkerThreadDebugger* debugger = WorkerThreadDebugger::from(m_isolate);
+        debugger->contextWillBeDestroyed(m_globalScope->thread(), m_scriptState->context());
     }
     m_scriptState->disposePerContextData();
 }
@@ -226,9 +224,8 @@ bool WorkerOrWorkletScriptController::initializeContextIfNeeded()
     // Name new context for debugging. For main thread worklet global scopes
     // this is done once the context is initialized.
     if (m_globalScope->isWorkerGlobalScope() || m_globalScope->isThreadedWorkletGlobalScope()) {
-        //     WorkerThreadDebugger* debugger = WorkerThreadDebugger::from(m_isolate);
-        //     debugger->contextCreated(m_globalScope->thread(), context);
-        DebugBreak();
+        WorkerThreadDebugger* debugger = WorkerThreadDebugger::from(m_isolate);
+        debugger->contextCreated(m_globalScope->thread(), context);
     }
 
     return true;

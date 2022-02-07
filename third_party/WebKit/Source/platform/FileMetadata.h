@@ -46,7 +46,7 @@ inline double invalidFileTime()
 }
 inline bool isValidFileTime(double time)
 {
-    return std::isfinite(time);
+    return /*std::*/isfinite(time);
 }
 
 class FileMetadata {

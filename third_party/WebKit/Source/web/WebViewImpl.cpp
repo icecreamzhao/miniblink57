@@ -457,7 +457,7 @@ WebViewImpl::WebViewImpl(WebViewClient* client,
 
     provideStorageQuotaClientTo(*m_page, StorageQuotaClientImpl::create());
     m_page->setValidationMessageClient(ValidationMessageClientImpl::create(*this));
-    //provideDedicatedWorkerMessagingProxyProviderTo(*m_page, DedicatedWorkerMessagingProxyProviderImpl::create());
+    provideDedicatedWorkerMessagingProxyProviderTo(*m_page, DedicatedWorkerMessagingProxyProviderImpl::create());
     StorageNamespaceController::provideStorageNamespaceTo(*m_page, &m_storageClientImpl);
 
     setVisibilityState(visibilityState, true);

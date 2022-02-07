@@ -195,7 +195,7 @@ public:
 
     void invalidateDeadObjectsInMarkingDeque();
 
-    bool markWrapperHeader(HeapObjectHeader*) const;
+    bool markWrapperHeader(HeapObjectHeader*) const override;
 
     // Mark wrappers in all worlds for the given script wrappable as alive in
     // V8.
