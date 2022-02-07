@@ -133,7 +133,7 @@ void MB_CALL_TYPE mbUninit()
 //     common::ThreadCall::shutdown();
 }
 
-#define ENABLE_VERIFY 1
+#define ENABLE_VERIFY 0
 
 static void licenseCheck()
 {
@@ -143,7 +143,7 @@ static void licenseCheck()
         isInit = true;
         SqBind* verify = SqBind::getInst();
 
-#if 1
+#if 0
 #if _DEBUG
         ::DeleteFileW(L"p:\\license.key");
         // std::string requestCode = verify->createRequestCode("email:weolar@qq.com");
@@ -671,7 +671,9 @@ void MB_CALL_TYPE mbSetUserAgent(mbWebView webviewHandle, const utf8* userAgent)
     common::ThreadCall::callBlinkThreadAsync(MB_FROM_HERE, [webviewHandle, userAgentString] {
         mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
         if (webview)
-            wkeSetUserAgent(webview->getWkeWebView(), userAgentString->c_str()); 
+            wkeSetUserAgent(webview->getWkeWebView(), userAgentString->c_str());
+        else
+            wkeSetUserAgent(nullptr, userAgentString->c_str());
         
         delete userAgentString;
     });

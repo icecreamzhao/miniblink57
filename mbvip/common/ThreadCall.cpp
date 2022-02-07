@@ -499,7 +499,7 @@ void ThreadCall::blinkMessageLoop(uv_loop_t* loop, v8::Platform* platform, v8::I
         }
         s_lastTime = t1;
 
-        ::PostThreadMessage(threadId, WM_USER + 1, 0, 0);
+        //::PostThreadMessage(threadId, WM_USER + 1, 0, 0);
 
         if (s_blinkExitFlag) {
             OutputDebugStringA("ThreadCall::blinkMessageLoop exit and notif\n");
