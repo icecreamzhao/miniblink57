@@ -28,7 +28,7 @@ void initPartialInterfacesInModules()
     //V8AudioTrackPartial::initialize();
     V8DataTransferItemPartial::initialize();
     V8DedicatedWorkerGlobalScopePartial::initialize();
-    //V8DevToolsHostPartial::initialize();
+    V8DevToolsHostPartial::initialize();
     V8HTMLCanvasElementPartial::initialize();
     //V8HTMLIFrameElementPartial::initialize();
     V8HTMLInputElementPartial::initialize();

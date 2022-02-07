@@ -105,12 +105,17 @@ void V8DevToolsHostPartial::installV8DevToolsHostTemplate(v8::Isolate* isolate, 
     }
 }
 
+// void V8DevToolsHostPartial::preparePrototypeObject(v8::Isolate* isolate, v8::Local<v8::Object> prototypeObject, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+// {
+//     //V8DevToolsHost::preparePrototypeObject(isolate, prototypeObject, interfaceTemplate);
+// }
+
 void V8DevToolsHostPartial::initialize()
 {
     // Should be invoked from ModulesInitializer.
     V8DevToolsHost::updateWrapperTypeInfo(
         &V8DevToolsHostPartial::installV8DevToolsHostTemplate,
-        nullptr);
+        /*&V8DevToolsHostPartial::preparePrototypeObject*/nullptr);
 }
 
 } // namespace blink

@@ -30,62 +30,60 @@ namespace DOMURLPartialV8Internal {
 
     static void createObjectURL2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        //   MediaSource* source;
-        //   source = V8MediaSource::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-        //   if (!source) {
-        //     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createObjectURL", "URL", "parameter 1 is not of type 'MediaSource'."));
-        //
-        //     return;
-        //   }
-        //
-        //   ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-        //   v8SetReturnValueString(info, URLMediaSource::createObjectURL(executionContext, source), info.GetIsolate());
-        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createObjectURL", "URL", "'MediaSource' not implemented."));
+        MediaSource* source;
+        source = V8MediaSource::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!source) {
+          V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createObjectURL", "URL", "parameter 1 is not of type 'MediaSource'."));
+        
+          return;
+        }
+        
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        v8SetReturnValueString(info, URLMediaSource::createObjectURL(executionContext, source), info.GetIsolate());
     }
 
     static void createObjectURL3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        //   MediaStream* stream;
-        //   stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-        //   if (!stream) {
-        //     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createObjectURL", "URL", "parameter 1 is not of type 'MediaStream'."));
-        //
-        //     return;
-        //   }
-        //
-        //   ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-        //   v8SetReturnValueString(info, URLMediaStream::createObjectURL(executionContext, stream), info.GetIsolate());
-        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createObjectURL", "URL", "'MediaSource' not implemented."));
+        MediaStream* stream;
+        stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!stream) {
+          V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createObjectURL", "URL", "parameter 1 is not of type 'MediaStream'."));
+        
+          return;
+        }
+        
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        v8SetReturnValueString(info, URLMediaStream::createObjectURL(executionContext, stream), info.GetIsolate());
     }
 
     static void createObjectURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        //   bool isArityError = false;
-        //   switch (std::min(1, info.Length())) {
-        //     case 1:
-        //       if (V8MediaSource::hasInstance(info[0], info.GetIsolate())) {
-        //         createObjectURL2Method(info);
-        //         return;
-        //       }
-        //       if (V8MediaStream::hasInstance(info[0], info.GetIsolate())) {
-        //         createObjectURL3Method(info);
-        //         return;
-        //       }
-        //       break;
-        //     default:
-        //       isArityError = true;
-        //   }
-        //
+        bool isArityError = false;
+        switch (std::min(1, info.Length())) {
+          case 1:
+            if (V8MediaSource::hasInstance(info[0], info.GetIsolate())) {
+              createObjectURL2Method(info);
+              return;
+            }
+            if (V8MediaStream::hasInstance(info[0], info.GetIsolate())) {
+              createObjectURL3Method(info);
+              return;
+            }
+            break;
+          default:
+            isArityError = true;
+        }
+        
         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "URL", "createObjectURL");
-        //
-        //   if (isArityError) {
-        //     if (info.Length() < 1) {
-        //       exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-        //       return;
-        //     }
-        //   }
-        //   exceptionState.throwTypeError("No function was found that matched the signature provided.");
-        exceptionState.throwTypeError("'createObjectURL' not implemented.");
+        
+        if (isArityError) {
+          if (info.Length() < 1) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+          }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+        //exceptionState.throwTypeError("'createObjectURL' not implemented.");
     }
 
 } // namespace DOMURLPartialV8Internal
@@ -108,9 +106,7 @@ void V8URLPartial::installV8URLTemplate(v8::Isolate* isolate, const DOMWrapperWo
 void V8URLPartial::initialize()
 {
     // Should be invoked from ModulesInitializer.
-    V8URL::updateWrapperTypeInfo(
-        &V8URLPartial::installV8URLTemplate,
-        nullptr);
+    V8URL::updateWrapperTypeInfo(&V8URLPartial::installV8URLTemplate, nullptr);
     V8URL::registerCreateObjectURLMethodForPartialInterface(&DOMURLPartialV8Internal::createObjectURLMethod);
 }
 

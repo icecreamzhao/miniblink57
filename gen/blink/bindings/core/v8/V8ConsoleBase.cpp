@@ -52,7 +52,7 @@ static void logMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
     int count = stackTrace->GetFrameCount();
 
     for (int i = 0; i < count; ++i) {
-        v8::Local<v8::StackFrame> stackFrame = stackTrace->GetFrame(i);
+        v8::Local<v8::StackFrame> stackFrame = stackTrace->GetFrame(info.GetIsolate(), i);
         int frameCount = stackTrace->GetFrameCount();
         int line = stackFrame->GetLineNumber();
         v8::Local<v8::String> scriptName = stackFrame->GetScriptNameOrSourceURL();
@@ -125,6 +125,7 @@ static void installV8ConsoleBaseTemplate(v8::Local<v8::FunctionTemplate> functio
     addFunction(isolate, functionTemplate, "warn", logMethodCallback);
     addFunction(isolate, functionTemplate, "timeEnd", logMethodCallback);
     addFunction(isolate, functionTemplate, "trace", logMethodCallback);
+    addFunction(isolate, functionTemplate, "timeStamp", logMethodCallback);    
 
     //     v8::Local<v8::ObjectTemplate> instanceTemplate = functionTemplate->InstanceTemplate();
     //     ALLOW_UNUSED_LOCAL(instanceTemplate);

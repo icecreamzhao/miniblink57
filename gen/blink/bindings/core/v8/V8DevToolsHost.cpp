@@ -143,9 +143,31 @@ namespace DevToolsHostV8Internal {
         impl->sendMessageToEmbedder(message);
     }
 
+    static void sendMessageToBackendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("sendMessageToEmbedder", "DevToolsHost", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> message;
+        message = info[0];
+        if (!message.prepare())
+            return;
+
+        impl->sendMessageToBackend(message);
+    }
+
     CORE_EXPORT void sendMessageToEmbedderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
         DevToolsHostV8Internal::sendMessageToEmbedderMethod(info);
+    }
+
+    CORE_EXPORT void sendMessageToBackendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::sendMessageToBackendMethod(info);
     }
 
     static void getSelectionBackgroundColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -204,6 +226,7 @@ const V8DOMConfiguration::MethodConfiguration V8DevToolsHostMethods[] = {
     { "copyText", DevToolsHostV8Internal::copyTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "platform", DevToolsHostV8Internal::platformMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "showContextMenuAtPoint", DevToolsHostV8Internal::showContextMenuAtPointMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sendMessageToBackend", DevToolsHostV8Internal::sendMessageToBackendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "sendMessageToEmbedder", DevToolsHostV8Internal::sendMessageToEmbedderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "getSelectionBackgroundColor", DevToolsHostV8Internal::getSelectionBackgroundColorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "getSelectionForegroundColor", DevToolsHostV8Internal::getSelectionForegroundColorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
