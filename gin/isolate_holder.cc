@@ -14,8 +14,9 @@
 #include "base/logging.h"
 #include "gin/debug_impl.h"
 #include "gin/v8_initializer.h"
+#if V8_MAJOR_VERSION < 7
 #include "sys-info.h"
-//#include "sys-info.h"
+#endif
 
 #ifdef MINIBLINK_NOT_IMPLEMENTED
 #include "base/message_loop/message_loop.h"
@@ -62,9 +63,11 @@ IsolateHolder::IsolateHolder(AccessMode access_mode)
     v8::ArrayBuffer::Allocator* allocator = g_array_buffer_allocator;
     CHECK(allocator); // << "You need to invoke gin::IsolateHolder::Initialize first";
     v8::Isolate::CreateParams params;
+#if V8_MAJOR_VERSION < 7
     params.entry_hook = DebugImpl::GetFunctionEntryHook();
-    params.code_event_handler = DebugImpl::GetJitCodeEventHandler();
     params.constraints.ConfigureDefaults(v8::base::SysInfo::AmountOfPhysicalMemory(), v8::base::SysInfo::AmountOfVirtualMemory());
+#endif
+    params.code_event_handler = DebugImpl::GetJitCodeEventHandler();
     params.array_buffer_allocator = allocator;
     isolate_ = v8::Isolate::New(params);
 #ifdef MINIBLINK_NOT_IMPLEMENTED
