@@ -112,6 +112,10 @@ typedef const struct __JSValue *JSValueConst;
 
 #define JS_MKVAL(tag, val) (JSValue)(intptr_t)(((val) << 4) | (tag))
 #define JS_MKPTR(tag, p) (JSValue)((intptr_t)(p) | (tag))
+inline JS_BOOL JS_VALUE_IS_EQ(JSValue a, JSValue b)
+{
+    return a == b;
+}
 
 #define JS_TAG_IS_FLOAT64(tag) ((unsigned)(tag) == JS_TAG_FLOAT64)
 
@@ -140,6 +144,10 @@ typedef uint64_t JSValue;
 
 #define JS_MKVAL(tag, val) (((uint64_t)(tag) << 32) | (uint32_t)(val))
 #define JS_MKPTR(tag, ptr) (((uint64_t)(tag) << 32) | (uintptr_t)(ptr))
+inline JS_BOOL JS_VALUE_IS_EQ(JSValue a, JSValue b)
+{
+    return a == b;
+}
 
 #define JS_FLOAT64_TAG_ADDEND (0x7ff80000 - JS_TAG_FIRST + 1) /* quiet NaN encoding */
 
@@ -177,8 +185,7 @@ static inline JSValue __JS_NewFloat64(JSContext *ctx, double d)
 /* same as JS_VALUE_GET_TAG, but return JS_TAG_FLOAT64 with NaN boxing */
 static inline int JS_VALUE_GET_NORM_TAG(JSValue v)
 {
-    uint32_t tag;
-    tag = JS_VALUE_GET_TAG(v);
+    uint32_t tag = JS_VALUE_GET_TAG(v);
     if (JS_TAG_IS_FLOAT64(tag))
         return JS_TAG_FLOAT64;
     else
@@ -187,8 +194,7 @@ static inline int JS_VALUE_GET_NORM_TAG(JSValue v)
 
 static inline JS_BOOL JS_VALUE_IS_NAN(JSValue v)
 {
-    uint32_t tag;
-    tag = JS_VALUE_GET_TAG(v);
+    uint32_t tag = JS_VALUE_GET_TAG(v);
     return tag == (JS_NAN >> 32);
 }
     
@@ -215,8 +221,30 @@ typedef struct JSValue {
 #define JS_VALUE_GET_FLOAT64(v) ((v).u.float64)
 #define JS_VALUE_GET_PTR(v) ((v).u.ptr)
 
-#define JS_MKVAL(tag, val) (JSValue){ (JSValueUnion){ .int32 = val }, tag }
-#define JS_MKPTR(tag, p) (JSValue){ (JSValueUnion){ .ptr = p }, tag }
+// #define JS_MKVAL(tag, val) (JSValue){ (JSValueUnion){ .int32 = val }, tag }
+// #define JS_MKPTR(tag, p) (JSValue){ (JSValueUnion){ .ptr = p }, tag }
+inline JSValue JS_MKVAL(int64_t tag, int32_t val)
+{
+    JSValue v = {0};
+    v.u.int32 = val;
+    v.tag = tag;
+    return v;
+}
+
+inline JSValue JS_MKPTR(int64_t tag, void* p)
+{
+    JSValue v = {0};
+    v.u.ptr = p;
+    v.tag = tag;
+    return v;
+}
+
+inline JS_BOOL JS_VALUE_IS_EQ(JSValue a, JSValue b)
+{
+    if (a.tag != b.tag)
+        return 0;
+    return a.u.ptr == b.u.ptr ? 1 : 0;
+}
 
 #define JS_TAG_IS_FLOAT64(tag) ((unsigned)(tag) == JS_TAG_FLOAT64)
 
@@ -308,7 +336,7 @@ static inline JS_BOOL JS_VALUE_IS_NAN(JSValue v)
 /* don't include the stack frames before this eval in the Error() backtraces */
 #define JS_EVAL_FLAG_BACKTRACE_BARRIER (1 << 6)
 
-typedef JSValue JSCFunction(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv, void* userdata);
+typedef JSValue JSCFunction(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv, void* userdata, JS_BOOL is_constructor);
 typedef JSValue JSCFunctionMagic(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv, int magic);
 typedef JSValue JSCFunctionData(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv, int magic, JSValue *func_data);
 
@@ -324,6 +352,9 @@ typedef struct JSMallocFunctions {
     void (*js_free)(JSMallocState *s, void *ptr);
     void *(*js_realloc)(JSMallocState *s, void *ptr, size_t size);
     size_t (*js_malloc_usable_size)(const void *ptr);
+
+    void* (*js_malloc_array_buffer)(JSMallocState* s, size_t size); // 这个不能和上面合并，因为v8的ArrayBuffer::Allocator没有realloc
+    void (*js_free_array_buffer)(JSMallocState* s, void* ptr);
 } JSMallocFunctions;
 
 typedef struct JSGCObjectHeader JSGCObjectHeader;
@@ -429,6 +460,11 @@ JSValue JS_AtomToString(JSContext *ctx, JSAtom atom);
 const char *JS_AtomToCString(JSContext *ctx, JSAtom atom);
 JSAtom JS_ValueToAtom(JSContext *ctx, JSValueConst val);
 
+JSAtom JS_NewAtomWithSymbol(JSContext *ctx, const char *str);
+JSValue JS_SymbolGetIterator(JSContext *ctx);
+JSValue JS_SymbolToStringTag(JSContext* ctx);
+JSAtom JS_SymbolGetIteratorAtom(JSContext* ctx);
+JSAtom JS_SymbolToStringTagAtom(JSContext* ctx);
 /* object class support */
 
 typedef struct JSPropertyEnum {
@@ -563,6 +599,22 @@ static js_force_inline JSValue JS_NewFloat64(JSContext *ctx, double d)
     return v;
 }
 
+typedef enum _JS_TYPED_ARRAY {
+    JS_UINT8C_TYPED_ARRAY,
+    JS_INT8_TYPED_ARRAY,
+    JS_UINT8_TYPED_ARRAY,
+    JS_INT16_TYPED_ARRAY,
+    JS_UINT16_TYPED_ARRAY,
+    JS_INT32_TYPED_ARRAY,
+    JS_UINT32_TYPED_ARRAY,
+#ifdef CONFIG_BIGNUM
+    JS_BIG_INT64_TYPED_ARRAY,
+    JS_BIG_UINT64_TYPED_ARRAY,
+#endif
+    JS_FLOAT32_TYPED_ARRAY,
+    JS_FLOAT64_TYPED_ARRAY,
+} JS_TYPED_ARRAY;
+
 static inline JS_BOOL JS_IsInteger(JSValueConst v)
 {
     int tag = JS_VALUE_GET_TAG(v);
@@ -636,8 +688,18 @@ static inline JS_BOOL JS_IsObject(JSValueConst v)
 
 JS_BOOL JS_IsRegExp(JSValueConst v);
 JS_BOOL JS_IsSet(JSValueConst v);
+JS_BOOL JS_IsMap(JSValueConst obj);
+JS_BOOL JS_IsMapIterator(JSValueConst obj);
+JS_BOOL JS_IsSetIterator(JSValueConst obj);
 JS_BOOL JS_IsPromise(JSValueConst v);
 JS_BOOL JS_IsProxy(JSValueConst v);
+JS_BOOL JS_IsArrayBuffer(JSValueConst v);
+JS_BOOL JS_IsSharedArrayBuffer(JSValueConst v);
+JS_BOOL JS_IsArrayBufferView(JSValueConst v);
+JS_BOOL JS_IsWhatTypedArray(JSValueConst v, JS_TYPED_ARRAY type);
+JS_BOOL JS_IsTypedArray(JSValueConst v);
+JS_BOOL JS_IsWeakSet(JSValueConst v);
+JS_BOOL JS_IsWeakMap(JSValueConst v);
 
 JSValue JS_Throw(JSContext *ctx, JSValue obj);
 JSValue JS_GetException(JSContext *ctx);
@@ -670,6 +732,10 @@ int JS_ToFloat64(JSContext *ctx, double *pres, JSValueConst val);
 int JS_ToBigInt64(JSContext *ctx, int64_t *pres, JSValueConst val);
 /* same as JS_ToInt64() but allow BigInt */
 int JS_ToInt64Ext(JSContext *ctx, int64_t *pres, JSValueConst val);
+
+// 对应v8的ExternalStringResourceBase，表示外部申请的字符串，quickjs来管理生命周期
+typedef void(*FreeExternalStringFunc)(void* userdata);
+JSValue JS_NewExternalStringLen(JSContext *ctx, const char* str, size_t len, FreeExternalStringFunc free_func, void* userdata);
 
 JSValue JS_NewStringLen(JSContext *ctx, const char *str1, size_t len1);
 JSValue JS_NewString(JSContext *ctx, const char *str);
@@ -719,12 +785,10 @@ static inline int JS_SetPropertyFocus(JSContext* ctx, JSValueConst this_obj, JSA
     return JS_SetPropertyInternal2(ctx, this_obj, prop, val, JS_PROP_THROW, 1, 0);
 }
 
-int JS_SetPropertyUint32(JSContext* ctx, JSValueConst this_obj,
-                         uint32_t idx, JSValue val);
-int JS_SetPropertyInt64(JSContext *ctx, JSValueConst this_obj,
-                        int64_t idx, JSValue val);
-int JS_SetPropertyStr(JSContext *ctx, JSValueConst this_obj,
-                      const char *prop, JSValue val);
+int JS_OrOpPropertyFlags(JSContext* ctx, JSValueConst this_obj, JSAtom prop, int flags);
+int JS_SetPropertyUint32(JSContext* ctx, JSValueConst this_obj, uint32_t idx, JSValue val);
+int JS_SetPropertyInt64(JSContext *ctx, JSValueConst this_obj, int64_t idx, JSValue val);
+int JS_SetPropertyStr(JSContext *ctx, JSValueConst this_obj, const char *prop, JSValue val);
 int JS_HasProperty(JSContext *ctx, JSValueConst this_obj, JSAtom prop);
 int JS_IsExtensible(JSContext *ctx, JSValueConst obj);
 int JS_PreventExtensions(JSContext *ctx, JSValueConst obj);
@@ -747,6 +811,7 @@ static inline JSValue JS_GetPrototypeFree(JSContext* ctx, JSValue obj)
 #define JS_GPN_SET_ENUM     (1 << 5)
 
 int JS_GetOwnPropertyNames(JSContext *ctx, JSPropertyEnum **ptab, uint32_t *plen, JSValueConst obj, int flags);
+void JS_FreePropEnum(JSContext* ctx, JSPropertyEnum* tab, uint32_t len);
 int JS_GetOwnProperty(JSContext *ctx, JSPropertyDescriptor *desc, JSValueConst obj, JSAtom prop);
 
 JSValue JS_Call(JSContext *ctx, JSValueConst func_obj, JSValueConst this_obj, int argc, JSValueConst *argv);
@@ -783,40 +848,31 @@ void JS_SetTestValFromClone(JSValue obj, JSValue v);
 JSValue JS_GetTestVal(JSValueConst obj);
 
 /* 'buf' must be zero terminated i.e. buf[buf_len] = '\0'. */
-JSValue JS_ParseJSON(JSContext *ctx, const char *buf, size_t buf_len,
-                     const char *filename);
+JSValue JS_ParseJSON(JSContext *ctx, const char *buf, size_t buf_len, const char *filename);
 #define JS_PARSE_JSON_EXT (1 << 0) /* allow extended JSON */
-JSValue JS_ParseJSON2(JSContext *ctx, const char *buf, size_t buf_len,
-                      const char *filename, int flags);
-JSValue JS_JSONStringify(JSContext *ctx, JSValueConst obj,
-                         JSValueConst replacer, JSValueConst space0);
+JSValue JS_ParseJSON2(JSContext *ctx, const char *buf, size_t buf_len, const char *filename, int flags);
+JSValue JS_JSONStringify(JSContext *ctx, JSValueConst obj, JSValueConst replacer, JSValueConst space0);
 
-typedef void JSFreeArrayBufferDataFunc(JSRuntime *rt, void *opaque, void *ptr);
-JSValue JS_NewArrayBuffer(JSContext *ctx, uint8_t *buf, size_t len,
-                          JSFreeArrayBufferDataFunc *free_func, void *opaque,
-                          JS_BOOL is_shared);
+typedef void JSFreeArrayBufferDataFunc(JSRuntime* rt, void* opaque, void* ptr);
+JSValue JS_NewArrayBuffer(JSContext *ctx, uint8_t *buf, size_t len, JSFreeArrayBufferDataFunc *free_func, void *opaque, JS_BOOL is_shared);
 JSValue JS_NewArrayBufferCopy(JSContext *ctx, const uint8_t *buf, size_t len);
 void JS_DetachArrayBuffer(JSContext *ctx, JSValueConst obj);
 uint8_t *JS_GetArrayBuffer(JSContext *ctx, size_t *psize, JSValueConst obj);
-JSValue JS_GetTypedArrayBuffer(JSContext *ctx, JSValueConst obj,
-                               size_t *pbyte_offset,
-                               size_t *pbyte_length,
-                               size_t *pbytes_per_element);
+JSValue JS_GetTypedArrayBuffer(JSContext *ctx, JSValueConst obj, size_t *pbyte_offset, size_t *pbyte_length, size_t *pbytes_per_element);
 typedef struct {
     void *(*sab_alloc)(void *opaque, size_t size);
     void (*sab_free)(void *opaque, void *ptr);
     void (*sab_dup)(void *opaque, void *ptr);
     void *sab_opaque;
 } JSSharedArrayBufferFunctions;
-void JS_SetSharedArrayBufferFunctions(JSRuntime *rt,
-                                      const JSSharedArrayBufferFunctions *sf);
+void JS_SetSharedArrayBufferFunctions(JSRuntime *rt, const JSSharedArrayBufferFunctions *sf);
+
+JSValue JS_NewTypedArray(JSContext *ctx, JS_TYPED_ARRAY type, JSValue array_buffer, size_t byte_offset, size_t length);
 
 JSValue JS_NewPromiseCapability(JSContext *ctx, JSValue *resolving_funcs);
 
 /* is_handled = TRUE means that the rejection is handled */
-typedef void JSHostPromiseRejectionTracker(JSContext *ctx, JSValueConst promise,
-                                           JSValueConst reason,
-                                           JS_BOOL is_handled, void *opaque);
+typedef void JSHostPromiseRejectionTracker(JSContext *ctx, JSValueConst promise, JSValueConst reason, JS_BOOL is_handled, void *opaque);
 void JS_SetHostPromiseRejectionTracker(JSRuntime *rt, JSHostPromiseRejectionTracker *cb, void *opaque);
 
 /* return != 0 if the JS code needs to be interrupted */
@@ -861,17 +917,14 @@ int JS_ExecutePendingJob(JSRuntime *rt, JSContext **pctx);
 #define JS_WRITE_OBJ_REFERENCE (1 << 3) /* allow object references to
                                            encode arbitrary object
                                            graph */
-uint8_t *JS_WriteObject(JSContext *ctx, size_t *psize, JSValueConst obj,
-                        int flags);
-uint8_t *JS_WriteObject2(JSContext *ctx, size_t *psize, JSValueConst obj,
-                         int flags, uint8_t ***psab_tab, size_t *psab_tab_len);
+uint8_t *JS_WriteObject(JSContext *ctx, size_t *psize, JSValueConst obj, int flags);
+uint8_t *JS_WriteObject2(JSContext *ctx, size_t *psize, JSValueConst obj, int flags, uint8_t ***psab_tab, size_t *psab_tab_len);
 
 #define JS_READ_OBJ_BYTECODE  (1 << 0) /* allow function/module */
 #define JS_READ_OBJ_ROM_DATA  (1 << 1) /* avoid duplicating 'buf' data */
 #define JS_READ_OBJ_SAB       (1 << 2) /* allow SharedArrayBuffer */
 #define JS_READ_OBJ_REFERENCE (1 << 3) /* allow object references */
-JSValue JS_ReadObject(JSContext *ctx, const uint8_t *buf, size_t buf_len,
-                      int flags);
+JSValue JS_ReadObject(JSContext *ctx, const uint8_t *buf, size_t buf_len, int flags);
 /* instantiate and evaluate a bytecode function. Only used when
    reading a script or module with JS_ReadObject() */
 JSValue JS_EvalFunction(JSContext *ctx, JSValue fun_obj);
