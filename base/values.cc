@@ -220,7 +220,7 @@ FundamentalValue::FundamentalValue(double in_value)
     : Value(Type::DOUBLE)
     , double_value_(in_value)
 {
-    if (!std::isfinite(double_value_)) {
+    if (!std_isfinite(double_value_)) {
         NOTREACHED() << "Non-finite (i.e. NaN or positive/negative infinity) "
                      << "values cannot be represented in JSON";
         double_value_ = 0.0;

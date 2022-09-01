@@ -106,7 +106,7 @@ public:
         return commit_interval_;
     }
 
-#if ENABLE_TENCENT(DIRECT_PRECONNECT)
+#if 0 // ENABLE_TENCENT(DIRECT_PRECONNECT)
     void set_commit_interval(const TimeDelta& interval)
     {
         commit_interval_ = interval;
@@ -137,7 +137,7 @@ private:
     DataSerializer* serializer_;
 
     // Time delta after which scheduled data will be written to disk.
-#if ENABLE_TENCENT(DIRECT_PRECONNECT)
+#if 0 // ENABLE_TENCENT(DIRECT_PRECONNECT)
     TimeDelta commit_interval_;
 #else
     const TimeDelta commit_interval_;

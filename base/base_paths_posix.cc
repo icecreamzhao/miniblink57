@@ -33,6 +33,8 @@
 
 namespace base {
 
+const char kProcSelfExe[] = "/proc/self/exe";
+
 bool PathProviderPosix(int key, FilePath* result)
 {
     FilePath path;
@@ -104,13 +106,15 @@ bool PathProviderPosix(int key, FilePath* result)
         return false;
     }
     case DIR_USER_DESKTOP:
-        *result = nix::GetXDGUserDirectory("DESKTOP", "Desktop");
+        __debugbreak();
+        //*result = nix::GetXDGUserDirectory("DESKTOP", "Desktop");
         return true;
     case DIR_CACHE: {
-        std::unique_ptr<Environment> env(Environment::Create());
-        FilePath cache_dir(
-            nix::GetXDGDirectory(env.get(), "XDG_CACHE_HOME", ".cache"));
-        *result = cache_dir;
+        __debugbreak();
+//         std::unique_ptr<Environment> env(Environment::Create());
+//         FilePath cache_dir(
+//             nix::GetXDGDirectory(env.get(), "XDG_CACHE_HOME", ".cache"));
+//         *result = cache_dir;
         return true;
     }
     }

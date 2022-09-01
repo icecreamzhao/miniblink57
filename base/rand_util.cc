@@ -14,6 +14,11 @@
 #include "base/logging.h"
 #include "base/strings/string_util.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace base {
 
 int RandInt(int min, int max)

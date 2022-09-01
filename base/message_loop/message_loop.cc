@@ -39,6 +39,11 @@
 #include "base/message_loop/message_pump_glib.h"
 #endif
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace base {
 
 DWORD s_disableDispatchMessageReentry = 0;
@@ -92,13 +97,15 @@ namespace {
 
     MessageLoop::MessagePumpFactory* message_pump_for_ui_factory_ = NULL;
 
-#if defined(OS_IOS)
-    typedef MessagePumpIOSForIO MessagePumpForIO;
-#elif defined(OS_NACL_SFI)
+// #if defined(OS_IOS)
+//     typedef MessagePumpIOSForIO MessagePumpForIO;
+// #elif defined(OS_NACL_SFI)
+#if !defined(WIN32)
     typedef MessagePumpDefault MessagePumpForIO;
-#elif defined(OS_POSIX)
-    typedef MessagePumpLibevent MessagePumpForIO;
 #endif
+// #elif defined(OS_POSIX)
+//     typedef MessagePumpLibevent MessagePumpForIO;
+// #endif
 
 #if !defined(OS_NACL_SFI)
     MessagePumpForIO* ToPumpIO(MessagePump* pump)
@@ -803,7 +810,9 @@ bool MessageLoopForUI::WatchFileDescriptor(
     MessagePumpLibevent::FileDescriptorWatcher* controller,
     MessagePumpLibevent::Watcher* delegate)
 {
-    return static_cast<MessagePumpLibevent*>(pump_.get())->WatchFileDescriptor(fd, persistent, mode, controller, delegate);
+    //return static_cast<MessagePumpLibevent*>(pump_.get())->WatchFileDescriptor(fd, persistent, mode, controller, delegate);
+    printf("MessageLoopForUI::WatchFileDescriptor is not impl\n");
+    return false;
 }
 #endif
 
@@ -836,7 +845,9 @@ bool MessageLoopForIO::WatchFileDescriptor(int fd,
     FileDescriptorWatcher* controller,
     Watcher* delegate)
 {
-    return ToPumpIO(pump_.get())->WatchFileDescriptor(fd, persistent, mode, controller, delegate);
+    //return ToPumpIO(pump_.get())->WatchFileDescriptor(fd, persistent, mode, controller, delegate);
+    printf("MessageLoopForIO::WatchFileDescriptor is not impl\n");
+    return false;
 }
 #endif
 

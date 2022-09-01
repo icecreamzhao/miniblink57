@@ -13,6 +13,11 @@
 #include "base/strings/string_split.h"
 #include "base/strings/string_util.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace base {
 
 namespace {

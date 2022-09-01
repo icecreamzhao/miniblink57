@@ -58,59 +58,59 @@ struct is_non_const_reference<const T&> : std::false_type {
 
 namespace internal {
 
-    template <typename First, typename Second>
-    struct SelectSecond {
-        using type = Second;
-    };
+template <typename First, typename Second>
+struct SelectSecond {
+    using type = Second;
+};
 
-    struct Any {
-        Any(...);
-    };
+struct Any {
+    Any(...);
+};
 
-    // True case: If |Lvalue| can be assigned to from |Rvalue|, then the return
-    // value is a true_type.
-    template <class Lvalue, class Rvalue>
-    typename internal::SelectSecond<
-        decltype((std::declval<Lvalue>() = std::declval<Rvalue>())),
-        std::true_type>::type
+// True case: If |Lvalue| can be assigned to from |Rvalue|, then the return
+// value is a true_type.
+template <class Lvalue, class Rvalue>
+typename internal::SelectSecond<
+    decltype((std::declval<Lvalue>() = std::declval<Rvalue>())),
+    std::true_type>::type
     IsAssignableTest(Lvalue&&, Rvalue&&);
 
-    // False case: Otherwise the return value is a false_type.
-    template <class Rvalue>
-    std::false_type IsAssignableTest(internal::Any, Rvalue&&);
+// False case: Otherwise the return value is a false_type.
+template <class Rvalue>
+std::false_type IsAssignableTest(internal::Any, Rvalue&&);
 
-    // Default case: Neither Lvalue nor Rvalue is void. Uses IsAssignableTest to
-    // determine the type of IsAssignableImpl.
-    template <class Lvalue,
-        class Rvalue,
-        bool = std::is_void<Lvalue>::value || std::is_void<Rvalue>::value>
+// Default case: Neither Lvalue nor Rvalue is void. Uses IsAssignableTest to
+// determine the type of IsAssignableImpl.
+template <class Lvalue,
+    class Rvalue,
+    bool = std::is_void<Lvalue>::value || std::is_void<Rvalue>::value>
     struct IsAssignableImpl
-        : public std::common_type<decltype(
-              internal::IsAssignableTest(std::declval<Lvalue>(),
-                  std::declval<Rvalue>()))>::type {
-    };
+    : public std::common_type<decltype(
+        internal::IsAssignableTest(std::declval<Lvalue>(),
+            std::declval<Rvalue>()))>::type {
+};
 
-    // Void case: Either Lvalue or Rvalue is void. Then the type of IsAssignableTest
-    // is false_type.
-    template <class Lvalue, class Rvalue>
-    struct IsAssignableImpl<Lvalue, Rvalue, true> : public std::false_type {
-    };
+// Void case: Either Lvalue or Rvalue is void. Then the type of IsAssignableTest
+// is false_type.
+template <class Lvalue, class Rvalue>
+struct IsAssignableImpl<Lvalue, Rvalue, true> : public std::false_type {
+};
 
-    // Uses expression SFINAE to detect whether using operator<< would work.
-    template <typename T, typename = void>
-    struct SupportsOstreamOperator : std::false_type {
-    };
-    template <typename T>
-    struct SupportsOstreamOperator<T,
-        decltype(void(std::declval<std::ostream&>()
-            << std::declval<T>()))>
-        : std::true_type {
-    };
+// Uses expression SFINAE to detect whether using operator<< would work.
+template <typename T, typename = void>
+struct SupportsOstreamOperator : std::false_type {
+};
+template <typename T>
+struct SupportsOstreamOperator<T,
+    decltype(void(std::declval<std::ostream&>()
+        << std::declval<T>()))>
+    : std::true_type {
+};
 
 } // namespace internal
 
-// TODO(crbug.com/554293): Remove this when all platforms have this in the std
-// namespace.
+  // TODO(crbug.com/554293): Remove this when all platforms have this in the std
+  // namespace.
 template <class Lvalue, class Rvalue>
 struct is_assignable : public internal::IsAssignableImpl<Lvalue, Rvalue> {
 };
@@ -121,8 +121,8 @@ struct is_assignable : public internal::IsAssignableImpl<Lvalue, Rvalue> {
 template <class T>
 struct is_copy_assignable
     : public is_assignable<typename std::add_lvalue_reference<T>::type,
-          typename std::add_lvalue_reference<
-              typename std::add_const<T>::type>::type> {
+    typename std::add_lvalue_reference<
+    typename std::add_const<T>::type>::type> {
 };
 
 // is_move_assignable is true if a T&& is assignable to a T&.
@@ -131,7 +131,7 @@ struct is_copy_assignable
 template <class T>
 struct is_move_assignable
     : public is_assignable<typename std::add_lvalue_reference<T>::type,
-          const typename std::add_rvalue_reference<T>::type> {
+    const typename std::add_rvalue_reference<T>::type> {
 };
 
 // underlying_type produces the integer type backing an enum type.
@@ -184,13 +184,13 @@ using is_trivially_destructible = std::is_trivially_destructible<T>;
 #if defined(CR_USE_FALLBACKS_FOR_OLD_GLIBCXX) || defined(CR_USE_FALLBACKS_FOR_OLD_EXPERIMENTAL_GLIBCXX) || defined(CR_USE_FALLBACKS_FOR_GCC_WITH_LIBCXX)
 template <typename T>
 struct is_trivially_copyable {
-// TODO(danakj): Remove this when android builders are all using a newer version
-// of gcc, or the android ndk is updated to a newer libc++ that does this for
-// us.
+    // TODO(danakj): Remove this when android builders are all using a newer version
+    // of gcc, or the android ndk is updated to a newer libc++ that does this for
+    // us.
 #if _GNUC_VER >= 501
-    static constexpr bool value = __is_trivially_copyable(T);
+    static const/*expr*/ bool value = __is_trivially_copyable(T);
 #else
-    static constexpr bool value = __has_trivial_copy(T);
+    static const/*expr*/ bool value = __has_trivial_copy(T);
 #endif
 };
 #else

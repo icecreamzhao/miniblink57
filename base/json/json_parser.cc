@@ -956,7 +956,7 @@ namespace internal {
             return base::MakeUnique<FundamentalValue>(num_int);
 
         double num_double;
-        if (StringToDouble(num_string.as_string(), &num_double) && std::isfinite(num_double)) {
+        if (StringToDouble(num_string.as_string(), &num_double) && std_isfinite(num_double)) {
             return base::MakeUnique<FundamentalValue>(num_double);
         }
 

@@ -43,6 +43,7 @@ namespace base {
 typedef wchar_t char16;
 typedef std::wstring string16;
 typedef std::char_traits<wchar_t> string16_char_traits;
+BASE_EXPORT size_t c16len(const char16* s);
 
 } // namespace base
 
@@ -52,7 +53,8 @@ typedef std::char_traits<wchar_t> string16_char_traits;
 
 namespace base {
 
-typedef uint16_t char16;
+//typedef uint16_t char16;
+typedef char16_t char16;
 
 // char16 versions of the functions required by string16_char_traits; these
 // are based on the wide character functions of similar names ("w" or "wcs"

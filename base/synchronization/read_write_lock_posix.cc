@@ -17,31 +17,31 @@ namespace subtle {
     ReadWriteLock::~ReadWriteLock()
     {
         int result = pthread_rwlock_destroy(&native_handle_);
-        DCHECK_EQ(result, 0) << ". " << strerror(result);
+        DCHECK_EQ(result, 0)/* << ". " << strerror(result)*/;
     }
 
     void ReadWriteLock::ReadAcquire()
     {
         int result = pthread_rwlock_rdlock(&native_handle_);
-        DCHECK_EQ(result, 0) << ". " << strerror(result);
+        DCHECK_EQ(result, 0)/* << ". " << strerror(result)*/;
     }
 
     void ReadWriteLock::ReadRelease()
     {
         int result = pthread_rwlock_unlock(&native_handle_);
-        DCHECK_EQ(result, 0) << ". " << strerror(result);
+        DCHECK_EQ(result, 0)/* << ". " << strerror(result)*/;
     }
 
     void ReadWriteLock::WriteAcquire()
     {
         int result = pthread_rwlock_wrlock(&native_handle_);
-        DCHECK_EQ(result, 0) << ". " << strerror(result);
+        DCHECK_EQ(result, 0)/* << ". " << strerror(result)*/;
     }
 
     void ReadWriteLock::WriteRelease()
     {
         int result = pthread_rwlock_unlock(&native_handle_);
-        DCHECK_EQ(result, 0) << ". " << strerror(result);
+        DCHECK_EQ(result, 0)/* << ". " << strerror(result)*/;
     }
 
 } // namespace subtle

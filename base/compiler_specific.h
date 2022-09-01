@@ -102,12 +102,14 @@
 #define NOINLINE
 #endif
 
+#ifndef ALWAYS_INLINE
 #if COMPILER_GCC && defined(NDEBUG)
 #define ALWAYS_INLINE inline __attribute__((__always_inline__))
 #elif COMPILER_MSVC && defined(NDEBUG)
 #define ALWAYS_INLINE inline // __forceinline
 #else
 #define ALWAYS_INLINE inline
+#endif
 #endif
 
 // Specify memory alignment for structs, classes, etc.

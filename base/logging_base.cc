@@ -35,7 +35,9 @@ typedef HANDLE MutexHandle;
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#ifndef MAX_PATH
 #define MAX_PATH PATH_MAX
+#endif
 typedef FILE* FileHandle;
 typedef pthread_mutex_t* MutexHandle;
 #endif
@@ -148,7 +150,7 @@ namespace {
         struct timespec ts;
         clock_gettime(CLOCK_MONOTONIC, &ts);
 
-        uint64 absolute_micro = static_cast<int64>(ts.tv_sec) * 1000000 + static_cast<int64>(ts.tv_nsec) / 1000;
+        uint64_t absolute_micro = static_cast<int64_t>(ts.tv_sec) * 1000000 + static_cast<int64_t>(ts.tv_nsec) / 1000;
 
         return absolute_micro;
 #endif

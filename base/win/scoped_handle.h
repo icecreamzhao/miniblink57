@@ -17,8 +17,9 @@
 #if defined(COMPILER_MSVC)
 #include <intrin.h>
 #define BASE_WIN_GET_CALLER _ReturnAddress()
-#elif defined(COMPILER_GCC)
-#define BASE_WIN_GET_CALLER __builtin_extract_return_addr(\ __builtin_return_address(0))
+//#elif defined(COMPILER_GCC)
+#else
+#define BASE_WIN_GET_CALLER __builtin_extract_return_addr(__builtin_return_address(0))
 #endif
 
 namespace base {
@@ -81,8 +82,7 @@ namespace win {
 
                 if (Traits::IsHandleValid(handle)) {
                     handle_ = handle;
-                    Verifier::StartTracking(handle, this, BASE_WIN_GET_CALLER,
-                        tracked_objects::GetProgramCounter());
+                    Verifier::StartTracking(handle, this, BASE_WIN_GET_CALLER, tracked_objects::GetProgramCounter());
                 }
                 ::SetLastError(last_error);
             }
@@ -99,8 +99,7 @@ namespace win {
             Handle temp = handle_;
             handle_ = Traits::NullHandle();
             if (Traits::IsHandleValid(temp)) {
-                Verifier::StopTracking(temp, this, BASE_WIN_GET_CALLER,
-                    tracked_objects::GetProgramCounter());
+                Verifier::StopTracking(temp, this, BASE_WIN_GET_CALLER, tracked_objects::GetProgramCounter());
             }
             return temp;
         }
@@ -109,8 +108,7 @@ namespace win {
         void Close()
         {
             if (Traits::IsHandleValid(handle_)) {
-                Verifier::StopTracking(handle_, this, BASE_WIN_GET_CALLER,
-                    tracked_objects::GetProgramCounter());
+                Verifier::StopTracking(handle_, this, BASE_WIN_GET_CALLER, tracked_objects::GetProgramCounter());
 
                 Traits::CloseHandle(handle_);
                 handle_ = Traits::NullHandle();

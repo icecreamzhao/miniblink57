@@ -25,7 +25,7 @@ public:
     URandomFd()
         : fd_(open("/dev/urandom", O_RDONLY))
     {
-        DCHECK_GE(fd_, 0) << "Cannot open /dev/urandom: " << errno;
+        DCHECK_GE(fd_, 0)/* << "Cannot open /dev/urandom: " << errno*/;
     }
 
     ~URandomFd() { close(fd_); }

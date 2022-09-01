@@ -6,6 +6,7 @@ namespace base {
 
 WindowsVersion getWindowsVersion(int* major, int* minor)
 {
+#if defined(OS_WIN) 
     static bool initialized = false;
     static WindowsVersion version;
     static int majorVersion, minorVersion;
@@ -49,6 +50,13 @@ WindowsVersion getWindowsVersion(int* major, int* minor)
     if (minor)
         *minor = minorVersion;
     return version;
+#else
+    if (major)
+        *major = 6;
+    if (minor)
+        *minor = 1;
+    return Windows7;
+#endif
 }
 
 }

@@ -19,6 +19,15 @@
 
 namespace base {
 
+size_t c16len(const char16* s)
+{
+    const char16* s_orig = s;
+    while (*s) {
+        ++s;
+    }
+    return s - s_orig;
+}
+
 int c16memcmp(const char16* s1, const char16* s2, size_t n)
 {
     // We cannot call memcmp because that changes the semantics.
@@ -31,15 +40,6 @@ int c16memcmp(const char16* s1, const char16* s2, size_t n)
         ++s2;
     }
     return 0;
-}
-
-size_t c16len(const char16* s)
-{
-    const char16* s_orig = s;
-    while (*s) {
-        ++s;
-    }
-    return s - s_orig;
 }
 
 const char16* c16memchr(const char16* s, char16 c, size_t n)

@@ -2,6 +2,8 @@
 #ifndef patch_code_sync_xp_h
 #define patch_code_sync_xp_h
 
+#ifdef _MSC_VER
+
 #include <windows.h>
 #include <intrin.h>
 
@@ -1232,5 +1234,7 @@ inline BOOL TryAcquireSRWLockSharedXp(volatile PSRWLOCK SRWLock)
 
 #pragma pack(pop)
 #pragma optimize("", on)
+
+#endif // _MSC_VER
 
 #endif // patch_code_sync_xp_h

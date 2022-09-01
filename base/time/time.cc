@@ -177,7 +177,7 @@ time_t Time::ToTimeT() const
 // static
 Time Time::FromDoubleT(double dt)
 {
-    if (dt == 0 || std::isnan(dt))
+    if (dt == 0 || /*std::*/isnan(dt))
         return Time(); // Preserve 0 so we can tell it doesn't exist.
     return Time(kTimeTToMicrosecondsOffset) + TimeDelta::FromSecondsD(dt);
 }

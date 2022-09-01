@@ -8,6 +8,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#if !defined(WIN32)
+#include <libio.h>
+#endif
+#include <wchar.h>
 #include <string>
 
 #include "base/base_export.h"

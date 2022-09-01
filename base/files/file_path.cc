@@ -615,6 +615,12 @@ std::string FilePath::AsUTF8Unsafe() const
 #if defined(SYSTEM_NATIVE_UTF8)
     return value();
 #else
+//     std::wstring xx =  SysNativeMBToWide(value());
+//     const char* str = (const char*)xx.c_str();
+//     std::string yy = WideToUTF8(xx);
+//     printf("AsUTF8Unsafe: %d, %d\n", sizeof(L"1234"), sizeof(wchar_t));
+//     printf("FilePath::AsUTF8Unsafe: %d %d, %u %u %u %u %u\n", xx.size(), yy.size(), str[0], str[1], str[2], str[3], str[4]);
+//     return yy;
     return WideToUTF8(SysNativeMBToWide(value()));
 #endif
 }

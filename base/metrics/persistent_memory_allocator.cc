@@ -277,10 +277,12 @@ PersistentMemoryAllocator::PersistentMemoryAllocator(
 
     // These atomics operate inter-process and so must be lock-free. The local
     // casts are to make sure it can be evaluated at compile time to a constant.
-    CHECK(((SharedMetadata*)0)->freeptr.is_lock_free());
-    CHECK(((SharedMetadata*)0)->flags.is_lock_free());
-    CHECK(((BlockHeader*)0)->next.is_lock_free());
-    CHECK(corrupt_.is_lock_free());
+//     CHECK(((SharedMetadata*)0)->freeptr.is_lock_free());
+//     CHECK(((SharedMetadata*)0)->flags.is_lock_free());
+//     CHECK(((BlockHeader*)0)->next.is_lock_free());
+//     CHECK(corrupt_.is_lock_free());
+    OutputDebugStringA("PersistentMemoryAllocator::PersistentMemoryAllocator is not impl\n");
+    *(int*)1 = 1;
 
     if (shared_meta()->cookie != kGlobalCookie) {
         if (readonly) {

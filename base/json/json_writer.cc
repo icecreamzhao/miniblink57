@@ -16,6 +16,11 @@
 #include "base/values.h"
 #include "build/build_config.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace base {
 
 #if defined(OS_WIN)

@@ -7,12 +7,11 @@
 #ifndef BASE_WIN_EVENT_TRACE_PROVIDER_H_
 #define BASE_WIN_EVENT_TRACE_PROVIDER_H_
 
+#include <windows.h>
+#include <wmistr.h>
 #include <evntrace.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <windows.h>
-#include <wmistr.h>
-
 #include <limits>
 
 #include "base/base_export.h"
@@ -21,7 +20,7 @@
 #undef max
 #undef min
 
-#if 1 // ndef _DEBUG
+#if !defined(WIN32)
 
 typedef struct  _TRACE_GUID_REGISTRATION {
     LPCGUID Guid;            // Guid of data block being registered or updated.

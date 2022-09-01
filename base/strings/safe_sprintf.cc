@@ -43,6 +43,11 @@
     } while (0)
 #endif
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace base {
 namespace strings {
 

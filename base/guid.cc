@@ -71,14 +71,14 @@ bool IsValidGUIDOutputString(const base::StringPiece& guid)
     return IsValidGUIDInternal(guid, true /* strict */);
 }
 
-std::string RandomDataToGUIDString(const uint64_t bytes[2])
-{
-    return StringPrintf("%08x-%04x-%04x-%04x-%012llx",
-        static_cast<unsigned int>(bytes[0] >> 32),
-        static_cast<unsigned int>((bytes[0] >> 16) & 0x0000ffff),
-        static_cast<unsigned int>(bytes[0] & 0x0000ffff),
-        static_cast<unsigned int>(bytes[1] >> 48),
-        bytes[1] & 0x0000ffffffffffffULL);
-}
+// std::string RandomDataToGUIDString(const uint64_t bytes[2])
+// {
+//     return StringPrintf("%08x-%04x-%04x-%04x-%012llx",
+//         static_cast<unsigned int>(bytes[0] >> 32),
+//         static_cast<unsigned int>((bytes[0] >> 16) & 0x0000ffff),
+//         static_cast<unsigned int>(bytes[0] & 0x0000ffff),
+//         static_cast<unsigned int>(bytes[1] >> 48),
+//         bytes[1] & 0x0000ffffffffffffULL);
+// }
 
 } // namespace base
