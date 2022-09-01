@@ -1,0 +1,84 @@
+﻿cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  autofit.c
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftbase.c
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftbbox.c
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftbdf.c
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftbitmap.c
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftcid.c
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftfstype.c
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftgasp.c
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afblue.c(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afblue.c(257,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+  ftglyph.c
+  ftgxval.c
+  ftinit.c
+  ftmm.c
+  ftotval.c
+  ftpatent.c
+  ftpfr.c
+  ftstroke.c
+  ftsynth.c
+  ftsystem.c
+  fttype1.c
+  ftwinfnt.c
+  bdf.c
+  ftcache.c
+  cff.c
+  type1cid.c
+  ftgzip.c
+  ftlzw.c
+  pcf.c
+  pfr.c
+  psaux.c
+  pshinter.c
+  psmodule.c
+  raster.c
+  sfnt.c
+G:\mycode\mb\third_party\freetype\src\src\psaux\psintrp.c(1005,29): warning C4267: “=”: 从“size_t”转换到“FT_Fast”，可能丢失数据 (编译源文件 ..\..\..\src\psaux\psaux.c)
+  smooth.c
+G:\mycode\mb\third_party\freetype\src\src\sfnt\sfdriver.c(846,32): warning C4267: “=”: 从“size_t”转换到“FT_UInt”，可能丢失数据 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\sfdriver.c(997,44): warning C4244: “函数”: 从“__int64”转换到“const unsigned int”，可能丢失数据 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+  truetype.c
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcolr.c(127,50): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcolr.c(136,40): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(121,40): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(153,50): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(174,50): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(195,57): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttload.c(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+  type1.c
+  type42.c
+  winfnt.c
+G:\mycode\mb\third_party\freetype\src\src\smooth\ftgrays.c(1700,26): warning C4267: “+=”: 从“size_t”转换到“TCoord”，可能丢失数据 (编译源文件 ..\..\..\src\smooth\smooth.c)
+G:\mycode\mb\third_party\freetype\src\src\truetype\ttgload.c(1817,42): warning C4312: “类型强制转换”: 从“unsigned long”转换到更大的“void *” (编译源文件 ..\..\..\src\truetype\truetype.c)
+G:\mycode\mb\third_party\freetype\src\src\truetype\ttobjs.c(1035,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\truetype\truetype.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(277,51): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(298,58): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(330,65): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(360,23): warning C4267: “=”: 从“size_t”转换到“FT_UInt”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(569,59): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(578,58): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(587,61): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(596,63): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1driver.c(606,58): warning C4267: “=”: 从“size_t”转换到“FT_ULong”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type42\t42parse.c(836,66): warning C4244: “=”: 从“__int64”转换到“FT_Int”，可能丢失数据 (编译源文件 ..\..\..\src\type42\type42.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1load.c(1742,68): warning C4244: “=”: 从“__int64”转换到“FT_Int”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\type1\t1load.c(1912,40): warning C4244: “=”: 从“__int64”转换到“FT_Int”，可能丢失数据 (编译源文件 ..\..\..\src\type1\type1.c)
+G:\mycode\mb\third_party\freetype\src\src\truetype\ttgxvar.c(2170): warning C4701: 使用了可能未初始化的局部变量“fvar_head”
+cl : 命令行 warning D9002: 忽略未知选项“/arch:SSE2”
+  ftdebug.c
+  freetype.vcxproj -> G:\mycode\mb\third_party\freetype\src\objs\x64\Release Static\freetype.lib
