@@ -1,4 +1,4 @@
-
+ï»¿
 #include "config.h"
 #include "content/web_impl_win/BlinkPlatformImpl.h"
 #include "content/web_impl_win/WebThreadImpl.h"
@@ -58,16 +58,22 @@
 #include "net/WebURLLoaderManager.h"
 #include "net/WebStorageNamespaceImpl.h"
 #include "net/DownloadFileBlobCache.h"
+#include "net/WebURLLoaderManagerUtil.h"
 #include "net/DataURL.h"
 #include "wke/wkeUtil.h"
 #include "wke/wkeGlobalVar.h"
 #include "wke/wkeWebView.h"
+#include "wtf/text/WTFStringUtil.h"
 #include "base/rand_util.h"
 #include "base/values.h"
 #include "base/time/time.h"
+#if defined(OS_LINUX)
+#include "third_party/skia/include/ports/SkFontMgr_custom.h"
+#endif
 #include <crtdbg.h>
 #include <iosfwd>
 #include <sstream>
+#include "base/threading/thread_local.h"
 
 // #define VLD_FORCE_ENABLE 1
 // #include "C:\\Program Files (x86)\\Visual Leak Detector\\include\\vld.h"
@@ -147,6 +153,7 @@ static void onFreeHook(void* address)
 //     net::ActivatingObjCheck::inst()->remove((intptr_t)address);
 }
 
+#if defined(OS_WIN)
 BOOL HookAddrByHotpatch(void* addr, PROC pfnNew, PROC* pfnOld)
 {
     FARPROC pFunc = (FARPROC)addr;
@@ -165,14 +172,14 @@ BOOL HookAddrByHotpatch(void* addr, PROC pfnNew, PROC* pfnOld)
 
     VirtualProtect((LPVOID)((DWORD)pFunc - 5), 7, PAGE_EXECUTE_READWRITE, &dwOldProtect);
 
-    dwAddress = (DWORD)pfnNew - (DWORD)pFunc; //¼ÆËãHookº¯ÊıºÍ±»Hookº¯ÊıµÄµØÖ·Æ«ÒÆ
+    dwAddress = (DWORD)pfnNew - (DWORD)pFunc; //è®¡ç®—Hookå‡½æ•°å’Œè¢«Hookå‡½æ•°çš„åœ°å€åç§»
 
-    memcpy(&pBuf[1], &dwAddress, 4); //½«Æ«ÒÆµØÖ·Æ´´Õµ½¡°JMP XXXXx"ÖĞ
+    memcpy(&pBuf[1], &dwAddress, 4); //å°†åç§»åœ°å€æ‹¼å‡‘åˆ°â€œJMP XXXXx"ä¸­
 
-    memcpy((LPVOID)((DWORD)pFunc - 5), pBuf, 5); //½«¡°JMP pfnNew¡±Ğ´ÈëpFunc-5µÄÎ»ÖÃ£¬Ò²¾ÍÊÇÎå¸öNOPµÄÎ»ÖÃ
+    memcpy((LPVOID)((DWORD)pFunc - 5), pBuf, 5); //å°†â€œJMP pfnNewâ€å†™å…¥pFunc-5çš„ä½ç½®ï¼Œä¹Ÿå°±æ˜¯äº”ä¸ªNOPçš„ä½ç½®
 
                                                  // 2. MOV EDI, EDI (0x8BFF)
-                                                 // ½«¡°JMP-7¡±Ğ´ÈëpFuncµÄÎ»ÖÃ£¬Ò²¾ÍÊÇMOV EDI, EDIµÄÎ»ÖÃ
+                                                 // å°†â€œJMP-7â€å†™å…¥pFuncçš„ä½ç½®ï¼Œä¹Ÿå°±æ˜¯MOV EDI, EDIçš„ä½ç½®
     memcpy(pFunc, pBuf2, 2);
 
     VirtualProtect((LPVOID)((DWORD)pFunc - 5), 7, dwOldProtect, &dwOldProtect);
@@ -184,6 +191,7 @@ BOOL HookByHotpatch(LPCWSTR szDllName, LPCSTR szFuncName, PROC pfnNew, PROC* pfn
     FARPROC pFunc = (FARPROC)GetProcAddress(LoadLibraryW(szDllName), szFuncName);
     return HookAddrByHotpatch(pFunc, pfnNew, pfnOld);
 }
+#endif
 
 namespace blink {
 #ifdef _DEBUG
@@ -201,7 +209,7 @@ extern "C" void x86_check_features(void);
 
 namespace content {
 
-DWORD sCurrentThreadTlsKey = -1;
+base::ThreadLocalPointer<WebThreadImpl>* sCurrentThreadTlsKey;
 
 void traceEventSamplingState(const char* category, const char*  name, const char* funcName)
 {
@@ -219,10 +227,9 @@ static WebThreadImpl* currentTlsThread()
 {
     //AtomicallyInitializedStaticReference(WTF::ThreadSpecific<WebThreadImpl>, sCurrentThread, new ThreadSpecific<WebThreadImpl>);
     //return sCurrentThread;
-    if (-1 != sCurrentThreadTlsKey)
-        return (WebThreadImpl*)TlsGetValue(sCurrentThreadTlsKey);
-
-    return nullptr;
+    if (!sCurrentThreadTlsKey)
+        return nullptr;
+    return sCurrentThreadTlsKey->Get();
 }
 
 static void setRuntimeEnabledFeatures()
@@ -259,24 +266,24 @@ static void setRuntimeEnabledFeatures()
 typedef BOOL (WINAPI* PFN_SetThreadStackGuarantee)(PULONG StackSizeInBytes);
 
 typedef HANDLE (WINAPI* PFN_CreateFileW)(
-    __in     LPCWSTR lpFileName,
-    __in     DWORD dwDesiredAccess,
-    __in     DWORD dwShareMode,
-    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    __in     DWORD dwCreationDisposition,
-    __in     DWORD dwFlagsAndAttributes,
-    __in_opt HANDLE hTemplateFile
+    LPCWSTR lpFileName,
+    DWORD dwDesiredAccess,
+    DWORD dwShareMode,
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    DWORD dwCreationDisposition,
+    DWORD dwFlagsAndAttributes,
+    HANDLE hTemplateFile
     );
 PFN_CreateFileW s_CreateFileW = nullptr;
 
 HANDLE WINAPI HookCreateFileW(
-    __in     LPCWSTR lpFileName,
-    __in     DWORD dwDesiredAccess,
-    __in     DWORD dwShareMode,
-    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    __in     DWORD dwCreationDisposition,
-    __in     DWORD dwFlagsAndAttributes,
-    __in_opt HANDLE hTemplateFile
+    LPCWSTR lpFileName,
+    DWORD dwDesiredAccess,
+    DWORD dwShareMode,
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    DWORD dwCreationDisposition,
+    DWORD dwFlagsAndAttributes,
+    HANDLE hTemplateFile
     )
 {
     return s_CreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
@@ -305,7 +312,7 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
 
 #ifndef NO_USE_ORIG_CHROME
     if (ocEnable)
-      OrigChromeMgr::init();
+        OrigChromeMgr::init();
 #endif
 
     //v8::V8::SetFlagsFromString("--turbo", strlen("--turbo"));
@@ -342,15 +349,11 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
 
     setRuntimeEnabledFeatures();
 
-    //gfx::win::InitDeviceScaleFactor();
     BlinkPlatformImpl* platform = new BlinkPlatformImpl();
-    //blink::Platform::initialize(platform);
     gin::IsolateHolder::Initialize(gin::IsolateHolder::kNonStrictMode, gin::ArrayBufferAllocator::SharedInstance());
-
-    //ThreadState::current()->enterGCForbiddenScope();
+    printf("BlinkPlatformImpl::initialize\n");
+    
     blink::initialize(platform);
-    //initializeOffScreenTimerWindow();
-    //ThreadState::current()->leaveGCForbiddenScope();
 
     // Maximum allocation size allowed for image scaling filters that
     // require pre-scaling. Skia will fallback to a filter that doesn't
@@ -359,13 +362,17 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
     const size_t kImageCacheSingleAllocationByteLimit = 64 * 1024 * 1024;
     SkGraphics::SetResourceCacheSingleAllocationByteLimit(kImageCacheSingleAllocationByteLimit);
 
+#if defined(OS_LINUX)
+    // flutter: https://engine.chinmaygarde.com/platform__linux_8cc_source.html
+    sk_sp<SkFontMgr> fontMgr(SkFontMgr_New_Custom_Directory("/usr/share/fonts/")); // FontCacheSkia.cpp, FontCache::getLastResortFallbackFont
+#else
     sk_sp<SkFontMgr> fontMgr(SkFontMgr_New_GDI());
+#endif
+
     blink::WebFontRendering::setSkiaFontManager(fontMgr);
 
     blink::networkStateNotifier().setWebConnection(blink::WebConnectionTypeWifi, 0);
     blink::networkStateNotifier().setOnLine(true);
-
-    //gin::V8Platform::Get()->CallOnForegroundThread(nullptr, nullptr); // init
 
     platform->m_defaultGcTimer = new blink::Timer<BlinkPlatformImpl>(platform, &BlinkPlatformImpl::garbageCollectedTimer);
     platform->m_defaultGcTimer->start(40 * 10, 40 * 10, FROM_HERE);
@@ -375,8 +382,11 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
 
     WTF::PartitionAllocHooks::setAllocationHook(onAllocationHook);
     WTF::PartitionAllocHooks::setFreeHook(onFreeHook);
+#if defined(OS_WIN)
+    blink::FontCache::setSmallCaptionFontMetrics(L"å®‹ä½“", 12);
+#endif
 
-    blink::FontCache::setSmallCaptionFontMetrics(L"ËÎÌå", 12);
+    net::sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
 }
 
 BlinkPlatformImpl::BlinkPlatformImpl() 
@@ -463,9 +473,11 @@ void BlinkPlatformImpl::destroyWebInfo()
 //         delete m_sessionStorageStorageMap;
 //     m_sessionStorageStorageMap = nullptr;
 
+#if defined(OS_WIN) 
     if (m_clipboardImpl)
         delete m_clipboardImpl;
     m_clipboardImpl = nullptr;
+#endif
 
     if (m_userAgent)
         delete m_userAgent;
@@ -494,7 +506,9 @@ void shutdownIoThread(blink::WebThreadSupportingGC* webThread, int* waitCount)
 
 void BlinkPlatformImpl::preShutdown()
 {
+#if defined(OS_WIN)
     WebPluginImpl::shutdown();
+#endif
     destroyWebInfo();
 
     int waitCount = m_ioThreads.size();
@@ -566,9 +580,9 @@ void BlinkPlatformImpl::shutdown()
 #endif
 
 #ifdef _DEBUG
-    if (blink::g_activatingImageLoader && !blink::g_activatingImageLoader->empty() ||
+    if ((blink::g_activatingImageLoader && !blink::g_activatingImageLoader->empty()) ||
         // blink::g_activatingFontFallbackList && !blink::g_activatingFontFallbackList->empty() ||
-        g_activatingStyleFetchedImage && !g_activatingStyleFetchedImage->empty() 
+        (g_activatingStyleFetchedImage && !g_activatingStyleFetchedImage->empty() )
         // || g_activatingIncrementLoadEventDelayCount && !g_activatingIncrementLoadEventDelayCount->empty()
         )
         DebugBreak();
@@ -588,7 +602,7 @@ void BlinkPlatformImpl::shutdown()
     size_t v8MemSize = g_v8MemSize;
     v8MemSize += g_blinkMemSize;
     v8MemSize += g_skiaMemSize;
-    g_callAddrsRecord;
+    //g_callAddrsRecord;
 #endif
     delete this;
 
@@ -598,7 +612,7 @@ void BlinkPlatformImpl::shutdown()
 
 void BlinkPlatformImpl::perfTimer(blink::TimerBase*)
 {
-    String output = String::format("perfTimer: paintToMemory:%d raster:%d, scheduled:%d, AutoRecordActions:%f\n",
+    String output = String::format("perfTimer: paintToMemory:%u raster:%u, scheduled:%u, AutoRecordActions:%f\n",
         g_paintToMemoryCanvasInUiThreadCount, g_rasterTaskCount, g_scheduledActionCount, (float)g_autoRecordActionsTime);
     OutputDebugStringA(output.utf8().data());
 
@@ -684,7 +698,7 @@ void BlinkPlatformImpl::closeThread()
 blink::WebThread* BlinkPlatformImpl::createThread(const char* name)
 {
     if (0 != strcmp(name, "MainThread")) {
-        RELEASE_ASSERT(-1 != sCurrentThreadTlsKey);
+        RELEASE_ASSERT(nullptr != sCurrentThreadTlsKey);
     }
     WebThreadImpl* threadImpl = new WebThreadImpl(name);
 
@@ -717,8 +731,9 @@ void BlinkPlatformImpl::onThreadExit(WebThreadImpl* threadImpl)
 
 void BlinkPlatformImpl::onCurrentThreadWhenWebThreadImplCreated(blink::WebThread* thread)
 {
-    RELEASE_ASSERT(-1 != sCurrentThreadTlsKey);
-    TlsSetValue(sCurrentThreadTlsKey, thread);
+    RELEASE_ASSERT(nullptr != sCurrentThreadTlsKey);
+    //TlsSetValue(sCurrentThreadTlsKey, thread);
+    sCurrentThreadTlsKey->Set((WebThreadImpl*)thread);
 }
 
 blink::WebThread* BlinkPlatformImpl::currentThread()
@@ -726,7 +741,8 @@ blink::WebThread* BlinkPlatformImpl::currentThread()
     if (-1 == m_mainThreadId) {
         m_mainThreadId = WTF::currentThread();
         m_mainThread = createThread("MainThread");
-        sCurrentThreadTlsKey = TlsAlloc();
+        //sCurrentThreadTlsKey = TlsAlloc();
+        sCurrentThreadTlsKey = new base::ThreadLocalPointer<WebThreadImpl>();
         onCurrentThreadWhenWebThreadImplCreated(m_mainThread);
         return m_mainThread;
     }
@@ -871,6 +887,7 @@ blink::WebData BlinkPlatformImpl::parseDataURL(const blink::WebURL& url, blink::
 
 void readJsFile(const char* path, std::vector<char>* buffer)
 {
+#if defined(OS_WIN)
     HANDLE hFile = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (INVALID_HANDLE_VALUE == hFile) {
         DebugBreak();
@@ -885,6 +902,7 @@ void readJsFile(const char* path, std::vector<char>* buffer)
     BOOL b = ::ReadFile(hFile, &buffer->at(0), bufferSize, &numberOfBytesRead, nullptr);
     ::CloseHandle(hFile);
     b = b;
+#endif
 }
 
 blink::WebData BlinkPlatformImpl::loadResource(const char* name)
@@ -904,7 +922,10 @@ blink::WebData BlinkPlatformImpl::loadResource(const char* name)
 //         return blink::WebData(blink::themeChromiumSkiaUserAgentStyleSheet, sizeof(blink::themeChromiumSkiaUserAgentStyleSheet));
 //     else if (0 == strcmp("themeChromium.css", name))
 //         return blink::WebData(blink::themeChromiumUserAgentStyleSheet, sizeof(blink::themeChromiumUserAgentStyleSheet));
-    else if (0 == strcmp("themeWinQuirks.css", name))
+    else if (0 == strcmp("themeChromiumLinux.css", name)) {
+        const char themeChromiumLinux[] = {"select:not([size]):not([multiple]),select[size='0'],select[size='1'] {background-color: ButtonFace;}input[type=range i] {color: #9d968E;}\0"};
+        return blink::WebData(themeChromiumLinux, sizeof(themeChromiumLinux));
+    } else if (0 == strcmp("themeWinQuirks.css", name))
         return blink::WebData(blink::themeWinQuirksUserAgentStyleSheet, sizeof(blink::themeWinQuirksUserAgentStyleSheet));
     else if (0 == strcmp("missingImage", name) || 0 == strcmp("nullPlugin", name))
         return blink::WebData((const char*)content::gMissingImageData, sizeof(content::gMissingImageData));
@@ -1104,8 +1125,12 @@ blink::WebURLError BlinkPlatformImpl::cancelledError(const blink::WebURL& url) c
     WTF::String outError = "url cancelledError:";
     outError.append((WTF::String)url.string());
     outError.append("\n");
+#if defined(OS_WIN)
     OutputDebugStringW(outError.charactersWithNullTermination().data());
-
+#else
+    Vector<char> str = WTF::ensureStringToUTF8(outError, true);
+    OutputDebugStringA(str.data());
+#endif
     return error;
 }
 
@@ -1174,14 +1199,19 @@ blink::WebBlobRegistry* BlinkPlatformImpl::getBlobRegistry()
 
 blink::WebClipboard* BlinkPlatformImpl::clipboard()
 {
+#if defined(OS_WIN) 
     if (!m_clipboardImpl)
         m_clipboardImpl = new WebClipboardImpl();
     return m_clipboardImpl;
+#else
+    return nullptr;
+#endif
 }
 
 // Plugins -------------------------------------------------------------
 void BlinkPlatformImpl::getPluginList(bool refresh, const blink::WebSecurityOrigin& mainFrameOrigin, blink::WebPluginListBuilder* builder)
 {
+#if defined(OS_WIN)
 //     builder->addPlugin(blink::WebString::fromUTF8("Shockwave Flash"), blink::WebString::fromUTF8("flashPlugin"), blink::WebString::fromUTF8(".swf"));
 //     builder->addMediaTypeToLastPlugin(blink::WebString::fromUTF8("application/x-shockwave-flash"), blink::WebString::fromUTF8("flashPlugin"));
 //     builder->addFileExtensionToLastMediaType(blink::WebString::fromUTF8(".swf"));
@@ -1209,8 +1239,8 @@ void BlinkPlatformImpl::getPluginList(bool refresh, const blink::WebSecurityOrig
             String type = it->key;
             String desc = it->value;
 
-            // third_party\WebKit\Source\core\dom\DOMImplementation.cpp»áÑ¯ÎÊ
-            // third_party\WebKit\Source\platform\plugins\PluginData.cpp ÀïµÃµ½µÄ²å¼şmimeÊÇ·ñÓĞÖ§³ÖµÄ£¬ÓĞµÄ»°¾Í´´½¨PluginDocument
+            // third_party\WebKit\Source\core\dom\DOMImplementation.cppä¼šè¯¢é—®
+            // third_party\WebKit\Source\platform\plugins\PluginData.cpp é‡Œå¾—åˆ°çš„æ’ä»¶mimeæ˜¯å¦æœ‰æ”¯æŒçš„ï¼Œæœ‰çš„è¯å°±åˆ›å»ºPluginDocument
             if (desc.startsWith("application/virtual-plugin-")) {
                 if (!package->load())
                     continue;
@@ -1230,6 +1260,7 @@ void BlinkPlatformImpl::getPluginList(bool refresh, const blink::WebSecurityOrig
             }
         }
     }
+#endif
 }
 
 blink::WebFileUtilities* BlinkPlatformImpl::fileUtilities()

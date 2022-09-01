@@ -1,4 +1,4 @@
-
+ï»¿
 #ifndef content_browser_RunFileChooserImpl_h
 #define content_browser_RunFileChooserImpl_h
 
@@ -16,14 +16,25 @@
 #define interface struct
 
 #include <windows.h>
-#include <ObjBase.h>
-#include <ShlObj.h>
+#include <objbase.h>
+#include <shlobj.h>
 #include <shlwapi.h>
 #include <process.h>
 
 namespace content {
 
 static void appendStringToVector(std::vector<char>* result, const Vector<char>& str)
+{
+    result->reserve(result->size() + str.size());
+    const char* p = str.data();
+    const char* end = p + str.size();
+    while (p < end) {
+        result->push_back(*p);
+        ++p;
+    }
+}
+
+static void appendStringToVector(std::vector<char>* result, const std::vector<char>& str)
 {
     result->reserve(result->size() + str.size());
     const char* p = str.data();
@@ -168,8 +179,8 @@ static void addForExtensions(const Vector<blink::WebString>& exts, const String&
 //     return true;
 // }
 
-// ÏÖÔÚ°ÑËùÓĞÏî¶¼¹é²¢µ½Ò»¸öÏîÁË
-static void addForExtensions2(const Vector<blink::WebString>& exts, const String& description, std::vector<char>* filter)
+// ç°åœ¨æŠŠæ‰€æœ‰é¡¹éƒ½å½’å¹¶åˆ°ä¸€ä¸ªé¡¹äº†
+static void addForExtensions2(const Vector<blink::WebString>& exts, std::vector<char>* filter)
 {
     if (exts.isEmpty())
         return;
@@ -192,9 +203,7 @@ public:
         // Image Files(*.gif;*.jpeg;*.png)\0*.gif;*.jpeg;*.png\0All Files(*.*)\0*.*\0\0
         std::vector<char> filter;
 
-        appendStringToVector(&filter, "Custom Files");
-        filter.push_back('\0');
-
+        Vector<blink::WebString> exts;
         for (size_t i = 0; i < params.acceptTypes.size(); ++i) {
             String mimeType = params.acceptTypes[i];
             if (mimeType.isNull() || mimeType.isEmpty())
@@ -204,11 +213,25 @@ public:
             mimeType = mimeType.lower();
 
 //             WebMimeRegistryImpl* mimeRegistry = (WebMimeRegistryImpl*)blink::Platform::current()->mimeRegistry();
-//             Vector<blink::WebString> exts = mimeRegistry->extensionsForMimeType(mimeType);
-//             addForExtensions2(exts, mimeType, &filter);
+//             Vector<blink::WebString> tempExts = mimeRegistry->extensionsForMimeType(mimeType);
+// 
+//             for (size_t j = 0; j < tempExts.size(); ++j) {
+//                 exts.append(tempExts[j]);
+//             }
             DebugBreak();
         }
-        filter.push_back('\0');
+
+        std::vector<char> filterItem;
+        addForExtensions2(exts, &filterItem);
+
+        if (filterItem.size() > 0) {
+            appendStringToVector(&filter, "Custom Files(");
+            appendStringToVector(&filter, filterItem); // ç¬¬ä¸€éæ˜¯æè¿°
+            filter.push_back(')');
+            filter.push_back('\0');
+            appendStringToVector(&filter, filterItem); // ç¬¬äºŒéæ˜¯ç»™ç³»ç»Ÿçœ‹çš„
+            filter.push_back('\0');
+        }
 
         appendStringToVector(&filter, "All Files");
         filter.push_back('\0');
@@ -238,7 +261,7 @@ public:
         WTF::MByteToWChar(&filter[0], filter.size() - 1, &m_filterW, CP_UTF8);
 
         m_titleBuf = WTF::ensureUTF16UChar(title, true);
-
+#if defined(OS_WIN)
         memset(&m_ofn, 0, sizeof(OPENFILENAMEW));
         m_ofn.lStructSize = sizeof(OPENFILENAMEW);
         m_ofn.hwndOwner = nullptr;
@@ -248,6 +271,7 @@ public:
         m_ofn.nMaxFile = fileNameBufLen - 2;
         m_ofn.lpstrTitle = m_titleBuf.data();
         m_ofn.Flags = OFN_EXPLORER | OFN_LONGNAMES | OFN_NOCHANGEDIR;
+#endif
     }
 
     OPENFILENAMEW* getInfo()
@@ -303,7 +327,7 @@ public:
 
         std::vector<std::wstring> selectedFiles;
         std::vector<std::wstring> selectedFilesRef;
-
+#if defined(OS_WIN)
         if (m_retVal) {
             // Figure out if the user selected multiple files.  If fileNameBuf is a directory, then multiple files were selected!
             if ((m_wrap->getInfo()->Flags & OFN_ALLOWMULTISELECT) && (::GetFileAttributesW(m_wrap->getFileNameBuf()) & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -352,6 +376,9 @@ public:
             wsFileNames[i] = info;
         }
         m_completion->didChooseFile(wsFileNames);
+#else
+        DebugBreak();
+#endif
     }
 
 private:
@@ -370,7 +397,7 @@ static DWORD __stdcall getOpenFileNameThread(void* param)
     int count = 0;
     MSG msg = { 0 };
     while (true) {
-        if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        if (::PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE)) {
             ::TranslateMessage(&msg);
             ::DispatchMessageW(&msg);
         }
@@ -385,19 +412,20 @@ static DWORD __stdcall getOpenFileNameThread(void* param)
 
 static HWND createHideWindow()
 {
-    WCHAR* s_fileChooserClassName = L"ChooserClass";
+    const WCHAR* s_fileChooserClassName = u16("ChooserClass");
     static bool hasRegister = false;
     if (!hasRegister) {
-        WNDCLASS wc = { 0 };
+        WNDCLASSEXW wc = { 0 };
+        wc.cbSize = sizeof(WNDCLASSEXW);
         wc.style = 0;
         wc.lpfnWndProc = ::DefWindowProcW;
         wc.cbClsExtra = 0;
         wc.cbWndExtra = 0;
         wc.hInstance = NULL;
-        wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wc.hIcon = LoadIconW(NULL, IDI_APPLICATION);
+        wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
         wc.lpszClassName = s_fileChooserClassName;
-        ::RegisterClass(&wc);
+        ::RegisterClassExW(&wc);
         hasRegister = true;
     }
     
@@ -427,19 +455,19 @@ static bool runFileChooserImpl(const blink::WebFileChooserParams& params, blink:
         if (wrap->isDirectory()) {
             LPITEMIDLIST pil = NULL;
             INITCOMMONCONTROLSEX InitCtrls = { 0 };
-            BROWSEINFO bi = { 0 };
+            BROWSEINFOW bi = { 0 };
             bi.hwndOwner = hwndOwner;
             bi.iImage = 0;
-            bi.lParam = NULL;
+            bi.lParam = 0;
             bi.lpfn = NULL;
-            bi.lpszTitle = L"ÇëÑ¡ÔñÎÄ¼şÂ·¾¶";
+            bi.lpszTitle = u16("è¯·é€‰æ‹©æ–‡ä»¶è·¯å¾„");
             bi.pszDisplayName = wrap->getInfo()->lpstrFile;
             bi.ulFlags = BIF_BROWSEINCLUDEFILES;
 
-            //InitCommonControlsEx(&InitCtrls); // ÔÚµ÷ÓÃº¯ÊıSHBrowseForFolderÖ®Ç°ĞèÒªµ÷ÓÃ¸Ãº¯Êı³õÊ¼»¯Ïà¹Ø»·¾³
-            pil = ::SHBrowseForFolder(&bi);
+            //InitCommonControlsEx(&InitCtrls); // åœ¨è°ƒç”¨å‡½æ•°SHBrowseForFolderä¹‹å‰éœ€è¦è°ƒç”¨è¯¥å‡½æ•°åˆå§‹åŒ–ç›¸å…³ç¯å¢ƒ
+            pil = ::SHBrowseForFolderW(&bi);
             if (NULL != pil) {
-                ::SHGetPathFromIDList(pil, wrap->getInfo()->lpstrFile);//»ñÈ¡ÓÃ»§Ñ¡ÔñµÄÎÄ¼şÂ·¾¶
+                ::SHGetPathFromIDListW(pil, wrap->getInfo()->lpstrFile);//è·å–ç”¨æˆ·é€‰æ‹©çš„æ–‡ä»¶è·¯å¾„
                 retVal = TRUE;
             }
         } else {

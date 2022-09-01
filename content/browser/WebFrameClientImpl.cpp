@@ -107,10 +107,12 @@ WebFrameClientImpl::WebFrameClientImpl()
 WebFrameClientImpl::~WebFrameClientImpl()
 {
     RELEASE_ASSERT(0 == m_unusedFrames.size());
+#if defined(OS_WIN)
     if (m_menu)
         delete m_menu;
 //     if (m_webGeolocationClientImpl)
 //       delete m_webGeolocationClientImpl;
+#endif
 }
 
 void WebFrameClientImpl::didAddMessageToConsole(const WebConsoleMessage& message,
@@ -141,8 +143,13 @@ void WebFrameClientImpl::didAddMessageToConsole(const WebConsoleMessage& message
     }
 
     if (wke::g_consoleOutputEnable) {
+#if defined(OS_WIN)
         Vector<UChar> utf16 = WTF::ensureUTF16UChar(outstr, true);
         OutputDebugStringW(utf16.data());
+#else
+        Vector<char> utf8Str = WTF::ensureStringToUTF8(outstr, true);
+        OutputDebugStringA(utf8Str.data());
+#endif
     }
 
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
@@ -196,6 +203,7 @@ void WebFrameClientImpl::frameDetached(WebLocalFrame* child, DetachType)
 
 blink::WebPlugin* WebFrameClientImpl::createPlugin(WebLocalFrame* frame, const WebPluginParams& params)
 {
+#if defined(OS_WIN) 
     WebPluginParams newParam = params;
     Vector<String> paramNames;
     Vector<String> paramValues;
@@ -230,26 +238,10 @@ blink::WebPlugin* WebFrameClientImpl::createPlugin(WebLocalFrame* frame, const W
     plugin->setWkeWebView(m_webPage->wkeWebView());
 
     return plugin.leakRef();
+#else
+    return nullptr;
+#endif
 }
-
-// blink::WebMediaPlayer* WebFrameClientImpl::createMediaPlayer(WebLocalFrame* frame, const WebURL& url , WebMediaPlayerClient* client, WebContentDecryptionModule*)
-// {
-// #ifndef NO_USE_ORIG_CHROME
-//     return OrigChromeMgr::createWebMediaPlayer(frame, url, client);
-// #endif
-//     return nullptr;
-//     //return new WebMediaPlayerImpl(frame, url, client);
-// }
-// 
-// blink::WebMediaPlayer* WebFrameClientImpl::createMediaPlayer(
-//     WebLocalFrame* frame, const WebURL& url, WebMediaPlayerClient* client, WebMediaPlayerEncryptedMediaClient*, WebContentDecryptionModule*
-//     )
-// {
-// #ifndef NO_USE_ORIG_CHROME
-//     return OrigChromeMgr::createWebMediaPlayer(frame, url, client);
-// #endif
-//     return nullptr;
-// }
 
 WebMediaPlayer* WebFrameClientImpl::createMediaPlayer(const WebMediaPlayerSource& source,
     WebMediaPlayerClient* client,
@@ -257,10 +249,14 @@ WebMediaPlayer* WebFrameClientImpl::createMediaPlayer(const WebMediaPlayerSource
     WebContentDecryptionModule* module,
     const WebString& sinkId)
 {
+#if defined(OS_WIN) 
     if (!m_urlIndex.get() || m_urlIndex->frame() != m_frame)
         m_urlIndex.reset(new media::UrlIndex(m_frame));
 
     return OrigChromeMgr::createWebMediaPlayer(m_frame, source, client, encrypt, module, sinkId, m_urlIndex);
+#else
+    return nullptr;
+#endif
 }
 
 blink::WebApplicationCacheHost* WebFrameClientImpl::createApplicationCacheHost(WebApplicationCacheHostClient*) { return 0; }
@@ -715,6 +711,7 @@ void WebFrameClientImpl::didReceiveResponse(const WebURLResponse&)
 
 void WebFrameClientImpl::runModalAlertDialog(const WebString& message)
 {
+#if defined(OS_WIN)
     bool needCall = true;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
     wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
@@ -730,10 +727,12 @@ void WebFrameClientImpl::runModalAlertDialog(const WebString& message)
 
     Vector<UChar> text = WTF::ensureUTF16UChar(message, true);
     ::MessageBoxW(nullptr, text.data(), L"Miniblink Alert", 0);
+#endif
 }
 
 bool WebFrameClientImpl::runModalConfirmDialog(const WebString& message)
 {
+#if defined(OS_WIN)
     bool needCall = true;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
     wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
@@ -750,10 +749,14 @@ bool WebFrameClientImpl::runModalConfirmDialog(const WebString& message)
     Vector<UChar> text = WTF::ensureUTF16UChar(message, true);
     int result = ::MessageBoxW(NULL, text.data(), L"Miniblink Confirm", MB_OKCANCEL);
     return result == IDOK;
+#else
+    return true;
+#endif
 }
 
 bool WebFrameClientImpl::runModalPromptDialog(const WebString& message, const WebString& defaultValue, WebString* actualValue)
 {
+#if defined(OS_WIN)
     bool needCall = true;
     bool result = false;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
@@ -778,6 +781,9 @@ bool WebFrameClientImpl::runModalPromptDialog(const WebString& message, const We
     Vector<UChar> text = WTF::ensureUTF16UChar(message, true);
     int resultOk = ::MessageBoxW(NULL, text.data(), L"Miniblink Prompt", MB_OKCANCEL);
     return resultOk == IDOK;
+#else
+    return true;
+#endif
 }
 
 bool WebFrameClientImpl::runModalBeforeUnloadDialog(bool isReload)
@@ -787,6 +793,7 @@ bool WebFrameClientImpl::runModalBeforeUnloadDialog(bool isReload)
 
 void WebFrameClientImpl::showContextMenu(const blink::WebContextMenuData& data)
 {
+#if defined(OS_WIN)
     if (!m_menu)
         m_menu = new ContextMenu(m_webPage);
 
@@ -798,6 +805,7 @@ void WebFrameClientImpl::showContextMenu(const blink::WebContextMenuData& data)
 
     if (m_webPage->getContextMenuEnabled())
         m_menu->show(data, frameId);
+#endif
 }
 
 // void WebFrameClientImpl::clearContextMenu()
@@ -873,7 +881,7 @@ public:
 
         String downloadName = m_downloadName;
         if (!downloadName.isNull() && !m_downloadName.isEmpty())
-            downloadName.insert(L"attachment; filename=", 0);
+            downloadName.insert("attachment; filename=", 0);
 
         net::RequestExtraData* requestExtraData = new net::RequestExtraData();
         requestExtraData->setIsDownload(downloadName);

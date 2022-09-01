@@ -3,7 +3,11 @@
 
 //#include "mc/base/BdColor.h"
 #include "content/WebPageOcBridge.h"
+#if defined(WIN32) 
 #include "skia/ext/bitmap_platform_device_win.h"
+#else
+#include "skia/ext/bitmap_platform_device_cairo.h"
+#endif
 #include "skia/ext/platform_canvas.h"
 
 namespace content {
@@ -31,6 +35,7 @@ void SoftwareOutputDevice::setHWND(HWND hWnd)
 
 HDC SoftwareOutputDevice::getHdcLocked()
 {
+#if defined(WIN32)
     if (!m_memoryCanvas)
         return nullptr;
 
@@ -44,6 +49,10 @@ HDC SoftwareOutputDevice::getHdcLocked()
 
     HDC hDC = device->GetBitmapDCUgly(m_hWnd);
     return hDC;
+#else
+    __debugbreak();
+    return nullptr;
+#endif
 }
 
 void SoftwareOutputDevice::releaseHdc()
@@ -62,8 +71,11 @@ void SoftwareOutputDevice::Resize(const gfx::Size& viewportPixelSize, float scal
     ::EnterCriticalSection(&m_memoryCanvasLock);
     if (m_memoryCanvas)
         delete m_memoryCanvas;
+#if defined(WIN32) 
     m_memoryCanvas = skia::CreatePlatformCanvas(viewportPixelSize.width(), viewportPixelSize.height(), true);
-
+#else
+    m_memoryCanvas = skia::CreatePlatformCanvas(viewportPixelSize.width(), viewportPixelSize.height(), true, nullptr, skia::CRASH_ON_FAILURE);
+#endif
     COLORREF c = 0xffffff; // m_webPageOcBridge->getBackgroundColor();
 
     SkPaint clearColorPaint;
@@ -92,14 +104,23 @@ void SoftwareOutputDevice::EndPaint()
     bool needDrawToScreen = m_webPageOcBridge->onEndPaintStep1(nullptr, damage_rect_.ToRECT());
 
     if (needDrawToScreen) {
+#if defined(WIN32) 
         HDC hdc = ::GetDC(m_hWnd);
-        skia::DrawToNativeContext(m_memoryCanvas, hdc, damage_rect_.x(), damage_rect_.y(), &damage_rect_.ToRECT());
+        RECT r = damage_rect_.ToRECT();
+        skia::DrawToNativeContext(m_memoryCanvas, hdc, damage_rect_.x(), damage_rect_.y(), &r);
         ::ReleaseDC(m_hWnd, hdc);
+#else
+        __debugbreak();
+#endif
     }
 
+#if defined(OS_WIN)
     HDC hMemoryDC = skia::BeginPlatformPaint(m_hWnd, m_memoryCanvas);
     m_webPageOcBridge->onEndPaintStep2(hMemoryDC, damage_rect_.ToRECT());
     skia::EndPlatformPaint(m_memoryCanvas);
+#else
+    m_webPageOcBridge->onEndPaintStep2((HDC)m_memoryCanvas, damage_rect_.ToRECT());
+#endif
 }
 
 void SoftwareOutputDevice::swapBuffers()
@@ -109,12 +130,16 @@ void SoftwareOutputDevice::swapBuffers()
 
 void SoftwareOutputDevice::firePaintEvent(HDC hdc, const RECT& paintRect)
 {
+#if defined(WIN32)
     if (!hdc || !m_memoryCanvas || gfx::Rect(paintRect).IsEmpty())
         return;
 
     ::EnterCriticalSection(&m_memoryCanvasLock);
     skia::DrawToNativeContext(m_memoryCanvas, hdc, paintRect.left, paintRect.top, &paintRect);
     ::LeaveCriticalSection(&m_memoryCanvasLock);
+#else
+    //__debugbreak();
+#endif
 }
 
 };

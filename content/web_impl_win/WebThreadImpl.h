@@ -18,6 +18,10 @@ namespace WTF {
 class Mutex;
 } // WTF
 
+namespace base {
+class WaitableEvent;
+}
+
 namespace content {
 
 class WebSchedulerImpl;
@@ -103,7 +107,7 @@ private:
     void didProcessTasks();
     void clearEmptyObservers();
 
-    HANDLE m_hEvent;
+    base::WaitableEvent* m_hEvent;
     blink::PlatformThreadId m_threadId;
     bool m_willExit;
     bool m_threadClosed;

@@ -141,11 +141,9 @@ WebKeyboardEvent PlatformEventHandler::buildKeyboardEvent(WebInputEvent::Type ty
     buildModifiers(&keyEvent);
     if (isKeypadEvent(wParam, keyData, type))
         keyEvent.setModifiers(keyEvent.modifiers() | WebInputEvent::IsKeyPad);
-
+#if defined(OS_WIN)
     if (VK_LEFT == keyEvent.windowsKeyCode)
         wcscpy(keyEvent.text, L"Left");
-    else if (VK_UP == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"Up");
     else if (VK_UP == keyEvent.windowsKeyCode)
         wcscpy(keyEvent.text, L"Up");
     else if (VK_RIGHT == keyEvent.windowsKeyCode)
@@ -171,7 +169,7 @@ WebKeyboardEvent PlatformEventHandler::buildKeyboardEvent(WebInputEvent::Type ty
         wcscpy(keyEvent.text, L"U+001B");
     else if (VK_RETURN == keyEvent.windowsKeyCode)
         wcscpy(keyEvent.text, L"Enter");
-
+#endif
     memset(keyEvent.text, 0, sizeof(WebUChar) * WebKeyboardEvent::textLengthCap);
     keyEvent.text[0] = (WebUChar)wParam;
     return keyEvent;
@@ -183,7 +181,7 @@ static void makeDraggableRegionNcHitTest(HWND hWnd, LPARAM lParam, bool* isDragg
     int yPos = ((int)(short)HIWORD(lParam));
     if (true == *isDraggableRegionNcHitTest) {
         //::PostMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(xPos, yPos));
-        ::PostMessage(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
+        ::PostMessageW(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
         lastPosForDrag = IntPoint(xPos, yPos);
     } else {
         if (hWnd)
@@ -643,7 +641,7 @@ static bool isNearPos(const blink::IntPoint& a, const blink::IntPoint& b)
 static void WKE_CALL_TYPE postDragMessageImpl(HWND hWnd, void* param)
 {
     ::ReleaseCapture();
-    ::PostMessage(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
+    ::PostMessageW(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
 }
 
 static void postDragMessage(HWND hWnd)
@@ -678,6 +676,7 @@ void PlatformEventHandler::buildMousePosInfo(HWND hWnd, UINT message, WPARAM wPa
         ::GetCursorPos(&ptCursor);
         *globalPos = IntPoint(ptCursor.x, ptCursor.y);
         ::ScreenToClient(hWnd, &ptCursor);
+
         if (ptCursor.x < 2)
             ptCursor.x = -1;
         else if (ptCursor.x > 10)
@@ -697,8 +696,11 @@ void PlatformEventHandler::buildMousePosInfo(HWND hWnd, UINT message, WPARAM wPa
         pos->setY(/*m_offset.y() +*/ ((int)(short)HIWORD(lParam)));
 
         POINT widgetPoint = { pos->x(), pos->y() };
+#if defined(WIN32)
         ::ClientToScreen(hWnd, &widgetPoint);
+#else
 
+#endif
         *globalPos = IntPoint(widgetPoint.x, widgetPoint.y);
     }
 }
@@ -768,10 +770,12 @@ LRESULT PlatformEventHandler::fireMouseEvent(HWND hWnd, UINT message, WPARAM wPa
 
     buildMousePosInfo(hWnd, message, wParam, lParam, &handle, &pos, &globalPos);
 
+#if defined(WIN32)
     if (!m_checkMouseLeaveTimer.isActive())
         m_checkMouseLeaveTimer.startRepeating(0.2, FROM_HERE);
     if (WM_MOUSELEAVE == message)
         m_checkMouseLeaveTimer.stop();
+#endif
 
     double time = WTF::currentTime();
     WebMouseEvent webMouseEvent;
@@ -933,7 +937,7 @@ bool PlatformEventHandler::isDraggableRegionNcHitTest(HWND hWnd, const blink::In
 int verticalScrollLines()
 {
     static ULONG scrollLines = 0;
-    if (!scrollLines && !SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &scrollLines, 0))
+    if (!scrollLines && !SystemParametersInfoW(SPI_GETWHEELSCROLLLINES, 0, &scrollLines, 0))
         scrollLines = 3;
     return scrollLines;
 }
@@ -941,7 +945,7 @@ int verticalScrollLines()
 int horizontalScrollChars()
 {
     static ULONG scrollChars = 0;
-    if (!scrollChars && !SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &scrollChars, 0))
+    if (!scrollChars && !SystemParametersInfoW(SPI_GETWHEELSCROLLCHARS, 0, &scrollChars, 0))
         scrollChars = 1;
     return scrollChars;
 }

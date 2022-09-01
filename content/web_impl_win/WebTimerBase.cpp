@@ -419,7 +419,14 @@ void WebTimerBase::fireTimersInNestedEventLoop()
 
 void WebTimerBase::fired()
 {
+    std::string name = m_location.function_name();
+    //printf("WebTimerBase::fired begin %p, %x, %s\n", m_task, pthread_self(), name.c_str());
+    
+//     if (name == "continueJob") {
+//         __debugbreak();
+//     }
     m_task->run();
+    //printf("WebTimerBase::fired end %p, func name:%s\n", m_task, name.c_str());
 }
 
 } // namespace content

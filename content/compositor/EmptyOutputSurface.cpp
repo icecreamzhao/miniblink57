@@ -21,6 +21,7 @@
 #include "ui/gfx/geometry/dip_util.h"
 
 //#include "content/gpu/ContextProviderCommandBuffer.h"
+#include <memory>
 
 namespace content {
 
@@ -29,7 +30,7 @@ static uint32_t s_nextSurfaceIdNamespace = 1u;
 
 static std::unique_ptr<cc::SurfaceIdAllocator> createSurfaceIdAllocator()
 {
-    std::unique_ptr<cc::SurfaceIdAllocator> allocator = std::make_unique<cc::SurfaceIdAllocator>(/*s_nextSurfaceIdNamespace++*/);
+    std::unique_ptr<cc::SurfaceIdAllocator> allocator = WTF::makeUnique<cc::SurfaceIdAllocator>(/*s_nextSurfaceIdNamespace++*/);
 //     if (EmptyOutputSurface::m_surfaceManager)
 //         allocator->RegisterSurfaceIdNamespace(EmptyOutputSurface::m_surfaceManager);
     DebugBreak();

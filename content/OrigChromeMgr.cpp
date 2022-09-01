@@ -27,7 +27,7 @@
 //#include "third_party/WebKit/public/web/WebSecurityOrigin.h"
 #include "third_party/WebKit/public/platform/WebMediaPlayerSource.h"
 #include "ui/gl/gl_surface.h"
-#include <Shlwapi.h>
+#include <shlwapi.h>
 
 #if _DEBUG
 #pragma comment(lib, "M:\\chromium\\chromium.bb\\src\\out\\Debug\\ffmpeg.dll.lib")
@@ -97,18 +97,18 @@ void OrigChromeMgr::runUntilIdle()
     base::MessageLoop::current()->RunUntilIdle();
 }
 
-static int s_blinkThreadRunnerCount = 0;
-static int s_uiThreadRunnerCount = 0;
+static long s_blinkThreadRunnerCount = 0;
+static long s_uiThreadRunnerCount = 0;
 
 static void blinkRunner(OrigTaskType task)
 {
-    InterlockedDecrement((LONG*)&s_blinkThreadRunnerCount);
+    _InterlockedDecrement((long*)&s_blinkThreadRunnerCount);
     task();
 }
 
 static void uiRunner(OrigTaskType task)
 {
-    InterlockedDecrement((LONG*)&s_uiThreadRunnerCount);
+    _InterlockedDecrement((long*)&s_uiThreadRunnerCount);
     task();
 }
 
@@ -117,7 +117,7 @@ void OrigChromeMgr::postBlinkTask(OrigTaskType task)
     if (!m_inst || s_blinkThreadRunnerCount > 0)
         return;
 
-    InterlockedIncrement((LONG*)&s_blinkThreadRunnerCount);
+    _InterlockedIncrement((long*)&s_blinkThreadRunnerCount);
     m_inst->m_blinkLoop->PostTask(FROM_HERE, base::Bind(&blinkRunner, task));
 }
 
@@ -125,7 +125,7 @@ void OrigChromeMgr::postUiTask(OrigTaskType task)
 {
     if (!m_inst || s_uiThreadRunnerCount > 0)
         return;
-    InterlockedIncrement((LONG*)&s_uiThreadRunnerCount);
+    _InterlockedIncrement((long*)&s_uiThreadRunnerCount);
     m_inst->m_uiLoop->PostTask(FROM_HERE, base::Bind(&uiRunner, task));
 }
 
@@ -175,8 +175,7 @@ private:
 void OrigChromeMgr::addTaskObserver(blink::WebThread::TaskObserver* observer)
 {
     if (!m_inst->m_blinkLoop) {
-        m_inst->m_blinkLoop = new base::MessageLoop(base::MessageLoop::TYPE_UI);
-
+        m_inst->m_blinkLoop = new base::MessageLoop(base::MessageLoop::TYPE_IO);
 //         const char* kThreadName = "MbBlinkThread";
 //         m_inst->m_blinkLoop->set_thread_name(kThreadName);
     }
@@ -265,6 +264,7 @@ base::Thread* OrigChromeMgr::getOrCreateCompositorThread()
 
 void OrigChromeMgr::createMediaThreadIfNeeded()
 {
+#if defined(OS_WIN)
     //DCHECK(message_loop() == base::MessageLoop::current());
     if (m_mediaThread)
         return;
@@ -292,6 +292,7 @@ void OrigChromeMgr::createMediaThreadIfNeeded()
     media::AudioParameters outputParams = m_audioManager->GetDefaultOutputStreamParameters();
     media::AudioParameters inputParams = m_audioManager->GetInputStreamParameters(media::AudioDeviceDescription::kDefaultDeviceId);
     //m_audioHardwareConfig = new media::AudioHardwareConfig(inputParams, outputParams);
+#endif
 }
 
 blink::WebCompositorSupport* OrigChromeMgr::createWebCompositorSupport()
@@ -332,9 +333,12 @@ int64_t adjustAmountOfExternalAllocatedMemory(int64_t)
 
 AudioRendererMixerManager* OrigChromeMgr::getAudioRendererMixerManager()
 {
+#if defined(OS_WIN)
     if (!m_audioRendererMixerManager)
         m_audioRendererMixerManager = (new AudioRendererMixerManager());
     return m_audioRendererMixerManager;
+#endif
+    return nullptr;
 }
 
 static media::GpuVideoAcceleratorFactories* getGpuFactoriesCb()
@@ -416,7 +420,7 @@ blink::WebMediaPlayer* OrigChromeMgr::createWebMediaPlayer(
     linked_ptr<media::UrlIndex> urlIndex
     )
 {
-    //return nullptr;
+#if defined(OS_WIN)
     if (!m_inst)
         return nullptr;
     AudioRendererMixerManager* audioRendererMixerManager = m_inst->getAudioRendererMixerManager();
@@ -474,6 +478,8 @@ blink::WebMediaPlayer* OrigChromeMgr::createWebMediaPlayer(
         urlIndex, 
         params        
     );
+#endif
+    return nullptr;
 }
 
 // blink::WebGraphicsContext3D* OrigChromeMgr::createOffscreenGraphicsContext3D(

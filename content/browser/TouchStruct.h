@@ -45,7 +45,7 @@ inline BOOL RegisterTouchWindowXp(HWND hwnd, ULONG ulFlags)
     static PFN_RegisterTouchWindow s_RegisterTouchWindow = NULL;
     static BOOL s_isInit = FALSE;
     if (!s_isInit) {
-        HMODULE handle = GetModuleHandle(L"User32.dll");
+        HMODULE handle = GetModuleHandleW(u16("User32.dll"));
         s_RegisterTouchWindow = (PFN_RegisterTouchWindow)GetProcAddress(handle, "RegisterTouchWindow");
         s_isInit = TRUE;
     }
@@ -62,7 +62,7 @@ inline BOOL GetTouchInputInfoXp(HTOUCHINPUT hTouchInput, UINT cInputs, PTOUCHINP
     static PFN_GetTouchInputInfo s_GetTouchInputInfo = NULL;
     static BOOL s_isInit = FALSE;
     if (!s_isInit) {
-        HMODULE handle = GetModuleHandle(L"User32.dll");
+        HMODULE handle = GetModuleHandleW(u16("User32.dll"));
         s_GetTouchInputInfo = (PFN_GetTouchInputInfo)GetProcAddress(handle, "GetTouchInputInfo");
         s_isInit = TRUE;
     }
@@ -79,7 +79,7 @@ inline BOOL CloseTouchInputHandleXp(HTOUCHINPUT hTouchInput)
     static PFN_CloseTouchInputHandle s_CloseTouchInputHandle = NULL;
     static BOOL s_isInit = FALSE;
     if (!s_isInit) {
-        HMODULE handle = GetModuleHandle(L"User32.dll");
+        HMODULE handle = GetModuleHandleW(u16("User32.dll"));
         s_CloseTouchInputHandle = (PFN_CloseTouchInputHandle)GetProcAddress(handle, "CloseTouchInputHandle");
         s_isInit = TRUE;
     }

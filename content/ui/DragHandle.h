@@ -13,6 +13,7 @@
 
 #include "base/COMPtr.h"
 #include <shlobj.h>
+//#include <oleidl.h>
 #include <functional>
 #include <vector>
 
@@ -63,10 +64,25 @@ public:
         const blink::WebPoint* dragImageOffset);
     
     // IDropTarget
-    virtual HRESULT __stdcall DragEnter(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) override;
-    HRESULT __stdcall DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) override;
+    HRESULT __stdcall DragEnter(     
+        /* [unique][in] */ IDataObject* pDataObj,
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect) override;
+    HRESULT __stdcall DragOver(
+    
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect
+    
+    ) override;
     HRESULT __stdcall DragLeave() override;
-    HRESULT __stdcall Drop(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) override;
+    HRESULT __stdcall Drop(
+        /* [unique][in] */ IDataObject* pDataObj,
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect
+    ) override;
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppvObject) override;
 
     ULONG __stdcall AddRef() override;
@@ -105,7 +121,7 @@ private:
 
     COMPtr<IDataObject> m_tempDataObjectForSimulate;
 
-    WTF::Mutex m_tasksLock;
+    WTF::RecursiveMutex m_tasksLock;
     std::vector<std::function<void(void)>*> m_tasks;
 };
 

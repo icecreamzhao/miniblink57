@@ -20,7 +20,7 @@ public:
     // WebThemeEngine methods:
     virtual blink::WebSize getSize(Part) override;
     // Paint the given the given theme part.
-    virtual void paint(blink::WebCanvas*, blink::WebThemeEngine::Part, blink::WebThemeEngine::State, const blink::WebRect&, const ExtraParams*);
+    virtual void paint(blink::WebCanvas*, blink::WebThemeEngine::Part, blink::WebThemeEngine::State, const blink::WebRect&, const ExtraParams*) override;
 private:
     NativeThemeWin* m_nativeThemeWin;
     CustomTheme* m_theme;

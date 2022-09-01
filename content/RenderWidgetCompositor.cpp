@@ -122,11 +122,6 @@ RenderWidgetCompositor::~RenderWidgetCompositor()
 
 void RenderWidgetCompositor::destroy()
 {
-    char* output = (char*)malloc(0x100);
-    sprintf_s(output, 0x99, "RenderWidgetCompositor::destroy: %p, display:%p\n", this, m_display);
-    OutputDebugStringA(output);
-    free(output);
-
     if (m_display) {
         int waiter = 0;
         OrigChromeMgr::getInst()->getUiLoop()->task_runner()->PostTask(FROM_HERE, base::Bind(&preDestroyOnUiThread, m_display, &waiter));

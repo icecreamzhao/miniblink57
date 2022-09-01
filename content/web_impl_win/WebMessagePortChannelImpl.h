@@ -36,7 +36,7 @@ private:
     blink::Member<PlatformMessagePortChannel> m_channel;
     blink::Persistent<WebMessagePortChannelImpl> m_keepAlive;
 
-    WTF::Mutex m_mutex;
+    WTF::RecursiveMutex m_mutex;
 };
 
 }  // namespace content

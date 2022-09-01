@@ -37,6 +37,7 @@ using namespace content;
 NPNetscapeFuncs s_wkeBrowserFuncs = { 0 };
 #endif
 
+#if defined(OS_WIN)
 // The plugin view is always the ndata of the instance,. Sometimes, plug-ins will call an instance-specific function
 // with a NULL instance. To workaround this, call the last plug-in view that made a call to a plug-in.
 // Currently, the current plug-in view is only set before NPP_New in PluginView::start.
@@ -54,6 +55,7 @@ static WebPluginImpl* pluginViewForInstance(NPP instance)
     }
     return WebPluginImpl::currentPluginView();
 }
+#endif
 
 void* NPN_MemAlloc(uint32_t size)
 {
@@ -83,6 +85,7 @@ NPError NPN_RequestRead(NPStream*, NPByteRange*)
 
 NPError NPN_GetURLNotify(NPP instance, const char* url, const char* target, void* notifyData)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.geturlnotify)
@@ -90,10 +93,14 @@ NPError NPN_GetURLNotify(NPP instance, const char* url, const char* target, void
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->getURLNotify(url, target, notifyData);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_GetURL(NPP instance, const char* url, const char* target)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.geturl)
@@ -101,10 +108,14 @@ NPError NPN_GetURL(NPP instance, const char* url, const char* target)
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->getURL(url, target);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_PostURLNotify(NPP instance, const char* url, const char* target, uint32_t len, const char* buf, NPBool file, void* notifyData)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.posturlnotify)
@@ -112,10 +123,14 @@ NPError NPN_PostURLNotify(NPP instance, const char* url, const char* target, uin
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->postURLNotify(url, target, len, buf, file, notifyData);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_PostURL(NPP instance, const char* url, const char* target, uint32_t len, const char* buf, NPBool file)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.posturl)
@@ -123,10 +138,14 @@ NPError NPN_PostURL(NPP instance, const char* url, const char* target, uint32_t 
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->postURL(url, target, len, buf, file);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_NewStream(NPP instance, NPMIMEType type, const char* target, NPStream** stream)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.newstream)
@@ -134,10 +153,14 @@ NPError NPN_NewStream(NPP instance, NPMIMEType type, const char* target, NPStrea
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->newStream(type, target, stream);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 int32_t NPN_Write(NPP instance, NPStream* stream, int32_t len, void* buffer)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.write)
@@ -145,21 +168,29 @@ int32_t NPN_Write(NPP instance, NPStream* stream, int32_t len, void* buffer)
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->write(stream, len, buffer);
+#else
+    return 0;
+#endif
 }
 
 NPError NPN_DestroyStream(NPP instance, NPStream* stream, NPReason reason)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.destroystream)
             return s_wkeBrowserFuncs.destroystream(instance, stream, reason);
         return NPERR_INVALID_INSTANCE_ERROR;
     }
-    return view->destroyStream(stream, reason);
+    return view->destroyStream(stream, reason); 
+#else
+        return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 const char* NPN_UserAgent(NPP instance)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         const char* ua = nullptr;
@@ -170,10 +201,14 @@ const char* NPN_UserAgent(NPP instance)
     }        
  
     return view->userAgent();
+#else
+    return nullptr;
+#endif
 }
 
 void NPN_Status(NPP instance, const char* message)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.status)
@@ -181,10 +216,12 @@ void NPN_Status(NPP instance, const char* message)
         return;
     }
     view->status(message);
+#endif
 }
 
 void NPN_InvalidateRect(NPP instance, NPRect* invalidRect)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.invalidaterect)
@@ -192,10 +229,12 @@ void NPN_InvalidateRect(NPP instance, NPRect* invalidRect)
         return;
     }
     view->invalidateRect(invalidRect);
+#endif
 }
 
 void NPN_InvalidateRegion(NPP instance, NPRegion invalidRegion)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.invalidateregion)
@@ -203,10 +242,12 @@ void NPN_InvalidateRegion(NPP instance, NPRegion invalidRegion)
         return;
     }
     view->invalidateRegion(invalidRegion);
+#endif
 }
 
 void NPN_ForceRedraw(NPP instance)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.forceredraw)
@@ -214,10 +255,12 @@ void NPN_ForceRedraw(NPP instance)
         return;
     }
     view->forceRedraw();
+#endif
 }
 
 NPError NPN_GetValue(NPP instance, NPNVariable variable, void* value)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.getvalue)
@@ -226,10 +269,14 @@ NPError NPN_GetValue(NPP instance, NPNVariable variable, void* value)
     }        
 
     return view->getValue(variable, value);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_SetValue(NPP instance, NPPVariable variable, void* value)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.setvalue)
@@ -237,26 +284,34 @@ NPError NPN_SetValue(NPP instance, NPPVariable variable, void* value)
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->setValue(variable, value);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 void* NPN_GetJavaEnv()
 {
+#if defined(OS_WIN)
     // Unsupported
     if (s_wkeBrowserFuncs.getJavaEnv)
         return s_wkeBrowserFuncs.getJavaEnv();
-    return 0;
+#endif
+    return nullptr;
 }
 
 void* NPN_GetJavaPeer(NPP instance)
 {
+#if defined(OS_WIN)
     // Unsupported
     if (s_wkeBrowserFuncs.getJavaPeer)
         return s_wkeBrowserFuncs.getJavaPeer(instance);
-    return 0;
+#endif
+    return nullptr;
 }
 
 void NPN_PushPopupsEnabledState(NPP instance, NPBool enabled)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.pushpopupsenabledstate)
@@ -264,10 +319,12 @@ void NPN_PushPopupsEnabledState(NPP instance, NPBool enabled)
         return;
     }
     view->pushPopupsEnabledState(enabled);
+#endif
 }
 
 void NPN_PopPopupsEnabledState(NPP instance)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.poppopupsenabledstate)
@@ -275,17 +332,21 @@ void NPN_PopPopupsEnabledState(NPP instance)
         return;
     }
     view->popPopupsEnabledState();
+#endif
 }
 
 extern "C" typedef void PluginThreadAsyncCallFunction(void*);
 void NPN_PluginThreadAsyncCall(NPP instance, PluginThreadAsyncCallFunction func, void* userData)
 {
+#if defined(OS_WIN)
     // Callback function type only differs from MainThreadFunction by being extern "C", which doesn't affect calling convention on any compilers we use.
     PluginMainThreadScheduler::scheduler().scheduleCall(instance, reinterpret_cast<PluginMainThreadScheduler::MainThreadFunction*>(func), userData);
+#endif
 }
 
 NPError NPN_GetValueForURL(NPP instance, NPNURLVariable variable, const char* url, char** value, uint32_t* len)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.getvalueforurl)
@@ -293,10 +354,14 @@ NPError NPN_GetValueForURL(NPP instance, NPNURLVariable variable, const char* ur
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->getValueForURL(variable, url, value, len);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_SetValueForURL(NPP instance, NPNURLVariable variable, const char* url, const char* value, uint32_t len)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.setvalueforurl)
@@ -304,10 +369,14 @@ NPError NPN_SetValueForURL(NPP instance, NPNURLVariable variable, const char* ur
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->setValueForURL(variable, url, value, len);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_GetAuthenticationInfo(NPP instance, const char* protocol, const char* host, int32_t port, const char* scheme, const char* realm, char** username, uint32_t* ulen, char** password, uint32_t* plen)
 {
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.getauthenticationinfo)
@@ -315,17 +384,20 @@ NPError NPN_GetAuthenticationInfo(NPP instance, const char* protocol, const char
         return NPERR_INVALID_INSTANCE_ERROR;
     }
     return view->getAuthenticationInfo(protocol, host, port, scheme, realm, username, ulen, password, plen);
+#else
+    return NPERR_INVALID_INSTANCE_ERROR;
+#endif
 }
 
 NPError NPN_PopUpContextMenu(NPP instance, NPMenu* menu)
 {
-//     UNUSED_PARAM(instance);
-//     UNUSED_PARAM(menu);
+#if defined(OS_WIN)
     WebPluginImpl* view = pluginViewForInstance(instance);
     if (!view) {
         if (s_wkeBrowserFuncs.popupcontextmenu)
             return s_wkeBrowserFuncs.popupcontextmenu(instance, menu);
         return NPERR_INVALID_INSTANCE_ERROR;
     }
+#endif
     return NPERR_NO_ERROR;
 }

@@ -11,7 +11,7 @@ public:
 
     // cc::ContextProvider implementation.
     virtual bool BindToCurrentThread() override;
-    virtual void DetachFromThread();
+    virtual void DetachFromThread() override;
 
     virtual gpu::gles2::GLES2Interface* ContextGL() override;
     virtual gpu::ContextSupport* ContextSupport() override;

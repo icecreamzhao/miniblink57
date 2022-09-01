@@ -4,13 +4,13 @@
 #include "wke/wkeGlobalVar.h"
 #include "third_party/WebKit/Source/platform/Timer.h"
 #include <windows.h>
-#include <xstring>
+#include "base/strings/string16.h"
 
-typedef void (*TipPaintCallback) (HWND hWnd, HDC hdc, const wchar_t * text, size_t textLength);
+typedef void (*TipPaintCallback) (HWND hWnd, HDC hdc, const WCHAR * text, size_t textLength);
 
 namespace content {
 
-#define kToolTipClassName L"MbToolTip"
+#define kToolTipClassName u16("MbToolTip")
 
 class ToolTip {
 public:
@@ -31,14 +31,14 @@ public:
     void init()
     {
         registerClass();
-        m_hTipWnd = CreateWindowEx(WS_EX_TOOLWINDOW, kToolTipClassName, kToolTipClassName, WS_POPUP | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, 225, 140, HWND_DESKTOP, NULL, nullptr, this);
+        m_hTipWnd = CreateWindowExW(WS_EX_TOOLWINDOW, kToolTipClassName, kToolTipClassName, WS_POPUP | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, 225, 140, HWND_DESKTOP, NULL, nullptr, this);
         ::SetPropW(m_hTipWnd, kToolTipClassName, (HANDLE)this);
 
         int fontHeight = m_dpi * 18;
 
-        m_hFont = CreateFont(fontHeight, 0, 0, 0, FW_THIN, FALSE, FALSE, FALSE,
+        m_hFont = CreateFontW(fontHeight, 0, 0, 0, FW_THIN, FALSE, FALSE, FALSE,
             GB2312_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-            DEFAULT_QUALITY, FIXED_PITCH | FF_MODERN, L"微软雅黑");
+            DEFAULT_QUALITY, FIXED_PITCH | FF_MODERN, u16("微软雅黑"));
     }
 
     ~ToolTip()
@@ -56,21 +56,21 @@ public:
         m_dpi /= 100;
         ::ReleaseDC(0, screen);
 
-        WNDCLASSEX wcex;
+        WNDCLASSEXW wcex;
 
-        wcex.cbSize = sizeof(WNDCLASSEX);
+        wcex.cbSize = sizeof(WNDCLASSEXW);
         wcex.style = CS_HREDRAW | CS_VREDRAW | CS_DROPSHADOW;
         wcex.lpfnWndProc = wndProc;
         wcex.cbClsExtra = 0;
         wcex.cbWndExtra = 0;
         wcex.hInstance = nullptr;
         wcex.hIcon = nullptr;
-        wcex.hCursor = LoadCursor(0, IDC_ARROW);
+        wcex.hCursor = LoadCursorW(0, IDC_ARROW);
         wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wcex.lpszMenuName = 0;
         wcex.lpszClassName = kToolTipClassName;
         wcex.hIconSm = nullptr;
-        return !!RegisterClassEx(&wcex);
+        return !!RegisterClassExW(&wcex);
     }
 
     void show(const WCHAR* text, POINT* pos)
@@ -80,7 +80,7 @@ public:
                 hide();
             return;
         }
-        std::wstring textString = text;
+        base::string16 textString = text;
         if (0 == textString.size()) {
             if (m_isToolsTip)
                 hide();
@@ -93,7 +93,7 @@ public:
             
             HDC hScreenDc = ::GetDC(m_hTipWnd);
             HFONT hOldFont = (HFONT)::SelectObject(hScreenDc, m_hFont);
-            ::GetTextExtentPoint32(hScreenDc, m_text.c_str(), m_text.size(), &m_size);
+            ::GetTextExtentPoint32W(hScreenDc, m_text.c_str(), m_text.size(), &m_size);
             ::SelectObject(hScreenDc, hOldFont);
             ::ReleaseDC(m_hTipWnd, hScreenDc);
 
@@ -127,7 +127,7 @@ public:
             break;
         }
 
-        return ::DefWindowProc(hWnd, uMsg, wParam, lParam);
+        return ::DefWindowProcW(hWnd, uMsg, wParam, lParam);
     }
 
     void onPaint(HWND hWnd, HDC hdc)
@@ -150,10 +150,10 @@ public:
         ::SelectObject(hdc, m_hFont);
         ::SetTextColor(hdc, RGB(86, 86, 86));
         ::SetBkColor(hdc, RGB(255, 255, 255));
-        ::TextOut(hdc, 4, 2, m_text.c_str(), m_text.size());
+        ::TextOutW(hdc, 4, 2, m_text.c_str(), m_text.size());
     }
 
-    std::wstring getText() const { return m_text; }
+    base::string16 getText() const { return m_text; }
 
 private:
     void resetShowState()
@@ -205,7 +205,7 @@ private:
 
     void hide()
     {
-        m_text = L"";
+        m_text = u16("");
         m_isShow = false;
         ::ShowWindow(m_hTipWnd, SW_HIDE);
 
@@ -221,7 +221,7 @@ private:
     HWND m_hTipWnd;
     HFONT m_hFont;
     bool m_isShow;
-    std::wstring m_text;
+    base::string16 m_text;
 
     blink::Timer<ToolTip> m_delayShowTimer;
     int m_delayShowCount;

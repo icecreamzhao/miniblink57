@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include <ShlObj.h>
+#include <shlobj.h>
 
 #define kMimeTypeText "text/plain"
 #define kMimeTypeURIList "text/uri-list"

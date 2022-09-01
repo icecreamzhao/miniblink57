@@ -117,7 +117,7 @@ public:
     void closeInternal();
 
     // Lock used to ensure exclusive access to the object internals.
-    WTF::Mutex m_mutex;
+    WTF::RecursiveMutex m_mutex;
 
     // Pointer to our entangled pair - cleared when close() is called.
     //RefPtr<PlatformMessagePortChannel> m_entangledChannel;

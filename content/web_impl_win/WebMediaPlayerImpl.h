@@ -95,11 +95,11 @@ public:
 
     virtual double mediaTimeForTimeValue(double timeValue) const override;
 
-    virtual unsigned decodedFrameCount() const override;
-    virtual unsigned droppedFrameCount() const override;
-    virtual unsigned corruptedFrameCount() const override;
-    virtual unsigned audioDecodedByteCount() const override;
-    virtual unsigned videoDecodedByteCount() const override;
+    virtual unsigned int decodedFrameCount() const override;
+    virtual unsigned int droppedFrameCount() const override;
+    virtual unsigned int corruptedFrameCount() const override;
+    virtual size_t audioDecodedByteCount() const override;
+    virtual size_t videoDecodedByteCount() const override;
 
     virtual void paint(blink::WebCanvas*, const blink::WebRect&, SkPaint&) override;
     // Do a GPU-GPU textures copy if possible.

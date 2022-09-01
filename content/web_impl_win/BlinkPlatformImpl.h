@@ -4,6 +4,7 @@
 
 namespace WTF {
 class Mutex;
+class RecursiveMutex;
 }
 
 namespace blink {

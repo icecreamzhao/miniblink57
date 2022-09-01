@@ -40,7 +40,7 @@ WebURLLoaderImplCurl::~WebURLLoaderImplCurl()
 
 void WebURLLoaderImplCurl::init()
 {
-    m_hadDestroied = false;
+    m_hadDestroied = nullptr;
     m_jobIds = 0;
     m_blobLoader = nullptr;
 }

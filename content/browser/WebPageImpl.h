@@ -24,8 +24,7 @@
 #include "skia/ext/platform_canvas.h"
 #include "net/PageNetExtraData.h"
 #include "net/StorageDef.h"
-
-typedef struct HWND__ *HWND;
+#include <windows.h>
 
 namespace mc {
 class LayerTreeHost;
@@ -350,7 +349,7 @@ public:
 
     WTF::Vector<DestroyNotif*> m_destroyNotifs;
     //WTF::Vector<int> m_destroyNotifIds;
-    WTF::Mutex m_destroyNotifsMutex;
+    WTF::RecursiveMutex m_destroyNotifsMutex;
 
     HRGN m_draggableRegion;
 
@@ -358,8 +357,8 @@ public:
     int m_debugCount;
     //int m_needsCommit;
     int m_commitCount;
-    int m_needsLayout;
-    int m_layerDirty;
+    long m_needsLayout;
+    long m_layerDirty;
     int m_executeMainFrameCount;
     double m_lastFrameTimeMonotonic;
 
@@ -368,7 +367,9 @@ public:
     int m_firstDrawCount;
 
     blink::Persistent<PageNavController> m_navigationController;
+#if defined(OS_WIN)
     blink::Persistent<PopupMenuWin> m_popup;
+#endif
 
     bool isDevToolsClient() const { return !!m_devToolsClient; }
     DevToolsClient* m_devToolsClient;

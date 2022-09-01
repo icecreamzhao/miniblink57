@@ -10,7 +10,7 @@
 #define PURE = 0
 
 #include <windows.h>
-#include <Shlwapi.h>
+#include <shlwapi.h>
 
 namespace content {
 
@@ -18,6 +18,7 @@ static const ULONGLONG kSecondsFromFileTimeToTimet = 11644473600;
 
 static bool getFindData(String path, WIN32_FIND_DATAW& findData)
 {
+#if defined(OS_WIN)
     if (path.isNull() || path.isEmpty())
         return false;
     Vector<UChar> upath = WTF::ensureUTF16UChar(path, true);
@@ -29,10 +30,15 @@ static bool getFindData(String path, WIN32_FIND_DATAW& findData)
         return false;
     ::FindClose(handle);
     return true;
+#else
+    DebugBreak();
+    return false;
+#endif
 }
 
 String pathByAppendingComponent(const String& path, const String& component)
 {
+#if defined(OS_WIN)
     Vector<UChar> buffer(MAX_PATH);
 
     if (path.length() + 1 > buffer.size())
@@ -51,10 +57,15 @@ String pathByAppendingComponent(const String& path, const String& component)
     buffer.shrink(wcslen(buffer.data()));
 
     return String(buffer.data(), buffer.size());
+#else
+    DebugBreak();
+    return String();
+#endif
 }
 
 String openTemporaryFile(const String&, HANDLE& handle)
 {
+#if defined(OS_WIN)
     handle = INVALID_HANDLE_VALUE;
 
     wchar_t tempPath[MAX_PATH];
@@ -88,10 +99,15 @@ String openTemporaryFile(const String&, HANDLE& handle)
         return String();
 
     return proposedPath;
+#else
+    DebugBreak();
+    return String();
+#endif
 }
 
 int writeToFile(HANDLE handle, const char* data, int length)
 {
+#if defined(OS_WIN)
     if (!(INVALID_HANDLE_VALUE != handle))
         return -1;
 
@@ -101,24 +117,38 @@ int writeToFile(HANDLE handle, const char* data, int length)
     if (!success)
         return -1;
     return static_cast<int>(bytesWritten);
+#else
+    DebugBreak();
+    return -1;
+#endif
 }
 
 String pathGetFileName(const String& path)
 {
+#if defined(OS_WIN)
     return String(::PathFindFileNameW(WTF::ensureUTF16UChar(path, true).data()));
+#else
+    DebugBreak();
+    return String();
+#endif
 }
 
 bool fileExists(const String& path)
 {
+#if defined(OS_WIN)
     WIN32_FIND_DATAW findData;
     return getFindData(path, findData);
+#else
+    DebugBreak();
+    return false;
+#endif
 }
 
 static void getFileModificationTimeFromFindData(const WIN32_FIND_DATAW& findData, time_t& time)
 {
     ULARGE_INTEGER fileTime;
-    fileTime.HighPart = findData.ftLastWriteTime.dwHighDateTime;
-    fileTime.LowPart = findData.ftLastWriteTime.dwLowDateTime;
+    fileTime.u.HighPart = findData.ftLastWriteTime.dwHighDateTime;
+    fileTime.u.LowPart = findData.ftLastWriteTime.dwLowDateTime;
 
     // Information about converting time_t to FileTime is available at http://msdn.microsoft.com/en-us/library/ms724228%28v=vs.85%29.aspx
     time = fileTime.QuadPart / 10000000 - kSecondsFromFileTimeToTimet;
@@ -127,8 +157,8 @@ static void getFileModificationTimeFromFindData(const WIN32_FIND_DATAW& findData
 static bool getFileSizeFromFindData(const WIN32_FIND_DATAW& findData, long long& size)
 {
     ULARGE_INTEGER fileSize;
-    fileSize.HighPart = findData.nFileSizeHigh;
-    fileSize.LowPart = findData.nFileSizeLow;
+    fileSize.u.HighPart = findData.nFileSizeHigh;
+    fileSize.u.LowPart = findData.nFileSizeLow;
 
     if (fileSize.QuadPart > static_cast<ULONGLONG>(std::numeric_limits<long long>::max()))
         return false;
@@ -144,6 +174,7 @@ WebFileUtilitiesImpl::WebFileUtilitiesImpl()
 
 bool WebFileUtilitiesImpl::getFileInfo(const blink::WebString& path, blink::WebFileInfo& result)
 {
+#if defined(OS_WIN)
     if (path.isNull() || path.isEmpty())
         return false;
 
@@ -161,10 +192,15 @@ bool WebFileUtilitiesImpl::getFileInfo(const blink::WebString& path, blink::WebF
     result.platformPath = path;
 
     return true;
+#else
+    DebugBreak();
+    return false;
+#endif
 }
 
 blink::WebString WebFileUtilitiesImpl::directoryName(const blink::WebString& path) 
 {
+#if defined(OS_WIN)
     String pathString(path);
     String name = pathString.left(pathString.length() - pathGetFileName(pathString).length());
     if (name.characterStartingAt(name.length() - 1) == '\\') {
@@ -172,10 +208,15 @@ blink::WebString WebFileUtilitiesImpl::directoryName(const blink::WebString& pat
         name.truncate(name.length() - 1);
     }
     return name;
+#else
+    DebugBreak();
+    return blink::WebString();
+#endif
 }
 
 blink::WebString WebFileUtilitiesImpl::baseName(const blink::WebString& path)
 {
+#if defined(OS_WIN)
     if (path.isNull() || path.isEmpty())
         return "";
     Vector<UChar> result = WTF::ensureUTF16UChar(path, true);
@@ -183,11 +224,20 @@ blink::WebString WebFileUtilitiesImpl::baseName(const blink::WebString& path)
         return "";
     ::PathStripPathW(result.data());
     return String(result.data());
+#else
+    DebugBreak();
+    return blink::WebString();
+#endif
 }
 
 bool WebFileUtilitiesImpl::isDirectory(const blink::WebString& path)
-{ 
+{
+#if defined(OS_WIN)
     return ::PathIsDirectoryW(WTF::ensureUTF16UChar(path, true).data());
+#else
+    DebugBreak();
+    return false;
+#endif
 }
 
 blink::WebURL WebFileUtilitiesImpl::filePathToURL(const blink::WebString& path)

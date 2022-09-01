@@ -1,6 +1,8 @@
-
+﻿
 #ifndef content_ui_SaveImage_h
 #define content_ui_SaveImage_h
+
+#if defined(OS_WIN)
 
 #include "content/browser/PostTaskHelper.h"
 #include "content/browser/WebPageImpl.h"
@@ -86,7 +88,7 @@ static DWORD __stdcall saveImageThread(void* param)
     ofn.lpstrFilter = filter;
     ofn.lpstrFile = fileNameBuf.data();
     ofn.nMaxFile = fileNameBufLen - 2;
-    ofn.lpstrTitle = (LPWSTR)L"ͼƬ����Ϊ...";
+    ofn.lpstrTitle = (LPWSTR)L"图片另存为...";
     ofn.Flags = OFN_EXPLORER | OFN_LONGNAMES | OFN_NOCHANGEDIR | OFN_OVERWRITEPROMPT;
     BOOL retVal = ::GetSaveFileNameW(&ofn);
 
@@ -144,5 +146,7 @@ bool saveImage(const blink::WebImage& image, const blink::WebURL& url)
 }
 
 }
+
+#endif
 
 #endif // content_ui_SaveImage_h

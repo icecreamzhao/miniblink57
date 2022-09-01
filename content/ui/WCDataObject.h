@@ -26,7 +26,7 @@
 #ifndef WCDataObject_h
 #define WCDataObject_h
 
-#include <ShlObj.h>
+#include <shlobj.h>
 #include <objidl.h>
 #include <memory>
 #include <string>

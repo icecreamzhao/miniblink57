@@ -79,7 +79,7 @@ private:
 
     bool m_callPending;
     CallQueueMap m_callQueueMap;
-    WTF::Mutex m_queueMutex;
+    WTF::RecursiveMutex m_queueMutex;
 };
 
 } // namespace content

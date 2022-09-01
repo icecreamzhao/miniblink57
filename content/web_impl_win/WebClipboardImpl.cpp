@@ -36,7 +36,7 @@
 #define PURE = 0
 #endif
 
-#include <ShlObj.h>
+#include <shlobj.h>
 #include <vector>
 
 using blink::WebClipboard;
@@ -949,7 +949,7 @@ extern "C" LRESULT __stdcall clipboardOwnerWndProc(HWND hWnd, UINT message, WPAR
     case WM_CHANGECBCHAIN:
         break;
     default:
-        return DefWindowProc(hWnd, message, wparam, lparam);
+        return DefWindowProcW(hWnd, message, wparam, lparam);
     }
 
     return result;
@@ -960,22 +960,22 @@ HWND WebClipboardImpl::getClipboardWindow()
     if (INVALID_HANDLE_VALUE != m_clipboardOwner && NULL != m_clipboardOwner)
         return m_clipboardOwner;
 
-    WNDCLASSEX window_class;
-    window_class.cbSize = sizeof(window_class);
-    window_class.style = 0;
-    window_class.lpfnWndProc = clipboardOwnerWndProc;
-    window_class.cbClsExtra = 0;
-    window_class.cbWndExtra = 0;
-    window_class.hInstance = nullptr;
-    window_class.hIcon = NULL;
-    window_class.hCursor = NULL;
-    window_class.hbrBackground = NULL;
-    window_class.lpszMenuName = NULL;
-    window_class.lpszClassName = L"WebClipboardImplMessageWindow";
-    window_class.hIconSm = NULL;
-    ATOM atom = RegisterClassEx(&window_class);
+    WNDCLASSEXW windowClass;
+    windowClass.cbSize = sizeof(windowClass);
+    windowClass.style = 0;
+    windowClass.lpfnWndProc = clipboardOwnerWndProc;
+    windowClass.cbClsExtra = 0;
+    windowClass.cbWndExtra = 0;
+    windowClass.hInstance = nullptr;
+    windowClass.hIcon = NULL;
+    windowClass.hCursor = NULL;
+    windowClass.hbrBackground = NULL;
+    windowClass.lpszMenuName = NULL;
+    windowClass.lpszClassName = L"WebClipboardImplMessageWindow";
+    windowClass.hIconSm = NULL;
+    ATOM atom = RegisterClassExW(&windowClass);
 
-    m_clipboardOwner = ::CreateWindow(MAKEINTATOM(atom), L"window_name", 0, 0, 0, 1, 1, HWND_MESSAGE, 0, NULL, NULL);
+    m_clipboardOwner = ::CreateWindowW(MAKEINTATOM(atom), L"window_name", 0, 0, 0, 1, 1, HWND_MESSAGE, 0, NULL, NULL);
 
     return m_clipboardOwner;
 

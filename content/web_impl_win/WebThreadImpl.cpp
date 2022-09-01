@@ -10,6 +10,7 @@
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
 #include "third_party/WebKit/Source/wtf/ThreadingPrimitives.h"
 #include "third_party/WebKit/Source/wtf/CurrentTime.h"
+#include "base/synchronization/waitable_event.h"
 
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
 #include "wke/wkeUtil.h"
@@ -46,7 +47,7 @@ unsigned WebThreadImpl::getNewCurrentHeapInsertionOrder()
     return atomicIncrement((volatile int *)&m_currentHeapInsertionOrder);
 }
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 ActivatingTimerCheck* gActivatingTimerCheck = nullptr;
 #endif
 
@@ -80,13 +81,14 @@ WebThreadImpl::WebThreadImpl(const char* name)
         return;
     }
 
-    m_hEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
+    //m_hEvent = ::CreateEventW(NULL, FALSE, FALSE, NULL);
+    m_hEvent = new base::WaitableEvent(base::WaitableEvent::ResetPolicy::AUTOMATIC, base::WaitableEvent::InitialState::NOT_SIGNALED);
 
     DWORD threadIdentifier = 0;
     m_threadHandle = ::CreateThread(0, 0, WebThreadImplThreadEntryPoint, this, 0, &threadIdentifier);
  
     while (!m_hadThreadInit) {
-        Sleep(20);
+        Sleep(1);
     };
 }
 
@@ -130,8 +132,10 @@ void WebThreadImpl::waitForExit()
 void WebThreadImpl::willExit()
 {
     m_willExit = true;
-    if (m_hEvent)
-        ::SetEvent(m_hEvent);
+    if (m_hEvent) {
+        //::SetEvent(m_hEvent);
+        m_hEvent->Signal();
+    }
 
     if (m_threadId == WTF::currentThread())
         fireOnExit();
@@ -141,12 +145,15 @@ void WebThreadImpl::threadEntryPoint()
 {
     //base::SetThreadName(m_name);
 
+    printf("WebThreadImpl::threadEntryPoint begin: %s\n", m_name);
+
     m_threadId = WTF::currentThread();
     BlinkPlatformImpl::onCurrentThreadWhenWebThreadImplCreated(this);
     m_hadThreadInit = true;
 
     while (!m_willExit) {
-        DWORD dReturn = ::WaitForSingleObject(m_hEvent, INFINITE);
+        //DWORD dReturn = ::WaitForSingleObject(m_hEvent, INFINITE);
+        m_hEvent->Wait();
 
         startTriggerTasks();
 
@@ -155,7 +162,11 @@ void WebThreadImpl::threadEntryPoint()
             ::Sleep(1);
         }
     }
-    ::CloseHandle(m_hEvent);
+
+    printf("WebThreadImpl::threadEntryPoint exit: %s\n", m_name);
+
+    //::CloseHandle(m_hEvent);
+    delete m_hEvent;
     m_hEvent = nullptr;
 
     fireOnExit();
@@ -194,8 +205,10 @@ void WebThreadImpl::postDelayedTaskWithPriorityCrossThread(
 #endif
 
     if (m_willExit) {
-        if (m_hEvent)
-            ::SetEvent(m_hEvent);
+        if (m_hEvent) {
+            //::SetEvent(m_hEvent);
+            m_hEvent->Signal();
+        }
         delete task;
         return;
     }
@@ -211,8 +224,10 @@ void WebThreadImpl::postDelayedTaskWithPriorityCrossThread(
     if (m_taskPairsToPost.size() > 500)
         OutputDebugStringA("WebThreadImpl::postDelayedTaskWithPriorityCrossThread too much\n");
 
-    if (m_hEvent)
-        ::SetEvent(m_hEvent);
+    if (m_hEvent) {
+        //::SetEvent(m_hEvent);
+        m_hEvent->Signal();
+    }
     ::LeaveCriticalSection(&m_taskPairsMutex);
 }
 
@@ -313,8 +328,10 @@ void WebThreadImpl::addTaskObserver(TaskObserver* observer)
 
     ::EnterCriticalSection(&m_observersMutex);
     if (m_observers.end() != findObserver(m_observers, observer)) {
-        if (m_hEvent)
-            ::SetEvent(m_hEvent);
+        if (m_hEvent) {
+            //::SetEvent(m_hEvent);
+            m_hEvent->Signal();
+        }
         ::LeaveCriticalSection(&m_observersMutex);
         return;
     }
@@ -324,8 +341,10 @@ void WebThreadImpl::addTaskObserver(TaskObserver* observer)
 
     double fireTime = currentTime();
     if (!m_timerHeap.empty() && (m_timerHeap[0]->m_nextFireTime <= fireTime)) {
-        if (m_hEvent)
-            ::SetEvent(m_hEvent);
+        if (m_hEvent) {
+            //::SetEvent(m_hEvent);
+            m_hEvent->Signal();
+        }
     } else
         postTask(FROM_HERE, new EmptyTask());
 
@@ -550,6 +569,11 @@ void WebThreadImpl::schedulerTasks()
         if (!gActivatingTimerCheck->isActivating(timer))
             DebugBreak();
 #endif
+//         std::string name = m_name;
+//         if (name == "ioThread") {            
+//             printf("WebThreadImpl::schedulerTasks, ioThread: m_timerHeap.size():%zu %s\n", m_timerHeap.size(), timer->getTraceLocation().function_name());
+//         }
+
         // Once the timer has been fired, it may be deleted, so do nothing else with it after this point.
         willProcessTasks();
         timer->fired();
