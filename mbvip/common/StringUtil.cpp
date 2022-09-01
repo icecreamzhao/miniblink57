@@ -2,21 +2,36 @@
 #include "mbvip/common/StringUtil.h"
 
 #include <string>
+#include <string.h>
 #include <vector>
 #include <windows.h>
-#include <Shlwapi.h>
+#include <shlwapi.h>
+#ifdef __clang__
+#include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
+#endif
+#include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
 extern HMODULE g_hModule;
 
 namespace common {
 
-std::string utf16ToUtf8(const wchar_t* lpszSrc)
+std::string utf16ToUtf8(const WCHAR* lpszSrc)
 {
     return utf16ToMulByte(lpszSrc, CP_UTF8);
 }
 
-std::string utf16ToMulByte(const wchar_t* lpszSrc, unsigned int codepage)
+std::string utf16ToMulByte(const WCHAR* lpszSrc, unsigned int codepage)
 {
+#ifdef __clang__
+    std::vector<char> out;
+    WTF::WCharToMByte(lpszSrc, u16len(lpszSrc), &out, codepage);
+    if (0 == out.size())
+        return std::string();
+    std::string ret;
+    ret.assign(out.size(), '\0');
+    memcpy((void*)ret.c_str(), out.data(), out.size());
+    return ret;
+#else
     std::string sResult;
     if (lpszSrc != NULL) {
         int  nUTF8Len = WideCharToMultiByte(codepage, 0, lpszSrc, -1, NULL, 0, NULL, NULL);
@@ -29,26 +44,37 @@ std::string utf16ToMulByte(const wchar_t* lpszSrc, unsigned int codepage)
         }
     }
     return sResult;
+#endif // __clang__
 }
 
-std::wstring utf8ToUtf16(const std::string& utf8)
+base::string16 utf8ToUtf16(const std::string& utf8)
 {
     return mulByteToUtf16(utf8, CP_UTF8);
 }
 
-std::wstring mulByteToUtf16(const std::string& str, unsigned int codepage)
+base::string16 mulByteToUtf16(const std::string& str, unsigned int codepage)
 {
-    std::wstring utf16;
+#ifdef __clang__
+    std::vector<UChar> out;
+    WTF::MByteToWChar(str.c_str(), str.size(), &out, codepage);
+    if (0 == out.size())
+        return base::string16();
+    base::string16 ret;
+    ret.assign(out.size(), L'\0');
+    memcpy((void*)ret.c_str(), out.data(), out.size() * sizeof(UChar));
+    return ret;
+#else
+    base::string16 utf16;
     size_t n = ::MultiByteToWideChar(codepage, 0, str.c_str(), (int)str.size(), nullptr, 0);
     if (0 == n)
         return L"";
-    std::vector<wchar_t> wbuf(n);
+    std::vector<WCHAR> wbuf(n);
     ::MultiByteToWideChar(codepage, 0, str.c_str(), (int)str.size(), &wbuf[0], n);
     utf16.resize(n + 5);
     utf16.assign(&wbuf[0], n);
     return utf16;
+#endif // __clang__
 }
-
 
 static const std::string base64Chars =
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -189,51 +215,84 @@ bool isTextUTF8(const char *str, size_t length)
     return true;
 }
 
-std::wstring createPathFromDllPath(const std::wstring& fileName)
+base::string16 createPathFromDllPath(const base::string16& fileName)
 {
-    std::vector<wchar_t> path;
+#if defined(WIN32)
+    std::vector<WCHAR> path;
     path.resize(MAX_PATH + 1);
-    memset(&path.at(0), 0, sizeof(wchar_t) * (MAX_PATH + 1));
+    memset(&path.at(0), 0, sizeof(WCHAR) * (MAX_PATH + 1));
     ::GetModuleFileNameW(g_hModule, &path.at(0), MAX_PATH);
     ::PathRemoveFileSpecW(&path.at(0));
 
     ::PathAppendW(&path.at(0), fileName.c_str());
 
-    std::wstring result(&path.at(0), wcslen(&path.at(0)));
+    base::string16 result(&path.at(0), wcslen(&path.at(0)));
 
     if (L'\\' != result[result.size() - 1])
         result += L'\\';
 
     return result;
+#else
+    DebugBreak();
+    return base::string16();
+#endif
 }
 
 bool isLocalDebugMachine()
 {
+#if defined(WIN32) 
     return !!::PathFileExistsW(L"E:\\mycode\\mtmb\\mtmb\\printing\\Printing.cpp");
+#else
+    DebugBreak();
+    return false;
+#endif
 }
 
-static std::wstring* g_pluginDirectory;
+static base::string16* g_pluginDirectory;
 
-void setPluginDirectory(const std::wstring& dir)
+void setPluginDirectory(const base::string16& dir)
 {
     if (0 == dir.size())
         return;
 
     if (g_pluginDirectory)
         delete g_pluginDirectory;
-    g_pluginDirectory = new std::wstring(dir);
+    g_pluginDirectory = new base::string16(dir);
 
-    if (g_pluginDirectory->at(g_pluginDirectory->size() - 1) != L'\\')
-        *g_pluginDirectory += L'\\';
+    if (g_pluginDirectory->at(g_pluginDirectory->size() - 1) != u16('\\'))
+        *g_pluginDirectory += u16('\\');
 }
 
-std::wstring getPluginDirectory()
+base::string16 getPluginDirectory()
 {
     if (g_pluginDirectory)
         return *g_pluginDirectory;
     
-    g_pluginDirectory = new std::wstring(createPathFromDllPath(L"plugins\\"));
+    g_pluginDirectory = new base::string16(createPathFromDllPath(u16("plugins\\")));
     return *g_pluginDirectory;
+}
+
+unsigned int hashStringW(const base::string16& p)
+{
+    std::string str((const char*)p.c_str(), p.size() * sizeof(WCHAR));
+    return hashStringA(str);
+}
+
+unsigned int hashStringA(const std::string& p)
+{
+    int prime = 25013;
+    unsigned int h = 0;
+    unsigned int g;
+
+    for (size_t i = 0; i < p.size(); ++i) {
+        h = (h << 4) + p[i];
+        g = h & 0xF0000000;
+        if (g) {
+            h ^= (g >> 24);
+            h ^= g;
+        }
+    }
+    return h % prime;
 }
 
 }

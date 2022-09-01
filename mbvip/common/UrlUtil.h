@@ -8,10 +8,10 @@ class UrlUtil {
 public:
     // "1234-sss.ss?sz"  -> "1234-sss.ss"
     // "1234-sss.ss/" -> "1234-sss.ss"
-    static std::wstring getSaveNameFromUrl(const std::string& url)
+    static base::string16 getSaveNameFromUrl(const std::string& url)
     {
         if (0 == url.size())
-            return L"";
+            return u16("");
 
         size_t pos1 = url.find_last_of('\\');
         if (std::string::npos == pos1)

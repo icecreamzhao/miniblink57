@@ -18,9 +18,16 @@
 #include "download/DownloadMgr.h"
 #endif // ENABLE_IN_MB_MAIN
 
+#include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
+
 #include <vector>
+#include <string.h>
 #include <stdio.h>
-#include <Shlwapi.h>
+#include <shlwapi.h>
+
+#if !defined(WIN32)
+#include <gtk/gtk.h>
+#endif
 
 bool g_mbIsInit = false;
 DWORD g_uiThreadId = 0;
@@ -58,11 +65,11 @@ const utf8* MB_CALL_TYPE mbGetString(mbStringPtr str)
 
 static bool checkThreadCallIsValidImpl(const char* funcName, bool isBlinkThread)
 {
-    std::wstring textMsg;
+    base::string16 textMsg;
     if (!g_mbIsInit) {
-        textMsg = L"禁止未初始化调用此接口：";
+        textMsg = u16("禁止未初始化调用此接口：");
         textMsg += common::utf8ToUtf16(funcName);
-        ::MessageBoxW(nullptr, textMsg.c_str(), L"警告", MB_OK);
+        ::MessageBoxW(nullptr, textMsg.c_str(), u16("警告"), MB_OK);
         ::TerminateProcess((HANDLE)-1, 5);
         return false;
     }
@@ -75,16 +82,20 @@ static bool checkThreadCallIsValidImpl(const char* funcName, bool isBlinkThread)
             return true;
     }
 
-    textMsg = L"禁止跨线程调用此接口：";
+#if defined(OS_WIN) 
+    textMsg = u16("禁止跨线程调用此接口：");
     textMsg += common::utf8ToUtf16(funcName);
-    textMsg += L"，";
+    textMsg += u16("，");
 
-    wchar_t* temp = (wchar_t*)malloc(0x200);
-    wsprintf(temp, L"当前线程:%d，主线程：%d", ::GetCurrentThreadId(), common::ThreadCall::getUiThreadId());
+    WCHAR* temp = (WCHAR*)malloc(0x200);
+    wsprintf(temp, u16("当前线程:%d，主线程：%d"), ::GetCurrentThreadId(), common::ThreadCall::getUiThreadId());
     textMsg += temp;
     free(temp);
 
-    ::MessageBoxW(nullptr, textMsg.c_str(), L"警告", MB_OK);
+    ::MessageBoxW(nullptr, textMsg.c_str(), u16("警告"), MB_OK);
+#else
+    printf("current thread:%u, main thread:%u", ::GetCurrentThreadId(), common::ThreadCall::getUiThreadId());
+#endif
     ::TerminateProcess((HANDLE)-1, 5);
     return false;
 }
@@ -97,7 +108,7 @@ static bool checkThreadCallIsValid(const char* funcName)
 mbSettings* MB_CALL_TYPE mbCreateInitSettings()
 {
     mbSettings* settings = new mbSettings();
-    memset(settings, 0, sizeof(settings));
+    memset(settings, 0, sizeof(mbSettings));
     settings->version = kMbVersion;
     return settings;
 }
@@ -113,6 +124,10 @@ void MB_CALL_TYPE mbInit(const mbSettings* settings)
     if (g_mbIsInit)
         return;
     g_mbIsInit = true;
+
+#if !defined(WIN32)
+    gtk_init(nullptr, nullptr);
+#endif
 
     //////////////////////////////////////////////////////////////////////////
     //settings = new mbSettings();
@@ -145,11 +160,11 @@ static void licenseCheck()
 
 #if 0
 #if _DEBUG
-        ::DeleteFileW(L"p:\\license.key");
+        ::DeleteFileW(u16("p:\\license.key"));
         // std::string requestCode = verify->createRequestCode("email:weolar@qq.com");
         std::string license = verify->createLicense("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");
 
-        HANDLE hFile = CreateFileW(L"p:\\license.key", GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL); // L"D:\\license.key"
+        HANDLE hFile = CreateFileW(u16("p:\\license.key"), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
         if (INVALID_HANDLE_VALUE == hFile)
             DebugBreak();
 
@@ -249,7 +264,7 @@ void MB_CALL_TYPE mbMoveToCenter(mbWebView webviewHandle)
 
     int parentWidth = 0;
     int parentHeight = 0;
-    if (WS_CHILD == ::GetWindowLong(hWnd, GWL_STYLE)) {
+    if (WS_CHILD == ::GetWindowLongW(hWnd, GWL_STYLE)) {
         HWND parent = ::GetParent(hWnd);
         RECT rect = { 0 };
         ::GetClientRect(parent, &rect);
@@ -583,7 +598,7 @@ void MB_CALL_TYPE mbSetCookieEnabled(mbWebView webviewHandle, BOOL b)
     });
 }
 
-static void setFullPathOnBlinkThread(mbWebView webviewHandle, std::wstring* pathString, bool isCookiePath)
+static void setFullPathOnBlinkThread(mbWebView webviewHandle, base::string16* pathString, bool isCookiePath)
 {
     if (!webviewHandle) {
         isCookiePath ? wkeSetCookieJarFullPath(nullptr, pathString->c_str()) : wkeSetLocalStorageFullPath(nullptr, pathString->c_str());
@@ -603,7 +618,7 @@ void MB_CALL_TYPE setFullPath(mbWebView webviewHandle, const WCHAR* path, bool i
     //checkThreadCallIsValid(__FUNCTION__);
     if (!path)
         return;
-    std::wstring* pathString = new std::wstring(path);
+    base::string16* pathString = new base::string16(path);
     if (0 == pathString->size()) {
         delete pathString;
         return;
@@ -634,13 +649,13 @@ void MB_CALL_TYPE mbSetCookieJarPath(mbWebView webviewHandle, const WCHAR* path)
     if (!path)
         return;
 
-    std::wstring pathString(path);
+    base::string16 pathString(path);
     if (0 == pathString.size())
         return;
 
-    if (L'\\' != pathString[pathString.size() - 1])
-        pathString += L'\\';
-    pathString += L"cookies.dat";
+    if (u16('\\') != pathString[pathString.size() - 1])
+        pathString += u16('\\');
+    pathString += u16("cookies.dat");
 
     mbSetCookieJarFullPath(webviewHandle, pathString.c_str());
 }
@@ -648,7 +663,7 @@ void MB_CALL_TYPE mbSetCookieJarPath(mbWebView webviewHandle, const WCHAR* path)
 void MB_CALL_TYPE mbAddPluginDirectory(mbWebView webviewHandle, const WCHAR* path)
 {
     checkThreadCallIsValid(__FUNCTION__);
-    std::wstring* pathString = new std::wstring(path);
+    base::string16* pathString = new base::string16(path);
     common::setPluginDirectory(*pathString);
 
     common::ThreadCall::callBlinkThreadAsync(MB_FROM_HERE, [webviewHandle, pathString] {
@@ -844,8 +859,17 @@ static void WKE_CALL_TYPE onDocumentReady(wkeWebView wkeWebview, void* param, wk
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
     if (!webview)
         return;
-    
+
     mbWebFrameHandle mbFrameId = toMbFrameHandle(wkeWebview, frameId);
+    bool isMainFrame = wkeIsMainFrame(wkeWebview, frameId);
+    if (isMainFrame)
+        webview->setMainFrameId(frameId);
+
+    if (webview->getClosure().m_DocumentReadyInBlinkCallback)
+        webview->getClosure().m_DocumentReadyInBlinkCallback(webviewHandle, webview->getClosure().m_DocumentReadyInBlinkParam, mbFrameId);
+
+    if (!(webview->getClosure().m_DocumentReadyCallback))
+        return;
 
     common::ThreadCall::callUiThreadAsync(MB_FROM_HERE, [webviewHandle, mbFrameId] {
         mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
@@ -1448,7 +1472,7 @@ int MB_CALL_TYPE mbGetCursorInfoType(mbWebView webviewHandle)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// void readFile(const wchar_t* path, std::vector<char>* buffer)
+// void readFile(const WCHAR* path, std::vector<char>* buffer)
 // {
 //     HANDLE hFile = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 //     if (INVALID_HANDLE_VALUE == hFile) {
@@ -1474,7 +1498,7 @@ int MB_CALL_TYPE mbGetCursorInfoType(mbWebView webviewHandle)
 //     b = b;
 // }
 // 
-// static bool hookUrl(void* job, const char* url, const char* hookUrl, const wchar_t* localFile, const char* mime)
+// static bool hookUrl(void* job, const char* url, const char* hookUrl, const WCHAR* localFile, const char* mime)
 // {
 //     if (0 == strstr(url, hookUrl))
 //         return false;
@@ -1559,9 +1583,14 @@ mbWebFrameHandle MB_CALL_TYPE mbWebFrameGetMainFrame(mbWebView webviewHandle)
 
 BOOL MB_CALL_TYPE mbIsMainFrame(mbWebView webviewHandle, mbWebFrameHandle frameId)
 {
-    checkThreadCallIsValid(__FUNCTION__);
-    bool b = (frameId == (mbWebFrameHandle)-2);
-    return b;
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview)
+        return FALSE;
+
+    if (frameId == (mbWebFrameHandle)-2)
+        return TRUE;
+    //return wkeIsMainFrame(webview->getWkeWebView(), (mbWebFrameHandle)(frameId));
+    return webview->getMainFrameId() == frameId;
 }
 
 static void getSourceOrMHTML(mbWebView webviewHandle, mbGetSourceCallback calback, void* param, bool isSource)
@@ -1656,10 +1685,10 @@ const char* MB_CALL_TYPE mbUtilCreateRequestCode(const char* registerInfo)
 #endif
 }
 
-BOOL MB_CALL_TYPE mbUtilIsRegistered(const wchar_t* defaultPath)
+BOOL MB_CALL_TYPE mbUtilIsRegistered(const WCHAR* defaultPath)
 {
 #if ENABLE_VERIFY && ENABLE_IN_MB_MAIN
-    return SqBind::getInst()->loadLicenseAndVerify(std::wstring(defaultPath));
+    return SqBind::getInst()->loadLicenseAndVerify(base::string16(defaultPath));
 #else
     return TRUE;
 #endif
@@ -1697,6 +1726,14 @@ public:
     ~MbJsValue()
     {
         common::LiveIdDetect::get()->deconstructed(m_id);
+    }
+
+    static MbJsValue* wkeJsValueSaveToMb(jsExecState es, jsValue v)
+    {
+        MbJsValue* mbVal = new MbJsValue();
+        mbVal->m_type = kMbJsTypeV8Value;
+        mbVal->m_v = v;
+        return mbVal;
     }
 
     static MbJsValue* wkeJsValueToMb(jsExecState es, jsValue v)
@@ -1744,6 +1781,7 @@ public:
     double getDoubleVal() const { return m_doubleVal; }
     std::string getStrVal() const { return m_strVal; }
     BOOL getBoolVal() const { return m_boolVal; }
+    jsValue getJsVal() const { return m_v; }
 
 private:
     int64_t m_id;
@@ -1752,6 +1790,8 @@ private:
     double m_doubleVal;
     std::string m_strVal;
     BOOL m_boolVal;
+
+    jsValue m_v;
 };
 
 double MB_CALL_TYPE mbJsToDouble(mbJsExecState es, mbJsValue v)
@@ -1990,7 +2030,7 @@ const utf8* MB_CALL_TYPE mbNetGetHTTPHeaderField(mbNetJob jobPtr, const char* ke
     return wkeNetGetHTTPHeaderFieldFromResponse((wkeNetJob)jobPtr, key);
 }
 
-void MB_CALL_TYPE mbNetSetHTTPHeaderField(mbNetJob jobPtr, const wchar_t* key, const wchar_t* value, BOOL response)
+void MB_CALL_TYPE mbNetSetHTTPHeaderField(mbNetJob jobPtr, const WCHAR* key, const WCHAR* value, BOOL response)
 {
     wkeNetSetHTTPHeaderField((wkeNetJob)jobPtr, key, value, !!response);
 }
@@ -2293,6 +2333,11 @@ mbRequestType MB_CALL_TYPE mbNetGetRequestMethod(mbNetJob jobPtr)
     return (mbRequestType)wkeNetGetRequestMethod((wkeNetJob)jobPtr);
 }
 
+const char* MB_CALL_TYPE mbNetGetReferrer(mbNetJob jobPtr)
+{
+    return wkeNetGetReferrer((wkeNetJob)jobPtr);
+}
+
 long long MB_CALL_TYPE mbNetGetExpectedContentLength(mbWebUrlResponsePtr response)
 {
     return wkeNetGetExpectedContentLength((wkeWebUrlResponsePtr)response);
@@ -2539,30 +2584,24 @@ void MB_CALL_TYPE mbGetPdfPageData(mbWebView webviewHandle, mbOnGetPdfPageDataCa
 #endif // if ENABLE_IN_MB_MAIN
 }
 
-void mbSetUserKeyValue(mbWebView webviewHandle, const char* key, void* value)
+void MB_CALL_TYPE mbSetUserKeyValue(mbWebView webviewHandle, const char* key, void* value)
 {
-	checkThreadCallIsValid(__FUNCTION__);
+    checkThreadCallIsValid(__FUNCTION__);
     if (!key)
         return;
 
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
     if (!webview)
         return;
-
-	webview->getUuserKeyValues()[key] = value;
+    webview->setUserKeyValue(key, value);
 }
 
-void* mbGetUserKeyValue(mbWebView webviewHandle, const char* key)
+void* MB_CALL_TYPE mbGetUserKeyValue(mbWebView webviewHandle, const char* key)
 {
-	checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
     if (!webview)
         return nullptr;
-
-	std::map<std::string, void*>::const_iterator it = webview->getUuserKeyValues().find(key);
-	if (webview->getUuserKeyValues().end() == it)
-		return nullptr;
-	return it->second;
+    return webview->getUserKeyValue(key);
 }
 
 mbPostBodyElements* MB_CALL_TYPE mbNetGetPostBody(void* jobPtr)
@@ -2605,7 +2644,7 @@ void MB_CALL_TYPE mbSetDiskCacheEnabled(mbWebView webviewHandle, BOOL enable)
 
 void MB_CALL_TYPE mbSetDiskCachePath(mbWebView webviewHandle, const WCHAR* path)
 {
-    std::wstring* pathString = new std::wstring(path);
+    base::string16* pathString = new base::string16(path);
     common::ThreadCall::callBlinkThreadAsync(MB_FROM_HERE, [pathString] {
         std::string pathUtf8 = common::utf16ToUtf8(pathString->c_str());
         wkeSetDebugConfig(nullptr, "diskCachePath", pathUtf8.c_str());
@@ -2643,11 +2682,11 @@ void MB_CALL_TYPE mbSetWindowTitle(mbWebView webviewHandle, const utf8* title)
     HWND hwnd = mbGetHostHWND(webviewHandle);
     if (!hwnd)
         return;
-    std::wstring titleW = common::utf8ToUtf16(title);
+    base::string16 titleW = common::utf8ToUtf16(title);
     ::SetWindowTextW(hwnd, titleW.c_str());
 }
 
-void MB_CALL_TYPE mbSetWindowTitleW(mbWebView webviewHandle, const wchar_t* title)
+void MB_CALL_TYPE mbSetWindowTitleW(mbWebView webviewHandle, const WCHAR* title)
 {
     HWND hwnd = mbGetHostHWND(webviewHandle);
     if (!hwnd)
@@ -2723,4 +2762,199 @@ void MB_CALL_TYPE mbNetEnableResPacket(mbWebView webviewHandle, const WCHAR* pat
         return;
 
     webview->setPacketPathName(pathName);
+}
+
+void MB_CALL_TYPE mbGoToIndex(mbWebView webviewHandle, int index)
+{
+    common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [index](mb::MbWebView* webview) {
+        wkeGoToIndex(webview->getWkeWebView(), index);
+    });
+}
+
+void MB_CALL_TYPE mbOnNodeCreateProcess(mbWebView webviewHandle, mbNodeOnCreateProcessCallback callback, void* param)
+{
+    wkeNodeOnCreateProcess(nullptr, (wkeNodeOnCreateProcessCallback)callback, param);
+}
+
+void* MB_CALL_TYPE mbJsToV8Value(mbJsExecState es, mbJsValue v)
+{
+    MbJsValue* mbVal = (MbJsValue*)v;
+    if (mbVal->getType() != kMbJsTypeV8Value)
+        return nullptr;
+    return jsToV8Value((jsExecState)es, mbVal->getJsVal());
+}
+
+mbJsExecState MB_CALL_TYPE mbGetGlobalExecByFrame(mbWebView webviewHandle, mbWebFrameHandle frameId)
+{
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview)
+        return nullptr;
+
+    wkeWebView wkeWebview = webview->getWkeWebView();
+    return wkeGetGlobalExecByFrame(wkeWebview, (wkeWebFrameHandle)frameId);
+}
+
+mbWebView MB_CALL_TYPE mbGetWebViewForCurrentContext()
+{
+    wkeWebView wkeWebview = wkeGetWebViewForCurrentContext();
+    mbWebView webviewHandle = (mbWebView)wkeGetUserKeyValue(wkeWebview, "MbWebView");
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview)
+        return NULL_WEBVIEW;
+    return webviewHandle;
+}
+
+void MB_CALL_TYPE mbOnDocumentReadyInBlinkThread(mbWebView webviewHandle, mbDocumentReadyCallback callback, void* param)
+{
+    checkThreadCallIsValid(__FUNCTION__);
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
+    if (!webview)
+        return;
+    webview->getClosure().setDocumentReadyInBlinkCallback(callback, param);
+    printf("mbOnDocumentReadyInBlinkThread: %p\n", callback);
+    if (!callback)
+        __debugbreak();
+    common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
+        wkeOnDocumentReady2(webview->getWkeWebView(), onDocumentReady, (void*)webviewHandle);
+    });
+}
+
+int MB_CALL_TYPE mbGetContentWidth(mbWebView webviewHandle)
+{
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview)
+        return 1;
+    return wkeGetContentWidth(webview->getWkeWebView());
+}
+
+int MB_CALL_TYPE mbGetContentHeight(mbWebView webviewHandle)
+{
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview)
+        return 1;
+    return wkeGetContentHeight(webview->getWkeWebView());
+}
+
+BOOL MB_CALL_TYPE mbRegisterEmbedderCustomElement(mbWebView webviewHandle, mbWebFrameHandle frameId, const char* name, void* options, void* outResult)
+{
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview)
+        return FALSE;
+    return wkeRegisterEmbedderCustomElement(webview->getWkeWebView(), (mbWebFrameHandle)frameId, name, options, outResult);
+}
+
+void MB_CALL_TYPE mbOnThreadIdle(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCall::setThreadIdle(callback, param1, param2);
+}
+
+void MB_CALL_TYPE mbOnBlinkThreadInit(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCall::setBlinkThreadInited(callback, param1, param2);
+}
+
+void MB_CALL_TYPE mbCallBlinkThreadAsync(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCall::callBlinkThreadAsync(MB_FROM_HERE, [callback, param1, param2]() {
+        callback(param1, param2);
+    });
+}
+
+void MB_CALL_TYPE mbCallBlinkThreadSync(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCall::callBlinkThreadSync(MB_FROM_HERE, [callback, param1, param2]() {
+        callback(param1, param2);
+    });
+}
+
+void MB_CALL_TYPE mbCallUiThreadSync(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCall::callUiThreadSync(MB_FROM_HERE, [callback, param1, param2]() {
+        callback(param1, param2);
+    });
+}
+
+void MB_CALL_TYPE mbCallUiThreadAsync(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCall::callUiThreadAsync(MB_FROM_HERE, [callback, param1, param2]() {
+        callback(param1, param2);
+    });
+}
+
+void MB_CALL_TYPE mbWebFrameGetMainWorldScriptContext(mbWebView webviewHandle, mbWebFrameHandle frameId, v8ContextPtr contextOut)
+{
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+    if (!webview)
+        return;
+
+    wkeWebFrameHandle wkeFrameId = (wkeWebFrameHandle)frameId;
+    if ((mbWebFrameHandle)-2 == frameId)
+        wkeFrameId = wkeWebFrameGetMainFrame(webview->getWkeWebView());
+    return wkeWebFrameGetMainWorldScriptContext(webview->getWkeWebView(), wkeFrameId, contextOut);
+}
+
+void MB_CALL_TYPE mbEditorUnSelect(mbWebView webviewHandle)
+{
+    checkThreadCallIsValid(__FUNCTION__);
+    common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [](mb::MbWebView* webview) {
+        wkeEditorUnSelect(webview->getWkeWebView());
+    });
+}
+
+void MB_CALL_TYPE mbSetEditable(mbWebView webviewHandle, bool editable)
+{
+    common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [editable](mb::MbWebView* webview) {
+        wkeSetEditable(webview->getWkeWebView(), editable);
+    });
+}
+
+void MB_CALL_TYPE mbEditorRedo(mbWebView webviewHandle)
+{
+    checkThreadCallIsValid(__FUNCTION__);
+    common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [](mb::MbWebView* webview) {
+        wkeEditorRedo(webview->getWkeWebView());
+    });
+}
+
+void MB_CALL_TYPE mbGoToOffset(mbWebView webviewHandle, int offset)
+{
+    common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [offset](mb::MbWebView* webview) {
+        wkeGoToOffset(webview->getWkeWebView(), offset);
+    });
+}
+
+void MB_CALL_TYPE mbInsertCSSByFrame(mbWebView webviewHandle, mbWebFrameHandle frameId, const utf8* cssText)
+{
+    common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [frameId, cssText](mb::MbWebView* webview) {
+        wkeInsertCSSByFrame(webview->getWkeWebView(), (wkeWebFrameHandle)frameId, cssText);
+    });
+}
+
+v8Isolate MB_CALL_TYPE mbGetBlinkMainThreadIsolate()
+{
+    return wkeGetBlinkMainThreadIsolate();
+}
+
+void MB_CALL_TYPE mbOnWillReleaseScriptContext(mbWebView webviewHandle, mbWillReleaseScriptContextCallback callback, void* param)
+{
+    checkThreadCallIsValid(__FUNCTION__);
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
+    if (!webview)
+        return;
+    webview->getClosure().setWillReleaseScriptContextCallback(callback, param);
+}
+
+void MB_CALL_TYPE mbOnLoadUrlFinish(mbWebView webView, mbLoadUrlFinishCallback callback, void* callbackParam)
+{
+
+}
+
+void MB_CALL_TYPE mbOnLoadUrlHeadersReceived(mbWebView webView, mbLoadUrlHeadersReceivedCallback callback, void* callbackParam)
+{
+
+}
+
+void MB_CALL_TYPE mbUtilSetDefaultPrinterSettings(mbWebView webView, const mbDefaultPrinterSettings* setting)
+{
+
 }

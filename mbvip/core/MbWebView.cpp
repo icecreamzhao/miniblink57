@@ -11,7 +11,9 @@
 #endif
 
 #include "mbvip/core/MbWebView.h"
+#if defined(WIN32) 
 #include "mbvip/core/PromptWnd.h"
+#endif
 
 #if ENABLE_IN_MB_MAIN
 #include "printing/PdfViewerPluginFunc.h"
@@ -21,17 +23,25 @@
 #include "mbvip/common/LiveIdDetect.h"
 #include "mbvip/common/BindJsQuery.h"
 #include "mbvip/common/TimeUtil.h"
+#include "mbvip/common/StringUtil.h"
 #if ENABLE_IN_MB_MAIN
 #include "mbvip/ffax/ffaxmain.h"
 #include "mbvip/core/RenderInit.h"
 #endif
+
+#if !defined(OS_WIN)
+#include <cairo.h>
+#endif
+#include "skia/ext/platform_canvas.h"
+#include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
+
 #include <vector>
 
 namespace mb {
 
-int atomicIncrement(int volatile* addend) { return InterlockedIncrement(reinterpret_cast<long volatile*>(addend)); }
-int atomicDecrement(int volatile* addend) { return InterlockedDecrement(reinterpret_cast<long volatile*>(addend)); }
-const wchar_t* kClassWndName = L"mbWebWindowClass";
+long atomicIncrement(long volatile* addend) { return _InterlockedIncrement(reinterpret_cast<long volatile*>(addend)); }
+long atomicDecrement(long volatile* addend) { return _InterlockedDecrement(reinterpret_cast<long volatile*>(addend)); }
+const WCHAR* kClassWndName = u16("mbWebWindowClass");
 extern unsigned int g_mbMask;
 extern bool g_enableNativeSetCapture;
 extern bool g_enableNativeSetFocus;
@@ -50,8 +60,14 @@ MbWebView::MbWebView()
     m_isShow = false;
     m_hWnd = nullptr;
     m_isEnableNode = false;
+#if defined(OS_WIN)
     m_memoryBMP = nullptr;
     m_memoryDC = nullptr;
+#else
+    m_bitmap = nullptr;
+    m_memoryCanvas = nullptr;
+    m_surface = nullptr;
+#endif
     m_isLayerWindow = false;
     m_clientSize.cx = 0;
     m_clientSize.cy = 0;
@@ -71,10 +87,13 @@ MbWebView::MbWebView()
     m_enableMouseKeyMessage = true;
     m_zoomFactor = 1.0f;
     m_backgroundColor = 0xffffffff;
+    m_mainFrameId = 0;
+
     ::InitializeCriticalSection(&m_memoryCanvasLock);
     ::InitializeCriticalSection(&m_mouseMsgQueueLock);
     ::InitializeCriticalSection(&m_dirtyRectLock);
     ::InitializeCriticalSection(&m_clientSizeLock);
+    ::InitializeCriticalSection(&m_userKeyValuesLock);
 }
 
 void MbWebView::preDestroy()
@@ -102,13 +121,20 @@ MbWebView::~MbWebView()
         DebugBreak();
 
     m_hWnd = nullptr;
-
+#if defined(OS_WIN)
     if (m_memoryBMP)
         ::DeleteObject(m_memoryBMP);
 
     if (m_memoryDC)
         ::DeleteDC(m_memoryDC);
-
+#else
+    if (m_bitmap)
+        delete m_bitmap;
+    if (m_memoryCanvas)
+        delete m_memoryCanvas;
+    if (m_surface)
+        cairo_surface_destroy(m_surface);
+#endif
     if (m_draggableRegion)
         ::DeleteObject(m_draggableRegion);
 
@@ -194,6 +220,7 @@ void WKE_CALL_TYPE onURLChanged(wkeWebView wkeWebview, void* param, wkeWebFrameH
 
 bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeString msg, const wkeString defaultResult, wkeString result)
 {
+#if defined(WIN32) 
     int64_t id = (int64_t)param;
     MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
     if (!self)
@@ -214,6 +241,7 @@ bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeStri
         wkeSetString(result, str, strlen(str));
         mbDeleteString(resultVal);
     }
+#endif
     return true;
 }
 
@@ -283,7 +311,7 @@ void MbWebView::setHostWnd(HWND hWnd)
     m_hWnd = hWnd;
 
     if (!m_isTransparent)
-        m_isTransparent = !!(::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_LAYERED);
+        m_isTransparent = !!(::GetWindowLongW(hWnd, GWL_EXSTYLE) & WS_EX_LAYERED);
 
     mbWebView webviewHandle = (mbWebView)m_id;
     common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [](MbWebView* self) {
@@ -386,7 +414,7 @@ bool MbWebView::doDraggableRegionNcHitTest(HWND hWnd)
 
         if (hRootWnd) {
             ::ReleaseCapture();
-            ::PostMessage(hRootWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
+            ::PostMessageW(hRootWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
         }
     }
     return handle;
@@ -436,23 +464,24 @@ static void WKE_CALL_TYPE onDraggableRegionsChanged(wkeWebView webWindow, void* 
 
 void MbWebView::createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD styleEx, int x, int y, int width, int height)
 {
-    const wchar_t* szClassName = L"MtMbWebWindow";
+    const WCHAR* szClassName = u16("MtMbWebWindow");
     MSG msg = { 0 };
-    WNDCLASSW wndClass = { 0 };
+    WNDCLASSEXW wndClass = { 0 };
     static bool isFirstRegister = true;
     if (isFirstRegister) {
         isFirstRegister = false;
+        wndClass.cbSize = sizeof(WNDCLASSEXW);
         wndClass.style = CS_HREDRAW | CS_VREDRAW;
         wndClass.lpfnWndProc = &MbWebView::windowProc;
         wndClass.cbClsExtra = 200;
         wndClass.cbWndExtra = 200;
         wndClass.hInstance = GetModuleHandleW(NULL);
-        wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wndClass.hIcon = LoadIconW(NULL, IDI_APPLICATION);
+        wndClass.hCursor = LoadCursorW(NULL, IDC_ARROW);
         wndClass.hbrBackground = NULL;
         wndClass.lpszMenuName = NULL;
         wndClass.lpszClassName = szClassName;
-        RegisterClassW(&wndClass);
+        RegisterClassExW(&wndClass);
     }
 
     m_hWnd = CreateWindowExW(
@@ -546,6 +575,7 @@ SIZE MbWebView::getClientSizeLocked()
 
 void MbWebView::fillBackgroundColor(HDC hdc, int w, int h)
 {
+#if defined(OS_WIN)
     if (!m_isTransparent) {
         RECT r = { 0, 0, w, w };
         HBRUSH hbr = ::CreateSolidBrush(m_backgroundColor);
@@ -559,10 +589,12 @@ void MbWebView::fillBackgroundColor(HDC hdc, int w, int h)
             }
         }
     }
+#endif
 }
 
 void MbWebView::copyBitmapWhenResize(int w, int h, const SIZE& clientSize)
 {
+#if defined(OS_WIN)
     ::EnterCriticalSection(&m_clientSizeLock);
     if (!m_memoryDC || !m_memoryBMP) {
         ::LeaveCriticalSection(&m_clientSizeLock);
@@ -607,6 +639,7 @@ void MbWebView::copyBitmapWhenResize(int w, int h, const SIZE& clientSize)
 
     ::LeaveCriticalSection(&m_memoryCanvasLock);
     ::LeaveCriticalSection(&m_clientSizeLock);
+#endif
 }
 
 // in ui thread
@@ -618,6 +651,8 @@ void MbWebView::onResize(int w, int h, bool needSetHostWnd)
     if (clientSize.cx == w && clientSize.cy == h)
         return;
 
+    printf("MbWebView::onResize--------------------\n");
+
     setClientSizeLocked(w, h);
     setBlinkSize();
 
@@ -627,20 +662,20 @@ void MbWebView::onResize(int w, int h, bool needSetHostWnd)
         ::SetWindowPos(m_hWnd, NULL, 0, 0, w, h, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
 
-void readFile(const wchar_t* path, std::vector<char>* buffer)
-{
-    HANDLE hFile = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (INVALID_HANDLE_VALUE == hFile)
-        return;
-
-    DWORD fileSizeHigh;
-    const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
-
-    DWORD numberOfBytesRead = 0;
-    buffer->resize(bufferSize);
-    BOOL b = ::ReadFile(hFile, &buffer->at(0), bufferSize, &numberOfBytesRead, nullptr);
-    ::CloseHandle(hFile);
-}
+// void readFile(const wchar_t* path, std::vector<char>* buffer)
+// {
+//     HANDLE hFile = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//     if (INVALID_HANDLE_VALUE == hFile)
+//         return;
+// 
+//     DWORD fileSizeHigh;
+//     const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
+// 
+//     DWORD numberOfBytesRead = 0;
+//     buffer->resize(bufferSize);
+//     BOOL b = ::ReadFile(hFile, &buffer->at(0), bufferSize, &numberOfBytesRead, nullptr);
+//     ::CloseHandle(hFile);
+// }
 
 #if ENABLE_IN_MB_MAIN
 #if ENABLE_NODEJS
@@ -764,8 +799,6 @@ void MbWebView::onDidCreateScriptContext(wkeWebView webView, void* param, wkeWeb
 
 void MbWebView::onPaintUpdated(wkeWebView wkeWebview, void* param, const HDC hdc, int x, int y, int cx, int cy)
 {
-    //OutputDebugStringA("MbWebView::onPaintUpdated InComposite\n");
-
     int64_t id = (int64_t)param;
     MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
     if (!self)
@@ -791,12 +824,12 @@ void MbWebView::onPaintUpdatedInCompositeThread(const HDC hdc, int x, int y, int
     SIZE clientSize = getClientSizeLocked();
     if (0 == clientSize.cx * clientSize.cy)
         return;
-
+#if defined(OS_WIN)
     if (!m_memoryDC)
         m_memoryDC = ::CreateCompatibleDC(nullptr);
 
     if ((!m_memoryBMP /*|| m_clientSizeDirty*/) ||
-        (clientSize.cx * clientSize.cy != 0) && (clientSize.cx == cx && clientSize.cy == cy && 0 == x && 0 == y)) {
+        ((clientSize.cx * clientSize.cy != 0) && (clientSize.cx == cx && clientSize.cy == cy && 0 == x && 0 == y))) {
         //m_clientSizeDirty = false;
 
         if (m_memoryBMP)
@@ -819,14 +852,44 @@ void MbWebView::onPaintUpdatedInCompositeThread(const HDC hdc, int x, int y, int
     }
 
     if (m_memoryDC)
-        ::BitBlt(m_memoryDC, x, y, cx, cy, hdc, x, y, SRCCOPY);        
+        ::BitBlt(m_memoryDC, x, y, cx, cy, hdc, x, y, SRCCOPY);
+#else
+    if (!m_isWebWindowMode)
+        return;
+    SkCanvas* canvas = (SkCanvas*)hdc;
+    SkBitmap bitmap = skia::ReadPixels(canvas);
+
+    unsigned char* byteData = nullptr;
+    if ((!m_bitmap) || ((clientSize.cx * clientSize.cy != 0) && (clientSize.cx == cx && clientSize.cy == cy && 0 == x && 0 == y))) {
+        if (m_bitmap)
+            delete m_bitmap;
+        if (m_memoryCanvas)
+            delete m_memoryCanvas;
+        if (m_surface)
+            cairo_surface_destroy(m_surface);
+
+        m_surface = createSurfaceByHwnd(m_hWnd, cx, cy);
+
+        m_bitmap = new SkBitmap();
+        SkImageInfo info = SkImageInfo::MakeN32(cx, cy,kOpaque_SkAlphaType);
+        byteData = cairo_image_surface_get_data(m_surface);
+        m_bitmap->installPixels(info, byteData, cairo_image_surface_get_stride(m_surface), NULL, nullptr, nullptr);
+        m_memoryCanvas = new SkCanvas(*m_bitmap);
+    }
+
+    if (m_memoryCanvas) {        
+        SkRect isrc = SkRect::MakeXYWH(x, y, cx, cy);
+        SkRect dst = isrc;
+        m_memoryCanvas->drawBitmapRect(bitmap, isrc, dst, nullptr);
+    }
+#endif
 }
 
 static void drawLayeredWindow(HWND hWnd, HDC hdc, HDC hMemoryDC, const POINT& dstPoint)
 {
     BITMAP bmp = { 0 };
     HBITMAP hBmp = (HBITMAP)::GetCurrentObject(hMemoryDC, OBJ_BITMAP);
-    ::GetObject(hBmp, sizeof(BITMAP), (LPSTR)&bmp);
+    ::GetObject(hBmp, sizeof(BITMAP), &bmp);
 
     POINT pointSource = { 0, 0 };
     SIZE sizeDest = { 0 };
@@ -841,13 +904,14 @@ static void drawLayeredWindow(HWND hWnd, HDC hdc, HDC hMemoryDC, const POINT& ds
     ::UpdateLayeredWindow(hWnd, hdc, nullptr, &sizeDest, hMemoryDC, &pointSource, RGB(0xFF, 0xFF, 0xFF), &blend, ULW_ALPHA);
 }
 
-void MbWebView::onPaintUpdatedInUiThread(int x, int y, int cx, int cy)
+void MbWebView::onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, int cy)
 {
     SIZE clientSize = getClientSizeLocked();
 
     ::EnterCriticalSection(&m_memoryCanvasLock);
 
     if (m_hWnd && m_isAutoDrawToHwnd) {
+#if defined(OS_WIN)
         HDC hdcScreen = ::GetDC(m_hWnd);
         if (!m_isTransparent) {
             ::BitBlt(hdcScreen, x + m_offset.x, y + m_offset.y, cx, cy, m_memoryDC, x, y, SRCCOPY);
@@ -855,18 +919,27 @@ void MbWebView::onPaintUpdatedInUiThread(int x, int y, int cx, int cy)
             drawLayeredWindow(m_hWnd, hdcScreen, m_memoryDC, m_offset);
         
         ::ReleaseDC(m_hWnd, hdcScreen);
+#else
+        ;
+#endif
     }
 
     mbPaintUpdatedCallback paintUpdatedCallback = getClosure().m_PaintUpdatedCallback;
-    if (paintUpdatedCallback)
+    if (paintUpdatedCallback) {
+#if defined(OS_WIN)
         paintUpdatedCallback(getWebviewHandle(), getClosure().m_PaintUpdatedParam, m_memoryDC, x, y, cx, cy);
+#else
+        paintUpdatedCallback(getWebviewHandle(), getClosure().m_PaintUpdatedParam, hdc, x, y, cx, cy);
+#endif
+    }
 
+#if defined(OS_WIN)
     mbPaintBitUpdatedCallback paintBitUpdatedCallback = getClosure().m_PaintBitUpdatedCallback;
     if (paintBitUpdatedCallback) {
         mbRect r = { x, y, cx, cy };
         paintBitUpdatedCallback(getWebviewHandle(), getClosure().m_PaintBitUpdatedParam, m_bits, &r, clientSize.cx, clientSize.cy);
     }
-
+#endif
     ::LeaveCriticalSection(&m_memoryCanvasLock);
 
     ::EnterCriticalSection(&m_clientSizeLock);
@@ -880,30 +953,44 @@ void MbWebView::onPrePaintUpdatedInCompositeThread(const HDC hdc, int x, int y, 
     onPaintUpdatedInCompositeThread(hdc, x, y, cx, cy);
     ::LeaveCriticalSection(&m_memoryCanvasLock);
 
-    int64_t id = m_id;
-    common::ThreadCall::callUiThreadAsync(MB_FROM_HERE, [id, x, y, cx, cy] {
-        MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
-        if (!self)
-            return;
-            
-        self->onPaintUpdatedInUiThread(x, y, cx, cy);
-    });
+//     int64_t id = m_id;
+//     common::ThreadCall::callUiThreadAsync(MB_FROM_HERE, [id, x, y, cx, cy] {
+//         MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
+//         if (!self)
+//             return;
+//             
+//         self->onPaintUpdatedInUiThread(x, y, cx, cy);
+//     });
+    onPaintUpdatedInUiThread(hdc, x, y, cx, cy);
 
-    if (m_isWebWindowMode) {
+    bool needReflush = m_isWebWindowMode;
+#if !defined(WIN32)
+    needReflush = true;
+#endif
+    if (needReflush) {
         RECT rc = { x, y, x + cx, y + cy };
         ::InvalidateRect(m_hWnd, &rc, false);
     }
 }
 
+
+
 HDC MbWebView::getViewDC()
 {
+#if defined(OS_WIN)
     ::EnterCriticalSection(&m_memoryCanvasLock);
     return m_memoryDC;
+#else
+    DebugBreak();
+    return nullptr;
+#endif
 }
 
 void MbWebView::unlockViewDC()
 {
+#if defined(OS_WIN)
     ::LeaveCriticalSection(&m_memoryCanvasLock);
+#endif
 }
 
 void MbWebView::delayDoMouseMsgInBlinkThread()
@@ -1012,70 +1099,74 @@ bool MbWebView::setCursorInfoTypeByCache()
     HCURSOR hCur = NULL;
     switch (m_cursorInfoType) {
     case WkeCursorInfoPointer:
-        hCur = ::LoadCursor(NULL, IDC_ARROW);
+        hCur = ::LoadCursorW(NULL, IDC_ARROW);
         break;
     case WkeCursorInfoIBeam:
-        hCur = ::LoadCursor(NULL, IDC_IBEAM);
+        hCur = ::LoadCursorW(NULL, IDC_IBEAM);
         break;
     case WkeCursorInfoProgress:
-        hCur = ::LoadCursor(NULL, IDC_APPSTARTING);
+        hCur = ::LoadCursorW(NULL, IDC_APPSTARTING);
         break;
     case WkeCursorInfoCross:
-        hCur = ::LoadCursor(NULL, IDC_CROSS);
+        hCur = ::LoadCursorW(NULL, IDC_CROSS);
         break;
     case WkeCursorInfoMove:
-        hCur = ::LoadCursor(NULL, IDC_SIZEALL);
+        hCur = ::LoadCursorW(NULL, IDC_SIZEALL);
         break;
 
     case WkeCursorInfoColumnResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZEWE);
+        hCur = ::LoadCursorW(NULL, IDC_SIZEWE);
         break;
     case WkeCursorInfoRowResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZENS);
+        hCur = ::LoadCursorW(NULL, IDC_SIZENS);
         break;
     case WkeCursorInfoHand:
-        hCur = ::LoadCursor(NULL, IDC_HAND);
+        hCur = ::LoadCursorW(NULL, IDC_HAND);
         break;
     case WkeCursorInfoWait:
-        hCur = ::LoadCursor(NULL, IDC_WAIT);
+        hCur = ::LoadCursorW(NULL, IDC_WAIT);
         break;
     case WkeCursorInfoHelp:
-        hCur = ::LoadCursor(NULL, IDC_HELP);
+        hCur = ::LoadCursorW(NULL, IDC_HELP);
         break;
     case WkeCursorInfoEastResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZEWE);
+        hCur = ::LoadCursorW(NULL, IDC_SIZEWE);
         break;
     case WkeCursorInfoNorthResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZENS);
+        hCur = ::LoadCursorW(NULL, IDC_SIZENS);
         break;
     case WkeCursorInfoSouthWestResize:
     case WkeCursorInfoNorthEastResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZENESW);
+        hCur = ::LoadCursorW(NULL, IDC_SIZENESW);
         break;
     case WkeCursorInfoSouthResize:
     case WkeCursorInfoNorthSouthResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZENS);
+        hCur = ::LoadCursorW(NULL, IDC_SIZENS);
         break;
     case WkeCursorInfoNorthWestResize:
     case WkeCursorInfoSouthEastResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZENWSE);
+        hCur = ::LoadCursorW(NULL, IDC_SIZENWSE);
         break;
     case WkeCursorInfoWestResize:
     case WkeCursorInfoEastWestResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZEWE);
+        hCur = ::LoadCursorW(NULL, IDC_SIZEWE);
         break;
     case WkeCursorInfoNorthEastSouthWestResize:
     case WkeCursorInfoNorthWestSouthEastResize:
-        hCur = ::LoadCursor(NULL, IDC_SIZEALL);
+        hCur = ::LoadCursorW(NULL, IDC_SIZEALL);
         break;
     case WkeCursorInfoNoDrop:
     case WkeCursorInfoNotAllowed:
-        hCur = ::LoadCursor(NULL, IDC_NO);
+        hCur = ::LoadCursorW(NULL, IDC_NO);
         break;
     }
 
     if (hCur) {
+#if defined(WIN32)
         ::SetCursor(hCur);
+#else
+        ::linuxSetCursor(m_hWnd, hCur);
+#endif
         return true;
     }
 
@@ -1169,9 +1260,9 @@ void MbWebView::onBlinkThreadPaint()
     //////////////////////////////////////////////////////////////////////////
 }
 
-void MbWebView::onPaint(HWND hWnd)
+void MbWebView::onPaint(HWND hWnd, WPARAM wParam)
 {
-    if (WS_EX_LAYERED == (WS_EX_LAYERED & GetWindowLong(hWnd, GWL_EXSTYLE)))
+    if (WS_EX_LAYERED == (WS_EX_LAYERED & GetWindowLongW(hWnd, GWL_EXSTYLE)))
         return;
     
     PAINTSTRUCT ps = { 0 };
@@ -1194,12 +1285,33 @@ void MbWebView::onPaint(HWND hWnd)
     int height = rcInvalid.bottom - rcInvalid.top;
 
     if (0 != width && 0 != height) {
+#if defined(OS_WIN)
         HDC hMbDC = getViewDC();
         if (hMbDC) {
             ::BitBlt(hdc, destX, destY, width, height, hMbDC, srcX, srcY, SRCCOPY);
         } else
             ::FillRect(hdc, &ps.rcPaint, (HBRUSH)::GetStockObject(WHITE_BRUSH));
         unlockViewDC();
+#else
+        if (m_surface) {
+            ::EnterCriticalSection(&m_memoryCanvasLock);
+            cairo_t* cr = (cairo_t*)wParam;
+
+            cairo_surface_flush(m_surface);
+//             unsigned char* byteData = cairo_image_surface_get_data(m_surface);
+//             unsigned __int32* source_data = (unsigned __int32*)byteData;
+//             int stride = cairo_image_surface_get_stride(m_surface) / 4;
+
+//             for (int y = 0; y < height; y++) {
+//                 for (int x = 0; x < width; x++) {
+//                     source_data[y * stride + x] = 0xff112233;
+//                 }
+//             }
+            cairo_surface_mark_dirty(m_surface);
+            cairo_set_source_surface(cr, m_surface, 0, 0);
+            ::LeaveCriticalSection(&m_memoryCanvasLock);
+        }
+#endif
     }
 
     ::EndPaint(hWnd, &ps);
@@ -1259,7 +1371,7 @@ LRESULT MbWebView::windowProcImpl(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_PAINT:
-        onPaint(hWnd);
+        onPaint(hWnd, wParam);
         break;
 
     case WM_SIZE:
@@ -1468,9 +1580,9 @@ void MbWebView::setPacketPathName(const WCHAR* pathName)
 static const char kResPacketPrefix[] = "mbpack:///";
 static const size_t kResPacketPrefixLen = sizeof(kResPacketPrefix) - 1;
 
-static std::vector<std::wstring> splitUrl(const std::string& text)
+static std::vector<base::string16> splitUrl(const std::string& text)
 {
-    std::vector<std::wstring> result;
+    std::vector<base::string16> result;
     size_t pos = 0;
     std::string temp = text;
     while (true) {
@@ -1480,14 +1592,14 @@ static std::vector<std::wstring> splitUrl(const std::string& text)
             pos = temp.find('/', posTemp);
 
             if (pos == std::string::npos) {
-                std::wstring tokenW = common::utf8ToUtf16(temp);
+                base::string16 tokenW = common::utf8ToUtf16(temp);
                 result.push_back(tokenW);
                 break;
             }
         }
 
         std::string token = temp.substr(0, pos);
-        std::wstring tokenW = common::utf8ToUtf16(token);
+        base::string16 tokenW = common::utf8ToUtf16(token);
 
         result.push_back(tokenW);
         temp = temp.substr(pos + 1, std::string::npos);
@@ -1498,6 +1610,7 @@ static std::vector<std::wstring> splitUrl(const std::string& text)
 
 bool MbWebView::handleResPacket(const char* url, void* job)
 {
+#if defined(OS_WIN)
     HRESULT hr;
     IStorage* tempStorage = nullptr;
     IStorage* subStorage = nullptr;
@@ -1515,13 +1628,13 @@ bool MbWebView::handleResPacket(const char* url, void* job)
     if (!SUCCEEDED(hr))
         return false;
 
-    std::vector<std::wstring> tokens = splitUrl(text);
+    std::vector<base::string16> tokens = splitUrl(text);
 
     std::vector<IStorage*> storages;
     storages.push_back(tempStorage);
 
     for (size_t i = 0; i < tokens.size(); ++i) {
-        std::wstring token = tokens[i];
+        base::string16 token = tokens[i];
         if (i == tokens.size() - 1) {
             hr = tempStorage->OpenStream(token.c_str(), NULL, STGM_READ | STGM_SHARE_EXCLUSIVE, 0, &pStm);
             if (!SUCCEEDED(hr))
@@ -1556,6 +1669,27 @@ bool MbWebView::handleResPacket(const char* url, void* job)
         pStm->Release();
 
     return true;
+#else
+    return false;
+#endif
+}
+
+void MbWebView::setUserKeyValue(const char* key, void* value)
+{
+    ::EnterCriticalSection(&m_userKeyValuesLock);
+    m_userKeyValues[key] = value;
+    ::LeaveCriticalSection(&m_userKeyValuesLock);
+}
+
+void* MbWebView::getUserKeyValue(const char* key) const
+{
+    ::EnterCriticalSection(&m_userKeyValuesLock);
+    std::map<std::string, void*>::const_iterator it = m_userKeyValues.find(key);
+    if (m_userKeyValues.end() == it)
+        return nullptr;
+    void* ret = it->second;
+    ::LeaveCriticalSection(&m_userKeyValuesLock);
+    return ret;
 }
 
 }

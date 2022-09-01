@@ -63,7 +63,7 @@ private:
 
     static TaskAsyncData* cretaeAsyncData(DWORD toThreadId);
 
-    static unsigned __stdcall blinkThread(void* created);
+    static unsigned int CALLBACK blinkThread(void* created);
 };
 
 } // MtRender

@@ -12,10 +12,28 @@
 #define MB_DEFINE_H
 
 #include <windows.h>
+#if !defined(WIN32)
+#include <dlfcn.h>
+#include <stdio.h>
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 
+#if defined(__clang__)
+#define MB_DLLEXPORT __attribute__ ((visibility("default")))
+//#define MB_SELECTANY __attribute__((selectany))
+#define MB_SELECTANY 
+#else
+typedef __int64 int64_t;
+#define MB_DLLEXPORT __declspec(dllexport)
+#define MB_SELECTANY __declspec(selectany)
+#endif
+
+#if __SIZEOF_LONG__ == 8
+#define MB_CALL_TYPE 
+#else
 #define MB_CALL_TYPE __stdcall
+#endif
 
 typedef struct _mbRect {
     int x;
@@ -87,7 +105,7 @@ typedef enum {
 
 #if !defined(__cplusplus)
 #ifndef HAVE_WCHAR_T
-typedef unsigned short wchar_t;
+typedef unsigned short WCHAR;
 #endif
 #endif
 
@@ -139,7 +157,7 @@ typedef struct _mbSettings {
     mbOnBlinkThreadInitCallback blinkThreadInitCallback;
     void* blinkThreadInitCallbackParam;
     intptr_t version;
-    const wchar_t* mainDllPath;
+    const WCHAR* mainDllPath;
     HMODULE mainDllHandle;
     const char* config;
 } mbSettings;
@@ -157,12 +175,11 @@ namespace mb { class MbWebView; }
 #else
 struct _tagMbWebView;
 #endif
-typedef intptr_t mbWebView;
 
-#ifdef _WIN64
+#if __SIZEOF_LONG__ == 8
 typedef __int64          mbWebView;
 #else
-typedef int              mbWebView;
+typedef intptr_t         mbWebView;
 #endif
 
 #define NULL_WEBVIEW     0
@@ -408,10 +425,11 @@ typedef enum {
     kMbJsTypeUndefined  = 5,
     //kMbJsTypeArray = 6,
     kMbJsTypeNull = 7,
+    kMbJsTypeV8Value = 8,
 } mbJsType;
 
-typedef long long int64_t;
-typedef int64_t mbJsValue;
+//typedef long long int64_t;
+typedef long long mbJsValue;
 typedef void* mbJsExecState;
 
 typedef void(MB_CALL_TYPE *mbOnGetPdfPageDataCallback)(mbWebView webView, void* param, void* data, size_t size);
@@ -432,12 +450,16 @@ typedef mbStringPtr(MB_CALL_TYPE *mbPromptBoxCallback)(mbWebView webView, void* 
 typedef BOOL(MB_CALL_TYPE *mbNavigationCallback)(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url);
 typedef mbWebView(MB_CALL_TYPE *mbCreateViewCallback)(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url, const mbWindowFeatures* windowFeatures);
 typedef void(MB_CALL_TYPE *mbDocumentReadyCallback)(mbWebView webView, void* param, mbWebFrameHandle frameId);
+typedef void(MB_CALL_TYPE *mbLoadUrlFinishCallback)(mbWebView webView, void* param, const utf8* url, mbNetJob job, int len);
+typedef void(MB_CALL_TYPE *mbLoadUrlHeadersReceivedCallback)(mbWebView webView, void* param, const char* url, mbNetJob job);
 typedef BOOL(MB_CALL_TYPE *mbCloseCallback)(mbWebView webView, void* param, void* unuse);
 typedef BOOL(MB_CALL_TYPE *mbDestroyCallback)(mbWebView webView, void* param, void* unuse);
 typedef void(MB_CALL_TYPE *mbOnShowDevtoolsCallback)(mbWebView webView, void* param);
 typedef void(MB_CALL_TYPE *mbDidCreateScriptContextCallback)(mbWebView webView, void* param, mbWebFrameHandle frameId, void* context, int extensionGroup, int worldId);
 typedef BOOL(MB_CALL_TYPE *mbGetPluginListCallback)(BOOL refresh, void* pluginListBuilder, void* param);
 typedef BOOL(MB_CALL_TYPE *mbNetResponseCallback)(mbWebView webView, void* param, const utf8* url, mbNetJob job);
+typedef void(MB_CALL_TYPE* mbThreadCallback)(void* param1, void* param2);
+typedef void(MB_CALL_TYPE* mbNodeOnCreateProcessCallback)(mbWebView webView, void* param, const WCHAR* applicationPath, const WCHAR* arguments, STARTUPINFOW* startup);
 
 typedef enum {
     MB_LOADING_SUCCEEDED,
@@ -517,7 +539,7 @@ typedef struct _mbNetJobDataBind {
     mbNetJobDataFinishCallback finishCallback;
 } mbNetJobDataBind;
 
-typedef void(MB_CALL_TYPE*mbPopupDialogSaveNameCallback)(void* ptr, const wchar_t* filePath);
+typedef void(MB_CALL_TYPE*mbPopupDialogSaveNameCallback)(void* ptr, const WCHAR* filePath);
 
 typedef struct _mbDownloadBind {
     void* param;
@@ -608,6 +630,22 @@ typedef struct _mbPrintintSettings {
     float scale;
 } mbPrintintSettings;
 
+typedef struct _mbDefaultPrinterSettings {
+    int structSize; // 默认是4 * 10
+    BOOL isLandscape; // 是否为横向打印格式
+    BOOL isPrintHeadFooter; // 
+    BOOL isPrintBackgroud; // 是否打印背景
+    int edgeDistanceLeft; // 上边距单位：毫米
+    int edgeDistanceTop;
+    int edgeDistanceRight;
+    int edgeDistanceBottom;
+    int copies; // 默认打印份数
+    int paperType; // DMPAPER_A4等
+#if defined(__cplusplus)
+    inline _mbDefaultPrinterSettings();
+#endif
+} mbDefaultPrinterSettings;
+
 typedef BOOL(MB_CALL_TYPE *mbPrintingCallback)(mbWebView webview, void* param, mbPrintintStep step, HDC hDC, const mbPrintintSettings* settings, int pageCount);
 
 typedef mbStringPtr(MB_CALL_TYPE *mbImageBufferToDataURLCallback)(mbWebView webView, void* param, const char* data, size_t size);
@@ -618,55 +656,103 @@ typedef mbStringPtr(MB_CALL_TYPE *mbImageBufferToDataURLCallback)(mbWebView webV
 
 #define MB_DEFINE_ITERATOR0(returnVal, name, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR1(returnVal, name, p1, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR2(returnVal, name, p1, p2, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR3(returnVal, name, p1, p2, p3, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR4(returnVal, name, p1, p2, p3, p4, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR5(returnVal, name, p1, p2, p3, p4, p5, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR6(returnVal, name, p1, p2, p3, p4, p5, p6, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR7(returnVal, name, p1, p2, p3, p4, p5, p6, p7, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR8(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR9(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8, p9); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR10(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define MB_DEFINE_ITERATOR11(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, description) \
     typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    MB_SELECTANY FN_##name name = ((FN_##name)0);
+
+//---
+
+#define MB_DECLARE_H_ITERATOR0(returnVal, name, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR1(returnVal, name, p1, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR2(returnVal, name, p1, p2, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR3(returnVal, name, p1, p2, p3, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR4(returnVal, name, p1, p2, p3, p4, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR5(returnVal, name, p1, p2, p3, p4, p5, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR6(returnVal, name, p1, p2, p3, p4, p5, p6, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR7(returnVal, name, p1, p2, p3, p4, p5, p6, p7, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR8(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR9(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8, p9); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR10(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10); \
+    extern FN_##name name;
+
+#define MB_DECLARE_H_ITERATOR11(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, description) \
+    typedef returnVal(MB_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11); \
+    extern FN_##name name;
 
 // ---
-
-#define MB_DLLEXPORT __declspec(dllexport)
 
 #define MB_DECLARE_ITERATOR0(returnVal, name, description) \
     MB_EXTERN_C MB_DLLEXPORT returnVal MB_CALL_TYPE name();
@@ -706,10 +792,17 @@ typedef mbStringPtr(MB_CALL_TYPE *mbImageBufferToDataURLCallback)(mbWebView webV
 
 // ---
 
+#if defined(WIN32)
 #define MB_GET_PTR_ITERATOR(name) \
     name = (FN_##name)GetProcAddress(g_hMiniblinkMod, #name); \
     if (!name) \
         MessageBoxA(((HWND)0), "mb api not found", #name, 0);
+#else
+#define MB_GET_PTR_ITERATOR(name) \
+    name = (FN_##name)dlsym(g_hMiniblinkMod, #name); \
+    if (!name) \
+        printf("mb api not found: %s", #name);
+#endif
 
 #define MB_GET_PTR_ITERATOR0(returnVal, name, description) \
     MB_GET_PTR_ITERATOR(name);
@@ -809,7 +902,7 @@ ITERATOR2(void, mbSetViewProxy, mbWebView webView, const mbProxy* proxy, "")\
 ITERATOR2(void, mbNetSetMIMEType, mbNetJob jobPtr, const char* type, "") \
 ITERATOR1(const char*, mbNetGetMIMEType, mbNetJob jobPtr, "只能在blink线程调用（非主线程）") \
 ITERATOR3(const utf8*, mbNetGetHTTPHeaderField, mbNetJob job, const char* key, BOOL fromRequestOrResponse, "") \
-ITERATOR4(void, mbNetSetHTTPHeaderField, mbNetJob jobPtr, const wchar_t* key, const wchar_t* value, BOOL response, "") \
+ITERATOR4(void, mbNetSetHTTPHeaderField, mbNetJob jobPtr, const WCHAR* key, const WCHAR* value, BOOL response, "") \
 \
 ITERATOR2(void, mbSetMouseEnabled, mbWebView webView, BOOL b, "") \
 ITERATOR2(void, mbSetTouchEnabled, mbWebView webView, BOOL b, "") \
@@ -837,7 +930,7 @@ ITERATOR2(void, mbSetCookieJarFullPath, mbWebView webView, const WCHAR* path, ""
 ITERATOR2(void, mbSetLocalStorageFullPath, mbWebView webView, const WCHAR* path, "") \
 ITERATOR1(const utf8*, mbGetTitle, mbWebView webView, "") \
 ITERATOR2(void, mbSetWindowTitle, mbWebView webView, const utf8* title, "") \
-ITERATOR2(void, mbSetWindowTitleW, mbWebView webView, const wchar_t* title, "") \
+ITERATOR2(void, mbSetWindowTitleW, mbWebView webView, const WCHAR* title, "") \
 ITERATOR1(const utf8*, mbGetUrl, mbWebView webView, "") \
 ITERATOR1(int, mbGetCursorInfoType, mbWebView webView, "") \
 ITERATOR2(void, mbAddPluginDirectory, mbWebView webView, const WCHAR* path, "") \
@@ -942,7 +1035,7 @@ ITERATOR4(void, mbGetContentAsMarkup, mbWebView webView, mbGetContentAsMarkupCal
 ITERATOR3(void, mbGetSource, mbWebView webView, mbGetSourceCallback calback, void* param, "") \
 ITERATOR3(void, mbUtilSerializeToMHTML, mbWebView webView, mbGetSourceCallback calback, void* param, "") \
 ITERATOR1(const char*, mbUtilCreateRequestCode, const char* registerInfo, "") \
-ITERATOR1(BOOL, mbUtilIsRegistered, const wchar_t* defaultPath, "") \
+ITERATOR1(BOOL, mbUtilIsRegistered, const WCHAR* defaultPath, "") \
 ITERATOR3(BOOL, mbUtilPrint, mbWebView webView, mbWebFrameHandle frameId, const mbPrintSettings* printParams, "") \
 ITERATOR1(const utf8*, mbUtilBase64Encode, const utf8* str, "") \
 ITERATOR1(const utf8*, mbUtilBase64Decode, const utf8* str, "") \
@@ -971,30 +1064,69 @@ ITERATOR2(void, mbPluginListBuilderAddFileExtensionToLastMediaType, void* builde
 \
 ITERATOR0(void, mbEnableHighDPISupport, "") \
 ITERATOR0(void, mbRunMessageLoop, "") \
+ITERATOR3(void, mbOnLoadUrlFinish, mbWebView webView, mbLoadUrlFinishCallback callback, void* callbackParam, "") \
+ITERATOR3(void, mbOnLoadUrlHeadersReceived, mbWebView webView, mbLoadUrlHeadersReceivedCallback callback, void* callbackParam, "") \
+ITERATOR3(void, mbOnDocumentReadyInBlinkThread, mbWebView webView, mbDocumentReadyCallback callback, void* param, "") \
+ITERATOR2(void, mbUtilSetDefaultPrinterSettings, mbWebView webView, const mbDefaultPrinterSettings* setting, "") \
+ITERATOR1(int, mbGetContentWidth, mbWebView webView, "") \
+ITERATOR1(int, mbGetContentHeight, mbWebView webView, "") \
+ITERATOR0(mbWebView, mbGetWebViewForCurrentContext, "") \
+ITERATOR5(BOOL, mbRegisterEmbedderCustomElement, mbWebView webviewHandle, mbWebFrameHandle frameId, const char* name, void* options, void* outResult, "") \
+ITERATOR3(void, mbOnNodeCreateProcess, mbWebView webviewHandle, mbNodeOnCreateProcessCallback callback, void* param, "") \
+ITERATOR2(mbJsExecState, mbGetGlobalExecByFrame, mbWebView webView, mbWebFrameHandle frameId, "") \
+ITERATOR2(void*, mbJsToV8Value, mbJsExecState es, mbJsValue v, "") \
+ITERATOR3(void, mbOnThreadIdle, mbThreadCallback callback, void* param1, void* param2, "") \
+ITERATOR3(void, mbOnBlinkThreadInit, mbThreadCallback callback, void* param1, void* param2, "") \
+ITERATOR3(void, mbCallBlinkThreadAsync, mbThreadCallback callback, void* param1, void* param2, "") \
+ITERATOR3(void, mbCallBlinkThreadSync, mbThreadCallback callback, void* param1, void* param2, "") \
+ITERATOR3(void, mbCallUiThreadSync, mbThreadCallback callback, void* param1, void* param2, "") \
+ITERATOR3(void, mbCallUiThreadAsync, mbThreadCallback callback, void* param1, void* param2, "") \
+ITERATOR3(void, mbSetUserKeyValue, mbWebView webView, const char* key, void* value, "") \
+ITERATOR2(void*, mbGetUserKeyValue, mbWebView webView, const char* key, "") \
+ITERATOR2(void, mbGoToOffset, mbWebView webView, int offset, "") \
+ITERATOR2(void, mbGoToIndex, mbWebView webView, int index, "") \
+ITERATOR1(void, mbEditorRedo, mbWebView webView, "") \
+ITERATOR1(void, mbEditorUnSelect, mbWebView webView, "") \
+ITERATOR0(v8Isolate, mbGetBlinkMainThreadIsolate, "") \
+ITERATOR3(void, mbInsertCSSByFrame, mbWebView webView, mbWebFrameHandle frameId, const utf8* cssText, "") \
+ITERATOR3(void, mbWebFrameGetMainWorldScriptContext, mbWebView webView, mbWebFrameHandle frameId, v8ContextPtr contextOut, "") \
+ITERATOR3(void, mbOnWillReleaseScriptContext, mbWebView webView, mbWillReleaseScriptContextCallback callback, void* callbackParam, "") \
+ITERATOR1(const char*, mbNetGetReferrer, mbNetJob jobPtr, "获取request的referrer") \
+ITERATOR2(void, mbSetEditable, mbWebView webView, bool editable, "") \
+ITERATOR1(void*, mbGetProcAddr, const char* name, "")
 
 #if ENABLE_MB == 1
-
+// 如果是在dll\so里
 MB_EXTERN_C MB_DLLEXPORT void MB_CALL_TYPE mbInit(const mbSettings* settings);
 
 MB_FOR_EACH_DEFINE_FUNCTION(MB_DECLARE_ITERATOR0, MB_DECLARE_ITERATOR1, MB_DECLARE_ITERATOR2, \
     MB_DECLARE_ITERATOR3, MB_DECLARE_ITERATOR4, MB_DECLARE_ITERATOR5, MB_DECLARE_ITERATOR6, MB_DECLARE_ITERATOR7, MB_DECLARE_ITERATOR8, MB_DECLARE_ITERATOR9, MB_DECLARE_ITERATOR10, MB_DECLARE_ITERATOR11)
 
-#else
+#else // ENABLE_MB
 
+#if MB_IN_EXE_H == 1 || !defined(__clang__)
+// 如果在linux exp文件或者win exe里
 MB_FOR_EACH_DEFINE_FUNCTION(MB_DEFINE_ITERATOR0, MB_DEFINE_ITERATOR1, MB_DEFINE_ITERATOR2, \
     MB_DEFINE_ITERATOR3, MB_DEFINE_ITERATOR4, MB_DEFINE_ITERATOR5, MB_DEFINE_ITERATOR6, MB_DEFINE_ITERATOR7, MB_DEFINE_ITERATOR8, MB_DEFINE_ITERATOR9, MB_DEFINE_ITERATOR10, MB_DEFINE_ITERATOR11)
+#else
+// 如果在linux 非exp文件
+MB_FOR_EACH_DEFINE_FUNCTION(MB_DECLARE_H_ITERATOR0, MB_DECLARE_H_ITERATOR1, MB_DECLARE_H_ITERATOR2, \
+    MB_DECLARE_H_ITERATOR3, MB_DECLARE_H_ITERATOR4, MB_DECLARE_H_ITERATOR5, MB_DECLARE_H_ITERATOR6, MB_DECLARE_H_ITERATOR7, MB_DECLARE_H_ITERATOR8, \
+    MB_DECLARE_H_ITERATOR9, MB_DECLARE_H_ITERATOR10, MB_DECLARE_H_ITERATOR11)
+#endif // MB_IN_EXE_H
 
 typedef void (MB_CALL_TYPE *FN_mbInit)(const mbSettings* settings);
 
-#ifdef _WIN64
-__declspec(selectany) const wchar_t* kMbMainDllPath = L"miniblink_x64.dll";
-#else
-__declspec(selectany) const wchar_t* kMbMainDllPath = L"node.dll";
-#endif
+#if defined(WIN32)
+# ifdef _WIN64
+MB_SELECTANY const WCHAR* kMbMainDllPath = L"miniblink_x64.dll";
+# else
+MB_SELECTANY const WCHAR* kMbMainDllPath = L"node.dll";
+# endif
 
-__declspec(selectany) HMODULE g_hMiniblinkMod = nullptr;
+MB_SELECTANY HMODULE g_hMiniblinkMod = nullptr;
 
-inline void mbSetMbMainDllPath(const wchar_t* dllPath)
+inline void mbSetMbMainDllPath(const WCHAR* dllPath)
 {
     kMbMainDllPath = dllPath;
 }
@@ -1026,9 +1158,25 @@ inline void mbInit(const mbSettings* settings)
     return;
 }
 
-#endif
+#else // defined(WIN32)
 
+inline void mbInit(const mbSettings* settings)
+{
+    printf("mbInit\n");
+    void* g_hMiniblinkMod = dlopen("/home/daniel/Desktop/wkexe/miniblink.so", RTLD_LAZY);
+    printf("g_hMiniblinkMod: %p\n", g_hMiniblinkMod);
+    FN_mbInit mbInitExFunc = (FN_mbInit)dlsym(g_hMiniblinkMod, "mbInit");
+    printf("mbInitExFunc: %p\n", mbInitExFunc);
+    mbInitExFunc(settings);
 
+    MB_FOR_EACH_DEFINE_FUNCTION(MB_GET_PTR_ITERATOR0, MB_GET_PTR_ITERATOR1, MB_GET_PTR_ITERATOR2, MB_GET_PTR_ITERATOR3, \
+        MB_GET_PTR_ITERATOR4, MB_GET_PTR_ITERATOR5, MB_GET_PTR_ITERATOR6, MB_GET_PTR_ITERATOR7, MB_GET_PTR_ITERATOR8, MB_GET_PTR_ITERATOR9, MB_GET_PTR_ITERATOR10, MB_GET_PTR_ITERATOR11);
+
+}
+
+#endif // defined(WIN32)
+
+#endif // ENABLE_MB
 
 #endif // MB_DEFINE_H
 

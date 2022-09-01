@@ -4,6 +4,7 @@
 
 #include "mbvip/common/StringUtil.h"
 #include <process.h>
+#include <string.h>
 
 namespace mb {
     
@@ -29,8 +30,8 @@ private:
             return;
         classRegistered = true;
 
-        WNDCLASSEX wcex;
-        wcex.cbSize = sizeof(WNDCLASSEX);
+        WNDCLASSEXW wcex;
+        wcex.cbSize = sizeof(WNDCLASSEXW);
 
         wcex.style = CS_HREDRAW | CS_VREDRAW;
         wcex.lpfnWndProc = promptWndProc;
@@ -38,13 +39,13 @@ private:
         wcex.cbWndExtra = 0;
         wcex.hInstance = nullptr;
         wcex.hIcon = nullptr; // LoadIcon(hInstance, MAKEINTRESOURCE(IDI_WKEXE));
-        wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wcex.hCursor = LoadCursorW(NULL, IDC_ARROW);
         wcex.hbrBackground = nullptr;
         wcex.lpszMenuName = nullptr;
         wcex.lpszClassName = windowClass.c_str();
         wcex.hIconSm = nullptr;
 
-        RegisterClassEx(&wcex);
+        RegisterClassExW(&wcex);
     }
 
     const static int wndWidth = 388;
@@ -59,7 +60,7 @@ private:
             std::vector<WCHAR> text;
             text.resize(260);
             memset(&text.at(0), 0, sizeof(WCHAR) * 260);
-            ::GetWindowText(m_editHwnd, &text.at(0), 256);
+            ::GetWindowTextW(m_editHwnd, &text.at(0), 256);
 
             m_result = &text.at(0);
             ::PostQuitMessage(0);
@@ -71,9 +72,9 @@ private:
 
     static LRESULT CALLBACK promptWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
-        PromptWnd* self = reinterpret_cast<PromptWnd*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+        PromptWnd* self = reinterpret_cast<PromptWnd*>(GetWindowLongPtrW(hWnd, GWLP_USERDATA));
         if (!self)
-            return ::DefWindowProc(hWnd, message, wParam, lParam);
+            return ::DefWindowProcW(hWnd, message, wParam, lParam);
 
         switch (message) {
         case WM_COMMAND:
@@ -96,11 +97,11 @@ private:
         }
         break;
         case WM_LBUTTONDOWN:
-            ::PostMessage(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
+            ::PostMessageW(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
             break;
         }
 
-        return ::DefWindowProc(hWnd, message, wParam, lParam);
+        return ::DefWindowProcW(hWnd, message, wParam, lParam);
     }
 
     void onPaint(HDC hdc)
@@ -109,14 +110,14 @@ private:
         ::Rectangle(hdc, 1, 1, wndWidth - 1, wndHeight - 1);
     }
 
-    static unsigned int __stdcall threadFunc(void* param)
+    static unsigned int CALLBACK threadFunc(void* param)
     {
         PromptWnd* self = (PromptWnd*)param;
         self->show(self->m_title, self->m_text);
 
         MSG msg = { 0 };
         while (true) {
-            if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            if (::PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE)) {
                 if (WM_QUIT == msg.message)
                     break;
                 ::TranslateMessage(&msg);
@@ -166,44 +167,39 @@ private:
             WS_POPUP | WS_CLIPCHILDREN,
             700, 300, wndWidth, wndHeight,
             m_hParantWnd, NULL, nullptr, NULL);
-        ::SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+        ::SetWindowLongPtrW(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
         SetForegroundWindow(hWnd);
         m_hWnd = hWnd;
 
-        m_font = ::CreateFont(
+        m_font = ::CreateFontW(
             -fontHeight, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE,
             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
             DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
 
-        m_editHwnd = ::CreateWindow(
+        m_editHwnd = ::CreateWindowW(
             L"EDIT", 0,
             WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT | ES_AUTOVSCROLL |
             ES_AUTOHSCROLL,
             14, 135, 360, 22,
             hWnd, 0, NULL, 0);
-        ::SendMessage(m_editHwnd, WM_SETFONT, reinterpret_cast<WPARAM>(m_font), TRUE);
-        ::SetWindowText(m_editHwnd, text.c_str());
+        ::SendMessageW(m_editHwnd, WM_SETFONT, reinterpret_cast<WPARAM>(m_font), TRUE);
+        ::SetWindowTextW(m_editHwnd, text.c_str());
 
-        m_okHwnd = ::CreateWindow(
+        m_okHwnd = ::CreateWindowW(
             L"BUTTON", L"yes",
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
             180, 174, buttonWidth, urlbarHeight,
             hWnd, reinterpret_cast<HMENU>((intptr_t)IDC_OK_ID), nullptr, 0);
-        ::SendMessage(m_okHwnd, WM_SETFONT, reinterpret_cast<WPARAM>(m_font), TRUE);
+        ::SendMessageW(m_okHwnd, WM_SETFONT, reinterpret_cast<WPARAM>(m_font), TRUE);
 
-        m_cancelHwnd = ::CreateWindow(
+        m_cancelHwnd = ::CreateWindowW(
             L"BUTTON", L"no",
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
             290, 174, buttonWidth, urlbarHeight,
             hWnd, reinterpret_cast<HMENU>((intptr_t)IDC_CANCEL_ID), nullptr, 0);
-        ::SendMessage(m_cancelHwnd, WM_SETFONT, reinterpret_cast<WPARAM>(m_font), TRUE);
+        ::SendMessageW(m_cancelHwnd, WM_SETFONT, reinterpret_cast<WPARAM>(m_font), TRUE);
 
-        m_staticHwnd = CreateWindow(L"static", L"C”Ô—‘÷–ŒƒÕ¯",
-            WS_CHILD | WS_VISIBLE | /*WS_BORDER |*/ SS_CENTER | SS_CENTERIMAGE,
-            20, 20, 342, 100,
-            hWnd, NULL, NULL, NULL);
-        SendMessage(m_staticHwnd, WM_SETFONT, (WPARAM)m_font, NULL);
-        SetWindowText(m_staticHwnd, title.c_str());
+        SetWindowTextW(m_staticHwnd, title.c_str());
 
         ::ShowWindow(hWnd, SW_SHOW);
     }

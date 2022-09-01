@@ -20,11 +20,17 @@ class MbWebView;
 }
 
 typedef struct _wkeSettings  wkeSettings;
-typedef intptr_t mbWebView;
+//typedef intptr_t mbWebView;
 
 #define MB_FROM_HERE ::common::TraceLocation(__FUNCTION__, __FILE__)
 
 namespace common {
+
+struct ThreadCallballInfo {
+    mbThreadCallback cb = nullptr;
+    void* param1 = nullptr;
+    void* param2 = nullptr;
+};
 
 class TraceLocation {
 public:
@@ -71,6 +77,9 @@ public:
     static void callUiThreadSync(const TraceLocation& caller, std::function<void(void)>&& closure);
     static void callUiThreadAsync(const TraceLocation& caller, std::function<void(void)>&& closure);
     static void callMediaThreadAsync(const TraceLocation& caller, std::function<void(void)>&& closure);
+
+    static void setThreadIdle(mbThreadCallback callback, void* param1, void* param2);
+    static void setBlinkThreadInited(mbThreadCallback callback, void* param1, void* param2);
 
     static void postNodeCoreThreadTask(const TraceLocation& caller, std::function<void(void)>&& closure);
 
@@ -123,8 +132,8 @@ private:
     static TaskAsyncData* cretaeAsyncData(const TraceLocation& caller, DWORD toThreadId, void* dataEx, DWORD destroyThreadId);
     static void postThreadMessage(DWORD idThread, UINT Msg, TaskAsyncData* asyncData);
 
-    static unsigned __stdcall blinkThread(void* created);
-    static unsigned __stdcall mediaThread(void* param);
+    static unsigned int CALLBACK blinkThread(void* created);
+    static unsigned int CALLBACK mediaThread(void* param);
 
     struct TaskItem {
         TaskItem(DWORD idThread, UINT msg, TaskAsyncData* asyncData) {
@@ -149,6 +158,12 @@ private:
     static bool runTaskQueue(UINT msg, TaskAsyncData* asyncData);
     static std::list<TaskItem*>* m_taskQueue[kMaxTaskQueue];
     static CRITICAL_SECTION m_taskQueueMutex;
+
+    friend void MB_CALL_TYPE mbOnThreadIdle(mbThreadCallback callback, void* param1, void* param2);
+    friend void MB_CALL_TYPE mbOnBlinkThreadInit(mbThreadCallback callback, void* param1, void* param2);
+    static ThreadCallballInfo s_blinkThreadInitedInfo;
+    static ThreadCallballInfo s_blinkThreadIdleInfo;
+    static ThreadCallballInfo s_uiThreadIdleInfo;
 
     static uv_loop_t* m_blinkLoop;
     static v8::Platform* m_v8platform;

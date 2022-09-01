@@ -105,6 +105,7 @@ public:
     mbNavigationCallback m_NavigationSyncCallback{ nullptr }; void* m_NavigationSyncParam{ nullptr }; void setNavigationSyncCallback(mbNavigationCallback callback, void* param) {
         m_NavigationSyncCallback = callback; m_NavigationSyncParam = param;
     };
+    mbDocumentReadyCallback m_DocumentReadyInBlinkCallback{ nullptr }; void* m_DocumentReadyInBlinkParam{ nullptr }; void setDocumentReadyInBlinkCallback(mbDocumentReadyCallback callback, void* param) { m_DocumentReadyInBlinkCallback = callback; m_DocumentReadyInBlinkParam = param; };
 	mbDocumentReadyCallback m_DocumentReadyCallback{ nullptr }; void* m_DocumentReadyParam{ nullptr }; void setDocumentReadyCallback(mbDocumentReadyCallback callback, void* param) { m_DocumentReadyCallback = callback; m_DocumentReadyParam = param; };
 	mbLoadUrlBeginCallback m_LoadUrlBeginCallback{ nullptr }; void* m_LoadUrlBeginParam{ nullptr }; void setLoadUrlBeginCallback(mbLoadUrlBeginCallback callback, void* param) { m_LoadUrlBeginCallback = callback; m_LoadUrlBeginParam = param; };
 	mbLoadUrlEndCallback m_LoadUrlEndCallback{ nullptr }; void* m_LoadUrlEndParam{ nullptr }; void setLoadUrlEndCallback(mbLoadUrlEndCallback callback, void* param) { m_LoadUrlEndCallback = callback; m_LoadUrlEndParam = param; };
@@ -129,6 +130,7 @@ public:
 	mbNetGetFaviconCallback m_NetGetFaviconCallback{ nullptr }; void* m_NetGetFaviconParam{ nullptr }; void setNetGetFaviconCallback(mbNetGetFaviconCallback callback, void* param) { m_NetGetFaviconCallback = callback; m_NetGetFaviconParam = param; };
 	mbCloseCallback m_ClosingCallback{ nullptr }; void* m_ClosingParam{ nullptr }; void setCloseCallback(mbCloseCallback callback, void* param) { m_ClosingCallback = callback; m_ClosingParam = param; };
     mbDidCreateScriptContextCallback m_DidCreateScriptContextCallback{ nullptr }; void* m_DidCreateScriptContextParam{ nullptr }; void setDidCreateScriptContextCallback(mbDidCreateScriptContextCallback callback, void* param) { m_DidCreateScriptContextCallback = callback; m_DidCreateScriptContextParam = param; };
+    mbWillReleaseScriptContextCallback m_WillReleaseScriptContextCallback{ nullptr }; void* m_WillReleaseScriptContextParam{ nullptr }; void setWillReleaseScriptContextCallback(mbWillReleaseScriptContextCallback callback, void* param) { m_WillReleaseScriptContextCallback = callback; m_WillReleaseScriptContextParam = param; };
     mbImageBufferToDataURLCallback m_ImageBufferToDataURLCallback{ nullptr }; void* m_ImageBufferToDataURLParam{ nullptr }; void setImageBufferToDataURLCallback(mbImageBufferToDataURLCallback callback, void* param) { m_ImageBufferToDataURLCallback = callback; m_ImageBufferToDataURLParam = param; };
     mbNetResponseCallback m_NetResponseCallback{ nullptr }; void* m_NetResponseParam{ nullptr }; void setNetResponseCallback(mbNetResponseCallback callback, void* param) { m_NetResponseCallback = callback; m_NetResponseParam = param; };
 

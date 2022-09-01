@@ -21,10 +21,14 @@
 
 #include "base/json/json_reader.h"
 #include "base/values.h"
+#include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
 #include <shlwapi.h>
 #include <process.h>
 #include <vector>
+#if !defined(WIN32)
+#include <gtk/gtk.h>
+#endif
 
 // #define VLD_FORCE_ENABLE 1
 // #include "C:\\Program Files (x86)\\Visual Leak Detector\\include\\vld.h"
@@ -37,11 +41,19 @@ namespace wke {
 extern bool g_enableSkipJsError;
 }
 
+namespace content {
+extern DWORD g_uiThreadId;
+}
+
 namespace common {
 
 DWORD ThreadCall::m_blinkThreadId = 0;
 DWORD ThreadCall::m_uiThreadId = 0;
 DWORD ThreadCall::m_mediaThreadId = 0;
+
+ThreadCallballInfo ThreadCall::s_blinkThreadInitedInfo;
+ThreadCallballInfo ThreadCall::s_blinkThreadIdleInfo;
+ThreadCallballInfo ThreadCall::s_uiThreadIdleInfo;
 
 ThreadCall::CompositorTpye ThreadCall::m_compositorTpye = kCompositorTpyeSoftware;
 uv_loop_t* ThreadCall::m_blinkLoop = nullptr;
@@ -61,7 +73,7 @@ static bool* s_blinkExitFlag = nullptr;
 
 void ThreadCall::init(const mbSettings* settings)
 {
-    kMsgExitMbMsgLoop = ::RegisterWindowMessage(L"exitMbMsgLoop");
+    kMsgExitMbMsgLoop = ::RegisterWindowMessageW(u16("exitMbMsgLoop"));
     initTaskQueue();
 
     m_uiThreadId = ::GetCurrentThreadId();
@@ -148,6 +160,28 @@ void ThreadCall::callMediaThreadAsync(const TraceLocation& caller, std::function
     callAsync(asyncData, asynThreadCallbackWrap, asyncData);
 }
 
+void ThreadCall::setThreadIdle(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCallballInfo* info = nullptr;
+    if (common::ThreadCall::isBlinkThread()) {
+        info = &common::ThreadCall::s_blinkThreadIdleInfo;
+    } else if (common::ThreadCall::isUiThread()) {
+        info = &common::ThreadCall::s_uiThreadIdleInfo;
+    } else
+        return;
+
+    info->cb = callback;
+    info->param1 = param1;
+    info->param2 = param2;
+}
+
+void ThreadCall::setBlinkThreadInited(mbThreadCallback callback, void* param1, void* param2)
+{
+    common::ThreadCall::s_blinkThreadInitedInfo.cb = callback;
+    common::ThreadCall::s_blinkThreadInitedInfo.param1 = param1;
+    common::ThreadCall::s_blinkThreadInitedInfo.param2 = param2;
+}
+
 void ThreadCall::postNodeCoreThreadTask(const TraceLocation& caller, std::function<void(void)>&& closure)
 {
     callUiThreadAsync(caller, std::move(closure));
@@ -204,13 +238,13 @@ void* ThreadCall::waitForCallThreadAsync(TaskAsyncData* asyncData)
 
         // 有npapi插件的时候，createwebview会死等，然后主窗口又可能会发消息给npapi窗口，造成死锁
         MSG msg;
-        if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != FALSE) {
+        if (::PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE) != FALSE) {
             ::TranslateMessage(&msg);
-            ::DispatchMessage(&msg);
+            ::DispatchMessageW(&msg);
         }
 
         if (!firstPost)
-            ::PostThreadMessageA(::GetCurrentThreadId(), WM_NULL, 0, 0);
+            ::PostThreadMessageW(::GetCurrentThreadId(), WM_NULL, 0, 0);
         firstPost = true;
     }
 
@@ -242,7 +276,7 @@ void ThreadCall::exitBlinkMessageLoop()
 {
     bool hadExit = false;
     s_blinkExitFlag = &hadExit;
-    ::PostThreadMessage(m_blinkThreadId, WM_QUIT, (WPARAM)::GetCurrentThreadId(), (LPARAM)s_blinkExitFlag);
+    ::PostThreadMessageW(m_blinkThreadId, WM_QUIT, (WPARAM)::GetCurrentThreadId(), (LPARAM)s_blinkExitFlag);
     while (!hadExit) {
         wake();
         ::Sleep(20);
@@ -408,6 +442,9 @@ void ThreadCall::uiMessageLoop()
     while (WM_QUIT != msg.message) {
         DWORD t1 = ::GetTickCount();
 
+        if (s_uiThreadIdleInfo.cb)
+            s_uiThreadIdleInfo.cb(s_uiThreadIdleInfo.param1, s_uiThreadIdleInfo.param2);
+
         if (runNoWait(threadId))
             break;
 
@@ -421,9 +458,9 @@ void ThreadCall::uiMessageLoop()
 //             ::DispatchMessageW(&msg);
 //         }
 
-        if (::GetMessage(&msg, NULL, 0, 0) > 0) {
+        if (::GetMessageW(&msg, NULL, 0, 0) > 0) {
             ::TranslateMessage(&msg);
-            ::DispatchMessage(&msg);
+            ::DispatchMessageW(&msg);
         }
 
         DWORD t2 = ::GetTickCount();
@@ -447,6 +484,7 @@ void ThreadCall::uiMessageLoop()
 void ThreadCall::blinkMessageLoop(uv_loop_t* loop, v8::Platform* platform, v8::Isolate* isolate)
 {
     OutputDebugStringA("ThreadCall::blinkMessageLoop\n");
+
     MSG msg = { 0 };
     DWORD threadId = ::GetCurrentThreadId();
 
@@ -464,11 +502,19 @@ void ThreadCall::blinkMessageLoop(uv_loop_t* loop, v8::Platform* platform, v8::I
                 wkeSetDebugConfig(nullptr, "runUntilIdle", nullptr);
             else
                 wkeWake(nullptr);
-        }            
+        }
 
-        if (runNoWait(threadId))
+        if (s_blinkThreadInitedInfo.cb) {
+            s_blinkThreadInitedInfo.cb(s_blinkThreadInitedInfo.param1, s_blinkThreadInitedInfo.param2);
+            s_blinkThreadInitedInfo.cb = nullptr;
+        }
+        if (s_blinkThreadIdleInfo.cb)
+            s_blinkThreadIdleInfo.cb(s_blinkThreadIdleInfo.param1, s_blinkThreadIdleInfo.param2);
+
+        if (runNoWait(threadId)) {
+            printf("runNoWait-----------------------------\n");
             break;
-
+        }
 //         if (!::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
 //              ::Sleep(0);
 //             continue;
@@ -476,16 +522,23 @@ void ThreadCall::blinkMessageLoop(uv_loop_t* loop, v8::Platform* platform, v8::I
 
         DWORD t2 = ::GetTickCount();
 
+//         while (true) {
+//             ::Sleep(100);
+//         }
+
 //         if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 //             ::TranslateMessage(&msg);
 //             ::DispatchMessageW(&msg);
 //         }
-
-        if (::GetMessage(&msg, NULL, 0, 0) > 0) {
+#if defined(OS_WIN)
+        if (::GetMessageW(&msg, NULL, 0, 0) > 0) {
             ::TranslateMessage(&msg);
-            ::DispatchMessage(&msg);
+            ::DispatchMessageW(&msg);
         }
-
+#else
+        usleep(100);
+        //printf("ThreadCall::blinkMessageLoop 222\n");
+#endif
 //         if (msg.message < WM_USER)
 //             ::Sleep(1);
 
@@ -499,8 +552,7 @@ void ThreadCall::blinkMessageLoop(uv_loop_t* loop, v8::Platform* platform, v8::I
         }
         s_lastTime = t1;
 
-        //::PostThreadMessage(threadId, WM_USER + 1, 0, 0);
-
+        //::PostThreadMessageW(threadId, WM_USER + 1, 0, 0);
         if (s_blinkExitFlag) {
             OutputDebugStringA("ThreadCall::blinkMessageLoop exit and notif\n");
             break;
@@ -514,8 +566,8 @@ struct InitBlinkInfo {
 };
 
 static HWND s_timerWindowHandle = 0;
-const LPCWSTR kTimerWindowClassName = L"MbVipTimerWindowClass";
-static LONG s_pendingTimers = 0;
+const LPCWSTR kTimerWindowClassName = u16("MbVipTimerWindowClass");
+static long s_pendingTimers = 0;
 static UINT s_timerFiredMessage = 0;
 DWORD s_timerWindowWndProcThreadId = 0;
 
@@ -527,10 +579,10 @@ LRESULT CALLBACK ThreadCall::timerWindowWndProc(HWND hWnd, UINT message, WPARAM 
     LRESULT result = 0;
 
     if (s_timerFiredMessage == message) {
-        InterlockedExchange(&s_pendingTimers, 0);
+        _InterlockedExchange(&s_pendingTimers, 0);
         wake();
     } else
-        result = ::DefWindowProc(hWnd, message, wParam, lParam);
+        result = ::DefWindowProcW(hWnd, message, wParam, lParam);
 
     return result;
 }
@@ -540,8 +592,8 @@ static void WINAPI heartbeatTimerProc()
     if (!s_timerWindowHandle)
         return;
 
-    if (InterlockedIncrement(&s_pendingTimers) == 1)
-        ::PostMessage(s_timerWindowHandle, s_timerFiredMessage, 0, 0);
+    if (_InterlockedIncrement(&s_pendingTimers) == 1)
+        ::PostMessageW(s_timerWindowHandle, s_timerFiredMessage, 0, 0);
 }
 
 void ThreadCall::initializeOffScreenTimerWindow()
@@ -550,19 +602,19 @@ void ThreadCall::initializeOffScreenTimerWindow()
         return;
     s_timerWindowWndProcThreadId = ::GetCurrentThreadId();
 
-    WNDCLASSEX wcex = { 0 };
-    wcex.cbSize = sizeof(WNDCLASSEX);
+    WNDCLASSEXW wcex = { 0 };
+    wcex.cbSize = sizeof(WNDCLASSEXW);
     wcex.lpfnWndProc = timerWindowWndProc;
-    wcex.hInstance = ::GetModuleHandle(NULL);
+    wcex.hInstance = ::GetModuleHandleW(NULL);
     wcex.lpszClassName = kTimerWindowClassName;
-    ::RegisterClassEx(&wcex);
+    ::RegisterClassExW(&wcex);
 
     s_timerWindowHandle = CreateWindowExW(0, // window ex-style
         kTimerWindowClassName, // window class name
-        L"OffScreenTimer", // window caption
+        u16("OffScreenTimer"), // window caption
         WS_POPUP, 1, 1, 1, 1, NULL, NULL, ::GetModuleHandleW(NULL), NULL);
     //::SetTimer(s_timerWindowHandle, (UINT_PTR)s_timerWindowHandle, 10, 0);
-    s_timerFiredMessage = RegisterWindowMessage(L"com.weolar.MbVip.TimerFired");
+    s_timerFiredMessage = RegisterWindowMessageW(u16("com.weolar.MbVip.TimerFired"));
 
     wkeSetDebugConfig(nullptr, "setUiThreadHeartbeatCallback", (const char*)heartbeatTimerProc);
 }
@@ -606,7 +658,7 @@ void initMainDllPath()
     ::GetModuleFileNameW(g_hModule, &path->at(0), MAX_PATH);
     ::PathRemoveFileSpecW(&path->at(0));
 
-    ::PathAppendW(&path->at(0), L"node.dll");
+    ::PathAppendW(&path->at(0), u16("node.dll"));
     wkeSetWkeDllPath(&path->at(0));
 #endif
 }
@@ -627,17 +679,6 @@ unsigned int ThreadCall::blinkThread(void* param)
     InitBlinkInfo* initBlinkInfo = (InitBlinkInfo*)param;
     setThreadName("blinkThread");
 
-#ifdef _WIN64
-    wkeSetWkeDllPath(L"miniblink_x64.dll");
-#endif
-    //wkeSetWkeDllPath(L"G:\\mycode\\mb_temp\\out\\Debug\\node.dll");
-
-//     if (isValidVersion(initBlinkInfo) && initBlinkInfo->settings->mainDllHandle)
-//         wkeSetWkeDllHandle(initBlinkInfo->settings->mainDllHandle);
-// 
-//     if (isValidVersion(initBlinkInfo) && initBlinkInfo->settings->mainDllPath)
-//         wkeSetWkeDllPath(initBlinkInfo->settings->mainDllPath);
-
     wkeSettings settings;
     memset(&settings, 0, sizeof(wkeSettings));
 
@@ -657,8 +698,9 @@ unsigned int ThreadCall::blinkThread(void* param)
         wkeSetDebugConfig(nullptr, "initOrigChromeBlinkThread", nullptr);
     }
 
-    wkeSetDebugConfig(nullptr, "paintcallbackInOtherThread", (const char*)m_uiThreadId);
-    
+    //wkeSetDebugConfig(nullptr, "paintcallbackInOtherThread", (const char*)m_uiThreadId);
+    content::g_uiThreadId = m_uiThreadId;
+
     wkeSetDebugConfig(nullptr, "smootTextEnable", "1");
     wkeSetDebugConfig(nullptr, "flashChineseEnable", nullptr);
     wkeSetDebugConfig(nullptr, "minimumFontSize", "13");
@@ -760,17 +802,17 @@ void ThreadCall::createBlinkThread(const mbSettings* settings)
 #endif
 
     if (m_compositorTpye != kCompositorTpyeMC)
-        OutputDebugStringW(L"开启CC\n");
+        OutputDebugStringW(u16("开启CC\n"));
     else
-        OutputDebugStringW(L"禁用CC\n");
+        OutputDebugStringW(u16("禁用CC\n"));
 
     unsigned threadIdentifier = 0;
     HANDLE threadHandle = reinterpret_cast<HANDLE>(_beginthreadex(0, 0, blinkThread, &initBlinkInfo, 0, &threadIdentifier));
 
     while (!initBlinkInfo.created) { ::Sleep(20); }
-
+#if defined(OS_WIN)
     ::CloseHandle(threadHandle);
-
+#endif
     if (kCompositorTpyeMC != m_compositorTpye)
         wkeSetDebugConfig(nullptr, "initOrigChromeUiThread", nullptr);
 }
@@ -799,6 +841,7 @@ typedef struct tagTHREADNAME_INFO {
 
 void ThreadCall::setThreadName(const char* szThreadName)
 {
+#if defined(OS_WIN) 
     THREADNAME_INFO info;
     info.dwType = 0x1000;
     info.szName = szThreadName;
@@ -809,12 +852,14 @@ void ThreadCall::setThreadName(const char* szThreadName)
         ::RaiseException(0x406D1388, 0, sizeof(info) / sizeof(DWORD), (const ULONG_PTR*)&info);
     } __except (EXCEPTION_CONTINUE_EXECUTION) {
     }
+#endif
 }
 
 } // common
 
 void MyOutputDebugStringA(const char* lpcszOutputString, ...)
 {
+#if defined(OS_WIN) 
     std::string strResult;
     if (NULL != lpcszOutputString) {
         va_list marker = NULL;
@@ -832,4 +877,5 @@ void MyOutputDebugStringA(const char* lpcszOutputString, ...)
         strFormated.append(strResult);
         OutputDebugStringA(strFormated.c_str());
     }
+#endif
 }

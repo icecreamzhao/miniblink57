@@ -4,7 +4,7 @@ namespace common {
 static HANDLE s_timer;
 static HWND s_timerWindowHandle = 0;
 const LPCWSTR kTimerWindowClassName = L"MbVipTimerWindowClass";
-static LONG s_pendingTimers = 0;
+static long s_pendingTimers = 0;
 static UINT s_timerFiredMessage = 0;
 
 static LRESULT CALLBACK timerWindowWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

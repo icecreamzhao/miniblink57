@@ -3,27 +3,27 @@
 
 #include "wke/wkedefine.h"
 #include <process.h>
-#include <Shlwapi.h>
+#include <shlwapi.h>
 #include <xstring>
 #include <vector>
 
 #define WM_THREAD_CALL_OTHER_THREAD (WM_USER + 0x5328)
 
-std::string utf16ToUtf8(LPCWSTR lpszSrc)
-{
-    std::string sResult;
-    if (lpszSrc != NULL) {
-        int  nUTF8Len = WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, NULL, 0, NULL, NULL);
-        char* pUTF8 = new char[nUTF8Len + 1];
-        if (pUTF8 != NULL) {
-            ZeroMemory(pUTF8, nUTF8Len + 1);
-            WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, pUTF8, nUTF8Len, NULL, NULL);
-            sResult = pUTF8;
-            delete[] pUTF8;
-        }
-    }
-    return sResult;
-}
+// std::string utf16ToUtf8(LPCWSTR lpszSrc)
+// {
+//     std::string sResult;
+//     if (lpszSrc != NULL) {
+//         int  nUTF8Len = WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, NULL, 0, NULL, NULL);
+//         char* pUTF8 = new char[nUTF8Len + 1];
+//         if (pUTF8 != NULL) {
+//             ZeroMemory(pUTF8, nUTF8Len + 1);
+//             WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, pUTF8, nUTF8Len, NULL, NULL);
+//             sResult = pUTF8;
+//             delete[] pUTF8;
+//         }
+//     }
+//     return sResult;
+// }
 
 extern wkeWebView g_wkeWebview;
 
@@ -46,7 +46,7 @@ void CallMgr::callUiThreadSync(std::function<void(void)>&& closure)
 
     asyncData->call = threadCallbackWrap;
     asyncData->data = asyncData;
-    ::PostThreadMessage(asyncData->toThreadId, WM_THREAD_CALL_OTHER_THREAD, (WPARAM)callbackInOtherThread, (LPARAM)asyncData);
+    ::PostThreadMessageW(asyncData->toThreadId, WM_THREAD_CALL_OTHER_THREAD, (WPARAM)callbackInOtherThread, (LPARAM)asyncData);
 
     waitForCallThreadAsync(asyncData);
 }
@@ -129,7 +129,7 @@ void CallMgr::callAsync(TaskAsyncData* asyncData, CoreMainTask call, void* data)
 {
     asyncData->call = call;
     asyncData->data = data;
-    ::PostThreadMessage(asyncData->toThreadId, WM_THREAD_CALL, (WPARAM)callbackInOtherThread, (LPARAM)asyncData);
+    ::PostThreadMessageW(asyncData->toThreadId, WM_THREAD_CALL, (WPARAM)callbackInOtherThread, (LPARAM)asyncData);
 }
 
 void* CallMgr::waitForCallThreadAsync(TaskAsyncData* asyncData)
@@ -144,7 +144,7 @@ void* CallMgr::waitForCallThreadAsync(TaskAsyncData* asyncData)
 CallMgr::TaskAsyncData* CallMgr::cretaeAsyncData(DWORD toThreadId)
 {
     TaskAsyncData* asyncData = new TaskAsyncData();
-    asyncData->event = ::CreateEvent(NULL, FALSE, FALSE, NULL);
+    asyncData->event = ::CreateEventW(NULL, FALSE, FALSE, NULL);
     asyncData->fromThreadId = ::GetCurrentThreadId();
     asyncData->toThreadId = toThreadId;
 
@@ -154,12 +154,12 @@ CallMgr::TaskAsyncData* CallMgr::cretaeAsyncData(DWORD toThreadId)
 void CallMgr::exitMessageLoop(DWORD threadId)
 {
     if (::GetCurrentThreadId() == threadId) {
-        ::PostThreadMessage(threadId, WM_QUIT, (WPARAM)::GetCurrentThreadId(), (LPARAM)0);
+        ::PostThreadMessageW(threadId, WM_QUIT, (WPARAM)::GetCurrentThreadId(), (LPARAM)0);
         return;
     }
 
     bool hadExit = false;
-    ::PostThreadMessage(threadId, WM_QUIT, (WPARAM)::GetCurrentThreadId(), (LPARAM)&hadExit);
+    ::PostThreadMessageW(threadId, WM_QUIT, (WPARAM)::GetCurrentThreadId(), (LPARAM)&hadExit);
     while (!hadExit) {
         ::Sleep(20);
     }
@@ -193,7 +193,7 @@ void CallMgr::messageLoop()
 {
     MSG msg;
     while (true) {
-        if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        if (::PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE)) {
             if (WM_QUIT == msg.message) {
                 if (0 != msg.lParam)
                     *((bool*)(msg.lParam)) = true;

@@ -3,6 +3,7 @@
 #include "mbvip/common/LiveIdDetect.h"
 #include "mbvip/common/ThreadCall.h"
 #include <string>
+#include <string.h>
 
 namespace common {
 
@@ -11,7 +12,7 @@ BindJsQuery::BindJsQuery(int64_t hostId, wkeWebFrameHandle frameId)
     m_hostId = hostId;
 
     m_frameId = frameId;
-    strncpy(typeName, "MbQueryFunc", 11);
+    strcpy(typeName, "MbQueryFunc");
     propertyGet = nullptr;
     propertySet = nullptr;
     finalize = nullptr;

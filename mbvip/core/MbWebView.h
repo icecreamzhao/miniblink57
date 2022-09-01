@@ -12,6 +12,7 @@
 #if ENABLE_NODEJS
 #include "v8.h"
 #endif
+#include "base/strings/string16.h"
 
 namespace node {
 class Environment;
@@ -20,6 +21,10 @@ class Environment;
 namespace printing {
 class Printing;
 }
+
+class SkCanvas;
+class SkBitmap;
+typedef struct _cairo_surface cairo_surface_t;
 
 namespace mb {
 
@@ -49,6 +54,8 @@ public:
     float getZoomFactor() const { return m_zoomFactor; }
 
 	std::map<std::string, void*>& getUuserKeyValues() { return m_userKeyValues; }
+    void setUserKeyValue(const char* key, void* value);
+    void* getUserKeyValue(const char* key) const;
 
 	void setTitle(const std::string& title) { m_title = title; }
 	const std::string& getTitle() const { return m_title; }
@@ -59,16 +66,16 @@ public:
     mbRect getCaretRect();
 
     void setPacketPathName(const WCHAR* pathName);
-    std::wstring getPacketPathName() const { return m_packetPathName; }
+    base::string16 getPacketPathName() const { return m_packetPathName; }
 
     bool handleResPacket(const char* url, void* job);
 
     void onResize(int w, int h, bool needSetHostWnd);
 
     void onBlinkThreadPaint();
-    void onPaint(HWND hWnd);
+    void onPaint(HWND hWnd, WPARAM wParam);
     void onPaintUpdatedInCompositeThread(const HDC hdc, int x, int y, int cx, int cy);
-    void onPaintUpdatedInUiThread(int x, int y, int cx, int cy);
+    void onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, int cy);
     void onPrePaintUpdatedInCompositeThread(const HDC hdc, int x, int y, int cx, int cy);
 
     void setPaintUpdatedCallback(mbPaintUpdatedCallback paintUpdatedCallback, void* param);
@@ -127,15 +134,18 @@ public:
 
     void setNavigateIndex(int index)
     {
-        InterlockedExchange((LONG volatile*)(&m_navigateIndex), index);
+        _InterlockedExchange((long volatile*)(&m_navigateIndex), index);
     }
 
     int getNavigateIndex() const
     {
         int index = 0;
-        InterlockedExchange((LONG volatile*)(&index), m_navigateIndex);
+        _InterlockedExchange((long volatile*)(&index), m_navigateIndex);
         return index;
     }
+
+    wkeWebFrameHandle getMainFrameId() const { return m_mainFrameId; }
+    void setMainFrameId(wkeWebFrameHandle id) { m_mainFrameId = id; }
 
     printing::Printing* m_printing;
 
@@ -175,9 +185,15 @@ private:
     bool m_isCursorInfoTypeAsynGetting;
     bool m_isCursorInfoTypeAsynChanged;
     CRITICAL_SECTION m_memoryCanvasLock;
+#if defined(OS_WIN)
     HBITMAP m_memoryBMP;
     COLORREF* m_bits;
     HDC m_memoryDC;
+#else
+    SkBitmap* m_bitmap;
+    SkCanvas* m_memoryCanvas;
+    cairo_surface_t* m_surface;
+#endif
     COLORREF m_backgroundColor;
     mbRect m_caretPos;
 
@@ -191,14 +207,15 @@ private:
     bool m_enableMouseKeyMessage;
     float m_zoomFactor;
 
-    int m_navigateIndex;
+    long m_navigateIndex;
 
 	std::string m_title;
 	std::string m_url;
 
-	std::map<std::string, void*> m_userKeyValues;
+    std::map<std::string, void*> m_userKeyValues;
+    mutable CRITICAL_SECTION m_userKeyValuesLock;
 
-    int m_createWebViewRequestCount;
+    long m_createWebViewRequestCount;
     CallbackClosure m_closure;
 
     CRITICAL_SECTION m_mouseMsgQueueLock;
@@ -232,9 +249,11 @@ private:
 
     bool m_hasSetPaintUpdatedCallback;
 
+    wkeWebFrameHandle m_mainFrameId;
+
     node::Environment* m_env;
 
-    std::wstring m_packetPathName;
+    base::string16 m_packetPathName;
 };
 
 bool checkThreadCallIsValid(const char* funcName);
