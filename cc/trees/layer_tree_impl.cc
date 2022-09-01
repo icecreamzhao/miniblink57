@@ -2118,7 +2118,7 @@ static gfx::SelectionBound ComputeViewportSelectionBound(
     // NaN). Since consumers of gfx::SelectionBounds may round |edge_top| or
     // |edge_bottom| (and since rounding will crash on NaN), we return an empty
     // bound instead.
-    if (std::isnan(screen_top.x()) || std::isnan(screen_top.y()) || std::isnan(screen_bottom.x()) || std::isnan(screen_bottom.y()))
+    if (std_isnan(screen_top.x()) || std_isnan(screen_top.y()) || std_isnan(screen_bottom.x()) || std_isnan(screen_bottom.y()))
         return gfx::SelectionBound();
 
     const float inv_scale = 1.f / device_scale_factor;

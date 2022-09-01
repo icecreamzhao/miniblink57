@@ -22,18 +22,18 @@ namespace mojom {
 
 class LocalFrameId {
 public:
-    const LocalFrameId()
+    /*const*/ LocalFrameId()
         : local_id_(0)
     {
     }
 
-    const LocalFrameId(const LocalFrameId& other)
+    /*const*/ LocalFrameId(const LocalFrameId& other)
         : local_id_(other.local_id_)
         , nonce_(other.nonce_)
     {
     }
 
-    const LocalFrameId(uint32_t local_id, const base::UnguessableToken& nonce)
+    /*const*/ LocalFrameId(uint32_t local_id, const base::UnguessableToken& nonce)
         : local_id_(local_id)
         , nonce_(nonce)
     {

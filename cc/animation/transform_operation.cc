@@ -18,6 +18,11 @@
 #include "ui/gfx/geometry/vector3d_f.h"
 #include "ui/gfx/transform_util.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace {
 const SkMScalar kAngleEpsilon = 1e-4f;
 }

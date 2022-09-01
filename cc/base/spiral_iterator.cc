@@ -6,6 +6,11 @@
 
 #include <algorithm>
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace cc {
 
 SpiralIterator::SpiralIterator()

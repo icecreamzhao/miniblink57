@@ -13,6 +13,11 @@
 
 #include "base/logging.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 // Defining the following macro will cause the error metric function to weigh
 // each color channel differently depending on how the human eye can perceive
 // them. This can give a slight improvement in image quality at the cost of a

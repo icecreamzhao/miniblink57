@@ -8,6 +8,11 @@
 
 #include "base/strings/stringprintf.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace cc {
 
 void IndexRect::ClampTo(const IndexRect& other)

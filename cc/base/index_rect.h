@@ -60,7 +60,7 @@ namespace cc {
 //    └───┴───┴───┴───┴───┘
 class CC_EXPORT IndexRect {
 public:
-    const IndexRect(int left, int right, int top, int bottom)
+    /*const*/ IndexRect(int left, int right, int top, int bottom)
         : left_(left)
         , right_(right)
         , top_(top)

@@ -9,6 +9,11 @@
 #include <algorithm>
 #include <utility>
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace cc {
 
 // Default number of max-sized elements to allocate space for, if there is no

@@ -17,19 +17,19 @@ namespace cc {
 
 class FrameSinkId {
 public:
-    const FrameSinkId()
+    /*const*/ FrameSinkId()
         : client_id_(0)
         , sink_id_(0)
     {
     }
 
-    const FrameSinkId(const FrameSinkId& other)
+    /*const*/ FrameSinkId(const FrameSinkId& other)
         : client_id_(other.client_id_)
         , sink_id_(other.sink_id_)
     {
     }
 
-    const FrameSinkId(uint32_t client_id, uint32_t sink_id)
+    /*const*/ FrameSinkId(uint32_t client_id, uint32_t sink_id)
         : client_id_(client_id)
         , sink_id_(sink_id)
     {

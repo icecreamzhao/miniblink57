@@ -766,7 +766,7 @@ namespace draw_property_utils {
 
     static void ResetIfHasNanCoordinate(gfx::RectF* rect)
     {
-        if (std::isnan(rect->x()) || std::isnan(rect->y()) || std::isnan(rect->right()) || std::isnan(rect->bottom()))
+        if (std_isnan(rect->x()) || std_isnan(rect->y()) || std_isnan(rect->right()) || std_isnan(rect->bottom()))
             *rect = gfx::RectF();
     }
 

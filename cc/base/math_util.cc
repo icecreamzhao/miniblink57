@@ -37,7 +37,7 @@ static HomogeneousCoordinate ProjectHomogeneousPoint(
     // happens when the layer is rotated so that it is infinitesimally thin, or
     // when it is co-planar with the camera origin -- i.e. when the layer is
     // invisible anyway.
-    if (!std::isfinite(z))
+    if (!std_isfinite(z))
         return HomogeneousCoordinate(0.0, 0.0, 0.0, 1.0);
 
     HomogeneousCoordinate result(p.x(), p.y(), z, 1.0);
@@ -203,7 +203,7 @@ gfx::Rect MathUtil::MapEnclosingClippedRect(const gfx::Transform& transform,
     gfx::RectF mapped_rect = MapClippedRect(transform, gfx::RectF(src_rect));
 
     // gfx::ToEnclosingRect crashes if called on a RectF with any NaN coordinate.
-    if (std::isnan(mapped_rect.x()) || std::isnan(mapped_rect.y()) || std::isnan(mapped_rect.right()) || std::isnan(mapped_rect.bottom()))
+    if (std_isnan(mapped_rect.x()) || std_isnan(mapped_rect.y()) || std_isnan(mapped_rect.right()) || std_isnan(mapped_rect.bottom()))
         return gfx::Rect();
 
     return gfx::ToEnclosingRect(mapped_rect);
@@ -251,7 +251,7 @@ gfx::Rect MathUtil::ProjectEnclosingClippedRect(const gfx::Transform& transform,
     gfx::RectF projected_rect = ProjectClippedRect(transform, gfx::RectF(src_rect));
 
     // gfx::ToEnclosingRect crashes if called on a RectF with any NaN coordinate.
-    if (std::isnan(projected_rect.x()) || std::isnan(projected_rect.y()) || std::isnan(projected_rect.right()) || std::isnan(projected_rect.bottom()))
+    if (std_isnan(projected_rect.x()) || std_isnan(projected_rect.y()) || std_isnan(projected_rect.right()) || std_isnan(projected_rect.bottom()))
         return gfx::Rect();
 
     return gfx::ToEnclosingRect(projected_rect);

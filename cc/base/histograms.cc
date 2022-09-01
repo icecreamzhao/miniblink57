@@ -87,7 +87,7 @@ bool ScopedUMAHistogramAreaTimerBase::GetHistogramValues(
     double area_per_time = area / elapsed.InMillisecondsF();
     // It is not clear how NaN can get here, but we've gotten crashes from
     // saturated_cast. http://crbug.com/486214
-    if (std::isnan(area_per_time))
+    if (std_isnan(area_per_time))
         return false;
     *time_microseconds = base::saturated_cast<Sample>(elapsed.InMicroseconds());
     *pixels_per_ms = base::saturated_cast<Sample>(area_per_time);
