@@ -31,7 +31,7 @@ struct SVGCharacterData {
     SVGCharacterData();
 
     static float emptyValue() { return std::numeric_limits<float>::quiet_NaN(); }
-    static bool isEmptyValue(float value) { return std::isnan(value); }
+    static bool isEmptyValue(float value) { return std_isnan(value); }
 
     bool hasX() const { return !isEmptyValue(x); }
     bool hasY() const { return !isEmptyValue(y); }

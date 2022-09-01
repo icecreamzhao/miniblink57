@@ -42,7 +42,7 @@ public:
     {
         if (index >= TypedArrayBase<T>::m_length)
             return;
-        if (std::isnan(value)) // Clamp NaN to 0
+        if (std_isnan(value)) // Clamp NaN to 0
             value = 0;
         // The double cast is necessary to get the correct wrapping
         // for out-of-range values with Int32Array and Uint32Array.

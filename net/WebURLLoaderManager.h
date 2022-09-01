@@ -60,6 +60,7 @@ class WebCookieJarImpl;
 struct BlobTempFileInfo;
 struct InitializeHandleInfo;
 struct MainTaskArgs;
+class WebURLLoaderManagerMainTask;
 
 class AutoLockJob {
 public:
@@ -176,17 +177,17 @@ private:
     bool m_isShutdown;
 
     friend class WebURLLoaderInternal;
-    WTF::Mutex m_liveJobsMutex;
+    WTF::RecursiveMutex m_liveJobsMutex;
     WTF::HashMap<int, JobHead*> m_liveJobs;
     int m_newestJobId;
     
     friend class WebURLLoaderManagerMainTask;
-    WTF::Mutex m_mainTasksMutex;
+    WTF::RecursiveMutex m_mainTasksMutex;
     WebURLLoaderManagerMainTask* m_mainTasksBegin;
     WebURLLoaderManagerMainTask* m_mainTasksEnd;
 
 public:
-    //WTF::Mutex m_shutdownMutex;
+    //WTF::RecursiveMutex m_shutdownMutex;
     class ShutdownRWLock {
     public:
         ShutdownRWLock()
@@ -197,7 +198,7 @@ public:
 
         bool read()
         {
-            WTF::Locker<WTF::Mutex> locker(m_lock);
+            WTF::Locker<WTF::RecursiveMutex> locker(m_lock);
             if (m_writeCount > 0)
                 return false;
 
@@ -207,7 +208,7 @@ public:
 
         void releaseRead()
         {
-            WTF::Locker<WTF::Mutex> locker(m_lock);
+            WTF::Locker<WTF::RecursiveMutex> locker(m_lock);
             --m_readCount;
         }
 
@@ -232,7 +233,7 @@ public:
     private:
         int m_readCount;
         int m_writeCount;
-        WTF::Mutex m_lock;
+        WTF::RecursiveMutex m_lock;
     };
 
     class ShutdownReadLocker {

@@ -1,6 +1,8 @@
 
 #include "net/ActivatingObjCheck.h"
 #include <vector>
+#include <stdio.h>
+#include <malloc.h>
 
 namespace net {
 
@@ -64,7 +66,7 @@ bool ActivatingObjCheck::isActivatingLocked(intptr_t loader)
 
 int ActivatingObjCheck::genId()
 {
-    InterlockedIncrement((long *)&m_newestId);
+    _InterlockedIncrement((long *)&m_newestId);
     return m_newestId;
 }
 

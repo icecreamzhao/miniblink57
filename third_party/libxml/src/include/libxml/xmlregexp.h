@@ -119,8 +119,7 @@ typedef xmlExpCtxt* xmlExpCtxtPtr;
 XMLPUBFUN void XMLCALL
 xmlExpFreeCtxt(xmlExpCtxtPtr ctxt);
 XMLPUBFUN xmlExpCtxtPtr XMLCALL
-xmlExpNewCtxt(int maxNodes,
-    xmlDictPtr dict);
+xmlExpNewCtxt(int maxNodes, xmlDictPtr dict);
 
 XMLPUBFUN int XMLCALL
 xmlExpCtxtNbNodes(xmlExpCtxtPtr ctxt);

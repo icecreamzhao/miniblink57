@@ -70,7 +70,7 @@ double MonthInputType::valueAsDate() const
     if (!parseToDateComponents(element().value(), &date))
         return DateComponents::invalidMilliseconds();
     double msec = date.millisecondsSinceEpoch();
-    DCHECK(std::isfinite(msec));
+    DCHECK(std_isfinite(msec));
     return msec;
 }
 
@@ -87,7 +87,7 @@ Decimal MonthInputType::defaultValueForStepUp() const
     DateComponents date;
     date.setMillisecondsSinceEpochForMonth(convertToLocalTime(currentTimeMS()));
     double months = date.monthsSinceEpoch();
-    DCHECK(std::isfinite(months));
+    DCHECK(std_isfinite(months));
     return Decimal::fromDouble(months);
 }
 
@@ -112,7 +112,7 @@ Decimal MonthInputType::parseToNumber(const String& src,
     if (!parseToDateComponents(src, &date))
         return defaultValue;
     double months = date.monthsSinceEpoch();
-    DCHECK(std::isfinite(months));
+    DCHECK(std_isfinite(months));
     return Decimal::fromDouble(months);
 }
 

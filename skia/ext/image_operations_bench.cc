@@ -294,20 +294,20 @@ public:
 
 } // namespace
 
-int main(int argc, char** argv)
-{
-    Benchmark bench;
-    CommandLineAutoReset command_line(argc, argv);
-
-    if (!bench.ParseArgs(command_line.Get())) {
-        Benchmark::Usage();
-        return 1;
-    }
-
-    if (!bench.Run()) {
-        printf("Failed to run benchmark\n");
-        return 1;
-    }
-
-    return 0;
-}
+// int main(int argc, char** argv)
+// {
+//     Benchmark bench;
+//     CommandLineAutoReset command_line(argc, argv);
+// 
+//     if (!bench.ParseArgs(command_line.Get())) {
+//         Benchmark::Usage();
+//         return 1;
+//     }
+// 
+//     if (!bench.Run()) {
+//         printf("Failed to run benchmark\n");
+//         return 1;
+//     }
+// 
+//     return 0;
+// }

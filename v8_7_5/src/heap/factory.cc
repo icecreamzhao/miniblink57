@@ -189,7 +189,7 @@ namespace internal {
         AllocationType allocation)
     {
         if (length < 0 || length > FixedArray::kMaxLength) {
-            DebugBreak();
+            base::OS::DebugBreak();
             isolate()->heap()->FatalProcessOutOfMemory("invalid array length");
         }
         return AllocateRawArray(FixedArray::SizeFor(length), allocation);
@@ -311,7 +311,7 @@ namespace internal {
         AllocationType allocation)
     {
         if (length < 0)
-            DebugBreak();
+            base::OS::DebugBreak();
         DCHECK_LE(0, length);
         if (length == 0)
             return empty_property_array();

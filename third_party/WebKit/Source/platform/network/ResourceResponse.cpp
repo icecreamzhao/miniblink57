@@ -521,7 +521,7 @@ static double parseDateValueInHeader(const HTTPHeaderMap& headers,
     // Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
     // Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
     double dateInMilliseconds = parseDate(headerValue);
-    if (!std::isfinite(dateInMilliseconds))
+    if (!std_isfinite(dateInMilliseconds))
         return std::numeric_limits<double>::quiet_NaN();
     return dateInMilliseconds / 1000;
 }

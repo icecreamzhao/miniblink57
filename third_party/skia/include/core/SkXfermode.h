@@ -149,49 +149,112 @@ public:
     }
 
 #define GEN_SKBLENDMODE_LIST(F) \
-    F(kClear);                  \
-    F(kSrc);                    \
-    F(kDst);                    \
-    F(kSrcOver);                \
-    F(kDstOver);                \
-    F(kSrcIn);                  \
-    F(kDstIn);                  \
-    F(kSrcOut);                 \
-    F(kDstOut);                 \
-    F(kSrcATop);                \
-    F(kDstATop);                \
-    F(kXor);                    \
-    F(kPlus);                   \
-    F(kModulate);               \
-    F(kScreen);                 \
-    F(kLastCoeffMode);          \
-    F(kOverlay);                \
-    F(kDarken);                 \
-    F(kLighten);                \
-    F(kColorDodge);             \
-    F(kColorBurn);              \
-    F(kHardLight);              \
-    F(kSoftLight);              \
-    F(kDifference);             \
-    F(kExclusion);              \
-    F(kMultiply);               \
-    F(kLastSeparableMode);      \
-    F(kHue);                    \
-    F(kSaturation);             \
-    F(kColor);                  \
-    F(kLuminosity);             \
-    F(kLastMode);
+    F(Clear);                  \
+    F(Src);                    \
+    F(Dst);                    \
+    F(SrcOver);                \
+    F(DstOver);                \
+    F(SrcIn);                  \
+    F(DstIn);                  \
+    F(SrcOut);                 \
+    F(DstOut);                 \
+    F(SrcATop);                \
+    F(DstATop);                \
+    F(Xor);                    \
+    F(Plus);                   \
+    F(Modulate);               \
+    F(Screen);                 \
+    F(LastCoeffMode);          \
+    F(Overlay);                \
+    F(Darken);                 \
+    F(Lighten);                \
+    F(ColorDodge);             \
+    F(ColorBurn);              \
+    F(HardLight);              \
+    F(SoftLight);              \
+    F(Difference);             \
+    F(Exclusion);              \
+    F(Multiply);               \
+    F(LastSeparableMode);      \
+    F(Hue);                    \
+    F(Saturation);             \
+    F(Color);                  \
+    F(Luminosity);             \
+    F(LastMode);
 
     static SkXfermode::Mode SkBlendModeToSkXfermodeMode(SkBlendMode mode)
     {
-// #define _SET_MODE_(x)               \
-//     if (SkBlendMode::##x## == mode) \
-//         return (SkXfermode::##x##_Mode);
-// 
-//         GEN_SKBLENDMODE_LIST(_SET_MODE_);
-// #undef _SET_MODE_
+#define _SET_MODE_(x)               \
+    if (SkBlendMode::k##x == mode) \
+        return (SkXfermode::k##x##_Mode);
 
-        *(int*)1 = 1;
+        GEN_SKBLENDMODE_LIST(_SET_MODE_);
+#undef _SET_MODE_
+//         if (SkBlendMode::kClear == mode) 
+//             return (SkXfermode::kClear_Mode); 
+//         if (SkBlendMode::kSrc == mode) 
+//             return (SkXfermode::kSrc_Mode); 
+//         if (SkBlendMode::kDst == mode) 
+//             return (SkXfermode::kDst_Mode); 
+//         if (SkBlendMode::kSrcOver == mode) 
+//             return (SkXfermode::kSrcOver_Mode); 
+//         if (SkBlendMode::kDstOver == mode) 
+//             return (SkXfermode::kDstOver_Mode); 
+//         if (SkBlendMode::kSrcIn == mode) 
+//             return (SkXfermode::kSrcIn_Mode); 
+//         if (SkBlendMode::kDstIn == mode) 
+//             return (SkXfermode::kDstIn_Mode); 
+//         if (SkBlendMode::kSrcOut == mode) 
+//             return (SkXfermode::kSrcOut_Mode); 
+//         if (SkBlendMode::kDstOut == mode) 
+//             return (SkXfermode::kDstOut_Mode); 
+//         if (SkBlendMode::kSrcATop == mode) 
+//             return (SkXfermode::kSrcATop_Mode); 
+//         if (SkBlendMode::kDstATop == mode) 
+//             return (SkXfermode::kDstATop_Mode); 
+//         if (SkBlendMode::kXor == mode) 
+//             return (SkXfermode::kXor_Mode); 
+//         if (SkBlendMode::kPlus == mode) 
+//             return (SkXfermode::kPlus_Mode); 
+//         if (SkBlendMode::kModulate == mode) 
+//             return (SkXfermode::kModulate_Mode); 
+//         if (SkBlendMode::kScreen == mode) 
+//             return (SkXfermode::kScreen_Mode); 
+//         if (SkBlendMode::kLastCoeffMode == mode) 
+//             return (SkXfermode::kLastCoeffMode_Mode);
+//         if (SkBlendMode::kOverlay == mode) 
+//             return (SkXfermode::kOverlay_Mode); 
+//         if (SkBlendMode::kDarken == mode) 
+//             return (SkXfermode::kDarken_Mode); 
+//         if (SkBlendMode::kLighten == mode) 
+//             return (SkXfermode::kLighten_Mode); 
+//         if (SkBlendMode::kColorDodge == mode) 
+//             return (SkXfermode::kColorDodge_Mode); 
+//         if (SkBlendMode::kColorBurn == mode) 
+//             return (SkXfermode::kColorBurn_Mode); 
+//         if (SkBlendMode::kHardLight == mode) 
+//             return (SkXfermode::kHardLight_Mode); 
+//         if (SkBlendMode::kSoftLight == mode) 
+//             return (SkXfermode::kSoftLight_Mode); 
+//         if (SkBlendMode::kDifference == mode) 
+//             return (SkXfermode::kDifference_Mode); 
+//         if (SkBlendMode::kExclusion == mode) 
+//             return (SkXfermode::kExclusion_Mode); 
+//         if (SkBlendMode::kMultiply == mode) 
+//             return (SkXfermode::kMultiply_Mode); 
+//         if (SkBlendMode::kLastSeparableMode == mode) 
+//             return (SkXfermode::kLastSeparableMode_Mode);
+//         if (SkBlendMode::kHue == mode) 
+//             return (SkXfermode::kHue_Mode); 
+//         if (SkBlendMode::kSaturation == mode) 
+//             return (SkXfermode::kSaturation_Mode); 
+//         if (SkBlendMode::kColor == mode) 
+//             return (SkXfermode::kColor_Mode); 
+//         if (SkBlendMode::kLuminosity == mode) 
+//             return (SkXfermode::kLuminosity_Mode); 
+//         if (SkBlendMode::kLastMode == mode) 
+//             return (SkXfermode::kLastMode_Mode);
+//         *(int*)1 = 1;
         return SkXfermode::kSrcOver_Mode;
     }
 

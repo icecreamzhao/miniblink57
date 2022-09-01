@@ -256,9 +256,9 @@ static String formatChromiumMediaControlsTime(float time,
     float duration,
     bool includeSeparator)
 {
-    if (!std::isfinite(time))
+    if (!std_isfinite(time))
         time = 0;
-    if (!std::isfinite(duration))
+    if (!std_isfinite(duration))
         duration = 0;
     int seconds = static_cast<int>(fabsf(time));
     int minutes = seconds / 60;

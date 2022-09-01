@@ -454,12 +454,11 @@ SkBlendMode SkPaint::getBlendMode() const
         return SkBlendMode::kSrcOver;
 
 #define IS_MODE(x)                                            \
-    if (SkXfermode::IsMode(xFermode, SkXfermode::##x##_Mode)) \
-        return SkBlendMode::##x##;
+    if (SkXfermode::IsMode(xFermode, SkXfermode::k##x##_Mode)) \
+        return SkBlendMode::k##x;
 
     GEN_SKBLENDMODE_LIST(IS_MODE);
 #undef IS_MODE
-    *(int*)1 = 1;
     return SkBlendMode::kSrcOver;
 }
 
@@ -471,12 +470,77 @@ bool SkPaint::isSrcOver() const
 
 void SkPaint::setBlendMode(SkBlendMode mode)
 {
-#define SET_MODE(x)                 \
-    if (SkBlendMode::##x## == mode) \
-        setXfermodeMode(SkXfermode::##x##_Mode);
+// #define SET_MODE(x)                 \
+//     if (SkBlendMode::##x## == mode) \
+//         setXfermodeMode(SkXfermode::##x##_Mode);
+// 
+//     GEN_SKBLENDMODE_LIST(SET_MODE);
+// #undef SET_MODE
 
-    GEN_SKBLENDMODE_LIST(SET_MODE);
-#undef SET_MODE
+    if (SkBlendMode::kClear == mode)
+        setXfermodeMode(SkXfermode::kClear_Mode);
+    if (SkBlendMode::kSrc == mode)
+        setXfermodeMode(SkXfermode::kSrc_Mode);
+    if (SkBlendMode::kDst == mode)
+        setXfermodeMode(SkXfermode::kDst_Mode);
+    if (SkBlendMode::kSrcOver == mode)
+        setXfermodeMode(SkXfermode::kSrcOver_Mode);
+    if (SkBlendMode::kDstOver == mode)
+        setXfermodeMode(SkXfermode::kDstOver_Mode);
+    if (SkBlendMode::kSrcIn == mode)
+        setXfermodeMode(SkXfermode::kSrcIn_Mode);
+    if (SkBlendMode::kDstIn == mode)
+        setXfermodeMode(SkXfermode::kDstIn_Mode);
+    if (SkBlendMode::kSrcOut == mode)
+        setXfermodeMode(SkXfermode::kSrcOut_Mode);
+    if (SkBlendMode::kDstOut == mode)
+        setXfermodeMode(SkXfermode::kDstOut_Mode);
+    if (SkBlendMode::kSrcATop == mode)
+        setXfermodeMode(SkXfermode::kSrcATop_Mode);
+    if (SkBlendMode::kDstATop == mode)
+        setXfermodeMode(SkXfermode::kDstATop_Mode);
+    if (SkBlendMode::kXor == mode)
+        setXfermodeMode(SkXfermode::kXor_Mode);
+    if (SkBlendMode::kPlus == mode)
+        setXfermodeMode(SkXfermode::kPlus_Mode);
+    if (SkBlendMode::kModulate == mode)
+        setXfermodeMode(SkXfermode::kModulate_Mode);
+    if (SkBlendMode::kScreen == mode)
+        setXfermodeMode(SkXfermode::kScreen_Mode);
+    if (SkBlendMode::kLastCoeffMode == mode)
+        setXfermodeMode(SkXfermode::kLastCoeffMode_Mode);
+    if (SkBlendMode::kOverlay == mode)
+        setXfermodeMode(SkXfermode::kOverlay_Mode);
+    if (SkBlendMode::kDarken == mode)
+        setXfermodeMode(SkXfermode::kDarken_Mode);
+    if (SkBlendMode::kLighten == mode)
+        setXfermodeMode(SkXfermode::kLighten_Mode);
+    if (SkBlendMode::kColorDodge == mode)
+        setXfermodeMode(SkXfermode::kColorDodge_Mode);
+    if (SkBlendMode::kColorBurn == mode)
+        setXfermodeMode(SkXfermode::kColorBurn_Mode);
+    if (SkBlendMode::kHardLight == mode)
+        setXfermodeMode(SkXfermode::kHardLight_Mode);
+    if (SkBlendMode::kSoftLight == mode)
+        setXfermodeMode(SkXfermode::kSoftLight_Mode);
+    if (SkBlendMode::kDifference == mode)
+        setXfermodeMode(SkXfermode::kDifference_Mode);
+    if (SkBlendMode::kExclusion == mode)
+        setXfermodeMode(SkXfermode::kExclusion_Mode);
+    if (SkBlendMode::kMultiply == mode)
+        setXfermodeMode(SkXfermode::kMultiply_Mode);
+    if (SkBlendMode::kLastSeparableMode == mode)
+        setXfermodeMode(SkXfermode::kLastSeparableMode_Mode);
+    if (SkBlendMode::kHue == mode)
+        setXfermodeMode(SkXfermode::kHue_Mode);
+    if (SkBlendMode::kSaturation == mode)
+        setXfermodeMode(SkXfermode::kSaturation_Mode);
+    if (SkBlendMode::kColor == mode)
+        setXfermodeMode(SkXfermode::kColor_Mode);
+    if (SkBlendMode::kLuminosity == mode)
+        setXfermodeMode(SkXfermode::kLuminosity_Mode);
+    if (SkBlendMode::kLastMode == mode)
+        setXfermodeMode(SkXfermode::kLastMode_Mode);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

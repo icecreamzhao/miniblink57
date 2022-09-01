@@ -200,7 +200,7 @@ void FontCache::setFontManager(const sk_sp<SkFontMgr>& fontManager)
 
 PassRefPtr<OpenTypeVerticalData> FontCache::getVerticalData(const FontFileKey& key, const FontPlatformData& platformData)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     FontVerticalDataCache& fontVerticalDataCache = fontVerticalDataCacheInstance();
     FontVerticalDataCache::iterator result = fontVerticalDataCache.find(key);
     if (result != fontVerticalDataCache.end())

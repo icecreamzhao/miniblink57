@@ -735,7 +735,7 @@ bool WebSocketChannelImpl::processFrame()
     // All control frames must have a payload of 125 bytes or less, which means the frame must not contain
     // the "extended payload length" field.
     if (WebSocketOneFrame::isControlOpCode(frame.opCode) && WebSocketOneFrame::needsExtendedLengthField(frame.payloadLength)) {
-        fail(String::format("Received control frame having too long payload: %d bytes", frame.payloadLength), ErrorMessageLevel, m_sourceURLAtConstruction, m_lineNumberAtConstruction);
+        fail(String::format("Received control frame having too long payload: %ud bytes", frame.payloadLength), ErrorMessageLevel, m_sourceURLAtConstruction, m_lineNumberAtConstruction);
         return false;
     }
 

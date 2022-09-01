@@ -435,7 +435,7 @@ TimeRanges* MediaSource::seekable() const
 
     double sourceDuration = duration();
     // If duration equals NaN: Return an empty TimeRanges object.
-    if (std::isnan(sourceDuration))
+    if (std_isnan(sourceDuration))
         return TimeRanges::create();
 
     // If duration equals positive Infinity:
@@ -503,7 +503,7 @@ void MediaSource::setDuration(double duration, ExceptionState& exceptionState)
     // 2.1 https://www.w3.org/TR/media-source/#widl-MediaSource-duration
     // 1. If the value being set is negative or NaN then throw a TypeError
     // exception and abort these steps.
-    if (std::isnan(duration)) {
+    if (std_isnan(duration)) {
         logAndThrowTypeError(exceptionState, ExceptionMessages::notAFiniteNumber(duration, "duration"));
         return;
     }
@@ -567,7 +567,7 @@ void MediaSource::durationChangeAlgorithm(double newDuration,
     // 3. Set old duration to the current value of duration.
     double oldDuration = duration();
     DCHECK_LE(highestBufferedPresentationTimestamp,
-        std::isnan(oldDuration) ? 0 : oldDuration);
+        std_isnan(oldDuration) ? 0 : oldDuration);
 
     // 4. Update duration to new duration.
     bool requestSeek = m_attachedElement->currentTime() > newDuration;

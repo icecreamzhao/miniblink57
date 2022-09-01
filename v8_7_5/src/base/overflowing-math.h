@@ -77,7 +77,7 @@ namespace base {
             return x / y;
         if (x == 0 || x != x)
             return std::numeric_limits<T>::quiet_NaN();
-        if ((x >= 0) == (std::signbit(y) == 0)) {
+        if ((x >= 0) == (/*std::*/signbit(y) == 0)) {
             return std::numeric_limits<T>::infinity();
         }
         return -std::numeric_limits<T>::infinity();
@@ -89,7 +89,7 @@ namespace base {
     {
         if (a != 0)
             return 1.0f / std::sqrt(a);
-        if (std::signbit(a) == 0)
+        if (/*std::*/signbit(a) == 0)
             return std::numeric_limits<float>::infinity();
         return -std::numeric_limits<float>::infinity();
     }

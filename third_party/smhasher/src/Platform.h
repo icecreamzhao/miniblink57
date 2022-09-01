@@ -45,8 +45,13 @@ void SetAffinity(int cpu);
 
 #include <stdint.h>
 
+#ifndef FORCE_INLINE
 #define FORCE_INLINE inline __attribute__((always_inline))
+#endif
+
+#ifndef NEVER_INLINE
 #define NEVER_INLINE __attribute__((noinline))
+#endif
 
 inline uint32_t rotl32(uint32_t x, int8_t r)
 {

@@ -115,8 +115,7 @@ MutexBase::MutexBase(bool recursive)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
-    pthread_mutexattr_settype(
-        &attr, recursive ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
+    pthread_mutexattr_settype(&attr, recursive ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
 
     int result = pthread_mutex_init(&m_mutex.m_internalMutex, &attr);
     DCHECK_EQ(result, 0);

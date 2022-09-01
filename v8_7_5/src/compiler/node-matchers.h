@@ -182,14 +182,14 @@ namespace internal {
             }
             bool IsMinusZero() const
             {
-                return this->Is(0.0) && std::signbit(this->Value());
+                return this->Is(0.0) && /*std::*/signbit(this->Value());
             }
             bool IsNegative() const { return this->HasValue() && this->Value() < 0.0; }
-            bool IsNaN() const { return this->HasValue() && std::isnan(this->Value()); }
-            bool IsZero() const { return this->Is(0.0) && !std::signbit(this->Value()); }
+            bool IsNaN() const { return this->HasValue() && /*std::*/isnan(this->Value()); }
+            bool IsZero() const { return this->Is(0.0) && !/*std::*/signbit(this->Value()); }
             bool IsNormal() const
             {
-                return this->HasValue() && std::isnormal(this->Value());
+                return this->HasValue() && /*std::*/isnormal(this->Value());
             }
             bool IsInteger() const
             {

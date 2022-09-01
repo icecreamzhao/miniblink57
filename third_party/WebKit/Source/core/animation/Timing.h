@@ -71,13 +71,13 @@ public:
 
     void assertValid() const
     {
-        DCHECK(/*std::*/isfinite(startDelay));
-        DCHECK(/*std::*/isfinite(endDelay));
-        DCHECK(/*std::*/isfinite(iterationStart));
+        DCHECK(std_isfinite(startDelay));
+        DCHECK(std_isfinite(endDelay));
+        DCHECK(std_isfinite(iterationStart));
         DCHECK_GE(iterationStart, 0);
         DCHECK_GE(iterationCount, 0);
-        DCHECK(/*std::*/isnan(iterationDuration) || iterationDuration >= 0);
-        DCHECK(/*std::*/isfinite(playbackRate));
+        DCHECK(std_isnan(iterationDuration) || iterationDuration >= 0);
+        DCHECK(std_isfinite(playbackRate));
         DCHECK(timingFunction);
     }
 

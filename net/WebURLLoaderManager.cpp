@@ -44,6 +44,7 @@
 #include "config.h"
 #include "net/WebURLLoaderManager.h"
 
+#include "base/logging.h"
 #include "third_party/WebKit/public/platform/Platform.h"
 #include "third_party/WebKit/public/platform/WebURLRequest.h"
 #include "third_party/WebKit/public/platform/WebURLError.h"
@@ -90,6 +91,9 @@
 #include "wke/wkeGlobalVar.h"
 #endif
 #include "wtf/RefCountedLeakCounter.h"
+#include "base/path_service.h"
+#include "base/files/file_path.h"
+#include "base/files/file_util.h"
 
 using namespace blink;
 
@@ -158,8 +162,8 @@ WebURLLoaderManager::WebURLLoaderManager(const char* cookieJarFullPath)
     content::BlinkPlatformImpl* platform = (content::BlinkPlatformImpl*)Platform::current();
 
     if (wke::g_diskCacheEnable && CurlCacheManager::getInstance()->cacheDirectory().isEmpty()) {
-        String path = net::getDefaultLocalStorageFullPath();
-        path.append(L"cache");
+        String path = net::getDefaultLocalStorageFullPath().c_str();
+        path.append("cache");
         CurlCacheManager::getInstance()->setCacheDirectory(path);
     }
 
@@ -195,7 +199,7 @@ void WebURLLoaderManager::shutdown()
 {
     m_isShutdown = true;
 
-    //WTF::Locker<WTF::Mutex> locker(m_shutdownMutex);
+    //WTF::Locker<WTF::RecursiveMutex> locker(m_shutdownMutex);
     m_shutdownLock.waitForWrite();
 
     CurlCacheManager::getInstance()->shutdown();
@@ -259,21 +263,6 @@ WebCookieJarImpl* WebURLLoaderManager::getShareCookieJar() const
 
 WebURLLoaderManager* WebURLLoaderManager::m_sharedInstance = nullptr;
 
-static std::string getDefaultCookiesFullpath()
-{
-    std::vector<wchar_t> path;
-    path.resize(MAX_PATH + 1);
-    memset(&path[0], 0, sizeof(wchar_t) * (MAX_PATH + 1));
-    ::GetModuleFileNameW(nullptr, &path[0], MAX_PATH);
-    ::PathRemoveFileSpecW(&path[0]);
-    ::PathAppendW(&path[0], L"cookies.dat");
-
-    std::vector<char> pathStrA;
-    WTF::WCharToMByte(&path[0], wcslen(&path[0]), &pathStrA, CP_UTF8);
-
-    return std::string(&pathStrA[0], pathStrA.size());
-}
-
 WebURLLoaderManager* WebURLLoaderManager::sharedInstance()
 {
     if (!m_sharedInstance) {
@@ -290,8 +279,8 @@ void WebURLLoaderManager::setCookieJarFullPath(const char* path)
     if (!m_sharedInstance) {
         m_sharedInstance = new WebURLLoaderManager(path);
     } else {
-        WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-        WTF::Locker<WTF::Mutex> locker(*mutex);
+        WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+        WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
 
         WebCookieJarImpl* cookieJar = CookieJarMgr::getInst()->createOrGet(path);
         m_sharedInstance->m_shareCookieJar = cookieJar;
@@ -775,7 +764,7 @@ bool WebURLLoaderManager::downloadOnIoThread()
                 WebURLLoaderManagerMainTask::createAndPushTask(jobId, WebURLLoaderManagerMainTask::TaskType::kDidFinishLoading, nullptr, 0, 0, 0);
             }
         } else {
-            char* url = nullptr;
+            const char* url = nullptr;
             curl_easy_getinfo(job->m_handle, CURLINFO_EFFECTIVE_URL, &url);
             if (!url)
                 url = "url is empty";
@@ -825,7 +814,7 @@ void WebURLLoaderManager::removeFromCurlOnIoThread(int jobId)
     if (!job)
         return;
 
-    WTF::Locker<WTF::Mutex> locker(job->m_destroingMutex);
+    WTF::Locker<WTF::RecursiveMutex> locker(*job->m_destroingMutex);
 
     WebURLLoaderInternal::State state = job->m_state;
     ASSERT(WebURLLoaderInternal::kDestroyed != state);
@@ -923,7 +912,7 @@ static SetupDataInfo* setupFormDataOnMainThread(WebURLLoaderInternal* job, CURLo
     
     static const long long maxCurlOffT = (1LL << (expectedSizeOfCurlOffT * 8 - 1)) - 1;
     // Obtain the total size of the form data
-    curl_off_t size = 0;
+    long long size = 0;
     SetupDataInfo* result = new SetupDataInfo();
     result->chunkedTransfer = false;
 
@@ -954,7 +943,7 @@ static SetupDataInfo* setupFormDataOnMainThread(WebURLLoaderInternal* job, CURLo
 
             flattenElement = new FlattenHTTPBodyElement();
             flattenElement->type = FlattenHTTPBodyElement::Type::TypeFile;
-            Vector<UChar> filePath = WTF::ensureUTF16UChar(element.filePath, true);
+            Vector<char> filePath = WTF::ensureStringToUTF8(element.filePath, true);
             flattenElement->filePath = filePath.data();
             flattenElement->fileStart = offset;
             flattenElement->fileLength = length;
@@ -1029,11 +1018,11 @@ static void setupPostOrPutOnIoThread(WebURLLoaderInternal* job, bool isPost, Set
 
     if (isPost && data && 1 == data->flattenElements.size()) {
         FlattenHTTPBodyElement* element = data->flattenElements[0];
-        if (WebHTTPBody::Element::TypeData == element->type || WebHTTPBody::Element::TypeBlob == element->type) {
+        if (FlattenHTTPBodyElement::TypeData == element->type || FlattenHTTPBodyElement::TypeBlob == element->type) {
             curl_easy_setopt(job->m_handle, CURLOPT_POSTFIELDSIZE, element->data.size());
             curl_easy_setopt(job->m_handle, CURLOPT_COPYPOSTFIELDS, element->data.data());
 
-            InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(element->data.size()));
+            _InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(element->data.size()));
 
             delete element;
             return;
@@ -1109,7 +1098,7 @@ AutoLockJob::~AutoLockJob()
 
 JobHead* WebURLLoaderManager::checkJob(int jobId)
 {
-    WTF::Locker<WTF::Mutex> locker(m_liveJobsMutex);
+    WTF::Locker<WTF::RecursiveMutex> locker(m_liveJobsMutex);
     WTF::HashMap<int, JobHead*>::iterator it = m_liveJobs.find(jobId);
     if (it == m_liveJobs.end())
         return nullptr;
@@ -1121,7 +1110,7 @@ int WebURLLoaderManager::addLiveJobs(JobHead* job)
     RELEASE_ASSERT(WTF::isMainThread());
     if (m_isShutdown)
         return 0;
-    WTF::Locker<WTF::Mutex> locker(m_liveJobsMutex);
+    WTF::Locker<WTF::RecursiveMutex> locker(m_liveJobsMutex);
 
     int jobId = (++m_newestJobId);
     m_liveJobs.add(jobId, job);
@@ -1135,7 +1124,7 @@ void WebURLLoaderManager::removeLiveJobs(int jobId)
     RELEASE_ASSERT(WTF::isMainThread());
     if (m_isShutdown)
         return;
-    WTF::Locker<WTF::Mutex> locker(m_liveJobsMutex);
+    WTF::Locker<WTF::RecursiveMutex> locker(m_liveJobsMutex);
     m_liveJobs.remove(jobId);
 }
 
@@ -1205,15 +1194,15 @@ static bool isLocalFileNotExist(const char* urlTrim, WebURLLoaderInternal* job)
         return false;
 
     String url(urlTrim);
+    size_t questionMarkPos = url.find("?");
+    if (WTF::kNotFound != questionMarkPos)
+        url = url.substring(0, questionMarkPos);
+    bool result = false;
+#if defined(OS_WIN)
     if (url.startsWith("file:///"))
         url.remove(0, sizeof("file:///") - 1);
     url.replace("/", "\\");
 
-    size_t questionMarkPos = url.find("?");
-    if (WTF::kNotFound != questionMarkPos)
-        url = url.substring(0, questionMarkPos);
-
-    bool result = false;
     Vector<UChar> buf = WTF::ensureUTF16UChar(url, true);
     result = !::PathFileExistsW(buf.data());
     if (!result)
@@ -1221,6 +1210,19 @@ static bool isLocalFileNotExist(const char* urlTrim, WebURLLoaderInternal* job)
 
     String outString = String::format("isLocalFileNotExist: %s\n", WTF::ensureStringToUTF8(url, true).data());
     OutputDebugStringW(outString.charactersWithNullTermination().data());
+#else
+    if (url.startsWith("file://"))
+        url.remove(0, sizeof("file://") - 1);
+    url.replace("\\", "/");
+
+    Vector<char> buf = WTF::ensureStringToUTF8(url, true);
+    result = !(base::PathExists(base::FilePath(buf.data())));
+    if (!result)
+        return false;
+    
+    printf("isLocalFileNotExist 1: %x %x %x %x, %s\n", (unsigned char)buf[14], (unsigned char)buf[15], (unsigned char)buf[16], (unsigned char)buf[17], buf.data());
+    printf("isLocalFileNotExist 2: %x %x %x %x\n", url[14], url[15], url[16], url[17]);
+#endif
 
     return result;
 }
@@ -1234,8 +1236,10 @@ int WebURLLoaderManager::addAsynchronousJob(WebURLLoaderInternal* job)
 #if 0
 //     if (WTF::kNotFound != url.find("electron-ui/file:")) 
 //         OutputDebugStringA("");
-    
-    String outString = String::format("addAsynchronousJob : %d, %s\n", m_liveJobs.size(), WTF::ensureStringToUTF8(url, true).data());
+    Vector<char> urlStr = WTF::ensureStringToUTF8(url, true);
+    //printf("addAsynchronousJob: %x %x %x %x\n", urlStr[17], urlStr[18], urlStr[19], urlStr[20]);
+
+    String outString = String::format("addAsynchronousJob : %d, %s\n", m_liveJobs.size(), urlStr.data());
     OutputDebugStringW(outString.charactersWithNullTermination().data());
 #endif
 
@@ -1330,7 +1334,7 @@ bool WebURLLoaderManager::doCancel(JobHead* jobHead, CancelledReason cancelledRe
     }
 
     WebURLLoaderInternal* job = (WebURLLoaderInternal*)jobHead;
-    WTF::Locker<WTF::Mutex> locker(job->m_destroingMutex);
+    WTF::Locker<WTF::RecursiveMutex> locker(*job->m_destroingMutex);
     bool cancelled = job->isCancelled();
 
     RELEASE_ASSERT(kNoCancelled != cancelledReason);
@@ -1363,7 +1367,7 @@ void WebURLLoaderManager::cancel(int jobId)
 
 void WebURLLoaderManager::cancelAllJobsOfWebview(int webviewId)
 {
-    //WTF::Locker<WTF::Mutex> locker(m_liveJobsMutex);
+    //WTF::Locker<WTF::RecursiveMutex> locker(m_liveJobsMutex);
     m_liveJobsMutex.lock();
 
     int jobId = -1;
@@ -1736,8 +1740,8 @@ void WebURLLoaderManager::initializeHandleOnIoThread(int jobId, InitializeHandle
     String urlString = job->m_url.c_str();
     curl_easy_setopt(job->m_handle, CURLOPT_URL, job->m_url.c_str());
 
-    WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-    WTF::Locker<WTF::Mutex> locker(*mutex);
+    WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+    WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
 
     std::string cookieJarFullPath;
     if (job->m_pageNetExtraData) {
@@ -1782,7 +1786,6 @@ void WebURLLoaderManager::initializeHandleOnIoThread(int jobId, InitializeHandle
     if (info->wkeNetInterface.size())
         curl_easy_setopt(job->m_handle, CURLOPT_INTERFACE, info->wkeNetInterface.c_str());
 #endif
-
     job->m_initializeHandleInfo = nullptr;
     delete info;
 }
@@ -1794,10 +1797,10 @@ void WebURLLoaderManager::timeoutOnMainThread(int jobId)
     if (!job)
         return;
 
-    OutputDebugStringW(L"timeoutOnMainThread:");
+    OutputDebugStringW(u16("timeoutOnMainThread:"));
     KURL kUrl = job->firstRequest()->url();
     OutputDebugStringA(kUrl.string().utf8().data());
-    OutputDebugStringW(L"\n");
+    OutputDebugStringW(u16("\n"));
 
     BlackListCancelTask::cancel(this, job, kBlackListCancelJobId);
     cancel(jobId);
@@ -1831,7 +1834,7 @@ int WebURLLoaderManager::initializeHandleOnMainThread(WebURLLoaderInternal* job)
     kurl = job->firstRequest()->url();
 
     bool needFastCheckLocalFilePath = !job->m_isWkeNetSetDataBeSetted && !job->m_isHoldJobToAsynCommit;
-    if (needFastCheckLocalFilePath && kurl.isLocalFile() && isLocalFileNotExist(info->url.c_str(), job) || job->m_isWkeCanceled) {
+    if ((needFastCheckLocalFilePath && kurl.isLocalFile() && isLocalFileNotExist(info->url.c_str(), job)) || job->m_isWkeCanceled) {
         Platform::current()->currentThread()->postTask(FROM_HERE, new BlackListCancelTask(this, jobId));
         needDeleteInfo = true;
     }
@@ -1862,7 +1865,7 @@ void WebURLLoaderManager::startOnIoThread(int jobId)
         //         WTF::String outstr = String::format("Error %job starting job %s\n", ret, encodeWithURLEscapeSequences(job->firstRequest()->url().string()).latin1().data());
         //         OutputDebugStringW(outstr.charactersWithNullTermination().data());
 #endif
-        WTF::Locker<WTF::Mutex> locker(job->m_destroingMutex);
+        WTF::Locker<WTF::RecursiveMutex> locker(*job->m_destroingMutex);
         job->m_cancelledReason = kNormalCancelled;
         removeFromCurlOnIoThread(jobId);
 
@@ -1923,6 +1926,8 @@ WebURLLoaderInternal::WebURLLoaderInternal(
     KURL url = (KURL)m_firstRequest->url();
     m_user = url.user();
     m_pass = url.pass();
+
+    m_destroingMutex = new WTF::RecursiveMutex(); // 不在析构函数里删除，而是在WebURLLoaderInternal::release里
 
     m_dataLength = 0;
     m_isBlackList = false;

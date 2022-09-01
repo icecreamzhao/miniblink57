@@ -104,7 +104,7 @@ void InProcessWorkerMessagingProxy::startWorkerGlobalScope(
     WorkerV8Settings workerV8Settings(WorkerV8Settings::Default());
     workerV8Settings.m_heapLimitMode = WorkerV8Settings::HeapLimitMode::Default;
 
-    toIsolate(document)->IsHeapLimitIncreasedForDebugging()
+    false//toIsolate(document)->IsHeapLimitIncreasedForDebugging()
         ? WorkerV8Settings::HeapLimitMode::IncreasedForDebugging
         : WorkerV8Settings::HeapLimitMode::Default;
     std::unique_ptr<WorkerThreadStartupData> startupData =

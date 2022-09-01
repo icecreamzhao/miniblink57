@@ -11,7 +11,8 @@ namespace net {
 class WebURLLoaderManager::IoTask : public blink::WebThread::Task {
 public:
     IoTask(WebURLLoaderManager* manager, blink::WebThread* thread, bool start)
-        : m_manager(manager)
+        : blink::WebThread::Task()
+        , m_manager(manager)
         , m_thread(thread)
         , m_start(start)
     {
@@ -21,7 +22,6 @@ public:
 
     virtual void run() override
     {
-        //WTF::Locker<WTF::Mutex> locker(m_manager->m_shutdownMutex);
         ShutdownReadLocker locker(&m_manager->m_shutdownLock);
         if (!locker.lock())
             return;

@@ -265,7 +265,7 @@ void SVGAnimationElement::beginElement()
 
 void SVGAnimationElement::beginElementAt(float offset)
 {
-    ASSERT(std::isfinite(offset));
+    ASSERT(std_isfinite(offset));
     SMILTime elapsed = this->elapsed();
     addBeginTime(elapsed, elapsed + offset, SMILTimeWithOrigin::ScriptOrigin);
 }
@@ -277,7 +277,7 @@ void SVGAnimationElement::endElement()
 
 void SVGAnimationElement::endElementAt(float offset)
 {
-    ASSERT(std::isfinite(offset));
+    ASSERT(std_isfinite(offset));
     SMILTime elapsed = this->elapsed();
     addEndTime(elapsed, elapsed + offset, SMILTimeWithOrigin::ScriptOrigin);
 }

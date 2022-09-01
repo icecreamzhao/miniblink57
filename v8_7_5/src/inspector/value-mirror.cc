@@ -464,12 +464,12 @@ namespace {
         {
             *unserializable = true;
             double rawValue = m_value->Value();
-            if (std::isnan(rawValue))
+            if (/*std::*/isnan(rawValue))
                 return "NaN";
-            if (rawValue == 0.0 && std::signbit(rawValue))
+            if (rawValue == 0.0 && /*std::*/signbit(rawValue))
                 return "-0";
-            if (std::isinf(rawValue)) {
-                return std::signbit(rawValue) ? "-Infinity" : "Infinity";
+            if (/*std::*/isinf(rawValue)) {
+                return /*std::*/signbit(rawValue) ? "-Infinity" : "Infinity";
             }
             *unserializable = false;
             return String16::fromDouble(rawValue);

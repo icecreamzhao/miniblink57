@@ -147,6 +147,18 @@ const AtomicString& FontDescription::getLocale(bool includeDefault) const
     return m_locale->localeString();
 }
 
+const LayoutLocale* FontDescription::locale(bool includeDefault) const
+{
+    if (!m_locale.get() && includeDefault)
+        return &LayoutLocale::getDefault();
+    return m_locale.get();
+}
+
+const LayoutLocale& FontDescription::localeOrDefault() const
+{
+    return LayoutLocale::valueOrDefault(m_locale.get());
+}
+
 void FontDescription::setTraits(FontTraits traits)
 {
     setStyle(traits.style());

@@ -6,7 +6,7 @@
 
 namespace v8 {
 namespace platform {
-    class DefaultPlatform;
+class DefaultPlatform;
 }
 }
 
@@ -21,6 +21,10 @@ public:
     void CallDelayedOnWorkerThread(std::unique_ptr<v8::Task> task, double delay_in_seconds);
     double CurrentClockTimeMillis();
 
+    v8::Platform* GetPlatform() const
+    {
+        return (v8::Platform*)m_defaultPlatform;
+    }
 private:
     v8::platform::DefaultPlatform* m_defaultPlatform;
 };

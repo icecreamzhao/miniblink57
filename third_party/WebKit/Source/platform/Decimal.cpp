@@ -706,10 +706,10 @@ Decimal Decimal::floor() const
 
 Decimal Decimal::fromDouble(double doubleValue)
 {
-    if (std::isfinite(doubleValue))
+    if (std_isfinite(doubleValue))
         return fromString(String::numberToStringECMAScript(doubleValue));
 
-    if (std::isinf(doubleValue))
+    if (std_isinf(doubleValue))
         return infinity(doubleValue < 0 ? Negative : Positive);
 
     return nan();

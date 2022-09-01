@@ -49,10 +49,12 @@ class WebHTTPBodyPrivate;
 class WebHTTPBody {
 public:
     struct Element {
-        enum Type { TypeData,
+        enum Type { 
+            TypeData,
             TypeFile,
             TypeBlob,
-            TypeFileSystemURL } type;
+            TypeFileSystemURL 
+        } type;
         WebData data;
         WebString filePath;
         long long fileStart;

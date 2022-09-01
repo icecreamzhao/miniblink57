@@ -250,7 +250,7 @@ bool SVGPathNormalizer::decomposeArcToCubic(const FloatPoint& currentPoint,
         float endTheta = theta1 + (i + 1) * thetaArc / segments;
 
         float t = (8 / 6.f) * tanf(0.25f * (endTheta - startTheta));
-        if (!std::isfinite(t))
+        if (!std_isfinite(t))
             return false;
         float sinStartTheta = sinf(startTheta);
         float cosStartTheta = cosf(startTheta);

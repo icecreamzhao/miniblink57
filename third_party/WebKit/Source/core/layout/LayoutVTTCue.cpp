@@ -83,7 +83,7 @@ namespace {
         LayoutUnit maxDimension,
         LayoutUnit margin) const
     {
-        DCHECK(std::isfinite(m_cueBox.snapToLinesPosition()));
+        DCHECK(std_isfinite(m_cueBox.snapToLinesPosition()));
 
         // 6. Let line be cue's computed line.
         // 7. Round line to an integer by adding 0.5 and then flooring it.
@@ -371,7 +371,7 @@ void LayoutVTTCue::layout()
     LayoutState state(*this);
 
     // http://dev.w3.org/html5/webvtt/#dfn-apply-webvtt-cue-settings - step 13.
-    if (!std::isnan(m_snapToLinesPosition))
+    if (!std_isnan(m_snapToLinesPosition))
         SnapToLinesLayouter(*this, computeControlsRect()).layout();
     else
         repositionCueSnapToLinesNotSet();

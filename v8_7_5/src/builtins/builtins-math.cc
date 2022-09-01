@@ -31,7 +31,7 @@ namespace internal {
                 Object::ToNumber(isolate, x));
             double abs_value = std::abs(x->Number());
 
-            if (std::isnan(abs_value)) {
+            if (/*std::*/isnan(abs_value)) {
                 one_arg_is_nan = true;
             } else {
                 abs_values.push_back(abs_value);

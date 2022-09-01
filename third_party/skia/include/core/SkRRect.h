@@ -294,9 +294,9 @@ public:
 
     SkDEBUGCODE(void validate() const;)
 
-        enum {
-            kSizeInMemory = 12 * sizeof(SkScalar)
-        };
+    enum {
+        kSizeInMemory = 12 * sizeof(SkScalar)
+    };
 
     /**
      *  Write the rrect into the specified buffer. This is guaranteed to always

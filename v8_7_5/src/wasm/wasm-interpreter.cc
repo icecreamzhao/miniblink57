@@ -518,7 +518,7 @@ namespace internal {
                 if (base_trap == kTrapCount) {
                     return val;
                 }
-                return std::isnan(a) ? 0
+                return /*std::*/isnan(a) ? 0
                                      : (a < static_cast<float_type>(0.0)
                                              ? std::numeric_limits<int_type>::min()
                                              : std::numeric_limits<int_type>::max());
@@ -564,7 +564,7 @@ namespace internal {
                 if (base_trap == kTrapCount) {
                     return val;
                 }
-                return std::isnan(a) ? 0
+                return /*std::*/isnan(a) ? 0
                                      : (a < 0.0 ? std::numeric_limits<int64_t>::min()
                                                 : std::numeric_limits<int64_t>::max());
             }
@@ -582,7 +582,7 @@ namespace internal {
                 if (base_trap == kTrapCount) {
                     return val;
                 }
-                return std::isnan(a) ? 0
+                return /*std::*/isnan(a) ? 0
                                      : (a < 0.0 ? std::numeric_limits<int64_t>::min()
                                                 : std::numeric_limits<int64_t>::max());
             }
@@ -600,7 +600,7 @@ namespace internal {
                 if (base_trap == kTrapCount) {
                     return val;
                 }
-                return std::isnan(a) ? 0
+                return /*std::*/isnan(a) ? 0
                                      : (a < 0.0 ? std::numeric_limits<uint64_t>::min()
                                                 : std::numeric_limits<uint64_t>::max());
             }
@@ -618,7 +618,7 @@ namespace internal {
                 if (base_trap == kTrapCount) {
                     return val;
                 }
-                return std::isnan(a) ? 0
+                return /*std::*/isnan(a) ? 0
                                      : (a < 0.0 ? std::numeric_limits<uint64_t>::min()
                                                 : std::numeric_limits<uint64_t>::max());
             }
@@ -1222,12 +1222,12 @@ namespace internal {
             template <>
             V8_INLINE bool has_nondeterminism<float>(float val)
             {
-                return std::isnan(val);
+                return /*std::*/isnan(val);
             }
             template <>
             V8_INLINE bool has_nondeterminism<double>(double val)
             {
-                return std::isnan(val);
+                return /*std::*/isnan(val);
             }
 
         } // namespace
@@ -2488,12 +2488,12 @@ namespace internal {
                     CONVERT_CASE(F32x4UConvertI32x4, int4, i32x4, float4, 4, 0, uint32_t,
                         static_cast<float>(a))
                     CONVERT_CASE(I32x4SConvertF32x4, float4, f32x4, int4, 4, 0, double,
-                        std::isnan(a) ? 0
+                        /*std::*/isnan(a) ? 0
                                       : a<kMinInt ? kMinInt : a> kMaxInt
                                 ? kMaxInt
                                 : static_cast<int32_t>(a))
                     CONVERT_CASE(I32x4UConvertF32x4, float4, f32x4, int4, 4, 0, double,
-                        std::isnan(a)
+                        /*std::*/isnan(a)
                             ? 0
                             : a<0 ? 0 : a> kMaxUInt32 ? kMaxUInt32
                                                       : static_cast<uint32_t>(a))

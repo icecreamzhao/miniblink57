@@ -134,7 +134,7 @@ public:
 
     base::string16 utf16() const
     {
-        return base::Latin1OrUTF16ToUTF16(length(), data8(), data16());
+        return base::Latin1OrUTF16ToUTF16(length(), data8(), (const base::char16*)data16());
     }
 
     BLINK_COMMON_EXPORT static WebString fromUTF16(const base::string16&);

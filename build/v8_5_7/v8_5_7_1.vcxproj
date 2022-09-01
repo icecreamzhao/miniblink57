@@ -91,7 +91,7 @@
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;V8_NO_FAST_TLS;WIN32;_DEBUG;_LIB;V8_TARGET_ARCH_IA32=1;V8_DEPRECATION_WARNINGS;NVALGRIND;ENABLE_HANDLE_ZAPPING;V8_USE_EXTERNAL_STARTUP_DATA=1;BUILDING_V8_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../v8_5_7;../../v8_5_7/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../v8_5_7;../../v8_5_7/include;../../gen/v8_5_7</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -139,12 +139,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;V8_NO_FAST_TLS;WIN32;NDEBUG;_LIB;V8_TARGET_ARCH_IA32=1;V8_DEPRECATION_WARNINGS;NVALGRIND;ENABLE_HANDLE_ZAPPING;V8_USE_EXTERNAL_STARTUP_DATA=1;BUILDING_V8_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../v8_5_7;../../v8_5_7/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../v8_5_7;../../v8_5_7/include;../../gen/v8_5_7</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DisableSpecificWarnings>4800;4530</DisableSpecificWarnings>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <AdditionalOptions>
@@ -199,6 +199,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\gen\v8_5_7\include\inspector\Debugger.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\include\inspector\Runtime.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\include\inspector\Schema.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\debugger-script.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\injected-script-source.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Console.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Debugger.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Forward.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\HeapProfiler.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Profiler.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Protocol.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Runtime.h" />
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Schema.h" />
     <ClInclude Include="..\..\v8_5_7\include\v8-debug.h" />
     <ClInclude Include="..\..\v8_5_7\include\v8-experimental.h" />
     <ClInclude Include="..\..\v8_5_7\include\v8-inspector-protocol.h" />
@@ -374,6 +387,34 @@
     <ClInclude Include="..\..\v8_5_7\src\i18n.h" />
     <ClInclude Include="..\..\v8_5_7\src\icu_util.h" />
     <ClInclude Include="..\..\v8_5_7\src\identity-map.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\injected-script-native.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\injected-script.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\inspected-context.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\java-script-call-frame.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\remote-object-id.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\script-breakpoint.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\search-util.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\string-16.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\string-util.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-console-agent-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-console-message.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-console.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-debugger-agent-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-debugger-script.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-debugger.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-function-call.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-heap-profiler-agent-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-injected-script-host.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-inspector-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-inspector-session-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-internal-value-type.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-profiler-agent-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-regex.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-runtime-agent-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-schema-agent-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-stack-trace-impl.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-value-copier.h" />
+    <ClInclude Include="..\..\v8_5_7\src\inspector\wasm-translation.h" />
     <ClInclude Include="..\..\v8_5_7\src\interface-descriptors.h" />
     <ClInclude Include="..\..\v8_5_7\src\isolate-inl.h" />
     <ClInclude Include="..\..\v8_5_7\src\isolate.h" />
@@ -509,6 +550,13 @@
     <ClCompile Include="..\..\gen\v8_5_7\experimental-libraries.cc" />
     <ClCompile Include="..\..\gen\v8_5_7\extras-libraries.cc" />
     <ClCompile Include="..\..\gen\v8_5_7\libraries.cc" />
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Console.cpp" />
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Debugger.cpp" />
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\HeapProfiler.cpp" />
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Profiler.cpp" />
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Protocol.cpp" />
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\RuntimeDevtools.cpp" />
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Schema.cpp" />
     <ClCompile Include="..\..\v8_5_7\src\accessors.cc">
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</WholeProgramOptimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</WholeProgramOptimization>
@@ -1122,6 +1170,33 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</WholeProgramOptimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\injected-script-native.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\injected-script.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\inspected-context.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\java-script-call-frame.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\remote-object-id.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\search-util.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\string-16.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\string-util.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-console-agent-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-console-message.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-console.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-debugger-agent-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-debugger-script.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-debugger.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-function-call.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-heap-profiler-agent-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-injected-script-host.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-inspector-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-inspector-session-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-internal-value-type.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-profiler-agent-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-regex.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-runtime-agent-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-schema-agent-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-stack-trace-impl.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-value-copier.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\inspector\wasm-translation.cc" />
     <ClCompile Include="..\..\v8_5_7\src\interface-descriptors.cc">
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</WholeProgramOptimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</WholeProgramOptimization>
@@ -1294,7 +1369,9 @@
     <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-function.cc" />
     <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-futex.cc" />
     <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-generator.cc" />
-    <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-internal.cc" />
+    <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-internal.cc">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
+    </ClCompile>
     <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-interpreter.cc" />
     <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-literals.cc" />
     <ClCompile Include="..\..\v8_5_7\src\runtime\runtime-liveedit.cc" />

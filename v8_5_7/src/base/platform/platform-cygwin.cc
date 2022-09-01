@@ -27,7 +27,7 @@ namespace base {
 
 
 const char* OS::LocalTimezone(double time, TimezoneCache* cache) {
-  if (std::isnan(time)) return "";
+  if (std_isnan(time)) return "";
   time_t tv = static_cast<time_t>(std::floor(time/msPerSecond));
   struct tm tm;
   struct tm* t = localtime_r(&tv, &tm);

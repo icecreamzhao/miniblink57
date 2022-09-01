@@ -14,6 +14,11 @@
 #include "url/url_parse_internal.h"
 #include "url/url_util_internal.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace url {
 
 namespace {

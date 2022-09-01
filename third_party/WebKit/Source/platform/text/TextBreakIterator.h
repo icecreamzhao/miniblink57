@@ -33,6 +33,11 @@ namespace blink {
 //typedef icu::BreakIterator TextBreakIterator;
 class TextBreakIterator {
 public:
+    virtual ~TextBreakIterator()
+    {
+
+    }
+
     virtual void reset(const UChar* str, int len);
     virtual int32_t first() = 0;
     virtual int32_t last();

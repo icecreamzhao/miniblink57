@@ -215,7 +215,7 @@ int VideoCaptureOracle::next_frame_number() const
 
 void VideoCaptureOracle::RecordCapture(double pool_utilization)
 {
-    DCHECK(std::isfinite(pool_utilization) && pool_utilization >= 0.0);
+    DCHECK(std_isfinite(pool_utilization) && pool_utilization >= 0.0);
 
     smoothing_sampler_.RecordSample();
     const base::TimeTicks timestamp = GetFrameTimestamp(next_frame_number_);
@@ -236,7 +236,7 @@ void VideoCaptureOracle::RecordWillNotCapture(double pool_utilization)
             << next_frame_number_ << ").";
 
     if (auto_throttling_enabled_) {
-        DCHECK(std::isfinite(pool_utilization) && pool_utilization >= 0.0);
+        DCHECK(std_isfinite(pool_utilization) && pool_utilization >= 0.0);
         const base::TimeTicks timestamp = GetFrameTimestamp(next_frame_number_);
         buffer_pool_utilization_.Update(pool_utilization, timestamp);
         AnalyzeAndAdjust(timestamp);
@@ -313,7 +313,7 @@ void VideoCaptureOracle::RecordConsumerFeedback(int frame_number,
     if (!auto_throttling_enabled_)
         return;
 
-    if (!std::isfinite(resource_utilization)) {
+    if (!std_isfinite(resource_utilization)) {
         LOG(DFATAL) << "Non-finite utilization provided by consumer for frame #"
                     << frame_number << ": " << resource_utilization;
         return;

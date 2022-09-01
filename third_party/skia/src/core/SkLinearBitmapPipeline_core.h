@@ -95,7 +95,7 @@ public:
         , fLength(length)
         , fCount { count }
     {
-        SkASSERT(std::isfinite(length));
+        SkASSERT(/*std_*/isfinite(length));
     }
 
     operator std::tuple<SkPoint&, SkScalar&, int&>()
@@ -126,8 +126,8 @@ public:
 
     Span breakAt(SkScalar breakX, SkScalar dx)
     {
-        SkASSERT(std::isfinite(breakX));
-        SkASSERT(std::isfinite(dx));
+        SkASSERT(/*std::*/isfinite(breakX));
+        SkASSERT(/*std::*/isfinite(dx));
         SkASSERT(dx != 0.0f);
 
         if (this->isEmpty()) {

@@ -4,24 +4,24 @@
 
 #include "gin/arguments.h"
 
-#include "base/strings/stringprintf.h"
+//#include "base/strings/stringprintf.h"
 #include "gin/converter.h"
 
 namespace gin {
 
 Arguments::Arguments()
-    : isolate_(NULL)
-    , info_(NULL)
-    , next_(0)
-    , insufficient_arguments_(false)
+    : isolate_(NULL),
+    info_(NULL),
+    next_(0),
+    insufficient_arguments_(false)
 {
 }
 
 Arguments::Arguments(const v8::FunctionCallbackInfo<v8::Value>& info)
-    : isolate_(info.GetIsolate())
-    , info_(&info)
-    , next_(0)
-    , insufficient_arguments_(false)
+    : isolate_(info.GetIsolate()),
+    info_(&info),
+    next_(0),
+    insufficient_arguments_(false)
 {
 }
 
@@ -55,9 +55,12 @@ void Arguments::ThrowError() const
     if (insufficient_arguments_)
         return ThrowTypeError("Insufficient number of arguments.");
 
-    return ThrowTypeError(base::StringPrintf(
-        "Error processing argument at index %d, conversion failure from %s",
-        next_ - 1, V8TypeAsString((*info_)[next_ - 1]).c_str()));
+    char* err = new char[10000];
+    sprintf(err, "Error processing argument at index %d, conversion failure from %s",
+        next_ - 1, V8TypeAsString((*info_)[next_ - 1]).c_str());
+
+    ThrowTypeError(err);
+    delete err;
 }
 
 void Arguments::ThrowTypeError(const std::string& message) const
@@ -71,4 +74,4 @@ bool Arguments::IsConstructCall() const
     return info_->IsConstructCall();
 }
 
-} // namespace gin
+}  // namespace gin

@@ -1031,7 +1031,7 @@ void Simulator::FPCompare(double val0, double val1) {
 
   // TODO(jbramley): This assumes that the C++ implementation handles
   // comparisons in the way that we expect (as per AssertSupportedFPCR()).
-  if ((std::isnan(val0) != 0) || (std::isnan(val1) != 0)) {
+  if ((std_isnan(val0) != 0) || (std_isnan(val1) != 0)) {
     nzcv().SetRawValue(FPUnorderedFlag);
   } else if (val0 < val1) {
     nzcv().SetRawValue(FPLessThanFlag);
@@ -2388,7 +2388,7 @@ int32_t Simulator::FPToInt32(double value, FPRounding rmode) {
   } else if (value < kWMinInt) {
     return kWMinInt;
   }
-  return std::isnan(value) ? 0 : static_cast<int32_t>(value);
+  return std_isnan(value) ? 0 : static_cast<int32_t>(value);
 }
 
 
@@ -2399,7 +2399,7 @@ int64_t Simulator::FPToInt64(double value, FPRounding rmode) {
   } else if (value < kXMinInt) {
     return kXMinInt;
   }
-  return std::isnan(value) ? 0 : static_cast<int64_t>(value);
+  return std_isnan(value) ? 0 : static_cast<int64_t>(value);
 }
 
 
@@ -2410,7 +2410,7 @@ uint32_t Simulator::FPToUInt32(double value, FPRounding rmode) {
   } else if (value < 0.0) {
     return 0;
   }
-  return std::isnan(value) ? 0 : static_cast<uint32_t>(value);
+  return std_isnan(value) ? 0 : static_cast<uint32_t>(value);
 }
 
 
@@ -2421,7 +2421,7 @@ uint64_t Simulator::FPToUInt64(double value, FPRounding rmode) {
   } else if (value < 0.0) {
     return 0;
   }
-  return std::isnan(value) ? 0 : static_cast<uint64_t>(value);
+  return std_isnan(value) ? 0 : static_cast<uint64_t>(value);
 }
 
 
@@ -2769,7 +2769,7 @@ double Simulator::FPRoundInt(double value, FPRounding round_mode) {
   if ((value == 0.0) || (value == kFP64PositiveInfinity) ||
       (value == kFP64NegativeInfinity)) {
     return value;
-  } else if (std::isnan(value)) {
+  } else if (std_isnan(value)) {
     return FPProcessNaN(value);
   }
 
@@ -2995,9 +2995,9 @@ void Simulator::VisitFPDataProcessing3Source(Instruction* instr) {
 template <typename T>
 T Simulator::FPAdd(T op1, T op2) {
   // NaNs should be handled elsewhere.
-  DCHECK(!std::isnan(op1) && !std::isnan(op2));
+  DCHECK(!std_isnan(op1) && !std_isnan(op2));
 
-  if (std::isinf(op1) && std::isinf(op2) && (op1 != op2)) {
+  if (std_isinf(op1) && std_isinf(op2) && (op1 != op2)) {
     // inf + -inf returns the default NaN.
     return FPDefaultNaN<T>();
   } else {
@@ -3010,9 +3010,9 @@ T Simulator::FPAdd(T op1, T op2) {
 template <typename T>
 T Simulator::FPDiv(T op1, T op2) {
   // NaNs should be handled elsewhere.
-  DCHECK(!std::isnan(op1) && !std::isnan(op2));
+  DCHECK(!std_isnan(op1) && !std_isnan(op2));
 
-  if ((std::isinf(op1) && std::isinf(op2)) || ((op1 == 0.0) && (op2 == 0.0))) {
+  if ((std_isinf(op1) && std_isinf(op2)) || ((op1 == 0.0) && (op2 == 0.0))) {
     // inf / inf and 0.0 / 0.0 return the default NaN.
     return FPDefaultNaN<T>();
   } else {
@@ -3025,7 +3025,7 @@ T Simulator::FPDiv(T op1, T op2) {
 template <typename T>
 T Simulator::FPMax(T a, T b) {
   // NaNs should be handled elsewhere.
-  DCHECK(!std::isnan(a) && !std::isnan(b));
+  DCHECK(!std_isnan(a) && !std_isnan(b));
 
   if ((a == 0.0) && (b == 0.0) &&
       (copysign(1.0, a) != copysign(1.0, b))) {
@@ -3046,13 +3046,13 @@ T Simulator::FPMaxNM(T a, T b) {
   }
 
   T result = FPProcessNaNs(a, b);
-  return std::isnan(result) ? result : FPMax(a, b);
+  return std_isnan(result) ? result : FPMax(a, b);
 }
 
 template <typename T>
 T Simulator::FPMin(T a, T b) {
   // NaNs should be handled elsewhere.
-  DCHECK(!std::isnan(a) && !std::isnan(b));
+  DCHECK(!std_isnan(a) && !std_isnan(b));
 
   if ((a == 0.0) && (b == 0.0) &&
       (copysign(1.0, a) != copysign(1.0, b))) {
@@ -3073,16 +3073,16 @@ T Simulator::FPMinNM(T a, T b) {
   }
 
   T result = FPProcessNaNs(a, b);
-  return std::isnan(result) ? result : FPMin(a, b);
+  return std_isnan(result) ? result : FPMin(a, b);
 }
 
 
 template <typename T>
 T Simulator::FPMul(T op1, T op2) {
   // NaNs should be handled elsewhere.
-  DCHECK(!std::isnan(op1) && !std::isnan(op2));
+  DCHECK(!std_isnan(op1) && !std_isnan(op2));
 
-  if ((std::isinf(op1) && (op2 == 0.0)) || (std::isinf(op2) && (op1 == 0.0))) {
+  if ((std_isinf(op1) && (op2 == 0.0)) || (std_isinf(op2) && (op1 == 0.0))) {
     // inf * 0.0 returns the default NaN.
     return FPDefaultNaN<T>();
   } else {
@@ -3098,13 +3098,13 @@ T Simulator::FPMulAdd(T a, T op1, T op2) {
 
   T sign_a = copysign(1.0, a);
   T sign_prod = copysign(1.0, op1) * copysign(1.0, op2);
-  bool isinf_prod = std::isinf(op1) || std::isinf(op2);
+  bool isinf_prod = std_isinf(op1) || std_isinf(op2);
   bool operation_generates_nan =
-      (std::isinf(op1) && (op2 == 0.0)) ||                      // inf * 0.0
-      (std::isinf(op2) && (op1 == 0.0)) ||                      // 0.0 * inf
-      (std::isinf(a) && isinf_prod && (sign_a != sign_prod));   // inf - inf
+      (std_isinf(op1) && (op2 == 0.0)) ||                      // inf * 0.0
+      (std_isinf(op2) && (op1 == 0.0)) ||                      // 0.0 * inf
+      (std_isinf(a) && isinf_prod && (sign_a != sign_prod));   // inf - inf
 
-  if (std::isnan(result)) {
+  if (std_isnan(result)) {
     // Generated NaNs override quiet NaNs propagated from a.
     if (operation_generates_nan && IsQuietNaN(a)) {
       return FPDefaultNaN<T>();
@@ -3125,7 +3125,7 @@ T Simulator::FPMulAdd(T a, T op1, T op2) {
   }
 
   result = FusedMultiplyAdd(op1, op2, a);
-  DCHECK(!std::isnan(result));
+  DCHECK(!std_isnan(result));
 
   // Work around broken fma implementations for rounded zero results: If a is
   // 0.0, the sign of the result is the sign of op1 * op2 before rounding.
@@ -3139,7 +3139,7 @@ T Simulator::FPMulAdd(T a, T op1, T op2) {
 
 template <typename T>
 T Simulator::FPSqrt(T op) {
-  if (std::isnan(op)) {
+  if (std_isnan(op)) {
     return FPProcessNaN(op);
   } else if (op < 0.0) {
     return FPDefaultNaN<T>();
@@ -3153,9 +3153,9 @@ T Simulator::FPSqrt(T op) {
 template <typename T>
 T Simulator::FPSub(T op1, T op2) {
   // NaNs should be handled elsewhere.
-  DCHECK(!std::isnan(op1) && !std::isnan(op2));
+  DCHECK(!std_isnan(op1) && !std_isnan(op2));
 
-  if (std::isinf(op1) && std::isinf(op2) && (op1 == op2)) {
+  if (std_isinf(op1) && std_isinf(op2) && (op1 == op2)) {
     // inf - inf returns the default NaN.
     return FPDefaultNaN<T>();
   } else {
@@ -3167,7 +3167,7 @@ T Simulator::FPSub(T op1, T op2) {
 
 template <typename T>
 T Simulator::FPProcessNaN(T op) {
-  DCHECK(std::isnan(op));
+  DCHECK(std_isnan(op));
   return fpcr().DN() ? FPDefaultNaN<T>() : ToQuietNaN(op);
 }
 
@@ -3178,10 +3178,10 @@ T Simulator::FPProcessNaNs(T op1, T op2) {
     return FPProcessNaN(op1);
   } else if (IsSignallingNaN(op2)) {
     return FPProcessNaN(op2);
-  } else if (std::isnan(op1)) {
+  } else if (std_isnan(op1)) {
     DCHECK(IsQuietNaN(op1));
     return FPProcessNaN(op1);
-  } else if (std::isnan(op2)) {
+  } else if (std_isnan(op2)) {
     DCHECK(IsQuietNaN(op2));
     return FPProcessNaN(op2);
   } else {
@@ -3198,13 +3198,13 @@ T Simulator::FPProcessNaNs3(T op1, T op2, T op3) {
     return FPProcessNaN(op2);
   } else if (IsSignallingNaN(op3)) {
     return FPProcessNaN(op3);
-  } else if (std::isnan(op1)) {
+  } else if (std_isnan(op1)) {
     DCHECK(IsQuietNaN(op1));
     return FPProcessNaN(op1);
-  } else if (std::isnan(op2)) {
+  } else if (std_isnan(op2)) {
     DCHECK(IsQuietNaN(op2));
     return FPProcessNaN(op2);
-  } else if (std::isnan(op3)) {
+  } else if (std_isnan(op3)) {
     DCHECK(IsQuietNaN(op3));
     return FPProcessNaN(op3);
   } else {
@@ -3221,13 +3221,13 @@ bool Simulator::FPProcessNaNs(Instruction* instr) {
 
   if (instr->Mask(FP64) == FP64) {
     double result = FPProcessNaNs(dreg(fn), dreg(fm));
-    if (std::isnan(result)) {
+    if (std_isnan(result)) {
       set_dreg(fd, result);
       done = true;
     }
   } else {
     float result = FPProcessNaNs(sreg(fn), sreg(fm));
-    if (std::isnan(result)) {
+    if (std_isnan(result)) {
       set_sreg(fd, result);
       done = true;
     }

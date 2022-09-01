@@ -169,12 +169,12 @@ namespace internal {
             case 'e':
             case 'E': {
                 double value = current.data_.u_double_;
-                int inf = std::isinf(value);
+                int inf = /*std::*/isinf(value);
                 if (inf == -1) {
                     Add("-inf");
                 } else if (inf == 1) {
                     Add("inf");
-                } else if (std::isnan(value)) {
+                } else if (/*std::*/isnan(value)) {
                     Add("nan");
                 } else {
                     EmbeddedVector<char, 28> formatted;

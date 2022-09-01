@@ -324,11 +324,11 @@ void Resource::ResourceCallback::runTask()
         resource->finishPendingClients();
 }
 
-// constexpr Resource::Status Resource::NotStarted;
-// constexpr Resource::Status Resource::Pending;
-// constexpr Resource::Status Resource::Cached;
-// constexpr Resource::Status Resource::LoadError;
-// constexpr Resource::Status Resource::DecodeError;
+const/*expr*/ Resource::Status Resource::NotStarted;
+const/*expr*/ Resource::Status Resource::Pending;
+const/*expr*/ Resource::Status Resource::Cached;
+const/*expr*/ Resource::Status Resource::LoadError;
+const/*expr*/ Resource::Status Resource::DecodeError;
 
 Resource::Resource(const ResourceRequest& request,
     Type type,
@@ -519,11 +519,11 @@ static double currentAge(const ResourceResponse& response,
     // RFC2616 13.2.3
     // No compensation for latency as that is not terribly important in practice
     double dateValue = response.date();
-    double apparentAge = std::isfinite(dateValue)
+    double apparentAge = std_isfinite(dateValue)
         ? std::max(0., responseTimestamp - dateValue)
         : 0;
     double ageValue = response.age();
-    double correctedReceivedAge = std::isfinite(ageValue) ? std::max(apparentAge, ageValue) : apparentAge;
+    double correctedReceivedAge = std_isfinite(ageValue) ? std::max(apparentAge, ageValue) : apparentAge;
     double residentTime = currentTime() - responseTimestamp;
     return correctedReceivedAge + residentTime;
 }
@@ -548,15 +548,15 @@ static double freshnessLifetime(ResourceResponse& response,
 
     // RFC2616 13.2.4
     double maxAgeValue = response.cacheControlMaxAge();
-    if (std::isfinite(maxAgeValue))
+    if (std_isfinite(maxAgeValue))
         return maxAgeValue;
     double expiresValue = response.expires();
     double dateValue = response.date();
-    double creationTime = std::isfinite(dateValue) ? dateValue : responseTimestamp;
-    if (std::isfinite(expiresValue))
+    double creationTime = std_isfinite(dateValue) ? dateValue : responseTimestamp;
+    if (std_isfinite(expiresValue))
         return expiresValue - creationTime;
     double lastModifiedValue = response.lastModified();
-    if (std::isfinite(lastModifiedValue))
+    if (std_isfinite(lastModifiedValue))
         return (creationTime - lastModifiedValue) * 0.1;
     // If no cache headers are present, the specification leaves the decision to
     // the UA. Other browsers seem to opt for 0.
@@ -591,8 +591,8 @@ static bool canUseResponse(ResourceResponse& response,
 
     if (response.httpStatusCode() == 302 || response.httpStatusCode() == 307) {
         // Default to not cacheable unless explicitly allowed.
-        bool hasMaxAge = std::isfinite(response.cacheControlMaxAge());
-        bool hasExpires = std::isfinite(response.expires());
+        bool hasMaxAge = std_isfinite(response.cacheControlMaxAge());
+        bool hasExpires = std_isfinite(response.expires());
         // TODO: consider catching Cache-Control "private" and "public" here.
         if (!hasMaxAge && !hasExpires)
             return false;

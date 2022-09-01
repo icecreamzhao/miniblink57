@@ -1127,7 +1127,7 @@ namespace {
     {
         // If the aspectRatio is 0 or infinite, the ellipse is completely flat.
         // TODO(sashab): Implement Degenerate Radial Gradients, see crbug.com/635727.
-        if (aspectRatio == 0 || std::isinf(aspectRatio))
+        if (aspectRatio == 0 || std_isinf(aspectRatio))
             return FloatSize(0, 0);
 
         // x^2/a^2 + y^2/b^2 = 1
@@ -1236,9 +1236,9 @@ PassRefPtr<Gradient> CSSRadialGradientValue::createGradient(
         }
     }
 
-    DCHECK(std::isfinite(firstRadius));
-    DCHECK(std::isfinite(secondRadius.width()));
-    DCHECK(std::isfinite(secondRadius.height()));
+    DCHECK(std_isfinite(firstRadius));
+    DCHECK(std_isfinite(secondRadius.width()));
+    DCHECK(std_isfinite(secondRadius.height()));
 
     bool isDegenerate = !secondRadius.width() || !secondRadius.height();
     RefPtr<Gradient> gradient = Gradient::create(firstPoint, firstRadius, secondPoint,

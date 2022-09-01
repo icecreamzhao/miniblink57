@@ -159,19 +159,19 @@ void Animation::setCurrentTime(double newCurrentTime)
 void Animation::setCurrentTimeInternal(double newCurrentTime,
     TimingUpdateReason reason)
 {
-    DCHECK(std::isfinite(newCurrentTime));
+    DCHECK(std_isfinite(newCurrentTime));
 
     bool oldHeld = m_held;
     bool outdated = false;
     bool isLimited = limited(newCurrentTime);
-    m_held = m_paused || !m_playbackRate || isLimited || std::isnan(m_startTime);
+    m_held = m_paused || !m_playbackRate || isLimited || std_isnan(m_startTime);
     if (m_held) {
         if (!oldHeld || m_holdTime != newCurrentTime)
             outdated = true;
         m_holdTime = newCurrentTime;
         if (m_paused || !m_playbackRate) {
             m_startTime = nullValue();
-        } else if (isLimited && std::isnan(m_startTime) && reason == TimingUpdateForAnimationFrame) {
+        } else if (isLimited && std_isnan(m_startTime) && reason == TimingUpdateForAnimationFrame) {
             m_startTime = calculateStartTime(newCurrentTime);
         }
     } else {
@@ -215,7 +215,7 @@ void Animation::updateCurrentTimingState(TimingUpdateReason reason)
 double Animation::startTime(bool& isNull) const
 {
     double result = startTime();
-    isNull = std::isnan(result);
+    isNull = std_isnan(result);
     return result;
 }
 
@@ -227,7 +227,7 @@ double Animation::startTime() const
 double Animation::currentTime(bool& isNull)
 {
     double result = currentTime();
-    isNull = std::isnan(result);
+    isNull = std_isnan(result);
     return result;
 }
 
@@ -291,7 +291,7 @@ bool Animation::preCommit(int compositorGroup, bool startOnCompositor)
         m_compositorState = nullptr;
     }
 
-    DCHECK(!m_compositorState || !std::isnan(m_compositorState->startTime));
+    DCHECK(!m_compositorState || !std_isnan(m_compositorState->startTime));
 
     if (!shouldStart) {
         m_currentTimePending = false;
@@ -325,14 +325,14 @@ void Animation::postCommit(double timelineTime)
 
     switch (m_compositorState->pendingAction) {
     case Start:
-        if (!std::isnan(m_compositorState->startTime)) {
+        if (!std_isnan(m_compositorState->startTime)) {
             DCHECK_EQ(m_startTime, m_compositorState->startTime);
             m_compositorState->pendingAction = None;
         }
         break;
     case Pause:
     case PauseThenStart:
-        DCHECK(std::isnan(m_startTime));
+        DCHECK(std_isnan(m_startTime));
         m_compositorState->pendingAction = None;
         setCurrentTimeInternal(
             (timelineTime - m_compositorState->startTime) * m_playbackRate,
@@ -351,7 +351,7 @@ void Animation::notifyCompositorStartTime(double timelineTime)
 
     if (m_compositorState) {
         DCHECK_EQ(m_compositorState->pendingAction, Start);
-        DCHECK(std::isnan(m_compositorState->startTime));
+        DCHECK(std_isnan(m_compositorState->startTime));
 
         double initialCompositorHoldTime = m_compositorState->holdTime;
         m_compositorState->pendingAction = None;
@@ -366,7 +366,7 @@ void Animation::notifyCompositorStartTime(double timelineTime)
             return;
         }
 
-        if (!std::isnan(m_startTime) || currentTimeInternal() != initialCompositorHoldTime) {
+        if (!std_isnan(m_startTime) || currentTimeInternal() != initialCompositorHoldTime) {
             // A new start time or current time was set while starting.
             setCompositorPending(true);
             return;
@@ -379,7 +379,7 @@ void Animation::notifyCompositorStartTime(double timelineTime)
 void Animation::notifyStartTime(double timelineTime)
 {
     if (playing()) {
-        DCHECK(std::isnan(m_startTime));
+        DCHECK(std_isnan(m_startTime));
         DCHECK(m_held);
 
         if (m_playbackRate == 0) {
@@ -433,7 +433,7 @@ void Animation::setStartTime(double startTime)
 void Animation::setStartTimeInternal(double newStartTime)
 {
     DCHECK(!m_paused);
-    DCHECK(std::isfinite(newStartTime));
+    DCHECK(std_isfinite(newStartTime));
     DCHECK_NE(newStartTime, m_startTime);
 
     bool hadStartTime = hasStartTime();
@@ -711,7 +711,7 @@ void Animation::setPlaybackRate(double playbackRate)
 
 void Animation::setPlaybackRateInternal(double playbackRate)
 {
-    DCHECK(std::isfinite(playbackRate));
+    DCHECK(std_isfinite(playbackRate));
     DCHECK_NE(playbackRate, m_playbackRate);
 
     if (!limited() && !paused() && hasStartTime())
@@ -755,7 +755,7 @@ bool Animation::canStartAnimationOnCompositor() const
         return false;
 
     // FIXME: Timeline playback rates should be compositable
-    if (m_playbackRate == 0 || (std::isinf(effectEnd()) && m_playbackRate < 0) || (timeline() && timeline()->playbackRate() != 1))
+    if (m_playbackRate == 0 || (std_isinf(effectEnd()) && m_playbackRate < 0) || (timeline() && timeline()->playbackRate() != 1))
         return false;
 
     return m_timeline && m_content && m_content->isKeyframeEffectReadOnly() && playing();
@@ -783,7 +783,7 @@ bool Animation::maybeStartAnimationOnCompositor()
     }
 
     double timeOffset = 0;
-    if (std::isnan(startTime)) {
+    if (std_isnan(startTime)) {
         timeOffset = reversed ? effectEnd() - currentTimeInternal() : currentTimeInternal();
         timeOffset = timeOffset / fabs(m_playbackRate);
     }
@@ -892,7 +892,7 @@ bool Animation::update(TimingUpdateReason reason)
         }
     }
     DCHECK(!m_outdated);
-    return !m_finished || std::isfinite(timeToEffectChange());
+    return !m_finished || std_isfinite(timeToEffectChange());
 }
 
 double Animation::timeToEffectChange()

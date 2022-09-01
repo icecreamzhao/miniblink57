@@ -2540,21 +2540,21 @@ namespace internal {
                         if (IsDoubleElementsKind(Subclass::kind())) {
                             // Search for NaN in PACKED_DOUBLE_ELEMENTS or
                             // HOLEY_DOUBLE_ELEMENTS --- Skip The Hole and trust
-                            // std::isnan(elementK) for result
+                            // /*std::*/isnan(elementK) for result
                             auto elements = FixedDoubleArray::cast(receiver->elements());
 
                             for (uint32_t k = start_from; k < length; ++k) {
                                 if (elements->is_the_hole(k)) {
                                     continue;
                                 }
-                                if (std::isnan(elements->get_scalar(k)))
+                                if (/*std::*/isnan(elements->get_scalar(k)))
                                     return Just(true);
                             }
                             return Just(false);
                         } else {
                             // Search for NaN in PACKED_ELEMENTS, HOLEY_ELEMENTS,
                             // PACKED_SMI_ELEMENTS or HOLEY_SMI_ELEMENTS. Return true if
-                            // elementK->IsHeapNumber() && std::isnan(elementK->Number())
+                            // elementK->IsHeapNumber() && /*std::*/isnan(elementK->Number())
                             DCHECK(IsSmiOrObjectElementsKind(Subclass::kind()) || IsPackedFrozenOrSealedElementsKind(Subclass::kind()));
                             auto elements = FixedArray::cast(receiver->elements());
 
@@ -3407,15 +3407,15 @@ namespace internal {
                     if (!value->IsNumber())
                         return Just(false);
                     double search_value = value->Number();
-                    if (!std::isfinite(search_value)) {
+                    if (!/*std::*/isfinite(search_value)) {
                         // Integral types cannot represent +Inf or NaN.
                         if (Kind < FLOAT32_ELEMENTS || Kind > FLOAT64_ELEMENTS) {
                             return Just(false);
                         }
-                        if (std::isnan(search_value)) {
+                        if (/*std::*/isnan(search_value)) {
                             for (uint32_t k = start_from; k < length; ++k) {
                                 double element_k = elements->get_scalar(k);
-                                if (std::isnan(element_k))
+                                if (/*std::*/isnan(element_k))
                                     return Just(true);
                             }
                             return Just(false);
@@ -3462,12 +3462,12 @@ namespace internal {
                     if (!value->IsNumber())
                         return Just<int64_t>(-1);
                     double search_value = value->Number();
-                    if (!std::isfinite(search_value)) {
+                    if (!/*std::*/isfinite(search_value)) {
                         // Integral types cannot represent +Inf or NaN.
                         if (Kind < FLOAT32_ELEMENTS || Kind > FLOAT64_ELEMENTS) {
                             return Just<int64_t>(-1);
                         }
-                        if (std::isnan(search_value)) {
+                        if (/*std::*/isnan(search_value)) {
                             return Just<int64_t>(-1);
                         }
                     } else if (search_value < std::numeric_limits<ctype>::lowest() || search_value > std::numeric_limits<ctype>::max()) {
@@ -3515,11 +3515,11 @@ namespace internal {
                     if (!value->IsNumber())
                         return Just<int64_t>(-1);
                     double search_value = value->Number();
-                    if (!std::isfinite(search_value)) {
+                    if (!/*std::*/isfinite(search_value)) {
                         if (std::is_integral<ctype>::value) {
                             // Integral types cannot represent +Inf or NaN.
                             return Just<int64_t>(-1);
-                        } else if (std::isnan(search_value)) {
+                        } else if (/*std::*/isnan(search_value)) {
                             // Strict Equality Comparison of NaN is always false.
                             return Just<int64_t>(-1);
                         }

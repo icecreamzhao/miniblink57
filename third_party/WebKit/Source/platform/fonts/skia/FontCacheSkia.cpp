@@ -46,6 +46,7 @@
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/CString.h"
 #include <memory>
+#include "third_party/fontconfig/src/fontconfig/fontconfig.h"
 //#include <unicode/locid.h>
 
 #if !OS(WIN) && !OS(ANDROID)
@@ -89,8 +90,9 @@ AtomicString FontCache::getFamilyNameForCharacter(SkFontMgr* fm, UChar32 c, cons
     CString defaultLocale = toSkFontMgrLocale(defaultLanguage());
     bcp47Locales[localeCount++] = defaultLocale.data();
     CString fontLocale;
-    if (!fontDescription.locale().isEmpty()) {
-        fontLocale = toSkFontMgrLocale(fontDescription.locale());
+
+    if (!fontDescription.locale()->localeString().isEmpty()) {
+        fontLocale = toSkFontMgrLocale(fontDescription.locale()->localeString());
         bcp47Locales[localeCount++] = fontLocale.data();
     }
     ASSERT_WITH_SECURITY_IMPLICATION(localeCount < kMaxLocales);
@@ -127,10 +129,86 @@ PassRefPtr<SimpleFontData> FontCache::fallbackOnStandardFontStyle(
     return nullptr;
 }
 
+static String getDefaultFontList()
+{
+    String defaultFont;
+
+    FcBool result = FcInit();
+    FcConfig* config = FcConfigGetCurrent();
+    FcConfigSetRescanInterval(config, 0);
+
+    // show the fonts (debugging)
+    FcPattern* pat = FcPatternCreate();
+    FcObjectSet* os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_LANG, (char*)0);
+    FcFontSet* fs = FcFontList(config, pat, os);
+
+    printf("Total fonts: %d\n", fs->nfont);
+
+    for (int i = 0; fs && i < fs->nfont; i++) {
+        FcPattern* font = fs->fonts[i];
+        FcChar8* str = FcNameUnparse(font);
+
+        // Noto Sans CJK TC,Noto Sans CJK TC Bold:style=Regular,normal:lang=aa|ay
+        //printf("Font: %d, [%s]\n", i, str);
+
+        String fontStr(str, strlen((const char*)str));
+        free(str);
+        Vector<String> spli;
+        fontStr.split(u16(':'), false, spli);
+
+        if (spli.size() != 3)
+            continue;
+
+        if (WTF::kNotFound == spli[1].find("normal") && WTF::kNotFound == spli[1].find("Regular"))
+            continue;
+
+        if (WTF::kNotFound != spli[2].find("zh-cn")) {
+            defaultFont = spli[0];
+            break;
+        }        
+    }
+    if (fs)
+        FcFontSetDestroy(fs);
+
+    if (WTF::kNotFound == defaultFont.find(','))
+        return defaultFont;
+
+    Vector<String> spli;
+    defaultFont.split(u16(','), false, spli);
+    defaultFont = spli[0];
+
+    printf("getDefaultFontList: %s\n", defaultFont.utf8().data());
+
+    return defaultFont;
+}
+
 PassRefPtr<SimpleFontData> FontCache::getLastResortFallbackFont(const FontDescription& description, ShouldRetain shouldRetain)
 {
     const FontFaceCreationParams fallbackCreationParams(getFallbackFontFamily(description));
     const FontPlatformData* fontPlatformData = getFontPlatformData(description, fallbackCreationParams);
+
+#if !defined(WIN32)
+    // /usr/share/fonts/opentype/noto
+
+//     const char* defaultFonts[] = {
+//         "Noto Sans CJK SC", "WenQuanYi Zen Hei", "FreeSerif", "Sarai", nullptr
+//     };
+//     for (int i = 0; defaultFonts[i]; ++i) {
+//         FontFaceCreationParams params(AtomicString(defaultFonts[i]));
+//         fontPlatformData = getFontPlatformData(description, params);
+//         if (fontPlatformData)
+//             break;
+//     }
+    if (!fontPlatformData) {
+        String defaultFont = getDefaultFontList();
+        if (!defaultFont.isEmpty()) {
+            AtomicString family(defaultFont);
+            FontFaceCreationParams params(family);
+            fontPlatformData = getFontPlatformData(description, params);
+            printf("FontCache::getLastResortFallbackFont~: %p\n", fontPlatformData);
+        }
+    }
+#endif
 
     // We should at least have Sans or Arial which is the last resort fallback of SkFontHost ports.
     if (!fontPlatformData) {
@@ -210,7 +288,7 @@ std::unique_ptr<FontPlatformData> FontCache::createFontPlatformData(const FontDe
     if (!tf)
         return nullptr;
 
-    return wrapUnique(new FontPlatformData(tf,
+    return WTF::wrapUnique(new FontPlatformData(tf,
         name.data(),
         fontSize,
         (fontDescription.weight() > 200 + tf->fontStyle().weight()) || fontDescription.isSyntheticBold(),

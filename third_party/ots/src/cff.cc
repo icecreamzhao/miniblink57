@@ -189,7 +189,7 @@ bool CheckSid(const std::pair<uint32_t, DICT_OPERAND_TYPE>& operand,
 
 bool ParseDictDataBcd(
     ots::Buffer* table,
-    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE>>* operands)
+    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE> >* operands)
 {
     bool read_decimal_point = false;
     bool read_e = false;
@@ -250,7 +250,7 @@ bool ParseDictDataBcd(
 
 bool ParseDictDataEscapedOperator(
     ots::Buffer* table,
-    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE>>* operands)
+    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE> >* operands)
 {
     uint8_t op = 0;
     if (!table->ReadU8(&op)) {
@@ -268,7 +268,7 @@ bool ParseDictDataEscapedOperator(
 
 bool ParseDictDataNumber(
     ots::Buffer* table, uint8_t b0,
-    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE>>* operands)
+    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE> >* operands)
 {
     uint8_t b1 = 0;
     uint8_t b2 = 0;
@@ -323,7 +323,7 @@ bool ParseDictDataNumber(
 
 bool ParseDictDataReadNext(
     ots::Buffer* table,
-    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE>>* operands)
+    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE> >* operands)
 {
     uint8_t op = 0;
     if (!table->ReadU8(&op)) {
@@ -350,7 +350,7 @@ bool ParsePrivateDictData(
     DICT_DATA_TYPE type, ots::OpenTypeCFF* out_cff)
 {
     ots::Buffer table(data + offset, dict_length);
-    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE>> operands;
+    std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE> > operands;
 
     // Since a Private DICT for FDArray might not have a Local Subr (e.g. Hiragino
     // Kaku Gothic Std W8), we create an empty Local Subr here to match the size
@@ -483,7 +483,7 @@ bool ParseDictData(const uint8_t* data, size_t table_length,
         size_t dict_length = index.offsets[i] - index.offsets[i - 1];
         ots::Buffer table(data + index.offsets[i - 1], dict_length);
 
-        std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE>> operands;
+        std::vector<std::pair<uint32_t, DICT_OPERAND_TYPE> > operands;
 
         FONT_FORMAT font_format = FORMAT_UNKNOWN;
         bool have_ros = false;

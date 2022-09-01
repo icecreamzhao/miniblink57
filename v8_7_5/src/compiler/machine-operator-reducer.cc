@@ -643,7 +643,7 @@ namespace internal {
             case IrOpcode::kChangeFloat32ToFloat64: {
                 Float32Matcher m(node->InputAt(0));
                 if (m.HasValue()) {
-                    if (!allow_signalling_nan_ && std::isnan(m.Value())) {
+                    if (!allow_signalling_nan_ && /*std::*/isnan(m.Value())) {
                         // Do some calculation to make guarantee the value is a quiet NaN.
                         return ReplaceFloat64(m.Value() + m.Value());
                     }
@@ -726,7 +726,7 @@ namespace internal {
             case IrOpcode::kTruncateFloat64ToFloat32: {
                 Float64Matcher m(node->InputAt(0));
                 if (m.HasValue()) {
-                    if (!allow_signalling_nan_ && std::isnan(m.Value())) {
+                    if (!allow_signalling_nan_ && /*std::*/isnan(m.Value())) {
                         // Do some calculation to make guarantee the value is a quiet NaN.
                         return ReplaceFloat32(DoubleToFloat32(m.Value() + m.Value()));
                     }

@@ -12,7 +12,7 @@ namespace blink {
 
 void TimingInput::setStartDelay(Timing& timing, double startDelay)
 {
-    if (std::isfinite(startDelay))
+    if (std_isfinite(startDelay))
         timing.startDelay = startDelay / 1000;
     else
         timing.startDelay = Timing::defaults().startDelay;
@@ -20,7 +20,7 @@ void TimingInput::setStartDelay(Timing& timing, double startDelay)
 
 void TimingInput::setEndDelay(Timing& timing, double endDelay)
 {
-    if (std::isfinite(endDelay))
+    if (std_isfinite(endDelay))
         timing.endDelay = endDelay / 1000;
     else
         timing.endDelay = Timing::defaults().endDelay;
@@ -45,8 +45,8 @@ bool TimingInput::setIterationStart(Timing& timing,
     double iterationStart,
     ExceptionState& exceptionState)
 {
-    DCHECK(std::isfinite(iterationStart));
-    if (std::isnan(iterationStart) || iterationStart < 0) {
+    DCHECK(std_isfinite(iterationStart));
+    if (std_isnan(iterationStart) || iterationStart < 0) {
         exceptionState.throwTypeError("iterationStart must be non-negative.");
         return false;
     }
@@ -58,7 +58,7 @@ bool TimingInput::setIterationCount(Timing& timing,
     double iterationCount,
     ExceptionState& exceptionState)
 {
-    if (std::isnan(iterationCount) || iterationCount < 0) {
+    if (std_isnan(iterationCount) || iterationCount < 0) {
         exceptionState.throwTypeError("iterationCount must be non-negative.");
         return false;
     }
@@ -75,7 +75,7 @@ bool TimingInput::setIterationDuration(
 
     if (iterationDuration.isUnrestrictedDouble()) {
         double durationNumber = iterationDuration.getAsUnrestrictedDouble();
-        if (std::isnan(durationNumber) || durationNumber < 0) {
+        if (std_isnan(durationNumber) || durationNumber < 0) {
             exceptionState.throwTypeError(errorMessage);
             return false;
         }
@@ -94,7 +94,7 @@ bool TimingInput::setIterationDuration(
 
 void TimingInput::setPlaybackRate(Timing& timing, double playbackRate)
 {
-    if (std::isfinite(playbackRate))
+    if (std_isfinite(playbackRate))
         timing.playbackRate = playbackRate;
     else
         timing.playbackRate = Timing::defaults().playbackRate;

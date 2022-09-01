@@ -635,7 +635,7 @@ namespace internal {
         // where we put all these methods at some point?
         ComparisonResult StrictNumberCompare(double x, double y)
         {
-            if (std::isnan(x) || std::isnan(y)) {
+            if (/*std::*/isnan(x) || /*std::*/isnan(y)) {
                 return ComparisonResult::kUndefined;
             } else if (x < y) {
                 return ComparisonResult::kLessThan;
@@ -651,7 +651,7 @@ namespace internal {
         bool StrictNumberEquals(double x, double y)
         {
             // Must check explicitly for NaN's on Windows, but -0 works fine.
-            if (std::isnan(x) || std::isnan(y))
+            if (/*std::*/isnan(x) || /*std::*/isnan(y))
                 return false;
             return x == y;
         }
@@ -1718,7 +1718,7 @@ namespace internal {
             double this_value = Number();
             double other_value = other->Number();
             // +0 == -0 is true
-            return this_value == other_value || (std::isnan(this_value) && std::isnan(other_value));
+            return this_value == other_value || (/*std::*/isnan(this_value) && /*std::*/isnan(other_value));
         }
         if (IsString() && other->IsString()) {
             return String::cast(*this)->Equals(String::cast(other));

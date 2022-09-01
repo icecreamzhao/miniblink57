@@ -9,7 +9,7 @@
 
 #include "SkFontConfigInterface.h"
 
-#include <fontconfig/fontconfig.h>
+#include "third_party/fontconfig/src/fontconfig/fontconfig.h"
 
 class SkFontConfigInterfaceDirect : public SkFontConfigInterface {
 public:

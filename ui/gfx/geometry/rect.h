@@ -54,7 +54,7 @@ public:
     {
     }
 
-#if defined(OS_WIN)
+#if defined(OS_WIN) || defined(OS_LINUX_FOR_WIN)
     explicit Rect(const RECT& r);
 #elif defined(OS_MACOSX)
     explicit Rect(const CGRect& r);
@@ -64,7 +64,7 @@ public:
     {
     }
 
-#if defined(OS_WIN)
+#if defined(OS_WIN) || defined(OS_LINUX_FOR_WIN)
     // Construct an equivalent Win32 RECT object.
     RECT ToRECT() const;
 #elif defined(OS_MACOSX)

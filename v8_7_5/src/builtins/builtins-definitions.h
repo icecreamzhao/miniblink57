@@ -536,7 +536,9 @@ namespace internal {
                                                                                  \
     /* ExtrasUtils */                                                            \
     CPP(ExtrasUtilsUncurryThis)                                                  \
+    CPP(ExtrasUtilsSimpleBind)                                                   \
     CPP(ExtrasUtilsCallReflectApply)                                             \
+    CPP(ExtrasUtilsSimpleBindCallReflectApply)                                   \
                                                                                  \
     /* Function */                                                               \
     CPP(FunctionConstructor)                                                     \

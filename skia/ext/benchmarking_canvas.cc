@@ -10,6 +10,7 @@
 #include "base/logging.h"
 #include "base/strings/stringprintf.h"
 #include "base/time/time.h"
+#include "base/memory/ptr_util.h"
 #include "third_party/skia/include/core/SkColorFilter.h"
 #include "third_party/skia/include/core/SkImageFilter.h"
 #include "third_party/skia/include/core/SkPaint.h"
@@ -515,7 +516,7 @@ public:
         base::TimeDelta ticks = base::TimeTicks::Now() - start_ticks_;
         op_record_->SetDouble("cmd_time", ticks.InMillisecondsF());
 
-        canvas_->op_records_.Append(op_record_);
+        canvas_->op_records_.Append(base::WrapUnique(op_record_));
     }
 
     void addParam(const char name[], std::unique_ptr<base::Value> value)

@@ -121,11 +121,11 @@ CSSMatrix* CSSMatrix::inverse(ExceptionState& exceptionState) const
 
 CSSMatrix* CSSMatrix::translate(double x, double y, double z) const
 {
-    if (std::isnan(x))
+    if (std_isnan(x))
         x = 0;
-    if (std::isnan(y))
+    if (std_isnan(y))
         y = 0;
-    if (std::isnan(z))
+    if (std_isnan(z))
         z = 0;
     return CSSMatrix::create(
         TransformationMatrix(*m_matrix).translate3d(x, y, z));
@@ -133,11 +133,11 @@ CSSMatrix* CSSMatrix::translate(double x, double y, double z) const
 
 CSSMatrix* CSSMatrix::scale(double scaleX, double scaleY, double scaleZ) const
 {
-    if (std::isnan(scaleX))
+    if (std_isnan(scaleX))
         scaleX = 1;
-    if (std::isnan(scaleY))
+    if (std_isnan(scaleY))
         scaleY = scaleX;
-    if (std::isnan(scaleZ))
+    if (std_isnan(scaleZ))
         scaleZ = 1;
     return CSSMatrix::create(
         TransformationMatrix(*m_matrix).scale3d(scaleX, scaleY, scaleZ));
@@ -145,18 +145,18 @@ CSSMatrix* CSSMatrix::scale(double scaleX, double scaleY, double scaleZ) const
 
 CSSMatrix* CSSMatrix::rotate(double rotX, double rotY, double rotZ) const
 {
-    if (std::isnan(rotX))
+    if (std_isnan(rotX))
         rotX = 0;
 
-    if (std::isnan(rotY) && std::isnan(rotZ)) {
+    if (std_isnan(rotY) && std_isnan(rotZ)) {
         rotZ = rotX;
         rotX = 0;
         rotY = 0;
     }
 
-    if (std::isnan(rotY))
+    if (std_isnan(rotY))
         rotY = 0;
-    if (std::isnan(rotZ))
+    if (std_isnan(rotZ))
         rotZ = 0;
     return CSSMatrix::create(
         TransformationMatrix(*m_matrix).rotate3d(rotX, rotY, rotZ));
@@ -167,13 +167,13 @@ CSSMatrix* CSSMatrix::rotateAxisAngle(double x,
     double z,
     double angle) const
 {
-    if (std::isnan(x))
+    if (std_isnan(x))
         x = 0;
-    if (std::isnan(y))
+    if (std_isnan(y))
         y = 0;
-    if (std::isnan(z))
+    if (std_isnan(z))
         z = 0;
-    if (std::isnan(angle))
+    if (std_isnan(angle))
         angle = 0;
     if (!x && !y && !z)
         z = 1;
@@ -183,14 +183,14 @@ CSSMatrix* CSSMatrix::rotateAxisAngle(double x,
 
 CSSMatrix* CSSMatrix::skewX(double angle) const
 {
-    if (std::isnan(angle))
+    if (std_isnan(angle))
         angle = 0;
     return CSSMatrix::create(TransformationMatrix(*m_matrix).skewX(angle));
 }
 
 CSSMatrix* CSSMatrix::skewY(double angle) const
 {
-    if (std::isnan(angle))
+    if (std_isnan(angle))
         angle = 0;
     return CSSMatrix::create(TransformationMatrix(*m_matrix).skewY(angle));
 }

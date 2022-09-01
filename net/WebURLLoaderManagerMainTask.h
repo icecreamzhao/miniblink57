@@ -126,7 +126,7 @@ private:
 
     static MainTaskRunner* m_inst;
     bool m_isDestroying;
-    WTF::Mutex m_mutex;
+    WTF::RecursiveMutex m_mutex;
     WTF::Vector<WebURLLoaderManagerMainTask*> m_list;
 };
 
@@ -140,20 +140,22 @@ void WebURLLoaderInternal::release(int jobId)
     if (!job)
         return;
 
-    WTF::Mutex& liveJobsMutex = manager->m_liveJobsMutex;
+    WTF::RecursiveMutex& liveJobsMutex = manager->m_liveJobsMutex;
     while (true) {
-        job->m_destroingMutex.lock(); // 不需要unlock了，因为job直接会被析构
+        job->m_destroingMutex->lock(); // 不需要unlock了，因为job直接会被析构（此处存疑）
         liveJobsMutex.lock();
         if (2 < job->getRefCount()) {
             liveJobsMutex.unlock();
-            job->m_destroingMutex.unlock();
-            ::Sleep(16);
+            job->m_destroingMutex->unlock();
+            ::Sleep(1);
             continue;
         }
 
         job->m_handle = nullptr;
         manager->removeLiveJobs(jobId);
+        WTF::RecursiveMutex* destroingMutex = job->m_destroingMutex;
         delete job;
+        destroingMutex->unlock(); // 暂时先加个unlock。没搞懂以前不加是什么原因
 
         liveJobsMutex.unlock();
         break;
@@ -316,7 +318,7 @@ public:
 
         WebURLLoaderManager* manager = WebURLLoaderManager::sharedInstance();
 
-        WTF::Locker<WTF::Mutex> locker(manager->m_mainTasksMutex);
+        WTF::Locker<WTF::RecursiveMutex> locker(manager->m_mainTasksMutex);
         bool needPost = false;
         if (nullptr == manager->m_mainTasksEnd) {
             manager->m_mainTasksEnd = task;
@@ -436,7 +438,7 @@ void MainTaskRunner::destroyImpl()
 
 void MainTaskRunner::addTask(WebURLLoaderManagerMainTask* task)
 {
-    WTF::Locker<WTF::Mutex> locker(m_mutex);
+    WTF::Locker<WTF::RecursiveMutex> locker(m_mutex);
     if (m_isDestroying) {
         delete task;
         return;
@@ -755,22 +757,22 @@ static void distpatchWkeWillSendRequest(WebURLLoaderInternal* job, const KURL* n
     if (!page->wkeHandler().otherLoadCallback)
         return;
 
-    Vector<UChar> url = WTF::ensureUTF16UChar(job->firstRequest()->url().string(), false);
-    Vector<UChar> newUrl;
+    Vector<char> url = WTF::ensureStringToUTF8(job->firstRequest()->url().string(), false);
+    Vector<char> newUrl;
     if (newURL)
-        newUrl = WTF::ensureUTF16UChar(newURL->getUTF8String(), false);
-    Vector<UChar> method = WTF::ensureUTF16UChar(job->firstRequest()->httpMethod(), false);
-    Vector<UChar> referrer = WTF::ensureUTF16UChar(job->firstRequest()->httpHeaderField(blink::WebString::fromUTF8("Referer")), false);
+        newUrl = WTF::ensureStringToUTF8(newURL->getUTF8String(), false);
+    Vector<char> method = WTF::ensureStringToUTF8(job->firstRequest()->httpMethod(), false);
+    Vector<char> referrer = WTF::ensureStringToUTF8(job->firstRequest()->httpHeaderField(blink::WebString::fromUTF8("Referer")), false);
     
     wkeTempCallbackInfo* info = wkeGetTempCallbackInfo(page->wkeWebView());
     info->size = sizeof(wkeTempCallbackInfo);
     info->willSendRequestInfo = new wkeWillSendRequestInfo();
-    info->willSendRequestInfo->url = wkeCreateStringW(url.data(), url.size());
-    info->willSendRequestInfo->newUrl = newURL ? wkeCreateStringW(newUrl.data(), newUrl.size()) : nullptr;
+    info->willSendRequestInfo->url = wkeCreateString(url.data(), url.size());
+    info->willSendRequestInfo->newUrl = newURL ? wkeCreateString(newUrl.data(), newUrl.size()) : nullptr;
     info->willSendRequestInfo->resourceType = webURLRequestToResourceType(*job->firstRequest());
     info->willSendRequestInfo->httpResponseCode = httpCode;
-    info->willSendRequestInfo->method = wkeCreateStringW(method.data(), method.size());
-    info->willSendRequestInfo->referrer = wkeCreateStringW(referrer.data(), referrer.size());
+    info->willSendRequestInfo->method = wkeCreateString(method.data(), method.size());
+    info->willSendRequestInfo->referrer = wkeCreateString(referrer.data(), referrer.size());
     info->willSendRequestInfo->headers = nullptr;
 
     page->wkeHandler().otherLoadCallback(page->wkeWebView(), page->wkeHandler().otherLoadCallbackParam,
@@ -1004,7 +1006,7 @@ void WebURLLoaderManagerMainTask::handleDidSendData(MainTaskArgs* args, WebURLLo
 
     unsigned long long sentData = size * nmemb;
 
-    InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(sentData));
+    _InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(sentData));
     WebURLLoaderManager::sharedInstance()->handleDidSentData(job, job->m_sentDataBytes, job->m_totalBytesToBeSent);
 }
 

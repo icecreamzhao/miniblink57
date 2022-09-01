@@ -20,6 +20,7 @@
 #include "SkTypefaceCache.h"
 #include "SkTypes.h"
 
+#include "third_party/fontconfig/src/fontconfig/fontconfig.h"
 #include <limits>
 #include <memory>
 
@@ -252,9 +253,8 @@ protected:
     SkFontStyleSet_Custom* onMatchFamily(const char familyName[]) const override
     {
         for (int i = 0; i < fFamilies.count(); ++i) {
-            if (fFamilies[i]->getFamilyName().equals(familyName)) {
+            if (fFamilies[i]->getFamilyName().equals(familyName))
                 return SkRef(fFamilies[i].get());
-            }
         }
         return nullptr;
     }
@@ -422,12 +422,12 @@ private:
                 SkString realname;
                 SkFontStyle style = SkFontStyle(); // avoid uninitialized warning
                 if (!scanner.scanFont(stream, faceIndex, &realname, &style, &isFixedPitch, nullptr)) {
-                    SkDebugf("---- failed to open <%s> <%d> as a font\n",
-                        filename.c_str(), faceIndex);
+                    SkDebugf("---- failed to open <%s> <%d> as a font\n", filename.c_str(), faceIndex);
                     continue;
-                }
+                }                
 
                 SkFontStyleSet_Custom* addTo = find_family(*families, realname.c_str());
+                //printf("load_directory_fonts: %p, %s\n", addTo, realname.c_str());
                 if (nullptr == addTo) {
                     addTo = new SkFontStyleSet_Custom(realname);
                     families->push_back().reset(addTo);
@@ -451,8 +451,120 @@ private:
     SkString fBaseDirectory;
 };
 
+void getFontList3()
+{
+    FcInit();
+    FcConfig* config = FcInitLoadConfigAndFonts();
+    FcPattern* pat = FcPatternCreate();
+    FcObjectSet* os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_LANG, FC_FILE, (char*)0);
+    FcFontSet* fs = FcFontList(config, pat, os);
+
+    printf("Total matching fonts: %d\n", fs->nfont);
+    for (int i = 0; fs && i < fs->nfont; ++i) {
+        FcPattern* font = fs->fonts[i];
+        FcChar8* file, * style, * family;
+        if (FcPatternGetString(font, FC_FILE, 0, &file) == FcResultMatch &&
+            FcPatternGetString(font, FC_FAMILY, 0, &family) == FcResultMatch &&
+            FcPatternGetString(font, FC_STYLE, 0, &style) == FcResultMatch) {
+            printf("Filename: %s (family %s, style %s)\n", file, family, style);
+        }
+    }
+    if (fs) FcFontSetDestroy(fs);
+}
+
+void getFontList2()
+{
+    FcPattern* pat;
+    FcFontSet* fs;
+    FcObjectSet* os;
+    FcChar8* s, * file;
+    FcConfig* config;
+    FcBool result;
+    int i;
+
+    result = FcInit();
+    config = FcConfigGetCurrent();
+    FcConfigSetRescanInterval(config, 0);
+
+    // show the fonts (debugging)
+    pat = FcPatternCreate();
+    os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_LANG, (char*)0);
+    fs = FcFontList(config, pat, os);
+
+    printf("Total fonts: %d\n", fs->nfont);
+
+    for (i = 0; fs && i < fs->nfont; i++) {
+        FcPattern* font = fs->fonts[i];//FcFontSetFont(fs, i);
+        //FcPatternPrint(font);
+        FcChar8* str = FcNameUnparse(font);
+        if (FcPatternGetString(font, FC_FILE, 0, &file) == FcResultMatch) {
+            printf("Filename: [%s]\n", file);
+        }
+
+        FcChar8* lang;
+        if (FcPatternGetString(font, FC_LANG, 0, &lang) == FcResultMatch)
+            printf("(lang: %s)\n", lang);
+
+        printf("Font: [%s]\n", str);
+        free(str);
+    }
+    if (fs)
+        FcFontSetDestroy(fs);
+}
+
+void getFontList()
+{
+    const FcChar8* format = NULL;
+    int			nfont = 0;
+    int			i;
+    FcObjectSet* os = 0;
+    FcFontSet* fs;
+    FcPattern* pat;
+
+    FcInit();
+    FcConfig* fc = FcInitLoadConfigAndFonts();
+    pat = FcNameParse((FcChar8*)"lang=zh");
+
+    if (!pat) {
+        printf("Unable to parse the pattern\n");
+        return;
+    }
+
+    os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_FILE, (char*)0);
+    format = (const FcChar8*)"%{=fclist}\n";
+
+    fs = FcFontList(fc, pat, os);
+    if (os)
+        FcObjectSetDestroy(os);
+    if (pat)
+        FcPatternDestroy(pat);
+
+    printf("getFontList: %d %d\n", fs->nfont, fs->sfont);
+
+    int	j;
+    for (j = 0; j < fs->nfont; j++) {
+        FcChar8* s;
+        s = FcPatternFormat(fs->fonts[j], format);
+        if (s) {
+            printf("%s", s);
+            FcStrFree(s);
+        }
+    }
+
+    if (fs) {
+        nfont = fs->nfont;
+        FcFontSetDestroy(fs);
+    }
+
+    FcFini();
+
+    __debugbreak();
+}
+
+
 SK_API SkFontMgr* SkFontMgr_New_Custom_Directory(const char* dir)
 {
+    //getFontList2();
     return new SkFontMgr_Custom(DirectorySystemFontLoader(dir));
 }
 

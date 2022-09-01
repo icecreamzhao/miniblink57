@@ -3301,7 +3301,6 @@ namespace internal {
                 UNREACHABLE();
             }
 
-            ::OutputDebugStringA("ObjectRef::data fail\n");
             return nullptr;
         }
 

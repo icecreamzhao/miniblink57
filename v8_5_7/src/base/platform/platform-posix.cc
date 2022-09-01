@@ -400,7 +400,7 @@ void OS::ClearTimezoneCache(TimezoneCache* cache) {
 
 
 double OS::DaylightSavingsOffset(double time, TimezoneCache*) {
-  if (std::isnan(time)) return std::numeric_limits<double>::quiet_NaN();
+  if (std_isnan(time)) return std::numeric_limits<double>::quiet_NaN();
   time_t tv = static_cast<time_t>(std::floor(time/msPerSecond));
   struct tm tm;
   struct tm* t = localtime_r(&tv, &tm);

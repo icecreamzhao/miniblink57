@@ -789,7 +789,7 @@ namespace internal {
                 double start_from = from_index->Number();
                 if (start_from >= len)
                     return ReadOnlyRoots(isolate).false_value();
-                if (V8_LIKELY(std::isfinite(start_from))) {
+                if (V8_LIKELY(/*std::*/isfinite(start_from))) {
                     if (start_from < 0) {
                         index = static_cast<int64_t>(std::max<double>(start_from + len, 0));
                     } else {

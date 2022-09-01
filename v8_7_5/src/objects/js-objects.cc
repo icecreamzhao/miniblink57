@@ -67,10 +67,13 @@
 #include "src/string-stream.h"
 #include "src/transitions.h"
 #include "src/wasm/wasm-objects.h"
+#include "src/base/thread-local.h"
+
+#include <windows.h>
 
 namespace v8 {
 
-DWORD s_tlsPatchForCreateDataProperty = 0;
+base::ThreadLocalBoolean* s_tlsPatchForCreateDataProperty = nullptr;
 
 namespace internal {
 
@@ -3322,8 +3325,9 @@ namespace internal {
                 Handle<Object> accessors = it->GetAccessors();
 
                 bool b = false;
-                if (0 != s_tlsPatchForCreateDataProperty)
-                    b = (1 == (int)TlsGetValue(s_tlsPatchForCreateDataProperty));
+                if (nullptr != s_tlsPatchForCreateDataProperty)
+                    b = s_tlsPatchForCreateDataProperty->Get();
+                    //b = (1 == (int)TlsGetValue(s_tlsPatchForCreateDataProperty));
 
                 // Special handling for AccessorInfo, which behaves like a data
                 // property.
@@ -3698,9 +3702,12 @@ namespace internal {
         Handle<Object> value,
         Maybe<ShouldThrow> should_throw)
     {
-        if (0 == s_tlsPatchForCreateDataProperty)
-            s_tlsPatchForCreateDataProperty = TlsAlloc();
-        TlsSetValue(s_tlsPatchForCreateDataProperty, (LPVOID)1);
+//         if (0 == s_tlsPatchForCreateDataProperty)
+//             s_tlsPatchForCreateDataProperty = TlsAlloc();
+//         TlsSetValue(s_tlsPatchForCreateDataProperty, (LPVOID)1);
+        if (!s_tlsPatchForCreateDataProperty)
+            s_tlsPatchForCreateDataProperty = new base::ThreadLocalBoolean();
+        s_tlsPatchForCreateDataProperty->Set(true);
 
         DCHECK(it->GetReceiver()->IsJSObject());
         MAYBE_RETURN(JSReceiver::GetPropertyAttributes(it), Nothing<bool>());
@@ -5804,7 +5811,7 @@ namespace internal {
             tv = std::numeric_limits<double>::quiet_NaN();
         }
         Handle<Object> value = isolate->factory()->NewNumber(tv);
-        Handle<JSDate>::cast(result)->SetValue(*value, std::isnan(tv));
+        Handle<JSDate>::cast(result)->SetValue(*value, /*std::*/isnan(tv));
         return Handle<JSDate>::cast(result);
     }
 
@@ -5869,7 +5876,7 @@ namespace internal {
         }
 
         double time = value()->Number();
-        if (std::isnan(time))
+        if (/*std::*/isnan(time))
             return GetReadOnlyRoots().nan_value();
 
         int64_t local_time_ms = date_cache->ToLocal(static_cast<int64_t>(time));
@@ -5890,7 +5897,7 @@ namespace internal {
     {
         DCHECK_GE(index, kFirstUTCField);
 
-        if (std::isnan(value))
+        if (/*std::*/isnan(value))
             return GetReadOnlyRoots().nan_value();
 
         int64_t time_ms = static_cast<int64_t>(value);
@@ -5942,7 +5949,7 @@ namespace internal {
     {
         Isolate* const isolate = date->GetIsolate();
         Handle<Object> value = isolate->factory()->NewNumber(v);
-        bool value_is_nan = std::isnan(v);
+        bool value_is_nan = /*std::*/isnan(v);
         date->SetValue(*value, value_is_nan);
         return value;
     }

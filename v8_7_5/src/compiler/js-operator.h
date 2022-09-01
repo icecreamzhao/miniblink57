@@ -38,11 +38,11 @@ namespace internal {
             explicit CallFrequency(float value)
                 : value_(value)
             {
-                DCHECK(!std::isnan(value));
+                DCHECK(!/*std::*/isnan(value));
             }
 
             bool IsKnown() const { return !IsUnknown(); }
-            bool IsUnknown() const { return std::isnan(value_); }
+            bool IsUnknown() const { return /*std::*/isnan(value_); }
             float value() const
             {
                 DCHECK(IsKnown());

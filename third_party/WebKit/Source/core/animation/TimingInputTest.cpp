@@ -152,7 +152,7 @@ TEST(AnimationTimingInputTest, TimingInputIterationCount)
     Timing timing = applyTimingInputString(scope.isolate(), "iterations",
         "Infinity", success);
     EXPECT_TRUE(success);
-    EXPECT_TRUE(std::isinf(timing.iterationCount));
+    EXPECT_TRUE(std_isinf(timing.iterationCount));
     EXPECT_GT(timing.iterationCount, 0);
 
     applyTimingInputNumber(scope.isolate(), "iterations", -1, success);
@@ -180,10 +180,10 @@ TEST(AnimationTimingInputTest, TimingInputIterationDuration)
     Timing timing = applyTimingInputNumber(scope.isolate(), "duration",
         std::numeric_limits<double>::infinity(), success);
     EXPECT_TRUE(success);
-    EXPECT_TRUE(std::isinf(timing.iterationDuration));
+    EXPECT_TRUE(std_isinf(timing.iterationDuration));
     EXPECT_GT(timing.iterationDuration, 0);
 
-    EXPECT_TRUE(std::isnan(
+    EXPECT_TRUE(std_isnan(
         applyTimingInputString(scope.isolate(), "duration", "auto", success)
             .iterationDuration));
     EXPECT_TRUE(success);
@@ -338,7 +338,7 @@ TEST(AnimationTimingInputTest, TimingInputEmpty)
     EXPECT_EQ(controlTiming.fillMode, updatedTiming.fillMode);
     EXPECT_EQ(controlTiming.iterationStart, updatedTiming.iterationStart);
     EXPECT_EQ(controlTiming.iterationCount, updatedTiming.iterationCount);
-    EXPECT_TRUE(std::isnan(updatedTiming.iterationDuration));
+    EXPECT_TRUE(std_isnan(updatedTiming.iterationDuration));
     EXPECT_EQ(controlTiming.playbackRate, updatedTiming.playbackRate);
     EXPECT_EQ(controlTiming.direction, updatedTiming.direction);
     EXPECT_EQ(*controlTiming.timingFunction, *updatedTiming.timingFunction);

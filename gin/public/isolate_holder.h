@@ -49,6 +49,17 @@ public:
     // V8Initializer::LoadV8Snapshot) before calling this method.
     static void Initialize(ScriptMode mode, v8::ArrayBuffer::Allocator* allocator);
 
+    struct MemoryHead {
+        size_t magicNum;
+        size_t size;
+    };
+    static const size_t magicNum0 = 0x33333333;
+    static const size_t magicNum1 = 0x44444444;
+    static MemoryHead* GetPointerHead(void* pointer);
+    static size_t GetPointerMemSize(void* pointer);
+    static void* GetHeadToMemBegin(MemoryHead* head);
+    static v8::ArrayBuffer::Allocator* get_allocator();
+
     v8::Isolate* isolate() { return isolate_; }
 
     void EnableIdleTasks(std::unique_ptr<V8IdleTaskRunner> runner);

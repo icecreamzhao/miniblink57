@@ -60,7 +60,7 @@ public:
     virtual CGContextRef GetBitmapContext(const SkMatrix& transform, const SkIRect& clip_bounds) = 0;
 #endif
 
-#if defined(OS_WIN)
+#if defined(OS_WIN) || defined(OS_LINUX)
     virtual PlatformSurface BeginPlatformPaint(void* hWnd);
     virtual void EndPlatformPaint();
 

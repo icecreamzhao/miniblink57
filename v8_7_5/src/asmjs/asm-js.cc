@@ -60,7 +60,7 @@ namespace internal {
                 members.Remove(wasm::AsmJsParser::StandardMember::kInfinity);
                 Handle<Name> name = isolate->factory()->Infinity_string();
                 Handle<Object> value = JSReceiver::GetDataProperty(stdlib, name);
-                if (!value->IsNumber() || !std::isinf(value->Number()))
+                if (!value->IsNumber() || !/*std::*/isinf(value->Number()))
                     return false;
             }
             if (members.contains(wasm::AsmJsParser::StandardMember::kNaN)) {

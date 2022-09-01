@@ -5,6 +5,14 @@
 #ifndef OPENTYPE_SANITISER_H_
 #define OPENTYPE_SANITISER_H_
 
+extern "C" unsigned long __cdecl _byteswap_ulong(unsigned long);
+extern "C" unsigned short __cdecl _byteswap_ushort(unsigned short);
+
+#define my_ntohl(x) _byteswap_ulong(x)
+#define my_ntohs(x) _byteswap_ushort(x)
+#define my_htonl(x) _byteswap_ulong(x)
+#define my_htons(x) _byteswap_ushort(x)
+
 #if defined(_WIN32)
 #include <stdlib.h>
 typedef signed char int8_t;
@@ -15,10 +23,6 @@ typedef int int32_t;
 typedef unsigned int uint32_t;
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
-#define my_ntohl(x) _byteswap_ulong(x)
-#define my_ntohs(x) _byteswap_ushort(x)
-#define my_htonl(x) _byteswap_ulong(x)
-#define my_htons(x) _byteswap_ushort(x)
 #else
 #include <arpa/inet.h>
 #include <stdint.h>

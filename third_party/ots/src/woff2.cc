@@ -11,13 +11,16 @@
 #if 1 // def MINIBLINK_NOT_IMPLEMENTED
 #include <zlib.h>
 #endif
-#include "brotli/dec/decode.h"
+//#include "brotli/dec/decode.h"
+#include "dec/decode.h"
 
 #include "opentype-sanitiser.h"
 #include "ots-memory-stream.h"
 #include "ots.h"
 #include "woff2.h"
+#if defined(WIN32) 
 #include <winsock.h>
+#endif
 #include <limits>
 #undef max
 #undef min
@@ -543,7 +546,7 @@ bool ReconstructGlyf(const uint8_t* data, size_t data_size,
     static const int kNumSubStreams = 7;
     ots::Buffer file(data, data_size);
     uint32_t version;
-    std::vector<std::pair<const uint8_t*, size_t>> substreams(kNumSubStreams);
+    std::vector<std::pair<const uint8_t*, size_t> > substreams(kNumSubStreams);
 
     if (!file.ReadU32(&version)) {
         return OTS_FAILURE();

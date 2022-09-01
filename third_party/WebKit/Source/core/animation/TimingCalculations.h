@@ -128,7 +128,7 @@ static inline double calculateScaledActiveTime(double activeDuration,
     if (specified.playbackRate == 0)
         return startOffset;
 
-    if (!std::isfinite(activeTime))
+    if (!std_isfinite(activeTime))
         return std::numeric_limits<double>::infinity();
 
     return multiplyZeroAlwaysGivesZero(specified.playbackRate < 0
@@ -141,7 +141,7 @@ static inline double calculateScaledActiveTime(double activeDuration,
 static inline bool endsOnIterationBoundary(double iterationCount,
     double iterationStart)
 {
-    DCHECK(std::isfinite(iterationCount));
+    DCHECK(std_isfinite(iterationCount));
     return !fmod(iterationCount + iterationStart, 1);
 }
 
@@ -164,10 +164,10 @@ static inline double calculateIterationTime(
     DCHECK_GE(scaledActiveTime, 0);
     DCHECK_LE(scaledActiveTime, repeatedDuration + startOffset);
 
-    if (!std::isfinite(scaledActiveTime) || (scaledActiveTime - startOffset == repeatedDuration && specified.iterationCount && endsOnIterationBoundary(specified.iterationCount, specified.iterationStart)))
+    if (!std_isfinite(scaledActiveTime) || (scaledActiveTime - startOffset == repeatedDuration && specified.iterationCount && endsOnIterationBoundary(specified.iterationCount, specified.iterationStart)))
         return iterationDuration;
 
-    DCHECK(std::isfinite(scaledActiveTime));
+    DCHECK(std_isfinite(scaledActiveTime));
     double iterationTime = fmod(scaledActiveTime, iterationDuration);
 
     // This implements step 3 of
@@ -237,7 +237,7 @@ static inline double calculateTransformedTime(double currentIteration,
         currentIteration, iterationDuration, iterationTime, specified);
     if (isNull(directedTime))
         return nullValue();
-    if (!std::isfinite(iterationDuration))
+    if (!std_isfinite(iterationDuration))
         return directedTime;
     double timeFraction = directedTime / iterationDuration;
     DCHECK(timeFraction >= 0 && timeFraction <= 1);

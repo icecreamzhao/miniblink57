@@ -47,8 +47,8 @@ AudioDelayDSPKernel::AudioDelayDSPKernel(double maxDelayTime, float sampleRate)
     , m_writeIndex(0)
     , m_firstTime(true)
 {
-    ASSERT(maxDelayTime > 0.0 && !std::isnan(maxDelayTime));
-    if (maxDelayTime <= 0.0 || std::isnan(maxDelayTime))
+    ASSERT(maxDelayTime > 0.0 && !std_isnan(maxDelayTime));
+    if (maxDelayTime <= 0.0 || std_isnan(maxDelayTime))
         return;
 
     size_t bufferLength = bufferLengthForDelay(maxDelayTime, sampleRate);
@@ -126,7 +126,7 @@ void AudioDelayDSPKernel::process(const float* source,
     for (unsigned i = 0; i < framesToProcess; ++i) {
         if (sampleAccurate) {
             delayTime = delayTimes[i];
-            if (std::isnan(delayTime))
+            if (std_isnan(delayTime))
                 delayTime = maxTime;
             else
                 delayTime = clampTo(delayTime, 0.0, maxTime);

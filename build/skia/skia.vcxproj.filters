@@ -127,6 +127,9 @@
     <Filter Include="third_party\skcms">
       <UniqueIdentifier>{1814069b-adc6-4730-81c9-23e208fbd30c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\gpu">
+      <UniqueIdentifier>{260fb7a7-cdc7-4bcf-8c8b-98e43a92fce9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

@@ -85,6 +85,43 @@ void SafePointBarrier::resumeOthers(bool barrierLocked)
     ASSERT(ThreadState::current()->isAtSafePoint());
 }
 
+// unsigned char pushAllRegistersShellCodeX64[] = {
+//     //;; Push all callee - saves registers to get them
+//     //;; on the stack for conservative stack scanning.
+//     //;; We maintain 16 - byte alignment at calls(required on Mac).
+//     //;; There is an 8 - byte return address on the stack and we push
+//     //;; 56 bytes which maintains 16 - byte stack alignment
+//     //;; at the call.
+//     0x6A, 0x00, // push 0    
+//     0x53,       // push rbx 
+//     0x55,       // push rbp
+//     0x41, 0x54, // push r12
+//     0x41, 0x55, // push r13
+//     0x41, 0x56, // push r14
+//     0x41, 0x57, // push r15
+//     //;; Pass the two first arguments unchanged(rdi, rsi)
+//     //;; and the stack pointer after pushing callee - saved
+//     //;; registers to the callback.
+//     0x4C, 0x8B, 0xC2, // mov r8, rdx  
+//     0x48, 0x8B, 0xD4, // mov rdx, rsp  
+//     0x41, 0xFF, 0xD0, // call r8
+//     0x48, 0x83, 0xC4, 0x38, // add rsp, 38h  
+//     0xC3, // ret
+// };
+// 
+// using PushAllRegistersFN = void(*)(SafePointBarrier*, ThreadState*, intptr_t*);
+// static blink::PushAllRegistersCallback s_cb = nullptr;
+// 
+// static void initPushAllRegisters()
+// {
+//     if (!s_cb) {
+//         void* pushAllRegistersPtr = (void*)pushAllRegistersShellCodeX64;
+//         const size_t length = sizeof(pushAllRegistersShellCodeX64);
+//         s_cb = (blink::PushAllRegistersCallback)mmap(0, length, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+//         memcpy((void*)s_cb, pushAllRegistersPtr, length);
+//     }
+// }
+
 void SafePointBarrier::checkAndPark(ThreadState* state,
     SafePointAwareMutexLocker* locker)
 {
@@ -98,6 +135,8 @@ void SafePointBarrier::checkAndPark(ThreadState* state,
         if (locker)
             locker->reset();
         pushAllRegisters(this, state, parkAfterPushRegisters);
+//         initPushAllRegisters();
+//         s_cb(this, state, (intptr_t*)parkAfterPushRegisters);
     }
 }
 
@@ -105,6 +144,8 @@ void SafePointBarrier::enterSafePoint(ThreadState* state)
 {
     ASSERT(!state->sweepForbidden());
     pushAllRegisters(this, state, enterSafePointAfterPushRegisters);
+//     initPushAllRegisters();
+//     s_cb(this, state, (intptr_t*)enterSafePointAfterPushRegisters);
 }
 
 void SafePointBarrier::leaveSafePoint(ThreadState* state,

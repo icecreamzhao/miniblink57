@@ -1185,7 +1185,7 @@ void HTMLInputElement::updateView()
 double HTMLInputElement::valueAsDate(bool& isNull) const
 {
     double date = m_inputType->valueAsDate();
-    isNull = !std::isfinite(date);
+    isNull = !std_isfinite(date);
     return date;
 }
 
@@ -1206,7 +1206,7 @@ void HTMLInputElement::setValueAsNumber(double newValue,
 {
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#dom-input-valueasnumber
     // On setting, if the new value is infinite, then throw a TypeError exception.
-    if (std::isinf(newValue)) {
+    if (std_isinf(newValue)) {
         exceptionState.throwTypeError(
             ExceptionMessages::notAFiniteNumber(newValue));
         return;
@@ -1949,7 +1949,7 @@ bool HTMLInputElement::setupDateTimeChooserParameters(
             DateTimeSuggestion suggestion;
             suggestion.value = m_inputType->parseToNumber(option->value(), Decimal::nan())
                                    .toDouble();
-            if (std::isnan(suggestion.value))
+            if (std_isnan(suggestion.value))
                 continue;
             suggestion.localizedValue = localizeValue(option->value());
             suggestion.label = option->value() == option->label() ? String() : option->label();

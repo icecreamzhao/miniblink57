@@ -23,16 +23,18 @@
 #include "third_party/WebKit/Source/platform/UserGestureIndicator.h"
 #include "third_party/WebKit/Source/bindings/core/v8/ExceptionState.h"
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
+#include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 #include "net/ActivatingObjCheck.h"
 #include "net/WebURLLoaderManagerUtil.h"
 #include "net/cookies/WebCookieJarCurlImpl.h"
+#include "base/path_service.h"
 
+#if defined(WIN32)
 #undef  PURE
 #define PURE = 0;
 #define interface struct
 #include <shlwapi.h>
-
-extern double g_testJsTime;
+#endif
 
 namespace wke {
 
@@ -112,7 +114,7 @@ const utf8* CWebView::name() const
     return m_name.string();
 }
 
-const wchar_t* CWebView::nameW() const
+const WCHAR* CWebView::nameW() const
 {
     return m_name.stringW();
 }
@@ -122,9 +124,13 @@ void CWebView::setName(const utf8* name)
     m_name.setString(name);
 }
 
-void CWebView::setName(const wchar_t* name)
+void CWebView::setName(const WCHAR* name)
 {
+#if defined(OS_WIN)
     m_name.setString(name);
+#else
+    DebugBreak();
+#endif
 }
 
 bool CWebView::isTransparent() const
@@ -167,9 +173,12 @@ void CWebView::loadPostURL(const utf8* inUrl, const char * poastData, int nLen )
     m_webPage->loadRequest(content::WebPage::kMainFrameId, request);
 }
 
-void CWebView::loadPostURL(const wchar_t * inUrl,const char * poastData, int nLen)
+void CWebView::loadPostURL(const WCHAR* inUrl,const char * poastData, int nLen)
 {
+#if defined(OS_WIN)
     loadPostURL(String(inUrl).utf8().data(), poastData,nLen);
+#endif
+    DebugBreak();
 }
 
 static bool checkIsFileUrl(const utf8* inUrl)
@@ -192,17 +201,19 @@ static bool trimPathBody(const utf8* inUrl, int length, bool isFile, std::vector
 
     if (fileBodyLength <= 3)
         return false;
-
+#if defined(WIN32) 
     int len = 0;
     if (fileBody[1] != ':' && isFile) { // xxx.htm
         Vector<WCHAR> filenameBuffer;
         filenameBuffer.resize(MAX_PATH + 3);
+        ::GetCurrentDirectoryW(MAX_PATH, filenameBuffer.data());
 
-//         ::GetModuleFileNameW(NULL, filenameBuffer.data(), MAX_PATH);
-//         ::PathRemoveFileSpecW(filenameBuffer.data());
-        ::GetCurrentDirectory(MAX_PATH, filenameBuffer.data());
+        //int pathLength = base::c16len(filenameBuffer.data());
+        int pathLength = 0;
+        while (*(filenameBuffer.data() + pathLength)) {
+            ++pathLength;
+        }
 
-        int pathLength = wcslen(filenameBuffer.data());
         if (pathLength <= 1 || pathLength > MAX_PATH)
             return false;
 
@@ -222,12 +233,35 @@ static bool trimPathBody(const utf8* inUrl, int length, bool isFile, std::vector
     strncpy(&out->at(0) + len, fileBody, fileBodyLength);
     out->push_back('\0');
     return true;
+
+#else
+    base::FilePath fullpath;
+    base::FilePath file(fileBody);
+    if (fileBody[0] != '/' && isFile) { // xxx.htm
+        base::PathService::Get(base::DIR_MODULE, &fullpath);        
+        fullpath = fullpath.Append(file);
+    } else {
+        fullpath = file;
+    }
+    std::string path = fullpath.AsUTF8Unsafe();
+    printf("trimPathBody: %s\n", path.c_str());
+
+    out->resize(path.size());
+    strncpy(out->data(), path.c_str(), path.size());
+    out->push_back('\0');
+    return true;
+#endif
 }
 
 static bool trimPath(const utf8* inUrl, bool isFile, std::vector<char>* out)
 {
+    // linux下，file:///是绝对路径，/开头也是绝对路径
     int length = strlen(inUrl);
+#if defined(WIN32) 
     const char* fileHead = "file:///";
+#else
+    const char* fileHead = "file://";
+#endif
     int fileHeadLength = strlen(fileHead);
     const char* fileBody = inUrl;
     int fileBodyLength = length;
@@ -269,6 +303,8 @@ void CWebView::_loadURL(const utf8* inUrl, bool isFile)
         return;
     }
 
+    printf("CWebView::_loadURL: [%s] [%s] [%s]\n", inUrl, &inUrlBuf[0], url.getUTF8String().utf8().data());
+
     m_url = &inUrlBuf[0];
     blink::WebURLRequest request(url);
     request.setCachePolicy(blink::WebCachePolicy::UseProtocolCachePolicy);
@@ -281,26 +317,34 @@ void CWebView::loadURL(const utf8* inUrl)
     _loadURL(inUrl, checkIsFileUrl(inUrl));
 }
 
-void CWebView::loadURL(const wchar_t* url)
+void CWebView::loadURL(const WCHAR* url)
 {
+#if defined(OS_WIN)
     loadURL(String(url).utf8().data());
+#endif
+    DebugBreak();
 }
 
 static String createMemoryUrl()
 {
-    std::vector<wchar_t> path;
+#if defined(OS_WIN)
+    std::vector<WCHAR> path;
     path.resize(MAX_PATH + 1);
-    memset(&path[0], 0, sizeof(wchar_t) * (MAX_PATH + 1));
+    memset(&path[0], 0, sizeof(WCHAR) * (MAX_PATH + 1));
     ::GetModuleFileNameW(nullptr, &path[0], MAX_PATH);
     ::PathRemoveFileSpecW(&path[0]);
 
     String result(&path[0]);
     result = WTF::ensureUTF16String(result);
-    result.replace(L"\\", L"/");
-    result.insert(L"file:///", 0);
-    result.append(String::format("/_miniblink__data_%d.htm", GetTickCount()));
+    result.replace(u16("\\"), u16("/"));
+    result.insert(u16("file:///"), 0);
+    result.append(String::format("/_miniblink__data_%u.htm", GetTickCount()));
 
     return WTF::ensureStringToUTF8String(result);
+#else
+    DebugBreak();
+    return String();
+#endif
 }
 
 void CWebView::loadHTML(const utf8* html)
@@ -325,8 +369,9 @@ void CWebView::loadHtmlWithBaseUrl(const utf8* html, const utf8* baseUrl)
     m_webPage->loadHTMLString(content::WebPage::kMainFrameId, blink::WebData(html, length), kbaseUrl, kbaseUrl, true);
 }
 
-void CWebView::loadHTML(const wchar_t* html)
+void CWebView::loadHTML(const WCHAR* html)
 {
+#if defined(OS_WIN)
     size_t length = wcslen(html);
     if (0 == length)
         return;
@@ -335,6 +380,9 @@ void CWebView::loadHTML(const wchar_t* html)
 
     String url = createMemoryUrl(); // String::format("MemoryURL://data.com/%d", GetTickCount());
     m_webPage->loadHTMLString(content::WebPage::kMainFrameId, blink::WebData(htmlUTF8Buf.data(), htmlUTF8Buf.size()), blink::KURL(blink::ParsedURLString, url), blink::WebURL(), true);
+#else
+    DebugBreak();
+#endif
 }
 
 void CWebView::loadFile(const utf8* filename)
@@ -345,12 +393,14 @@ void CWebView::loadFile(const utf8* filename)
     if (length < 4)
         return;
 
-    String filenameUTF8(filename, length);
-    loadFile(ensureUTF16UChar(filenameUTF8, true).data());
+    //String filenameUTF8(filename, length);
+    //loadFile(ensureUTF16UChar(filenameUTF8, true).data());
+    _loadURL(filename, true);
 }
 
-void CWebView::loadFile(const wchar_t* filename)
+void CWebView::loadFile(const WCHAR* filename)
 {
+#if defined(OS_WIN)
     if (!filename)
         return;
     size_t length = wcslen(filename);
@@ -359,6 +409,9 @@ void CWebView::loadFile(const wchar_t* filename)
 
     String filenameA(filename, length);
     _loadURL(WTF::ensureStringToUTF8(filenameA, true).data(), true);
+#else
+    DebugBreak();
+#endif
 }
 
 const utf8* CWebView::url() const
@@ -409,9 +462,13 @@ void CWebView::setUserAgent(const utf8 * useragent)
     platform->setUserAgent((char *)useragent);
 }
 
-void CWebView::setUserAgent(const wchar_t * useragent)
+void CWebView::setUserAgent(const WCHAR * useragent)
 {
+#if defined(OS_WIN)
     setUserAgent(String(useragent).utf8().data());
+#else
+    DebugBreak();
+#endif
 }
 
 void CWebView::stopLoading()
@@ -443,12 +500,17 @@ const utf8* CWebView::title()
     return m_title.string();
 }
 
-const wchar_t* CWebView::titleW()
+const WCHAR* CWebView::titleW()
 {
+#if defined(OS_WIN)
     content::WebFrameClientImpl* frameClient = m_webPage->webFrameClientImpl();
     m_title = frameClient->title();
 
     return m_title.stringW();
+#else
+    DebugBreak();
+    return nullptr;
+#endif
 }
 
 void CWebView::resize(int w, int h)
@@ -706,10 +768,15 @@ void CWebView::setCookieEnabled(bool enable)
     m_isCokieEnabled = enable;
 }
 
-const wchar_t* CWebView::cookieW()
+const WCHAR* CWebView::cookieW()
 {
+#if defined(OS_WIN)
     cookie();
     return m_cookie.stringW();
+#else
+    DebugBreak();
+    return nullptr;
+#endif
 }
 
 const utf8* CWebView::cookie()
@@ -996,13 +1063,18 @@ static jsValue runJsImpl(blink::WebFrame* mainFrame, String* codeString, bool is
     return v8ValueToJsValue(context, result);
 }
 
-jsValue CWebView::runJS(const wchar_t* script)
+jsValue CWebView::runJS(const WCHAR* script)
 {
+#if defined(OS_WIN)
     if (!script)
         return jsUndefined();
 
     String codeString(script);
     return runJsImpl(m_webPage->mainFrame(), &codeString, true);
+#else
+    DebugBreak();
+    return 0;
+#endif
 }
 
 jsValue CWebView::runJS(const utf8* script)
@@ -1155,7 +1227,7 @@ void CWebView::onPromptBox(wkePromptBoxCallback callback, void* callbackParam)
 
 static LRESULT CALLBACK hideWindowWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    return DefWindowProc(hWnd, message, wParam, lParam);
+    return DefWindowProcW(hWnd, message, wParam, lParam);
 }
 
 static HWND createHideWnd()
@@ -1164,19 +1236,19 @@ static HWND createHideWnd()
     if (s_hWnd) {
         return s_hWnd;
     }
-    const LPCWSTR kWindowClassName = L"MiniBlinkAlertWindowClass";
+    const LPCWSTR kWindowClassName = u16("MiniBlinkAlertWindowClass");
 
-    WNDCLASSEX wcex = { 0 };
-    wcex.cbSize = sizeof(WNDCLASSEX);
+    WNDCLASSEXW wcex = { 0 };
+    wcex.cbSize = sizeof(WNDCLASSEXW);
     wcex.lpfnWndProc = hideWindowWndProc;
-    wcex.hInstance = ::GetModuleHandle(NULL);
+    wcex.hInstance = ::GetModuleHandleW(NULL);
     wcex.lpszClassName = kWindowClassName;
-    ::RegisterClassEx(&wcex);
+    ::RegisterClassExW(&wcex);
 
     s_hWnd = CreateWindowExW(
         WS_EX_TOOLWINDOW,        // window ex-style
         kWindowClassName,    // window class name
-        L"HideTopMostWnd", // window caption
+        u16("HideTopMostWnd"), // window caption
         WS_POPUP & (~WS_CAPTION) & (~WS_SYSMENU) & (~WS_SIZEBOX), // window style
         1,              // initial x position
         1,              // initial y position
@@ -1191,18 +1263,19 @@ static HWND createHideWnd()
 }
 
 void WKE_CALL_TYPE defaultRunAlertBox(wkeWebView webView, void* param, const wkeString msg)
-{   
+{
+#if defined(OS_WIN)
     HWND hWnd = createHideWnd();
     ::SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     ::SetForegroundWindow(hWnd);
     ::ShowWindow(hWnd, SW_SHOW);
 
     const int maxShowLength = 500;
-    Vector<wchar_t> msgBuf;
-    const wchar_t* msgString = wkeGetStringW(msg);
+    Vector<WCHAR> msgBuf;
+    const WCHAR* msgString = wkeGetStringW(msg);
     if (wcslen(msgString) > maxShowLength) {
         msgBuf.resize(maxShowLength);
-        memcpy(msgBuf.data(), msgString, maxShowLength * sizeof(wchar_t));
+        memcpy(msgBuf.data(), msgString, maxShowLength * sizeof(WCHAR));
         msgBuf[maxShowLength - 1] = L'\0';
         msgBuf[maxShowLength - 2] = L'.';
         msgBuf[maxShowLength - 3] = L'.';
@@ -1212,18 +1285,26 @@ void WKE_CALL_TYPE defaultRunAlertBox(wkeWebView webView, void* param, const wke
         msgBuf[maxShowLength - 7] = L'.';
         msgString = msgBuf.data();
     }
-    MessageBoxW(hWnd, msgString, L"Miniblink", MB_OK);
+    MessageBoxW(hWnd, msgString, u16("Miniblink"), MB_OK);
 
     ::ShowWindow(hWnd, SW_HIDE);
 
     hWnd = wkeGetHostHWND(webView);
     ::SetFocus(hWnd);
+#else
+    DebugBreak();
+#endif
 }
 
 bool WKE_CALL_TYPE defaultRunConfirmBox(wkeWebView webView, void* param, const wkeString msg)
 {
-    int result = MessageBoxW(NULL, wkeGetStringW(msg), L"wke", MB_OKCANCEL);
+#if defined(OS_WIN)
+    int result = MessageBoxW(NULL, wkeGetStringW(msg), u16("wke"), MB_OKCANCEL);
     return result == IDOK;
+#else
+    DebugBreak();
+    return false;
+#endif
 }
 
 bool WKE_CALL_TYPE defaultRunPromptBox(wkeWebView webView, void* param, const wkeString msg, const wkeString defaultResult, wkeString result)
@@ -1279,7 +1360,7 @@ void CWebView::_initPage(COLORREF color)
 // 
 //     UChar dir[256];
 //     GetCurrentDirectory(256, dir);
-//     wcscat(dir, L"\\localStorage");
+//     wcscat(dir, u16("\\localStorage"));
 //     settings->setLocalStorageDatabasePath(dir);
 //     blink::DatabaseTracker::tracker().setDatabaseDirectoryPath(dir);
 // 

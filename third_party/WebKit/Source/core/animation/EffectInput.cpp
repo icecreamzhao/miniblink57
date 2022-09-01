@@ -65,7 +65,7 @@ namespace {
         ExceptionState& exceptionState)
     {
         // Keyframes with offsets outside the range [0.0, 1.0] are an error.
-        if (std::isnan(offset)) {
+        if (std_isnan(offset)) {
             exceptionState.throwTypeError("Non numeric offset provided");
             return false;
         }

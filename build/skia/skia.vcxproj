@@ -75,13 +75,14 @@
       <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_HAS_CONSTEXPR=0;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;_HAS_CONSTEXPR=0;_CRT_SECURE_NO_WARNINGS;SK_SUPPORT_LEGACY_CREATESHADER_PTR=1;SK_SUPPORT_LEGACY_PICTURE_PTR=1;SK_SUPPORT_LEGACY_XFERMODE_PTR=1;SK_GDI_ALWAYS_USE_TEXTMETRICS_FOR_FONT_METRICS;SK_USE_DISCARDABLE_SCALEDIMAGECACHE;SK_GAMMA_SRGB;SK_GAMMA_CONTRAST=0.5;SK_IGNORE_ETC1_SUPPORT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../third_party/skia/src/utils/win;../../third_party/skia/include/codec;../../third_party/skia/include/config;../../third_party/skia/include/core;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/pipe;../../third_party/skia/include/ports;../../third_party/skia/include/utils/win;../../third_party/skia/include/utils;../../third_party/skia/include/private;../../third_party/skia/src/image;../../third_party/skia/src/core;../../third_party/skia/src/sfnt;../../third_party/skia/src/lazy;../../third_party/skia/src/utils;../../third_party/skia/src/opts;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -861,7 +862,9 @@
     <ClCompile Include="..\..\third_party\skia\src\effects\SkTableColorFilter.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\effects\SkTableMaskFilter.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\effects\SkTileImageFilter.cpp" />
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkXfermodeImageFilter.cpp" />
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkXfermodeImageFilter.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</PreprocessToFile>
+    </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\fonts\SkFontMgr_indirect.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\fonts\SkGScalerContext.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\fonts\SkRandomScalerContext.cpp" />

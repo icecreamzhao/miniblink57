@@ -122,7 +122,7 @@ namespace protocol {
     {
         int flags = v8::internal::ALLOW_HEX | v8::internal::ALLOW_OCTAL | v8::internal::ALLOW_BINARY;
         double result = v8::internal::StringToDouble(s, flags);
-        *isOk = !std::isnan(result);
+        *isOk = !/*std::*/isnan(result);
         return result;
     }
 

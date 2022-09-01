@@ -206,4 +206,30 @@
 // gives 1Mb bytes per page.
 const int kPageSizeBits = 19;
 
+template <class _Ty>
+constexpr const _Ty& std_max(const _Ty& _Left, const _Ty& _Right)
+{
+    return _Left < _Right ? _Right : _Left;
+}
+
+template <class _Ty>
+constexpr const _Ty& std_min(const _Ty& _Left, const _Ty& _Right)
+{
+    return _Left > _Right ? _Right : _Left;
+}
+
+#if (defined(WIN32))
+#define std_isfinite std::isfinite
+#define std_isnan std::isnan
+#define std_isinf std::isinf
+#define std_signbit std::signbit
+#define std_isnormal std::isnormal
+#else
+#define std_isfinite isfinite
+#define std_isnan isnan
+#define std_isinf isinf
+#define std_signbit signbit
+#define std_isnormal isnormal
+#endif
+
 #endif  // V8_BASE_BUILD_CONFIG_H_

@@ -135,7 +135,7 @@ Decimal BaseTemporalInputType::parseToNumber(
     if (!parseToDateComponents(source, &date))
         return defaultValue;
     double msec = date.millisecondsSinceEpoch();
-    DCHECK(std::isfinite(msec));
+    DCHECK(std_isfinite(msec));
     return Decimal::fromDouble(msec);
 }
 

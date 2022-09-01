@@ -1,4 +1,6 @@
 ﻿
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #include "RootWindow.h"
 #include "RegWnd.h"
 #include "Resource.h"
@@ -15,35 +17,8 @@
 
 std::string getUrl();
 #define MAX_URL_LENGTH 255
-
-std::string utf16ToUtf8(LPCWSTR lpszSrc)
-{
-    std::string sResult;
-    if (lpszSrc != NULL) {
-        int  nUTF8Len = WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, NULL, 0, NULL, NULL);
-        char* pUTF8 = new char[nUTF8Len + 1];
-        if (pUTF8 != NULL) {
-            ZeroMemory(pUTF8, nUTF8Len + 1);
-            WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, pUTF8, nUTF8Len, NULL, NULL);
-            sResult = pUTF8;
-            delete[] pUTF8;
-        }
-    }
-    return sResult;
-}
-
-std::wstring utf8ToUtf16(const std::string& utf8)
-{
-    std::wstring utf16;
-    size_t n = ::MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size(), nullptr, 0);
-    if (0 == n)
-        return L"";
-    std::vector<wchar_t> wbuf(n);
-    ::MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size(), &wbuf[0], n);
-    utf16.resize(n + 5);
-    utf16.assign(&wbuf[0], n);
-    return utf16;
-}
+std::wstring utf8ToUtf16(const std::string& utf8);
+std::string utf16ToUtf8(LPCWSTR lpszSrc);
 
 std::string getUrl()
 {
@@ -62,14 +37,101 @@ std::string getUrl()
     //urlA = utf16ToUtf8(L"file:///G:/test/web_test/单病种/单病种质量管理系统.html");
     //urlA = utf16ToUtf8(L"file:///D:/我Storage/selectone.html");
 
+    DWORD value_length = ::GetEnvironmentVariable(L"GOOGLE_API_KEY", nullptr, 0);
+
     const char* url = //urlA.c_str();
+        "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"; // Symbol.iterator错误
+        "https://cc.163.com/348422493/";
+        "file:///D:/test/web/cc_163/111.htm";
+        
+        "file:///G:/test/web_test/jq22/mp4.htm"; // 崩溃
+        "file:///G:/test/web_test/dragtest/testdrag.html"; // 拖拽失效
+        "file:///G:/test/web_test/tigerkin/testindex.htm"; // 文字排版不对
+        "http://39.99.38.196:8080"; // devtools有崩溃
+        "https://ant-design.gitee.io/docs/react/introduce-cn"; // ant 有js错误
+        "file:///G:/test/web_test/tongyonghuizhi.htm"; // 黑体空格显示成框框
+        "file:///G:/test/web_test/feihu/index1.html"; // 内存有泄漏
+        "https://xsdt1.i-xinnuo.com/xnt_pc/xnt.html#/pdfPage?id=1189&enterpriseName=%E7%88%B1%E4%BF%A1%E8%AF%BA%E5%BE%81%E4%BF%A1%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%B1%9F%E8%8B%8F%E5%88%86%E5%85%AC%E5%8F%B8"; // 内存泄漏
+        "https://iyn.me/i/"; // 有断行判断崩溃（LayoutRubyRun::canBreakBefore）
+        "file:///G:/test/web_test/alen_bug/index.html";
+        "https://xsdt1.i-xinnuo.com/?param="; // 下拉框出不来
+
+        "https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/start/install";
+        "http://192.168.222.1:8000/index.html";
+        "https://element-plus.gitee.io/zh-CN/";
+        "https://www.epicgames.com/id/register/epic?";
+        "https://microsoft.github.io/monaco-editor/"; // 崩溃
+        "http://192.168.222.1:8000/jieshao.htm";
+        "file:///G:/test/web_test/icoc/video.htm";
+        "https://www.chinaacc.com/wangxiao/tanchu/jieshao.shtml"; // 视频播放有问题
+        "https://www.cdeledu.com/";
+
+        "file:///G:/test/web_test/web-components-examples-master/popup-info-box-web-component/index.html";
+        "file:///G:/test/web_test/element/test_gc.htm";
+        "file:///G:/test/web_test/media_match.htm";
+        "file:///G:/test/web_test/baidupan/mb57_text_crash.htm";
+        "https://baidu.com";
+        "file:///G:/test/web_test/baidupan/mb57_baidu_crash.htm";
+
+        "file:///G:/test/web_test/input.htm";
+        "http://yedict.com/zsts.htm"; // 扩展字体区
+        "file:///C:/Users/Administrator/Documents/input.htm";
+
+        "http://web.4399.com/user/?_a=login&redirecturl=%2Fuser%2F%3Ftype%3Dsafe";
+        "http://xp.4399.com/lc/register.html?pass=1&v";
+        "http://aoqi.100bt.com/play/play.html";
+        "file:///G:/test/web_test/npNetsignerTest/npNetsignerTest.html";
+        "https://xsdt1.i-xinnuo.com/xqc_pc/xqc.html#/pdfPage?title=%E5%90%88%E5%90%8C%E6%AD%A3%E6%96%87%E6%B5%8B%E8%AF%95.pdf&fileId=60ff7c7be4b017f601627438";
+        "file:///G:/test/web_test/kancloud/test_download.htm";
+        "file:///G:/mycode/miniblink57/third_party/WebKit/Source/core/inspector/InspectorOverlayPage49.html";
+        "file:///G:/test/web_test/kancloud/test_canvas.htm";
+        "http://seerh5.61.com/";
+
+        "http://seer.61.com/play.shtml";
+        "http://chrome.360.cn/test/v8/run.html";
+        "file:///G:/test/web_test/kancloud/index.htm";
+        "https://element.eleme.cn/#/zh-CN/component/transition";
+        "http://wonzilerv2.danweiapp.com/";
+        "file:///G:/test/exe_test/meng/img.htm";
+        "www.bilibili.com";
+        "file:///G:/mycode/miniblink57/Debug/plugins/test.html";
+        "http://seer.61.com.tw/Client.swf";
+        "http://192.168.222.1:8000/pdfjs/web/viewer.html";
+        "https://www.kancloud.cn/manual/thinkphp6_0/1037479";
+        "https://element.eleme.cn/#/zh-CN/component/pagination";
+        "https://poe.ninja/challenge/builds";
+        "file:///G:/test/web_test/example_icon/index1.html";
+        "Tanwan.com/cqbz/wd";
+        "file:///P:/BaiduNetdiskWorkspace/table_test1.html";
+        "oschina.net"; // 触发CachingWordShaper的字体未实现断言
+        "https://uniapp.dcloudet.cn/uniCloud/admin";
+        "https://static-54446097-3b6f-462e-8fe0-fe8855ea8c2e.bspapp.com/#/";
+        "https://fontawesome.dashgame.com/";
+        "http://aola.100bt.com/play/play.html";
+        "file:///G:/test/web_test/vxe-table/vxe-table.htm#/table/scroll/rows"; // 卡慢问题
+        "https://xuliangzhan.gitee.io/vxe-table/#/table/scroll/rows";
+
+        "https://projects.lukehaas.me/css-loaders/";
+        "http://192.168.222.1:8000/input.htm";
+        "file:///G:/test/web_test/flash_test/flash.html";
+
+        "https://www.easck.com/Internetmore/2021/0819/883307.shtml";
+
+        "file:///G:/test/web_test/v8_bug.html";
+        "https://kaifa.baidu.com/";
+        "file:///G:/test/web_test/dianxin/22.html";
+        "file:///G:/test/web_test/test_v8_error.htm";
+
+        "file:///G:/test/web_test/websocket_test/test.htm";
         "file:///G:/test/web_test/element/test_img.htm";
         "file:///G:/test/web_test/xmlifa/index.htm";
+        "http://www.websocket-test.com/";
+
+        "http://coolaf.com/tool/chattest";
         "http://192.168.222.1:8000/input.htm";
-        "https://baidu.com";
+
         "taobao.com";
         "http://192.168.222.1:8000/test_img.htm";
-        "file:///G:/test/web_test/element/test_img.htm";
         "https://www.bilibili.com/video/BV1rp4y1n7Ft?spm_id_from=333.851.b_7265636f6d6d656e64.1";
         "file:///G:/test/web_test/CallNumber/testSocket.html";
         "file:///G:/test/web_test/test(3).html";
@@ -187,7 +249,7 @@ std::string getUrl()
     "file:///G:/test/exe_test/honghe_20200324/MathSubject/DyCourseware/GeoGebra/HTML5/5.0/previewggb.html";
     "http://hepfw.etwowin.com.cn/";
     "mbpack:///1.htm";
-    "file:///E:/test/ouchn_cn/pdf_test/123.pdf";
+    "file:///g:/test/ouchn_cn/pdf_test/123.pdf";
     "http://windbg.org/";
     "file:///G:/test/exe_test/HHBlinkTest/Environment/open_new_page.htm";
     "file:///G:/test/exe_test/HHBlinkTest/Environment/MathSubject/DyCourseware/GeoGebra/HTML5/5.0/previewggb.html";
@@ -328,6 +390,35 @@ std::string getUrl()
 //     if (!isExist)
 //         return "http://miniblink.net/";
     return url;
+}
+
+std::string utf16ToUtf8(LPCWSTR lpszSrc)
+{
+    std::string sResult;
+    if (lpszSrc != NULL) {
+        int  nUTF8Len = WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, NULL, 0, NULL, NULL);
+        char* pUTF8 = new char[nUTF8Len + 1];
+        if (pUTF8 != NULL) {
+            ZeroMemory(pUTF8, nUTF8Len + 1);
+            WideCharToMultiByte(CP_UTF8, 0, lpszSrc, -1, pUTF8, nUTF8Len, NULL, NULL);
+            sResult = pUTF8;
+            delete[] pUTF8;
+        }
+    }
+    return sResult;
+}
+
+std::wstring utf8ToUtf16(const std::string& utf8)
+{
+    std::wstring utf16;
+    size_t n = ::MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size(), nullptr, 0);
+    if (0 == n)
+        return L"";
+    std::vector<wchar_t> wbuf(n);
+    ::MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size(), &wbuf[0], n);
+    utf16.resize(n + 5);
+    utf16.assign(&wbuf[0], n);
+    return utf16;
 }
 
 void readFile(const wchar_t* path, std::vector<char>* buffer)
@@ -901,7 +992,7 @@ void RootWindow::onShowDevtools()
     std::vector<wchar_t> pathXX = path;
     ::PathAppendW(&path[0], L"front_end\\inspector.html");
 
-    std::string pathA = "g:/mycode/mb/third_party/WebKit/Source/devtools/front_end/inspector.html";
+    std::string pathA = "G:/mycode/miniblink57/gen/devtools/inspector.html";
     if (::PathFileExistsA(pathA.c_str())) {
         mbSetDebugConfig(m_mbView, "showDevTools", pathA.c_str());
         return;
@@ -1060,9 +1151,9 @@ static void setTitle(HWND hWnd, const std::wstring& title)
 
     std::wstring titleString = title;
     if (*isRegistered)
-        titleString = L"(VIP已注册) " + titleString;
+        titleString = L"(mb57，VIP已注册) " + titleString;
     else
-        titleString = L"(VIP未注册) " + titleString;
+        titleString = L"(mb57，VIP未注册) " + titleString;
 
     if (titleString.size() > 65) {
         titleString = titleString.substr(0, 65);
@@ -1727,13 +1818,13 @@ void RootWindow::initSettings()
     mbSetDebugConfig(m_mbView, "wakeMinInterval", "5"); // ?????1-200
     mbSetDebugConfig(m_mbView, "drawMinInterval", "300");
     mbSetDebugConfig(m_mbView, "contentScale", "100");
+    mbSetDebugConfig(m_mbView, "enableSkipJs", "true");
     //mbSetDebugConfig(m_mbView, "enableNodejs", "1");
     //mbSetDebugConfig(m_mbView, "drawTileLine", "true");
     //mbSetDebugConfig(m_mbView, "disableNavigatorPlugins", "true");
     mbSetCookieEnabled(m_mbView, true);
     mbSetNavigationToNewWindowEnable(m_mbView, true);
     mbSetCspCheckEnable(m_mbView, true);
-    mbSetUserAgent(m_mbView, "Mozilla/5.0 (Windows NT 10.0; rv:56.0) Gecko/20100101 Firefox/56.0");
 
     //mbNetEnableResPacket(m_mbView, L"E:\\mycode\\mbvip\\out\\x86\\Debug\\1.mbpack");
 
@@ -1786,48 +1877,27 @@ void RootWindow::initSettings()
 
 static BOOL MB_CALL_TYPE handleLoadUrlBegin(mbWebView webView, void* param, const char* url, void* job)
 {
-    OutputDebugStringA("handleLoadUrlBegin:");
-    OutputDebugStringA(url);
-    OutputDebugStringA("\n");
+//     std::string urlStr("handleLoadUrlBegin:");
+//     urlStr += url;
+//     urlStr += "\n";
+//     OutputDebugStringA(urlStr.c_str());
 
-    if (hookUrl(job, url, "p__doc__routers.eb18ae3b.async.js", L"G:\\test\\web_test\\yuque\\p__doc__routers.eb18ae3b.async.js", "text/javascript"))
-      return true;
-
-//     if (hookUrl(job, url, "h5.worker", L"G:\\test\\web_test\\cctv\\h5.worker.js", "text/javascript"))
-//         return true;
-// 
-//     if (hookUrl(job, url, "cntv_Advertise.js", L"G:\\test\\web_test\\cctv\\cntv_Advertise.js", "text/javascript"))
-//         return true;
-// 
-//     if (hookUrl(job, url, "h5_live_index.js", L"G:\\test\\web_test\\cctv\\h5_live_index.js", "text/javascript"))
-//         return true;
-// 
-//     if (hookUrl(job, url, "html5player_analysis_lib.js", L"G:\\test\\web_test\\cctv\\html5player_analysis_lib.js", "text/javascript"))
-//         return true;
-// 
-//     if (hookUrl(job, url, "liveplayer.js", L"G:\\test\\web_test\\cctv\\liveplayer.js", "text/javascript"))
-//         return true;
-// 
-//     if (hookUrl(job, url, "video.a8d03c74.js", L"G:\\test\\web_test\\mse_api\\bilibili.video.a8d03c74.js", "text/javascript"))
-//         return true;
-    // 
-
-//     if (hookUrl(job, url, "de3c81144eb2a2d6c957.js", L"G:\\test\\web_test\\mgtv\\de3c81144eb2a2d6c957.js", "text/javascript"))
-//         return true;
-//     if (hookUrl(job, url, "b6a45a2bc95a8d3e941a.js", L"G:\\test\\web_test\\mgtv\\b6a45a2bc95a8d3e941a.js", "text/javascript"))
-//         return true;
-//     if (hookUrl(job, url, "ed27ed969f72424e4a4b.js", L"G:\\test\\web_test\\mgtv\\ed27ed969f72424e4a4b.js", "text/javascript"))
-//         return true;    
-//     if (hookUrl(job, url, "a1f373c6c9488fdc9682.js", L"G:\\test\\web_test\\mgtv\\a1f373c6c9488fdc9682.js", "text/javascript"))
-//         return true;
-//     if (hookUrl(job, url, "promise.polyfill.min.js", L"G:\\test\\web_test\\mgtv\\promise.polyfill.min.js", "text/javascript"))
-//         return true;
-
-    if (hookUrl(job, url, "hls.min.js", L"G:\\test\\web_test\\mgtv\\hls.min.js", "text/javascript"))
+    if (hookUrl(job, url, "main.907756de.js", L"G:\\test\\web_test\\testherf\\main.907756de.js", "text/html"))
         return true;
-    if (hookUrl(job, url, "vplayer.min.js?ver", L"G:\\test\\web_test\\mgtv\\vplayer.min.js", "text/javascript"))
+
+    if (hookUrl(job, url, "_app-f54e3843f15fa10c7198.js", L"D:\\test\\web\\cc_163\\_app-f54e3843f15fa10c7198.js", "text/javascript"))
         return true;
-    if (hookUrl(job, url, "hls-loader.min.js", L"G:\\test\\web_test\\mgtv\\hls-loader.min.js", "text/javascript"))
+// 
+//     if (hookUrl(job, url, "act/webcc/link-pk-game/v1.9.1/index.js", L"D:\\test\\web\\cc_163\\webcc_191_index.js", "text/javascript"))
+//         return true;
+// 
+//     if (hookUrl(job, url, "act/webcc/performance-reporter/v1.2.0/index.js", L"D:\\test\\web\\cc_163\\performance-reporter.js", "text/javascript"))
+//         return true;
+// 
+//     if (hookUrl(job, url, "act/webcc/h5player/v0.39.17/index.js", L"D:\\test\\web\\cc_163\\h5player.js", "text/javascript"))
+//         return true;
+
+    if (hookUrl(job, url, "act/webcc/luxury-car-sdk/v1.3.1/index.js", L"D:\\test\\web\\cc_163\\luxury-car-sdk.js", "text/javascript"))
         return true;
 
 //     if (hookUrl(job, url, "mguser.api.max.mgtv.com/user/getArtistsByMediaId", L"G:\\test\\web_test\\mgtv\\getArtistsByMediaId.js", "text/javascript"))
@@ -1867,7 +1937,7 @@ static BOOL MB_CALL_TYPE handleLoadUrlBegin(mbWebView webView, void* param, cons
 
 static void MB_CALL_TYPE handleLoadUrlEnd(mbWebView webView, void* param, const char* url, void* job, void* buf, int len)
 {
-   saveDumpFile(L"G:\\test\\web_test\\mgtv\\abpage.js", (const char*)buf, len);
+//    saveDumpFile(L"G:\\test\\web_test\\mgtv\\abpage.js", (const char*)buf, len);
 // 
 //     std::vector<char> buffer;
 //     readFile(L"G:\\test\\web_test\\m_baidu\\index.htm", &buffer);
@@ -1877,6 +1947,6 @@ static void MB_CALL_TYPE handleLoadUrlEnd(mbWebView webView, void* param, const 
     memcpy(buffer.data(), buf, len);
     buffer.push_back('\0');
 
-//     if (nullptr != strstr(buffer.data(), "Promises must be constructed via new"))
-//         OutputDebugStringA("find!\n");
+    if (nullptr != strstr(buffer.data(), "LoginSocketConnection.mainSocket.connectByUrl"))
+        OutputDebugStringA("find!\n");
 }

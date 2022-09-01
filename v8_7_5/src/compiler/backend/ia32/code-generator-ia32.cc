@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#if V8_TARGET_ARCH_IA32
+
 #include "src/compiler/backend/code-generator.h"
 
 #include "src/assembler-inl.h"
@@ -4653,3 +4655,5 @@ namespace internal {
     } // namespace compiler
 } // namespace internal
 } // namespace v8
+
+#endif // V8_TARGET_ARCH_IA32

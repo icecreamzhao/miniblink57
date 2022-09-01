@@ -1062,7 +1062,7 @@ namespace internal {
         // non-smi keys of keyed loads/stores to a smi or a string.
         if (key->IsHeapNumber()) {
             double value = Handle<HeapNumber>::cast(key)->value();
-            if (std::isnan(value)) {
+            if (/*std::*/isnan(value)) {
                 key = isolate->factory()->NaN_string();
             } else {
                 // Check bounds first to avoid undefined behavior in the conversion

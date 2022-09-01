@@ -71,7 +71,7 @@ public:
     // per http://dev.w3.org/csswg/cssom-view/#normalize-non_finite-values.
     static float normalizeNonFiniteScroll(float value)
     {
-        return std::isfinite(value) ? value : 0.0;
+        return std_isfinite(value) ? value : 0.0;
     }
 
     // The window that hosts the ScrollableArea. The ScrollableArea will

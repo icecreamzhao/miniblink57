@@ -227,8 +227,7 @@ namespace {
                 // values) when the resulting bitmap is drawn to the screen.
                 //
                 // We only need to do this when generating the final output row (here).
-                int max_color_channel = std::max(out_row[byte_offset + 0],
-                    std::max(out_row[byte_offset + 1], out_row[byte_offset + 2]));
+                int max_color_channel = std_max(out_row[byte_offset + 0], std_max(out_row[byte_offset + 1], out_row[byte_offset + 2]));
                 if (alpha < max_color_channel)
                     out_row[byte_offset + 3] = max_color_channel;
                 else
@@ -327,7 +326,7 @@ void ConvolutionFilter1D::AddFilter(int filter_offset,
     instance.length = filter_size;
     filters_.push_back(instance);
 
-    max_filter_ = std::max(max_filter_, filter_length);
+    max_filter_ = std_max(max_filter_, filter_length);
 }
 
 const ConvolutionFilter1D::Fixed* ConvolutionFilter1D::GetSingleFilter(

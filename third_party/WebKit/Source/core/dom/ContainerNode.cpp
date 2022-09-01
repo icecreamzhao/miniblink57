@@ -1003,7 +1003,7 @@ LayoutRect ContainerNode::boundingBox() const
     }
 
     FloatSize size = lowerRight.expandedTo(upperLeft) - upperLeft;
-    if (std::isnan(size.width()) || std::isnan(size.height()))
+    if (std_isnan(size.width()) || std_isnan(size.height()))
         return LayoutRect();
 
     return enclosingLayoutRect(FloatRect(upperLeft, size));

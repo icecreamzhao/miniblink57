@@ -309,8 +309,8 @@ void MultipleFieldsTemporalInputTypeView::pickerIndicatorChooseValue(
 void MultipleFieldsTemporalInputTypeView::pickerIndicatorChooseValue(
     double value)
 {
-    DCHECK(std::isfinite(value) || std::isnan(value));
-    if (std::isnan(value))
+    DCHECK(std_isfinite(value) || std_isnan(value));
+    if (std_isnan(value))
         element().setValue(emptyString(), DispatchInputAndChangeEvent);
     else
         element().setValueAsNumber(value, ASSERT_NO_EXCEPTION,

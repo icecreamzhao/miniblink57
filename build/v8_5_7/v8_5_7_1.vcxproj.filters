@@ -148,6 +148,24 @@
     <Filter Include="src\ic\x64">
       <UniqueIdentifier>{a3046aa3-6c41-4820-9212-0f55fc078788}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\gen\include">
+      <UniqueIdentifier>{c7c48623-7a36-42f2-a178-3629603ba79f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gen\src">
+      <UniqueIdentifier>{a7efd48f-45d1-4b52-b112-95ba99efdb03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gen\include\inspector">
+      <UniqueIdentifier>{ec464c6c-ea1a-4157-85ac-ab62d038f5d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gen\src\inspector">
+      <UniqueIdentifier>{4b34556f-4107-44a2-8d45-5c857e852c93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gen\src\inspector\protocol">
+      <UniqueIdentifier>{dcc7b826-3b01-4a1a-8e13-867302703727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\inspector">
+      <UniqueIdentifier>{47b638a4-db70-4dc6-b462-d078c6d36120}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\v8_5_7\include\v8.h">
@@ -914,6 +932,129 @@
     </ClInclude>
     <ClInclude Include="..\..\v8_5_7\src\full-codegen\full-codegen.h">
       <Filter>src\full-codegen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\include\inspector\Runtime.h">
+      <Filter>src\gen\include\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\include\inspector\Schema.h">
+      <Filter>src\gen\include\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\include\inspector\Debugger.h">
+      <Filter>src\gen\include\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\HeapProfiler.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Profiler.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Protocol.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Runtime.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Schema.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Console.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Debugger.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\protocol\Forward.h">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\injected-script-source.h">
+      <Filter>src\gen\src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\v8_5_7\src\inspector\debugger-script.h">
+      <Filter>src\gen\src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\injected-script.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\injected-script-native.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\inspected-context.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\java-script-call-frame.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\remote-object-id.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\script-breakpoint.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\search-util.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\string-16.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\string-util.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-console.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-console-agent-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-console-message.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-debugger.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-debugger-agent-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-debugger-script.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-function-call.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-heap-profiler-agent-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-injected-script-host.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-inspector-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-inspector-session-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-internal-value-type.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-profiler-agent-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-regex.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-runtime-agent-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-schema-agent-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-stack-trace-impl.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\v8-value-copier.h">
+      <Filter>src\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_5_7\src\inspector\wasm-translation.h">
+      <Filter>src\inspector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2461,6 +2602,108 @@
     </ClCompile>
     <ClCompile Include="..\..\v8_5_7\src\ic\x64\ic-x64.cc">
       <Filter>src\ic\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Profiler.cpp">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Protocol.cpp">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Schema.cpp">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Console.cpp">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\Debugger.cpp">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\HeapProfiler.cpp">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\v8_5_7\src\inspector\protocol\RuntimeDevtools.cpp">
+      <Filter>src\gen\src\inspector\protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-inspector-session-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-internal-value-type.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-profiler-agent-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-regex.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-runtime-agent-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-schema-agent-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-stack-trace-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-value-copier.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\wasm-translation.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\injected-script.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\injected-script-native.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\inspected-context.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\java-script-call-frame.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\remote-object-id.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\search-util.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\string-16.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\string-util.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-console.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-console-agent-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-console-message.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-debugger.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-debugger-agent-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-debugger-script.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-function-call.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-heap-profiler-agent-impl.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-injected-script-host.cc">
+      <Filter>src\inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_5_7\src\inspector\v8-inspector-impl.cc">
+      <Filter>src\inspector</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

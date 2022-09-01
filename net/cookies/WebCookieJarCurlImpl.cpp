@@ -129,11 +129,11 @@ static void addMatchingCurlCookie(const char* cookie, const String& domain, cons
 
     int expires = strExpires.toInt();
 
-    __int64 now = 0;
+    time_t now = 0;
     time(&now);
 
     // Check if cookie has expired
-    if (expires && now > expires)
+    if (expires != 0 && (now > expires))
         return;
 
     String strName;
@@ -658,8 +658,8 @@ WebCookieJarImpl::~WebCookieJarImpl()
 
 // void WebCookieJarImpl::setCookieJarFullPath(const char* path)
 // {
-//     WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-//     WTF::Locker<WTF::Mutex> locker(*mutex);
+//     WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+//     WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
 // 
 //     if (!path)
 //         return;
@@ -670,8 +670,8 @@ WebCookieJarImpl::~WebCookieJarImpl()
 
 std::string WebCookieJarImpl::getCookieJarFullPath()
 {
-    WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-    WTF::Locker<WTF::Mutex> locker(*mutex);
+    WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+    WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
 
     flushCurlCookie(nullptr);
     return m_cookieJarFileName;

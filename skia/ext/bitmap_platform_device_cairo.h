@@ -13,6 +13,7 @@
 #include "skia/ext/platform_device.h"
 
 typedef struct _cairo_surface cairo_surface_t;
+typedef struct _cairo cairo_t;
 
 // -----------------------------------------------------------------------------
 // Image byte ordering on Linux:
@@ -86,7 +87,7 @@ protected:
 
 private:
     // Overridden from PlatformDevice:
-    cairo_t* BeginPlatformPaint(const SkMatrix& transform,
+    /*cairo_t**/PlatformSurface BeginPlatformPaint(const SkMatrix& transform,
         const SkIRect& clip_bounds) override;
 
     static BitmapPlatformDevice* Create(int width, int height, bool is_opaque,

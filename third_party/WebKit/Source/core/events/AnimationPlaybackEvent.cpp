@@ -33,7 +33,7 @@ AnimationPlaybackEvent::~AnimationPlaybackEvent() { }
 double AnimationPlaybackEvent::currentTime(bool& isNull) const
 {
     double result = currentTime();
-    isNull = std::isnan(result);
+    isNull = std_isnan(result);
     return result;
 }
 
@@ -45,7 +45,7 @@ double AnimationPlaybackEvent::currentTime() const
 double AnimationPlaybackEvent::timelineTime(bool& isNull) const
 {
     double result = timelineTime();
-    isNull = std::isnan(result);
+    isNull = std_isnan(result);
     return result;
 }
 

@@ -25,7 +25,7 @@ public:
     void moveToCenter();
     virtual void resize(int width, int height) override;
 
-    void setTitle(const wchar_t* text);
+    void setTitle(const WCHAR* text);
     void setTitle(const utf8* text);
 
     void onClosing(wkeWindowClosingCallback callback, void* param);

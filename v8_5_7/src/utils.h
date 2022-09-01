@@ -208,18 +208,18 @@ T Min(T a, T b) {
 // Returns the maximum of the two parameters according to JavaScript semantics.
 template <typename T>
 T JSMax(T x, T y) {
-  if (std::isnan(x)) return x;
-  if (std::isnan(y)) return y;
-  if (std::signbit(x) < std::signbit(y)) return x;
+  if (std_isnan(x)) return x;
+  if (std_isnan(y)) return y;
+  if (std_signbit(x) < std_signbit(y)) return x;
   return x > y ? x : y;
 }
 
 // Returns the maximum of the two parameters according to JavaScript semantics.
 template <typename T>
 T JSMin(T x, T y) {
-  if (std::isnan(x)) return x;
-  if (std::isnan(y)) return y;
-  if (std::signbit(x) < std::signbit(y)) return y;
+  if (std_isnan(x)) return x;
+  if (std_isnan(y)) return y;
+  if (std_signbit(x) < std_signbit(y)) return y;
   return x > y ? y : x;
 }
 
@@ -240,7 +240,7 @@ inline double Floor(double x) {
 
 inline double Pow(double x, double y) {
   if (y == 0.0) return 1.0;
-  if (std::isnan(y) || ((x == 1 || x == -1) && std::isinf(y))) {
+  if (std_isnan(y) || ((x == 1 || x == -1) && std_isinf(y))) {
     return std::numeric_limits<double>::quiet_NaN();
   }
 #if (defined(__MINGW64_VERSION_MAJOR) &&                              \
@@ -248,7 +248,7 @@ inline double Pow(double x, double y) {
     defined(V8_OS_AIX)
   // MinGW64 and AIX have a custom implementation for pow.  This handles certain
   // special cases that are different.
-  if ((x == 0.0 || std::isinf(x)) && y != 0.0 && std::isfinite(y)) {
+  if ((x == 0.0 || std_isinf(x)) && y != 0.0 && std_isfinite(y)) {
     double f;
     double result = ((x == 0.0) ^ (y > 0)) ? V8_INFINITY : 0;
     /* retain sign if odd integer exponent */

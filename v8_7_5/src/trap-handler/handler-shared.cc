@@ -27,7 +27,7 @@ namespace internal {
 // which the dynamic loader cannot handle executables whose TLS area is only
 // 1 byte in size; see https://sourceware.org/bugzilla/show_bug.cgi?id=14898.
 #ifdef SUPPORT_XP_CODE
-        int g_thread_in_wasm_code_tls = 0;
+        //int g_thread_in_wasm_code_tls = 0;
 #else
         THREAD_LOCAL int g_thread_in_wasm_code;
 

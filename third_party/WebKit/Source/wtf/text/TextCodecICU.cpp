@@ -373,6 +373,7 @@ int TextCodecICU::decodeToBuffer(UChar* target,
 
 void MByteToWChar(LPCSTR lpcszStr, DWORD cbMultiByte, Vector<UChar>& out, UINT codePage)
 {
+#if defined(WIN32) 
     DWORD dwMinSize;
     dwMinSize = MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, NULL, 0);
 
@@ -380,18 +381,27 @@ void MByteToWChar(LPCSTR lpcszStr, DWORD cbMultiByte, Vector<UChar>& out, UINT c
 
     // Convert headers from ASCII to Unicode.
     MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, out.data(), dwMinSize);
+#else
+    * (int*)1 = 1;
+    printf("TextCodecICU.cpp, MByteToWChar\n");
+#endif
 }
 
-void WCharToMByte(LPCWSTR lpWideCharStr, DWORD cchWideChar, Vector<char>& out, UINT codePage)
-{
-    DWORD dwMinSize;
-    dwMinSize = WideCharToMultiByte(codePage, 0, lpWideCharStr, cchWideChar, NULL, 0, NULL, FALSE);
-
-    out.resize(dwMinSize);
-
-    // Convert headers from ASCII to Unicode.
-    WideCharToMultiByte(codePage, 0, lpWideCharStr, cchWideChar, out.data(), dwMinSize, NULL, FALSE);
-}
+// void WCharToMByte(LPCWSTR lpWideCharStr, DWORD cchWideChar, Vector<char>& out, UINT codePage)
+// {
+// #if defined(WIN32) 
+//     DWORD dwMinSize;
+//     dwMinSize = WideCharToMultiByte(codePage, 0, lpWideCharStr, cchWideChar, NULL, 0, NULL, FALSE);
+// 
+//     out.resize(dwMinSize);
+// 
+//     // Convert headers from ASCII to Unicode.
+//     WideCharToMultiByte(codePage, 0, lpWideCharStr, cchWideChar, out.data(), dwMinSize, NULL, FALSE);
+// #else
+//     * (int*)1 = 1;
+//     printf("TextCodecICU.cpp, MByteToWChar\n");
+// #endif
+// }
 
 String TextCodecICU::decode(const char* bytes,
     size_t length,
@@ -403,7 +413,7 @@ String TextCodecICU::decode(const char* bytes,
     if (strcasecmp(m_encoding.name(), "gb2312") && strcasecmp(m_encoding.name(), "GBK"))
         return String();
 
-    MByteToWChar(bytes, length, resultBuffer, CP_ACP);
+    WTF::MByteToWChar(bytes, length, resultBuffer, CP_ACP);
     return String(resultBuffer);
 
     // Get a converter for the passed-in encoding.

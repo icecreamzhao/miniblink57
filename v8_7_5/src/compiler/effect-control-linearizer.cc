@@ -4559,8 +4559,6 @@ namespace internal {
             case kExternalBigUint64Array:
                 UNREACHABLE();
             }
-
-            ::OutputDebugStringA("EffectControlLinearizer::BuildReverseBytes fail\n");
             return nullptr;
         }
 

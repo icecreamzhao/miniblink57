@@ -584,9 +584,9 @@ namespace XPath {
         double len,
         double maxLen)
     {
-        DCHECK(std::isfinite(maxLen));
+        DCHECK(std_isfinite(maxLen));
         const double end = start + len;
-        if (std::isnan(start) || std::isnan(end))
+        if (std_isnan(start) || std_isnan(end))
             return std::make_pair(1, 1);
         // Neither start nor end are NaN, but may still be +/- Inf
         const double clampedStart = clamp(start, 1, maxLen + 1);
@@ -744,8 +744,8 @@ namespace XPath {
 
     double FunRound::round(double val)
     {
-        if (!std::isnan(val) && !std::isinf(val)) {
-            if (std::signbit(val) && val >= -0.5)
+        if (!std_isnan(val) && !std_isinf(val)) {
+            if (std_signbit(val) && val >= -0.5)
                 val *= 0; // negative zero
             else
                 val = floor(val + 0.5);

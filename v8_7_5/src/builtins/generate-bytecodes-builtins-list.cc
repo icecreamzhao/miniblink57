@@ -86,14 +86,14 @@ namespace internal {
 } // namespace internal
 } // namespace v8
 
-int main(int argc, const char* argv[])
-{
-    if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <output filename>\n";
-        std::exit(1);
-    }
-
-    v8::internal::interpreter::WriteHeader(argv[1]);
-
-    return 0;
-}
+// int main(int argc, const char* argv[])
+// {
+//     if (argc != 2) {
+//         std::cerr << "Usage: " << argv[0] << " <output filename>\n";
+//         std::exit(1);
+//     }
+// 
+//     v8::internal::interpreter::WriteHeader(argv[1]);
+// 
+//     return 0;
+// }

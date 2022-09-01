@@ -241,6 +241,7 @@ void printingTest(wkeWebView webview)
 //     pdfData->unref();
 }
 
+#if defined(OS_WIN)
 void readFile(const wchar_t* path, std::vector<char>* buffer)
 {
     HANDLE hFile = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -256,6 +257,7 @@ void readFile(const wchar_t* path, std::vector<char>* buffer)
     ::CloseHandle(hFile);
     b = b;
 }
+#endif
 
 static void executeScript(blink::WebFrame* frame, const char* scriptFormat, const base::Value& parameters)
 {
@@ -793,7 +795,7 @@ inline BOOL SetProcessDPIAwareXp()
     static PFN_SetProcessDPIAware s_SetProcessDPIAware = NULL;
     static BOOL s_isInit = FALSE;
     if (!s_isInit) {
-        HMODULE handle = GetModuleHandle(L"User32.dll");
+        HMODULE handle = GetModuleHandleW(u16("User32.dll"));
         s_SetProcessDPIAware = (PFN_SetProcessDPIAware)GetProcAddress(handle, "SetProcessDPIAware");
         s_isInit = TRUE;
     }
@@ -810,7 +812,7 @@ inline HRESULT SetProcessDpiAwarenessXp(XP_PROCESS_DPI_AWARENESS value)
     static PFN_SetProcessDpiAwareness s_SetProcessDpiAwareness = NULL;
     static BOOL s_isInit = FALSE;
     if (!s_isInit) {
-        HMODULE handle = GetModuleHandle(L"User32.dll");
+        HMODULE handle = GetModuleHandleW(u16("User32.dll"));
         s_SetProcessDpiAwareness = (PFN_SetProcessDpiAwareness)GetProcAddress(handle, "SetProcessDpiAwareness");
         s_isInit = TRUE;
     }

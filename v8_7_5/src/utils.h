@@ -211,11 +211,11 @@ namespace internal {
     template <typename T>
     T JSMax(T x, T y)
     {
-        if (std::isnan(x))
+        if (/*std::*/isnan(x))
             return x;
-        if (std::isnan(y))
+        if (/*std::*/isnan(y))
             return y;
-        if (std::signbit(x) < std::signbit(y))
+        if (/*std::*/signbit(x) < /*std::*/signbit(y))
             return x;
         return x > y ? x : y;
     }
@@ -224,11 +224,11 @@ namespace internal {
     template <typename T>
     T JSMin(T x, T y)
     {
-        if (std::isnan(x))
+        if (/*std::*/isnan(x))
             return x;
-        if (std::isnan(y))
+        if (/*std::*/isnan(y))
             return y;
-        if (std::signbit(x) < std::signbit(y))
+        if (/*std::*/signbit(x) < /*std::*/signbit(y))
             return y;
         return x > y ? y : x;
     }
@@ -261,7 +261,7 @@ namespace internal {
         // Workaround MS fmod bugs. ECMA-262 says:
         // dividend is finite and divisor is an infinity => result equals dividend
         // dividend is a zero and divisor is nonzero finite => result equals dividend
-        if (!(std::isfinite(x) && (!std::isfinite(y) && !std::isnan(y))) && !(x == 0 && (y != 0 && std::isfinite(y)))) {
+        if (!(/*std::*/isfinite(x) && (!/*std::*/isfinite(y) && !/*std::*/isnan(y))) && !(x == 0 && (y != 0 && /*std::*/isfinite(y)))) {
             double result = fmod(x, y);
             // Workaround MS bug in VS CRT in some OS versions, https://crbug.com/915045
             // fmod(-17, +/-1) should equal -0.0 but now returns 0.0.

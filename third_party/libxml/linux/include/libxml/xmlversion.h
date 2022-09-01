@@ -91,9 +91,9 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  * Whether the thread support is configured in
  */
 #if 1
-#if defined(_REENTRANT) || defined(__MT__) || (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE - 0 >= 199506L))
+//#if defined(_REENTRANT) || defined(__MT__) || (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE - 0 >= 199506L)) // weolar
 #define LIBXML_THREAD_ENABLED
-#endif
+//#endif
 #endif
 
 /**
@@ -263,7 +263,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether iconv support is available
  */
-#if 0
+#if 1
 #define LIBXML_ICONV_ENABLED
 #endif
 
@@ -272,7 +272,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether icu support is available
  */
-#if 1
+#if 0
 #define LIBXML_ICU_ENABLED
 #endif
 

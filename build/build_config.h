@@ -79,6 +79,30 @@
 #define USE_TCMALLOC 1
 #endif
 
+template <class _Ty>
+constexpr const _Ty& std_max(const _Ty& _Left, const _Ty& _Right)
+{
+    return _Left < _Right ? _Right : _Left;
+}
+
+template <class _Ty>
+constexpr const _Ty& std_min(const _Ty& _Left, const _Ty& _Right)
+{
+    return _Left > _Right ? _Right : _Left;
+}
+
+#if (defined(OS_WIN))
+#define std_isfinite std::isfinite
+#define std_isnan std::isnan
+#define std_isinf std::isinf
+#define std_signbit std::signbit
+#elif (defined(OS_LINUX))
+#define std_isfinite isfinite
+#define std_isnan isnan
+#define std_isinf isinf
+#define std_signbit signbit
+#endif
+
 // Compiler detection.
 #if defined(__GNUC__)
 #define COMPILER_GCC 1
@@ -170,5 +194,14 @@
 #define TENCENT_REPORT_SCREEN_STATUS 0
 
 #define ENABLE_TENCENT(x) TENCENT_#x
+
+#if defined(OS_WIN) || defined(OS_LINUX_FOR_WIN)
+#pragma GCC diagnostic ignored "-Wignored-attributes"
+#include "windows.h"
+#endif
+
+#include "base/gtest_prod_util.h"
+
+#define BUILDFLAG(x) x
 
 #endif // BUILD_BUILD_CONFIG_H_

@@ -137,7 +137,7 @@ TEST_F(AnimationKeyframeEffectV8Test, CanOmitSpecifiedDuration)
 {
     Vector<Dictionary, 0> jsKeyframes;
     KeyframeEffect* animation = createAnimation(element.get(), jsKeyframes);
-    EXPECT_TRUE(std::isnan(animation->specifiedTiming().iterationDuration));
+    EXPECT_TRUE(std_isnan(animation->specifiedTiming().iterationDuration));
 }
 
 TEST_F(AnimationKeyframeEffectV8Test, SpecifiedGetters)

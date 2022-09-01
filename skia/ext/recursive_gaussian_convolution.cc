@@ -126,7 +126,7 @@ namespace {
                 w_n1 = w[n];
                 w[n] = w_n;
                 out[output_index] = FloatTo8<absolute_values>(w_n);
-                max_output = std::max(max_output, out[output_index]);
+                max_output = std_max(max_output, out[output_index]);
             }
         }
         return max_output;

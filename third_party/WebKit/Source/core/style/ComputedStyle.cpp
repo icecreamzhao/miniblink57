@@ -1767,8 +1767,8 @@ void ComputedStyle::setTextAutosizingMultiplier(float multiplier)
 
     float size = specifiedFontSize();
 
-    ASSERT(std::isfinite(size));
-    if (!std::isfinite(size) || size < 0)
+    ASSERT(std_isfinite(size));
+    if (!std_isfinite(size) || size < 0)
         size = 0;
     else
         size = std::min(maximumAllowedFontSize, size);

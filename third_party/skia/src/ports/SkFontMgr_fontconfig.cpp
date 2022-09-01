@@ -709,6 +709,7 @@ public:
         : fFC(config ? config : FcInitLoadConfigAndFonts())
         , fFamilyNames(GetFamilyNames(fFC))
     {
+        
     }
 
     virtual ~SkFontMgr_fontconfig()

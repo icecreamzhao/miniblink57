@@ -121,7 +121,7 @@ public:
     void setFontSizes(const FontSizes& fontSizes) { m_fontSizes = fontSizes; }
     void setZoom(float zoom)
     {
-        ASSERT(std::isfinite(zoom) && zoom > 0);
+        ASSERT(std_isfinite(zoom) && zoom > 0);
         m_zoom = zoom;
     }
 

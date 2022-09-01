@@ -29,7 +29,7 @@
 #include <libxml/xmlversion.h>
 #include <win32config.h>
 #else
-#include "config.h"
+#include "configlinux.h"
 #include <libxml/xmlversion.h>
 #endif
 

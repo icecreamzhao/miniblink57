@@ -46,7 +46,7 @@ inline double invalidFileTime()
 }
 inline bool isValidFileTime(double time)
 {
-    return /*std::*/isfinite(time);
+    return std_isfinite(time);
 }
 
 class FileMetadata {
@@ -68,9 +68,11 @@ public:
     // The value -1 means that the length is not set.
     long long length;
 
-    enum Type { TypeUnknown = 0,
+    enum Type {
+        TypeUnknown = 0,
         TypeFile,
-        TypeDirectory };
+        TypeDirectory
+    };
 
     Type type;
     String platformPath;

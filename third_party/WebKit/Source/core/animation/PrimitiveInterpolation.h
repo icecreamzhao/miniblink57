@@ -128,7 +128,7 @@ private:
         double fraction,
         std::unique_ptr<TypedInterpolationValue>& result) const final
     {
-        if (!std::isnan(m_lastFraction) && (fraction < 0.5) == (m_lastFraction < 0.5))
+        if (!std_isnan(m_lastFraction) && (fraction < 0.5) == (m_lastFraction < 0.5))
             return;
         const TypedInterpolationValue* side = ((fraction < 0.5) ? m_start : m_end).get();
         result = side ? side->clone() : nullptr;

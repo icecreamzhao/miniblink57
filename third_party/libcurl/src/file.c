@@ -72,7 +72,7 @@
 #endif
 
 void* (__cdecl *userOpenFile)(const char * _Filename) = 0;
-void(__cdecl *userCloseFile)(void* userFileHandle) = 0;
+int(__cdecl *userCloseFile)(void* userFileHandle) = 0;
 size_t(__cdecl *userFileSize)(void* userFileHandle) = 0;
 int(__cdecl *userReadFile)(void* userFileHandle, void *buf, size_t count) = 0;
 int(__cdecl *userSeekFile)(void* userFileHandle, size_t _Offset, int origin) = 0;
@@ -104,6 +104,7 @@ int fstat_hook(int file_handle, struct_stat* stat_info)
     return fstat(file_handle, stat_info);
 }
 
+#if defined(WIN32)
 wchar_t* utf8_to_wide_char(const char * inStr)
 {
     int cbMultiByte = 0;
@@ -128,13 +129,14 @@ wchar_t* utf8_to_wide_char(const char * inStr)
 
     return outStr;
 }
+#endif
 
 FILE* fopen_wrap(/*_In_z_*/ const char * _Filename, /*_In_*/ const char * _OpenFlag)
 {
+    FILE* fp = 0;
+#if defined(WIN32)
   wchar_t* filenameW = 0;
   wchar_t* openFlagW = 0;
-
-  FILE* fp = 0;
 
   filenameW = utf8_to_wide_char(_Filename);
   openFlagW = utf8_to_wide_char(_OpenFlag);
@@ -146,7 +148,7 @@ FILE* fopen_wrap(/*_In_z_*/ const char * _Filename, /*_In_*/ const char * _OpenF
 
   if (fp)
       return fp;
-
+#endif
   fp = fopen(_Filename, _OpenFlag);
   return fp;
 }
@@ -158,9 +160,9 @@ FILE* fopen_wrap(/*_In_z_*/ const char * _Filename, /*_In_*/ const char * _OpenF
 // #endif
 int open_readonly(const char * filename, int flag)
 {
-    wchar_t* filenameW = 0;
-
     int fp = -1;
+#if defined(WIN32)
+    wchar_t* filenameW = 0;
 
     if (userOpenFile)
         return (int)userOpenFile(filename);
@@ -172,7 +174,7 @@ int open_readonly(const char * filename, int flag)
 
     if (-1 != fp)
         return fp;
-
+#endif
     fp = _open(filename, flag);
     return fp;
 }

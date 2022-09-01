@@ -3134,10 +3134,10 @@ namespace internal {
     T Simulator::FPAdd(T op1, T op2)
     {
         T result = FPProcessNaNs(op1, op2);
-        if (std::isnan(result))
+        if (/*std::*/isnan(result))
             return result;
 
-        if (std::isinf(op1) && std::isinf(op2) && (op1 != op2)) {
+        if (/*std::*/isinf(op1) && /*std::*/isinf(op2) && (op1 != op2)) {
             // inf + -inf returns the default NaN.
             FPProcessException();
             return FPDefaultNaN<T>();
@@ -3151,9 +3151,9 @@ namespace internal {
     T Simulator::FPSub(T op1, T op2)
     {
         // NaNs should be handled elsewhere.
-        DCHECK(!std::isnan(op1) && !std::isnan(op2));
+        DCHECK(!/*std::*/isnan(op1) && !/*std::*/isnan(op2));
 
-        if (std::isinf(op1) && std::isinf(op2) && (op1 == op2)) {
+        if (/*std::*/isinf(op1) && /*std::*/isinf(op2) && (op1 == op2)) {
             // inf - inf returns the default NaN.
             FPProcessException();
             return FPDefaultNaN<T>();
@@ -3167,9 +3167,9 @@ namespace internal {
     T Simulator::FPMul(T op1, T op2)
     {
         // NaNs should be handled elsewhere.
-        DCHECK(!std::isnan(op1) && !std::isnan(op2));
+        DCHECK(!/*std::*/isnan(op1) && !/*std::*/isnan(op2));
 
-        if ((std::isinf(op1) && (op2 == 0.0)) || (std::isinf(op2) && (op1 == 0.0))) {
+        if ((/*std::*/isinf(op1) && (op2 == 0.0)) || (/*std::*/isinf(op2) && (op1 == 0.0))) {
             // inf * 0.0 returns the default NaN.
             FPProcessException();
             return FPDefaultNaN<T>();
@@ -3182,7 +3182,7 @@ namespace internal {
     template <typename T>
     T Simulator::FPMulx(T op1, T op2)
     {
-        if ((std::isinf(op1) && (op2 == 0.0)) || (std::isinf(op2) && (op1 == 0.0))) {
+        if ((/*std::*/isinf(op1) && (op2 == 0.0)) || (/*std::*/isinf(op2) && (op1 == 0.0))) {
             // inf * 0.0 returns +/-2.0.
             T two = 2.0;
             return std::copysign(1.0, op1) * std::copysign(1.0, op2) * two;
@@ -3197,12 +3197,12 @@ namespace internal {
 
         T sign_a = std::copysign(1.0, a);
         T sign_prod = std::copysign(1.0, op1) * std::copysign(1.0, op2);
-        bool isinf_prod = std::isinf(op1) || std::isinf(op2);
-        bool operation_generates_nan = (std::isinf(op1) && (op2 == 0.0)) || // inf * 0.0
-            (std::isinf(op2) && (op1 == 0.0)) || // 0.0 * inf
-            (std::isinf(a) && isinf_prod && (sign_a != sign_prod)); // inf - inf
+        bool isinf_prod = /*std::*/isinf(op1) || /*std::*/isinf(op2);
+        bool operation_generates_nan = (/*std::*/isinf(op1) && (op2 == 0.0)) || // inf * 0.0
+            (/*std::*/isinf(op2) && (op1 == 0.0)) || // 0.0 * inf
+            (/*std::*/isinf(a) && isinf_prod && (sign_a != sign_prod)); // inf - inf
 
-        if (std::isnan(result)) {
+        if (/*std::*/isnan(result)) {
             // Generated NaNs override quiet NaNs propagated from a.
             if (operation_generates_nan && IsQuietNaN(a)) {
                 FPProcessException();
@@ -3225,7 +3225,7 @@ namespace internal {
         }
 
         result = FusedMultiplyAdd(op1, op2, a);
-        DCHECK(!std::isnan(result));
+        DCHECK(!/*std::*/isnan(result));
 
         // Work around broken fma implementations for rounded zero results: If a is
         // 0.0, the sign of the result is the sign of op1 * op2 before rounding.
@@ -3240,16 +3240,16 @@ namespace internal {
     T Simulator::FPDiv(T op1, T op2)
     {
         // NaNs should be handled elsewhere.
-        DCHECK(!std::isnan(op1) && !std::isnan(op2));
+        DCHECK(!/*std::*/isnan(op1) && !/*std::*/isnan(op2));
 
-        if ((std::isinf(op1) && std::isinf(op2)) || ((op1 == 0.0) && (op2 == 0.0))) {
+        if ((/*std::*/isinf(op1) && /*std::*/isinf(op2)) || ((op1 == 0.0) && (op2 == 0.0))) {
             // inf / inf and 0.0 / 0.0 return the default NaN.
             FPProcessException();
             return FPDefaultNaN<T>();
         } else {
             if (op2 == 0.0) {
                 FPProcessException();
-                if (!std::isnan(op1)) {
+                if (!/*std::*/isnan(op1)) {
                     double op1_sign = std::copysign(1.0, op1);
                     double op2_sign = std::copysign(1.0, op2);
                     return static_cast<T>(op1_sign * op2_sign * kFP64PositiveInfinity);
@@ -3264,7 +3264,7 @@ namespace internal {
     template <typename T>
     T Simulator::FPSqrt(T op)
     {
-        if (std::isnan(op)) {
+        if (/*std::*/isnan(op)) {
             return FPProcessNaN(op);
         } else if (op < 0.0) {
             FPProcessException();
@@ -3278,7 +3278,7 @@ namespace internal {
     T Simulator::FPMax(T a, T b)
     {
         T result = FPProcessNaNs(a, b);
-        if (std::isnan(result))
+        if (/*std::*/isnan(result))
             return result;
 
         if ((a == 0.0) && (b == 0.0) && (std::copysign(1.0, a) != std::copysign(1.0, b))) {
@@ -3299,14 +3299,14 @@ namespace internal {
         }
 
         T result = FPProcessNaNs(a, b);
-        return std::isnan(result) ? result : FPMax(a, b);
+        return /*std::*/isnan(result) ? result : FPMax(a, b);
     }
 
     template <typename T>
     T Simulator::FPMin(T a, T b)
     {
         T result = FPProcessNaNs(a, b);
-        if (std::isnan(result))
+        if (/*std::*/isnan(result))
             return result;
 
         if ((a == 0.0) && (b == 0.0) && (std::copysign(1.0, a) != std::copysign(1.0, b))) {
@@ -3327,16 +3327,16 @@ namespace internal {
         }
 
         T result = FPProcessNaNs(a, b);
-        return std::isnan(result) ? result : FPMin(a, b);
+        return /*std::*/isnan(result) ? result : FPMin(a, b);
     }
 
     template <typename T>
     T Simulator::FPRecipStepFused(T op1, T op2)
     {
         const T two = 2.0;
-        if ((std::isinf(op1) && (op2 == 0.0)) || ((op1 == 0.0) && (std::isinf(op2)))) {
+        if ((/*std::*/isinf(op1) && (op2 == 0.0)) || ((op1 == 0.0) && (/*std::*/isinf(op2)))) {
             return two;
-        } else if (std::isinf(op1) || std::isinf(op2)) {
+        } else if (/*std::*/isinf(op1) || /*std::*/isinf(op2)) {
             // Return +inf if signs match, otherwise -inf.
             return ((op1 >= 0.0) == (op2 >= 0.0)) ? kFP64PositiveInfinity
                                                   : kFP64NegativeInfinity;
@@ -3351,9 +3351,9 @@ namespace internal {
         const T one_point_five = 1.5;
         const T two = 2.0;
 
-        if ((std::isinf(op1) && (op2 == 0.0)) || ((op1 == 0.0) && (std::isinf(op2)))) {
+        if ((/*std::*/isinf(op1) && (op2 == 0.0)) || ((op1 == 0.0) && (/*std::*/isinf(op2)))) {
             return one_point_five;
-        } else if (std::isinf(op1) || std::isinf(op2)) {
+        } else if (/*std::*/isinf(op1) || /*std::*/isinf(op2)) {
             // Return +inf if signs match, otherwise -inf.
             return ((op1 >= 0.0) == (op2 >= 0.0)) ? kFP64PositiveInfinity
                                                   : kFP64NegativeInfinity;
@@ -3361,9 +3361,9 @@ namespace internal {
             // The multiply-add-halve operation must be fully fused, so avoid interim
             // rounding by checking which operand can be losslessly divided by two
             // before doing the multiply-add.
-            if (std::isnormal(op1 / two)) {
+            if (/*std::*/isnormal(op1 / two)) {
                 return FusedMultiplyAdd(op1 / two, op2, one_point_five);
-            } else if (std::isnormal(op2 / two)) {
+            } else if (/*std::*/isnormal(op2 / two)) {
                 return FusedMultiplyAdd(op1, op2 / two, one_point_five);
             } else {
                 // Neither operand is normal after halving: the result is dominated by
@@ -3377,7 +3377,7 @@ namespace internal {
     {
         if ((value == 0.0) || (value == kFP64PositiveInfinity) || (value == kFP64NegativeInfinity)) {
             return value;
-        } else if (std::isnan(value)) {
+        } else if (/*std::*/isnan(value)) {
             return FPProcessNaN(value);
         }
 
@@ -3448,7 +3448,7 @@ namespace internal {
         } else if (value < kWMinInt) {
             return kWMinInt;
         }
-        return std::isnan(value) ? 0 : static_cast<int32_t>(value);
+        return /*std::*/isnan(value) ? 0 : static_cast<int32_t>(value);
     }
 
     int64_t Simulator::FPToInt64(double value, FPRounding rmode)
@@ -3459,7 +3459,7 @@ namespace internal {
         } else if (value < kXMinInt) {
             return kXMinInt;
         }
-        return std::isnan(value) ? 0 : static_cast<int64_t>(value);
+        return /*std::*/isnan(value) ? 0 : static_cast<int64_t>(value);
     }
 
     uint32_t Simulator::FPToUInt32(double value, FPRounding rmode)
@@ -3470,7 +3470,7 @@ namespace internal {
         } else if (value < 0.0) {
             return 0;
         }
-        return std::isnan(value) ? 0 : static_cast<uint32_t>(value);
+        return /*std::*/isnan(value) ? 0 : static_cast<uint32_t>(value);
     }
 
     uint64_t Simulator::FPToUInt64(double value, FPRounding rmode)
@@ -3481,7 +3481,7 @@ namespace internal {
         } else if (value < 0.0) {
             return 0;
         }
-        return std::isnan(value) ? 0 : static_cast<uint64_t>(value);
+        return /*std::*/isnan(value) ? 0 : static_cast<uint64_t>(value);
     }
 
 #define DEFINE_NEON_FP_VECTOR_OP(FN, OP, PROCNAN)                        \
@@ -3497,7 +3497,7 @@ namespace internal {
             T result;                                                    \
             if (PROCNAN) {                                               \
                 result = FPProcessNaNs(op1, op2);                        \
-                if (!std::isnan(result)) {                               \
+                if (!/*std::*/isnan(result)) {                               \
                     result = OP(op1, op2);                               \
                 }                                                        \
             } else {                                                     \
@@ -3542,7 +3542,7 @@ namespace internal {
             T op1 = -src1.Float<T>(i);
             T op2 = src2.Float<T>(i);
             T result = FPProcessNaNs(op1, op2);
-            dst.SetFloat(i, std::isnan(result) ? result : FPRecipStepFused(op1, op2));
+            dst.SetFloat(i, /*std::*/isnan(result) ? result : FPRecipStepFused(op1, op2));
         }
         return dst;
     }
@@ -3570,7 +3570,7 @@ namespace internal {
             T op1 = -src1.Float<T>(i);
             T op2 = src2.Float<T>(i);
             T result = FPProcessNaNs(op1, op2);
-            dst.SetFloat(i, std::isnan(result) ? result : FPRSqrtStepFused(op1, op2));
+            dst.SetFloat(i, /*std::*/isnan(result) ? result : FPRSqrtStepFused(op1, op2));
         }
         return dst;
     }
@@ -3599,7 +3599,7 @@ namespace internal {
             T op1 = src1.Float<T>(i);
             T op2 = src2.Float<T>(i);
             T nan_result = FPProcessNaNs(op1, op2);
-            if (!std::isnan(nan_result)) {
+            if (!/*std::*/isnan(nan_result)) {
                 switch (cond) {
                 case eq:
                     result = (op1 == op2);
@@ -3955,7 +3955,7 @@ namespace internal {
             for (int i = 0; i < LaneCountFromFormat(vform); i++) {
                 float input = src.Float<float>(i);
                 float rounded = FPRoundInt(input, rounding_mode);
-                if (inexact_exception && !std::isnan(input) && (input != rounded)) {
+                if (inexact_exception && !/*std::*/isnan(input) && (input != rounded)) {
                     FPProcessException();
                 }
                 dst.SetFloat<float>(i, rounded);
@@ -3965,7 +3965,7 @@ namespace internal {
             for (int i = 0; i < LaneCountFromFormat(vform); i++) {
                 double input = src.Float<double>(i);
                 double rounded = FPRoundInt(input, rounding_mode);
-                if (inexact_exception && !std::isnan(input) && (input != rounded)) {
+                if (inexact_exception && !/*std::*/isnan(input) && (input != rounded)) {
                     FPProcessException();
                 }
                 dst.SetFloat<double>(i, rounded);
@@ -4133,7 +4133,7 @@ namespace internal {
         static_assert(std::is_same<float, T>::value || std::is_same<double, T>::value,
             "T must be a float or double");
 
-        if (std::isnan(op)) {
+        if (/*std::*/isnan(op)) {
             return FPProcessNaN(op);
         } else if (op == 0.0) {
             if (std::copysign(1.0, op) < 0.0) {
@@ -4144,7 +4144,7 @@ namespace internal {
         } else if (std::copysign(1.0, op) < 0.0) {
             FPProcessException();
             return FPDefaultNaN<T>();
-        } else if (std::isinf(op)) {
+        } else if (/*std::*/isinf(op)) {
             return 0.0;
         } else {
             uint64_t fraction;
@@ -4224,9 +4224,9 @@ namespace internal {
             sign = double_sign(op);
         }
 
-        if (std::isnan(op)) {
+        if (/*std::*/isnan(op)) {
             return FPProcessNaN(op);
-        } else if (std::isinf(op)) {
+        } else if (/*std::*/isinf(op)) {
             return (sign == 1) ? -0.0 : 0.0;
         } else if (op == 0.0) {
             FPProcessException(); // FPExc_DivideByZero exception.
@@ -4392,7 +4392,7 @@ namespace internal {
         for (int i = 0; i < LaneCountFromFormat(vform); i++) {
             T op = src.Float<T>(i);
             T result;
-            if (std::isnan(op)) {
+            if (/*std::*/isnan(op)) {
                 result = FPProcessNaN(op);
             } else {
                 int exp;

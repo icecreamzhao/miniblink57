@@ -11,7 +11,8 @@
 #ifndef __XML_DICT_H__
 #define __XML_DICT_H__
 
-#include <libxml/tree.h>
+//#include <libxml/tree.h>
+#include <libxml/xmlstring.h>
 #include <libxml/xmlversion.h>
 
 #ifdef __cplusplus

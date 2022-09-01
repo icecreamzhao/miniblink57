@@ -285,7 +285,7 @@ namespace internal {
             ASSIGN_RETURN_ON_EXCEPTION(isolate, unit, Object::ToString(isolate, unit_obj),
                 T);
             // 4. If isFinite(value) is false, then throw a RangeError exception.
-            if (!std::isfinite(number)) {
+            if (!/*std::*/isfinite(number)) {
                 THROW_NEW_ERROR(
                     isolate,
                     NewRangeError(MessageTemplate::kNotFiniteNumber,

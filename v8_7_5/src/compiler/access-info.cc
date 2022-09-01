@@ -242,8 +242,6 @@ namespace internal {
             case kModuleExport:
                 return false;
             }
-
-            ::OutputDebugStringA("PropertyAccessInfo::Merge fail\n");
             return false;
         }
 

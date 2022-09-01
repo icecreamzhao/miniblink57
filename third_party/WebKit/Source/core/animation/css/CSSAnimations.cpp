@@ -611,7 +611,7 @@ void CSSAnimations::calculateTransitionUpdateForProperty(
     double reversingShorteningFactor = 1;
     if (interruptedTransition) {
         const double interruptedProgress = interruptedTransition->animation->effect()->progress();
-        if (!std::isnan(interruptedProgress)) {
+        if (!std_isnan(interruptedProgress)) {
             // const_cast because we need to take a ref later when passing to
             // startTransition.
             reversingAdjustedStartValue = const_cast<AnimatableValue*>(interruptedTransition->to);
@@ -875,7 +875,7 @@ void CSSAnimations::AnimationEventDelegate::onEventCondition(
         // between a single pair of samples. See http://crbug.com/275263. For
         // compatibility with the existing implementation, this event uses
         // the elapsedTime for the first iteration in question.
-        DCHECK(!std::isnan(animationNode.specifiedTiming().iterationDuration));
+        DCHECK(!std_isnan(animationNode.specifiedTiming().iterationDuration));
         const double elapsedTime = animationNode.specifiedTiming().iterationDuration * (m_previousIteration + 1);
         maybeDispatch(Document::ANIMATIONITERATION_LISTENER,
             EventTypeNames::animationiteration, elapsedTime);

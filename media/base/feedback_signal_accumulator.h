@@ -57,7 +57,7 @@ public:
     // (see class comments for elaboration).
     bool Update(double value, TimeType timestamp)
     {
-        DCHECK(!std::isnan(average_)) << "Reset() must be called once.";
+        DCHECK(!std_isnan(average_)) << "Reset() must be called once.";
 
         if (timestamp < update_time_) {
             return false; // Not in chronological order.
@@ -81,7 +81,7 @@ public:
             (update_time_ - prior_update_time_).InMicroseconds());
         const double weight = elapsed_us / (elapsed_us + half_life_.InMicroseconds());
         average_ = weight * update_value_ + (1.0 - weight) * prior_average_;
-        DCHECK(std::isfinite(average_));
+        DCHECK(std_isfinite(average_));
 
         return true;
     }

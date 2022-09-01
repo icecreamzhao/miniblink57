@@ -102,7 +102,7 @@ double HTMLProgressElement::value() const
     // of the progress bar. Otherwise, if parsing the value attribute's value
     // resulted in an error, or a number less than or equal to zero, then the
     // current value of the progress bar is zero.
-    return !std::isfinite(value) || value < 0 ? 0 : std::min(value, max());
+    return !std_isfinite(value) || value < 0 ? 0 : std::min(value, max());
 }
 
 void HTMLProgressElement::setValue(double value)
@@ -116,7 +116,7 @@ double HTMLProgressElement::max() const
     // Otherwise, if the element has no max attribute, or if it has one but
     // parsing it resulted in an error, or if the parsed value was less than or
     // equal to zero, then the maximum value of the progress bar is 1.0.
-    return !std::isfinite(max) || max <= 0 ? 1 : max;
+    return !std_isfinite(max) || max <= 0 ? 1 : max;
 }
 
 void HTMLProgressElement::setMax(double max)

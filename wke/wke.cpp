@@ -43,7 +43,9 @@
 #include <v8.h>
 #include "libplatform/libplatform.h"
 #include "base/strings/utf_string_conversions.h"
-#include <ObjBase.h>
+#include "base/strings/string16.h"
+#include "base/threading/thread_local.h"
+#include <objbase.h>
 #include <windows.h>
 // #include <sal.h>
 // #include <shlwapi.h>
@@ -68,7 +70,7 @@ const SkColor s_kBgColor = 0xffffffff;
 
 namespace wke {
 DWORD s_threadId = 0;
-DWORD s_reentryGuard = 0;
+base::ThreadLocalBoolean* s_reentryGuard = 0;
 }
 
 void wkeInitializeImpl(bool ocEnable)
@@ -77,13 +79,13 @@ void wkeInitializeImpl(bool ocEnable)
         return;
 
     wke::s_threadId = ::GetCurrentThreadId();
-    wke::s_reentryGuard = ::TlsAlloc();
-    ::TlsSetValue(wke::s_reentryGuard, (LPVOID)FALSE);
+    wke::s_reentryGuard = new base::ThreadLocalBoolean();
+    wke::s_reentryGuard->Set(false);
 
     //double-precision float
     //_controlfp(_PC_53, _MCW_PC);
 
-    CoInitialize(NULL);
+    CoInitializeEx(nullptr, 0);
 
     content::WebPage::initBlink(ocEnable);
     wke::wkeIsInit = true;
@@ -111,6 +113,7 @@ struct wkeProxyInfo {
             case WKE_PROXY_SOCKS4A:        info->proxyType = net::Socks4A; break;
             case WKE_PROXY_SOCKS5:         info->proxyType = net::Socks5; break;
             case WKE_PROXY_SOCKS5HOSTNAME: info->proxyType = net::Socks5Hostname; break;
+            case WKE_PROXY_NONE:           info->proxyType = net::HTTP; break;
             }
 
             info->hostname = String::fromUTF8(proxy.hostname);
@@ -287,12 +290,12 @@ void WKE_CALL_TYPE wkeSetContextMenuItemShow(wkeWebView webView, wkeMenuItemId i
 
 static std::vector<char> convertCookiesPathToUtf8(const WCHAR* path)
 {
-    std::wstring pathStr(path);
+    base::string16 pathStr(path);
     if (pathStr[pathStr.size() - 1] != L'\\' && pathStr[pathStr.size() - 1] != L'/')
         pathStr += L'\\';
     if (!::PathIsDirectoryW(pathStr.c_str()))
         return std::vector<char>();
-    pathStr += L"cookies.dat";
+    pathStr += u16("cookies.dat");
 
     std::vector<char> pathStrA;
     WTF::WCharToMByte(pathStr.c_str(), pathStr.size(), &pathStrA, CP_ACP);
@@ -316,22 +319,22 @@ void WKE_CALL_TYPE wkeSetDebugConfig(wkeWebView webview, const char* debugString
     
 #ifndef NO_USE_ORIG_CHROME
     if (nullptr != strstr(debugString, "runUntilIdleWithoutMsgPeek")) {
-        BOOL isReentry = (BOOL)::TlsGetValue(wke::s_reentryGuard);
+        bool isReentry = wke::s_reentryGuard->Get();
         if (isReentry)
             return;
 
-        ::TlsSetValue(wke::s_reentryGuard, (LPVOID)TRUE);
+        wke::s_reentryGuard->Set(true);
         OrigChromeMgr::runUntilIdleWithoutMsgPeek();
-        ::TlsSetValue(wke::s_reentryGuard, (LPVOID)FALSE);
+        wke::s_reentryGuard->Set(false);
         return;
     } else if (nullptr != strstr(debugString, "runUntilIdle")) {
-        BOOL isReentry = (BOOL)::TlsGetValue(wke::s_reentryGuard);
+        BOOL isReentry = wke::s_reentryGuard->Get();
         if (isReentry)
             return;
 
-        ::TlsSetValue(wke::s_reentryGuard, (LPVOID)TRUE);
+        wke::s_reentryGuard->Set(true);
         OrigChromeMgr::runUntilIdle();
-        ::TlsSetValue(wke::s_reentryGuard, (LPVOID)FALSE);
+        wke::s_reentryGuard->Set(false);
         return;
     } else if (nullptr != strstr(debugString, "initOrigChromeUiThread")) {
         OrigChromeMgr::getInst()->initUiThread();
@@ -440,9 +443,9 @@ void WKE_CALL_TYPE wkeSetDebugConfig(wkeWebView webview, const char* debugString
             wke::g_diskCacheEnable = atoi(param) == 1;
             if (net::CurlCacheManager::getInstance()->cacheDirectory().isEmpty()) {
                 //使用默认缓存目录
-                String path = net::getDefaultLocalStorageFullPath();
-                path.append(L"cache");
-                net::CurlCacheManager::getInstance()->setCacheDirectory(path);
+                std::string path = net::getDefaultLocalStorageFullPath();
+                path += ("cache");
+                net::CurlCacheManager::getInstance()->setCacheDirectory(String::fromUTF8(path.c_str()));
             }
         } else if ("diskCachePath" == item) {
             if (param) {
@@ -591,17 +594,19 @@ const utf8* WKE_CALL_TYPE wkeGetUserAgent(wkeWebView webView)
     return content::BlinkPlatformImpl::getUserAgent();
 }
 
-void WKE_CALL_TYPE wkeSetUserAgentW(wkeWebView webView, const wchar_t* userAgent)
+void WKE_CALL_TYPE wkeSetUserAgentW(wkeWebView webView, const WCHAR* userAgent)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     webView->setUserAgent(userAgent);
 }
 
-void WKE_CALL_TYPE wkeShowDevtools(wkeWebView webView, const wchar_t* path, wkeOnShowDevtoolsCallback callback, void* param)
+void WKE_CALL_TYPE wkeShowDevtools(wkeWebView webView, const WCHAR* path, wkeOnShowDevtoolsCallback callback, void* param)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     std::vector<char> pathUtf8;
-    WTF::WCharToMByte(path, wcslen(path), &pathUtf8, CP_UTF8);
+    base::string16 path16(path);
+
+    WTF::WCharToMByte(path16.c_str(), path16.size(), &pathUtf8, CP_UTF8);
     pathUtf8.push_back('\0');
     webView->showDevTools(&pathUtf8[0], callback, param);
 }
@@ -612,13 +617,13 @@ void WKE_CALL_TYPE wkePostURL(wkeWebView webView,const utf8* url, const char* po
     webView->loadPostURL(url, postData, postLen);
 }
 
-void WKE_CALL_TYPE wkePostURLW(wkeWebView webView,const wchar_t* url, const char* postData, int postLen)
+void WKE_CALL_TYPE wkePostURLW(wkeWebView webView,const WCHAR* url, const char* postData, int postLen)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     webView->loadPostURL(url, postData, postLen);
 }
 
-void WKE_CALL_TYPE wkeLoadW(wkeWebView webView, const wchar_t* url)
+void WKE_CALL_TYPE wkeLoadW(wkeWebView webView, const WCHAR* url)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     wkeLoadURLW(webView, url);
@@ -630,7 +635,7 @@ void WKE_CALL_TYPE wkeLoadURL(wkeWebView webView, const utf8* url)
     webView->loadURL(url);
 }
 
-void WKE_CALL_TYPE wkeLoadURLW(wkeWebView webView, const wchar_t* url)
+void WKE_CALL_TYPE wkeLoadURLW(wkeWebView webView, const WCHAR* url)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     webView->loadURL(url);
@@ -648,7 +653,7 @@ void WKE_CALL_TYPE wkeLoadHtmlWithBaseUrl(wkeWebView webView, const utf8* html, 
     webView->loadHtmlWithBaseUrl(html, baseUrl);
 }
 
-void WKE_CALL_TYPE wkeLoadHTMLW(wkeWebView webView, const wchar_t* html)
+void WKE_CALL_TYPE wkeLoadHTMLW(wkeWebView webView, const WCHAR* html)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     webView->loadHTML(html);
@@ -660,7 +665,7 @@ void WKE_CALL_TYPE wkeLoadFile(wkeWebView webView, const utf8* filename)
     return webView->loadFile(filename);
 }
 
-void WKE_CALL_TYPE wkeLoadFileW(wkeWebView webView, const wchar_t* filename)
+void WKE_CALL_TYPE wkeLoadFileW(wkeWebView webView, const WCHAR* filename)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, (void)0);
     return webView->loadFile(filename);
@@ -732,7 +737,7 @@ const utf8* WKE_CALL_TYPE wkeGetTitle(wkeWebView webView)
     return webView->title();
 }
 
-const wchar_t* WKE_CALL_TYPE wkeGetTitleW(wkeWebView webView)
+const WCHAR* WKE_CALL_TYPE wkeGetTitleW(wkeWebView webView)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, nullptr);
     return webView->titleW();
@@ -914,7 +919,7 @@ void WKE_CALL_TYPE wkeEditorRedo(wkeWebView webView)
     webView->editorRedo();
 }
 
-const wchar_t* WKE_CALL_TYPE wkeGetCookieW(wkeWebView webView)
+const WCHAR* WKE_CALL_TYPE wkeGetCookieW(wkeWebView webView)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, nullptr);
     return webView->cookieW();
@@ -963,7 +968,7 @@ void WKE_CALL_TYPE wkePerformCookieCommand(wkeWebView webView, wkeCookieCommand 
     switch (command) {
     case wkeCookieCommandClearAllCookies: {
         curl_easy_setopt(curl, CURLOPT_COOKIELIST, "ALL");
-        std::wstring cookiesPathW = base::UTF8ToWide(cookiesPath);
+        base::string16 cookiesPathW = base::UTF8ToUTF16(cookiesPath);
         ::DeleteFileW(cookiesPathW.c_str());
     }
         break;
@@ -1011,7 +1016,8 @@ void WKE_CALL_TYPE wkeSetCookieJarFullPath(wkeWebView webView, const WCHAR* path
         return;
 
     std::vector<char> jarPathA;
-    WTF::WCharToMByte(path, wcslen(path), &jarPathA, CP_UTF8);
+    base::string16 path16(path);
+    WTF::WCharToMByte(path16.c_str(), path16.size(), &jarPathA, CP_UTF8);
     if (0 == jarPathA.size())
         return;
     jarPathA.push_back('\0');
@@ -1021,18 +1027,24 @@ void WKE_CALL_TYPE wkeSetCookieJarFullPath(wkeWebView webView, const WCHAR* path
 void WKE_CALL_TYPE wkeSetLocalStorageFullPath(wkeWebView webView, const WCHAR* path)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
+#if defined(OS_WIN)
     if (!path)
         return;
 
     String pathString(path);
-    net::setDefaultLocalStorageFullPath(pathString);
+    net::setDefaultLocalStorageFullPath(pathString.utf8().data());
+#else
+    DebugBreak();
+#endif
 }
 
 void WKE_CALL_TYPE wkeAddPluginDirectory(wkeWebView webView, const WCHAR* path)
 {
+#if defined(OS_WIN)
     wke::checkThreadCallIsValid(__FUNCTION__);
     String directory(path);
     content::PluginDatabase::installedPlugins()->addExtraPluginDirectory(directory);
+#endif
 }
 
 void WKE_CALL_TYPE wkeSetMediaVolume(wkeWebView webView, float volume)
@@ -1132,7 +1144,7 @@ jsValue WKE_CALL_TYPE wkeRunJS(wkeWebView webView, const utf8* script)
     return webView->runJS(script);
 }
 
-jsValue WKE_CALL_TYPE wkeRunJSW(wkeWebView webView, const wchar_t* script)
+jsValue WKE_CALL_TYPE wkeRunJSW(wkeWebView webView, const WCHAR* script)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, jsUndefined());
     return webView->runJS(script);
@@ -1524,10 +1536,10 @@ const utf8* WKE_CALL_TYPE wkeGetString(const wkeString s)
     return s ? s->string() : "";
 }
 
-const wchar_t* WKE_CALL_TYPE wkeGetStringW(const wkeString string)
+const WCHAR* WKE_CALL_TYPE wkeGetStringW(const wkeString string)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
-    return string ? string->stringW() : L"";
+    return string ? string->stringW() : u16("");
 }
 
 void WKE_CALL_TYPE wkeSetString(wkeString string, const utf8* str, size_t len)
@@ -1564,18 +1576,22 @@ void WKE_CALL_TYPE wkeSetStringWithoutNullTermination(wkeString string, const ut
     string->setString(str, len, false);
 }
 
-void WKE_CALL_TYPE wkeSetStringW(wkeString string, const wchar_t* str, size_t len)
+void WKE_CALL_TYPE wkeSetStringW(wkeString string, const WCHAR* str, size_t len)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!string)
         return;
 
     if (nullptr == str) {
-        str = L"";
+        str = u16("");
         len = 0;
     } else {
-        if (len == 0)
-            len = wcslen(str);
+        if (len == 0) {
+            //len = base::c16len(str);
+            while (*(str + len)) {
+                ++len;
+            }
+        }
     }
 
     string->setString(str, len, true);
@@ -1593,7 +1609,7 @@ wkeString WKE_CALL_TYPE wkeCreateString(const utf8* str, size_t len)
     return wkeStr;
 }
 
-wkeString WKE_CALL_TYPE wkeCreateStringW(const wchar_t* str, size_t len)
+wkeString WKE_CALL_TYPE wkeCreateStringW(const WCHAR* str, size_t len)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     wkeString wkeStr = new wke::CString(str, len, true);
@@ -1706,7 +1722,7 @@ void destroyWebView(wkeWebView webView, bool needDestryWin)
         destroyWebViewAsyn(webView);
     });
     if (needDestryWin) // 为了兼容别人的老程序，这里全都关闭窗口算了
-        ::PostMessage(hWnd, WM_CLOSE, 0, 0);
+        ::PostMessageW(hWnd, WM_CLOSE, 0, 0);
 }
 
 void WKE_CALL_TYPE wkeDestroyWebView(wkeWebView webView)
@@ -1791,7 +1807,7 @@ void WKE_CALL_TYPE wkeSetWindowTitle(wkeWebView webWindow, const utf8* title)
         return window->setTitle(title);
 }
 
-void WKE_CALL_TYPE wkeSetWindowTitleW(wkeWebView webWindow, const wchar_t* title)
+void WKE_CALL_TYPE wkeSetWindowTitleW(wkeWebView webWindow, const WCHAR* title)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webWindow, (void)0);
     if (wke::CWebWindow* window = static_cast<wke::CWebWindow*>(webWindow))
@@ -2012,6 +2028,7 @@ void WKE_CALL_TYPE wkeSetDeviceParameter(wkeWebView webView, const char* device,
 void WKE_CALL_TYPE wkeAddNpapiPlugin(wkeWebView webView, void* initializeFunc, void* getEntryPointsFunc, void* shutdownFunc)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
+#if defined(OS_WIN)
     RefPtr<content::PluginPackage> package = content::PluginPackage::createVirtualPackage(
         (NP_InitializeFuncPtr)initializeFunc,
         (NP_GetEntryPointsFuncPtr) getEntryPointsFunc,
@@ -2021,6 +2038,7 @@ void WKE_CALL_TYPE wkeAddNpapiPlugin(wkeWebView webView, void* initializeFunc, v
 //     content::PluginDatabase* database = content::PluginDatabase::installedPlugins();
 //     database->addVirtualPlugin(package);
 //     database->setPreferredPluginForMIMEType(mime, package.get());
+#endif
 }
 
 void WKE_CALL_TYPE wkeOnPluginFind(wkeWebView webView, const char* mime, wkeOnPluginFindCallback callback, void* param)
@@ -2221,7 +2239,7 @@ const utf8* WKE_CALL_TYPE wkeTitle(wkeWebView webView)
     return wkeGetTitle(webView);
 }
 
-const wchar_t* WKE_CALL_TYPE wkeTitleW(wkeWebView webView)
+const WCHAR* WKE_CALL_TYPE wkeTitleW(wkeWebView webView)
 {
     return wkeGetTitleW(webView);
 }
@@ -2389,7 +2407,7 @@ const utf8* WKE_CALL_TYPE wkeToString(const wkeString string)
     return wkeGetString(string);
 }
 
-const wchar_t* WKE_CALL_TYPE wkeToStringW(const wkeString string)
+const WCHAR* WKE_CALL_TYPE wkeToStringW(const wkeString string)
 {
     return wkeGetStringW(string);
 }
@@ -2466,7 +2484,7 @@ void WKE_CALL_TYPE wkeRunMessageLoop()
 {
     MSG msg = { 0 };
     while (true) {
-        if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        if (::PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE)) {
             if (WM_QUIT == msg.message)
                 break;
             ::TranslateMessage(&msg);
@@ -2486,25 +2504,34 @@ bool checkThreadCallIsValid(const char* funcName)
 {
     String output;
     if (!wke::wkeIsInit) {
-        output = L"禁止初始化前调用此接口：";
+#if defined(OS_WIN)
+        output = u16("禁止初始化前调用此接口：");
         output.append(funcName);
-        ::MessageBoxW(nullptr, output.charactersWithNullTermination().data(), L"警告！", MB_OK);
+        ::MessageBoxW(nullptr, output.charactersWithNullTermination().data(), u16("警告！"), MB_OK);
         ::TerminateProcess((HANDLE)-1, 5);
+#else
+        printf("don't call this call before init\n");
+        abort();
+#endif
         return false;
     }
 
     if (WTF::isMainThread())
         return true;
-        
-    output = L"禁止多线程调用此接口：";
+#if defined(OS_WIN)
+    output = u16("禁止多线程调用此接口：");
     output.append(funcName);
-    output.append(L"。当前线程id：");
+    output.append(u16("。当前线程id："));
     output.append(String::number(::GetCurrentThreadId()));
-    output.append(L"，主线程id：");
+    output.append(u16("，主线程id："));
     output.append(String::number(s_threadId));
     
-    ::MessageBoxW(nullptr, output.charactersWithNullTermination().data(), L"警告！", MB_OK);
+    ::MessageBoxW(nullptr, output.charactersWithNullTermination().data(), u16("警告！"), MB_OK);
     ::TerminateProcess((HANDLE)-1, 5);
+#else
+    printf("don't call this call cross thread, this thread:%d, main thread:%d\n", ::GetCurrentThreadId(), s_threadId);
+    abort();
+#endif
     return false;
 }
 

@@ -47,6 +47,7 @@
  * stddef.h defines wchar_t
  */
 #include <stddef.h>
+#include <stdint.h>
 
 /*==========================================================================*/
 /* For C wrappers, we use the symbol U_STABLE.                                */

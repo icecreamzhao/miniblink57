@@ -338,7 +338,7 @@ void MediaControlsPainter::paintMediaSliderInternal(const LayoutObject& object,
     TimeRanges* bufferedTimeRanges = mediaElement->buffered();
     float duration = mediaElement->duration();
     float currentTime = mediaElement->currentTime();
-    if (std::isnan(duration) || std::isinf(duration) || !duration || std::isnan(currentTime))
+    if (std_isnan(duration) || std_isinf(duration) || !duration || std_isnan(currentTime))
         return;
 
     for (unsigned i = 0; i < bufferedTimeRanges->length(); ++i) {
@@ -351,7 +351,7 @@ void MediaControlsPainter::paintMediaSliderInternal(const LayoutObject& object,
         // This is related to https://www.w3.org/Bugs/Public/show_bug.cgi?id=28125
         // FIXME: Remove this workaround when WebMediaPlayer
         // has an asynchronous pause interface.
-        if (std::isnan(start) || std::isnan(end) || start > currentTime + kCurrentTimeBufferedDelta || end < currentTime)
+        if (std_isnan(start) || std_isnan(end) || start > currentTime + kCurrentTimeBufferedDelta || end < currentTime)
             continue;
         int startPosition = int(start * rect.width() / duration);
         int currentPosition = int(currentTime * rect.width() / duration);
@@ -435,7 +435,7 @@ bool MediaControlsPainter::paintMediaVolumeSlider(const LayoutObject& object,
 
     // Calculate volume position for white background rectangle.
     float volume = mediaElement->volume();
-    if (std::isnan(volume) || volume < 0)
+    if (std_isnan(volume) || volume < 0)
         return true;
     if (volume > 1)
         volume = 1;

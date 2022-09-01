@@ -672,7 +672,7 @@ namespace internal {
         // The -0 value must be set before NewNumber works.
         set_minus_zero_value(
             *factory->NewHeapNumber(-0.0, AllocationType::kReadOnly));
-        DCHECK(std::signbit(roots.minus_zero_value()->Number()));
+        DCHECK(/*std::*/signbit(roots.minus_zero_value()->Number()));
 
         set_nan_value(*factory->NewHeapNumber(
             std::numeric_limits<double>::quiet_NaN(), AllocationType::kReadOnly));

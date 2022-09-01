@@ -118,22 +118,23 @@
    * by also making that declaration when compiling client code.
    */
 #if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
-#define XMLPUBFUN __declspec(dllexport)
-#define XMLPUBVAR __declspec(dllexport)
+# define XMLPUBFUN __declspec(dllexport)
+# define XMLPUBVAR __declspec(dllexport)
 #else
-#define XMLPUBFUN
-#if !defined(LIBXML_STATIC)
-#define XMLPUBVAR __declspec(dllimport) extern
-#else
-#define XMLPUBVAR extern
+# define XMLPUBFUN
+# if !defined(LIBXML_STATIC)
+#  define XMLPUBVAR __declspec(dllimport) extern
+# else
+#  define XMLPUBVAR extern
 #endif
 #endif
+
 #define XMLCALL __cdecl
 #define XMLCDECL __cdecl
 #if !defined _REENTRANT
 #define _REENTRANT
 #endif
-#endif
+#endif // _WIN32
 
 /* Cygwin platform, GNU compiler */
 #if defined(_WIN32) && defined(__CYGWIN__)

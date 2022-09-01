@@ -531,8 +531,7 @@ namespace internal {
         auto value = TracedValue::Create();
         value->SetDouble("startTime",
             (start_time_ - base::TimeTicks()).InMicroseconds());
-        TRACE_EVENT_SAMPLE_WITH_ID1(TRACE_DISABLED_BY_DEFAULT("v8.cpu_profiler"),
-            "Profile", id_, "data", std::move(value));
+        //TRACE_EVENT_SAMPLE_WITH_ID1(TRACE_DISABLED_BY_DEFAULT("v8.cpu_profiler"), "Profile", id_, "data", std::move(value));
     }
 
     void CpuProfile::AddPath(base::TimeTicks timestamp,
@@ -631,8 +630,7 @@ namespace internal {
             streaming_next_sample_ = samples_.size();
         }
 
-        TRACE_EVENT_SAMPLE_WITH_ID1(TRACE_DISABLED_BY_DEFAULT("v8.cpu_profiler"),
-            "ProfileChunk", id_, "data", std::move(value));
+        //TRACE_EVENT_SAMPLE_WITH_ID1(TRACE_DISABLED_BY_DEFAULT("v8.cpu_profiler"), "ProfileChunk", id_, "data", std::move(value));
     }
 
     void CpuProfile::FinishProfile()
@@ -641,8 +639,7 @@ namespace internal {
         StreamPendingTraceEvents();
         auto value = TracedValue::Create();
         value->SetDouble("endTime", (end_time_ - base::TimeTicks()).InMicroseconds());
-        TRACE_EVENT_SAMPLE_WITH_ID1(TRACE_DISABLED_BY_DEFAULT("v8.cpu_profiler"),
-            "ProfileChunk", id_, "data", std::move(value));
+        //TRACE_EVENT_SAMPLE_WITH_ID1(TRACE_DISABLED_BY_DEFAULT("v8.cpu_profiler"), "ProfileChunk", id_, "data", std::move(value));
     }
 
     void CpuProfile::Print()

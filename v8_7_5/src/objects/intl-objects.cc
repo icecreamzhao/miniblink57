@@ -2178,9 +2178,9 @@ namespace internal {
                 return isolate->factory()->integer_string();
             } else {
                 double number = numeric_obj->Number();
-                if (std::isfinite(number))
+                if (/*std::*/isfinite(number))
                     return isolate->factory()->integer_string();
-                if (std::isnan(number))
+                if (/*std::*/isnan(number))
                     return isolate->factory()->nan_string();
                 return isolate->factory()->infinity_string();
             }

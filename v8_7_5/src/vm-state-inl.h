@@ -38,7 +38,6 @@ namespace internal {
         case IDLE:
             return "IDLE";
         }
-        ::OutputDebugStringA("StateToString fail\n");
         return nullptr;
     }
 

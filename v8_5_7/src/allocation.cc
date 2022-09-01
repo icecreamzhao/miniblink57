@@ -16,7 +16,7 @@
 #endif
 
 #ifdef _DEBUG
-size_t g_v8MemSize = 0;
+extern size_t g_v8MemSize;
 #endif
 
 namespace WTF {

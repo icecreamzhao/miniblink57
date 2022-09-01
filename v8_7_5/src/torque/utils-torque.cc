@@ -135,7 +135,8 @@ namespace internal {
             TorqueError error(message);
             if (include_position)
                 error.position = CurrentSourcePosition::Get();
-            throw error;
+            //throw error;
+            *(int*)1 = 1;
         }
 
         void LintError(const std::string& error)

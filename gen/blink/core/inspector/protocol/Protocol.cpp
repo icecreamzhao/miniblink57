@@ -236,7 +236,7 @@ namespace protocol {
             else
                 output->append(falseValueString, 5);
         } else if (type() == TypeDouble) {
-            if (!std::isfinite(m_doubleValue)) {
+            if (!std_isfinite(m_doubleValue)) {
                 output->append(nullValueString, 4);
                 return;
             }

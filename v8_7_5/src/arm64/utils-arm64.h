@@ -74,7 +74,7 @@ namespace internal {
     inline bool IsSignallingNaN(double num)
     {
         uint64_t raw = bit_cast<uint64_t>(num);
-        if (std::isnan(num) && ((raw & kDQuietNanMask) == 0)) {
+        if (/*std::*/isnan(num) && ((raw & kDQuietNanMask) == 0)) {
             return true;
         }
         return false;
@@ -83,7 +83,7 @@ namespace internal {
     inline bool IsSignallingNaN(float num)
     {
         uint32_t raw = bit_cast<uint32_t>(num);
-        if (std::isnan(num) && ((raw & kSQuietNanMask) == 0)) {
+        if (/*std::*/isnan(num) && ((raw & kSQuietNanMask) == 0)) {
             return true;
         }
         return false;
@@ -98,19 +98,19 @@ namespace internal {
     template <typename T>
     inline bool IsQuietNaN(T num)
     {
-        return std::isnan(num) && !IsSignallingNaN(num);
+        return /*std::*/isnan(num) && !IsSignallingNaN(num);
     }
 
     // Convert the NaN in 'num' to a quiet NaN.
     inline double ToQuietNaN(double num)
     {
-        DCHECK(std::isnan(num));
+        DCHECK(/*std::*/isnan(num));
         return bit_cast<double>(bit_cast<uint64_t>(num) | kDQuietNanMask);
     }
 
     inline float ToQuietNaN(float num)
     {
-        DCHECK(std::isnan(num));
+        DCHECK(/*std::*/isnan(num));
         return bit_cast<float>(bit_cast<uint32_t>(num) | static_cast<uint32_t>(kSQuietNanMask));
     }
 

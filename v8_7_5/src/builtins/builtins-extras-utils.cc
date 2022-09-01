@@ -17,6 +17,12 @@ namespace internal {
             kFunctionSlot = Context::MIN_CONTEXT_SLOTS,
             kFunctionContextLength,
         };
+
+        enum SimpleBindFunctionContextSlot {
+            kSimpleBindFunctionSlot = Context::MIN_CONTEXT_SLOTS,
+            kSimpleBindThisArgSlot,
+            kSimpleBindFunctionContextLength,
+        };
     } // namespace
 
     // These functions are key for safe meta-programming:
@@ -33,7 +39,56 @@ namespace internal {
     //       return %reflect_apply(func, thisArg, args);
     //     };
     //   };
+    //   function simpleBind(func, thisArg) { // v8 57
+    //     return function(...args) {
+    //         return %reflect_apply(func, thisArg, args);
+    //       };
+    //   };
     //
+    BUILTIN(ExtrasUtilsSimpleBind)
+    {
+        HandleScope scope(isolate);
+
+        DCHECK_EQ(3, args.length());
+        Handle<JSFunction> func = args.at<JSFunction>(1);
+        Handle<Object> thisArg = args.at<Object>(2);
+
+        Handle<NativeContext> native_context(isolate->context()->native_context(), isolate);
+        Handle<Context> context = isolate->factory()->NewBuiltinContext(native_context, static_cast<int>(SimpleBindFunctionContextSlot::kSimpleBindFunctionContextLength));
+
+        context->set(static_cast<int>(SimpleBindFunctionContextSlot::kSimpleBindFunctionSlot), *func);
+        context->set(static_cast<int>(SimpleBindFunctionContextSlot::kSimpleBindThisArgSlot), *thisArg);
+
+        Handle<SharedFunctionInfo> info = isolate->factory()->NewSharedFunctionInfoForBuiltin(
+            isolate->factory()->empty_string(),
+            Builtins::kExtrasUtilsSimpleBindCallReflectApply, kNormalFunction);
+        info->DontAdaptArguments();
+
+        Handle<Map> map = isolate->strict_function_without_prototype_map();
+        Handle<JSFunction> new_bound_function = isolate->factory()->NewFunctionFromSharedFunctionInfo(map, info, context);
+
+        return *new_bound_function;
+    }
+
+    BUILTIN(ExtrasUtilsSimpleBindCallReflectApply)
+    {
+        HandleScope scope(isolate);
+        Handle<Context> context(isolate->context(), isolate);
+        Handle<NativeContext> native_context(isolate->context()->native_context(), isolate);
+
+        Handle<JSFunction> func(JSFunction::cast(context->get(static_cast<int>(SimpleBindFunctionContextSlot::kSimpleBindFunctionSlot))), isolate);
+        Handle<Object> this_arg(JSFunction::cast(context->get(static_cast<int>(SimpleBindFunctionContextSlot::kSimpleBindThisArgSlot))), isolate);
+
+        int const rest_args_atart = 1;
+        Arguments argv(args.length() - rest_args_atart, args.address_of_arg_at(rest_args_atart));
+        Handle<JSArray> rest_args_array = isolate->factory()->NewJSArray(0);
+        RETURN_FAILURE_ON_EXCEPTION(isolate, ArrayConstructInitializeElements(rest_args_array, &argv));
+
+        Handle<Object> reflect_apply_args[] = { func, this_arg, rest_args_array };
+        Handle<JSFunction> reflect_apply(native_context->reflect_apply(), isolate);
+        RETURN_RESULT_OR_FAILURE(isolate, Execution::Call(isolate, reflect_apply, isolate->factory()->undefined_value(), arraysize(reflect_apply_args), reflect_apply_args));
+    }
+
     BUILTIN(ExtrasUtilsUncurryThis)
     {
         HandleScope scope(isolate);

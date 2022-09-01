@@ -2401,7 +2401,7 @@ namespace internal {
         template <typename T>
         T FPProcessNaN(T op)
         {
-            DCHECK(std::isnan(op));
+            DCHECK(/*std::*/isnan(op));
             return fpcr().DN() ? FPDefaultNaN<T>() : ToQuietNaN(op);
         }
 
@@ -2412,10 +2412,10 @@ namespace internal {
                 return FPProcessNaN(op1);
             } else if (IsSignallingNaN(op2)) {
                 return FPProcessNaN(op2);
-            } else if (std::isnan(op1)) {
+            } else if (/*std::*/isnan(op1)) {
                 DCHECK(IsQuietNaN(op1));
                 return FPProcessNaN(op1);
-            } else if (std::isnan(op2)) {
+            } else if (/*std::*/isnan(op2)) {
                 DCHECK(IsQuietNaN(op2));
                 return FPProcessNaN(op2);
             } else {
@@ -2432,13 +2432,13 @@ namespace internal {
                 return FPProcessNaN(op2);
             } else if (IsSignallingNaN(op3)) {
                 return FPProcessNaN(op3);
-            } else if (std::isnan(op1)) {
+            } else if (/*std::*/isnan(op1)) {
                 DCHECK(IsQuietNaN(op1));
                 return FPProcessNaN(op1);
-            } else if (std::isnan(op2)) {
+            } else if (/*std::*/isnan(op2)) {
                 DCHECK(IsQuietNaN(op2));
                 return FPProcessNaN(op2);
-            } else if (std::isnan(op3)) {
+            } else if (/*std::*/isnan(op3)) {
                 DCHECK(IsQuietNaN(op3));
                 return FPProcessNaN(op3);
             } else {

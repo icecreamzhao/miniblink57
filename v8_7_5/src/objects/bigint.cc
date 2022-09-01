@@ -928,7 +928,7 @@ namespace internal {
 
     ComparisonResult BigInt::CompareToDouble(Handle<BigInt> x, double y)
     {
-        if (std::isnan(y))
+        if (/*std::*/isnan(y))
             return ComparisonResult::kUndefined;
         if (y == V8_INFINITY)
             return ComparisonResult::kLessThan;
@@ -1062,7 +1062,7 @@ namespace internal {
             return MutableBigInt::NewFromInt(isolate, Smi::ToInt(*number));
         }
         double value = HeapNumber::cast(*number)->value();
-        if (!std::isfinite(value) || (DoubleToInteger(value) != value)) {
+        if (!/*std::*/isfinite(value) || (DoubleToInteger(value) != value)) {
             THROW_NEW_ERROR(isolate,
                 NewRangeError(MessageTemplate::kBigIntFromNumber, number),
                 BigInt);

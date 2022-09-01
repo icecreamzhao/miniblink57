@@ -221,7 +221,7 @@ void JSONBasicValue::writeJSON(StringBuilder* output) const
         else
             output->append(falseString, 5);
     } else if (getType() == TypeDouble) {
-        if (!std::isfinite(m_doubleValue)) {
+        if (!std_isfinite(m_doubleValue)) {
             output->append(nullString, 4);
             return;
         }

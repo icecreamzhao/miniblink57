@@ -76,7 +76,7 @@ Decimal TimeInputType::defaultValueForStepUp() const
     DateComponents date;
     date.setMillisecondsSinceMidnight(convertToLocalTime(currentTimeMS()));
     double milliseconds = date.millisecondsSinceEpoch();
-    DCHECK(std::isfinite(milliseconds));
+    DCHECK(std_isfinite(milliseconds));
     return Decimal::fromDouble(milliseconds);
 }
 

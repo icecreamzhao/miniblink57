@@ -67,10 +67,10 @@ public:
     AtomicString(const LChar* chars, unsigned length);
     AtomicString(const UChar* chars, unsigned length);
     AtomicString(const UChar* chars);
-    AtomicString(const char16_t* chars)
-        : AtomicString(reinterpret_cast<const UChar*>(chars))
-    {
-    }
+//     AtomicString(const char16_t* chars)
+//         : AtomicString(reinterpret_cast<const UChar*>(chars))
+//     {
+//     }
 
     template <size_t inlineCapacity>
     explicit AtomicString(const Vector<UChar, inlineCapacity>& vector)

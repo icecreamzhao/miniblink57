@@ -616,7 +616,7 @@ bool ProcessGeneric(ots::OpenTypeFile* header,
     }
 
     // check that the tables are not overlapping.
-    std::vector<std::pair<uint32_t, uint8_t>> overlap_checker;
+    std::vector<std::pair<uint32_t, uint8_t> > overlap_checker;
     for (unsigned i = 0; i < font->num_tables; ++i) {
         overlap_checker.push_back(
             std::make_pair(tables[i].offset, static_cast<uint8_t>(1) /* start */));

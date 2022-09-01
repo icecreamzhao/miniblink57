@@ -2205,7 +2205,7 @@ HConstant::HConstant(Handle<Object> object, Representation r)
     int32_value_ = DoubleToInt32(n);
     bit_field_ = HasSmiValueField::update(
         bit_field_, has_int32_value && Smi::IsValid(int32_value_));
-    if (std::isnan(n)) {
+    if (std_isnan(n)) {
       double_value_ = std::numeric_limits<double>::quiet_NaN();
       // Canonicalize object with NaN value.
       DCHECK(object->IsHeapObject());  // NaN can't be a Smi.
@@ -2299,7 +2299,7 @@ HConstant::HConstant(double double_value, Representation r,
                  HasExternalReferenceValueField::encode(false) |
                  IsNotInNewSpaceField::encode(is_not_in_new_space) |
                  BooleanValueField::encode(double_value != 0 &&
-                                           !std::isnan(double_value)) |
+                                           !std_isnan(double_value)) |
                  IsUndetectableField::encode(false) |
                  InstanceTypeField::encode(kUnknownInstanceType)),
       int32_value_(DoubleToInt32(double_value)) {
@@ -2310,7 +2310,7 @@ HConstant::HConstant(double double_value, Representation r,
   bool could_be_heapobject = r.IsTagged() && !object.handle().is_null();
   bool is_smi = HasSmiValue() && !could_be_heapobject;
   set_type(is_smi ? HType::Smi() : HType::TaggedNumber());
-  if (std::isnan(double_value)) {
+  if (std_isnan(double_value)) {
     double_value_ = std::numeric_limits<double>::quiet_NaN();
   } else {
     double_value_ = double_value;
@@ -3382,7 +3382,7 @@ HInstruction* HStringCharFromCode::New(Isolate* isolate, Zone* zone,
   if (FLAG_fold_constants && char_code->IsConstant()) {
     HConstant* c_code = HConstant::cast(char_code);
     if (c_code->HasNumberValue()) {
-      if (std::isfinite(c_code->DoubleValue())) {
+      if (std_isfinite(c_code->DoubleValue())) {
         uint32_t code = c_code->NumberValueAsInteger32() & 0xffff;
         return HConstant::New(
             isolate, zone, context,
@@ -3405,10 +3405,10 @@ HInstruction* HUnaryMathOperation::New(Isolate* isolate, Zone* zone,
     HConstant* constant = HConstant::cast(value);
     if (!constant->HasNumberValue()) break;
     double d = constant->DoubleValue();
-    if (std::isnan(d)) {  // NaN poisons everything.
+    if (std_isnan(d)) {  // NaN poisons everything.
       return H_CONSTANT_DOUBLE(std::numeric_limits<double>::quiet_NaN());
     }
-    if (std::isinf(d)) {  // +Infinity and -Infinity.
+    if (std_isinf(d)) {  // +Infinity and -Infinity.
       switch (op) {
         case kMathCos:
         case kMathSin:
@@ -3518,7 +3518,7 @@ HInstruction* HPower::New(Isolate* isolate, Zone* zone, HValue* context,
     if (c_left->HasNumberValue() && c_right->HasNumberValue()) {
       double result =
           power_helper(isolate, c_left->DoubleValue(), c_right->DoubleValue());
-      return H_CONSTANT_DOUBLE(std::isnan(result)
+      return H_CONSTANT_DOUBLE(std_isnan(result)
                                    ? std::numeric_limits<double>::quiet_NaN()
                                    : result);
     }
@@ -3589,8 +3589,8 @@ HInstruction* HDiv::New(Isolate* isolate, Zone* zone, HValue* context,
     HConstant* c_left = HConstant::cast(left);
     HConstant* c_right = HConstant::cast(right);
     if ((c_left->HasNumberValue() && c_right->HasNumberValue())) {
-      if (std::isnan(c_left->DoubleValue()) ||
-          std::isnan(c_right->DoubleValue())) {
+      if (std_isnan(c_left->DoubleValue()) ||
+          std_isnan(c_right->DoubleValue())) {
         return H_CONSTANT_DOUBLE(std::numeric_limits<double>::quiet_NaN());
       } else if (c_right->DoubleValue() != 0) {
         double double_res = c_left->DoubleValue() / c_right->DoubleValue();

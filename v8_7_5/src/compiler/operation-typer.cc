@@ -148,11 +148,11 @@ namespace internal {
                 DCHECK_NE(0, n);
                 double x = +V8_INFINITY;
                 for (size_t i = 0; i < n; ++i) {
-                    if (!std::isnan(a[i])) {
+                    if (!/*std::*/isnan(a[i])) {
                         x = std::min(a[i], x);
                     }
                 }
-                DCHECK(!std::isnan(x));
+                DCHECK(!/*std::*/isnan(x));
                 return x == 0 ? 0 : x; // -0 -> 0
             }
 
@@ -164,11 +164,11 @@ namespace internal {
                 DCHECK_NE(0, n);
                 double x = -V8_INFINITY;
                 for (size_t i = 0; i < n; ++i) {
-                    if (!std::isnan(a[i])) {
+                    if (!/*std::*/isnan(a[i])) {
                         x = std::max(a[i], x);
                     }
                 }
-                DCHECK(!std::isnan(x));
+                DCHECK(!/*std::*/isnan(x));
                 return x == 0 ? 0 : x; // -0 -> 0
             }
 
@@ -188,7 +188,7 @@ namespace internal {
             // actual result cannot be nan either.
             int nans = 0;
             for (int i = 0; i < 4; ++i) {
-                if (std::isnan(results[i]))
+                if (/*std::*/isnan(results[i]))
                     ++nans;
             }
             if (nans == 4)
@@ -218,7 +218,7 @@ namespace internal {
             // result cannot be nan either.
             int nans = 0;
             for (int i = 0; i < 4; ++i) {
-                if (std::isnan(results[i]))
+                if (/*std::*/isnan(results[i]))
                     ++nans;
             }
             if (nans == 4)
@@ -245,7 +245,7 @@ namespace internal {
             // none of the "results" above is nan, the actual result may still be, so we
             // have to do a different check:
             for (int i = 0; i < 4; ++i) {
-                if (std::isnan(results[i])) {
+                if (/*std::*/isnan(results[i])) {
                     return cache_->kIntegerOrMinusZeroOrNaN;
                 }
             }

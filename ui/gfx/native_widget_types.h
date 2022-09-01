@@ -243,7 +243,7 @@ struct GLSurfaceHandle {
 };
 
 // AcceleratedWidget provides a surface to compositors to paint pixels.
-#if defined(OS_WIN)
+#if defined(OS_WIN) || defined(OS_LINUX_FOR_WIN)
 typedef HWND AcceleratedWidget;
 const AcceleratedWidget kNullAcceleratedWidget = NULL;
 #elif defined(USE_X11)

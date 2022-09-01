@@ -38,7 +38,7 @@ FontCache::FontCache()
     : m_purgePreventCount(0)
 {
     if (s_fontManager) {
-        adopted(s_fontManager);
+        WTF::adopted(s_fontManager);
         m_fontManager = s_fontManager;
     } else {
         m_fontManager = nullptr;
@@ -105,7 +105,7 @@ PassRefPtr<SimpleFontData> FontCache::fallbackFontForCharacter(
     }
 
     FontCache::PlatformFallbackFont fallbackFont;
-    FontCache::getFontForCharacter(c, fontDescription.locale().ascii().data(), &fallbackFont);
+    FontCache::getFontForCharacter(c, fontDescription.locale()->ascii().data(), &fallbackFont);
     if (fallbackFont.name.isEmpty())
         return nullptr;
 

@@ -20,6 +20,8 @@
 #include <set>
 #include <TlHelp32.h>
 #include <xmmintrin.h>
+#include "G:/mycode/quickjs-vs/quickjs.h"
+#include "G:/mycode/quickjs-vs/quickjs-libc.h"
 
 // #define VLD_FORCE_ENABLE 1
 // #include "C:\\Program Files (x86)\\Visual Leak Detector\\include\\vld.h"
@@ -34,6 +36,7 @@ int APIENTRY wWinMain2(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCm
 
 #define CLS_WINDOW L"mbTestWindow"
 void readFile(const wchar_t* path, std::vector<char>* buffer);
+void writeFile(const wchar_t* path, const std::vector<char>& buffer);
 
 LRESULT WINAPI testWindowProc(
     __in HWND hWnd,
@@ -376,14 +379,6 @@ void MB_CALL_TYPE onJsQuery(mbWebView webView, void* param, mbJsExecState es, in
     mbResponseQuery(webView, queryId, customMsg, request/*"I am response"*/);
 }
 
-mbWebView g_viewForReload;
-
-void WINAPI onTimerReload(HWND, UINT, UINT_PTR, DWORD)
-{
-    //mbReload(g_viewForReload);
-    //::ExitProcess(11);
-}
-
 void MB_CALL_TYPE onPaintBitUpdatedCallback(mbWebView webView, void* param, const void* buffer, const mbRect* r, int width, int height);
 
 void createSimpleMb()
@@ -414,9 +409,6 @@ void createSimpleMb()
     ::ShowWindow(hWnd, SW_SHOW);
     //mbSetHeadlessEnabled(view, TRUE);
 
-    g_viewForReload = view;
-    ::SetTimer(hWnd, (UINT_PTR)hWnd, 5000, onTimerReload);
-
     //::mbLoadHTML(view, "<html><head><style></style><script type=\"text/javascript\">var test = 'test';</script></head><body></body></html>");
     //https://www.baidu.com/s?wd=123
 
@@ -437,64 +429,6 @@ void createMbClient()
 {
     RootWindow* rootWin = new RootWindow();
     rootWin->createRootWindow();
-}
-
-wchar_t* killProcessArray[] = {
-    L"ServiceHub.DataWarehouseHost.exe",
-    L"ServiceHub.Host.CLR.x86.exe",
-    L"ServiceHub.IdentityHost.exe",
-    L"ServiceHub.SettingsHost.exe",
-    L"ServiceHub.TestWindowStoreHost.exe",
-    L"ServiceHub.ThreadedWaitDialog.exe",
-    L"ServiceHub.VSDetouredHost.exe",
-    L"VcxprojReader.exe",
-    L"PerfWatson2.exe",
-    L"vcpkgsrv.exe",
-    nullptr
-};
-
-bool isKillProcees(const wchar_t* proceName)
-{
-    for (int i = 0; killProcessArray[i] != nullptr; ++i) {
-        if (nullptr != wcsstr(proceName, killProcessArray[i]))
-            return true;
-    }
-    return false;
-}
-
-void KillVs()
-{
-    DWORD needed;
-
-    HANDLE hProcess = NULL;
-    HMODULE hModule;
-    wchar_t path[260] = L"";
-    HANDLE hToken;
-
-    HANDLE hProcessSnap = NULL;
-    PROCESSENTRY32 pe32;
-    pe32.dwSize = sizeof(PROCESSENTRY32);
-    hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken))
-        return;
-
-    Process32First(hProcessSnap, &pe32);
-    do {
-        hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, pe32.th32ProcessID);
-        if (hProcess) {
-            EnumProcessModules(hProcess, &hModule, sizeof(hModule), &needed);
-            GetModuleFileNameExW(hProcess, hModule, path, sizeof(path));
-        }
-        //pe32.szExeFile//进程名
-        //pe32.th32ProcessID//进程ID
-        if (isKillProcees(pe32.szExeFile)) {
-            HANDLE hProcessHandle = ::OpenProcess(PROCESS_TERMINATE, FALSE, pe32.th32ProcessID);
-            TerminateProcess(hProcessHandle, 4);
-        }
-
-    } while (Process32Next(hProcessSnap, &pe32));
-    CloseHandle(hProcess);
 }
 
 void ASSERT(bool b)
@@ -627,15 +561,328 @@ BOOL HookByHotpatch(LPCWSTR szDllName, LPCSTR szFuncName, void* pfnNew, void** p
     return HookAddrByHotpatch((void*)pFunc, pfnNew, pfnOld);
 }
 
+// xxx.new2-data = "aaa";
+// /*  xxx */
+// //ssxxxx
+class FixV8Error {
+public:
+    FixV8Error(std::string* source)
+    {
+        m_pos = 0;
+        m_sentenceBegin = 0;
+        m_sentenceEnd = 0;
+        m_isError = false;
+        m_isInSingleComments = false;
+        m_isInMutilComments = false;
+        m_source = source;
+    }
+
+    void run()
+    {
+        for (; m_pos < m_source->size() - 1; ++m_pos) {
+            runImpl(m_source->at(m_pos));
+            if (m_isError)
+                return;
+        }
+    }
+
+    void fixV8ErrorImpl()
+    {
+        for (size_t i = m_sentenceBegin; i < m_sentenceEnd; ++i) {
+            (*m_source)[i] = ' ';
+        }
+    }
+
+    void fixV8Error()
+    {
+        for (size_t i = m_sentenceBegin; i < m_sentenceEnd; ++i) {
+            if ('-' != m_source->at(i)) {
+                continue;
+            }
+            for (size_t j = i; j < m_sentenceEnd; ++j) {
+                char c = m_source->at(j);
+                if ('A'<= c && c <= 'Z' || 'a'<= c && c <= 'z' || ' ' == c || '\r' == c || '\n' == c)
+                    continue;
+                if (';' <= c)
+                    return;
+                if ('=' == c) {
+                    fixV8ErrorImpl();
+                    return;
+                }
+            }
+        }
+    }
+
+    void runImpl(char c)
+    {
+        switch (c) {
+        case '/': {
+            ++m_pos;
+            if ('/' == m_source->at(m_pos)) {
+                gotoSingleCommentsEnd();
+            } else if ('*' == m_source->at(m_pos)) {
+                gotoMutilCommentsEnd();
+            }
+            if (m_isError)
+                return;
+            m_sentenceBegin = m_pos;
+            m_sentenceEnd = m_pos;
+            break;
+        }
+        case '\'': {
+            gotoSingleQuotationEnd();
+            if (m_isError)
+                return;
+            break;
+        }
+        case '\"': {
+            gotoQuotationEnd();
+            if (m_isError)
+                return;
+            break;
+        }
+        case '\n': // no break;
+        case ';': {
+            fixV8Error();
+            m_sentenceBegin = m_sentenceEnd;
+            m_sentenceEnd++;
+            break;
+        }
+        default: {
+            m_sentenceEnd++;
+        }
+
+        }
+    }
+
+private:
+    void gotoQuotationEnd()
+    {
+        bool find = false;
+        for (; m_pos < m_source->size(); ++m_pos) {
+            if ('\\' == m_source->at(m_pos)) {
+                ++m_pos;
+                continue;
+            } else if ('\n' == m_source->at(m_pos)) {
+                m_isError = true;
+                return;
+            } else if ('"' == m_source->at(m_pos)) {
+                ++m_pos;
+                find = true;
+                break;
+            }
+        }
+        if (!find)
+            m_isError = true;
+    }
+
+    void gotoSingleQuotationEnd()
+    {
+        bool find = false;
+        for (; m_pos < m_source->size(); ++m_pos) {
+            if ('\\' == m_source->at(m_pos)) {
+                ++m_pos;
+                continue;
+            } else if ('\n' == m_source->at(m_pos)) {
+                m_isError = true;
+                return;
+            } else if ('\'' == m_source->at(m_pos)) {
+                ++m_pos;
+                find = true;
+                break;
+            }
+        }
+        if (!find)
+            m_isError = true;
+    }
+
+    void gotoSingleCommentsEnd()
+    {
+        for (; m_pos < m_source->size(); ++m_pos) {
+            if ('\n' == m_source->at(m_pos)) {
+                ++m_pos;
+                return;
+            }
+        }
+    }
+
+    void gotoMutilCommentsEnd()
+    {
+        for (; m_pos < m_source->size() - 1; ++m_pos) {
+            if ('*' == m_source->at(m_pos) && '//' == m_source->at(m_pos + 1)) {
+                ++m_pos;
+                return;
+            }
+        }
+        m_isError = true;
+    }
+
+    size_t m_pos;
+    size_t m_sentenceBegin;
+    size_t m_sentenceEnd;
+    bool m_isError;
+    bool m_isInSingleComments; // //
+    bool m_isInMutilComments; // /**/
+    std::string* m_source;
+};
+
+int testQuickjs()
+{
+    std::vector<char> buffer;
+    readFile(L"G:\\test\\web_test\\xmlifa\\test_v8.js", &buffer);
+
+    const char* filename = "<input>";
+
+    JSRuntime* rt;
+    JSContext* ctx;
+    rt = JS_NewRuntime();
+    ctx = JS_NewContextRaw(rt);
+    JS_AddIntrinsicBaseObjects(ctx);
+    //js_std_add_helpers(ctx, argc, argv);
+    //js_std_eval_binary(ctx, (const uint8_t *)buffer.data(), buffer.size(), 0);
+    JSValue v = JS_Eval(ctx, buffer.data(), buffer.size(), "<input>", JS_EVAL_TYPE_GLOBAL);
+    //js_std_loop(ctx);
+
+    JSValue res_val, exception_val;
+    exception_val = JS_GetException(ctx);
+
+    JSValue name, stack;
+    const char* stack_str;
+    const char *error_name;
+    int ret, error_line, pos, pos_line;
+    BOOL is_error, has_error_line;
+    
+    name = JS_GetPropertyStr(ctx, exception_val, "name");
+    error_name = JS_ToCString(ctx, name);
+    stack = JS_GetPropertyStr(ctx, exception_val, "stack");
+    if (!JS_IsUndefined(stack)) {
+        stack_str = JS_ToCString(ctx, stack);
+        if (stack_str) {
+            const char* p;
+            int len;
+
+//             if (outfile)
+//                 fprintf(outfile, "%s", stack_str);
+
+            len = strlen(filename);
+            p = strstr(stack_str, filename);
+            if (p != NULL && p[len] == ':') {
+                error_line = atoi(p + len + 1);
+                has_error_line = TRUE;
+            }
+            JS_FreeCString(ctx, stack_str);
+        }
+    }
+    JS_FreeValue(ctx, stack);
+    JS_FreeValue(ctx, name);
+
+    JS_FreeContext(ctx);
+    JS_FreeRuntime(rt);
+    return 0;
+}
+
+size_t gotoPosImpl(std::string* source, size_t index, bool* find, char ch, bool ignoreSpacing)
+{
+    size_t i = index;
+    for (; i < source->size() && i < index + 10; ++i) {
+        char c = source->at(i);
+        if (ch == c) {
+            *find = true;
+            return i;
+        }
+
+        if (!('A' <= c && c <= 'Z' || 'a' <= c && c <= 'z' || '0' <= c && c <= '9') 
+            && !(ignoreSpacing && ' ' == c)) {
+            *find = false;
+            return i;
+        }
+    }
+
+    if (i == source->size() - 1)
+        return -1;
+
+    *find = false;
+    return i;
+}
+
+size_t gotoMinuPos(std::string* source, size_t index, bool* find)
+{
+    return gotoPosImpl(source, index, find, '-', false);
+}
+
+size_t gotoEqPos(std::string* source, size_t index, bool* find)
+{
+    return gotoPosImpl(source, index, find, '=', true);
+}
+
+void nopScript(std::string* source, size_t index, size_t len)
+{
+    for (size_t i = index; i < index + len &&  i < source->size(); ++i) {
+        (*source)[i] = ';';
+    }
+}
+
+// document.getElementById("content").new2-data = "aaa"; 	// Uncaught
+bool fixV8ErrorImpl(std::string* source)
+{
+    bool find = false;
+    bool findMinus = false;
+    bool findEq = false;
+    for (size_t i = 0; i < source->size() - 1; ++i) {
+        char c = source->at(i);
+        if ('.' != c)
+            continue;
+
+        size_t pos1 = gotoMinuPos(source, i + 1, &findMinus);
+        if (-1 == pos1)
+            return false;
+        if (!findMinus) {
+            i = pos1 - 1;
+            continue;
+        }
+
+        size_t pos2 = gotoEqPos(source, pos1 + 1, &findEq);
+        if (-1 == pos2)
+            return false;
+        if (!findEq) {
+            i = pos2 - 1;
+            continue;
+        }
+
+        char c1 = source->at(pos2);
+        nopScript(source, i, pos2 - i + 1);
+        i = pos2;
+        find = true;
+    }
+    return find;
+}
+
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+    OutputDebugStringA("");
+
+    //testQuickjs();
+//     std::vector<char> buffer;
+//     readFile(L"G:\\test\\web_test\\xmlifa\\test_v8.js", &buffer);
+//     std::string str(buffer.data(), buffer.size());
+// //     FixV8Error fix(&str);
+// //     fix.run();
+// 
+//     //std::string str("xxx.asdasdasd.new-ab = \'123\'\n");
+//     //std::string str("xxx.asdasdasd.new-ab =");
+//     //std::string str("xxx.asdasdasd.new-ab");
+//     //std::string str(".asdasdasd.new-ab=");
+//     fixV8ErrorImpl(&str);
+//     buffer.resize(str.size());
+//     memcpy(buffer.data(), str.c_str(), str.size());
+//     writeFile(L"G:\\test\\web_test\\xmlifa\\test_v8_2.js", buffer);
+
 //     HookByHotpatch(L"ucrtbase.DLL", (LPCSTR)"malloc", ((void*)(MyMalloc)), (void**)&origMalloc);
 //     HookByHotpatch(L"ucrtbase.DLL", (LPCSTR)"free", ((void*)(MyFree)), (void**)&origFree);
 //     HookByHotpatch(L"ucrtbase.DLL", (LPCSTR)"realloc", ((void*)(MyRealloc)), (void**)&origRealloc);
 //     HookByHotpatch(L"ucrtbase.DLL", (LPCSTR)"calloc", ((void*)(MyCalloc)), (void**)&origCalloc);
     
-  const char* timeZoneOffset = getenv("fp_timeZoneOffset");
-  OutputDebugStringA("");
+
 //     crxEncryptMain();
 //     return 0;
 
@@ -676,7 +923,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
     RegWndClass(CLS_WINDOW, CS_HREDRAW | CS_VREDRAW);
     
     mbSettings* settings = new mbSettings();
-    memset(settings, 0, sizeof(settings));
+    memset(settings, 0, sizeof(mbSettings));
 
     //settings->mask |= MB_SETTING_PROXY;
     //settings->proxy.type = MB_PROXY_HTTP;
@@ -693,8 +940,13 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
     settings->version = kMbVersion;
     //settings->mainDllPath = L"E:\\mycode\\mtmb\\Debug\\node.dll";
 
-    mbSetMbDllPath(L"G:\\mycode\\miniblink57\\Debug\\node.dll");
+    //settings->config = "{\"enableSkipJs\":true}";
+    settings->config = "{}";
+
+    //mbSetMbDllPath(L"G:\\mycode\\miniblink57\\Debug\\node.dll");
     //mbSetMbMainDllPath(L"G:\\mycode\\mb\\out\\Debug\\node.dll");
+    mbSetMbMainDllPath(L"miniblink_5775_x32.dll");
+    //mbSetMbMainDllPath(L"node.dll");
 
     //settings->mainDllPath = L"node_v8_7_5.dll";
     //mbSetMbMainDllPath(L"node_v8_7_5.dll");
@@ -703,7 +955,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 //     mbSettings* settings = mbCreateInitSettings();
 //     mbSetInitSettings(settings, "DisableCC", nullptr);
     mbInit(settings);
-    
+
+    mbSetUserAgent(NULL_WEBVIEW, "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like XSD) Chrome/79.0.3945.130 Safari/537.36");
+
     //mbEnableHighDPISupport();
     //mbSetNpapiPluginsEnabled(NULL_WEBVIEW, false);
 
@@ -715,7 +969,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 //         if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 //             if (g_quitCount > 0) {
 //                 ++g_quitCount;
-//                 
 //             }
 //             if (g_quitCount > 100) {
 //                 ::PostThreadMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);

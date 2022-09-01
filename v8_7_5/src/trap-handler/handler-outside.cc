@@ -30,6 +30,7 @@
 
 #include "src/trap-handler/trap-handler-internal.h"
 #include "src/trap-handler/trap-handler.h"
+#include "src/base/thread-local.h"
 
 namespace {
 size_t gNextCodeObject = 0;
@@ -44,6 +45,8 @@ constexpr bool kEnableSlowChecks = false;
 namespace v8 {
 namespace internal {
     namespace trap_handler {
+
+        base::ThreadLocalPointer<int>* g_thread_in_wasm_code_tls = NULL;
 
         constexpr size_t kInitialCodeObjectSize = 1024;
         constexpr size_t kCodeObjectGrowthFactor = 2;
@@ -245,7 +248,8 @@ namespace internal {
 
         DISABLE_ASAN bool IsThreadInWasm()
         {
-            int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+//             int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+            int* thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
             return *thread_in_wasm_code_ptr != 0;
         }
 
@@ -254,7 +258,8 @@ namespace internal {
             if (IsTrapHandlerEnabled()) {
                 DCHECK(!IsThreadInWasm());
 
-                int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                //int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                int* thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
                 *thread_in_wasm_code_ptr = 1;
             }
         }
@@ -264,7 +269,8 @@ namespace internal {
             if (IsTrapHandlerEnabled()) {
                 DCHECK(IsThreadInWasm());
 
-                int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                //int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                int* thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
                 *thread_in_wasm_code_ptr = 0;
             }
         }
@@ -273,13 +279,17 @@ namespace internal {
         {
             int* thread_in_wasm_code_ptr = nullptr;
             if (0 == g_thread_in_wasm_code_tls) {
-                g_thread_in_wasm_code_tls = ::TlsAlloc();
+                //g_thread_in_wasm_code_tls = ::TlsAlloc();
+                g_thread_in_wasm_code_tls = new base::ThreadLocalPointer<int>();
 
                 thread_in_wasm_code_ptr = (int*)malloc(sizeof(int));
                 *thread_in_wasm_code_ptr = 0;
-                ::TlsSetValue(g_thread_in_wasm_code_tls, thread_in_wasm_code_ptr);
-            } else
-                thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                //::TlsSetValue(g_thread_in_wasm_code_tls, thread_in_wasm_code_ptr);
+                g_thread_in_wasm_code_tls->Set(thread_in_wasm_code_ptr);
+            } else {
+                //thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
+            }
 
             return thread_in_wasm_code_ptr;
         }

@@ -23,21 +23,21 @@ TEST(HTTPParsersTest, ParseCacheControl)
     EXPECT_TRUE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives("no-cache no-store", AtomicString());
     EXPECT_TRUE(header.parsed);
     EXPECT_TRUE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives("no-store must-revalidate", AtomicString());
     EXPECT_TRUE(header.parsed);
     EXPECT_FALSE(header.containsNoCache);
     EXPECT_TRUE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives("max-age=0", AtomicString());
     EXPECT_TRUE(header.parsed);
@@ -51,7 +51,7 @@ TEST(HTTPParsersTest, ParseCacheControl)
     EXPECT_FALSE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives("max-age=0 no-cache", AtomicString());
     EXPECT_TRUE(header.parsed);
@@ -65,35 +65,35 @@ TEST(HTTPParsersTest, ParseCacheControl)
     EXPECT_FALSE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives("nonsense", AtomicString());
     EXPECT_TRUE(header.parsed);
     EXPECT_FALSE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives("\rno-cache\n\t\v\0\b", AtomicString());
     EXPECT_TRUE(header.parsed);
     EXPECT_TRUE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives("      no-cache       ", AtomicString());
     EXPECT_TRUE(header.parsed);
     EXPECT_TRUE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 
     header = parseCacheControlDirectives(AtomicString(), "no-cache");
     EXPECT_TRUE(header.parsed);
     EXPECT_TRUE(header.containsNoCache);
     EXPECT_FALSE(header.containsNoStore);
     EXPECT_FALSE(header.containsMustRevalidate);
-    EXPECT_TRUE(std::isnan(header.maxAge));
+    EXPECT_TRUE(std_isnan(header.maxAge));
 }
 
 TEST(HTTPParsersTest, CommaDelimitedHeaderSet)

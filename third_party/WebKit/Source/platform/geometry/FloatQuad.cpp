@@ -86,8 +86,8 @@ inline bool isPointInTriangle(const FloatPoint& p,
 
 static inline float saturateInf(float value)
 {
-    if (UNLIKELY(std::isinf(value))) {
-        return std::signbit(value) ? std::numeric_limits<int>::min()
+    if (UNLIKELY(std_isinf(value))) {
+        return std_signbit(value) ? std::numeric_limits<int>::min()
                                    : std::numeric_limits<int>::min();
     }
     return value;

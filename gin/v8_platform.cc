@@ -139,7 +139,7 @@ struct WorkThreadInfo {
 };
 WorkThreadInfo* g_workThreadInfo = nullptr;
 
-static DWORD NTAPI v8WorkThreadProc(void* param)
+static DWORD CALLBACK v8WorkThreadProc(void* param)
 {
     WorkThreadInfo* info = (WorkThreadInfo*)param;
     g_workThreadInfo = info;
@@ -231,16 +231,25 @@ void V8Platform::CallOnForegroundThread(v8::Isolate* isolate, v8::Task* task)
 //         return;
 //     blink::Platform::current()->currentThread()->getWebTaskRunner()->postTask(BLINK_FROM_HERE, WTF::bind(&v8::Task::Run, WTF::unretained(task)));
 
+#if 0 // V8_MAJOR_VERSION >= 7
     std::shared_ptr<v8::TaskRunner> runner = GetForegroundTaskRunner(isolate);
     return runner->PostTask(WTF::wrapUnique(task));
+#else
+    blink::V8PerIsolateData* data = blink::V8PerIsolateData::from(isolate);
+    data->getThread()->postTask(FROM_HERE, new V8TaskToWebThreadTask(task));
+#endif
 }
 
-void V8Platform::CallDelayedOnForegroundThread(v8::Isolate* isolate, v8::Task* task, double delay_in_seconds)
+void V8Platform::CallDelayedOnForegroundThread(v8::Isolate* isolate, v8::Task* task, double delayInSeconds)
 {
-    //return s_mainThread->postDelayedTask(FROM_HERE, new V8TaskToWebThreadTask(task), (long long)(delay_in_seconds * 1000));
-
+    //return s_mainThread->postDelayedTask(FROM_HERE, new V8TaskToWebThreadTask(task), (long long)(delayInSeconds * 1000));
+#if 0 // V8_MAJOR_VERSION >= 7
     std::shared_ptr<v8::TaskRunner> runner = GetForegroundTaskRunner(isolate);
     return runner->PostDelayedTask(WTF::wrapUnique(task), delay_in_seconds);
+#else
+    blink::V8PerIsolateData* data = blink::V8PerIsolateData::from(isolate);
+    data->getThread()->postDelayedTask(FROM_HERE, new V8TaskToWebThreadTask(task), (long long)(delayInSeconds * 1000));
+#endif
 }
 
 double V8Platform::MonotonicallyIncreasingTime()

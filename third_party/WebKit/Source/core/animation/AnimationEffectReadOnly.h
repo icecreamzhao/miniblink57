@@ -48,7 +48,7 @@ enum TimingUpdateReason { TimingUpdateOnDemand,
 
 static inline bool isNull(double value)
 {
-    return std::isnan(value);
+    return std_isnan(value);
 }
 
 static inline double nullValue()

@@ -493,8 +493,9 @@ BOOL WKE_CALL_TYPE jsToBoolean(jsExecState es, jsValue v)
     return false;
 }
 
-const wchar_t* WKE_CALL_TYPE jsToTempStringW(jsExecState es, jsValue v)
+const WCHAR* WKE_CALL_TYPE jsToTempStringW(jsExecState es, jsValue v)
 {
+#if defined(OS_WIN)
     wke::checkThreadCallIsValid(__FUNCTION__);
     const utf8* utf8String = jsToTempString(es, v);
     Vector<UChar> utf16 = WTF::ensureUTF16UChar(String(utf8String), false);
@@ -502,6 +503,10 @@ const wchar_t* WKE_CALL_TYPE jsToTempStringW(jsExecState es, jsValue v)
         return L"";
 
     return wke::createTempWCharString(utf16.data(), utf16.size());
+#else
+    DebugBreak();
+    return nullptr;
+#endif
 }
 
 const utf8* WKE_CALL_TYPE jsToTempString(jsExecState es, jsValue v)
@@ -567,7 +572,7 @@ const utf8* WKE_CALL_TYPE jsToString(jsExecState es, jsValue v)
     return jsToTempString(es, v);
 }
 
-const wchar_t* WKE_CALL_TYPE jsToStringW(jsExecState es, jsValue v)
+const WCHAR* WKE_CALL_TYPE jsToStringW(jsExecState es, jsValue v)
 {
     return jsToTempStringW(es, v);
 }
@@ -676,8 +681,9 @@ jsValue WKE_CALL_TYPE jsString(jsExecState es, const utf8* str)
     return createJsValueByLocalValue(es->isolate, context, value.ToLocalChecked());
 }
 
-jsValue WKE_CALL_TYPE jsStringW(jsExecState es, const wchar_t* str)
+jsValue WKE_CALL_TYPE jsStringW(jsExecState es, const WCHAR* str)
 {
+#if defined(OS_WIN)
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !s_execStates->contains(es) || !es || !es->isolate)
         return jsUndefined();
@@ -693,6 +699,10 @@ jsValue WKE_CALL_TYPE jsStringW(jsExecState es, const wchar_t* str)
     if (value.IsEmpty())
         return jsUndefined();
     return createJsValueByLocalValue(es->isolate, context, value.ToLocalChecked());
+#else
+    DebugBreak();
+    return 0;
+#endif
 }
 
 jsValue WKE_CALL_TYPE jsArrayBuffer(jsExecState es, const char* buffer, size_t size)
@@ -801,18 +811,24 @@ jsValue WKE_CALL_TYPE jsGlobalObject(jsExecState es)
 
 jsValue WKE_CALL_TYPE jsEval(jsExecState es, const utf8* str)
 {
+#if defined(OS_WIN)
     String s = String::fromUTF8(str);
     Vector<UChar> buf = WTF::ensureUTF16UChar(s, true);
     return jsEvalW(es, buf.data());
+#else
+    DebugBreak();
+    return 0;
+#endif
 }
 
-jsValue WKE_CALL_TYPE jsEvalW(jsExecState es, const wchar_t* str)
+jsValue WKE_CALL_TYPE jsEvalW(jsExecState es, const WCHAR* str)
 {
     return jsEvalExW(es, str, true);
 }
 
-jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const wchar_t* str, bool isInClosure)
+jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const WCHAR* str, bool isInClosure)
 {
+#if defined(OS_WIN)
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !es || !s_execStates->contains(es) || !es->isolate || es->context.IsEmpty() || !str)
         return jsUndefined();
@@ -848,6 +864,10 @@ jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const wchar_t* str, bool isInClo
     v8::Local<v8::Value> result = script->Run(context).FromMaybe(v8::Local<v8::Value>());
 
     return createJsValueByLocalValue(isolate, context, result);
+#else
+    DebugBreak();
+    return 0;
+#endif
 }
 
 jsExceptionInfo* g_jsExceptionInfo = nullptr;
@@ -1662,7 +1682,7 @@ static jsValue WKE_CALL_TYPE wkeJsBindFunctionWrap(jsExecState es, void* param)
 
 void WKE_CALL_TYPE jsBindFunction(const char* name, jsNativeFunction fn, unsigned int argCount)
 {
-    wkeJsBindFunction(name, wkeJsBindFunctionWrap, fn, argCount);
+    wkeJsBindFunction(name, wkeJsBindFunctionWrap, (void *)fn, argCount);
 }
 
 static void wkeJsBindSetterGetter(const char* name, wkeJsNativeFunction fn, void* param, unsigned int funcType)
@@ -1696,13 +1716,13 @@ static void wkeJsBindSetterGetter(const char* name, wkeJsNativeFunction fn, void
 void WKE_CALL_TYPE jsBindGetter(const char* name, jsNativeFunction fn)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
-    wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, fn, JS_GETTER);
+    wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, (void *)fn, JS_GETTER);
 }
 
 void WKE_CALL_TYPE jsBindSetter(const char* name, jsNativeFunction fn)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
-    wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, fn, JS_SETTER);
+    wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, (void *)fn, JS_SETTER);
 }
 
 void WKE_CALL_TYPE wkeJsBindFunction(const char* name, wkeJsNativeFunction fn, void* param, unsigned int argCount)

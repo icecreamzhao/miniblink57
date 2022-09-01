@@ -55,7 +55,7 @@ void CanvasPathMethods::closePath()
 
 void CanvasPathMethods::moveTo(float x, float y)
 {
-    if (!std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -64,7 +64,7 @@ void CanvasPathMethods::moveTo(float x, float y)
 
 void CanvasPathMethods::lineTo(float x, float y)
 {
-    if (!std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -81,7 +81,7 @@ void CanvasPathMethods::quadraticCurveTo(float cpx,
     float x,
     float y)
 {
-    if (!std::isfinite(cpx) || !std::isfinite(cpy) || !std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(cpx) || !std_isfinite(cpy) || !std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -101,7 +101,7 @@ void CanvasPathMethods::bezierCurveTo(float cp1x,
     float x,
     float y)
 {
-    if (!std::isfinite(cp1x) || !std::isfinite(cp1y) || !std::isfinite(cp2x) || !std::isfinite(cp2y) || !std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(cp1x) || !std_isfinite(cp1y) || !std_isfinite(cp2x) || !std_isfinite(cp2y) || !std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -122,7 +122,7 @@ void CanvasPathMethods::arcTo(float x1,
     float r,
     ExceptionState& exceptionState)
 {
-    if (!std::isfinite(x1) || !std::isfinite(y1) || !std::isfinite(x2) || !std::isfinite(y2) || !std::isfinite(r))
+    if (!std_isfinite(x1) || !std_isfinite(y1) || !std_isfinite(x2) || !std_isfinite(y2) || !std_isfinite(r))
         return;
 
     if (r < 0) {
@@ -301,7 +301,7 @@ void CanvasPathMethods::arc(float x,
     bool anticlockwise,
     ExceptionState& exceptionState)
 {
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(radius) || !std::isfinite(startAngle) || !std::isfinite(endAngle))
+    if (!std_isfinite(x) || !std_isfinite(y) || !std_isfinite(radius) || !std_isfinite(startAngle) || !std_isfinite(endAngle))
         return;
 
     if (radius < 0) {
@@ -336,7 +336,7 @@ void CanvasPathMethods::ellipse(float x,
     bool anticlockwise,
     ExceptionState& exceptionState)
 {
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(radiusX) || !std::isfinite(radiusY) || !std::isfinite(rotation) || !std::isfinite(startAngle) || !std::isfinite(endAngle))
+    if (!std_isfinite(x) || !std_isfinite(y) || !std_isfinite(radiusX) || !std_isfinite(radiusY) || !std_isfinite(rotation) || !std_isfinite(startAngle) || !std_isfinite(endAngle))
         return;
 
     if (radiusX < 0) {
@@ -372,7 +372,7 @@ void CanvasPathMethods::rect(float x, float y, float width, float height)
     if (!isTransformInvertible())
         return;
 
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(width) || !std::isfinite(height))
+    if (!std_isfinite(x) || !std_isfinite(y) || !std_isfinite(width) || !std_isfinite(height))
         return;
 
     m_path.addRect(FloatRect(x, y, width, height));

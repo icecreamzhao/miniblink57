@@ -119,12 +119,12 @@ namespace internal {
             LintErrorStatus::Scope lint_error_status_scope;
             LanguageServerData::Scope server_data_scope;
 
-            try {
+            //try {
                 ParseTorque(source);
                 CompileCurrentAst(options);
-            } catch (TorqueError& error) {
-                return ResultFromError(error);
-            }
+//             } catch (TorqueError& error) {
+//                 return ResultFromError(error);
+//             }
 
             return CollectResultFromContextuals();
         }
@@ -138,13 +138,13 @@ namespace internal {
             LintErrorStatus::Scope lint_error_status_scope;
             LanguageServerData::Scope server_data_scope;
 
-            try {
+            //try {
                 for (const auto& path : files)
                     ReadAndParseTorqueFile(path);
                 CompileCurrentAst(options);
-            } catch (TorqueError& error) {
-                return ResultFromError(error);
-            }
+//             } catch (TorqueError& error) {
+//                 return ResultFromError(error);
+//             }
             return CollectResultFromContextuals();
         }
 

@@ -230,7 +230,7 @@ namespace internal {
 
         size_t ConstantArrayBuilder::Insert(double number)
         {
-            if (std::isnan(number))
+            if (/*std::*/isnan(number))
                 return InsertNaN();
             auto entry = heap_number_map_.find(number);
             if (entry == heap_number_map_.end()) {

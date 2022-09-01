@@ -185,7 +185,7 @@ public:
     WebURLLoaderImplCurl* m_loader;
     WebURLLoaderManager* m_manager;
 
-    WTF::Mutex m_destroingMutex;
+    WTF::RecursiveMutex* m_destroingMutex;
     enum State {
         kNormal,
         kDestroying,

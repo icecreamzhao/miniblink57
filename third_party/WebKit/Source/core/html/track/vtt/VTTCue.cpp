@@ -124,7 +124,7 @@ static const String& verticalGrowingRightKeyword()
 
 static bool isInvalidPercentage(double value)
 {
-    DCHECK(std::isfinite(value));
+    DCHECK(std_isfinite(value));
     return value < 0 || value > 100;
 }
 
@@ -210,7 +210,7 @@ void VTTCueBox::applyCSSProperties(
     // TODO(foolip): The position adjustment for non-snap-to-lines cues has
     // been removed from the spec:
     // https://www.w3.org/Bugs/Public/show_bug.cgi?id=19178
-    if (std::isnan(displayParameters.snapToLinesPosition)) {
+    if (std_isnan(displayParameters.snapToLinesPosition)) {
         // 10.13.1 Set up x and y:
         // Note: x and y are set through the CSS left and top above.
 
@@ -328,7 +328,7 @@ void VTTCue::setSnapToLines(bool value)
 
 bool VTTCue::lineIsAuto() const
 {
-    return std::isnan(m_linePosition);
+    return std_isnan(m_linePosition);
 }
 
 void VTTCue::line(DoubleOrAutoKeyword& result) const
@@ -364,7 +364,7 @@ void VTTCue::setLine(const DoubleOrAutoKeyword& position)
 
 bool VTTCue::textPositionIsAuto() const
 {
-    return std::isnan(m_textPosition);
+    return std_isnan(m_textPosition);
 }
 
 void VTTCue::position(DoubleOrAutoKeyword& result) const
@@ -778,7 +778,7 @@ VTTDisplayParameters VTTCue::calculateDisplayParameters() const
     displayParameters.snapToLinesPosition = m_snapToLines ? computedLinePosition
                                                           : std::numeric_limits<float>::quiet_NaN();
 
-    DCHECK(std::isfinite(displayParameters.size));
+    DCHECK(std_isfinite(displayParameters.size));
     DCHECK_NE(displayParameters.direction, CSSValueNone);
     DCHECK_NE(displayParameters.writingMode, CSSValueNone);
     return displayParameters;

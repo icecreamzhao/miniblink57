@@ -19,10 +19,6 @@ StorageNamespaceController::StorageNamespaceController(StorageClient* client)
     : m_client(client)
     , m_inspectorAgent(nullptr)
 {
-    char* output = (char*)malloc(0x100);
-    sprintf_s(output, 0x99, "StorageNamespaceController: %p %p\n", this, m_client);
-    OutputDebugStringA(output);
-    free(output);
 }
 
 StorageNamespaceController::~StorageNamespaceController() { }
@@ -46,11 +42,6 @@ StorageNamespace* StorageNamespaceController::localStorage()
 
 StorageClient* StorageNamespaceController::getStorageClient()
 {
-    char* output = (char*)malloc(0x100);
-    sprintf_s(output, 0x99, "StorageNamespaceController::getStorageClient: %p %p\n", this, m_client);
-    OutputDebugStringA(output);
-    free(output);
-
     return m_client;
 }
 

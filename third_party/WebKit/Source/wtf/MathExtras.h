@@ -92,7 +92,7 @@ inline double wtf_atan2(double x, double y)
 // instead of x.
 inline double wtf_fmod(double x, double y)
 {
-    return (!std::isinf(x) && std::isinf(y)) ? x : fmod(x, y);
+    return (!std_isinf(x) && std_isinf(y)) ? x : fmod(x, y);
 }
 
 // Work around a bug in the Microsoft CRT, where pow(NaN, 0) yields NaN instead

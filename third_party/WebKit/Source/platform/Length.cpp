@@ -182,7 +182,7 @@ float Length::nonNanCalculatedValue(LayoutUnit maxValue) const
 {
     ASSERT(isCalculated());
     float result = getCalculationValue().evaluate(maxValue.toFloat());
-    if (std::isnan(result))
+    if (std_isnan(result))
         return 0;
     return result;
 }

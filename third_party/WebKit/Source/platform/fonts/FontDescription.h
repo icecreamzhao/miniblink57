@@ -201,11 +201,8 @@ public:
     TextRenderingMode textRendering() const { return static_cast<TextRenderingMode>(m_fields.m_textRendering); }
     //UScriptCode script() const { return static_cast<UScriptCode>(m_fields.m_script); }
     const AtomicString& getLocale(bool includeDefault = true) const;
-    const LayoutLocale* locale(bool includeDefault = true) const { return m_locale.get(); }
-    const LayoutLocale& localeOrDefault() const
-    {
-        return LayoutLocale::valueOrDefault(m_locale.get());
-    }
+    const LayoutLocale* locale(bool includeDefault = true) const;
+    const LayoutLocale& localeOrDefault() const;
     UScriptCode script() const { return localeOrDefault().script(); }
 
     bool isSyntheticBold() const { return m_fields.m_syntheticBold; }

@@ -42,8 +42,8 @@ DelayDSPKernel::DelayDSPKernel(DelayProcessor* processor)
 
     m_maxDelayTime = processor->maxDelayTime();
     DCHECK_GE(m_maxDelayTime, 0);
-    DCHECK(!std::isnan(m_maxDelayTime));
-    if (m_maxDelayTime < 0 || std::isnan(m_maxDelayTime))
+    DCHECK(!std_isnan(m_maxDelayTime));
+    if (m_maxDelayTime < 0 || std_isnan(m_maxDelayTime))
         return;
 
     m_buffer.allocate(

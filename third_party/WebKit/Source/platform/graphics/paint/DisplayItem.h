@@ -242,10 +242,13 @@ public:
             , type(other.type)
         {
         }
-        Id& Id::operator=(const Id& other)
+        Id& operator=(const Id& other)
         {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-stack-address"
             Id id(other);
             return id;
+#pragma GCC diagnostic pop
         }
 
         const DisplayItemClient& client;

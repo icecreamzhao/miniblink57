@@ -123,7 +123,7 @@ namespace {
         }
 
         for (auto thresholdValue : thresholds) {
-            if (std::isnan(thresholdValue) || thresholdValue < 0.0 || thresholdValue > 1.0) {
+            if (std_isnan(thresholdValue) || thresholdValue < 0.0 || thresholdValue > 1.0) {
                 exceptionState.throwRangeError(
                     "Threshold values must be numbers between 0 and 1");
                 break;

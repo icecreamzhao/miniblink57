@@ -507,7 +507,7 @@ AudioParam* AudioParam::setValueCurveAtTime(DOMFloat32Array* curve,
     for (unsigned k = 0; k < curve->length(); ++k) {
         float value = curveData[k];
 
-        if (!std::isfinite(value)) {
+        if (!std_isfinite(value)) {
             exceptionState.throwDOMException(
                 V8TypeError, "The provided float value for the curve at element " + String::number(k) + " is non-finite: " + String::number(value));
             return nullptr;

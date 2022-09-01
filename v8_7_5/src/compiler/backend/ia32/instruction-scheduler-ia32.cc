@@ -6,6 +6,8 @@
 
 #include "src/objects-inl.h" // weolar
 
+#if V8_TARGET_ARCH_IA32
+
 namespace v8 {
 namespace internal {
     namespace compiler {
@@ -455,3 +457,5 @@ namespace internal {
     } // namespace compiler
 } // namespace internal
 } // namespace v8
+
+#endif

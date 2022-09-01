@@ -175,7 +175,7 @@ namespace internal {
             ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, timeout,
                 Object::ToNumber(isolate, timeout));
             timeout_number = timeout->Number();
-            if (std::isnan(timeout_number))
+            if (/*std::*/isnan(timeout_number))
                 timeout_number = ReadOnlyRoots(isolate).infinity_value()->Number();
             else if (timeout_number < 0)
                 timeout_number = 0;

@@ -40,7 +40,7 @@ namespace blink {
 // Skia has problems when passed infinite, etc floats, filter them to 0.
 static inline SkScalar WebCoreFloatToSkScalar(float f)
 {
-    return SkFloatToScalar(std::isfinite(f) ? f : 0);
+    return SkFloatToScalar(std_isfinite(f) ? f : 0);
 }
 
 FloatPoint::FloatPoint(const IntPoint& p)

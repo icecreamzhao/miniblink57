@@ -147,7 +147,7 @@ namespace internal {
         }
 
         double date_value = DateCache::TimeClip(x->Number());
-        if (std::isnan(date_value)) {
+        if (/*std::*/isnan(date_value)) {
             THROW_NEW_ERROR_RETURN_FAILURE(
                 isolate, NewRangeError(MessageTemplate::kInvalidTimeValue));
         }

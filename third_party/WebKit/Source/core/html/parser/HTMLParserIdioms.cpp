@@ -131,7 +131,7 @@ static double checkDoubleValue(double value, bool valid, double fallbackValue)
 
     // NaN and infinity are considered valid by String::toDouble, but not valid
     // here.
-    if (!std::isfinite(value))
+    if (!std_isfinite(value))
         return fallbackValue;
 
     // Numbers are considered finite IEEE 754 Double-precision floating point

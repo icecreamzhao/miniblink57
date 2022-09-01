@@ -10,7 +10,7 @@ public:
 
     void shutdown();
 
-    void DownloadFileBlobCache::appendDataToBlobCache(
+    void appendDataToBlobCache(
         blink::WebURLLoaderClient* client,
         blink::WebURLLoader* loader,
         const String& url,

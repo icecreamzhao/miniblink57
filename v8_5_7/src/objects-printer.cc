@@ -396,7 +396,7 @@ static void DoPrintElements(std::ostream& os, Object* object) {  // NOLINT
   int i;
   for (i = 1; i <= array->length(); i++) {
     if (i < array->length()) value = GetScalarElement(array, i);
-    bool values_are_nan = std::isnan(previous_value) && std::isnan(value);
+    bool values_are_nan = std_isnan(previous_value) && std_isnan(value);
     if (i != array->length() && (previous_value == value || values_are_nan) &&
         is_the_hole(previous_value) == is_the_hole(value)) {
       continue;

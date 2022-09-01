@@ -1735,7 +1735,7 @@ void HTMLMediaElement::setReadyState(ReadyState state)
         m_defaultPlaybackStartPosition = 0;
 
         double initialPlaybackPosition = fragmentParser.startTime();
-        if (std::isnan(initialPlaybackPosition))
+        if (std_isnan(initialPlaybackPosition))
             initialPlaybackPosition = 0;
 
         if (!jumped && initialPlaybackPosition > 0) {
@@ -2058,7 +2058,7 @@ void HTMLMediaElement::setOfficialPlaybackPosition(double position) const
     // Internal player position may advance slightly beyond duration because
     // many files use imprecise duration. Clamp official position to duration when
     // known. Duration may be unknown when readyState < HAVE_METADATA.
-    m_officialPlaybackPosition = std::isnan(duration()) ? position : std::min(duration(), position);
+    m_officialPlaybackPosition = std_isnan(duration()) ? position : std::min(duration(), position);
 
     if (m_officialPlaybackPosition != position) {
         BLINK_MEDIA_LOG << "setOfficialPlaybackPosition(" << (void*)this
@@ -2582,7 +2582,7 @@ void HTMLMediaElement::startPlaybackProgressTimer()
 
 void HTMLMediaElement::playbackProgressTimerFired(TimerBase*)
 {
-    if (!std::isnan(m_fragmentEndTime) && currentTime() >= m_fragmentEndTime && getDirectionOfPlayback() == Forward) {
+    if (!std_isnan(m_fragmentEndTime) && currentTime() >= m_fragmentEndTime && getDirectionOfPlayback() == Forward) {
         m_fragmentEndTime = std::numeric_limits<double>::quiet_NaN();
         if (!m_paused) {
             UseCounter::count(document(),
@@ -3151,7 +3151,7 @@ void HTMLMediaElement::timeChanged()
     // When the current playback position reaches the end of the media resource
     // when the direction of playback is forwards, then the user agent must follow
     // these steps:
-    if (!std::isnan(dur) && dur && now >= dur && getDirectionOfPlayback() == Forward) {
+    if (!std_isnan(dur) && dur && now >= dur && getDirectionOfPlayback() == Forward) {
         // If the media element has a loop attribute specified
         if (loop()) {
             //  then seek to the earliest possible position of the media resource and
@@ -3399,7 +3399,7 @@ bool HTMLMediaElement::couldPlayIfEnoughData() const
 bool HTMLMediaElement::endedPlayback(LoopCondition loopCondition) const
 {
     double dur = duration();
-    if (std::isnan(dur))
+    if (std_isnan(dur))
         return false;
 
     // 4.8.10.8 Playing the media resource

@@ -50,16 +50,25 @@
 
 #ifndef BASE_THREAD_LOCAL_H_
 #define BASE_THREAD_LOCAL_H_
-
+#if defined(WIN32) || defined(_WIN32) || defined(_WIN64) || defined(WIN64)
 #include <windows.h>
+#else
+#include <pthread.h>
+#endif
 
 namespace v8 {
 namespace base {
 
     // Helper functions that abstract the cross-platform APIs.  Do not use directly.
-    struct ThreadLocalPlatform {
-        typedef unsigned long SlotType;
-
+struct ThreadLocalPlatform {
+#if defined(WIN32) || defined(_WIN32) || defined(_WIN64) || defined(WIN64)
+    typedef unsigned long SlotType;
+// #elif defined(OS_ANDROID)
+//     typedef ThreadLocalStorage::StaticSlot SlotType;
+// #elif defined(OS_POSIX)
+#else
+    typedef pthread_key_t SlotType;
+#endif
         static void AllocateSlot(SlotType* slot);
         static void FreeSlot(SlotType slot);
         static void* GetValueFromSlot(SlotType slot);
@@ -119,32 +128,51 @@ namespace base {
     // static
     inline void ThreadLocalPlatform::AllocateSlot(SlotType* slot)
     {
+#if defined(WIN32)
         *slot = TlsAlloc();
-        //CHECK_NE(*slot, TLS_OUT_OF_INDEXES);
+        CHECK_NE(*slot, TLS_OUT_OF_INDEXES);
+#else
+        int error = pthread_key_create(slot, NULL);
+        CHECK_EQ(error, 0);
+#endif
     }
 
     // static
     inline void ThreadLocalPlatform::FreeSlot(SlotType slot)
     {
+#if defined(WIN32)
         if (!TlsFree(slot)) {
             //NOTREACHED() << "Failed to deallocate tls slot with TlsFree().";
             DebugBreak();
         }
+#else
+        int error = pthread_key_delete(slot);
+        DCHECK_EQ(0, error);
+#endif
     }
 
     // static
     inline void* ThreadLocalPlatform::GetValueFromSlot(SlotType slot)
     {
+#if defined(WIN32)
         return ::TlsGetValue(slot);
+#else
+        return pthread_getspecific(slot);
+#endif
     }
 
     // static
     inline void ThreadLocalPlatform::SetValueInSlot(SlotType slot, void* value)
     {
+#if defined(WIN32)
         if (!::TlsSetValue(slot, value)) {
             //LOG(FATAL) << "Failed to TlsSetValue().";
             DebugBreak();
         }
+#else
+        int error = pthread_setspecific(slot, value);
+        DCHECK_EQ(error, 0);
+#endif
     }
 
 } // namespace base

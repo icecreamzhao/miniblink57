@@ -54,7 +54,7 @@ public:
     float rotationAngle() const { return m_rotationAngle; }
     float force() const
     {
-        ASSERT(!std::isnan(pointerProperties().force));
+        ASSERT(!std_isnan(pointerProperties().force));
         return pointerProperties().force;
     }
 

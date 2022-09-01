@@ -380,14 +380,14 @@ namespace {
         if (!hasProperty)
             return true;
 
-        if (!ok || std::isnan(number)) {
+        if (!ok || std_isnan(number)) {
             setTypeError(context.toString(propertyName, "Is not a number"), error);
             return false;
         }
 
         number = trunc(number);
 
-        if (std::isinf(number) || number < minValue || number > maxValue) {
+        if (std_isinf(number) || number < minValue || number > maxValue) {
             setTypeError(context.toString(propertyName, "Outside of numeric range"),
                 error);
             return false;

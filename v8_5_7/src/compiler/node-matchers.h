@@ -162,13 +162,13 @@ struct FloatMatcher final : public ValueMatcher<T, kOpcode> {
     return this->HasValue() && low <= this->Value() && this->Value() <= high;
   }
   bool IsMinusZero() const {
-    return this->Is(0.0) && std::signbit(this->Value());
+    return this->Is(0.0) && std_signbit(this->Value());
   }
   bool IsNegative() const { return this->HasValue() && this->Value() < 0.0; }
-  bool IsNaN() const { return this->HasValue() && std::isnan(this->Value()); }
-  bool IsZero() const { return this->Is(0.0) && !std::signbit(this->Value()); }
+  bool IsNaN() const { return this->HasValue() && std_isnan(this->Value()); }
+  bool IsZero() const { return this->Is(0.0) && !std_signbit(this->Value()); }
   bool IsNormal() const {
-    return this->HasValue() && std::isnormal(this->Value());
+    return this->HasValue() && std_isnormal(this->Value());
   }
   bool IsInteger() const {
     return this->HasValue() && std::nearbyint(this->Value()) == this->Value();

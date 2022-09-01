@@ -55,7 +55,7 @@
 
 #include <stdio.h>
 
-extern "C" WINBASEAPI BOOL WINAPI InternetSetCookieA(LPCSTR lpszUrl, LPCSTR lpszCookieName, LPCSTR lpszCookieData);
+extern "C" BOOL WINAPI InternetSetCookieA(LPCSTR lpszUrl, LPCSTR lpszCookieName, LPCSTR lpszCookieData);
 
 #if ENABLE_WKE
 extern NPNetscapeFuncs s_wkeBrowserFuncs;
@@ -409,6 +409,7 @@ void parseCookieKeyValue(const String& cookie, Vector<String>* keys, Vector<Stri
 // fix "https://icorepnbs.pingan.com.cn/" swfupload bug, in which flash send http with cookie from IE
 static void fixSwfUpload(LocalFrame* frame)
 {
+#if defined(OS_WIN) 
     Document* doc = frame->document();
     const KURL& url = doc->url();
     if (!url.protocolIsInHTTPFamily())
@@ -448,6 +449,7 @@ static void fixSwfUpload(LocalFrame* frame)
         temp.append(";path=/;expires=Thu, 01-Jan-2022 00:00:01 GMT");
         ::InternetSetCookieA(host.utf8().data(), key.utf8().data(), temp.utf8().data());
     }
+#endif
 }
 
 #endif

@@ -260,7 +260,7 @@ void SMILTimeContainer::setElapsed(double elapsed)
 
 void SMILTimeContainer::scheduleAnimationFrame(double delayTime)
 {
-    DCHECK(std::isfinite(delayTime));
+    DCHECK(std_isfinite(delayTime));
     DCHECK(isTimelineRunning());
     DCHECK(!m_wakeupTimer.isActive());
 

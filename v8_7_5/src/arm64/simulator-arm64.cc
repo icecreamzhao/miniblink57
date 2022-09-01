@@ -946,7 +946,7 @@ namespace internal {
 
         // TODO(jbramley): This assumes that the C++ implementation handles
         // comparisons in the way that we expect (as per AssertSupportedFPCR()).
-        if ((std::isnan(val0) != 0) || (std::isnan(val1) != 0)) {
+        if ((/*std::*/isnan(val0) != 0) || (/*std::*/isnan(val1) != 0)) {
             nzcv().SetRawValue(FPUnorderedFlag);
         } else if (val0 < val1) {
             nzcv().SetRawValue(FPLessThanFlag);
@@ -3143,13 +3143,13 @@ namespace internal {
 
         if (instr->Mask(FP64) == FP64) {
             double result = FPProcessNaNs(dreg(fn), dreg(fm));
-            if (std::isnan(result)) {
+            if (/*std::*/isnan(result)) {
                 set_dreg(fd, result);
                 done = true;
             }
         } else {
             float result = FPProcessNaNs(sreg(fn), sreg(fm));
-            if (std::isnan(result)) {
+            if (/*std::*/isnan(result)) {
                 set_sreg(fd, result);
                 done = true;
             }

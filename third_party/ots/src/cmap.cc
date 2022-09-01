@@ -650,8 +650,8 @@ bool ots_cmap_parse(Font* font, const uint8_t* data, size_t length)
     }
 
     // check that the cmap subtables are not overlapping.
-    std::set<std::pair<uint32_t, uint32_t>> uniq_checker;
-    std::vector<std::pair<uint32_t, uint8_t>> overlap_checker;
+    std::set<std::pair<uint32_t, uint32_t> > uniq_checker;
+    std::vector<std::pair<uint32_t, uint8_t> > overlap_checker;
     for (unsigned i = 0; i < num_tables; ++i) {
         const uint32_t end_byte
             = subtable_headers[i].offset + subtable_headers[i].length;

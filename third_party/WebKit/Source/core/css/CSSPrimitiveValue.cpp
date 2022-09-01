@@ -94,7 +94,7 @@ CSSPrimitiveValue::UnitCategory CSSPrimitiveValue::unitTypeToUnitCategory(
 CSSPrimitiveValue* CSSPrimitiveValue::create(double value, UnitType type)
 {
     // TODO(timloh): This looks wrong.
-    if (std::isinf(value))
+    if (std_isinf(value))
         value = 0;
 
     if (value < 0 || value > CSSValuePool::maximumCacheableIntegerValue)
@@ -176,7 +176,7 @@ CSSPrimitiveValue::CSSPrimitiveValue(double num, UnitType type)
     : CSSValue(PrimitiveClass)
 {
     init(type);
-    ASSERT(std::isfinite(num));
+    ASSERT(std_isfinite(num));
     m_value.num = num;
 }
 
@@ -186,7 +186,7 @@ CSSPrimitiveValue::CSSPrimitiveValue(const Length& length, float zoom)
     switch (length.type()) {
     case Percent:
         init(UnitType::Percentage);
-        ASSERT(std::isfinite(length.percent()));
+        ASSERT(std_isfinite(length.percent()));
         m_value.num = length.percent();
         break;
     case Fixed:

@@ -13,7 +13,7 @@
 #if defined(WIN32) && !defined (__CYGWIN__) && !defined (__MINGW32__)
 #include <win32config.h>
 #else
-#include "config.h"
+//#include "configlinux.h"
 #endif
 
 #include <libxslt/xsltconfig.h>

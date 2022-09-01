@@ -87,7 +87,7 @@ T ReverseBytes(T value, int block_bytes_log2) {
 // NaN tests.
 inline bool IsSignallingNaN(double num) {
   uint64_t raw = double_to_rawbits(num);
-  if (std::isnan(num) && ((raw & kDQuietNanMask) == 0)) {
+  if (std_isnan(num) && ((raw & kDQuietNanMask) == 0)) {
     return true;
   }
   return false;
@@ -96,7 +96,7 @@ inline bool IsSignallingNaN(double num) {
 
 inline bool IsSignallingNaN(float num) {
   uint32_t raw = float_to_rawbits(num);
-  if (std::isnan(num) && ((raw & kSQuietNanMask) == 0)) {
+  if (std_isnan(num) && ((raw & kSQuietNanMask) == 0)) {
     return true;
   }
   return false;
@@ -105,19 +105,19 @@ inline bool IsSignallingNaN(float num) {
 
 template <typename T>
 inline bool IsQuietNaN(T num) {
-  return std::isnan(num) && !IsSignallingNaN(num);
+  return std_isnan(num) && !IsSignallingNaN(num);
 }
 
 
 // Convert the NaN in 'num' to a quiet NaN.
 inline double ToQuietNaN(double num) {
-  DCHECK(std::isnan(num));
+  DCHECK(std_isnan(num));
   return rawbits_to_double(double_to_rawbits(num) | kDQuietNanMask);
 }
 
 
 inline float ToQuietNaN(float num) {
-  DCHECK(std::isnan(num));
+  DCHECK(std_isnan(num));
   return rawbits_to_float(float_to_rawbits(num) | kSQuietNanMask);
 }
 

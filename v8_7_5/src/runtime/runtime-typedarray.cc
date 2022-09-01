@@ -98,8 +98,8 @@ namespace internal {
                 double _x = x, _y = y;
                 if (x == 0 && x == y) {
                     /* -0.0 is less than +0.0 */
-                    return std::signbit(_x) && !std::signbit(_y);
-                } else if (!std::isnan(_x) && std::isnan(_y)) {
+                    return /*std::*/signbit(_x) && !/*std::*/signbit(_y);
+                } else if (!/*std::*/isnan(_x) && /*std::*/isnan(_y)) {
                     /* number is less than NaN */
                     return true;
                 }

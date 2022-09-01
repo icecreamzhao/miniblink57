@@ -568,7 +568,7 @@ double AudioBufferSourceHandler::computePlaybackRate()
     // get any bad rate values.
     finalPlaybackRate = clampTo(finalPlaybackRate, 0.0, MaxRate);
 
-    bool isPlaybackRateValid = !std::isnan(finalPlaybackRate) && !std::isinf(finalPlaybackRate);
+    bool isPlaybackRateValid = !std_isnan(finalPlaybackRate) && !std_isinf(finalPlaybackRate);
     DCHECK(isPlaybackRateValid);
 
     if (!isPlaybackRateValid)

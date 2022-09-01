@@ -72,7 +72,7 @@ namespace platform {
             case TRACE_VALUE_TYPE_DOUBLE: {
                 std::string real;
                 double val = value.as_double;
-                if (std::isfinite(val)) {
+                if (/*std::*/isfinite(val)) {
                     std::ostringstream convert_stream;
                     convert_stream << val;
                     real = convert_stream.str();
@@ -82,7 +82,7 @@ namespace platform {
                     if (real.find('.') == std::string::npos && real.find('e') == std::string::npos && real.find('E') == std::string::npos) {
                         real += ".0";
                     }
-                } else if (std::isnan(val)) {
+                } else if (/*std::*/isnan(val)) {
                     // The JSON spec doesn't allow NaN and Infinity (since these are
                     // objects in EcmaScript).  Use strings instead.
                     real = "\"NaN\"";

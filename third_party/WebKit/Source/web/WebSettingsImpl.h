@@ -31,6 +31,7 @@
 #ifndef WebSettingsImpl_h
 #define WebSettingsImpl_h
 
+#include "third_party/WebKit/Source/config.h"
 #include "platform/heap/Handle.h"
 #include "public/web/WebSettings.h"
 #include "web/WebExport.h"

@@ -562,7 +562,7 @@ namespace internal {
             double x)
         {
             double date_value = DateCache::TimeClip(x);
-            if (std::isnan(date_value)) {
+            if (/*std::*/isnan(date_value)) {
                 THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kInvalidTimeValue),
                     String);
             }
@@ -634,7 +634,7 @@ namespace internal {
 
         double const x = Handle<JSDate>::cast(date)->value()->Number();
         // 2. If x is NaN, return "Invalid Date"
-        if (std::isnan(x)) {
+        if (/*std::*/isnan(x)) {
             return factory->Invalid_Date_string();
         }
 
@@ -1625,14 +1625,14 @@ namespace internal {
         // 1. Let x be TimeClip(x).
         x = DateCache::TimeClip(x);
         // 2. If x is NaN, throw a RangeError exception.
-        if (std::isnan(x)) {
+        if (/*std::*/isnan(x)) {
             THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kInvalidTimeValue),
                 String);
         }
         // 3. Let y be TimeClip(y).
         y = DateCache::TimeClip(y);
         // 4. If y is NaN, throw a RangeError exception.
-        if (std::isnan(y)) {
+        if (/*std::*/isnan(y)) {
             THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kInvalidTimeValue),
                 String);
         }
@@ -1661,14 +1661,14 @@ namespace internal {
         // 1. Let x be TimeClip(x).
         x = DateCache::TimeClip(x);
         // 2. If x is NaN, throw a RangeError exception.
-        if (std::isnan(x)) {
+        if (/*std::*/isnan(x)) {
             THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kInvalidTimeValue),
                 JSArray);
         }
         // 3. Let y be TimeClip(y).
         y = DateCache::TimeClip(y);
         // 4. If y is NaN, throw a RangeError exception.
-        if (std::isnan(y)) {
+        if (/*std::*/isnan(y)) {
             THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kInvalidTimeValue),
                 JSArray);
         }

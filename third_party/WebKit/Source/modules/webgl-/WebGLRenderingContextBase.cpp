@@ -2174,13 +2174,13 @@ void WebGLRenderingContextBase::clearColor(GLfloat r,
 {
     if (isContextLost())
         return;
-    if (std::isnan(r))
+    if (std_isnan(r))
         r = 0;
-    if (std::isnan(g))
+    if (std_isnan(g))
         g = 0;
-    if (std::isnan(b))
+    if (std_isnan(b))
         b = 0;
-    if (std::isnan(a))
+    if (std_isnan(a))
         a = 1;
     m_clearColor[0] = r;
     m_clearColor[1] = g;

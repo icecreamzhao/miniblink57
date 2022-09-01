@@ -15,18 +15,21 @@
     <RootNamespace>blink</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>blink</ProjectName>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -55,48 +58,51 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>TENCENT_FITSCREEN=1;ENABLE_WKE=1;_HAS_CONSTEXPR=0;ANGLE_ENABLE_GLSL;USE_AURA;OS_WIN;BUILDING_CEF_SHARED;USING_CEF_SHARED;WIN32;_DEBUG;_WINDOWS;INSIDE_BLINK=1;BLINK_IMPLEMENTATION=1;ENABLE_ASSERT=1;ENABLE_WML=1;CARES_STATICLIB=1;CURL_STATICLIB=1;SK_SUPPORT_LEGACY_CREATESHADER_PTR=1;SK_SUPPORT_LEGACY_PICTURE_PTR=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TENCENT_FITSCREEN=1;ENABLE_WKE=1;ENABLE_MB=1;_HAS_CONSTEXPR=0;ANGLE_ENABLE_GLSL;USE_AURA;OS_WIN;BUILDING_CEF_SHARED;USING_CEF_SHARED;WIN32;_DEBUG;_WINDOWS;INSIDE_BLINK=1;BLINK_IMPLEMENTATION=1;ENABLE_ASSERT=1;ENABLE_WML=1;CARES_STATICLIB=1;CURL_STATICLIB=1;SK_SUPPORT_LEGACY_CREATESHADER_PTR=1;SK_SUPPORT_LEGACY_PICTURE_PTR=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../;../../v8_5_7/;../../v8_5_7/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4800;4291;4996;4244;4305;4624;</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>../../;../../gen/v8_7_5/include;../../v8_7_5;../../v8_7_5/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4800;4291;4996;4244;4305;4624;4068;</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>config.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>config.h</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Debug\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_5_7_1.lib;skia_d.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib_d.lib;ots_d.lib;chromium_d.lib;libcurl.lib;openssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)..\Debug\node.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Debug;$(SolutionDir)..\Debug\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia_d.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib_d.lib;ots_d.lib;chromium_d.lib;libcurl.lib;libpng.lib;openssl.lib;harfbuzz.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)..\Debug\miniblink_5775_x32.dll</OutputFile>
       <ImportLibrary>$(OutDir)libcef.lib</ImportLibrary>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>mtmb.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>$(SolutionDir)/blink/mtmb.def</ModuleDefinitionFile>
+      <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;INSIDE_BLINK=1;BLINK_IMPLEMENTATION=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>NDEBUG;TENCENT_FITSCREEN=1;ENABLE_WKE=1;_HAS_CONSTEXPR=0;ANGLE_ENABLE_GLSL;USE_AURA;OS_WIN;BUILDING_CEF_SHARED;USING_CEF_SHARED;WIN32;_WINDOWS;INSIDE_BLINK=1;BLINK_IMPLEMENTATION=1;ENABLE_ASSERT=1;ENABLE_WML=1;CARES_STATICLIB=1;CURL_STATICLIB=1;SK_SUPPORT_LEGACY_CREATESHADER_PTR=1;SK_SUPPORT_LEGACY_PICTURE_PTR=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../;../../v8_5_7/;../../v8_5_7/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../;../../gen/v8_7_5/include;../../v8_7_5;../../v8_7_5/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>config.h</PrecompiledHeaderFile>
-      <DisableSpecificWarnings>4800;4291;4996;4244;4305;4530;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4800;4291;4996;4244;4305;4530;4068;</DisableSpecificWarnings>
       <ForcedIncludeFiles>config.h</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <Optimization>MinSpace</Optimization>
-      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -104,9 +110,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\release\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>v8_5_7_1.lib;chromium.lib;libxml.lib;skia.lib;zlib.lib;ots.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/FORCE:UNRESOLVED %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\release\;$(SolutionDir)..\out\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;libjpeg.lib;libpng.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;openssl.lib;harfbuzz.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/FORCE:UNRESOLVED /NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)node$(TargetExt)</OutputFile>
+      <ModuleDefinitionFile>mtmb.def</ModuleDefinitionFile>
+      <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -123,7 +132,13 @@
     <ClCompile Include="..\..\content\compositor\GpuOutputSurface.cpp" />
     <ClCompile Include="..\..\content\compositor\SoftwareOutputDevice.cpp" />
     <ClCompile Include="..\..\content\compositor\SoftwareOutputSurface.cpp" />
+    <ClCompile Include="..\..\content\devtools\DevToolsAgent.cpp" />
+    <ClCompile Include="..\..\content\devtools\DevToolsClient.cpp" />
+    <ClCompile Include="..\..\content\devtools\DevToolsMgr.cpp" />
+    <ClCompile Include="..\..\content\devtools\DevToolsProtocolDispatcher.cpp" />
     <ClCompile Include="..\..\content\LayerTreeWrap.cpp" />
+    <ClCompile Include="..\..\content\media\audio_device_factory.cc" />
+    <ClCompile Include="..\..\content\media\audio_renderer_mixer_manager.cc" />
     <ClCompile Include="..\..\content\OrigChromeMgr.cpp" />
     <ClCompile Include="..\..\content\RasterWorkerPool.cpp" />
     <ClCompile Include="..\..\content\RenderWidgetCompositor.cpp" />
@@ -298,6 +313,7 @@
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8DataView.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8DeathAwareScriptWrappable.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8DedicatedWorkerGlobalScope.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8DevToolsHost.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8Document.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8DocumentFragment.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8DocumentTimeline.cpp" />
@@ -444,6 +460,7 @@
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8InputDeviceCapabilitiesInit.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8InputEvent.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8InputEventInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8InspectorOverlayHost.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8Int16Array.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8Int32Array.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8Int8Array.cpp" />
@@ -686,22 +703,30 @@
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XMLHttpRequestEventTarget.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XMLHttpRequestUpload.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XMLSerializer.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XPathEvaluator.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XPathExpression.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XPathNSResolver.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XPathResult.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8XSLTProcessor.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\VideoTrackOrAudioTrackOrTextTrack.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\ArrayBufferOrArrayBufferViewOrDictionary.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\ArrayBufferOrArrayBufferViewOrUSVString.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\ArrayBufferViewOrBlobOrStringOrFormData.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\BooleanOrConstrainBooleanParameters.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\BooleanOrMediaTrackConstraints.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\DictionaryOrString.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\DoubleOrConstrainDoubleRange.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\FormDataOrURLSearchParams.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\HTMLCanvasElementOrOffscreenCanvas.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\initPartialInterfacesInModules.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\LongOrConstrainLongRange.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\RenderingContext.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\RequestOrUSVString.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\StringOrCanvasGradientOrCanvasPattern.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\StringOrStringSequence.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\StringOrStringSequenceOrConstrainDOMStringParameters.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8AnimationWorkletGlobalScope.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Body.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Canvas2DContextAttributes.cpp" />
@@ -716,10 +741,15 @@
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainDOMStringParameters.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainDoubleRange.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainLongRange.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Credential.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CredentialData.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CredentialRequestOptions.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CredentialsContainer.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DataTransferItemPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DedicatedWorkerGlobalScopePartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DeprecatedStorageInfo.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DeprecatedStorageQuota.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DevToolsHostPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntry.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntrySync.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryReader.cpp" />
@@ -735,6 +765,9 @@
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8ErrorCallback.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8EventSource.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8EventSourceInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FederatedCredential.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FederatedCredentialData.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FederatedCredentialRequestOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileEntry.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileEntrySync.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileSystemCallback.cpp" />
@@ -742,28 +775,51 @@
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileWriter.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileWriterCallback.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FileWriterSync.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8FormDataOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Headers.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8HitRegionOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8HTMLCanvasElementPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8HTMLInputElementPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8HTMLVideoElementPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8ImageBitmapRenderingContext.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8LocallyStoredCredentialData.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8LongRange.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaDeviceInfo.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaDevices.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaSource.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaStream.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamConstraints.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamEvent.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamEventInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamTrack.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamTrackEvent.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamTrackEventInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaTrackConstraints.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaTrackConstraintSet.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaTrackSettings.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MediaTrackSupportedConstraints.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Metadata.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MetadataCallback.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MimeType.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8MimeTypeArray.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8NavigatorPartial.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8NavigatorUserMediaError.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8NavigatorUserMediaErrorCallback.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8OffscreenCanvasPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8OffscreenCanvasRenderingContext2D.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8PaintRenderingContext2D.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8PaintSize.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8PaintWorkletGlobalScope.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8PasswordCredential.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8PasswordCredentialData.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Path2D.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Plugin.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8PluginArray.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Request.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Response.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8SiteBoundCredential.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8SourceBuffer.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8SourceBufferList.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Storage.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8StorageErrorCallback.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8StorageEstimate.cpp" />
@@ -778,7 +834,10 @@
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8TextDecoder.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8TextDecoderOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8TextEncoder.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8TrackDefault.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8TrackDefaultList.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8URLPartial.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8VideoPlaybackQuality.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WebSocket.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WindowPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8WorkerGlobalScopePartial.cpp" />
@@ -862,6 +921,30 @@
     <ClCompile Include="..\..\gen\blink\core\InputModeNames.cpp" />
     <ClCompile Include="..\..\gen\blink\core\InputTypeNames.cpp" />
     <ClCompile Include="..\..\gen\blink\core\input\InputDeviceCapabilitiesInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\InspectorInstrumentationImpl.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\AnimationDevtools.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\ApplicationCacheDevtools.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\CacheStorage.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\CSS.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Database.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\DeviceOrientation.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\DOM.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\DOMDebugger.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\DOMStorage.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Emulation.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\IndexedDB.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Input.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\IO.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\LayerTree.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Log.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Memory.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Network.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\PageDevtools.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Protocol.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Rendering.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Security.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Target.cpp" />
+    <ClCompile Include="..\..\gen\blink\core\inspector\protocol\Tracing.cpp" />
     <ClCompile Include="..\..\gen\blink\core\MathMLNames.cpp" />
     <ClCompile Include="..\..\gen\blink\core\MediaFeatureNames.cpp" />
     <ClCompile Include="..\..\gen\blink\core\MediaTypeNames.cpp" />
@@ -881,6 +964,13 @@
     <ClCompile Include="..\..\gen\blink\core\XMLNSNames.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\canvas2d\Canvas2DContextAttributes.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\canvas2d\HitRegionOptions.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\credentialmanager\CredentialData.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\credentialmanager\CredentialRequestOptions.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\credentialmanager\FederatedCredentialData.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\credentialmanager\FederatedCredentialRequestOptions.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\credentialmanager\FormDataOptions.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\credentialmanager\LocallyStoredCredentialData.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\credentialmanager\PasswordCredentialData.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\encoding\TextDecodeOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\encoding\TextDecoderOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\EventModules.cpp" />
@@ -894,6 +984,13 @@
     <ClCompile Include="..\..\gen\blink\modules\mediastream\ConstrainLongRange.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\mediastream\DoubleRange.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\mediastream\LongRange.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\mediastream\MediaStreamConstraints.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\mediastream\MediaStreamEventInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\mediastream\MediaStreamTrackEventInit.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\mediastream\MediaTrackConstraints.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\mediastream\MediaTrackConstraintSet.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\mediastream\MediaTrackSettings.cpp" />
+    <ClCompile Include="..\..\gen\blink\modules\mediastream\MediaTrackSupportedConstraints.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\quota\StorageEstimate.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\quota\StorageInfo.cpp" />
     <ClCompile Include="..\..\gen\blink\modules\storage\StorageEventInit.cpp" />
@@ -914,13 +1011,19 @@
     <ClCompile Include="..\..\gpu\command_buffer\common\mailbox.cc" />
     <ClCompile Include="..\..\gpu\command_buffer\common\mailbox_holder.cc" />
     <ClCompile Include="..\..\gpu\MailboxEmpty.cc" />
+    <ClCompile Include="..\..\linux\linuxgdi.cpp" />
+    <ClCompile Include="..\..\linux\linuxwindows.cpp" />
+    <ClCompile Include="..\..\linux\testmain.cpp" />
     <ClCompile Include="..\..\mbvip\common\BindJsQuery.cpp" />
     <ClCompile Include="..\..\mbvip\common\CallMgr.cpp" />
     <ClCompile Include="..\..\mbvip\common\cJSON.cpp" />
     <ClCompile Include="..\..\mbvip\common\LiveIdDetect.cpp" />
-    <ClCompile Include="..\..\mbvip\common\StringUtil.cpp" />
+    <ClCompile Include="..\..\mbvip\common\StringUtil.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\mbvip\common\ThreadCall.cpp" />
     <ClCompile Include="..\..\mbvip\core\mb.cpp" />
+    <ClCompile Include="..\..\mbvip\core\mb2.cpp" />
     <ClCompile Include="..\..\mbvip\core\MbWebView.cpp" />
     <ClCompile Include="..\..\net\ActivatingObjCheck.cpp" />
     <ClCompile Include="..\..\net\AsyncFileStream.cpp" />
@@ -1001,20 +1104,53 @@
     <ClCompile Include="..\..\third_party\smhasher\src\Stats.cpp" />
     <ClCompile Include="..\..\third_party\smhasher\src\SuperFastHash.cpp" />
     <ClCompile Include="..\..\third_party\smhasher\src\Types_smhasher.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\custom\V8DevToolsHostCustom.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\custom\V8IntersectionObserverCustom.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\IDLDictionaryBase.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\npruntime.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\NPV8Object.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8NPObject.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8NPUtils.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\config.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\ProcessingInstruction.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\editing\commands\SmartReplaceICU.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\DevToolsHost.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\DOMEditor.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\DOMPatchSupport.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\IdentifiersFactory.cpp" />
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorEmpty.cpp" />
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorTraceEventsEmpty.cpp" />
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\MainThreadDebuggerEmpty.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectedFrames.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorAnimationAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorApplicationCacheAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorCSSAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorDOMAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorDOMDebuggerAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorHighlight.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorHistory.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorInputAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorInstrumentation.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorLayerTreeAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorLogAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorMemoryAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorNetworkAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorOverlayHost.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorPageAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorResourceContainer.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorResourceContentLoader.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorSession.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorStyleSheet.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorTaskRunner.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorTraceEvents.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorTracingAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\InspectorWorkerAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\MainThreadDebugger.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\NetworkResourcesData.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\ThreadDebugger.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\V8InspectorString.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\WorkerInspectorController.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\WorkerThreadDebugger.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\layout\HitTestCache.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\layout\HitTestCanvasResult.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\layout\HitTestingTransformState.cpp" />
@@ -1048,6 +1184,7 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkerClients.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkerEventQueue.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkerGlobalScope.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkerInspectorProxy.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkerLoaderProxy.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkerNavigator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkerOrWorkletGlobalScope.cpp" />
@@ -1059,6 +1196,34 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\Worklet.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkletGlobalScope.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\workers\WorkletScriptLoader.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\DocumentXMLTreeViewer.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\DocumentXPathEvaluator.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\DocumentXSLT.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\DOMParser.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\NativeXPathNSResolver.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XMLSerializer.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathEvaluator.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathExpression.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathExpressionNode.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathFunctions.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathNodeSet.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathParser.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathPath.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathPredicate.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathResult.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathStep.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathUtil.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathValue.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XPathVariableReference.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XSLImportRule.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XSLStyleSheetLibxslt.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XSLTExtensions.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XSLTProcessor.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XSLTProcessorLibxslt.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XSLTUnicodeSort.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\audio_output_devices\AudioOutputDeviceClient.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\audio_output_devices\HTMLMediaElementAudioOutputDevice.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\audio_output_devices\SetSinkIdCallbacks.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\BaseRenderingContext2D.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasGradient.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\canvas2d\CanvasPathMethods.cpp" />
@@ -1079,6 +1244,13 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\compositorworker\CompositorWorkerMessagingProxy.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\compositorworker\CompositorWorkerThread.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\compositorworker\WindowAnimationWorklet.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\Credential.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\CredentialManagerClient.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\CredentialsContainer.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\FederatedCredential.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\NavigatorCredentials.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\PasswordCredential.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\SiteBoundCredential.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintDefinition.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintImageGeneratorImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\csspaint\PaintRenderingContext2D.cpp" />
@@ -1108,6 +1280,7 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\fetch\RequestInit.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\fetch\Response.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DataTransferItemFileSystem.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DevToolsHostFileSystem.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryEntry.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryEntrySync.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\DirectoryReader.cpp" />
@@ -1131,6 +1304,32 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\LocalFileSystem.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\filesystem\WorkerGlobalScopeFileSystem.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\imagebitmap\ImageBitmapRenderingContext.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\HTMLVideoElementMediaSource.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\MediaSource.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\MediaSourceRegistry.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\SourceBuffer.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\SourceBufferList.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\SourceBufferTrackBaseSupplement.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\TrackDefault.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\TrackDefaultList.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\URLMediaSource.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediasource\VideoPlaybackQuality.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaConstraintsImpl.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaDeviceInfo.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaDevices.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaDevicesRequest.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaErrorState.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStream.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamEvent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamRegistry.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamTrack.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamTrackEvent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorMediaStream.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorUserMedia.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorUserMediaError.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\URLMediaStream.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\UserMediaController.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\mediastream\UserMediaRequest.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\ModulesInitializer.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\offscreencanvas2d\OffscreenCanvasRenderingContext2D.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\offscreencanvas\OffscreenCanvasModules.cpp" />
@@ -1179,6 +1378,46 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\animation\CompositorTransformKeyframe.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\animation\CompositorTransformOperations.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\animation\TimingFunction.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioBus.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioChannel.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioDelayDSPKernel.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioDestination.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioDSPKernel.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioDSPKernelProcessor.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioFIFO.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioProcessor.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioPullFIFO.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioResampler.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioResamplerKernel.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\AudioUtilities.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\Biquad.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\Cone.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\DirectConvolver.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\Distance.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\DownSampler.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\DynamicsCompressor.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\DynamicsCompressorKernel.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\EqualPowerPanner.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\FFTConvolver.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\FFTFrame.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\FFTFrameStub.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\HRTFDatabase.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\HRTFDatabaseLoader.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\HRTFElevation.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\HRTFKernel.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\HRTFPanner.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\IIRFilter.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\MultiChannelResampler.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\Panner.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\Reverb.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\ReverbAccumulationBuffer.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\ReverbConvolver.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\ReverbConvolverStage.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\ReverbInputBuffer.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\SincResampler.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\StereoPanner.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\UpSampler.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\audio\VectorMath.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\blob\BlobData.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\blob\BlobRegistry.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\blob\BlobURL.cpp" />
@@ -1200,6 +1439,8 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\EventDispatchForbiddenScope.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\Platform.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebActiveGestureAnimation.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebAudioBus.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebAudioDevice.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebBlobData.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebCanvasCaptureHandler.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebCoalescedInputEvent.cpp" />
@@ -1232,6 +1473,12 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebImage.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebImageGenerator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMediaConstraints.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMediaDeviceInfo.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMediaPlayerClient.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMediaPlayerSource.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMediaStream.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMediaStreamSource.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMediaStreamTrack.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMemoryCoordinator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMessagePortChannelClient.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\exported\WebMixedContent.cpp" />
@@ -1287,12 +1534,20 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\GenericFontFamilySettings.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\GlyphPageTreeNode.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\FontSettings.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\OpenTypeCapsSupport.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\OpenTypeCapsSupportMPL.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\OpenTypeVerticalData.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\OrientationIterator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\ScriptRunIterator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\SegmentedFontData.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\CachingWordShaper.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\CaseMappingHarfBuzzBufferFiller.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\HarfBuzzFace.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\HarfBuzzShaper.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\RunSegmenter.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\Shaper.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeResult.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeResultBuffer.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeResultSpacing.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\SimpleShaper.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\fonts\SimpleFontData.cpp" />
@@ -1433,6 +1688,7 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\PathTraversalState.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\Pattern.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\PicturePattern.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\PictureSnapshot.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\PlaceholderImage.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\RecordingImageBufferSurface.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\graphics\skia\ImagePixelLocker.cpp" />
@@ -1458,6 +1714,7 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\heap\SparseHeapBitmap.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\heap\StackFrameDepth.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\heap\ThreadState.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\heap\UnifiedHeapController.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\heap\Visitor.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\Histogram.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\bmp\BMPImageDecoder.cpp" />
@@ -1493,6 +1750,11 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\LengthBox.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\LengthFunctions.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\LinkHash.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamCenter.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamComponent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamDescriptor.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamSource.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamWebAudioSource.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\MemoryCoordinator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\ContentSecurityPolicyParsers.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\network\ContentSecurityPolicyResponseHeaders.cpp" />
@@ -1657,6 +1919,7 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\web\ContextMenuAllowedScope.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\ContextMenuClientImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\DateTimeChooserImpl.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\web\DedicatedWorkerMessagingProxyProviderImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\DevToolsEmulator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\EditorClientImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\ExternalDateTimeChooser.cpp" />
@@ -1664,6 +1927,9 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\web\FindInPageCoordinates.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\FrameLoaderClientImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\FullscreenController.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\web\InspectorEmulationAgent.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\web\InspectorOverlay.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\web\InspectorRenderingAgent.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\LinkHighlightImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\LocalFileSystemClient.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\MediaKeysClientImpl.cpp" />
@@ -1696,6 +1962,8 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\web\WebCustomElement.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\WebDataSourceImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\WebDateTimeSuggestion.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\web\WebDevToolsAgentImpl.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\web\WebDevToolsFrontendImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\WebDocument.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\WebDOMActivityLogger.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\web\WebDOMEvent.cpp" />
@@ -3585,12 +3853,10 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\core\timing\PerformanceUserTiming.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\timing\TaskAttributionTiming.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\win\Precompile-core.cpp" />
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\DOMParser.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\parser\SharedBufferReader.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\parser\XMLDocumentParser.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\parser\XMLDocumentParserScope.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\parser\XMLErrors.cpp" />
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\xml\XMLSerializer.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xmlhttprequest\XMLHttpRequest.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xmlhttprequest\XMLHttpRequestProgressEventThrottle.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xmlhttprequest\XMLHttpRequestUpload.cpp" />
@@ -3626,12 +3892,18 @@
     <ClInclude Include="..\..\content\compositor\GpuOutputSurface.h" />
     <ClInclude Include="..\..\content\compositor\SoftwareOutputDevice.h" />
     <ClInclude Include="..\..\content\compositor\SoftwareOutputSurface.h" />
+    <ClInclude Include="..\..\content\devtools\DevToolsAgent.h" />
+    <ClInclude Include="..\..\content\devtools\DevToolsClient.h" />
+    <ClInclude Include="..\..\content\devtools\DevToolsMgr.h" />
+    <ClInclude Include="..\..\content\devtools\DevToolsProtocolDispatcher.h" />
     <ClInclude Include="..\..\content\gpu\ChildGpuMemoryBufferManager.h" />
     <ClInclude Include="..\..\content\gpu\CommandBufferMetrics.h" />
     <ClInclude Include="..\..\content\gpu\CommandBufferServiceStub.h" />
     <ClInclude Include="..\..\content\gpu\GrcontextForWebgraphicscontext3d.h" />
     <ClInclude Include="..\..\content\gpu\WgContext3dCmdBufImpl.h" />
     <ClInclude Include="..\..\content\LayerTreeWrap.h" />
+    <ClInclude Include="..\..\content\media\audio_device_factory.h" />
+    <ClInclude Include="..\..\content\media\audio_renderer_mixer_manager.h" />
     <ClInclude Include="..\..\content\OrigChromeMgr.h" />
     <ClInclude Include="..\..\content\RasterWorkerPool.h" />
     <ClInclude Include="..\..\content\RenderWidgetCompositor.h" />
@@ -4247,9 +4519,14 @@
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainDOMStringParameters.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainDoubleRange.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ConstrainLongRange.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Credential.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CredentialData.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CredentialRequestOptions.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CredentialsContainer.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DedicatedWorkerGlobalScopePartial.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DeprecatedStorageInfo.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DeprecatedStorageQuota.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DevToolsHostPartial.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntry.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryEntrySync.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DirectoryReader.h" />
@@ -4270,8 +4547,12 @@
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ExtendableEvent.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ExtendableMessageEvent.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ExtendableMessageEventInit.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FederatedCredential.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FederatedCredentialData.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FederatedCredentialRequestOptions.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FileSystemCallback.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FileSystemFlags.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8FormDataOptions.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HitRegionOptions.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLCanvasElementPartial.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLIFrameElementPartial.h" />
@@ -4279,14 +4560,23 @@
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLMediaElementPartial.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8HTMLVideoElementPartial.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8ImageBitmapRenderingContext.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8LocallyStoredCredentialData.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8LongRange.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8MediaSource.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8MediaStream.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamTrack.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamTrackEvent.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8MediaStreamTrackEventInit.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8OffscreenCanvasRenderingContext2D.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8PaintRenderingContext2D.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8PaintSize.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8PaintWorkletGlobalScope.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8PasswordCredential.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8PasswordCredentialData.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Path2D.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Plugin.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8SharedWorkerGlobalScopePartial.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8SiteBoundCredential.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Storage.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8StorageErrorCallback.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8StorageEstimate.h" />
@@ -4372,6 +4662,34 @@
     <ClInclude Include="..\..\gen\blink\core\fileapi\BlobPropertyBag.h" />
     <ClInclude Include="..\..\gen\blink\core\fileapi\FilePropertyBag.h" />
     <ClInclude Include="..\..\gen\blink\core\InputModeNames.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Accessibility.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Animation.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\ApplicationCache.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\CacheStorage.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\CSS.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Database.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Debugger.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\DeviceOrientation.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\DOM.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\DOMDebugger.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\DOMStorage.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Emulation.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Forward.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\IndexedDB.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Input.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\IO.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\LayerTree.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Log.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Memory.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Network.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Page.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Protocol.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Rendering.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Runtime.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Security.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Target.h" />
+    <ClInclude Include="..\..\gen\blink\core\inspector\protocol\Tracing.h" />
+    <ClInclude Include="..\..\gen\blink\core\InstrumentingAgents.h" />
     <ClInclude Include="..\..\gen\blink\core\offscreencanvas\ImageEncodeOptions.h" />
     <ClInclude Include="..\..\gen\blink\core\origin_trials\OriginTrials.h" />
     <ClInclude Include="..\..\gen\blink\core\timing\PerformanceObserverInit.h" />
@@ -4380,6 +4698,13 @@
     <ClInclude Include="..\..\gen\blink\core\WMLNames.h" />
     <ClInclude Include="..\..\gen\blink\modules\canvas2d\Canvas2DContextAttributes.h" />
     <ClInclude Include="..\..\gen\blink\modules\canvas2d\HitRegionOptions.h" />
+    <ClInclude Include="..\..\gen\blink\modules\credentialmanager\CredentialData.h" />
+    <ClInclude Include="..\..\gen\blink\modules\credentialmanager\CredentialRequestOptions.h" />
+    <ClInclude Include="..\..\gen\blink\modules\credentialmanager\FederatedCredentialData.h" />
+    <ClInclude Include="..\..\gen\blink\modules\credentialmanager\FederatedCredentialRequestOptions.h" />
+    <ClInclude Include="..\..\gen\blink\modules\credentialmanager\FormDataOptions.h" />
+    <ClInclude Include="..\..\gen\blink\modules\credentialmanager\LocallyStoredCredentialData.h" />
+    <ClInclude Include="..\..\gen\blink\modules\credentialmanager\PasswordCredentialData.h" />
     <ClInclude Include="..\..\gen\blink\modules\encoding\TextDecodeOptions.h" />
     <ClInclude Include="..\..\gen\blink\modules\encoding\TextDecoderOptions.h" />
     <ClInclude Include="..\..\gen\blink\modules\eventsource\EventSourceInit.h" />
@@ -4390,9 +4715,18 @@
     <ClInclude Include="..\..\gen\blink\modules\mediastream\ConstrainLongRange.h" />
     <ClInclude Include="..\..\gen\blink\modules\mediastream\DoubleRange.h" />
     <ClInclude Include="..\..\gen\blink\modules\mediastream\LongRange.h" />
+    <ClInclude Include="..\..\gen\blink\modules\mediastream\MediaStreamConstraints.h" />
+    <ClInclude Include="..\..\gen\blink\modules\mediastream\MediaStreamEventInit.h" />
+    <ClInclude Include="..\..\gen\blink\modules\mediastream\MediaStreamTrackEventInit.h" />
+    <ClInclude Include="..\..\gen\blink\modules\mediastream\MediaTrackConstraints.h" />
+    <ClInclude Include="..\..\gen\blink\modules\mediastream\MediaTrackConstraintSet.h" />
+    <ClInclude Include="..\..\gen\blink\modules\mediastream\MediaTrackSettings.h" />
+    <ClInclude Include="..\..\gen\blink\modules\mediastream\MediaTrackSupportedConstraints.h" />
     <ClInclude Include="..\..\gen\blink\modules\quota\StorageInfo.h" />
     <ClInclude Include="..\..\gen\blink\modules\storage\StorageEventInit.h" />
     <ClInclude Include="..\..\gen\blink\modules\websockets\CloseEventInit.h" />
+    <ClInclude Include="..\..\linux\linuxwinimpl.h" />
+    <ClInclude Include="..\..\linux\windows.h" />
     <ClInclude Include="..\..\mbvip\common\BindJsQuery.h" />
     <ClInclude Include="..\..\mbvip\common\CallbackClosure.h" />
     <ClInclude Include="..\..\mbvip\common\CallMgr.h" />
@@ -4509,6 +4843,9 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\Maplike.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\Microtask.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\NativeValueTraits.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\npruntime_impl.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\npruntime_priv.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\NPV8Object.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\Nullable.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\RejectedPromises.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\RemoteWindowProxy.h" />
@@ -4577,6 +4914,8 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8LazyEventListener.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8MutationCallback.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8NodeFilterCondition.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8NPObject.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8NPUtils.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8ObjectBuilder.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8ObjectConstructor.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8PagePopupControllerBinding.h" />
@@ -7007,6 +7346,9 @@
     <ClInclude Include="..\..\third_party\WebKit\public\platform\WebURLResponse.h" />
     <ClInclude Include="..\..\third_party\WebKit\public\platform\WebVector.h" />
     <ClInclude Include="..\..\third_party\WebKit\public\web\WebSecurityPolicy.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\audio_output_devices\AudioOutputDeviceClient.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\audio_output_devices\HTMLMediaElementAudioOutputDevice.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\audio_output_devices\SetSinkIdCallbacks.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\Cache.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\CacheStorage.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\cachestorage\CacheStorageError.h" />
@@ -7032,6 +7374,13 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\compositorworker\CompositorWorkerMessagingProxy.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\compositorworker\CompositorWorkerThread.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\compositorworker\WindowAnimationWorklet.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\Credential.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\CredentialManagerClient.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\CredentialsContainer.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\FederatedCredential.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\NavigatorCredentials.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\PasswordCredential.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\SiteBoundCredential.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintDefinition.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintImageGeneratorImpl.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\csspaint\PaintRenderingContext2D.h" />
@@ -7099,6 +7448,37 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\SyncCallbackHelper.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\filesystem\WorkerGlobalScopeFileSystem.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\imagebitmap\ImageBitmapRenderingContext.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\HTMLVideoElementMediaSource.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\MediaSource.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\MediaSourceRegistry.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\SourceBuffer.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\SourceBufferList.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\SourceBufferTrackBaseSupplement.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\TrackDefault.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\TrackDefaultList.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\URLMediaSource.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediasource\VideoPlaybackQuality.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\DOMWindowMediaStream.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaConstraintsImpl.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaDeviceInfo.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaDevices.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaDevicesRequest.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaErrorState.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStream.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamEvent.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamRegistry.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamTrack.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamTrackContentHint.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\MediaStreamTrackEvent.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorMediaStream.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorUserMedia.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorUserMediaError.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorUserMediaErrorCallback.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\NavigatorUserMediaSuccessCallback.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\URLMediaStream.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\UserMediaClient.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\UserMediaController.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\mediastream\UserMediaRequest.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\ModulesInitializer.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\offscreencanvas2d\OffscreenCanvasRenderingContext2D.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\offscreencanvas\OffscreenCanvasModules.h" />
@@ -7161,6 +7541,52 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\animation\TimingFunction.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\AsyncFileSystemCallbacks.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\AsyncMethodRunner.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioArray.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioBus.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioChannel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioDelayDSPKernel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioDestination.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioDestinationConsumer.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioDSPKernel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioDSPKernelProcessor.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioFIFO.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioFileReader.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioIOCallback.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioProcessor.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioPullFIFO.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioResampler.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioResamplerKernel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioSourceProvider.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioSourceProviderClient.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\AudioUtilities.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\Biquad.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\Cone.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\DenormalDisabler.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\DirectConvolver.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\Distance.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\DownSampler.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\DynamicsCompressor.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\DynamicsCompressorKernel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\EqualPowerPanner.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\FFTConvolver.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\FFTFrame.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\HRTFDatabase.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\HRTFDatabaseLoader.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\HRTFElevation.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\HRTFKernel.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\HRTFPanner.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\IIRFilter.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\MultiChannelResampler.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\Panner.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\Reverb.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\ReverbAccumulationBuffer.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\ReverbConvolver.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\ReverbConvolverStage.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\ReverbInputBuffer.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\SincResampler.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\StereoPanner.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\UpSampler.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\audio\VectorMath.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\blob\BlobData.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\blob\BlobRegistry.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\blob\BlobURL.h" />
@@ -7232,13 +7658,23 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\GlyphPage.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\GlyphPageTreeNode.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\FontSettings.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\OpenTypeCapsSupport.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\OpenTypeTypes.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\opentype\OpenTypeVerticalData.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\OrientationIterator.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\ScriptRunIterator.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\SegmentedFontData.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\CachingWordShapeIterator.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\CachingWordShaper.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\CaseMappingHarfBuzzBufferFiller.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\HarfBuzzFace.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\HarfBuzzShaper.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\RunSegmenter.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeCache.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\Shaper.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeResult.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeResultBuffer.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeResultInlineHeaders.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\ShapeResultSpacing.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\shaping\SimpleShaper.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\fonts\SimpleFontData.h" />
@@ -7457,6 +7893,7 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\heap\ThreadingTraits.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\heap\ThreadState.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\heap\TraceTraits.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\heap\UnifiedHeapController.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\heap\Visitor.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\heap\WrapperVisitor.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\Histogram.h" />
@@ -7503,6 +7940,11 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\LifecycleNotifier.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\LifecycleObserver.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\LinkHash.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamCenter.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamComponent.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamDescriptor.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamSource.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\mediastream\MediaStreamWebAudioSource.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\MemoryCoordinator.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\ContentSecurityPolicyParsers.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\network\ContentSecurityPolicyResponseHeaders.h" />
@@ -7838,7 +8280,7 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\ListHashSet.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\Locker.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\MathExtras.h" />
-    <ClInclude Include="..\..\third_party\WebKit\Source\wtf\Noncopyable.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\wtf\NonCopyable.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\NonCopyingSort.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\NotFound.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\NullPtr.h" />
@@ -7883,6 +8325,7 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\qt4\qunicodetables.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\qt4\UnicodeMacrosFromICU.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\qt4\UnicodeQt4.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\qt4\wchar.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\StringBuffer.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\StringBuilder.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\StringConcatenate.h" />
@@ -8278,13 +8721,11 @@
     <ClInclude Include="..\..\wke\wkeUtil.h" />
     <ClInclude Include="..\..\wke\wkeWebView.h" />
     <ClInclude Include="..\..\wke\wkeWebWindow.h" />
+    <ClInclude Include="..\build_config.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="miniwebkit_blink.ico" />
     <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="miniwebkit_blink.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\content\resources\calendarPickerJs.js" />
@@ -8312,6 +8753,7 @@
     <None Include="..\..\third_party\WebKit\Source\modules\websockets\DEPS" />
     <None Include="..\..\third_party\WebKit\Source\platform\animation\DEPS" />
     <None Include="..\..\third_party\WebKit\Source\platform\animation\OWNERS" />
+    <None Include="..\..\third_party\WebKit\Source\platform\audio\OWNERS" />
     <None Include="..\..\third_party\WebKit\Source\platform\BUILD.gn" />
     <None Include="..\..\third_party\WebKit\Source\platform\ColorData.gperf" />
     <None Include="..\..\third_party\WebKit\Source\platform\DEPS" />
@@ -8361,9 +8803,13 @@
     <None Include="..\..\ui\gfx\geometry\OWNERS" />
     <None Include="..\..\ui\gl\BUILD.gn" />
     <None Include="..\..\ui\gl\DEPS" />
+    <None Include="mtmb.def" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\third_party\smhasher\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="miniblink.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

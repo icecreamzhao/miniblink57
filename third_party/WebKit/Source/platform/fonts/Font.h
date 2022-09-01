@@ -123,14 +123,13 @@ public:
         m_shapeWordByWordComputed = true;
     }
 
-    ShapeCache* Font::shapeCache() const
+    ShapeCache* shapeCache() const
     {
         return m_fontFallbackList->shapeCache(m_fontDescription);
     }
 
 private:
-    enum ForTextEmphasisOrNot { NotForTextEmphasis,
-        ForTextEmphasis };
+    enum ForTextEmphasisOrNot { NotForTextEmphasis, ForTextEmphasis };
 
     // Returns the total advance.
     float buildGlyphBuffer(const TextRunPaintInfo&, GlyphBuffer&, const GlyphData* emphasisData = nullptr) const;

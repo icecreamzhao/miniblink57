@@ -4660,6 +4660,9 @@ namespace internal {
         SimpleInstallFunction(isolate_, extras_utils, "uncurryThis",
             Builtins::kExtrasUtilsUncurryThis, 1, false);
 
+        SimpleInstallFunction(isolate_, extras_utils, "simpleBind",
+            Builtins::kExtrasUtilsSimpleBind, 1, false);
+
         SimpleInstallFunction(isolate_, extras_utils, "markPromiseAsHandled",
             Builtins::kExtrasUtilsMarkPromiseAsHandled, 1, false);
 

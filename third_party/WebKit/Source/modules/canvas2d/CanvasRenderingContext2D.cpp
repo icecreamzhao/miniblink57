@@ -874,9 +874,9 @@ void CanvasRenderingContext2D::drawTextInternal(
     if (!c)
         return;
 
-    if (!std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(x) || !std_isfinite(y))
         return;
-    if (maxWidth && (!std::isfinite(*maxWidth) || *maxWidth <= 0))
+    if (maxWidth && (!std_isfinite(*maxWidth) || *maxWidth <= 0))
         return;
 
     // Currently, SkPictureImageFilter does not support subpixel text

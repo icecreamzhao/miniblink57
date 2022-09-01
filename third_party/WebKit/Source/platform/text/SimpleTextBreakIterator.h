@@ -73,7 +73,7 @@ struct WordBreakIterator : TextBreakIterator {
     {
     }
 
-    ~WordBreakIterator()
+    ~WordBreakIterator() override
     {
     }
 
@@ -175,7 +175,7 @@ struct CharBreakIterator : TextBreakIterator {
     {
     }
 
-    ~CharBreakIterator()
+    ~CharBreakIterator() override
     {
     }
 
@@ -205,6 +205,11 @@ struct CharBreakIterator : TextBreakIterator {
 };
 
 struct LineBreakIterator : TextBreakIterator {
+    ~LineBreakIterator() override
+    {
+
+    }
+
     virtual int first() override
     {
         m_currentPos = 0;
@@ -241,7 +246,7 @@ struct SentenceBreakIterator : TextBreakIterator {
     {
     }
 
-    ~SentenceBreakIterator()
+    ~SentenceBreakIterator() override
     {
     }
 
@@ -296,4 +301,4 @@ struct SentenceBreakIterator : TextBreakIterator {
 
 } // blink 
 
-#endif SimpleTextBreakIterator_h
+#endif // SimpleTextBreakIterator_h

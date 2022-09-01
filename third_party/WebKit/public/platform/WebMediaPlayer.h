@@ -176,9 +176,9 @@ public:
 
     virtual double mediaTimeForTimeValue(double timeValue) const = 0;
 
-    virtual unsigned decodedFrameCount() const = 0;
-    virtual unsigned droppedFrameCount() const = 0;
-    virtual unsigned corruptedFrameCount() const { return 0; }
+    virtual unsigned int decodedFrameCount() const = 0;
+    virtual unsigned int droppedFrameCount() const = 0;
+    virtual unsigned int corruptedFrameCount() const { return 0; }
     virtual size_t audioDecodedByteCount() const = 0;
     virtual size_t videoDecodedByteCount() const = 0;
 

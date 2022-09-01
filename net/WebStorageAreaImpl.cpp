@@ -55,19 +55,19 @@ static String buildOriginLocalFileNameString(const blink::KURL& pageUrl)
 }
 
 //static char* kLocalStorageDirectoryName = "LocalStorage";
-static char* kLocalStorageExtensionName = ".localstorage";
+static const char* kLocalStorageExtensionName = ".localstorage";
 
-static char* kSeparator = "--mb-sep--\n";
+static const char* kSeparator = "--mb-sep--\n";
 static size_t kSeparatorLength = 11;
 
-static char* kEmptySeprator = "--mb-ept--";// (char)0x1f;
+static const char* kEmptySeprator = "--mb-ept--";// (char)0x1f;
 static size_t kEmptySepratorLength = 10;
 
 HashSet<String>* WebStorageAreaImpl::s_cachedPath = nullptr;
 
 static String buildLocalStorageDirectoryPath(const String& localPath)
 {
-    return localPath;
+    return WTF::ensureStringToUTF8String(localPath);
 }
 
 static String buildLocalStorageFileNameString(const String& localPath, const blink::KURL& originUrl)
@@ -76,9 +76,9 @@ static String buildLocalStorageFileNameString(const String& localPath, const bli
     localStoragePath.append(buildLocalStorageDirectoryPath(localPath));
 
     if (localStoragePath.length() > 0) {
-        UChar c = localStoragePath.characters16()[localStoragePath.length() - 1];
-        if (L'\\' != c && L'/' != c)
-            localStoragePath.append(L'\\');
+        UChar c = localStoragePath.characters8()[localStoragePath.length() - 1];
+        if ('\\' != c && '/' != c)
+            localStoragePath.append(kPlatformFilePathSeparator);
     }
 
     localStoragePath.append(buildOriginLocalFileNameString(originUrl));

@@ -46,7 +46,7 @@ const Path& StylePath::path() const
 
 float StylePath::length() const
 {
-    if (std::isnan(m_pathLength))
+    if (std_isnan(m_pathLength))
         m_pathLength = path().length();
     return m_pathLength;
 }

@@ -157,6 +157,78 @@
     <Filter Include="url\third_party\mozilla">
       <UniqueIdentifier>{c9ce5ead-0029-4302-90db-87f139d6cd53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="media">
+      <UniqueIdentifier>{c4a0aec3-1a6b-42d7-88a2-c65271ffa8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\audio">
+      <UniqueIdentifier>{7f5e803a-b838-4fbd-b53e-756dd85144e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\base">
+      <UniqueIdentifier>{23a50a33-9267-477d-b2a4-824ac0eead99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\blink">
+      <UniqueIdentifier>{54e73209-f758-4ddb-affe-996e6fef3573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\capture">
+      <UniqueIdentifier>{2f7a0951-efb5-49dd-949b-23f4a7cf8904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\cdm">
+      <UniqueIdentifier>{2ce6a339-5efe-4608-8320-728e1fa96a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\ffmpeg">
+      <UniqueIdentifier>{e1bd6ecb-3d6b-424d-aa80-bb44956b74bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\filters">
+      <UniqueIdentifier>{e3da1751-5161-4db5-b11e-ab8b4962d683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\formats">
+      <UniqueIdentifier>{5d0b0815-f5ae-4efc-b1c0-645a51384e5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\midi">
+      <UniqueIdentifier>{4acb5a25-cbb5-46bb-a59c-577245cf55ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\renderers">
+      <UniqueIdentifier>{51c66c0c-15ed-4715-a939-a2f464c49637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\video">
+      <UniqueIdentifier>{ab5c099b-6b0f-42e8-85f7-f3cebf28a273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\audio\sounds">
+      <UniqueIdentifier>{97f1749c-d54b-465f-b767-b136019a72c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\audio\win">
+      <UniqueIdentifier>{c9bb10e9-5cef-473c-99b2-48d27efe2387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\base\simd">
+      <UniqueIdentifier>{4d4079ac-db3f-4bd3-8693-5e9b7713fb16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\base\win">
+      <UniqueIdentifier>{7112d3f0-56a1-4e46-9cc4-c618fa69498b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\capture\content">
+      <UniqueIdentifier>{ba31b6db-a2b8-4e60-8f42-bc52b361cec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\capture\video">
+      <UniqueIdentifier>{100300ef-2b25-4fd0-ba23-8b675a65aa30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\capture\video\win">
+      <UniqueIdentifier>{3e66502d-ba9a-484e-96b5-ebfad4ca2f65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\formats\common">
+      <UniqueIdentifier>{fa0a6f31-396f-476a-ac31-7854a96d0006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\formats\mp2t">
+      <UniqueIdentifier>{d552a281-8a22-4b8a-943a-982c69e45e40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\formats\mp4">
+      <UniqueIdentifier>{e0a57820-6f29-4c74-9fde-92a729852cfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\formats\mpeg">
+      <UniqueIdentifier>{0819d0e4-6d46-4ac6-8e15-8140ce04f542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\formats\webm">
+      <UniqueIdentifier>{68d1eacd-a4c6-4653-8930-9b2d86d68928}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -2376,6 +2448,1086 @@
     <ClInclude Include="..\..\base\WindowsVersion.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\media\audio\fake_audio_worker.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\null_audio_sink.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\point.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\sample_rates.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\scoped_task_runner_observer.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\simple_sources.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\virtual_audio_input_stream.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\virtual_audio_output_stream.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\agc_audio_stream.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_device_name.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_device_thread.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_input_controller.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_input_device.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_input_ipc.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_input_writer.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_io.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_logging.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_manager.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_manager_base.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_manager_factory.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_controller.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_device.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_dispatcher.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_dispatcher_impl.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_ipc.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_proxy.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_resampler.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_output_stream_sink.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_power_monitor.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\audio_source_diverter.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\clockless_audio_sink.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\fake_audio_input_stream.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\fake_audio_log_factory.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\fake_audio_manager.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\fake_audio_output_stream.h">
+      <Filter>media\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\sounds\audio_stream_handler.h">
+      <Filter>media\audio\sounds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\sounds\sounds_manager.h">
+      <Filter>media\audio\sounds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\sounds\wav_audio_handler.h">
+      <Filter>media\audio\sounds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\audio_device_listener_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\audio_low_latency_input_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\audio_low_latency_output_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\audio_manager_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\avrt_wrapper_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\core_audio_util_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\device_enumeration_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\wavein_input_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\audio\win\waveout_output_win.h">
+      <Filter>media\audio\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\simd\filter_yuv.h">
+      <Filter>media\base\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\simd\convert_rgb_to_yuv.h">
+      <Filter>media\base\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\simd\convert_rgb_to_yuv_ssse3.h">
+      <Filter>media\base\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\simd\convert_yuv_to_rgb.h">
+      <Filter>media\base\simd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\win\mf_initializer.h">
+      <Filter>media\base\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\content\animated_content_sampler.h">
+      <Filter>media\capture\content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\content\capture_resolution_chooser.h">
+      <Filter>media\capture\content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\content\screen_capture_device_core.h">
+      <Filter>media\capture\content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\content\smooth_event_sampler.h">
+      <Filter>media\capture\content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\content\thread_safe_capture_oracle.h">
+      <Filter>media\capture\content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\content\video_capture_oracle.h">
+      <Filter>media\capture\content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\fake_video_capture_device.h">
+      <Filter>media\capture\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\fake_video_capture_device_factory.h">
+      <Filter>media\capture\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\file_video_capture_device.h">
+      <Filter>media\capture\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\file_video_capture_device_factory.h">
+      <Filter>media\capture\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\video_capture_device.h">
+      <Filter>media\capture\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\video_capture_device_factory.h">
+      <Filter>media\capture\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\filter_base_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\pin_base_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\sink_filter_observer_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\sink_filter_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\sink_input_pin_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\video_capture_device_factory_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\video_capture_device_mf_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\video_capture_device_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\capture\video\win\capability_list_win.h">
+      <Filter>media\capture\video\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\ffmpeg\ffmpeg_common.h">
+      <Filter>media\ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\ffmpeg\ffmpeg_deleters.h">
+      <Filter>media\ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\audio_file_reader.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\audio_renderer_algorithm.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\blocking_url_protocol.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\chunk_demuxer.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\context_3d.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\decoder_selector.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\decoder_stream.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\decoder_stream_traits.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\decrypting_audio_decoder.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\decrypting_demuxer_stream.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\decrypting_video_decoder.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_aac_bitstream_converter.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_audio_decoder.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_bitstream_converter.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_demuxer.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_glue.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_h264_to_annex_b_bitstream_converter.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_h265_to_annex_b_bitstream_converter.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ffmpeg_video_decoder.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\file_data_source.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\frame_processor.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\gpu_video_decoder.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\h264_bit_reader.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\h264_parser.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\h264_to_annex_b_bitstream_converter.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\h265_parser.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\in_memory_url_protocol.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\ivf_parser.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\jpeg_parser.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\opus_constants.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\source_buffer_platform.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\source_buffer_range.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\source_buffer_stream.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\stream_parser_factory.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\video_cadence_estimator.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\video_renderer_algorithm.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\vp8_bool_decoder.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\vp8_parser.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\vp9_parser.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\vp9_raw_bits_reader.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\vpx_video_decoder.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\webvtt_util.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\wsola_internals.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\audio_clock.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\common\offset_byte_queue.h">
+      <Filter>media\formats\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\es_parser.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\es_parser_adts.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\es_parser_h264.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\es_parser_mpeg1audio.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\mp2t_common.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\mp2t_stream_parser.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\timestamp_unroller.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\ts_packet.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\ts_section.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\ts_section_pat.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\ts_section_pes.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\ts_section_pmt.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\ts_section_psi.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp2t\es_adapter_video.h">
+      <Filter>media\formats\mp2t</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\box_reader.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\es_descriptor.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\fourccs.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\hevc.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\mp4_stream_parser.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\rcheck.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\sample_to_group_iterator.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\track_run_iterator.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\aac.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\avc.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\bitstream_converter.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mp4\box_definitions.h">
+      <Filter>media\formats\mp4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mpeg\adts_stream_parser.h">
+      <Filter>media\formats\mpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mpeg\mpeg_audio_stream_parser_base.h">
+      <Filter>media\formats\mpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mpeg\mpeg1_audio_stream_parser.h">
+      <Filter>media\formats\mpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\mpeg\adts_constants.h">
+      <Filter>media\formats\mpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\renderers\default_renderer_factory.h">
+      <Filter>media\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\renderers\gpu_video_accelerator_factories.h">
+      <Filter>media\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\renderers\renderer_impl.h">
+      <Filter>media\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\renderers\skcanvas_video_renderer.h">
+      <Filter>media\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\renderers\video_renderer_impl.h">
+      <Filter>media\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\renderers\audio_renderer_impl.h">
+      <Filter>media\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\video\h264_poc.h">
+      <Filter>media\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\video\jpeg_decode_accelerator.h">
+      <Filter>media\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\video\picture.h">
+      <Filter>media\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\video\video_decode_accelerator.h">
+      <Filter>media\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\video\video_encode_accelerator.h">
+      <Filter>media\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\video\fake_video_encode_accelerator.h">
+      <Filter>media\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\video\gpu_memory_buffer_video_frame_pool.h">
+      <Filter>media\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_buffer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_buffer_converter.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_buffer_queue.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_bus.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_capturer_source.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_codecs.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_converter.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_decoder.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_decoder_config.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_discard_helper.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_fifo.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_hash.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_latency.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_parameters.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_point.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_pull_fifo.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_push_fifo.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_renderer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_renderer_mixer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_renderer_mixer_input.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_renderer_mixer_pool.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_renderer_sink.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_sample_types.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_shifter.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_timestamp_helper.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_video_metadata_extractor.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\bind_to_current_loop.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\bit_reader.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\bit_reader_core.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\bitstream_buffer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\buffering_state.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\byte_queue.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\callback_holder.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_callback_promise.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_config.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_context.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_factory.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_initialized_promise.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_key_information.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_promise.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_promise_adapter.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\cdm_session_tracker.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\channel_layout.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\channel_mixer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\channel_mixing_matrix.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\container_names.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\content_decryption_module.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\data_buffer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\data_source.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\decode_status.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\decoder_buffer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\decoder_buffer_queue.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\decoder_factory.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\decrypt_config.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\decryptor.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\demuxer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\demuxer_stream.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\demuxer_stream_provider.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\djb2.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\eme_constants.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\encryption_scheme.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\fake_audio_render_callback.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\fake_audio_renderer_sink.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\fake_demuxer_stream.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\fake_media_resources.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\fake_single_thread_task_runner.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\fake_text_track_stream.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\feedback_signal_accumulator.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\hdr_metadata.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\key_system_names.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\key_system_properties.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\key_systems.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\keyboard_event_counter.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\limits.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\loopback_audio_converter.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_client.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_content_type.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_export.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_file_checker.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_log.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_log_event.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_observer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_permission.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_resources.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_switches.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_track.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_tracks.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_url_demuxer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_url_params.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\media_util.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\mime_util.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\mime_util_internal.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\moving_average.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\multi_channel_resampler.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\null_video_sink.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\output_device_info.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\pipeline.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\pipeline_impl.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\pipeline_metadata.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\pipeline_status.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\player_tracker.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\provision_fetcher.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\ranges.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\renderer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\renderer_client.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\renderer_factory.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\sample_format.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\seekable_buffer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\serial_runner.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\silent_sink_suspender.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\sinc_resampler.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\stream_parser.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\stream_parser_buffer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\subsample_entry.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\surface_manager.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\test_data_util.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\test_helpers.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\test_random.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\text_cue.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\text_ranges.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\text_renderer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\text_track.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\text_track_config.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\time_delta_interpolator.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\time_source.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\timestamp_constants.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\user_input_monitor.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\vector_math.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\vector_math_testing.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_codecs.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_decoder.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_decoder_config.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_facing.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_frame.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_frame_metadata.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_frame_pool.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_renderer.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_renderer_sink.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_rotation.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_types.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\video_util.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\wall_clock_time_source.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\yuv_convert.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\base\audio_block_fifo.h">
+      <Filter>media\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webencryptedmediaclient_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webinbandtexttrack_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webmediaplayer_delegate.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webmediaplayer_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webmediaplayer_params.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webmediaplayer_util.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webmediasource_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\websourcebuffer_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\active_loader.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\buffered_data_source_host_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\cache_util.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\cdm_result_promise.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\cdm_result_promise_helper.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\cdm_session_adapter.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\interval_map.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\key_system_config_selector.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\lru.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\media_blink_export.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\multibuffer.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\multibuffer_data_source.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\multibuffer_reader.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\new_session_cdm_result_promise.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\renderer_media_player_interface.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\resource_multibuffer_data_provider.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\test_response_generator.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\texttrack_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\url_index.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\video_frame_compositor.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\watch_time_reporter.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webaudiosourceprovider_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webcontentdecryptionmodule_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webcontentdecryptionmoduleaccess_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\blink\webcontentdecryptionmodulesession_impl.h">
+      <Filter>media\blink</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\pipeline_controller.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\source_buffer_state.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\filters\audio_timestamp_validator.h">
+      <Filter>media\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_parser.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_stream_parser.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_tracks_parser.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_video_client.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_webvtt_parser.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\cluster_builder.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\opus_packet_builder.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\tracks_builder.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_audio_client.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_cluster_parser.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_colour_parser.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_constants.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_content_encodings.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_content_encodings_client.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_crypto_helpers.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\media\formats\webm\webm_info_parser.h">
+      <Filter>media\formats\webm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -4019,6 +5171,915 @@
     <ClCompile Include="..\..\base\WindowsVersion.cpp">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\media\audio\null_audio_sink.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\sample_rates.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\scoped_task_runner_observer.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\simple_sources.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\virtual_audio_input_stream.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\virtual_audio_output_stream.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_device_name.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_device_thread.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_input_controller.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_input_device.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_input_ipc.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_manager.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_manager_base.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_controller.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_device.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_dispatcher.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_dispatcher_impl.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_ipc.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_proxy.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_resampler.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_output_stream_sink.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_power_monitor.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\clockless_audio_sink.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\fake_audio_input_stream.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\fake_audio_log_factory.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\fake_audio_manager.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\fake_audio_output_stream.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\fake_audio_worker.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\sounds\sounds_manager.cc">
+      <Filter>media\audio\sounds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\sounds\wav_audio_handler.cc">
+      <Filter>media\audio\sounds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\sounds\audio_stream_handler.cc">
+      <Filter>media\audio\sounds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\audio_low_latency_input_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\audio_low_latency_output_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\audio_manager_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\avrt_wrapper_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\core_audio_util_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\device_enumeration_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\wavein_input_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\waveout_output_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\win\audio_device_listener_win.cc">
+      <Filter>media\audio\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\simd\convert_yuv_to_rgb_x86.cc">
+      <Filter>media\base\simd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\simd\filter_yuv_c.cc">
+      <Filter>media\base\simd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\simd\filter_yuv_sse2.cc">
+      <Filter>media\base\simd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\simd\convert_rgb_to_yuv_c.cc">
+      <Filter>media\base\simd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\simd\convert_rgb_to_yuv_sse2.cc">
+      <Filter>media\base\simd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\simd\convert_rgb_to_yuv_ssse3.cc">
+      <Filter>media\base\simd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\simd\convert_yuv_to_rgb_c.cc">
+      <Filter>media\base\simd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\content\capture_resolution_chooser.cc">
+      <Filter>media\capture\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\content\screen_capture_device_core.cc">
+      <Filter>media\capture\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\content\smooth_event_sampler.cc">
+      <Filter>media\capture\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\content\thread_safe_capture_oracle.cc">
+      <Filter>media\capture\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\content\video_capture_oracle.cc">
+      <Filter>media\capture\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\content\animated_content_sampler.cc">
+      <Filter>media\capture\content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\file_video_capture_device.cc">
+      <Filter>media\capture\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\file_video_capture_device_factory.cc">
+      <Filter>media\capture\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\video_capture_device.cc">
+      <Filter>media\capture\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\video_capture_device_factory.cc">
+      <Filter>media\capture\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\win\filter_base_win.cc">
+      <Filter>media\capture\video\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\win\pin_base_win.cc">
+      <Filter>media\capture\video\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\win\sink_filter_win.cc">
+      <Filter>media\capture\video\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\win\sink_input_pin_win.cc">
+      <Filter>media\capture\video\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\capture\video\win\capability_list_win.cc">
+      <Filter>media\capture\video\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\ffmpeg\ffmpeg_common.cc">
+      <Filter>media\ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\audio_file_reader.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\audio_renderer_algorithm.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\blocking_url_protocol.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\chunk_demuxer.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\decoder_selector.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\decoder_stream.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\decoder_stream_traits.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\decrypting_audio_decoder.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\decrypting_demuxer_stream.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\decrypting_video_decoder.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_aac_bitstream_converter.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_audio_decoder.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_demuxer.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_glue.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_h264_to_annex_b_bitstream_converter.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_h265_to_annex_b_bitstream_converter.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_video_decoder.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\file_data_source.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\frame_processor.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\gpu_video_decoder.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\h264_bit_reader.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\h264_parser.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\h264_to_annex_b_bitstream_converter.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\h265_parser.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\in_memory_url_protocol.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ivf_parser.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\jpeg_parser.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\opus_constants.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\source_buffer_platform.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\source_buffer_range.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\source_buffer_stream.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\stream_parser_factory.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\video_cadence_estimator.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\video_renderer_algorithm.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\vp8_bool_decoder.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\vp8_parser.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\vp9_parser.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\vp9_raw_bits_reader.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\wsola_internals.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\audio_clock.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\common\offset_byte_queue.cc">
+      <Filter>media\formats\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\es_parser_adts.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\es_parser_h264.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\es_parser_mpeg1audio.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\mp2t_stream_parser.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\timestamp_unroller.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\ts_packet.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\ts_section_pat.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\ts_section_pes.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\ts_section_pmt.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\ts_section_psi.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\es_adapter_video.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp2t\es_parser.cc">
+      <Filter>media\formats\mp2t</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\box_reader.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\es_descriptor.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\hevc.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\mp4_stream_parser.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\sample_to_group_iterator.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\track_run_iterator.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\aac.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\avc.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\bitstream_converter.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mp4\box_definitions.cc">
+      <Filter>media\formats\mp4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mpeg\mpeg_audio_stream_parser_base.cc">
+      <Filter>media\formats\mpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mpeg\mpeg1_audio_stream_parser.cc">
+      <Filter>media\formats\mpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mpeg\adts_constants.cc">
+      <Filter>media\formats\mpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\mpeg\adts_stream_parser.cc">
+      <Filter>media\formats\mpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\renderers\default_renderer_factory.cc">
+      <Filter>media\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\renderers\renderer_impl.cc">
+      <Filter>media\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\renderers\skcanvas_video_renderer.cc">
+      <Filter>media\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\renderers\video_renderer_impl.cc">
+      <Filter>media\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\renderers\audio_renderer_impl.cc">
+      <Filter>media\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\video\h264_poc.cc">
+      <Filter>media\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\video\jpeg_decode_accelerator.cc">
+      <Filter>media\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\video\video_decode_accelerator.cc">
+      <Filter>media\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\video\video_encode_accelerator.cc">
+      <Filter>media\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\video\fake_video_encode_accelerator.cc">
+      <Filter>media\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\video\gpu_memory_buffer_video_frame_pool.cc">
+      <Filter>media\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_buffer_converter.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_buffer_queue.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_bus.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_codecs.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_converter.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_decoder.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_decoder_config.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_discard_helper.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_fifo.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_hash.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_latency.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_parameters.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_point.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_pull_fifo.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_push_fifo.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_renderer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_renderer_mixer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_renderer_mixer_input.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_shifter.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_timestamp_helper.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_video_metadata_extractor.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\bit_reader.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\bit_reader_core.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\bitstream_buffer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\byte_queue.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_callback_promise.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_context.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_factory.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_initialized_promise.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_key_information.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_promise.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_promise_adapter.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\cdm_session_tracker.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\channel_layout.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\channel_mixer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\channel_mixing_matrix.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\container_names.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\content_decryption_module.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\data_buffer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\data_source.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\decode_status.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\decoder_buffer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\decoder_buffer_queue.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\decoder_factory.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\decrypt_config.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\decryptor.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\demuxer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\demuxer_stream.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\demuxer_stream_provider.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\djb2.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\encryption_scheme.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\hdr_metadata.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\key_system_names.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\key_system_properties.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\key_systems.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\keyboard_event_counter.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\loopback_audio_converter.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_client.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_content_type.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_file_checker.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_log.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_observer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_permission.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_resources.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_switches.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_track.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_tracks.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_url_demuxer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\media_util.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\mime_util.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\mime_util_internal.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\moving_average.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\multi_channel_resampler.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\null_video_sink.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\output_device_info.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\pipeline_impl.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\pipeline_metadata.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\player_tracker.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\ranges.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\renderer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\renderer_factory.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\sample_format.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\seekable_buffer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\serial_runner.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\silent_sink_suspender.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\sinc_resampler.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\stream_parser.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\stream_parser_buffer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\test_data_util.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\text_cue.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\text_ranges.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\text_renderer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\text_track_config.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\time_delta_interpolator.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\user_input_monitor.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\user_input_monitor_win.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\vector_math.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_codecs.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_decoder.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_decoder_config.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_frame.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_frame_metadata.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_frame_pool.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_renderer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_types.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\video_util.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\wall_clock_time_source.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\yuv_convert.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_block_fifo.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\base\audio_buffer.cc">
+      <Filter>media\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\webinbandtexttrack_impl.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\webmediaplayer_impl.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\webmediaplayer_params.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\webmediaplayer_util.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\webmediasource_impl.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\websourcebuffer_impl.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\active_loader.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\buffered_data_source_host_impl.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\cache_util.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\cdm_result_promise_helper.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\cdm_session_adapter.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\key_system_config_selector.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\multibuffer.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\multibuffer_data_source.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\multibuffer_reader.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\new_session_cdm_result_promise.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\texttrack_impl.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\url_index.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\video_frame_compositor.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\watch_time_reporter.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\webaudiosourceprovider_impl.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\pipeline_controller.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cc\layers\video_frame_provider_client_impl.cc">
+      <Filter>cc\layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cc\layers\video_layer.cc">
+      <Filter>cc\layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cc\layers\video_layer_impl.cc">
+      <Filter>cc\layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\base\power_monitor\power_monitor_device_source.cc">
+      <Filter>base\power_monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\base\power_monitor\power_monitor_device_source_win.cc">
+      <Filter>base\power_monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\base\power_monitor\power_monitor_source.cc">
+      <Filter>base\power_monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\base\power_monitor\power_monitor.cc">
+      <Filter>base\power_monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\source_buffer_state.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\audio_timestamp_validator.cc">
+      <Filter>media\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_parser.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_stream_parser.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_tracks_parser.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_video_client.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_webvtt_parser.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\cluster_builder.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\opus_packet_builder.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\tracks_builder.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_audio_client.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_cluster_parser.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_colour_parser.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_constants.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_content_encodings.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_content_encodings_client.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_crypto_helpers.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\formats\webm\webm_info_parser.cc">
+      <Filter>media\formats\webm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\video\picture.cc">
+      <Filter>media\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cc\resources\video_resource_updater.cc">
+      <Filter>cc\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\audio\audio_device_description.cc">
+      <Filter>media\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\blink\resource_multibuffer_data_provider.cc">
+      <Filter>media\blink</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\base\BUILD.gn">
@@ -4122,6 +6183,60 @@
     </None>
     <None Include="..\..\url\third_party\mozilla\README.chromium">
       <Filter>url\third_party\mozilla</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\convert_yuv_to_rgb_sse.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\convert_yuva_to_argb_mmx.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\convert_yuva_to_argb_mmx.inc">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\empty_register_state_mmx.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\linear_scale_yuv_to_rgb_mmx.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\linear_scale_yuv_to_rgb_mmx.inc">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\linear_scale_yuv_to_rgb_sse.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\media_export.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\scale_yuv_to_rgb_mmx.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\scale_yuv_to_rgb_mmx.inc">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\scale_yuv_to_rgb_sse.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\convert_rgb_to_yuv_ssse3.asm">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\convert_rgb_to_yuv_ssse3.inc">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\base\simd\convert_yuv_to_rgb_mmx.inc">
+      <Filter>media\base\simd</Filter>
+    </None>
+    <None Include="..\..\media\capture\content\README">
+      <Filter>media\capture\content</Filter>
+    </None>
+    <None Include="..\..\media\base\BUILD.gn">
+      <Filter>media\base</Filter>
+    </None>
+    <None Include="..\..\media\blink\BUILD.gn">
+      <Filter>media\blink</Filter>
+    </None>
+    <None Include="..\..\media\blink\DEPS">
+      <Filter>media\blink</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -13,10 +13,10 @@
 struct SkIRect;
 struct SkPoint;
 struct SkRect;
-typedef unsigned long DWORD;
-typedef DWORD COLORREF;
-typedef struct tagPOINT POINT;
-typedef struct tagRECT RECT;
+// typedef unsigned long DWORD;
+// typedef DWORD COLORREF;
+// typedef struct tagPOINT POINT;
+// typedef struct tagRECT RECT;
 
 namespace skia {
 

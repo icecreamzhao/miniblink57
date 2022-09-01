@@ -17,6 +17,7 @@
 #include "third_party/skia/include/core/SkPixelRef.h"
 #include "third_party/skia/include/core/SkPixmap.h"
 #include "skia/ext/platform_surface.h"
+#include "base/macros.h"
 
 class SkBaseDevice;
 
@@ -45,7 +46,7 @@ enum OnFailureType {
     RETURN_NULL_ON_FAILURE
 };
 
-#if defined(WIN32)
+#if defined(WIN32) // || defined(OS_LINUX_FOR_WIN)
 // The shared_section parameter is passed to gfx::PlatformDevice::create.
 // See it for details.
 SK_API SkCanvas* CreatePlatformCanvas(int width,

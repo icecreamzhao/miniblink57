@@ -179,11 +179,11 @@ static const size_t maximumDepth = 2000;
 //                                      Vector<v8::Local<v8::Array>>& stack,
 //                                      ExceptionState& exceptionState,
 //                                      bool allowExperimentalTypes = false) {
-//   if (value->IsNumber() && !std::isnan(value.As<v8::Number>()->Value()))
+//   if (value->IsNumber() && !std_isnan(value.As<v8::Number>()->Value()))
 //     return IDBKey::createNumber(value.As<v8::Number>()->Value());
 //   if (value->IsString())
 //     return IDBKey::createString(toCoreString(value.As<v8::String>()));
-//   if (value->IsDate() && !std::isnan(value.As<v8::Date>()->ValueOf()))
+//   if (value->IsDate() && !std_isnan(value.As<v8::Date>()->ValueOf()))
 //     return IDBKey::createDate(value.As<v8::Date>()->ValueOf());
 //   if (allowExperimentalTypes ||
 //       RuntimeEnabledFeatures::indexedDBExperimentalEnabled()) {

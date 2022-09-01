@@ -255,7 +255,7 @@ double BaseRenderingContext2D::lineWidth() const
 
 void BaseRenderingContext2D::setLineWidth(double width)
 {
-    if (!std::isfinite(width) || width <= 0)
+    if (!std_isfinite(width) || width <= 0)
         return;
     if (state().lineWidth() == width)
         return;
@@ -299,7 +299,7 @@ double BaseRenderingContext2D::miterLimit() const
 
 void BaseRenderingContext2D::setMiterLimit(double limit)
 {
-    if (!std::isfinite(limit) || limit <= 0)
+    if (!std_isfinite(limit) || limit <= 0)
         return;
     if (state().miterLimit() == limit)
         return;
@@ -313,7 +313,7 @@ double BaseRenderingContext2D::shadowOffsetX() const
 
 void BaseRenderingContext2D::setShadowOffsetX(double x)
 {
-    if (!std::isfinite(x))
+    if (!std_isfinite(x))
         return;
     if (state().shadowOffset().width() == x)
         return;
@@ -327,7 +327,7 @@ double BaseRenderingContext2D::shadowOffsetY() const
 
 void BaseRenderingContext2D::setShadowOffsetY(double y)
 {
-    if (!std::isfinite(y))
+    if (!std_isfinite(y))
         return;
     if (state().shadowOffset().height() == y)
         return;
@@ -341,7 +341,7 @@ double BaseRenderingContext2D::shadowBlur() const
 
 void BaseRenderingContext2D::setShadowBlur(double blur)
 {
-    if (!std::isfinite(blur) || blur < 0)
+    if (!std_isfinite(blur) || blur < 0)
         return;
     if (state().shadowBlur() == blur)
         return;
@@ -371,7 +371,7 @@ const Vector<double>& BaseRenderingContext2D::getLineDash() const
 static bool lineDashSequenceIsValid(const Vector<double>& dash)
 {
     for (size_t i = 0; i < dash.size(); i++) {
-        if (!std::isfinite(dash[i]) || dash[i] < 0)
+        if (!std_isfinite(dash[i]) || dash[i] < 0)
             return false;
     }
     return true;
@@ -391,7 +391,7 @@ double BaseRenderingContext2D::lineDashOffset() const
 
 void BaseRenderingContext2D::setLineDashOffset(double offset)
 {
-    if (!std::isfinite(offset) || state().lineDashOffset() == offset)
+    if (!std_isfinite(offset) || state().lineDashOffset() == offset)
         return;
     modifiableState().setLineDashOffset(offset);
 }
@@ -470,7 +470,7 @@ void BaseRenderingContext2D::scale(double sx, double sy)
     if (!c)
         return;
 
-    if (!std::isfinite(sx) || !std::isfinite(sy))
+    if (!std_isfinite(sx) || !std_isfinite(sy))
         return;
 
     AffineTransform newTransform = state().transform();
@@ -492,7 +492,7 @@ void BaseRenderingContext2D::rotate(double angleInRadians)
     if (!c)
         return;
 
-    if (!std::isfinite(angleInRadians))
+    if (!std_isfinite(angleInRadians))
         return;
 
     AffineTransform newTransform = state().transform();
@@ -515,7 +515,7 @@ void BaseRenderingContext2D::translate(double tx, double ty)
     if (!state().isTransformInvertible())
         return;
 
-    if (!std::isfinite(tx) || !std::isfinite(ty))
+    if (!std_isfinite(tx) || !std_isfinite(ty))
         return;
 
     AffineTransform newTransform = state().transform();
@@ -541,7 +541,7 @@ void BaseRenderingContext2D::transform(double m11,
     if (!c)
         return;
 
-    if (!std::isfinite(m11) || !std::isfinite(m21) || !std::isfinite(dx) || !std::isfinite(m12) || !std::isfinite(m22) || !std::isfinite(dy))
+    if (!std_isfinite(m11) || !std_isfinite(m21) || !std_isfinite(dx) || !std_isfinite(m12) || !std_isfinite(m22) || !std_isfinite(dy))
         return;
 
     AffineTransform transform(m11, m12, m21, m22, dx, dy);
@@ -593,7 +593,7 @@ void BaseRenderingContext2D::setTransform(double m11,
     if (!c)
         return;
 
-    if (!std::isfinite(m11) || !std::isfinite(m21) || !std::isfinite(dx) || !std::isfinite(m12) || !std::isfinite(m22) || !std::isfinite(dy))
+    if (!std_isfinite(m11) || !std_isfinite(m21) || !std_isfinite(dx) || !std_isfinite(m12) || !std_isfinite(m22) || !std_isfinite(dy))
         return;
 
     resetTransform();
@@ -610,7 +610,7 @@ static bool validateRectForCanvas(double& x,
     double& width,
     double& height)
 {
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(width) || !std::isfinite(height))
+    if (!std_isfinite(x) || !std_isfinite(y) || !std_isfinite(width) || !std_isfinite(height))
         return false;
 
     if (!width && !height)
@@ -838,7 +838,7 @@ bool BaseRenderingContext2D::isPointInPathInternal(
         return false;
 
     FloatPoint point(x, y);
-    if (!std::isfinite(point.x()) || !std::isfinite(point.y()))
+    if (!std_isfinite(point.x()) || !std_isfinite(point.y()))
         return false;
     AffineTransform ctm = state().transform();
     FloatPoint transformedPoint = ctm.inverse().mapPoint(point);
@@ -870,7 +870,7 @@ bool BaseRenderingContext2D::isPointInStrokeInternal(const Path& path,
         return false;
 
     FloatPoint point(x, y);
-    if (!std::isfinite(point.x()) || !std::isfinite(point.y()))
+    if (!std_isfinite(point.x()) || !std_isfinite(point.y()))
         return false;
     AffineTransform ctm = state().transform();
     FloatPoint transformedPoint = ctm.inverse().mapPoint(point);
@@ -1211,7 +1211,7 @@ void BaseRenderingContext2D::drawImage(ExecutionContext* executionContext,
             return;
     }
 
-    if (!std::isfinite(dx) || !std::isfinite(dy) || !std::isfinite(dw) || !std::isfinite(dh) || !std::isfinite(sx) || !std::isfinite(sy) || !std::isfinite(sw) || !std::isfinite(sh) || !dw || !dh || !sw || !sh)
+    if (!std_isfinite(dx) || !std_isfinite(dy) || !std_isfinite(dw) || !std_isfinite(dh) || !std_isfinite(sx) || !std_isfinite(sy) || !std_isfinite(sw) || !std_isfinite(sh) || !dw || !dh || !sw || !sh)
         return;
 
     FloatRect srcRect = normalizeRect(FloatRect(sx, sy, sw, sh));

@@ -2571,7 +2571,7 @@ void Heap::CreateInitialObjects() {
 
   // The -0 value must be set before NewNumber works.
   set_minus_zero_value(*factory->NewHeapNumber(-0.0, IMMUTABLE, TENURED));
-  DCHECK(std::signbit(minus_zero_value()->Number()) != 0);
+  DCHECK(std_signbit(minus_zero_value()->Number()) != 0);
 
   set_nan_value(*factory->NewHeapNumber(
       std::numeric_limits<double>::quiet_NaN(), IMMUTABLE, TENURED));

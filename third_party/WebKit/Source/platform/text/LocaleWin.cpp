@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2012 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -94,6 +94,7 @@ static void ensureNameToLCIDMap(NameToLCIDMap& map)
 // Windows XP support.
 static LCID WINAPI convertLocaleNameToLCID(LPCWSTR name, DWORD)
 {
+#if defined(OS_WIN)
     if (!name || !name[0])
         return LOCALE_USER_DEFAULT;
     DEFINE_STATIC_LOCAL(NameToLCIDMap, map, ());
@@ -106,6 +107,7 @@ static LCID WINAPI convertLocaleNameToLCID(LPCWSTR name, DWORD)
             return iterator->value;
         localeName = removeLastComponent(localeName);
     } while (!localeName.isEmpty());
+#endif
     return LOCALE_USER_DEFAULT;
 }
 
@@ -121,6 +123,7 @@ static LCID LCIDFromLocaleInternal(LCID userDefaultLCID,
     const String& userDefaultLanguageCode,
     const String& locale)
 {
+#if defined(OS_WIN)
     String localeLanguageCode = extractLanguageCode(locale);
     if (equalIgnoringCase(localeLanguageCode, userDefaultLanguageCode))
         return userDefaultLCID;
@@ -135,19 +138,23 @@ static LCID LCIDFromLocaleInternal(LCID userDefaultLCID,
 
     static LocaleNameToLCIDPtr localeNameToLCID = nullptr;
     if (!localeNameToLCID)
-        localeNameToLCID = reinterpret_cast<LocaleNameToLCIDPtr>(::GetProcAddress(::GetModuleHandle(L"kernel32"), "LocaleNameToLCID"));
+        localeNameToLCID = reinterpret_cast<LocaleNameToLCIDPtr>(::GetProcAddress(::GetModuleHandleW(L"kernel32"), "LocaleNameToLCID"));
     if (!localeNameToLCID)
       localeNameToLCID = convertLocaleNameToLCID;
 
     return localeNameToLCID(buffer, 0);
+#else
+    return 0;
+#endif
 }
 
 static LCID LCIDFromLocale(const String& locale, bool defaultsForLocale)
 {
+#if defined(OS_WIN)
     // According to MSDN, 9 is enough for LOCALE_SISO639LANGNAME.
     const size_t languageCodeBufferSize = 9;
     WCHAR lowercaseLanguageCode[languageCodeBufferSize];
-    ::GetLocaleInfo(
+    ::GetLocaleInfoW(
         LOCALE_USER_DEFAULT,
         LOCALE_SISO639LANGNAME | (defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0),
         lowercaseLanguageCode, languageCodeBufferSize);
@@ -159,6 +166,9 @@ static LCID LCIDFromLocale(const String& locale, bool defaultsForLocale)
         lcid = LCIDFromLocaleInternal(LOCALE_USER_DEFAULT, userDefaultLanguageCode,
             defaultLanguage());
     return lcid;
+#else
+    return 0;
+#endif
 }
 
 std::unique_ptr<Locale> Locale::create(const String& locale)
@@ -194,23 +204,78 @@ LocaleWin::~LocaleWin() { }
 
 String LocaleWin::getLocaleInfoString(LCTYPE type)
 {
-    int bufferSizeWithNUL = ::GetLocaleInfo(
+#if defined(OS_WIN)
+    int bufferSizeWithNUL = ::GetLocaleInfoW(
         m_lcid, type | (m_defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0), 0, 0);
     if (bufferSizeWithNUL <= 0)
         return String();
     StringBuffer<UChar> buffer(bufferSizeWithNUL);
-    ::GetLocaleInfo(m_lcid,
+    ::GetLocaleInfoW(m_lcid,
         type | (m_defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0),
         buffer.characters(), bufferSizeWithNUL);
     buffer.shrink(bufferSizeWithNUL - 1);
     return String::adopt(buffer);
+#else
+    struct StrLocal {
+        LCTYPE type;
+        const WCHAR* name;
+    };
+    StrLocal strLocals[] = {
+        { LOCALE_SABBREVMONTHNAME1, u16("1月")},
+        { LOCALE_SABBREVMONTHNAME2, u16("2月")},
+        { LOCALE_SABBREVMONTHNAME3, u16("3月")},
+        { LOCALE_SABBREVMONTHNAME4, u16("4月")},
+        { LOCALE_SABBREVMONTHNAME5, u16("5月")},
+        { LOCALE_SABBREVMONTHNAME6, u16("6月")},
+        { LOCALE_SABBREVMONTHNAME7, u16("7月")},
+        { LOCALE_SABBREVMONTHNAME8, u16("8月")},
+        { LOCALE_SABBREVMONTHNAME9, u16("9月")},
+        { LOCALE_SABBREVMONTHNAME10, u16("10月")},
+        { LOCALE_SABBREVMONTHNAME11, u16("11月")},
+        { LOCALE_SABBREVMONTHNAME12, u16("12月")},
+        { LOCALE_SMONTHNAME1, u16("一月")},
+        { LOCALE_SMONTHNAME2, u16("二月")},
+        { LOCALE_SMONTHNAME3, u16("三月")},
+        { LOCALE_SMONTHNAME4, u16("四月")},
+        { LOCALE_SMONTHNAME5, u16("五月")},
+        { LOCALE_SMONTHNAME6, u16("六月")},
+        { LOCALE_SMONTHNAME7, u16("七月")},
+        { LOCALE_SMONTHNAME8, u16("八月")},
+        { LOCALE_SMONTHNAME9, u16("九月")},
+        { LOCALE_SMONTHNAME10, u16("十月")},
+        { LOCALE_SMONTHNAME11, u16("十一月")},
+        { LOCALE_SMONTHNAME12, u16("十二月")},
+        { LOCALE_SSHORTDATE, u16("yyyy/M/d")},
+        { LOCALE_SYEARMONTH, u16("yyyy'年'M'月'")},
+        { LOCALE_STIMEFORMAT, u16("H:mm:ss")},
+        { LOCALE_SSHORTTIME, u16("H:mm")},
+        { LOCALE_STIME, u16(":")},
+        { LOCALE_S1159, u16("上午")},
+        { LOCALE_S2359, u16("下午")},
+        { LOCALE_SNATIVEDIGITS, u16("0123456789")},
+        { LOCALE_SDECIMAL, u16(".")},
+        { LOCALE_STHOUSAND, u16(",")},
+        { LOCALE_SNEGATIVESIGN, u16("-")},
+        { 0, nullptr }
+    };
+    for (size_t i = 0; nullptr != strLocals[i].name; ++i) {
+        if (type == strLocals[i].type)
+            return strLocals[i].name;
+    }
+    __debugbreak();
+    return "";
+#endif
 }
 
 void LocaleWin::getLocaleInfo(LCTYPE type, DWORD& result)
 {
-    ::GetLocaleInfo(m_lcid, type | LOCALE_RETURN_NUMBER,
+#if defined(OS_WIN)
+    ::GetLocaleInfoW(m_lcid, type | LOCALE_RETURN_NUMBER,
         reinterpret_cast<LPWSTR>(&result),
-        sizeof(DWORD) / sizeof(TCHAR));
+        sizeof(DWORD) / sizeof(WCHAR));
+#else
+
+#endif
 }
 
 void LocaleWin::ensureShortMonthLabels()
@@ -385,10 +450,13 @@ void LocaleWin::ensureWeekDayShortLabels()
 {
     if (!m_weekDayShortLabels.isEmpty())
         return;
-    const LCTYPE types[7] = { LOCALE_SABBREVDAYNAME7, // Sunday
+    const LCTYPE types[7] = { 
+        LOCALE_SABBREVDAYNAME7, // Sunday
         LOCALE_SABBREVDAYNAME1, // Monday
-        LOCALE_SABBREVDAYNAME2, LOCALE_SABBREVDAYNAME3,
-        LOCALE_SABBREVDAYNAME4, LOCALE_SABBREVDAYNAME5,
+        LOCALE_SABBREVDAYNAME2,
+        LOCALE_SABBREVDAYNAME3,
+        LOCALE_SABBREVDAYNAME4,
+        LOCALE_SABBREVDAYNAME5,
         LOCALE_SABBREVDAYNAME6 };
     m_weekDayShortLabels.reserveCapacity(WTF_ARRAY_LENGTH(types));
     for (unsigned i = 0; i < WTF_ARRAY_LENGTH(types); ++i) {

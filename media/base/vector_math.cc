@@ -10,6 +10,11 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 // NaCl does not allow intrinsics.
 #if defined(ARCH_CPU_X86_FAMILY) && !defined(OS_NACL)
 #include <xmmintrin.h>

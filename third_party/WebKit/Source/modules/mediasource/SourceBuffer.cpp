@@ -348,7 +348,7 @@ void SourceBuffer::setAppendWindowEnd(double end,
 
     // 3. If the new value equals NaN, then throw a TypeError and abort these
     //    steps.
-    if (std::isnan(end)) {
+    if (std_isnan(end)) {
         MediaSource::logAndThrowTypeError(exceptionState,
             ExceptionMessages::notAFiniteNumber(end));
         return;
@@ -465,19 +465,19 @@ void SourceBuffer::remove(double start,
     //    steps.
     // 4. If start is negative or greater than duration, then throw a TypeError
     //    exception and abort these steps.
-    if (start < 0 || std::isnan(m_source->duration()) || start > m_source->duration()) {
+    if (start < 0 || std_isnan(m_source->duration()) || start > m_source->duration()) {
         MediaSource::logAndThrowTypeError(
             exceptionState,
             ExceptionMessages::indexOutsideRange(
                 "start", start, 0.0, ExceptionMessages::ExclusiveBound,
-                std::isnan(m_source->duration()) ? 0 : m_source->duration(),
+                std_isnan(m_source->duration()) ? 0 : m_source->duration(),
                 ExceptionMessages::ExclusiveBound));
         return;
     }
 
     // 5. If end is less than or equal to start or end equals NaN, then throw a
     //    TypeError exception and abort these steps.
-    if (end <= start || std::isnan(end)) {
+    if (end <= start || std_isnan(end)) {
         MediaSource::logAndThrowTypeError(
             exceptionState,
             "The end value provided (" + String::number(end) + ") must be greater than the start value provided (" + String::number(start) + ").");

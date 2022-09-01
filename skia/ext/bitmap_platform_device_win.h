@@ -39,8 +39,8 @@ public:
 
     ~BitmapPlatformDevice() override;
 
-    HDC BeginPlatformPaint(void* hWnd);
-    void EndPlatformPaint();
+    HDC BeginPlatformPaint(void* hWnd) override;
+    void EndPlatformPaint() override;
 
     void DrawToHDC(HDC source_dc, HDC destination_dc, int x, int y, const RECT* src_rect, const SkMatrix& transform) override;
 

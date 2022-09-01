@@ -401,15 +401,15 @@ bool CurlCacheEntry::parseResponseHeaders(const ResourceResponse& response)
     double expirationDate = 0;
 
     lastModificationDate = response.lastModified();
-    if (std::isnan(lastModificationDate))
+    if (std_isnan(lastModificationDate))
         lastModificationDate = 0;
 
     responseDate = response.date();
-    if (std::isnan(responseDate))
+    if (std_isnan(responseDate))
         responseDate = 0;
 
     expirationDate = response.expires();
-    if (std::isnan(expirationDate))
+    if (std_isnan(expirationDate))
         expirationDate = 0;
 
 

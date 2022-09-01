@@ -357,8 +357,8 @@ BUILTIN(NumberPrototypeToExponential) {
       isolate, fraction_digits, Object::ToInteger(isolate, fraction_digits));
   double const fraction_digits_number = fraction_digits->Number();
 
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
+  if (std_isnan(value_number)) return isolate->heap()->nan_string();
+  if (std_isinf(value_number)) {
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }
@@ -408,8 +408,8 @@ BUILTIN(NumberPrototypeToFixed) {
                                    "toFixed() digits")));
   }
 
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
+  if (std_isnan(value_number)) return isolate->heap()->nan_string();
+  if (std_isinf(value_number)) {
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }
@@ -470,8 +470,8 @@ BUILTIN(NumberPrototypeToPrecision) {
                                      Object::ToInteger(isolate, precision));
   double const precision_number = precision->Number();
 
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
+  if (std_isnan(value_number)) return isolate->heap()->nan_string();
+  if (std_isinf(value_number)) {
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }
@@ -533,8 +533,8 @@ BUILTIN(NumberPrototypeToString) {
   }
 
   // Slow case.
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
+  if (std_isnan(value_number)) return isolate->heap()->nan_string();
+  if (std_isinf(value_number)) {
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }

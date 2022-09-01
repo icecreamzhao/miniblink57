@@ -91,7 +91,6 @@ namespace internal {
         case CodeEventListener::NUMBER_OF_LOG_EVENTS:
             return CpuProfileNode::kInternal;
         }
-        ::OutputDebugStringA("ProfileNode::source_type fail\n");
         return CpuProfileNode::kInternal;
     } // namespace internal
 

@@ -21,7 +21,7 @@
 
 namespace gfx {
 
-#if defined(OS_WIN)
+#if defined(OS_WIN) || defined(OS_LINUX_FOR_WIN)
 Rect::Rect(const RECT& r)
     : origin_(r.left, r.top)
     , size_(std::abs(r.right - r.left), std::abs(r.bottom - r.top))
@@ -35,7 +35,7 @@ Rect::Rect(const CGRect& r)
 }
 #endif
 
-#if defined(OS_WIN)
+#if defined(OS_WIN) || defined(OS_LINUX_FOR_WIN)
 RECT Rect::ToRECT() const
 {
     RECT r;

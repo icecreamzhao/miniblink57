@@ -99,7 +99,7 @@ NFCRecordType deduceRecordTypeFromDataType(const blink::NFCRecord& record)
     if (record.hasData()) {
         v8::Local<v8::Value> value = record.data().v8Value();
 
-        if (value->IsString() || (value->IsNumber() && !std::isnan(value.As<v8::Number>()->Value()))) {
+        if (value->IsString() || (value->IsNumber() && !std_isnan(value.As<v8::Number>()->Value()))) {
             return NFCRecordType::TEXT;
         }
 
@@ -368,7 +368,7 @@ namespace {
     bool isValidTextRecord(const NFCRecord& record)
     {
         v8::Local<v8::Value> value = record.data().v8Value();
-        if (!value->IsString() && !(value->IsNumber() && !std::isnan(value.As<v8::Number>()->Value())))
+        if (!value->IsString() && !(value->IsNumber() && !std_isnan(value.As<v8::Number>()->Value())))
             return false;
 
         if (record.hasMediaType() && !record.mediaType().startsWith(kPlainTextMimePrefix, TextCaseUnicodeInsensitive))

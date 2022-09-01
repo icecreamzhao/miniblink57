@@ -17,52 +17,65 @@ void WebFontRendering::setSkiaFontManager(sk_sp<SkFontMgr> fontMgr)
 // static
 void WebFontRendering::setDeviceScaleFactor(float deviceScaleFactor)
 {
+#if OS(WIN)
     FontCache::setDeviceScaleFactor(deviceScaleFactor);
+#endif
 }
 
 // static
 void WebFontRendering::addSideloadedFontForTesting(SkTypeface* typeface)
 {
+#if OS(WIN)
     FontCache::addSideloadedFontForTesting(typeface);
+#endif
 }
 
 // static
-void WebFontRendering::setMenuFontMetrics(const wchar_t* familyName,
-    int32_t fontHeight)
+void WebFontRendering::setMenuFontMetrics(const wchar_t* familyName, int32_t fontHeight)
 {
+#if OS(WIN)
     FontCache::setMenuFontMetrics(familyName, fontHeight);
+#endif
 }
 
 // static
-void WebFontRendering::setSmallCaptionFontMetrics(const wchar_t* familyName,
-    int32_t fontHeight)
+void WebFontRendering::setSmallCaptionFontMetrics(const wchar_t* familyName, int32_t fontHeight)
 {
+#if OS(WIN)
     FontCache::setSmallCaptionFontMetrics(familyName, fontHeight);
+#endif
 }
 
 // static
-void WebFontRendering::setStatusFontMetrics(const wchar_t* familyName,
-    int32_t fontHeight)
+void WebFontRendering::setStatusFontMetrics(const wchar_t* familyName, int32_t fontHeight)
 {
+#if OS(WIN)
     FontCache::setStatusFontMetrics(familyName, fontHeight);
+#endif
 }
 
 // static
 void WebFontRendering::setAntialiasedTextEnabled(bool enabled)
 {
+#if OS(WIN)
     FontCache::setAntialiasedTextEnabled(enabled);
+#endif
 }
 
 // static
 void WebFontRendering::setLCDTextEnabled(bool enabled)
 {
+#if OS(WIN)
     FontCache::setLCDTextEnabled(enabled);
+#endif
 }
 
 // static
 void WebFontRendering::setUseSkiaFontFallback(bool useSkiaFontFallback)
 {
+#if OS(WIN)
     FontCache::setUseSkiaFontFallback(useSkiaFontFallback);
+#endif
 }
 
 } // namespace blink

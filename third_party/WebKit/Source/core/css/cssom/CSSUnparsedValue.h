@@ -64,8 +64,7 @@ private:
     IterationSource* startIteration(ScriptState*, ExceptionState&) override;
 
     FRIEND_TEST_ALL_PREFIXES(CSSUnparsedValueTest, ListOfStrings);
-    FRIEND_TEST_ALL_PREFIXES(CSSUnparsedValueTest,
-        ListOfCSSVariableReferenceValues);
+    FRIEND_TEST_ALL_PREFIXES(CSSUnparsedValueTest, ListOfCSSVariableReferenceValues);
     FRIEND_TEST_ALL_PREFIXES(CSSUnparsedValueTest, MixedList);
     FRIEND_TEST_ALL_PREFIXES(CSSVariableReferenceValueTest, MixedList);
 

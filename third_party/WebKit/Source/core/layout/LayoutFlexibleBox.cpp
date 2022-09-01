@@ -1478,12 +1478,12 @@ bool LayoutFlexibleBox::resolveFlexibleLengths(
 
         LayoutUnit childSize = flexItem.flexBaseContentSize;
         double extraSpace = 0;
-        if (remainingFreeSpace > 0 && totalFlexGrow > 0 && flexSign == PositiveFlexibility && std::isfinite(totalFlexGrow)) {
+        if (remainingFreeSpace > 0 && totalFlexGrow > 0 && flexSign == PositiveFlexibility && std_isfinite(totalFlexGrow)) {
             extraSpace = remainingFreeSpace * child->style()->flexGrow() / totalFlexGrow;
-        } else if (remainingFreeSpace < 0 && totalWeightedFlexShrink > 0 && flexSign == NegativeFlexibility && std::isfinite(totalWeightedFlexShrink) && child->style()->flexShrink()) {
+        } else if (remainingFreeSpace < 0 && totalWeightedFlexShrink > 0 && flexSign == NegativeFlexibility && std_isfinite(totalWeightedFlexShrink) && child->style()->flexShrink()) {
             extraSpace = remainingFreeSpace * child->style()->flexShrink() * flexItem.flexBaseContentSize / totalWeightedFlexShrink;
         }
-        if (std::isfinite(extraSpace))
+        if (std_isfinite(extraSpace))
             childSize += LayoutUnit::fromFloatRound(extraSpace);
 
         LayoutUnit adjustedChildSize = adjustChildSizeForMinAndMax(*child, childSize);

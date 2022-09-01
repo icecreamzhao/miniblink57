@@ -246,7 +246,7 @@ BlobResourceLoader::BlobResourceLoader(BlobDataWrap* blobData, const blink::WebU
     , m_readItemCount(0)
     //, m_fileOpened(false)
     , m_isNotifyFinishing(false)
-    , m_isNotifyStarting(nullptr)
+    , m_isNotifyStarting(false)
     , m_isDestroied(nullptr)
 {
     //m_streamWrap = std::unique_ptr<StreamWrap>(new StreamWrap(this, m_async));
@@ -366,7 +366,7 @@ void BlobResourceLoader::doStart()
 
             flattenElement = new FlattenHTTPBodyElement();
             flattenElement->type = FlattenHTTPBodyElement::Type::TypeFile;
-            Vector<UChar> filePathBuf = WTF::ensureUTF16UChar(filePath, true);
+            Vector<char> filePathBuf = WTF::ensureStringToUTF8(filePath, true);
             flattenElement->filePath = filePathBuf.data();
             flattenElement->fileStart = item->offset;
             flattenElement->fileLength = item->length;

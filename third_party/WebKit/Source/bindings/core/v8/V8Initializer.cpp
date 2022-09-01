@@ -392,16 +392,14 @@ namespace {
         void* Allocate(size_t size) override
         {
             void* data;
-            WTF::ArrayBufferContents::allocateMemoryOrNull(
-                size, WTF::ArrayBufferContents::ZeroInitialize, data);
+            WTF::ArrayBufferContents::allocateMemoryOrNull(size, WTF::ArrayBufferContents::ZeroInitialize, data);
             return data;
         }
 
         void* AllocateUninitialized(size_t size) override
         {
             void* data;
-            WTF::ArrayBufferContents::allocateMemoryOrNull(
-                size, WTF::ArrayBufferContents::DontInitialize, data);
+            WTF::ArrayBufferContents::allocateMemoryOrNull(size, WTF::ArrayBufferContents::DontInitialize, data);
             return data;
         }
 
@@ -417,7 +415,7 @@ static void adjustAmountOfExternalAllocatedMemory(int64_t diff)
 {
 #if DCHECK_IS_ON()
     DEFINE_THREAD_SAFE_STATIC_LOCAL(int64_t, processTotal, new int64_t(0));
-    DEFINE_THREAD_SAFE_STATIC_LOCAL(Mutex, mutex, new Mutex);
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(RecursiveMutex, mutex, new RecursiveMutex);
     {
         MutexLocker locker(mutex);
 
@@ -436,12 +434,12 @@ void V8Initializer::initializeMainThread()
 
     WTF::ArrayBufferContents::initialize(adjustAmountOfExternalAllocatedMemory);
 
-    DEFINE_STATIC_LOCAL(ArrayBufferAllocator, arrayBufferAllocator, ());
+    //DEFINE_STATIC_LOCAL(ArrayBufferAllocator, arrayBufferAllocator, ());
     //   auto v8ExtrasMode = RuntimeEnabledFeatures::experimentalV8ExtrasEnabled()
     //                           ? gin::IsolateHolder::kStableAndExperimentalV8Extras
     //                           : gin::IsolateHolder::kStableV8Extras;
-    gin::IsolateHolder::Initialize(gin::IsolateHolder::kNonStrictMode,
-        /*v8ExtrasMode,*/ &arrayBufferAllocator);
+    printf("V8Initializer::initializeMainThread\n");
+    //gin::IsolateHolder::Initialize(gin::IsolateHolder::kNonStrictMode, /*v8ExtrasMode,*/ &arrayBufferAllocator);
 
     // NOTE: Some threads (namely utility threads) don't have a scheduler.
     WebScheduler* scheduler = Platform::current()->currentThread()->scheduler();

@@ -452,15 +452,15 @@ namespace internal {
     {
         // SameNumberValue(NaN, NaN) is true.
         if (value1 != value2) {
-            return std::isnan(value1) && std::isnan(value2);
+            return /*std::*/isnan(value1) && /*std::*/isnan(value2);
         }
         // SameNumberValue(0.0, -0.0) is false.
-        return (std::signbit(value1) == std::signbit(value2));
+        return (/*std::*/signbit(value1) == /*std::*/signbit(value2));
     }
 
     bool Object::IsNaN() const
     {
-        return this->IsHeapNumber() && std::isnan(HeapNumber::cast(*this)->value());
+        return this->IsHeapNumber() && /*std::*/isnan(HeapNumber::cast(*this)->value());
     }
 
     bool Object::IsMinusZero() const
@@ -1083,7 +1083,7 @@ namespace internal {
         }
         if (object->IsHeapNumber()) {
             double num = HeapNumber::cast(object)->value();
-            if (std::isnan(num))
+            if (/*std::*/isnan(num))
                 return Smi::FromInt(Smi::kMaxValue);
             // Use ComputeUnseededHash for all values in Signed32 range, including -0,
             // which is considered equal to 0 because collections use SameValueZero.

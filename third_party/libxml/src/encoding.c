@@ -44,6 +44,10 @@
 #include <libxml/globals.h>
 #include <libxml/xmlerror.h>
 
+#ifndef ICONV_CONST
+#define ICONV_CONST const
+#endif
+
 static xmlCharEncodingHandlerPtr xmlUTF16LEHandler = NULL;
 static xmlCharEncodingHandlerPtr xmlUTF16BEHandler = NULL;
 

@@ -22,11 +22,24 @@
 #include "net/HeaderVisitor.h"
 #include "content/browser/PostTaskHelper.h"
 
-void WKE_CALL_TYPE wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, const wchar_t* key, const wchar_t* value, bool response)
+const char* WKE_CALL_TYPE wkeNetGetReferrer(wkeNetJob jobPtr)
+{
+    net::WebURLLoaderInternal* job = (net::WebURLLoaderInternal*)jobPtr;
+    WTF::String httpReferrer = job->firstRequest()->httpHeaderField(blink::WebString::fromUTF8("referer"));
+    if (httpReferrer.isEmpty())
+        return "";
+    if (httpReferrer.is8Bit())
+        return wke::createTempCharString((const char*)httpReferrer.characters8(), httpReferrer.length());
+
+    WTF::CString httpReferrerUtf8 = httpReferrer.utf8();
+    return wke::createTempCharString(httpReferrerUtf8.data(), httpReferrerUtf8.length());
+}
+
+void WKE_CALL_TYPE wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, const WCHAR* key, const WCHAR* value, bool response)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     net::WebURLLoaderInternal* job = (net::WebURLLoaderInternal*)jobPtr;
-
+#if defined(OS_WIN)
     if (response) {
         job->m_response.setHTTPHeaderField(String(key), String(value));
     } else {
@@ -45,6 +58,8 @@ void WKE_CALL_TYPE wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, const wchar_t* key
             job->m_initializeHandleInfo->headers = headers;
         }
     }
+#endif
+    DebugBreak();
 }
 
 const char* WKE_CALL_TYPE wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, const char* key)
@@ -102,7 +117,7 @@ void WKE_CALL_TYPE wkeNetSetData(wkeNetJob jobPtr, void* buf, int len)
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (0 == len) {
         len = 1;
-        buf = " ";
+        buf = (void*)" ";
     }
 
     net::WebURLLoaderInternal* job = (net::WebURLLoaderInternal*)jobPtr;
@@ -663,6 +678,7 @@ namespace wke {
 
 wkePostBodyElements* flattenHTTPBodyElementToWke(const WTF::Vector<net::FlattenHTTPBodyElement*>& body)
 {
+#if defined(OS_WIN)
     if (0 == body.size())
         return nullptr;
 
@@ -673,11 +689,11 @@ wkePostBodyElements* flattenHTTPBodyElementToWke(const WTF::Vector<net::FlattenH
         result->element[i] = wkeElement;
         const net::FlattenHTTPBodyElement* element = body[i];
 
-        if (blink::WebHTTPBody::Element::Type::TypeFile == element->type ||
-            blink::WebHTTPBody::Element::Type::TypeFileSystemURL == element->type) {
+        if (net::FlattenHTTPBodyElement::TypeFile == element->type ||
+            net::FlattenHTTPBodyElement::TypeFileSystemURL == element->type) {
 
             wkeElement->type = wkeHttBodyElementTypeFile;
-            wkeElement->filePath = wkeCreateStringW(element->filePath.c_str(), element->filePath.size());
+            wkeElement->filePath = wkeCreateString(element->filePath.c_str(), element->filePath.size());
             wkeElement->fileLength = element->fileLength;
             wkeElement->fileStart = element->fileStart;
             wkeElement->data = nullptr;
@@ -690,6 +706,10 @@ wkePostBodyElements* flattenHTTPBodyElementToWke(const WTF::Vector<net::FlattenH
         }
     }
     return result;
+#else
+    DebugBreak();
+    return nullptr;
+#endif
 }
 
 void wkeflattenElementToBlink(const wkePostBodyElements& body, WTF::Vector<net::FlattenHTTPBodyElement*>* out)
@@ -707,7 +727,7 @@ void wkeflattenElementToBlink(const wkePostBodyElements& body, WTF::Vector<net::
             net::FlattenHTTPBodyElement::Type::TypeFile : net::FlattenHTTPBodyElement::Type::TypeData);
 
         if (net::FlattenHTTPBodyElement::Type::TypeFile == blinkElement->type) {
-            const wchar_t* filePath = wkeGetStringW(wkeElement->filePath);
+            const char* filePath = wkeGetString(wkeElement->filePath);
             blinkElement->filePath = filePath;
             blinkElement->fileLength = wkeElement->fileLength;
             blinkElement->fileStart = wkeElement->fileStart;

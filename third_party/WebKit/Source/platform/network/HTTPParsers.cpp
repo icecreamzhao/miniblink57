@@ -740,7 +740,7 @@ CacheControlHeader parseCacheControlDirectives(
                            mustRevalidateDirective)) {
                 cacheControlHeader.containsMustRevalidate = true;
             } else if (equalIgnoringCase(directives[i].first, maxAgeDirective)) {
-                if (!std::isnan(cacheControlHeader.maxAge)) {
+                if (!std_isnan(cacheControlHeader.maxAge)) {
                     // First max-age directive wins if there are multiple ones.
                     continue;
                 }
@@ -750,7 +750,7 @@ CacheControlHeader parseCacheControlDirectives(
                     cacheControlHeader.maxAge = maxAge;
             } else if (equalIgnoringCase(directives[i].first,
                            staleWhileRevalidateDirective)) {
-                if (!std::isnan(cacheControlHeader.staleWhileRevalidate)) {
+                if (!std_isnan(cacheControlHeader.staleWhileRevalidate)) {
                     // First stale-while-revalidate directive wins if there are multiple
                     // ones.
                     continue;

@@ -437,10 +437,10 @@ bool CompositorAnimations::convertTimingForCompositor(
     if (timing.endDelay != 0)
         return false;
 
-    if (std::isnan(timing.iterationDuration) || !timing.iterationCount || !timing.iterationDuration)
+    if (std_isnan(timing.iterationDuration) || !timing.iterationCount || !timing.iterationDuration)
         return false;
 
-    out.adjustedIterationCount = std::isfinite(timing.iterationCount) ? timing.iterationCount : -1;
+    out.adjustedIterationCount = std_isfinite(timing.iterationCount) ? timing.iterationCount : -1;
     out.scaledDuration = timing.iterationDuration;
     out.direction = timing.direction;
     // Compositor's time offset is positive for seeking into the animation.
@@ -452,9 +452,9 @@ bool CompositorAnimations::convertTimingForCompositor(
     out.iterationStart = timing.iterationStart;
 
     DCHECK_GT(out.scaledDuration, 0);
-    DCHECK(std::isfinite(out.scaledTimeOffset));
+    DCHECK(std_isfinite(out.scaledTimeOffset));
     DCHECK(out.adjustedIterationCount > 0 || out.adjustedIterationCount == -1);
-    DCHECK(std::isfinite(out.playbackRate) && out.playbackRate);
+    DCHECK(std_isfinite(out.playbackRate) && out.playbackRate);
     DCHECK_GE(out.iterationStart, 0);
 
     return true;
@@ -545,7 +545,7 @@ void CompositorAnimations::getAnimationOnCompositor(
         // the known issue of how the Web Animations spec handles infinite
         // durations. See https://github.com/w3c/web-animations/issues/142
         double scale = compositorTiming.scaledDuration;
-        if (!std::isfinite(scale))
+        if (!std_isfinite(scale))
             scale = 1.0;
         const PropertySpecificKeyframeVector& values = effect.getPropertySpecificKeyframes(property);
 
@@ -592,7 +592,7 @@ void CompositorAnimations::getAnimationOnCompositor(
 
         std::unique_ptr<CompositorAnimation> animation = CompositorAnimation::create(*curve, targetProperty, group, 0);
 
-        if (!std::isnan(startTime))
+        if (!std_isnan(startTime))
             animation->setStartTime(startTime);
 
         animation->setIterations(compositorTiming.adjustedIterationCount);

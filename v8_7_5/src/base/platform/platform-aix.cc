@@ -60,7 +60,7 @@ namespace base {
 
     const char* AIXTimezoneCache::LocalTimezone(double time_ms)
     {
-        if (std::isnan(time_ms))
+        if (/*std::*/isnan(time_ms))
             return "";
         time_t tv = static_cast<time_t>(floor(time_ms / msPerSecond));
         struct tm tm;

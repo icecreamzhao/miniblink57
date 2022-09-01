@@ -592,7 +592,7 @@ namespace internal {
             for (i = 1; i <= array->length(); i++) {
                 if (i < array->length())
                     value = GetScalarElement(array, i);
-                bool values_are_nan = std::isnan(previous_value) && std::isnan(value);
+                bool values_are_nan = /*std::*/isnan(previous_value) && /*std::*/isnan(value);
                 if (i != array->length() && (previous_value == value || values_are_nan) && IsTheHoleAt(array, i - 1) == IsTheHoleAt(array, i)) {
                     continue;
                 }

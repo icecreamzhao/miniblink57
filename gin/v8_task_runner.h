@@ -1,8 +1,6 @@
 #ifndef gin_v8_task_runner_h
 #define gin_v8_task_runner_h
 
-#if V8_MAJOR_VERSION >= 7
-
 namespace gin {
 
 class V8TaskToWebThreadTask : public blink::WebThread::Task {
@@ -34,6 +32,7 @@ private:
     v8::IdleTask* m_task;
 };
 
+#if V8_MAJOR_VERSION >= 7
 class V8ForegroundTaskRunner : public v8::TaskRunner {
 public:
     V8ForegroundTaskRunner(blink::WebThread* thread)
@@ -81,7 +80,9 @@ private:
     blink::WebThread* m_thread;
 };
 
+#endif // V8_MAJOR_VERSION
+
 } // gin
 
-#endif // V8_MAJOR_VERSION
+
 #endif // gin_v8_task_runner_h

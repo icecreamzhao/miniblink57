@@ -3261,7 +3261,7 @@ namespace internal {
             int64_t kMaxVal = kMinVal - 1;
             bool invalid_convert = false;
 
-            if (std::isnan(frb_val)) {
+            if (/*std::*/isnan(frb_val)) {
                 frt_val = kMinVal;
                 invalid_convert = true;
             } else {
@@ -3307,7 +3307,7 @@ namespace internal {
             uint64_t kMaxVal = kMinVal - 1;
             bool invalid_convert = false;
 
-            if (std::isnan(frb_val)) {
+            if (/*std::*/isnan(frb_val)) {
                 frt_val = kMinVal;
                 invalid_convert = true;
             } else {
@@ -3351,7 +3351,7 @@ namespace internal {
             int64_t kMinVal = kMinInt;
             int64_t kMaxVal = kMaxInt;
 
-            if (std::isnan(frb_val)) {
+            if (/*std::*/isnan(frb_val)) {
                 frt_val = kMinVal;
             } else {
                 switch (mode) {

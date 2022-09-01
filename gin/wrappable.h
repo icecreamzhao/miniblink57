@@ -5,10 +5,12 @@
 #ifndef GIN_WRAPPABLE_H_
 #define GIN_WRAPPABLE_H_
 
-#include "base/template_util.h"
+#include "base/macros.h"
+//#include "base/template_util.h"
 #include "gin/converter.h"
 #include "gin/gin_export.h"
 #include "gin/public/wrapper_info.h"
+#include <type_traits>
 
 namespace gin {
 
@@ -51,11 +53,11 @@ namespace gin {
 
 namespace internal {
 
-    GIN_EXPORT void* FromV8Impl(v8::Isolate* isolate,
-        v8::Local<v8::Value> val,
-        WrapperInfo* info);
+GIN_EXPORT void* FromV8Impl(v8::Isolate* isolate,
+    v8::Local<v8::Value> val,
+    WrapperInfo* info);
 
-} // namespace internal
+}  // namespace internal
 
 class ObjectTemplateBuilder;
 
@@ -65,11 +67,16 @@ protected:
     WrappableBase();
     virtual ~WrappableBase();
 
+    void InitWith(v8::Isolate* isolate, v8::Local<v8::Object> wrapper, WrapperInfo* info);
+
+    v8::Isolate* isolate() const { return isolate_; }
+
     // Overrides of this method should be declared final and not overridden again.
     virtual ObjectTemplateBuilder GetObjectTemplateBuilder(v8::Isolate* isolate);
 
-    v8::Local<v8::Object> GetWrapperImpl(v8::Isolate* isolate,
-        WrapperInfo* wrapper_info);
+    v8::Local<v8::Object> GetWrapperImpl(v8::Isolate* isolate, WrapperInfo* wrapper_info);
+
+    static WrappableBase* GetNativePtr(v8::Local<v8::Object> handle, WrapperInfo* info);
 
 private:
     static void FirstWeakCallback(
@@ -77,14 +84,21 @@ private:
     static void SecondWeakCallback(
         const v8::WeakCallbackInfo<WrappableBase>& data);
 
-    v8::Global<v8::Object> wrapper_; // Weak
+    v8::Global<v8::Object> wrapper_;  // Weak
+    v8::Isolate* isolate_;
 
     DISALLOW_COPY_AND_ASSIGN(WrappableBase);
 };
 
-template <typename T>
+
+template<typename T>
 class Wrappable : public WrappableBase {
 public:
+    void InitWith(v8::Isolate* isolate, v8::Local<v8::Object> wrapper)
+    {
+        WrappableBase::InitWith(isolate, wrapper, &T::kWrapperInfo);
+    }
+
     // Retrieve (or create) the v8 wrapper object cooresponding to this object.
     v8::Local<v8::Object> GetWrapper(v8::Isolate* isolate)
     {
@@ -92,16 +106,18 @@ public:
     }
 
 protected:
-    Wrappable() { }
-    virtual ~Wrappable() { }
+    Wrappable() {}
+    virtual ~Wrappable() {}
 
 private:
     DISALLOW_COPY_AND_ASSIGN(Wrappable);
 };
 
+
 // This converter handles any subclass of Wrappable.
-template <typename T>
-struct Converter<T*, typename base::enable_if<base::is_convertible<T*, WrappableBase*>::value>::type> {
+template<typename T>
+struct Converter<T*, typename std::enable_if<
+    std::is_convertible<T*, WrappableBase*>::value>::type> {
     static v8::Local<v8::Value> ToV8(v8::Isolate* isolate, T* val)
     {
         return val->GetWrapper(isolate);
@@ -115,6 +131,6 @@ struct Converter<T*, typename base::enable_if<base::is_convertible<T*, Wrappable
     }
 };
 
-} // namespace gin
+}  // namespace gin
 
-#endif // GIN_WRAPPABLE_H_
+#endif  // GIN_WRAPPABLE_H_

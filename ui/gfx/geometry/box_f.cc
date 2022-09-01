@@ -31,12 +31,12 @@ void BoxF::ExpandTo(const Point3F& min, const Point3F& max)
     DCHECK_LE(min.y(), max.y());
     DCHECK_LE(min.z(), max.z());
 
-    float min_x = std::min(x(), min.x());
-    float min_y = std::min(y(), min.y());
-    float min_z = std::min(z(), min.z());
-    float max_x = std::max(right(), max.x());
-    float max_y = std::max(bottom(), max.y());
-    float max_z = std::max(front(), max.z());
+    float min_x = std_min(x(), min.x());
+    float min_y = std_min(y(), min.y());
+    float min_z = std_min(z(), min.z());
+    float max_x = std_max(right(), max.x());
+    float max_y = std_max(bottom(), max.y());
+    float max_z = std_max(front(), max.z());
 
     origin_.SetPoint(min_x, min_y, min_z);
     width_ = max_x - min_x;

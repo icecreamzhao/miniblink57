@@ -331,9 +331,9 @@ class Simulator {
 
     if (r2_dval == 0.0)
       condition_reg_ = 8;
-    else if (r2_dval < 0.0 && r2_dval >= dbl_min && std::isfinite(r2_dval))
+    else if (r2_dval < 0.0 && r2_dval >= dbl_min && std_isfinite(r2_dval))
       condition_reg_ = 4;
-    else if (r2_dval > 0.0 && r2_dval <= dbl_max && std::isfinite(r2_dval))
+    else if (r2_dval > 0.0 && r2_dval <= dbl_max && std_isfinite(r2_dval))
       condition_reg_ = 2;
     else
       condition_reg_ = 1;
@@ -356,9 +356,9 @@ class Simulator {
 
     if (r2_dval == 0.0)
       condition_reg_ = 8;
-    else if (r2_dval < 0.0 && r2_dval >= dbl_min && std::isfinite(r2_dval))
+    else if (r2_dval < 0.0 && r2_dval >= dbl_min && std_isfinite(r2_dval))
       condition_reg_ = 4;
-    else if (r2_dval > 0.0 && r2_dval < dbl_max && std::isfinite(r2_dval))
+    else if (r2_dval > 0.0 && r2_dval < dbl_max && std_isfinite(r2_dval))
       condition_reg_ = 2;
     else
       condition_reg_ = 1;
@@ -371,9 +371,9 @@ class Simulator {
     if (src == static_cast<T1>(0.0)) {
       condition_reg_ |= 8;
     } else if (src < static_cast<T1>(0.0) && static_cast<T2>(src) == 0 &&
-               std::isfinite(src)) {
+               std_isfinite(src)) {
       condition_reg_ |= 4;
-    } else if (src > static_cast<T1>(0.0) && std::isfinite(src) &&
+    } else if (src > static_cast<T1>(0.0) && std_isfinite(src) &&
                src < static_cast<T1>(max)) {
       condition_reg_ |= 2;
     } else {

@@ -377,7 +377,7 @@ namespace internal {
     {
         DCHECK(map() != GetReadOnlyRoots().fixed_cow_array_map() && map() != GetReadOnlyRoots().fixed_array_map());
         int offset = kHeaderSize + index * kDoubleSize;
-        if (std::isnan(value)) {
+        if (/*std::*/isnan(value)) {
             WRITE_DOUBLE_FIELD(*this, offset, std::numeric_limits<double>::quiet_NaN());
         } else {
             WRITE_DOUBLE_FIELD(*this, offset, value);

@@ -21,7 +21,7 @@
 #include "SkTypeface.h"
 #include "SkTypes.h"
 
-#include <fontconfig/fontconfig.h>
+#include "third_party/fontconfig/src/fontconfig/fontconfig.h"
 #include <unistd.h>
 
 #ifdef SK_DEBUG

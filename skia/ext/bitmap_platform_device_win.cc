@@ -71,7 +71,7 @@ void LoadClippingRegionToDC(HDC context, const SkIRect& clip_bounds, const SkMat
 {
     HRGN hrgn = CreateRectRgnIndirect(&skia::SkIRectToRECT(clip_bounds));
     int result = SelectClipRgn(context, hrgn);
-    SkASSERT(result != ERROR);
+    SkASSERT(result != /*ERROR*/0);
     result = DeleteObject(hrgn);
     SkASSERT(result != 0);
 }
@@ -160,8 +160,7 @@ static bool InstallHBitmapPixels(SkBitmap* bitmap, int width, int height,
     const SkImageInfo info = SkImageInfo::MakeN32(width, height, at);
     const size_t rowBytes = info.minRowBytes();
     SkColorTable* color_table = NULL;
-    return bitmap->installPixels(info, data, rowBytes, color_table,
-        DeleteHBitmapCallback, hbitmap);
+    return bitmap->installPixels(info, data, rowBytes, color_table, DeleteHBitmapCallback, hbitmap);
 }
 
 // We use this static factory function instead of the regular constructor so
@@ -175,7 +174,6 @@ BitmapPlatformDevice* BitmapPlatformDevice::Create(
     HANDLE shared_section,
     bool do_clear)
 {
-
     void* data;
     HBITMAP hbitmap = NULL;
 
@@ -188,22 +186,21 @@ BitmapPlatformDevice* BitmapPlatformDevice::Create(
     if (base::win::IsUser32AndGdi32Available()) {
         hbitmap = CreateHBitmap(width, height, is_opaque, shared_section, &data);
         if (!hbitmap) {
-            LOG(ERROR) << "CreateHBitmap failed";
+            //LOG(ERROR) << "CreateHBitmap failed";
             return NULL;
         }
     } else {
         DCHECK(shared_section != NULL);
-        data = MapViewOfFile(shared_section, FILE_MAP_WRITE, 0, 0,
-            PlatformCanvasStrideForWidth(width) * height);
+        data = MapViewOfFile(shared_section, FILE_MAP_WRITE, 0, 0, PlatformCanvasStrideForWidth(width) * height);
         if (!data) {
-            LOG(ERROR) << "MapViewOfFile failed";
+            //LOG(ERROR) << "MapViewOfFile failed";
             return NULL;
         }
     }
 
     SkBitmap bitmap;
     if (!InstallHBitmapPixels(&bitmap, width, height, is_opaque, data, hbitmap)) {
-        LOG(ERROR) << "InstallHBitmapPixels failed";
+        //LOG(ERROR) << "InstallHBitmapPixels failed";
         return NULL;
     }
 
@@ -362,7 +359,6 @@ SkCanvas* CreatePlatformCanvas(int width,
         BitmapPlatformDevice::Create(width, height, is_opaque, shared_section));
     return CreateCanvas(dev, failureType);
 }
-
 
 // Port of PlatformBitmap to win
 

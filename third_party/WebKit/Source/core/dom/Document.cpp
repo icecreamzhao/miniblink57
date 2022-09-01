@@ -6176,21 +6176,21 @@ Touch* Document::createTouch(DOMWindow* window,
     // Match behavior from when these types were integers, and avoid surprises
     // from someone explicitly
     // passing Infinity/NaN.
-    if (!std::isfinite(pageX))
+    if (!std_isfinite(pageX))
         pageX = 0;
-    if (!std::isfinite(pageY))
+    if (!std_isfinite(pageY))
         pageY = 0;
-    if (!std::isfinite(screenX))
+    if (!std_isfinite(screenX))
         screenX = 0;
-    if (!std::isfinite(screenY))
+    if (!std_isfinite(screenY))
         screenY = 0;
-    if (!std::isfinite(radiusX))
+    if (!std_isfinite(radiusX))
         radiusX = 0;
-    if (!std::isfinite(radiusY))
+    if (!std_isfinite(radiusY))
         radiusY = 0;
-    if (!std::isfinite(rotationAngle))
+    if (!std_isfinite(rotationAngle))
         rotationAngle = 0;
-    if (!std::isfinite(force))
+    if (!std_isfinite(force))
         force = 0;
 
     if (radiusX || radiusY || rotationAngle || force)

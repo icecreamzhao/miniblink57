@@ -364,7 +364,7 @@ BUILTIN(MathHypot) {
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, x, Object::ToNumber(x));
     double abs_value = std::abs(x->Number());
 
-    if (std::isnan(abs_value)) {
+    if (std_isnan(abs_value)) {
       one_arg_is_nan = true;
     } else {
       abs_values.Add(abs_value);

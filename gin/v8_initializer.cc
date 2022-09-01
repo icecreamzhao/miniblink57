@@ -365,7 +365,9 @@ void V8Initializer::Initialize(gin::IsolateHolder::ScriptMode mode)
     if (v8_is_initialized)
         return;
 
-    v8::V8::InitializePlatform(V8Platform::Get());
+    if (!platform_)
+        platform_ = V8Platform::Get();
+    v8::V8::InitializePlatform(platform_);
 
     if (gin::IsolateHolder::kStrictMode == mode) {
         static const char use_strict[] = "--use_strict";
@@ -391,6 +393,8 @@ void V8Initializer::Initialize(gin::IsolateHolder::ScriptMode mode)
 
     v8_is_initialized = true;
 }
+
+v8::Platform* V8Initializer::platform_ = nullptr;
 
 #ifdef MINIBLINK_NOT_IMPLEMENTED
 // static

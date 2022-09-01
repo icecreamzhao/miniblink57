@@ -88,6 +88,8 @@ namespace internal {
 //     return top;                                               \
 //   }
 
+#if defined(WIN32) || defined(_WIN32) || defined(_WIN64) || defined(WIN64)
+
 #define DEFINE_CONTEXTUAL_VARIABLE(VarName)                                                         \
     template <>                                                                                     \
     V8_EXPORT_PRIVATE VarName::VariableType*&                                                       \
@@ -117,6 +119,39 @@ namespace internal {
             DebugBreak();                                                                           \
         return s_var;                                                                               \
     }
+
+#else
+
+#define DEFINE_CONTEXTUAL_VARIABLE(VarName)                                                         \
+    template <>                                                                                     \
+    V8_EXPORT_PRIVATE VarName::VariableType*&                                                       \
+    ContextualVariable<VarName, VarName::VariableType>::Top()                                       \
+    {                                                                                               \
+        static pthread_key_t top_slot = 0;                                                          \
+        static long run_once = 0;                                                                   \
+        static VarName::VariableType* s_var = nullptr;                                              \
+        do {                                                                                        \
+            volatile long old_var = _InterlockedCompareExchange((long volatile*)&(run_once), 2, 0); \
+            if (0 == old_var) {                                                                     \
+                pthread_key_create(&top_slot, NULL);                                                \
+                s_var = (VarName::VariableType*)malloc(sizeof(void*));                              \
+                pthread_setspecific(top_slot, s_var);                                               \
+                _InterlockedExchange((long volatile*)&(run_once), 1);                               \
+                break;                                                                              \
+            } else if (1 == old_var) {                                                              \
+                s_var = (VarName::VariableType*)pthread_getspecific(top_slot);                      \
+                break;                                                                              \
+            } else if (2 == old_var) {                                                              \
+                continue;                                                                           \
+            } else {                                                                                \
+                *(int*)1 = 1;                                                                       \
+            }                                                                                       \
+        } while (true);                                                                             \
+        if (!(s_var))                                                                               \
+            *(int*)1 = 1;                                                                           \
+        return s_var;                                                                               \
+    }
+#endif
 
         // By inheriting from {ContextualClass} a class can become a contextual variable
         // of itself, which is very similar to a singleton.

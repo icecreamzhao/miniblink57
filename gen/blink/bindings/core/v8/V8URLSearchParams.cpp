@@ -376,6 +376,7 @@ const V8DOMConfiguration::MethodConfiguration V8URLSearchParamsMethods[] = {
 
 void V8URLSearchParams::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
+    OutputDebugStringA("constructorCallback!!!!!!!!!!!!!!!!\n");
     if (!info.IsConstructCall()) {
         V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("URLSearchParams"));
         return;

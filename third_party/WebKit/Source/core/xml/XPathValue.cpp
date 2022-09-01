@@ -80,7 +80,7 @@ namespace XPath {
         case BooleanValue:
             return m_bool;
         case NumberValue:
-            return m_number && !std::isnan(m_number);
+            return m_number && !std_isnan(m_number);
         case StringValue:
             return !m_data->m_string.isEmpty();
         }
@@ -130,12 +130,12 @@ namespace XPath {
         case StringValue:
             return m_data->m_string;
         case NumberValue:
-            if (std::isnan(m_number))
+            if (std_isnan(m_number))
                 return "NaN";
             if (m_number == 0)
                 return "0";
-            if (std::isinf(m_number))
-                return std::signbit(m_number) ? "-Infinity" : "Infinity";
+            if (std_isinf(m_number))
+                return std_signbit(m_number) ? "-Infinity" : "Infinity";
             return String::number(m_number);
         case BooleanValue:
             return m_bool ? "true" : "false";

@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "base/memory/scoped_ptr.h"
+//#include "base/memory/scoped_ptr.h"
 #include "ui/gfx/font_render_params.h"
 #include "ui/gfx/gfx_export.h"
 

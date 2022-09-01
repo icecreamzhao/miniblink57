@@ -402,7 +402,7 @@ namespace internal {
             DisallowHeapAllocation no_allocation;
             if (IsMinusZero(value))
                 return kMinusZero;
-            if (std::isnan(value))
+            if (/*std::*/isnan(value))
                 return kNaN;
             if (IsUint32Double(value) || IsInt32Double(value))
                 return Lub(value, value);
@@ -523,7 +523,7 @@ namespace internal {
         bool OtherNumberConstantType::IsOtherNumberConstant(double value)
         {
             // Not an integer, not NaN, and not -0.
-            return !std::isnan(value) && !RangeType::IsInteger(value) && !IsMinusZero(value);
+            return !/*std::*/isnan(value) && !RangeType::IsInteger(value) && !IsMinusZero(value);
         }
 
         HeapConstantType::HeapConstantType(BitsetType::bitset bitset,
@@ -914,7 +914,7 @@ namespace internal {
                 return Range(value, value, zone);
             } else if (IsMinusZero(value)) {
                 return Type::MinusZero();
-            } else if (std::isnan(value)) {
+            } else if (/*std::*/isnan(value)) {
                 return Type::NaN();
             }
 

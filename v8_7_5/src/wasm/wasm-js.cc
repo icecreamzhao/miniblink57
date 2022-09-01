@@ -506,7 +506,7 @@ namespace {
                     ToString(argument_name).c_str());
                 return false;
             }
-            if (!std::isfinite(double_number)) {
+            if (!/*std::*/isfinite(double_number)) {
                 thrower->TypeError("%s must be convertible to a valid number",
                     ToString(argument_name).c_str());
                 return false;

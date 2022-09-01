@@ -2638,6 +2638,7 @@ class V8_EXPORT String : public Name {
    */
   class V8_EXPORT Value {
    public:
+    explicit Value(Isolate *isolate, Local<v8::Value> obj);
     explicit Value(Local<v8::Value> obj);
     ~Value();
     uint16_t* operator*() { return str_; }
@@ -3330,6 +3331,7 @@ class V8_EXPORT Array : public Object {
    * is negative the returned array will have length 0.
    */
   static Local<Array> V8CALL New(Isolate* isolate, int length = 0);
+  static Local<Array> V8CALL New(Isolate* isolate, Local<Value>* elements, size_t length);
 
   V8_INLINE static Array* V8CALL Cast(Value* obj);
  private:

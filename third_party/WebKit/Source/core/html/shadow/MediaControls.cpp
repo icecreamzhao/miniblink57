@@ -331,7 +331,7 @@ void MediaControls::reset()
     // If we don't have a duration, then mark it to be hidden.  For the
     // old UI case, want / don't want is the same as show / hide since
     // it is never marked as not fitting.
-    m_durationDisplay->setIsWanted(std::isfinite(duration));
+    m_durationDisplay->setIsWanted(std_isfinite(duration));
     m_currentTimeDisplay->setIsWanted(true);
     m_timeline->setIsWanted(true);
 

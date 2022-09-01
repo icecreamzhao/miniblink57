@@ -84,9 +84,9 @@ namespace internal {
 
     inline double DoubleToInteger(double x)
     {
-        if (std::isnan(x))
+        if (/*std::*/isnan(x))
             return 0;
-        if (!std::isfinite(x) || x == 0)
+        if (!/*std::*/isfinite(x) || x == 0)
             return x;
         return (x >= 0) ? std::floor(x) : std::ceil(x);
     }
@@ -94,7 +94,7 @@ namespace internal {
     // Implements most of https://tc39.github.io/ecma262/#sec-toint32.
     int32_t DoubleToInt32(double x)
     {
-        if ((std::isfinite(x)) && (x <= INT_MAX) && (x >= INT_MIN)) {
+        if ((/*std::*/isfinite(x)) && (x <= INT_MAX) && (x >= INT_MIN)) {
             int32_t i = static_cast<int32_t>(x);
             if (FastI2D(i) == x)
                 return i;
@@ -210,7 +210,7 @@ namespace internal {
         if (number->IsSmi())
             return Smi::ToInt(number);
         double d = number->Number();
-        if (std::isnan(d))
+        if (/*std::*/isnan(d))
             return 0;
         if (d >= static_cast<double>(std::numeric_limits<int64_t>::max())) {
             return std::numeric_limits<int64_t>::max();

@@ -61,11 +61,11 @@ void calculateWebTimingInformations(ResourceHandleInternal* job)
 // libcurl does not implement its own thread synchronization primitives.
 // these two functions provide mutexes for cookies, and for the global DNS
 // cache.
-WTF::Mutex* sharedResourceMutex(curl_lock_data data)
+WTF::RecursiveMutex* sharedResourceMutex(curl_lock_data data)
 {
-    DEFINE_STATIC_LOCAL(Mutex, cookieMutex, ());
-    DEFINE_STATIC_LOCAL(Mutex, dnsMutex, ());
-    DEFINE_STATIC_LOCAL(Mutex, shareMutex, ());
+    DEFINE_STATIC_LOCAL(RecursiveMutex, cookieMutex, ());
+    DEFINE_STATIC_LOCAL(RecursiveMutex, dnsMutex, ());
+    DEFINE_STATIC_LOCAL(RecursiveMutex, shareMutex, ());
 
     switch (data) {
     case CURL_LOCK_DATA_COOKIE:
@@ -82,13 +82,13 @@ WTF::Mutex* sharedResourceMutex(curl_lock_data data)
 
 void curl_lock_callback(CURL* /* handle */, curl_lock_data data, curl_lock_access /* access */, void* /* userPtr */)
 {
-    if (WTF::Mutex* mutex = sharedResourceMutex(data))
+    if (WTF::RecursiveMutex* mutex = sharedResourceMutex(data))
         mutex->lock();
 }
 
 void curl_unlock_callback(CURL* /* handle */, curl_lock_data data, void* /* userPtr */)
 {
-    if (WTF::Mutex* mutex = sharedResourceMutex(data))
+    if (WTF::RecursiveMutex* mutex = sharedResourceMutex(data))
         mutex->unlock();
 }
 

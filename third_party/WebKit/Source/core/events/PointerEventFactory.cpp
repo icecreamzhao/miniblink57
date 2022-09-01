@@ -101,7 +101,7 @@ namespace {
 
     float getPointerEventPressure(float force, int buttons)
     {
-        if (std::isnan(force))
+        if (std_isnan(force))
             return buttons ? 0.5 : 0;
         return force;
     }

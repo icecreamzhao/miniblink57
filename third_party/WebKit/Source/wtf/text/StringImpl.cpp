@@ -59,7 +59,11 @@ using namespace Unicode;
 // sizeof(ThreadRestrictionVerifier) is 16 bytes. Thus, in DCHECK mode the
 // class may be padded to 32 bytes.
 #if DCHECK_IS_ON()
-static_assert(sizeof(StringImpl) <= 8 * sizeof(int),
+static_assert(sizeof(StringImpl) <= 8 * sizeof(int)
+#ifdef _DEBUG
+    + sizeof(char*)
+#endif
+    ,
     "StringImpl should stay small");
 #else
 static_assert(sizeof(StringImpl) <= 3 * sizeof(int),

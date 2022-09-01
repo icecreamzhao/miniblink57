@@ -6531,13 +6531,13 @@ namespace internal {
         double n = std::round(a);
         uint32_t r1_val = static_cast<uint32_t>(n);
         set_low_register(r1, r1_val);
-        if (std::isfinite(a) && a < 0.0) {
-            DCHECK(n <= 0.0 && std::isfinite(n));
+        if (/*std::*/isfinite(a) && a < 0.0) {
+            DCHECK(n <= 0.0 && /*std::*/isfinite(n));
             condition_reg_ = (n < 0.0) ? 0x1 : 0x4;
         } else if (a == 0.0) {
             condition_reg_ = 0x8;
-        } else if (std::isfinite(a) && a > 0.0) {
-            DCHECK(n >= 0.0 && std::isfinite(n));
+        } else if (/*std::*/isfinite(a) && a > 0.0) {
+            DCHECK(n >= 0.0 && /*std::*/isfinite(n));
             condition_reg_ = (n <= static_cast<double>(UINT32_MAX)) ? 0x2 : 0x1;
         } else {
             condition_reg_ = 0x1;

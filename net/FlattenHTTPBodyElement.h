@@ -17,11 +17,11 @@ namespace net {
 
 struct FlattenHTTPBodyElement {
     enum Type {
-        TypeData, TypeFile, TypeBlob
+        TypeData, TypeFile, TypeBlob, TypeFileSystemURL
     } type;
 
     Vector<char> data;
-    std::wstring filePath;
+    std::string filePath;
     long long fileStart;
     long long fileLength; // -1 means to the end of the file.
 };
@@ -119,7 +119,7 @@ private:
     {
         RELEASE_ASSERT(!ptr && -1 == numberOfBlocks);
 
-        BlobTempFileInfo* info = DownloadFileBlobCache::inst()->getBlobTempFileInfoByTempFilePath(element.filePath.c_str());
+        BlobTempFileInfo* info = DownloadFileBlobCache::inst()->getBlobTempFileInfoByTempFilePath(blink::WebString::fromUTF8(element.filePath.c_str()));
         RELEASE_ASSERT(info);
 
         size_t fileSize = element.fileLength;
@@ -137,16 +137,22 @@ private:
 
     size_t readFile(void* ptr, size_t blockSize, size_t numberOfBlocks, const FlattenHTTPBodyElement& element, std::vector<char>* outBuf)
     {
-        wchar_t blobDownloadPath[] = L"file:///c:/miniblink_blob_download_";
-        std::wstring subPath = element.filePath.substr(0, sizeof(blobDownloadPath) / sizeof(wchar_t) - 1);
+        char blobDownloadPath[] = "file:///c:/miniblink_blob_download_";
+        std::string subPath = element.filePath.substr(0, sizeof(blobDownloadPath) / sizeof(char) - 1);
         if (subPath == blobDownloadPath)
             return readBlobDownloadFile(ptr, blockSize, numberOfBlocks, element, outBuf);
 
         if (!m_file) {
-            m_file = _wfopen(element.filePath.c_str(), L"rb");
-
+#if defined(OS_WIN)
+            std::vector<wchar_t> filePathW;
+            WTF::MByteToWChar(element.filePath.c_str(), element.filePath.size(), &filePathW, CP_UTF8);
+            filePathW.push_back(L'\0');
+            m_file = (FILE*)_wfopen(filePathW.data(), L"rb");
+#else
+            m_file = (FILE*)fopen(element.filePath.c_str(), "rb");
+#endif
             if (!m_file) {
-                readFileFinish(L"FlattenHTTPBodyElementStream._wfopen Fail:", element.filePath.c_str());
+                readFileFinish("FlattenHTTPBodyElementStream._wfopen Fail:", element.filePath.c_str());
                 // FIXME: show a user error?
                 return 0;
             } else {
@@ -201,7 +207,7 @@ private:
             readedLength = fread(ptr, 1, needReadLength, m_file);
         m_allReadLength += readedLength;
         if (!readedLength || ferror(m_file)) {
-            readFileFinish(L"FlattenHTTPBodyElementStream.ferror Fail:", element.filePath.c_str());
+            readFileFinish("FlattenHTTPBodyElementStream.ferror Fail:", element.filePath.c_str());
             // FIXME: show a user error?
             return 0;
         }
@@ -234,17 +240,24 @@ private:
         return readedLength;
     }
 
-    void readFileFinish(const wchar_t* errorText1, const wchar_t* errorText2)
+    void readFileFinish(const char* errorText1, const char* errorText2)
     {
         size_t elementIndex = m_elementIndex;
         reset();
         m_elementIndex = elementIndex + 1;
 
         if (errorText1) {
-            std::wstring errorText = errorText1;
+            std::string errorText = errorText1;
             errorText += errorText2;
-            errorText += L"\n";
-            OutputDebugStringW(errorText.c_str());
+            errorText += "\n";
+#if defined(OS_WIN)
+            std::vector<wchar_t> errorTextW;
+            WTF::MByteToWChar(errorText.c_str(), errorText.size(), &errorTextW, CP_UTF8);
+            errorTextW.push_back(L'\0');
+            OutputDebugStringW(errorTextW.data());
+#else
+            OutputDebugStringA(errorText.c_str());
+#endif
         }
     }
 
@@ -293,7 +306,7 @@ public:
 
     static void flatten(
         const blink::WebString& blobUUID,
-        curl_off_t* size,
+        long long* size,
         WTF::Vector<FlattenHTTPBodyElement*>* flattenElements,
         long long parentOffset,
         long long parentLength,
@@ -381,7 +394,7 @@ public:
 
                     flattenElement = new FlattenHTTPBodyElement();
                     flattenElement->type = FlattenHTTPBodyElement::Type::TypeFile;
-                    Vector<UChar> filePathBuf = WTF::ensureUTF16UChar(filePath, true);
+                    Vector<char> filePathBuf = WTF::ensureStringToUTF8(filePath, true);
                     flattenElement->filePath = filePathBuf.data();
                     flattenElement->fileStart = offset; // item->offset;
                     flattenElement->fileLength = length; // item->length;

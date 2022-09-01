@@ -404,7 +404,7 @@ void FundamentalValue::writeJSON(StringBuilder* output) const
         else
             StringUtil::builderAppend(*output, falseValueString, 5);
     } else if (type() == TypeDouble) {
-        if (!std::isfinite(m_doubleValue)) {
+        if (!/*std::*/isfinite(m_doubleValue)) {
             StringUtil::builderAppend(*output, nullValueString, 4);
             return;
         }
@@ -2961,7 +2961,7 @@ class JSONEncoder : public StreamingParserHandler {
     state_.top().StartElement(out_);
     // JSON cannot represent NaN or Infinity. So, for compatibility,
     // we behave like the JSON object in web browsers: emit 'null'.
-    if (!std::isfinite(value)) {
+    if (!/*std::*/isfinite(value)) {
       Emit("null");
       return;
     }

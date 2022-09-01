@@ -147,7 +147,7 @@ void AnimationTimeline::serviceAnimations(TimingUpdateReason reason)
     }
 
     DCHECK_EQ(m_outdatedAnimationCount, 0U);
-    DCHECK(m_lastCurrentTimeInternal == currentTimeInternal() || (std::isnan(currentTimeInternal()) && std::isnan(m_lastCurrentTimeInternal)));
+    DCHECK(m_lastCurrentTimeInternal == currentTimeInternal() || (std_isnan(currentTimeInternal()) && std_isnan(m_lastCurrentTimeInternal)));
 
 #if DCHECK_IS_ON()
     for (const auto& animation : m_animationsNeedingUpdate)
@@ -221,7 +221,7 @@ double AnimationTimeline::currentTimeInternal(bool& isNull)
     double result = m_playbackRate == 0
         ? zeroTime()
         : (document()->animationClock().currentTime() - zeroTime()) * m_playbackRate;
-    isNull = std::isnan(result);
+    isNull = std_isnan(result);
     return result;
 }
 
@@ -263,7 +263,7 @@ void AnimationTimeline::setCurrentTimeInternal(double currentTime)
 double AnimationTimeline::effectiveTime()
 {
     double time = currentTimeInternal();
-    return std::isnan(time) ? 0 : time;
+    return std_isnan(time) ? 0 : time;
 }
 
 void AnimationTimeline::pauseAnimationsForTesting(double pauseTime)
@@ -278,7 +278,7 @@ bool AnimationTimeline::needsAnimationTimingUpdate()
     if (currentTimeInternal() == m_lastCurrentTimeInternal)
         return false;
 
-    if (std::isnan(currentTimeInternal()) && std::isnan(m_lastCurrentTimeInternal))
+    if (std_isnan(currentTimeInternal()) && std_isnan(m_lastCurrentTimeInternal))
         return false;
 
     // We allow m_lastCurrentTimeInternal to advance here when there

@@ -1104,7 +1104,7 @@ namespace internal {
         double max_int32 = std::numeric_limits<int32_t>::max();
         double min_int32 = std::numeric_limits<int32_t>::min();
 
-        if (!std::isfinite(original) || !std::isfinite(rounded)) {
+        if (!/*std::*/isfinite(original) || !/*std::*/isfinite(rounded)) {
             set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
             ret = true;
         }
@@ -1138,7 +1138,7 @@ namespace internal {
         double max_int64 = std::numeric_limits<int64_t>::max();
         double min_int64 = std::numeric_limits<int64_t>::min();
 
-        if (!std::isfinite(original) || !std::isfinite(rounded)) {
+        if (!/*std::*/isfinite(original) || !/*std::*/isfinite(rounded)) {
             set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
             ret = true;
         }
@@ -1170,7 +1170,7 @@ namespace internal {
         double max_int32 = std::numeric_limits<int32_t>::max();
         double min_int32 = std::numeric_limits<int32_t>::min();
 
-        if (!std::isfinite(original) || !std::isfinite(rounded)) {
+        if (!/*std::*/isfinite(original) || !/*std::*/isfinite(rounded)) {
             set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
             ret = true;
         }
@@ -1200,7 +1200,7 @@ namespace internal {
         if (FCSR_ & kFCSRNaN2008FlagMask) {
             double max_int32 = std::numeric_limits<int32_t>::max();
             double min_int32 = std::numeric_limits<int32_t>::min();
-            if (std::isnan(original)) {
+            if (/*std::*/isnan(original)) {
                 set_fpu_register_word(fd_reg(), 0);
             } else if (rounded > max_int32) {
                 set_fpu_register_word(fd_reg(), kFPUInvalidResult);
@@ -1219,7 +1219,7 @@ namespace internal {
         if (FCSR_ & kFCSRNaN2008FlagMask) {
             double max_int32 = std::numeric_limits<int32_t>::max();
             double min_int32 = std::numeric_limits<int32_t>::min();
-            if (std::isnan(original)) {
+            if (/*std::*/isnan(original)) {
                 set_fpu_register(fd_reg(), 0);
             } else if (rounded > max_int32) {
                 set_fpu_register(fd_reg(), kFPUInvalidResult);
@@ -1241,7 +1241,7 @@ namespace internal {
             // loading the most accurate representation into max_int64, which is 2^63.
             double max_int64 = std::numeric_limits<int64_t>::max();
             double min_int64 = std::numeric_limits<int64_t>::min();
-            if (std::isnan(original)) {
+            if (/*std::*/isnan(original)) {
                 set_fpu_register(fd_reg(), 0);
             } else if (rounded >= max_int64) {
                 set_fpu_register(fd_reg(), kFPU64InvalidResult);
@@ -1261,7 +1261,7 @@ namespace internal {
         if (FCSR_ & kFCSRNaN2008FlagMask) {
             double max_int32 = std::numeric_limits<int32_t>::max();
             double min_int32 = std::numeric_limits<int32_t>::min();
-            if (std::isnan(original)) {
+            if (/*std::*/isnan(original)) {
                 set_fpu_register_word(fd_reg(), 0);
             } else if (rounded > max_int32) {
                 set_fpu_register_word(fd_reg(), kFPUInvalidResult);
@@ -1281,7 +1281,7 @@ namespace internal {
         if (FCSR_ & kFCSRNaN2008FlagMask) {
             double max_int32 = std::numeric_limits<int32_t>::max();
             double min_int32 = std::numeric_limits<int32_t>::min();
-            if (std::isnan(original)) {
+            if (/*std::*/isnan(original)) {
                 set_fpu_register(fd_reg(), 0);
             } else if (rounded > max_int32) {
                 set_fpu_register(fd_reg(), kFPUInvalidResult);
@@ -1303,7 +1303,7 @@ namespace internal {
             // loading the most accurate representation into max_int64, which is 2^63.
             double max_int64 = std::numeric_limits<int64_t>::max();
             double min_int64 = std::numeric_limits<int64_t>::min();
-            if (std::isnan(original)) {
+            if (/*std::*/isnan(original)) {
                 set_fpu_register(fd_reg(), 0);
             } else if (rounded >= max_int64) {
                 set_fpu_register(fd_reg(), kFPU64InvalidResult);
@@ -1327,7 +1327,7 @@ namespace internal {
         double max_int64 = std::numeric_limits<int64_t>::max();
         double min_int64 = std::numeric_limits<int64_t>::min();
 
-        if (!std::isfinite(original) || !std::isfinite(rounded)) {
+        if (!/*std::*/isfinite(original) || !/*std::*/isfinite(rounded)) {
             set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
             ret = true;
         }
@@ -2593,17 +2593,17 @@ namespace internal {
     template <typename T>
     static bool FPUProcessNaNsAndZeros(T a, T b, MaxMinKind kind, T& result)
     {
-        if (std::isnan(a) && std::isnan(b)) {
+        if (/*std::*/isnan(a) && /*std::*/isnan(b)) {
             result = a;
-        } else if (std::isnan(a)) {
+        } else if (/*std::*/isnan(a)) {
             result = b;
-        } else if (std::isnan(b)) {
+        } else if (/*std::*/isnan(b)) {
             result = a;
         } else if (b == a) {
             // Handle -0.0 == 0.0 case.
-            // std::signbit() returns int 0 or 1 so subtracting MaxMinKind::kMax
+            // /*std::*/signbit() returns int 0 or 1 so subtracting MaxMinKind::kMax
             // negates the result.
-            result = std::signbit(b) - static_cast<int>(kind) ? b : a;
+            result = /*std::*/signbit(b) - static_cast<int>(kind) ? b : a;
         } else {
             return false;
         }
@@ -2670,7 +2670,7 @@ namespace internal {
     template <typename T, typename std::enable_if<std::is_floating_point<T>::value, int>::type = 0>
     T FPUCanonalizeNaNArg(T result, T arg, KeepSign keepSign = KeepSign::no)
     {
-        DCHECK(std::isnan(arg));
+        DCHECK(/*std::*/isnan(arg));
         T qNaN = std::numeric_limits<T>::quiet_NaN();
         if (keepSign == KeepSign::yes) {
             return std::copysign(qNaN, result);
@@ -2681,7 +2681,7 @@ namespace internal {
     template <typename T>
     T FPUCanonalizeNaNArgs(T result, KeepSign keepSign, T first)
     {
-        if (std::isnan(first)) {
+        if (/*std::*/isnan(first)) {
             return FPUCanonalizeNaNArg(result, first, keepSign);
         }
         return result;
@@ -2690,7 +2690,7 @@ namespace internal {
     template <typename T, typename... Args>
     T FPUCanonalizeNaNArgs(T result, KeepSign keepSign, T first, Args... args)
     {
-        if (std::isnan(first)) {
+        if (/*std::*/isnan(first)) {
             return FPUCanonalizeNaNArg(result, first, keepSign);
         }
         return FPUCanonalizeNaNArgs(result, keepSign, args...);
@@ -2706,7 +2706,7 @@ namespace internal {
     T FPUCanonalizeOperation(Func f, KeepSign keepSign, T first, Args... args)
     {
         T result = f(first, args...);
-        if (std::isnan(result)) {
+        if (/*std::*/isnan(result)) {
             result = FPUCanonalizeNaNArgs(result, keepSign, first, args...);
         }
         return result;
@@ -2824,7 +2824,7 @@ namespace internal {
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_UN_D:
-            set_fcsr_bit(fcsr_cc, std::isnan(fs) || std::isnan(ft));
+            set_fcsr_bit(fcsr_cc, /*std::*/isnan(fs) || /*std::*/isnan(ft));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_EQ_D:
@@ -2832,7 +2832,7 @@ namespace internal {
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_UEQ_D:
-            set_fcsr_bit(fcsr_cc, (fs == ft) || (std::isnan(fs) || std::isnan(ft)));
+            set_fcsr_bit(fcsr_cc, (fs == ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft)));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_OLT_D:
@@ -2840,7 +2840,7 @@ namespace internal {
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_ULT_D:
-            set_fcsr_bit(fcsr_cc, (fs < ft) || (std::isnan(fs) || std::isnan(ft)));
+            set_fcsr_bit(fcsr_cc, (fs < ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft)));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_OLE_D:
@@ -2848,7 +2848,7 @@ namespace internal {
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_ULE_D:
-            set_fcsr_bit(fcsr_cc, (fs <= ft) || (std::isnan(fs) || std::isnan(ft)));
+            set_fcsr_bit(fcsr_cc, (fs <= ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft)));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case CVT_D_S:
@@ -3250,7 +3250,7 @@ namespace internal {
             SetFPUDoubleResult(fd_reg(), FPUCanonalizeOperation([](double fs) { return 1.0 / fs; }, fs));
             break;
         case C_UN_D:
-            set_fcsr_bit(fcsr_cc, std::isnan(fs) || std::isnan(ft));
+            set_fcsr_bit(fcsr_cc, /*std::*/isnan(fs) || /*std::*/isnan(ft));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_EQ_D:
@@ -3258,7 +3258,7 @@ namespace internal {
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_UEQ_D:
-            set_fcsr_bit(fcsr_cc, (fs == ft) || (std::isnan(fs) || std::isnan(ft)));
+            set_fcsr_bit(fcsr_cc, (fs == ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft)));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_OLT_D:
@@ -3266,7 +3266,7 @@ namespace internal {
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_ULT_D:
-            set_fcsr_bit(fcsr_cc, (fs < ft) || (std::isnan(fs) || std::isnan(ft)));
+            set_fcsr_bit(fcsr_cc, (fs < ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft)));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_OLE_D:
@@ -3274,7 +3274,7 @@ namespace internal {
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case C_ULE_D:
-            set_fcsr_bit(fcsr_cc, (fs <= ft) || (std::isnan(fs) || std::isnan(ft)));
+            set_fcsr_bit(fcsr_cc, (fs <= ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft)));
             TraceRegWr(test_fcsr_bit(fcsr_cc));
             break;
         case CVT_W_D: { // Convert double to word.
@@ -3471,7 +3471,7 @@ namespace internal {
             SetFPUWordResult2(fd_reg(), 0);
             break;
         case CMP_UN:
-            if (std::isnan(fs) || std::isnan(ft)) {
+            if (/*std::*/isnan(fs) || /*std::*/isnan(ft)) {
                 SetFPUWordResult2(fd_reg(), -1);
             } else {
                 SetFPUWordResult2(fd_reg(), 0);
@@ -3485,7 +3485,7 @@ namespace internal {
             }
             break;
         case CMP_UEQ:
-            if ((fs == ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs == ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUWordResult2(fd_reg(), -1);
             } else {
                 SetFPUWordResult2(fd_reg(), 0);
@@ -3499,7 +3499,7 @@ namespace internal {
             }
             break;
         case CMP_ULT:
-            if ((fs < ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs < ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUWordResult2(fd_reg(), -1);
             } else {
                 SetFPUWordResult2(fd_reg(), 0);
@@ -3513,21 +3513,21 @@ namespace internal {
             }
             break;
         case CMP_ULE:
-            if ((fs <= ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs <= ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUWordResult2(fd_reg(), -1);
             } else {
                 SetFPUWordResult2(fd_reg(), 0);
             }
             break;
         case CMP_OR:
-            if (!std::isnan(fs) && !std::isnan(ft)) {
+            if (!/*std::*/isnan(fs) && !/*std::*/isnan(ft)) {
                 SetFPUWordResult2(fd_reg(), -1);
             } else {
                 SetFPUWordResult2(fd_reg(), 0);
             }
             break;
         case CMP_UNE:
-            if ((fs != ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs != ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUWordResult2(fd_reg(), -1);
             } else {
                 SetFPUWordResult2(fd_reg(), 0);
@@ -3563,7 +3563,7 @@ namespace internal {
             SetFPUResult(fd_reg(), 0);
             break;
         case CMP_UN:
-            if (std::isnan(fs) || std::isnan(ft)) {
+            if (/*std::*/isnan(fs) || /*std::*/isnan(ft)) {
                 SetFPUResult(fd_reg(), -1);
             } else {
                 SetFPUResult(fd_reg(), 0);
@@ -3577,7 +3577,7 @@ namespace internal {
             }
             break;
         case CMP_UEQ:
-            if ((fs == ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs == ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUResult(fd_reg(), -1);
             } else {
                 SetFPUResult(fd_reg(), 0);
@@ -3591,7 +3591,7 @@ namespace internal {
             }
             break;
         case CMP_ULT:
-            if ((fs < ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs < ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUResult(fd_reg(), -1);
             } else {
                 SetFPUResult(fd_reg(), 0);
@@ -3605,28 +3605,28 @@ namespace internal {
             }
             break;
         case CMP_ULE:
-            if ((fs <= ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs <= ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUResult(fd_reg(), -1);
             } else {
                 SetFPUResult(fd_reg(), 0);
             }
             break;
         case CMP_OR:
-            if (!std::isnan(fs) && !std::isnan(ft)) {
+            if (!/*std::*/isnan(fs) && !/*std::*/isnan(ft)) {
                 SetFPUResult(fd_reg(), -1);
             } else {
                 SetFPUResult(fd_reg(), 0);
             }
             break;
         case CMP_UNE:
-            if ((fs != ft) || (std::isnan(fs) || std::isnan(ft))) {
+            if ((fs != ft) || (/*std::*/isnan(fs) || /*std::*/isnan(ft))) {
                 SetFPUResult(fd_reg(), -1);
             } else {
                 SetFPUResult(fd_reg(), 0);
             }
             break;
         case CMP_NE:
-            if (fs != ft && (!std::isnan(fs) && !std::isnan(ft))) {
+            if (fs != ft && (!/*std::*/isnan(fs) && !/*std::*/isnan(ft))) {
                 SetFPUResult(fd_reg(), -1);
             } else {
                 SetFPUResult(fd_reg(), 0);
@@ -5635,70 +5635,70 @@ namespace internal {
         const T_fp t_element = *reinterpret_cast<T_fp*>(&wt);
         switch (opcode) {
         case FCUN: {
-            if (std::isnan(s_element) || std::isnan(t_element)) {
+            if (/*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = all_ones;
             } else {
                 wd = 0;
             }
         } break;
         case FCEQ: {
-            if (s_element != t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element != t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = 0;
             } else {
                 wd = all_ones;
             }
         } break;
         case FCUEQ: {
-            if (s_element == t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element == t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = all_ones;
             } else {
                 wd = 0;
             }
         } break;
         case FCLT: {
-            if (s_element >= t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element >= t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = 0;
             } else {
                 wd = all_ones;
             }
         } break;
         case FCULT: {
-            if (s_element < t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element < t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = all_ones;
             } else {
                 wd = 0;
             }
         } break;
         case FCLE: {
-            if (s_element > t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element > t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = 0;
             } else {
                 wd = all_ones;
             }
         } break;
         case FCULE: {
-            if (s_element <= t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element <= t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = all_ones;
             } else {
                 wd = 0;
             }
         } break;
         case FCOR: {
-            if (std::isnan(s_element) || std::isnan(t_element)) {
+            if (/*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = 0;
             } else {
                 wd = all_ones;
             }
         } break;
         case FCUNE: {
-            if (s_element != t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element != t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = all_ones;
             } else {
                 wd = 0;
             }
         } break;
         case FCNE: {
-            if (s_element == t_element || std::isnan(s_element) || std::isnan(t_element)) {
+            if (s_element == t_element || /*std::*/isnan(s_element) || /*std::*/isnan(t_element)) {
                 wd = 0;
             } else {
                 wd = all_ones;
@@ -5940,7 +5940,7 @@ namespace internal {
         dst = std::numeric_limits<int_type>::max();                                      \
     } else if (element < std::numeric_limits<int_type>::min()) {                         \
         dst = std::numeric_limits<int_type>::min();                                      \
-    } else if (std::isnan(element)) {                                                    \
+    } else if (/*std::*/isnan(element)) {                                                    \
         dst = 0;                                                                         \
     } else {                                                                             \
         int_type fixed_point;                                                            \
@@ -6233,7 +6233,7 @@ namespace internal {
             T_fp element = *reinterpret_cast<T_fp*>(&src);
             switch (std::fpclassify(element)) {
             case FP_INFINITE:
-                if (std::signbit(element)) {
+                if (/*std::*/signbit(element)) {
                     dst = NEG_INFINITY_BIT;
                 } else {
                     dst = POS_INFINITY_BIT;
@@ -6247,21 +6247,21 @@ namespace internal {
                 }
                 break;
             case FP_NORMAL:
-                if (std::signbit(element)) {
+                if (/*std::*/signbit(element)) {
                     dst = NEG_NORMAL_BIT;
                 } else {
                     dst = POS_NORMAL_BIT;
                 }
                 break;
             case FP_SUBNORMAL:
-                if (std::signbit(element)) {
+                if (/*std::*/signbit(element)) {
                     dst = NEG_SUBNORMAL_BIT;
                 } else {
                     dst = POS_SUBNORMAL_BIT;
                 }
                 break;
             case FP_ZERO:
-                if (std::signbit(element)) {
+                if (/*std::*/signbit(element)) {
                     dst = NEG_ZERO_BIT;
                 } else {
                     dst = POS_ZERO_BIT;
@@ -6287,7 +6287,7 @@ namespace internal {
             T_fp element = bit_cast<T_fp>(src);
             const T_int max_int = std::numeric_limits<T_int>::max();
             const T_int min_int = std::numeric_limits<T_int>::min();
-            if (std::isnan(element)) {
+            if (/*std::*/isnan(element)) {
                 dst = 0;
             } else if (element >= max_int || element <= min_int) {
                 dst = element >= max_int ? max_int : min_int;
@@ -6299,7 +6299,7 @@ namespace internal {
         case FTRUNC_U: {
             T_fp element = bit_cast<T_fp>(src);
             const T_uint max_int = std::numeric_limits<T_uint>::max();
-            if (std::isnan(element)) {
+            if (/*std::*/isnan(element)) {
                 dst = 0;
             } else if (element >= max_int || element <= 0) {
                 dst = element >= max_int ? max_int : 0;
@@ -6310,7 +6310,7 @@ namespace internal {
         }
         case FSQRT: {
             T_fp element = bit_cast<T_fp>(src);
-            if (element < 0 || std::isnan(element)) {
+            if (element < 0 || /*std::*/isnan(element)) {
                 dst = bit_cast<T_int>(std::numeric_limits<T_fp>::quiet_NaN());
             } else {
                 dst = bit_cast<T_int>(std::sqrt(element));
@@ -6319,7 +6319,7 @@ namespace internal {
         }
         case FRSQRT: {
             T_fp element = bit_cast<T_fp>(src);
-            if (element < 0 || std::isnan(element)) {
+            if (element < 0 || /*std::*/isnan(element)) {
                 dst = bit_cast<T_int>(std::numeric_limits<T_fp>::quiet_NaN());
             } else {
                 dst = bit_cast<T_int>(1 / std::sqrt(element));
@@ -6328,7 +6328,7 @@ namespace internal {
         }
         case FRCP: {
             T_fp element = bit_cast<T_fp>(src);
-            if (std::isnan(element)) {
+            if (/*std::*/isnan(element)) {
                 dst = bit_cast<T_int>(std::numeric_limits<T_fp>::quiet_NaN());
             } else {
                 dst = bit_cast<T_int>(1 / element);
@@ -6337,7 +6337,7 @@ namespace internal {
         }
         case FRINT: {
             T_fp element = bit_cast<T_fp>(src);
-            if (std::isnan(element)) {
+            if (/*std::*/isnan(element)) {
                 dst = bit_cast<T_int>(std::numeric_limits<T_fp>::quiet_NaN());
             } else {
                 T_int dummy;
@@ -6375,7 +6375,7 @@ namespace internal {
             T_fp element = bit_cast<T_fp>(src);
             const T_int max_int = std::numeric_limits<T_int>::max();
             const T_int min_int = std::numeric_limits<T_int>::min();
-            if (std::isnan(element)) {
+            if (/*std::*/isnan(element)) {
                 dst = 0;
             } else if (element < min_int || element > max_int) {
                 dst = element > max_int ? max_int : min_int;
@@ -6387,7 +6387,7 @@ namespace internal {
         case FTINT_U: {
             T_fp element = bit_cast<T_fp>(src);
             const T_uint max_uint = std::numeric_limits<T_uint>::max();
-            if (std::isnan(element)) {
+            if (/*std::*/isnan(element)) {
                 dst = 0;
             } else if (element < 0 || element > max_uint) {
                 dst = element > max_uint ? max_uint : 0;

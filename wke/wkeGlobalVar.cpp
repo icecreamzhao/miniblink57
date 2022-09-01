@@ -29,8 +29,8 @@ bool g_jsClickEnable = false;
 bool g_enableNativeSetCapture = true;
 bool g_disableCspCheck = true;
 
-extern int g_outerWidth = kUnuseIntValue;
-extern int g_outerHeight = kUnuseIntValue;
+int g_outerWidth = kUnuseIntValue;
+int g_outerHeight = kUnuseIntValue;
 
 int g_disableDownloadMask = 0;
 

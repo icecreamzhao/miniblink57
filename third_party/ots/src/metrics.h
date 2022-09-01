@@ -29,7 +29,7 @@ struct OpenTypeMetricsHeader {
 };
 
 struct OpenTypeMetricsTable {
-    std::vector<std::pair<uint16_t, int16_t>> entries;
+    std::vector<std::pair<uint16_t, int16_t> > entries;
     std::vector<int16_t> sbs;
 };
 

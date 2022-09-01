@@ -3,6 +3,7 @@
 
 #include <set>
 #include <windows.h>
+#include <stdint.h>
 
 namespace net {
 
@@ -31,7 +32,7 @@ public:
 private:
     std::set<intptr_t>* m_activatingObjs;
     CRITICAL_SECTION m_mutex;
-    int m_newestId;
+    long m_newestId;
 
     static ActivatingObjCheck* m_inst;
 };

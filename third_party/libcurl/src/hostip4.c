@@ -112,7 +112,7 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
 #endif /* CURLRES_IPV4 */
 
 #if defined(CURLRES_IPV4) && !defined(CURLRES_ARES)
-
+#error "55555"
 /*
  * Curl_ipv4_resolve_r() - ipv4 threadsafe resolver function.
  *

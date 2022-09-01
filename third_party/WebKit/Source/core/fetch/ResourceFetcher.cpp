@@ -669,7 +669,7 @@ void ResourceFetcher::initializeRevalidation(
         revalidatingRequest.setHTTPHeaderField(HTTPNames::If_None_Match, eTag);
 
     double stalenessLifetime = resource->stalenessLifetime();
-    if (std::isfinite(stalenessLifetime) && stalenessLifetime > 0) {
+    if (std_isfinite(stalenessLifetime) && stalenessLifetime > 0) {
         revalidatingRequest.setHTTPHeaderField(
             HTTPNames::Resource_Freshness,
             AtomicString(String::format(

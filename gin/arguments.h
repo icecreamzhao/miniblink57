@@ -20,19 +20,21 @@ public:
     explicit Arguments(const v8::FunctionCallbackInfo<v8::Value>& info);
     ~Arguments();
 
-    template <typename T>
+    const v8::FunctionCallbackInfo<v8::Value>* getInfo() const { return info_; }
+
+    template<typename T>
     bool GetHolder(T* out)
     {
         return ConvertFromV8(isolate_, info_->Holder(), out);
     }
 
-    template <typename T>
+    template<typename T>
     bool GetData(T* out)
     {
         return ConvertFromV8(isolate_, info_->Data(), out);
     }
 
-    template <typename T>
+    template<typename T>
     bool GetNext(T* out)
     {
         if (next_ >= info_->Length()) {
@@ -43,7 +45,7 @@ public:
         return ConvertFromV8(isolate_, val, out);
     }
 
-    template <typename T>
+    template<typename T>
     bool GetRemaining(std::vector<T>* out)
     {
         if (next_ >= info_->Length()) {
@@ -73,7 +75,7 @@ public:
         return info_->Length();
     }
 
-    template <typename T>
+    template<typename T>
     void Return(T val)
     {
         v8::Local<v8::Value> v8_value;
@@ -100,6 +102,6 @@ private:
     bool insufficient_arguments_;
 };
 
-} // namespace gin
+}  // namespace gin
 
-#endif // GIN_ARGUMENTS_H_
+#endif  // GIN_ARGUMENTS_H_

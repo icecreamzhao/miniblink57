@@ -996,8 +996,7 @@ namespace internal {
         //   // Note: Once we migrate to the a big hash table, we never migrate
         //   // down to a smaller hash table.
         //   return LargeTable::Delete(Handle<LargeTable>::cast(table), key);
-        OutputDebugStringA("OrderedHashTableHandler<SmallTable, LargeTable>::Delete\n");
-        ::DebugBreak();
+        base::OS::DebugBreak();
         return false;
     }
 
@@ -1011,8 +1010,7 @@ namespace internal {
         //
         //   DCHECK(LargeTable::Is(table));
         //   return LargeTable::HasKey(isolate, LargeTable::cast(*table), *key);
-        OutputDebugStringA("OrderedHashTableHandler<SmallTable, LargeTable>::HasKey\n");
-        ::DebugBreak();
+        base::OS::DebugBreak();
         return false;
     }
 

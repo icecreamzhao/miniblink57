@@ -39,10 +39,6 @@ namespace blink {
 StorageClientImpl::StorageClientImpl(WebViewImpl* webView)
     : m_webView(webView)
 {
-    char* output = (char*)malloc(0x100);
-    sprintf_s(output, 0x99, "StorageClientImpl: %p %p\n", this, &m_webView);
-    OutputDebugStringA(output);
-    free(output);
 }
 
 std::unique_ptr<StorageNamespace>

@@ -82,7 +82,8 @@ namespace internal {
             }
 
             // Clear g_thread_in_wasm_code, primarily to protect against nested faults.
-            g_thread_in_wasm_code = false;
+            //g_thread_in_wasm_code = false;
+            ClearThreadInWasm();
 
             // Bail out early in case we got called for the wrong kind of signal.
 
@@ -122,7 +123,8 @@ namespace internal {
                     // Tell the caller to return to the landing pad.
                     *context_rip = landing_pad;
                     // We will return to wasm code, so restore the g_thread_in_wasm_code flag.
-                    g_thread_in_wasm_code = true;
+                    //g_thread_in_wasm_code = true;
+                    SetThreadInWasm();
                     return true;
                 }
             } // end signal mask scope
@@ -151,6 +153,12 @@ namespace internal {
             }
             // TryHandleSignal modifies context to change where we return to.
         }
+
+        void RemoveTrapHandler()
+        {
+        }
+
+        bool RegisterDefaultTrapHandler() { return false; }
 
     } // namespace trap_handler
 } // namespace internal

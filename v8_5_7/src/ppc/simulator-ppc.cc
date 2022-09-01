@@ -2956,7 +2956,7 @@ void Simulator::ExecuteExt4(Instruction* instr) {
       int64_t kMaxVal = kMinVal - 1;
       bool invalid_convert = false;
 
-      if (std::isnan(frb_val)) {
+      if (std_isnan(frb_val)) {
         frt_val = kMinVal;
         invalid_convert = true;
       } else {
@@ -3001,7 +3001,7 @@ void Simulator::ExecuteExt4(Instruction* instr) {
       uint64_t kMaxVal = kMinVal - 1;
       bool invalid_convert = false;
 
-      if (std::isnan(frb_val)) {
+      if (std_isnan(frb_val)) {
         frt_val = kMinVal;
         invalid_convert = true;
       } else {
@@ -3044,7 +3044,7 @@ void Simulator::ExecuteExt4(Instruction* instr) {
       int64_t kMinVal = kMinInt;
       int64_t kMaxVal = kMaxInt;
 
-      if (std::isnan(frb_val)) {
+      if (std_isnan(frb_val)) {
         frt_val = kMinVal;
       } else {
         switch (mode) {

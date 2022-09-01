@@ -57,9 +57,9 @@ public:
 
     double value() const { return m_time; }
 
-    bool isFinite() const { return std::isfinite(m_time); }
-    bool isIndefinite() const { return std::isinf(m_time); }
-    bool isUnresolved() const { return std::isnan(m_time); }
+    bool isFinite() const { return std_isfinite(m_time); }
+    bool isIndefinite() const { return std_isinf(m_time); }
+    bool isUnresolved() const { return std_isnan(m_time); }
 
 private:
     double m_time;

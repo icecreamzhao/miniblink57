@@ -40,7 +40,7 @@ public:
 
     double perspective() const { return m_p; }
 
-    virtual bool canBlendWith(const TransformOperation& other) const
+    virtual bool canBlendWith(const TransformOperation& other) const override
     {
         return isSameType(other);
     }

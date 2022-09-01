@@ -2794,7 +2794,6 @@ namespace internal {
                 return BuildWasmReturnCall(sig, args, position, ref_node, use_retpoline);
             }
 
-            ::OutputDebugStringA("WasmGraphBuilder::BuildImportCall fail\n");
             return nullptr;
         }
 
@@ -2845,7 +2844,6 @@ namespace internal {
                 DCHECK_NULL(rets);
                 return BuildWasmReturnCall(sig, args, position, ref_node, use_retpoline);
             }
-            ::OutputDebugStringA("WasmGraphBuilder::BuildImportCall fail\n");
             return nullptr;
         }
 
@@ -2969,7 +2967,6 @@ namespace internal {
                     use_retpoline);
             }
 
-            ::OutputDebugStringA("WasmGraphBuilder::BuildIndirectCall fail\n");
             return nullptr;
         }
 
@@ -3015,7 +3012,6 @@ namespace internal {
                     use_retpoline);
             }
 
-            ::OutputDebugStringA("WasmGraphBuilder::BuildIndirectCall fail\n");
             return nullptr;
         }
 

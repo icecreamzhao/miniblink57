@@ -3747,8 +3747,18 @@ MaybeLocal<BigInt> Value::ToBigInt(Local<Context> context) const
 
 bool Value::BooleanValue(Isolate* v8_isolate) const
 {
-    return Utils::OpenHandle(this)->BooleanValue(
-        reinterpret_cast<i::Isolate*>(v8_isolate));
+    return Utils::OpenHandle(this)->BooleanValue(reinterpret_cast<i::Isolate*>(v8_isolate));
+}
+
+bool Value::BooleanValue() const
+{
+    return BooleanValue(Isolate::GetCurrent());
+}
+
+Maybe<bool> Value::BooleanValue(Local<Context> context) const
+{
+    i::Isolate* isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+    return Just(Utils::OpenHandle(this)->BooleanValue(isolate));
 }
 
 MaybeLocal<Boolean> Value::ToBoolean(Local<Context> context) const
@@ -3759,8 +3769,7 @@ MaybeLocal<Boolean> Value::ToBoolean(Local<Context> context) const
 Local<Boolean> Value::ToBoolean(Isolate* v8_isolate) const
 {
     auto isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-    return ToApiHandle<Boolean>(
-        isolate->factory()->ToBoolean(BooleanValue(v8_isolate)));
+    return ToApiHandle<Boolean>(isolate->factory()->ToBoolean(BooleanValue(v8_isolate)));
 }
 
 MaybeLocal<Number> Value::ToNumber(Local<Context> context) const
@@ -4079,18 +4088,6 @@ void v8::RegExp::CheckCast(v8::Value* that)
     Utils::ApiCheck(obj->IsJSRegExp(),
         "v8::RegExp::Cast()",
         "Could not convert to regular expression");
-}
-
-bool Value::BooleanValue() const
-{
-    DebugBreak();
-    return false;
-}
-
-Maybe<bool> Value::BooleanValue(Local<Context> context) const
-{
-    i::Isolate* isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-    return Just(Utils::OpenHandle(this)->BooleanValue(isolate));
 }
 
 Maybe<double> Value::NumberValue(Local<Context> context) const
@@ -4849,7 +4846,7 @@ bool Object::SetAccessor(Local<Name> name,
     AccessControl settings,
     PropertyAttribute attribute)
 { // weolar
-    DebugBreak();
+    base::OS::DebugBreak();
     return false;
 }
 
@@ -7083,7 +7080,7 @@ Local<v8::Symbol> v8::SymbolObject::ValueOf() const
 
 MaybeLocal<v8::Value> v8::Date::New(Local<Context> context, double time)
 {
-    if (std::isnan(time)) {
+    if (/*std::*/isnan(time)) {
         // Introduce only canonical NaN value into the VM, to avoid signaling NaNs.
         time = std::numeric_limits<double>::quiet_NaN();
     }
@@ -8246,7 +8243,7 @@ Local<Private> v8::Private::ForApi(Isolate* isolate, Local<String> name)
 Local<Number> v8::Number::New(Isolate* isolate, double value)
 {
     i::Isolate* internal_isolate = reinterpret_cast<i::Isolate*>(isolate);
-    if (std::isnan(value)) {
+    if (/*std::*/isnan(value)) {
         // Introduce only canonical NaN value into the VM, to avoid signaling NaNs.
         value = std::numeric_limits<double>::quiet_NaN();
     }
@@ -8606,13 +8603,13 @@ void Isolate::Initialize(Isolate* isolate,
                 "snapshot blob file is corrupted or missing.");
         }
         base::ElapsedTimer timer;
-        if (i::FLAG_profile_deserialization)
+        //if (i::FLAG_profile_deserialization)
             timer.Start();
         i_isolate->InitWithoutSnapshot();
-        if (i::FLAG_profile_deserialization) {
+        //if (i::FLAG_profile_deserialization) {
             double ms = timer.Elapsed().InMillisecondsF();
             i::PrintF("[Initializing isolate from scratch took %0.3f ms]\n", ms);
-        }
+        //}
     }
     i_isolate->set_only_terminate_in_safe_scope(
         params.only_terminate_in_safe_scope);
@@ -11395,31 +11392,31 @@ CpuProfiler* Isolate::GetCpuProfiler()
     //   i::CpuProfiler* cpu_profiler =
     //     reinterpret_cast<i::Isolate*>(this)->cpu_profiler();
     //   return reinterpret_cast<CpuProfiler*>(cpu_profiler);
-    ::DebugBreak();
+    base::OS::DebugBreak();
     return nullptr;
 }
 
 Local<Array> StackTrace::AsArray()
 {
     // return Utils::ToLocal(Utils::OpenHandle(this));
-    ::DebugBreak();
+    base::OS::DebugBreak();
     return Local<Array>();
 }
 
 void NativeWeakMap::Set(Local<Value> v8_key, Local<Value> v8_value)
 {
-    ::DebugBreak();
+    base::OS::DebugBreak();
 }
 
 Local<Value> NativeWeakMap::Get(Local<Value> v8_key)
 {
-    ::DebugBreak();
+    base::OS::DebugBreak();
     return Local<Value>();
 }
 
 Local<NativeWeakMap> NativeWeakMap::New(Isolate* v8_isolate)
 {
-    ::DebugBreak();
+    base::OS::DebugBreak();
     return Local<NativeWeakMap>();
 }
 
@@ -11429,19 +11426,19 @@ MaybeLocal<Value> Debug::Call(Local<Context> context,
     v8::Local<v8::Function> fun,
     v8::Local<v8::Value> data)
 {
-    ::DebugBreak();
+    base::OS::DebugBreak();
     return MaybeLocal<Value>();
 }
 
 bool Debug::CheckDebugBreak(Isolate* isolate)
 {
-    ::DebugBreak();
+    base::OS::DebugBreak();
     return false;
 }
 
-void Debug::CancelDebugBreak(Isolate* isolate) { ::DebugBreak(); }
+void Debug::CancelDebugBreak(Isolate* isolate) { base::OS::DebugBreak(); }
 
-void Debug::DebugBreak(Isolate* isolate) { ::DebugBreak(); }
+void Debug::DebugBreak(Isolate* isolate) { base::OS::DebugBreak(); }
 
 bool Debug::SetDebugEventListener(Isolate* isolate, EventCallback that,
     Local<Value> data)
@@ -11495,7 +11492,7 @@ const ScriptCompiler::CachedData*
 ScriptCompiler::StreamedSource::GetCachedData() const
 {
     // return impl_->cached_data.get();
-    ::DebugBreak();
+    base::OS::DebugBreak();
     return nullptr;
 }
 
@@ -11524,6 +11521,15 @@ int32_t Value::Int32Value() const
 
     auto context = reinterpret_cast<v8::Isolate*>(Isolate::GetCurrent())->GetCurrentContext();
     return Int32Value((context)).FromMaybe(0);
+}
+
+int64_t Value::IntegerValue() const
+{
+    Local<Context> ctx = Isolate::GetCurrent()->GetCurrentContext();
+    Maybe<int64_t> result = IntegerValue(ctx);
+    if (result.IsNothing())
+        return 0;
+    return result.FromJust();
 }
 
 uint32_t Value::Uint32Value() const
@@ -11598,21 +11604,52 @@ Maybe<bool> v8::Object::ForceSet(v8::Local<v8::Context> context,
 
 Local<v8::Value> Function::Call(v8::Local<v8::Value> recv, int argc, v8::Local<v8::Value> argv[])
 {
-    ::DebugBreak();
-    return Local<Value>();
+    Isolate* isolate = Isolate::GetCurrent();
+    MaybeLocal<Value> result = Call(isolate->GetCurrentContext(), recv, argc, argv);
+    if (result.IsEmpty())
+        return Local<Value>();
+    return result.ToLocalChecked();
 }
 
 MaybeLocal<Array> Debug::GetInternalProperties(Isolate* v8_isolate, Local<Value> value)
 {
-    ::DebugBreak();
-    return MaybeLocal<Array>();
+    return debug::GetInternalProperties(v8_isolate, value);
 }
 
 void HeapProfiler::SetWrapperClassInfoProvider(uint16_t class_id,
     WrapperInfoCallback callback)
 {
-    //   reinterpret_cast<i::HeapProfiler*>(this)->DefineWrapperClass(class_id,
-    //     callback);
+    // reinterpret_cast<i::HeapProfiler*>(this)->DefineWrapperClass(class_id, callback);
+}
+
+double Value::NumberValue() const
+{
+    Local<Context> ctx = Isolate::GetCurrent()->GetCurrentContext();
+    Maybe<double> result = NumberValue(ctx);
+    if (result.IsNothing())
+        return 0;
+    return result.FromJust();
+}
+
+MaybeLocal<Value> Debug::GetMirror(Local<v8::Context>, Local<v8::Value>)
+{
+    base::OS::DebugBreak();
+    return MaybeLocal<Value>();
+}
+
+void Debug::ProcessDebugMessages(Isolate* isolate)
+{
+    base::OS::DebugBreak();
+}
+
+void Debug::SetMessageHandler(v8::Isolate*, void (*)(v8::Debug::Message const&))
+{
+    base::OS::DebugBreak();
+}
+
+void Debug::SendCommand(Isolate* isolate, const uint16_t* command, int length, Debug::ClientData* client_data)
+{
+    base::OS::DebugBreak();
 }
 
 } // namespace v8

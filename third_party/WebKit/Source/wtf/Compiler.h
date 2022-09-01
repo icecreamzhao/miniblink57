@@ -99,7 +99,10 @@
 #define NO_SANITIZE_UNRELATED_CAST
 #endif
 
+#ifndef ALWAYS_INLINE
 #define ALWAYS_INLINE inline
+#endif
+
 //#define LIKELY
 #define ASSERT_WITH_SECURITY_IMPLICATION(x) ASSERT(x)
 #define WARN_UNUSED_RETURN

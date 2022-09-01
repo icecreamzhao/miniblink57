@@ -13,7 +13,19 @@
 #include <windows.h>
 
 //////////////////////////////////////////////////////////////////////////
-#define WKE_CALL_TYPE __cdecl
+#if __SIZEOF_LONG__ == 8
+#define WKE_CALL_TYPE 
+#else
+#define WKE_CALL_TYPE __stdcall
+#endif
+
+#if defined(__clang__)
+#define WKE_EXPORT __attribute__ ((visibility("default")))
+#define WKE_SELECTANY __attribute__((selectany))
+#else
+#define WKE_EXPORT __declspec(dllexport)
+#define WKE_SELECTANY __declspec(selectany)
+#endif
 
 typedef struct _wkeRect {
     int x;
@@ -661,7 +673,11 @@ typedef struct {
 typedef void(WKE_CALL_TYPE*wkeDraggableRegionsChangedCallback)(wkeWebView webView, void* param, const wkeDraggableRegion* rects, int rectCount);
 
 //JavaScript Bind-----------------------------------------------------------------------------------
+#if defined(__clang__)
+#define JS_CALL 
+#else
 #define JS_CALL __fastcall
+#endif
 typedef jsValue(JS_CALL* jsNativeFunction) (jsExecState es);
 
 typedef jsValue(WKE_CALL_TYPE* wkeJsNativeFunction) (jsExecState es, void* param);
@@ -728,13 +744,13 @@ public:
     virtual void setTransparent(bool transparent) = 0;
 
     virtual void loadURL(const utf8* url) = 0;
-    virtual void loadURL(const wchar_t* url) = 0;
+    virtual void loadURL(const WCHAR* url) = 0;
 
     virtual void loadHTML(const utf8* html) = 0;
-    virtual void loadHTML(const wchar_t* html) = 0;
+    virtual void loadHTML(const WCHAR* html) = 0;
 
     virtual void loadFile(const utf8* filename) = 0;
-    virtual void loadFile(const wchar_t* filename) = 0;
+    virtual void loadFile(const WCHAR* filename) = 0;
 
     virtual const utf8* url() const = 0;
 
@@ -746,7 +762,7 @@ public:
     virtual void reload() = 0;
 
     virtual const utf8* title() = 0;
-    virtual const wchar_t* titleW() = 0;
+    virtual const WCHAR* titleW() = 0;
 
     virtual void resize(int w, int h) = 0;
     virtual int width() const = 0;   /*viewport width*/
@@ -795,7 +811,7 @@ public:
     virtual wkeRect getCaret() = 0;
 
     virtual jsValue runJS(const utf8* script) = 0;
-    virtual jsValue runJS(const wchar_t* script) = 0;
+    virtual jsValue runJS(const WCHAR* script) = 0;
     virtual jsExecState globalExec() = 0;
 
     virtual void sleep() = 0; //moveOffscreen
@@ -818,61 +834,61 @@ public:
 
 #define WKE_DEFINE_ITERATOR0(returnVal, name, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define WKE_DEFINE_ITERATOR1(returnVal, name, p1, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(p1); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define WKE_DEFINE_ITERATOR2(returnVal, name, p1, p2, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(p1, p2); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define WKE_DEFINE_ITERATOR3(returnVal, name, p1, p2, p3, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(p1, p2, p3); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define WKE_DEFINE_ITERATOR4(returnVal, name, p1, p2, p3, p4, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(p1, p2, p3, p4); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define WKE_DEFINE_ITERATOR5(returnVal, name, p1, p2, p3, p4, p5, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define WKE_DEFINE_ITERATOR6(returnVal, name, p1, p2, p3, p4, p5, p6, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 #define WKE_DEFINE_ITERATOR11(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, description) \
     typedef returnVal(WKE_CALL_TYPE* FN_##name)(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11); \
-    __declspec(selectany) FN_##name name = ((FN_##name)0);
+    WKE_SELECTANY FN_##name name = ((FN_##name)0);
 
 // ---
 
 #define WKE_DECLARE_ITERATOR0(returnVal, name, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name();
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name();
 
 #define WKE_DECLARE_ITERATOR1(returnVal, name, p1, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name(p1);
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name(p1);
 
 #define WKE_DECLARE_ITERATOR2(returnVal, name, p1, p2, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name(p1, p2);
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name(p1, p2);
 
 #define WKE_DECLARE_ITERATOR3(returnVal, name, p1, p2, p3, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name(p1, p2, p3);
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name(p1, p2, p3);
 
 #define WKE_DECLARE_ITERATOR4(returnVal, name, p1, p2, p3, p4, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name(p1, p2, p3, p4);
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name(p1, p2, p3, p4);
 
 #define WKE_DECLARE_ITERATOR5(returnVal, name, p1, p2, p3, p4, p5, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name(p1, p2, p3, p4, p5);
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name(p1, p2, p3, p4, p5);
 
 #define WKE_DECLARE_ITERATOR6(returnVal, name, p1, p2, p3, p4, p5, p6, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name(p1, p2, p3, p4, p5, p6);
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name(p1, p2, p3, p4, p5, p6);
 
 #define WKE_DECLARE_ITERATOR11(returnVal, name, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, description) \
-    WKE_EXTERN_C __declspec(dllexport) returnVal WKE_CALL_TYPE name(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
+    WKE_EXTERN_C WKE_EXPORT returnVal WKE_CALL_TYPE name(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
 
 // ---
 
@@ -927,7 +943,7 @@ public:
     \
     ITERATOR1(const utf8*, wkeGetSource, wkeWebView webView, "") \
     ITERATOR1(const utf8*, wkeTitle, wkeWebView webView, "") \
-    ITERATOR1(const wchar_t*, wkeTitleW, wkeWebView webView, "") \
+    ITERATOR1(const WCHAR*, wkeTitleW, wkeWebView webView, "") \
     ITERATOR1(int, wkeWidth, wkeWebView webView, "") \
     ITERATOR1(int, wkeHeight, wkeWebView webView, "") \
     ITERATOR1(int, wkeContentsWidth, wkeWebView webView, "") \
@@ -962,10 +978,10 @@ public:
     ITERATOR1(const wkeClientHandler*, wkeGetClientHandler, wkeWebView webView, "") \
     \
     ITERATOR1(const utf8*, wkeToString, const wkeString string, "") \
-    ITERATOR1(const wchar_t*, wkeToStringW, const wkeString string, "") \
+    ITERATOR1(const WCHAR*, wkeToStringW, const wkeString string, "") \
     \
     ITERATOR2(const utf8*, jsToString, jsExecState es, jsValue v, "") \
-    ITERATOR2(const wchar_t*, jsToStringW, jsExecState es, jsValue v, "") \
+    ITERATOR2(const WCHAR*, jsToStringW, jsExecState es, jsValue v, "") \
     \
     ITERATOR1(void, wkeConfigure, const wkeSettings* settings, "") \
     ITERATOR0(BOOL, wkeIsInitialize, "") \
@@ -1012,22 +1028,22 @@ public:
     \
     ITERATOR2(void, wkeSetUserAgent, wkeWebView webView, const utf8* userAgent, "") \
     ITERATOR1(const char*, wkeGetUserAgent, wkeWebView webView, "") \
-    ITERATOR2(void, wkeSetUserAgentW, wkeWebView webView, const wchar_t* userAgent, "") \
+    ITERATOR2(void, wkeSetUserAgentW, wkeWebView webView, const WCHAR* userAgent, "") \
     \
-    ITERATOR4(void, wkeShowDevtools, wkeWebView webView, const wchar_t* path, wkeOnShowDevtoolsCallback callback, void* param, "") \
+    ITERATOR4(void, wkeShowDevtools, wkeWebView webView, const WCHAR* path, wkeOnShowDevtoolsCallback callback, void* param, "") \
     \
-    ITERATOR2(void, wkeLoadW, wkeWebView webView, const wchar_t* url, "") \
+    ITERATOR2(void, wkeLoadW, wkeWebView webView, const WCHAR* url, "") \
     ITERATOR2(void, wkeLoadURL, wkeWebView webView, const utf8* url, "") \
-    ITERATOR2(void, wkeLoadURLW, wkeWebView webView, const wchar_t* url, "") \
+    ITERATOR2(void, wkeLoadURLW, wkeWebView webView, const WCHAR* url, "") \
     ITERATOR4(void, wkePostURL, wkeWebView wkeView, const utf8* url, const char* postData, int postLen, "") \
-    ITERATOR4(void, wkePostURLW, wkeWebView wkeView, const wchar_t* url, const char* postData, int postLen, "") \
+    ITERATOR4(void, wkePostURLW, wkeWebView wkeView, const WCHAR* url, const char* postData, int postLen, "") \
     \
     ITERATOR2(void, wkeLoadHTML, wkeWebView webView, const utf8* html, "") \
     ITERATOR3(void, wkeLoadHtmlWithBaseUrl, wkeWebView webView, const utf8* html, const utf8* baseUrl, "") \
-    ITERATOR2(void, wkeLoadHTMLW, wkeWebView webView, const wchar_t* html, "") \
+    ITERATOR2(void, wkeLoadHTMLW, wkeWebView webView, const WCHAR* html, "") \
     \
     ITERATOR2(void, wkeLoadFile, wkeWebView webView, const utf8* filename, "") \
-    ITERATOR2(void, wkeLoadFileW, wkeWebView webView, const wchar_t* filename, "") \
+    ITERATOR2(void, wkeLoadFileW, wkeWebView webView, const WCHAR* filename, "") \
     \
     ITERATOR1(const utf8*, wkeGetURL, wkeWebView webView, "") \
     ITERATOR2(const utf8*, wkeGetFrameUrl, wkeWebView webView, wkeWebFrameHandle frameId, "") \
@@ -1052,7 +1068,7 @@ public:
     ITERATOR1(void, wkeFreeMemBuf, wkeMemBuf* buf, "") \
     \
     ITERATOR1(const utf8*, wkeGetTitle, wkeWebView webView, "") \
-    ITERATOR1(const wchar_t*, wkeGetTitleW, wkeWebView webView, "") \
+    ITERATOR1(const WCHAR*, wkeGetTitleW, wkeWebView webView, "") \
     \
     ITERATOR3(void, wkeResize, wkeWebView webView, int w, int h, "") \
     ITERATOR1(int, wkeGetWidth, wkeWebView webView, "") \
@@ -1087,7 +1103,7 @@ public:
     ITERATOR1(void, wkeEditorUndo, wkeWebView webView, "") \
     ITERATOR1(void, wkeEditorRedo, wkeWebView webView, "") \
     \
-    ITERATOR1(const wchar_t*, wkeGetCookieW, wkeWebView webView, "") \
+    ITERATOR1(const WCHAR*, wkeGetCookieW, wkeWebView webView, "") \
     ITERATOR1(const utf8*, wkeGetCookie, wkeWebView webView, "") \
     ITERATOR3(void, wkeSetCookie, wkeWebView webView, const utf8* url, const utf8* cookie, "cookie格式必须是类似:cna=4UvTFE12fEECAXFKf4SFW5eo; expires=Tue, 23-Jan-2029 13:17:21 GMT; path=/; domain=.youku.com") \
     ITERATOR3(void, wkeVisitAllCookie, wkeWebView webView, void* params, wkeCookieVisitor visitor, "") \
@@ -1119,7 +1135,7 @@ public:
     ITERATOR1(wkeRect*, wkeGetCaretRect2, wkeWebView webView, "给一些不方便获取返回结构体的语言调用") \
     \
     ITERATOR2(jsValue, wkeRunJS, wkeWebView webView, const utf8* script, "") \
-    ITERATOR2(jsValue, wkeRunJSW, wkeWebView webView, const wchar_t* script, "") \
+    ITERATOR2(jsValue, wkeRunJSW, wkeWebView webView, const WCHAR* script, "") \
     \
     ITERATOR1(jsExecState, wkeGlobalExec, wkeWebView webView, "") \
     ITERATOR2(jsExecState, wkeGetGlobalExecByFrame, wkeWebView webView, wkeWebFrameHandle frameId, "") \
@@ -1135,14 +1151,14 @@ public:
     ITERATOR2(void, wkeSetEditable, wkeWebView webView, bool editable, "") \
     \
     ITERATOR1(const utf8*, wkeGetString, const wkeString string, "") \
-    ITERATOR1(const wchar_t*, wkeGetStringW, const wkeString string, "") \
+    ITERATOR1(const WCHAR*, wkeGetStringW, const wkeString string, "") \
     \
     ITERATOR3(void, wkeSetString, wkeString string, const utf8* str, size_t len, "") \
     ITERATOR3(void, wkeSetStringWithoutNullTermination, wkeString string, const utf8* str, size_t len, "") \
-    ITERATOR3(void, wkeSetStringW, wkeString string, const wchar_t* str, size_t len, "") \
+    ITERATOR3(void, wkeSetStringW, wkeString string, const WCHAR* str, size_t len, "") \
     \
     ITERATOR2(wkeString, wkeCreateString, const utf8* str, size_t len, "") \
-    ITERATOR2(wkeString, wkeCreateStringW, const wchar_t* str, size_t len, "") \
+    ITERATOR2(wkeString, wkeCreateStringW, const WCHAR* str, size_t len, "") \
     ITERATOR2(wkeString, wkeCreateStringWithoutNullTermination, const utf8* str, size_t len, "") \
     ITERATOR1(size_t, wkeGetStringLen, wkeString str, "") \
     ITERATOR1(void, wkeDeleteString, wkeString str, "") \
@@ -1197,7 +1213,8 @@ public:
     \
     ITERATOR2(void, wkeNetSetMIMEType, wkeNetJob jobPtr, const char* type, "设置response的mime") \
     ITERATOR2(const char*, wkeNetGetMIMEType, wkeNetJob jobPtr, wkeString mime, "获取response的mime") \
-    ITERATOR4(void, wkeNetSetHTTPHeaderField, wkeNetJob jobPtr, const wchar_t* key, const wchar_t* value, bool response, "") \
+    ITERATOR1(const char*, wkeNetGetReferrer, wkeNetJob jobPtr, "获取request的referrer") \
+    ITERATOR4(void, wkeNetSetHTTPHeaderField, wkeNetJob jobPtr, const WCHAR* key, const WCHAR* value, bool response, "") \
     ITERATOR2(const char*, wkeNetGetHTTPHeaderField, wkeNetJob jobPtr, const char* key, "") \
     ITERATOR2(const char*, wkeNetGetHTTPHeaderFieldFromResponse, wkeNetJob jobPtr, const char* key, "") \
     ITERATOR3(void, wkeNetSetData, wkeNetJob jobPtr, void* buf, int len, "调用此函数后,网络层收到数据会存储在一buf内,接收数据完成后响应OnLoadUrlEnd事件.#此调用严重影响性能,慎用" \
@@ -1269,7 +1286,7 @@ public:
     ITERATOR1(void, wkeUtilRelasePrintPdfDatas, const wkePdfDatas* datas,"") \
     \
     ITERATOR2(void, wkeSetWindowTitle, wkeWebView webWindow, const utf8* title, "") \
-    ITERATOR2(void, wkeSetWindowTitleW, wkeWebView webWindow, const wchar_t* title, "") \
+    ITERATOR2(void, wkeSetWindowTitleW, wkeWebView webWindow, const WCHAR* title, "") \
     \
     ITERATOR3(void, wkeNodeOnCreateProcess, wkeWebView webView, wkeNodeOnCreateProcessCallback callback, void* param, "") \
     \
@@ -1330,7 +1347,7 @@ public:
     ITERATOR3(jsValue, jsArrayBuffer, jsExecState es, const char* buffer, size_t size, "") \
     ITERATOR2(wkeMemBuf*, jsGetArrayBuffer, jsExecState es, jsValue value, "") \
     ITERATOR2(const utf8*, jsToTempString, jsExecState es, jsValue v, "") \
-    ITERATOR2(const wchar_t*, jsToTempStringW, jsExecState es, jsValue v, "") \
+    ITERATOR2(const WCHAR*, jsToTempStringW, jsExecState es, jsValue v, "") \
     ITERATOR2(void*, jsToV8Value, jsExecState es, jsValue v, "return v8::Persistent<v8::Value>*") \
     \
     ITERATOR1(jsValue, jsInt, int n, "") \
@@ -1345,7 +1362,7 @@ public:
     ITERATOR0(jsValue, jsFalse, "") \
     \
     ITERATOR2(jsValue, jsString, jsExecState es, const utf8* str, "") \
-    ITERATOR2(jsValue, jsStringW, jsExecState es, const wchar_t* str, "") \
+    ITERATOR2(jsValue, jsStringW, jsExecState es, const WCHAR* str, "") \
     ITERATOR1(jsValue, jsEmptyObject, jsExecState es, "") \
     ITERATOR1(jsValue, jsEmptyArray, jsExecState es, "") \
     \
@@ -1370,8 +1387,8 @@ public:
     ITERATOR1(wkeWebView, jsGetWebView, jsExecState es, "") \
     \
     ITERATOR2(jsValue, jsEval, jsExecState es, const utf8* str, "") \
-    ITERATOR2(jsValue, jsEvalW, jsExecState es, const wchar_t* str, "") \
-    ITERATOR3(jsValue, jsEvalExW, jsExecState es, const wchar_t* str, bool isInClosure, "") \
+    ITERATOR2(jsValue, jsEvalW, jsExecState es, const WCHAR* str, "") \
+    ITERATOR3(jsValue, jsEvalExW, jsExecState es, const WCHAR* str, bool isInClosure, "") \
     \
     ITERATOR5(jsValue, jsCall, jsExecState es, jsValue func, jsValue thisObject, jsValue* args, int argCount, "") \
     ITERATOR4(jsValue, jsCallGlobal, jsExecState es, jsValue func, jsValue* args, int argCount, "") \
@@ -1388,9 +1405,9 @@ public:
 
 #if ENABLE_WKE == 1
 
-WKE_EXTERN_C __declspec(dllexport) void WKE_CALL_TYPE wkeInit();
-WKE_EXTERN_C __declspec(dllexport) void WKE_CALL_TYPE wkeInitialize();
-WKE_EXTERN_C __declspec(dllexport) void WKE_CALL_TYPE wkeInitializeEx(const wkeSettings* settings);
+WKE_EXTERN_C WKE_EXPORT void WKE_CALL_TYPE wkeInit();
+WKE_EXTERN_C WKE_EXPORT void WKE_CALL_TYPE wkeInitialize();
+WKE_EXTERN_C WKE_EXPORT void WKE_CALL_TYPE wkeInitializeEx(const wkeSettings* settings);
 
 WKE_FOR_EACH_DEFINE_FUNCTION(WKE_DECLARE_ITERATOR0, WKE_DECLARE_ITERATOR1, WKE_DECLARE_ITERATOR2, \
     WKE_DECLARE_ITERATOR3, WKE_DECLARE_ITERATOR4, WKE_DECLARE_ITERATOR5, WKE_DECLARE_ITERATOR6, WKE_DECLARE_ITERATOR11)
@@ -1402,15 +1419,15 @@ WKE_FOR_EACH_DEFINE_FUNCTION(WKE_DEFINE_ITERATOR0, WKE_DEFINE_ITERATOR1, WKE_DEF
 
 typedef void (WKE_CALL_TYPE *FN_wkeInitializeEx)(const wkeSettings* settings);
 
-__declspec(selectany) const wchar_t* s_wkeDllPath = L"node.dll";
-__declspec(selectany) HMODULE s_wkeMainDllHandle = NULL;
+WKE_SELECTANY const WCHAR* s_wkeDllPath = L"node.dll";
+WKE_SELECTANY HMODULE s_wkeMainDllHandle = NULL;
 
 inline void wkeSetWkeDllHandle(const HMODULE mainDllHandle)
 {
     s_wkeMainDllHandle = mainDllHandle;
 }
 
-inline void wkeSetWkeDllPath(const wchar_t* dllPath)
+inline void wkeSetWkeDllPath(const WCHAR* dllPath)
 {
     s_wkeDllPath = dllPath;
 }

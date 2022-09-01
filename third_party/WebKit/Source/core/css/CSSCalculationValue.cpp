@@ -181,7 +181,7 @@ public:
         CSSPrimitiveValue::UnitType type,
         bool isInteger)
     {
-        if (std::isnan(value) || std::isinf(value))
+        if (std_isnan(value) || std_isinf(value))
             return nullptr;
         return new CSSCalcPrimitiveValue(CSSPrimitiveValue::create(value, type),
             isInteger);
@@ -430,7 +430,7 @@ public:
             CSSCalcExpressionNode* otherSide = leftSide == numberSide ? rightSide : leftSide;
 
             double number = numberSide->doubleValue();
-            if (std::isnan(number) || std::isinf(number))
+            if (std_isnan(number) || std_isinf(number))
                 return nullptr;
             if (op == CalcDivide && !number)
                 return nullptr;

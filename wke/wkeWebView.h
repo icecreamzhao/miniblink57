@@ -146,31 +146,31 @@ public:
     void setWillDestroy();
 
     const utf8* name() const override;
-    const wchar_t* nameW() const;
+    const WCHAR* nameW() const;
 
     void setName(const utf8* name) override;
-    void setName(const wchar_t* name);
+    void setName(const WCHAR* name);
 
     virtual bool isTransparent() const override;
     virtual void setTransparent(bool transparent) override;
 
     void loadURL(const utf8* inUrl) override;
-    void loadURL(const wchar_t* url) override;
+    void loadURL(const WCHAR* url) override;
     
     void loadPostURL(const utf8* inUrl,const char * poastData,int nLen);
-    void loadPostURL(const wchar_t * inUrl,const char * poastData,int nLen);
+    void loadPostURL(const WCHAR * inUrl,const char * poastData,int nLen);
 
     void loadHTML(const utf8* html) override;
     void loadHtmlWithBaseUrl(const utf8* html, const utf8* baseUrl);
-    void loadHTML(const wchar_t* html) override;
+    void loadHTML(const WCHAR* html) override;
 
     void loadFile(const utf8* filename) override;
-    void loadFile(const wchar_t* filename) override;
+    void loadFile(const WCHAR* filename) override;
 
     const utf8* url() const override;
 
     void setUserAgent(const utf8 * useragent);
-    void setUserAgent(const wchar_t * useragent);
+    void setUserAgent(const WCHAR * useragent);
     
     virtual bool isLoading() const override;
     virtual bool isLoadingSucceeded() const override;
@@ -183,7 +183,7 @@ public:
     void goToIndex(int index);
 
     const utf8* title() override;
-    const wchar_t* titleW() override;
+    const WCHAR* titleW() override;
     
     virtual void resize(int w, int h) override;
     int width() const override;
@@ -228,7 +228,7 @@ public:
     void editorUndo() override;
     void editorRedo() override;
 
-    const wchar_t* cookieW();
+    const WCHAR* cookieW();
     const utf8* cookie();
 
     void setCookieEnabled(bool enable) override;
@@ -255,7 +255,7 @@ public:
     static int64_t wkeWebFrameHandleToFrameId(content::WebPage* page, wkeWebFrameHandle frameId);
     static wkeWebFrameHandle frameIdTowkeWebFrameHandle(content::WebPage* page, int64_t frameId);
 
-    jsValue runJS(const wchar_t* script) override;
+    jsValue runJS(const WCHAR* script) override;
     jsValue runJS(const utf8* script) override;
     jsValue runJsInFrame(wkeWebFrameHandle frameId, const utf8* script, bool isInClosure);
     jsExecState globalExec() override;

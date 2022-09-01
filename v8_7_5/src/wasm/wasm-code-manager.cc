@@ -773,7 +773,6 @@ namespace internal {
                 case ExecutionTier::kNone:
                     UNREACHABLE();
                 }
-                ::OutputDebugStringA("GetCodeKindForExecutionTier fail\n");
                 return WasmCode::Kind::kFunction;
             }
         } // namespace

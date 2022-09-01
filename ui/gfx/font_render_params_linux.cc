@@ -4,7 +4,8 @@
 
 #include "ui/gfx/font_render_params.h"
 
-#include <fontconfig/fontconfig.h>
+//#include <fontconfig/fontconfig.h>
+#include <third_party/fontconfig/src/fontconfig/fontconfig.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -14,7 +15,7 @@
 #include "base/lazy_instance.h"
 #include "base/logging.h"
 #include "base/macros.h"
-#include "base/memory/scoped_ptr.h"
+//#include "base/memory/scoped_ptr.h"
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/synchronization/lock.h"
@@ -111,7 +112,7 @@ namespace {
         struct FcPatternDeleter {
             void operator()(FcPattern* ptr) const { FcPatternDestroy(ptr); }
         };
-        typedef scoped_ptr<FcPattern, FcPatternDeleter> ScopedFcPattern;
+        typedef std::unique_ptr<FcPattern, FcPatternDeleter> ScopedFcPattern;
 
         ScopedFcPattern query_pattern(FcPatternCreate());
         CHECK(query_pattern);
@@ -223,13 +224,14 @@ FontRenderParams GetFontRenderParams(const FontRenderParamsQuery& query,
 #if defined(OS_CHROMEOS)
         actual_query.device_scale_factor = device_scale_factor_for_internal_display;
 #else
-        // Linux does not support per-display DPI, so we use a slightly simpler
-        // code path than on Chrome OS to figure out the device scale factor.
-        gfx::Screen* screen = gfx::Screen::GetScreen();
-        if (screen) {
-            gfx::Display display = screen->GetPrimaryDisplay();
-            actual_query.device_scale_factor = display.device_scale_factor();
-        }
+//         // Linux does not support per-display DPI, so we use a slightly simpler
+//         // code path than on Chrome OS to figure out the device scale factor.
+//         gfx::Screen* screen = gfx::Screen::GetScreen();
+//         if (screen) {
+//             gfx::Display display = screen->GetPrimaryDisplay();
+//             actual_query.device_scale_factor = display.device_scale_factor();
+//         }
+        actual_query.device_scale_factor = 1;
 #endif
     }
     const uint32_t hash = HashFontRenderParamsQuery(actual_query);

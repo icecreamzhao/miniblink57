@@ -76,15 +76,12 @@ namespace internal {
         }
 
 #ifdef SUPPORT_XP_CODE
-
-        extern int g_thread_in_wasm_code_tls;
+        //extern int g_thread_in_wasm_code_tls;
         V8_NOINLINE V8_EXPORT_PRIVATE int* GetThreadInWasmThreadLocalAddress();
         DISABLE_ASAN bool IsThreadInWasm();
         void SetThreadInWasm();
         void ClearThreadInWasm();
-
 #else
-
         extern THREAD_LOCAL int g_thread_in_wasm_code;
 
         // Return the address of the thread-local {g_thread_in_wasm_code} variable. This

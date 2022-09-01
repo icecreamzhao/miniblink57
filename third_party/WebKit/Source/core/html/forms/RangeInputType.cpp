@@ -131,7 +131,7 @@ void RangeInputType::setValueAsDouble(double newValue,
 
 bool RangeInputType::typeMismatchFor(const String& value) const
 {
-    return !value.isEmpty() && !std::isfinite(parseToDoubleForNumberType(value));
+    return !value.isEmpty() && !std_isfinite(parseToDoubleForNumberType(value));
 }
 
 bool RangeInputType::supportsRequired() const

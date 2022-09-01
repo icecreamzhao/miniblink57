@@ -77,7 +77,7 @@ namespace base {
 
     const char* CygwinTimezoneCache::LocalTimezone(double time)
     {
-        if (std::isnan(time))
+        if (/*std::*/isnan(time))
             return "";
         time_t tv = static_cast<time_t>(std::floor(time / msPerSecond));
         struct tm tm;

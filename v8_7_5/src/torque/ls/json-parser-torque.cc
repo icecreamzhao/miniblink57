@@ -204,11 +204,11 @@ namespace internal {
                 CurrentSourceFile::Scope unkown_file(SourceFileMap::AddSource("<json>"));
 
                 JsonParserResult result;
-                try {
+                //try {
                     result.value = (*JsonGrammar().Parse(input)).Cast<JsonValue>();
-                } catch (TorqueError& error) {
-                    result.error = error;
-                }
+                //} catch (TorqueError& error) {
+                //    result.error = error;
+                //}
                 return result;
             }
 

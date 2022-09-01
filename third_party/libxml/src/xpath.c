@@ -15152,6 +15152,44 @@ xmlXPathRegisterAllFunctions(xmlXPathContextPtr ctxt)
                          xmlXPathEscapeUriFunction);
 }
 
+#if defined(__clang__)
+void xmlDebugDumpOneNode(FILE* output, xmlNodePtr node, int depth)
+{
+    if (output == NULL)
+        output = stdout;
+    fprintf(output, "xmlDebugDumpOneNode is not impl\n");
+}
+
+void xmlDebugDumpString(FILE* output, const xmlChar* str)
+{
+    int i;
+
+    if (output == NULL)
+        output = stdout;
+    if (str == NULL) {
+        fprintf(output, "(NULL)");
+        return;
+    }
+    for (i = 0; i < 40; i++)
+        if (str[i] == 0)
+            return;
+        else if (IS_BLANK_CH(str[i]))
+            fputc(' ', output);
+        else if (str[i] >= 0x80)
+            fprintf(output, "#%X", str[i]);
+        else
+            fputc(str[i], output);
+    fprintf(output, "...");
+}
+
+void xmlDebugDumpAttr(FILE* output, xmlAttrPtr attr, int depth)
+{
+    if (output == NULL)
+        output = stdout;
+	fprintf(output, "xmlDebugDumpAttr is not impl\n");
+}
+#endif
+
 #endif /* LIBXML_XPATH_ENABLED */
 #define bottom_xpath
 #include "elfgcchack.h"

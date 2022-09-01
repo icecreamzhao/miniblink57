@@ -427,7 +427,7 @@ MediaKeySession::MediaKeySession(ScriptState* scriptState,
     DCHECK(sessionId().isEmpty());
 
     // 3.2 Let the expiration attribute be NaN.
-    DCHECK(std::isnan(m_expiration));
+    DCHECK(std_isnan(m_expiration));
 
     // 3.3 Let the closed attribute be a new promise.
     DCHECK(!closed(scriptState).isUndefinedOrNull());
@@ -684,7 +684,7 @@ void MediaKeySession::loadTask(ContentDecryptionModuleResult* result,
 
     // 8.4 Let expiration time be NaN.
     //     (Done in the constructor.)
-    DCHECK(std::isnan(m_expiration));
+    DCHECK(std_isnan(m_expiration));
 
     // load() in Chromium will execute steps 8.5 through 8.8.
     m_session->load(sessionId, result->result());
@@ -1007,7 +1007,7 @@ void MediaKeySession::expirationChanged(double updatedExpiryTimeInMS)
     //    new expiration time in milliseconds since 01 January 1970 UTC.
     //    (Note that Chromium actually passes 0 to indicate no expiry.)
     // FIXME: Get Chromium to pass NaN.
-    if (!std::isnan(updatedExpiryTimeInMS) && updatedExpiryTimeInMS != 0.0)
+    if (!std_isnan(updatedExpiryTimeInMS) && updatedExpiryTimeInMS != 0.0)
         expirationTime = updatedExpiryTimeInMS;
 
     // 4. Set the session's expiration attribute to expiration time.

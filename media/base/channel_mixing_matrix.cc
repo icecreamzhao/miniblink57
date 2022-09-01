@@ -14,6 +14,11 @@
 
 #include "base/logging.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace media {
 
 // Default scale factor for mixing two channels together.  We use a different

@@ -325,14 +325,15 @@ public:
 
     SkDEBUGCODE(void validate() const;)
 
-        private : enum SerializationOffsets {
-            kRRectOrOvalStartIdx_SerializationShift = 28, // requires 3 bits
-            kRRectOrOvalIsCCW_SerializationShift = 27, // requires 1 bit
-            kIsRRect_SerializationShift = 26, // requires 1 bit
-            kIsFinite_SerializationShift = 25, // requires 1 bit
-            kIsOval_SerializationShift = 24, // requires 1 bit
-            kSegmentMask_SerializationShift = 0 // requires 4 bits
-        };
+private: 
+    enum SerializationOffsets {
+        kRRectOrOvalStartIdx_SerializationShift = 28, // requires 3 bits
+        kRRectOrOvalIsCCW_SerializationShift = 27, // requires 1 bit
+        kIsRRect_SerializationShift = 26, // requires 1 bit
+        kIsFinite_SerializationShift = 25, // requires 1 bit
+        kIsOval_SerializationShift = 24, // requires 1 bit
+        kSegmentMask_SerializationShift = 0 // requires 4 bits
+    };
 
     SkPathRef()
     {

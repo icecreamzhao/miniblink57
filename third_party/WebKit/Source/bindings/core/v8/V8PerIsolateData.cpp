@@ -44,20 +44,25 @@
 #include "wtf/PtrUtil.h"
 #include <memory>
 #include <v8-debug.h>
+#include "base/threading/thread_local.h"
 
 namespace blink {
 
 static V8PerIsolateData* mainThreadPerIsolateData = 0;
-static DWORD s_threadLocalV8PerIsolateData = 0;
+//static DWORD s_threadLocalV8PerIsolateData = 0;
+base::ThreadLocalPointer<V8PerIsolateData>* s_threadLocalV8PerIsolateData;
 
 gin::IsolateHolder* initIsolateHolder(V8PerIsolateData* data)
 {
     if (isMainThread())
         mainThreadPerIsolateData = data;
 
-    if (0 == s_threadLocalV8PerIsolateData)
-        s_threadLocalV8PerIsolateData = ::TlsAlloc();
-    ::TlsSetValue(s_threadLocalV8PerIsolateData, data);
+//     if (0 == s_threadLocalV8PerIsolateData)
+//         s_threadLocalV8PerIsolateData = ::TlsAlloc();
+//     ::TlsSetValue(s_threadLocalV8PerIsolateData, data);
+    if (!s_threadLocalV8PerIsolateData)
+        s_threadLocalV8PerIsolateData = new base::ThreadLocalPointer<V8PerIsolateData>();
+    s_threadLocalV8PerIsolateData->Set(data);
 
     return new gin::IsolateHolder();
 }
@@ -471,11 +476,19 @@ std::shared_ptr<v8::TaskRunner> V8PerIsolateData::getThreadRunner(v8::Isolate* i
     V8PerIsolateData* self = nullptr;
     if (isolate)
         self = static_cast<V8PerIsolateData*>(isolate->GetData(gin::kEmbedderBlink));
-    
-    if (!self)
-        self = (V8PerIsolateData*)::TlsGetValue(s_threadLocalV8PerIsolateData);
+
+    if (!self) {
+        //self = (V8PerIsolateData*)::TlsGetValue(s_threadLocalV8PerIsolateData);
+        self = s_threadLocalV8PerIsolateData->Get();
+    }
     return self->m_threadRunner;
 }
+
 #endif
+
+WebThread* V8PerIsolateData::getThread() const
+{
+    return m_thread;
+}
 
 } // namespace blink

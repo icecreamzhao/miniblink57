@@ -82,10 +82,10 @@ public:
 
     // Construct a string with UTF-16 data, from a null-terminated source.
     String(const UChar*);
-    String(const char16_t* chars)
-        : String(reinterpret_cast<const UChar*>(chars))
-    {
-    }
+//     String(const char16_t* chars)
+//         : String(reinterpret_cast<const UChar*>(chars))
+//     {
+//     }
 
     // Construct a string with latin1 data.
     String(const LChar* characters, unsigned length);

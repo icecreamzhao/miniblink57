@@ -117,8 +117,8 @@ static double enforceRange(double x,
     const char* typeName,
     ExceptionState& exceptionState)
 {
-    if (std::isnan(x) || std::isinf(x)) {
-        exceptionState.throwTypeError("Value is" + String(std::isinf(x) ? " infinite and" : "") + " not of type '" + String(typeName) + "'.");
+    if (std_isnan(x) || std_isinf(x)) {
+        exceptionState.throwTypeError("Value is" + String(std_isinf(x) ? " infinite and" : "") + " not of type '" + String(typeName) + "'.");
         return 0;
     }
     x = trunc(x);
@@ -204,13 +204,13 @@ static inline T toSmallerInt(v8::Isolate* isolate,
             LimitsTrait::maxValue, typeName, exceptionState);
 
     double numberValue = numberObject->Value();
-    if (std::isnan(numberValue) || !numberValue)
+    if (std_isnan(numberValue) || !numberValue)
         return 0;
 
     if (configuration == Clamp)
         return clampTo<T>(numberValue);
 
-    if (std::isinf(numberValue))
+    if (std_isinf(numberValue))
         return 0;
 
     numberValue = numberValue < 0 ? -floor(fabs(numberValue)) : floor(fabs(numberValue));
@@ -264,13 +264,13 @@ static inline T toSmallerUInt(v8::Isolate* isolate,
 
     double numberValue = numberObject->Value();
 
-    if (std::isnan(numberValue) || !numberValue)
+    if (std_isnan(numberValue) || !numberValue)
         return 0;
 
     if (configuration == Clamp)
         return clampTo<T>(numberValue);
 
-    if (std::isinf(numberValue))
+    if (std_isinf(numberValue))
         return 0;
 
     numberValue = numberValue < 0 ? -floor(fabs(numberValue)) : floor(fabs(numberValue));
@@ -335,13 +335,13 @@ int32_t toInt32Slow(v8::Isolate* isolate,
         return enforceRange(numberValue, kMinInt32, kMaxInt32, "long",
             exceptionState);
 
-    if (std::isnan(numberValue))
+    if (std_isnan(numberValue))
         return 0;
 
     if (configuration == Clamp)
         return clampTo<int32_t>(numberValue);
 
-    if (std::isinf(numberValue))
+    if (std_isinf(numberValue))
         return 0;
 
     int32_t result;
@@ -389,13 +389,13 @@ uint32_t toUInt32Slow(v8::Isolate* isolate,
 
     double numberValue = numberObject->Value();
 
-    if (std::isnan(numberValue))
+    if (std_isnan(numberValue))
         return 0;
 
     if (configuration == Clamp)
         return clampTo<uint32_t>(numberValue);
 
-    if (std::isinf(numberValue))
+    if (std_isinf(numberValue))
         return 0;
 
     uint32_t result;
@@ -430,7 +430,7 @@ int64_t toInt64Slow(v8::Isolate* isolate,
         return enforceRange(numberValue, -kJSMaxInteger, kJSMaxInteger, "long long",
             exceptionState);
 
-    if (std::isnan(numberValue) || std::isinf(numberValue))
+    if (std_isnan(numberValue) || std_isinf(numberValue))
         return 0;
 
     // NaNs and +/-Infinity should be 0, otherwise modulo 2^64.
@@ -475,13 +475,13 @@ uint64_t toUInt64Slow(v8::Isolate* isolate,
         return enforceRange(numberValue, 0, kJSMaxInteger, "unsigned long long",
             exceptionState);
 
-    if (std::isnan(numberValue))
+    if (std_isnan(numberValue))
         return 0;
 
     if (configuration == Clamp)
         return clampTo<uint64_t>(numberValue);
 
-    if (std::isinf(numberValue))
+    if (std_isinf(numberValue))
         return 0;
 
     // NaNs and +/-Infinity should be 0, otherwise modulo 2^64.
@@ -497,7 +497,7 @@ float toRestrictedFloat(v8::Isolate* isolate,
     float numberValue = toFloat(isolate, value, exceptionState);
     if (exceptionState.hadException())
         return 0;
-    if (!std::isfinite(numberValue)) {
+    if (!std_isfinite(numberValue)) {
         exceptionState.throwTypeError("The provided float value is non-finite.");
         return 0;
     }
@@ -526,7 +526,7 @@ double toRestrictedDouble(v8::Isolate* isolate,
     double numberValue = toDouble(isolate, value, exceptionState);
     if (exceptionState.hadException())
         return 0;
-    if (!std::isfinite(numberValue)) {
+    if (!std_isfinite(numberValue)) {
         exceptionState.throwTypeError("The provided double value is non-finite.");
         return 0;
     }
@@ -692,8 +692,7 @@ String toUSVString(v8::Isolate* isolate,
         stringObject = value.As<v8::String>();
     } else {
         v8::TryCatch block(isolate);
-        if (!v8Call(value->ToString(isolate->GetCurrentContext()), stringObject,
-                block)) {
+        if (!v8Call(value->ToString(isolate->GetCurrentContext()), stringObject, block)) {
             exceptionState.rethrowV8Exception(block.Exception());
             return String();
         }

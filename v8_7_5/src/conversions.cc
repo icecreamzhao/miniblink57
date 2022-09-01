@@ -1004,7 +1004,7 @@ namespace internal {
 
     const char* DoubleToCString(double v, Vector<char> buffer)
     {
-        switch (FPCLASSIFY_NAMESPACE::fpclassify(v)) {
+        switch (/*FPCLASSIFY_NAMESPACE::*/fpclassify(v)) {
         case FP_NAN:
             return "NaN";
         case FP_INFINITE:
@@ -1303,7 +1303,7 @@ namespace internal {
     char* DoubleToRadixCString(double value, int radix)
     {
         DCHECK(radix >= 2 && radix <= 36);
-        DCHECK(std::isfinite(value));
+        DCHECK(/*std::*/isfinite(value));
         DCHECK_NE(0.0, value);
         // Character array used for conversion.
         static const char chars[] = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -1458,7 +1458,7 @@ namespace internal {
         // Slow path: test DoubleToString(StringToDouble(string)) == string.
         Vector<const uint16_t> vector(buffer, length);
         double d = StringToDouble(vector, NO_FLAGS);
-        if (std::isnan(d))
+        if (/*std::*/isnan(d))
             return false;
         // Compute reverse string.
         char reverse_buffer[kBufferSize + 1]; // Result will be /0 terminated.

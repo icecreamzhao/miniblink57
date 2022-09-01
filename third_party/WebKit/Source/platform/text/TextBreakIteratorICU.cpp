@@ -687,18 +687,17 @@ namespace blink {
 //   LineBreakIteratorPool::sharedPool().put(iterator);
 // }
 //
-// static TextBreakIterator* nonSharedCharacterBreakIterator;
-//
-// static inline bool compareAndSwapNonSharedCharacterBreakIterator(
-//     TextBreakIterator* expected,
-//     TextBreakIterator* newValue) {
-//   DEFINE_STATIC_LOCAL(Mutex, nonSharedCharacterBreakIteratorMutex, ());
-//   MutexLocker locker(nonSharedCharacterBreakIteratorMutex);
-//   if (nonSharedCharacterBreakIterator != expected)
-//     return false;
-//   nonSharedCharacterBreakIterator = newValue;
-//   return true;
-// }
+static TextBreakIterator* nonSharedCharacterBreakIterator;
+
+static inline bool compareAndSwapNonSharedCharacterBreakIterator(TextBreakIterator* expected, TextBreakIterator* newValue)
+{
+    DEFINE_STATIC_LOCAL(Mutex, nonSharedCharacterBreakIteratorMutex, ());
+    MutexLocker locker(nonSharedCharacterBreakIteratorMutex);
+    if (nonSharedCharacterBreakIterator != expected)
+        return false;
+    nonSharedCharacterBreakIterator = newValue;
+    return true;
+}
 
 #define DEFINE_BREAK_ITERATOR(breakType, iteratorType)                                       \
     TextBreakIterator* breakType##BreakIterator(const UChar* string, int length)             \
@@ -787,9 +786,7 @@ NonSharedCharacterBreakIterator::NonSharedCharacterBreakIterator(
     createIteratorForBuffer(buffer, length);
 }
 
-void NonSharedCharacterBreakIterator::createIteratorForBuffer(
-    const UChar* buffer,
-    unsigned length)
+void NonSharedCharacterBreakIterator::createIteratorForBuffer(const UChar* buffer, unsigned length)
 {
     //   m_iterator = nonSharedCharacterBreakIterator;
     //   bool createdIterator =
@@ -805,16 +802,21 @@ void NonSharedCharacterBreakIterator::createIteratorForBuffer(
     //   }
     //
     //   setText16(m_iterator, buffer, length);
-    DebugBreak();
+
+    m_iterator = nonSharedCharacterBreakIterator;
+    bool createdIterator = m_iterator && compareAndSwapNonSharedCharacterBreakIterator(m_iterator, 0);
+    if (!createdIterator) {
+        m_iterator = new CharBreakIterator();
+        m_iterator->reset(buffer, length);
+    }
 }
 
 NonSharedCharacterBreakIterator::~NonSharedCharacterBreakIterator()
 {
-    //   if (m_is8Bit)
-    //     return;
-    //   if (!compareAndSwapNonSharedCharacterBreakIterator(0, m_iterator))
-    //     delete m_iterator;
-    DebugBreak();
+    if (m_is8Bit)
+        return;
+    if (!compareAndSwapNonSharedCharacterBreakIterator(0, m_iterator))
+        delete m_iterator;
 }
 
 int NonSharedCharacterBreakIterator::next()

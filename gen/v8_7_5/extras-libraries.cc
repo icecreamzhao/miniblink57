@@ -7,6 +7,7 @@
 #include "src/v8.h"
 #include "src/snapshot/natives.h"
 #include "src/utils.h"
+#include "extras-libraries-v857.h"
 
 namespace v8 {
 namespace internal {
@@ -4889,22 +4890,67 @@ namespace internal {
     if (strcmp(name, "SimpleQueue") == 0) return 2;
     if (strcmp(name, "ByteLengthQueuingStrategy") == 0) return 3;
     if (strcmp(name, "CountQueuingStrategy") == 0) return 4;
-    if (strcmp(name, "ReadableStream") == 0) return 5;
+    if (strcmp(name, "ReadableStream") == 0) { return 5; }
     if (strcmp(name, "WritableStream") == 0) return 6;
     if (strcmp(name, "TransformStream") == 0) return 7;
     return -1;
   }
 
+//   Vector<const char> readFile(const wchar_t* path)
+//   {
+//       HANDLE hFile = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//       if (INVALID_HANDLE_VALUE == hFile)
+//           DebugBreak();
+// 
+//       DWORD fileSizeHigh;
+//       const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
+//       Vector<const char> buffer = Vector<const char>::New(bufferSize);
+// 
+//       DWORD numberOfBytesRead = 0;
+//       BOOL b = ::ReadFile(hFile, (LPVOID)buffer.start(), bufferSize, &numberOfBytesRead, nullptr);
+//       ::CloseHandle(hFile);
+//       return buffer;
+//   }
+// 
+//   void writeFile(const wchar_t* path, const Vector<const char>& buffer)
+//   {
+//       HANDLE hFile = CreateFileW(path, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+//       if (INVALID_HANDLE_VALUE == hFile) {
+//           DebugBreak();
+//           return;
+//       }
+// 
+//       DWORD numberOfBytesWrite = 0;
+//       BOOL b = ::WriteFile(hFile, buffer.start(), buffer.size(), &numberOfBytesWrite, nullptr);
+//       ::CloseHandle(hFile);
+//       b = b;
+//   }
+
   template <>
   Vector<const char> NativesCollection<EXTRAS>::GetScriptSource(int index) {
-    if (index == 0) return Vector<const char>(sources + 0, 11093);
-    if (index == 1) return Vector<const char>(sources + 11093, 633);
-    if (index == 2) return Vector<const char>(sources + 11726, 2111);
-    if (index == 3) return Vector<const char>(sources + 13837, 480);
-    if (index == 4) return Vector<const char>(sources + 14317, 707);
-    if (index == 5) return Vector<const char>(sources + 15024, 28165);
-    if (index == 6) return Vector<const char>(sources + 43189, 26862);
-    if (index == 7) return Vector<const char>(sources + 70051, 13031);
+    if (index == 0) return Vector<const char>(sources + 0, 11093); // CommonOperations
+    if (index == 1) {
+        //return Vector<const char>(sources + 11093, 633);
+        return Vector<const char>((const char*)CommonStrings, sizeof(CommonStrings));
+    }
+    if (index == 2) return Vector<const char>(sources + 11726, 2111); // SimpleQueue
+    if (index == 3) {
+        //return Vector<const char>(sources + 13837, 480);
+        return Vector<const char>((const char*)ByteLengthQueuingStrategy, sizeof(ByteLengthQueuingStrategy));
+    }
+    if (index == 4) {
+        //return Vector<const char>(sources + 14317, 707);
+        return Vector<const char>((const char*)CountQueuingStrategy, sizeof(CountQueuingStrategy));
+    }
+    if (index == 5) {
+        //return Vector<const char>(sources + 15024, 28165);
+        return Vector<const char>((const char*)ReadableStream, sizeof(ReadableStream));
+    }
+    if (index == 6) {
+        //return Vector<const char>(sources + 43189, 26862);
+        return Vector<const char>((const char*)WritableStream, sizeof(WritableStream));
+    }
+    if (index == 7) return Vector<const char>(sources + 70051, 13031); // TransformStream
     return Vector<const char>("", 0);
   }
 

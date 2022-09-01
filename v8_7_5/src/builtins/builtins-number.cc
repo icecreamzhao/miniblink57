@@ -40,9 +40,9 @@ namespace internal {
             isolate, fraction_digits, Object::ToInteger(isolate, fraction_digits));
         double const fraction_digits_number = fraction_digits->Number();
 
-        if (std::isnan(value_number))
+        if (/*std::*/isnan(value_number))
             return ReadOnlyRoots(isolate).NaN_string();
-        if (std::isinf(value_number)) {
+        if (/*std::*/isinf(value_number)) {
             return (value_number < 0.0) ? ReadOnlyRoots(isolate).minus_Infinity_string()
                                         : ReadOnlyRoots(isolate).Infinity_string();
         }
@@ -87,9 +87,9 @@ namespace internal {
                 isolate, NewRangeError(MessageTemplate::kNumberFormatRange, isolate->factory()->NewStringFromAsciiChecked("toFixed() digits")));
         }
 
-        if (std::isnan(value_number))
+        if (/*std::*/isnan(value_number))
             return ReadOnlyRoots(isolate).NaN_string();
-        if (std::isinf(value_number)) {
+        if (/*std::*/isinf(value_number)) {
             return (value_number < 0.0) ? ReadOnlyRoots(isolate).minus_Infinity_string()
                                         : ReadOnlyRoots(isolate).Infinity_string();
         }
@@ -157,9 +157,9 @@ namespace internal {
             Object::ToInteger(isolate, precision));
         double const precision_number = precision->Number();
 
-        if (std::isnan(value_number))
+        if (/*std::*/isnan(value_number))
             return ReadOnlyRoots(isolate).NaN_string();
-        if (std::isinf(value_number)) {
+        if (/*std::*/isinf(value_number)) {
             return (value_number < 0.0) ? ReadOnlyRoots(isolate).minus_Infinity_string()
                                         : ReadOnlyRoots(isolate).Infinity_string();
         }
@@ -220,9 +220,9 @@ namespace internal {
         }
 
         // Slow case.
-        if (std::isnan(value_number))
+        if (/*std::*/isnan(value_number))
             return ReadOnlyRoots(isolate).NaN_string();
-        if (std::isinf(value_number)) {
+        if (/*std::*/isinf(value_number)) {
             return (value_number < 0.0) ? ReadOnlyRoots(isolate).minus_Infinity_string()
                                         : ReadOnlyRoots(isolate).Infinity_string();
         }

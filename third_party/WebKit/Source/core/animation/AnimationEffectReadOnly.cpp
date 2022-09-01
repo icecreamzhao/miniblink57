@@ -64,7 +64,7 @@ AnimationEffectReadOnly::AnimationEffectReadOnly(const Timing& timing,
 
 double AnimationEffectReadOnly::iterationDuration() const
 {
-    double result = std::isnan(m_timing.iterationDuration)
+    double result = std_isnan(m_timing.iterationDuration)
         ? intrinsicIterationDuration()
         : m_timing.iterationDuration;
     DCHECK_GE(result, 0);
@@ -180,7 +180,7 @@ void AnimationEffectReadOnly::updateInheritedTime(
             // the specified behaviour does not handle infinite durations well.
             // There is an open issue against the spec to fix this:
             // https://github.com/w3c/web-animations/issues/142
-            if (!std::isfinite(iterationDuration))
+            if (!std_isfinite(iterationDuration))
                 progress = fmod(m_timing.iterationStart, 1.0);
             else
                 progress = transformedTime / iterationDuration;

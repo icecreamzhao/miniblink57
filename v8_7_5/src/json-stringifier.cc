@@ -673,7 +673,7 @@ namespace internal {
 
     JsonStringifier::Result JsonStringifier::SerializeDouble(double number)
     {
-        if (std::isinf(number) || std::isnan(number)) {
+        if (/*std::*/isinf(number) || /*std::*/isnan(number)) {
             builder_.AppendCString("null");
             return SUCCESS;
         }

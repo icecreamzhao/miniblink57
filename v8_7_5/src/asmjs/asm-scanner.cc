@@ -312,7 +312,7 @@ namespace internal {
         double_value_ = StringToDouble(
             Vector<const uint8_t>::cast(VectorOf(number)),
             ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY | ALLOW_IMPLICIT_OCTAL);
-        if (std::isnan(double_value_)) {
+        if (/*std::*/isnan(double_value_)) {
             // Check if string to number conversion didn't consume all the characters.
             // This happens if the character filter let through something invalid
             // like: 0123ef for example.

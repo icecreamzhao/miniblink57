@@ -751,7 +751,7 @@ TEST(AnimationAnimationEffectReadOnlyTest, TimeToEffectChange)
 
     animationNode->updateInheritedTime(0);
     EXPECT_EQ(0, animationNode->takeLocalTime());
-    EXPECT_TRUE(std::isinf(animationNode->takeTimeToNextIteration()));
+    EXPECT_TRUE(std_isinf(animationNode->takeTimeToNextIteration()));
 
     // Normal iteration.
     animationNode->updateInheritedTime(1.75);
@@ -769,13 +769,13 @@ TEST(AnimationAnimationEffectReadOnlyTest, TimeToEffectChange)
     animationNode->updateInheritedTime(3.4);
     EXPECT_EQ(AnimationEffectReadOnly::PhaseActive, animationNode->getPhase());
     EXPECT_EQ(3.4, animationNode->takeLocalTime());
-    EXPECT_TRUE(std::isinf(animationNode->takeTimeToNextIteration()));
+    EXPECT_TRUE(std_isinf(animationNode->takeTimeToNextIteration()));
 
     // Item has finished.
     animationNode->updateInheritedTime(3.5);
     EXPECT_EQ(AnimationEffectReadOnly::PhaseAfter, animationNode->getPhase());
     EXPECT_EQ(3.5, animationNode->takeLocalTime());
-    EXPECT_TRUE(std::isinf(animationNode->takeTimeToNextIteration()));
+    EXPECT_TRUE(std_isinf(animationNode->takeTimeToNextIteration()));
 }
 
 } // namespace blink

@@ -291,9 +291,9 @@ void DynamicsCompressorKernel::process(
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // Fix gremlins.
-        if (std::isnan(m_detectorAverage))
+        if (std_isnan(m_detectorAverage))
             m_detectorAverage = 1;
-        if (std::isinf(m_detectorAverage))
+        if (std_isinf(m_detectorAverage))
             m_detectorAverage = 1;
 
         float desiredGain = m_detectorAverage;
@@ -321,9 +321,9 @@ void DynamicsCompressorKernel::process(
             m_maxAttackCompressionDiffDb = -1;
 
             // Fix gremlins.
-            if (std::isnan(compressionDiffDb))
+            if (std_isnan(compressionDiffDb))
                 compressionDiffDb = -1;
-            if (std::isinf(compressionDiffDb))
+            if (std_isinf(compressionDiffDb))
                 compressionDiffDb = -1;
 
             // Adaptive release - higher compression (lower compressionDiffDb)
@@ -350,9 +350,9 @@ void DynamicsCompressorKernel::process(
             // Attack mode - compressionDiffDb should be positive dB
 
             // Fix gremlins.
-            if (std::isnan(compressionDiffDb))
+            if (std_isnan(compressionDiffDb))
                 compressionDiffDb = 1;
-            if (std::isinf(compressionDiffDb))
+            if (std_isinf(compressionDiffDb))
                 compressionDiffDb = 1;
 
             // As long as we're still in attack mode, use a rate based off
@@ -420,9 +420,9 @@ void DynamicsCompressorKernel::process(
                 detectorAverage = std::min(1.0f, detectorAverage);
 
                 // Fix gremlins.
-                if (std::isnan(detectorAverage))
+                if (std_isnan(detectorAverage))
                     detectorAverage = 1;
-                if (std::isinf(detectorAverage))
+                if (std_isinf(detectorAverage))
                     detectorAverage = 1;
 
                 // Exponential approach to desired gain.

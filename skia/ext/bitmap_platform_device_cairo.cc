@@ -6,11 +6,13 @@
 #include "build/build_config.h"
 #include "skia/ext/platform_canvas.h"
 
-#if defined(OS_OPENBSD)
+#if 1 // defined(OS_OPENBSD)
 #include <cairo.h>
 #else
 #include <cairo/cairo.h>
 #endif
+
+#include "windows.h"
 
 namespace skia {
 
@@ -162,7 +164,7 @@ SkBaseDevice* BitmapPlatformDevice::onCreateDevice(const CreateInfo& info,
         info.fInfo.isOpaque());
 }
 
-cairo_t* BitmapPlatformDevice::BeginPlatformPaint(
+PlatformSurface BitmapPlatformDevice::BeginPlatformPaint(
     const SkMatrix& transform,
     const SkIRect& clip_bounds)
 {
@@ -173,8 +175,13 @@ cairo_t* BitmapPlatformDevice::BeginPlatformPaint(
     // Tell Cairo that we (probably) modified (actually, will modify) its pixel
     // buffer directly.
     cairo_surface_mark_dirty(surface);
-    return cairo_;
+    return (PlatformSurface)cairo_;
 }
+
+// PlatformSurface BitmapPlatformDevice::GetBitmapDCUgly(void* hWnd)
+// {
+//     __debugbreak();
+// }
 
 // PlatformCanvas impl
 
@@ -184,6 +191,55 @@ SkCanvas* CreatePlatformCanvas(int width, int height, bool is_opaque,
     sk_sp<SkBaseDevice> dev(
         BitmapPlatformDevice::Create(width, height, is_opaque, data));
     return CreateCanvas(dev, failureType);
+}
+
+// Port of PlatformBitmap to linux
+
+void PlatformDevice::DrawToHDC(void*, void*, int, int, tagRECT const*, SkMatrix const&)
+{
+    __debugbreak();
+}
+
+void DrawToNativeContext(SkCanvas* canvas, HDC destination_hdc, int x, int y, const RECT* src_rect)
+{
+    __debugbreak();
+}
+
+PlatformBitmap::PlatformBitmap() : surface_(0), platform_extra_(0)
+{
+    __debugbreak();
+}
+
+PlatformBitmap::~PlatformBitmap()
+{
+//     if (surface_) {
+//         if (platform_extra_)
+//             SelectObject(surface_, reinterpret_cast<HGDIOBJ>(platform_extra_));
+//         DeleteDC(surface_);
+//     }
+}
+
+bool PlatformBitmap::Allocate(int width, int height, bool is_opaque)
+{
+//     void* data;
+//     HBITMAP hbitmap = CreateHBitmap(width, height, is_opaque, 0, &data);
+//     if (!hbitmap)
+//         return false;
+// 
+//     surface_ = CreateCompatibleDC(NULL);
+//     InitializeDC(surface_);
+//     // When the memory DC is created, its display surface is exactly one
+//     // monochrome pixel wide and one monochrome pixel high. Save this object
+//     // off, we'll restore it just before deleting the memory DC.
+//     HGDIOBJ stock_bitmap = SelectObject(surface_, hbitmap);
+//     platform_extra_ = reinterpret_cast<intptr_t>(stock_bitmap);
+// 
+//     if (!InstallHBitmapPixels(&bitmap_, width, height, is_opaque, data, hbitmap))
+//         return false;
+//     bitmap_.lockPixels();
+    __debugbreak();
+
+    return true;
 }
 
 } // namespace skia

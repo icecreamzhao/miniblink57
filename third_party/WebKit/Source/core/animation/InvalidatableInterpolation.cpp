@@ -146,7 +146,7 @@ InvalidatableInterpolation::ensureValidConversion(
     const InterpolationEnvironment& environment,
     const UnderlyingValueOwner& underlyingValueOwner) const
 {
-    DCHECK(!std::isnan(m_currentFraction));
+    DCHECK(!std_isnan(m_currentFraction));
     DCHECK(m_interpolationTypes && m_interpolationTypesVersion == environment.interpolationTypesMap().version());
     if (isConversionCacheValid(environment, underlyingValueOwner))
         return m_cachedValue.get();

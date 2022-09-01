@@ -122,7 +122,7 @@ public:
             size, IsEagerlyFinalizedType<Metadata>::value));
     }
 
-#if OS(WIN) && COMPILER(MSVC)
+#if OS(WIN) && COMPILER(MSVC) || defined(OS_LINUX)
     // MSVC eagerly instantiates the unused 'operator delete',
     // provide a version that asserts and fails at run-time if
     // used.

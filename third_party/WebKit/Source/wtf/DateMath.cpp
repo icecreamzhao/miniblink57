@@ -171,7 +171,7 @@ static void appendTwoDigitNumber(StringBuilder& builder, int number)
 
 int msToYear(double ms)
 {
-    DCHECK(std::isfinite(ms));
+    DCHECK(std_isfinite(ms));
     DCHECK_GE(ms, kMinimumECMADateInMs);
     DCHECK_LE(ms, kMaximumECMADateInMs);
     int approxYear = static_cast<int>(floor(ms / (msPerDay * 365.2425)) + 1970);
@@ -795,7 +795,7 @@ double parseDateFromNullTerminatedCharacters(const char* dateString)
     bool haveTZ;
     int offset;
     double ms = parseDateFromNullTerminatedCharacters(dateString, haveTZ, offset);
-    if (std::isnan(ms))
+    if (std_isnan(ms))
         return std::numeric_limits<double>::quiet_NaN();
 
     // fall back to local timezone

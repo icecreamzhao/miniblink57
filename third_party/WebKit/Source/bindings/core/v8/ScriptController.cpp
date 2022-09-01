@@ -78,8 +78,8 @@
 #include "bindings/core/v8/npruntime_impl.h"
 #include "bindings/core/v8/npruntime_priv.h"
 #include "bindings/core/v8/NPV8Object.h"
-#include "bindings/core/v8/V8Npobject.h"
-#include "core/html/HtmlPluginElement.h"
+#include "bindings/core/v8/V8NPObject.h"
+#include "core/html/HTMLPluginElement.h"
 #endif
 
 namespace blink {

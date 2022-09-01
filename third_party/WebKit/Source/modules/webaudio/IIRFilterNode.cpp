@@ -91,7 +91,7 @@ IIRFilterNode* IIRFilterNode::create(BaseAudioContext& context,
     // Make sure all coefficents are finite.
     for (size_t k = 0; k < feedforwardCoef.size(); ++k) {
         double c = feedforwardCoef[k];
-        if (!std::isfinite(c)) {
+        if (!std_isfinite(c)) {
             String name = "feedforward coefficient " + String::number(k);
             exceptionState.throwDOMException(
                 InvalidStateError,
@@ -102,7 +102,7 @@ IIRFilterNode* IIRFilterNode::create(BaseAudioContext& context,
 
     for (size_t k = 0; k < feedbackCoef.size(); ++k) {
         double c = feedbackCoef[k];
-        if (!std::isfinite(c)) {
+        if (!std_isfinite(c)) {
             String name = "feedback coefficient " + String::number(k);
             exceptionState.throwDOMException(
                 InvalidStateError,

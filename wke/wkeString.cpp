@@ -34,7 +34,7 @@ CString::CString(const utf8* str, size_t len, bool nullTermination)
     setString(str, len, nullTermination);
 }
 
-CString::CString(const wchar_t* str, size_t len, bool nullTermination)
+CString::CString(const UChar* str, size_t len, bool nullTermination)
 {
     setString(str, len, nullTermination);
 }
@@ -88,17 +88,17 @@ const utf8* CString::string() const
     return &m_str.at(0);
 }
 
-const wchar_t* CString::stringW() const
+const UChar* CString::stringW() const
 {
     if (0 == m_str.size() || 1 == m_str.size())
-        return L"";
+        return u16("");
 
     std::vector<UChar> result;
     WTF::MByteToWChar(&m_str.at(0), m_str.size(), &result, CP_UTF8);
     if (0 == result.size())
-        return L"";
+        return u16("");
 
-    return createTempWCharString((const wchar_t*)&result.at(0), result.size());
+    return createTempWCharString((const UChar*)&result.at(0), result.size());
 }
 
 void CString::setString(const utf8* str, size_t len, bool nullTermination)
@@ -116,12 +116,12 @@ void CString::setString(const utf8* str, size_t len, bool nullTermination)
         m_str.push_back('\0');
 }
 
-void CString::setString(const wchar_t* str, size_t len, bool nullTermination)
+void CString::setString(const UChar* str, size_t len, bool nullTermination)
 {
     if (!str)
         return;
     if (0 == len)
-        len = wcslen(str);
+        len = wcslen((const wchar_t *)str);
     if (0 == len)
         return;
     WTF::WCharToMByte(str, len, &m_str, CP_UTF8);
@@ -135,7 +135,7 @@ void CString::_free()
 }
 
 static std::vector<std::vector<char>*>* s_sharedStringBuffers = nullptr;
-static std::vector<std::vector<wchar_t>*>* s_sharedStringBuffersW = nullptr;
+static std::vector<std::vector<UChar>*>* s_sharedStringBuffersW = nullptr;
 static std::vector<jsKeys*>* s_sharedJsKeys = nullptr;
 
 void* createTempMem(size_t length)
@@ -162,16 +162,16 @@ const char* createTempCharString(const char* str, size_t length)
     return &stringBuffer->at(0);
 }
 
-const wchar_t* createTempWCharString(const wchar_t* str, size_t length)
+const UChar* createTempWCharString(const UChar* str, size_t length)
 {
     if (!str || 0 == length)
-        return L"";
-    std::vector<wchar_t>* stringBuffer = new std::vector<wchar_t>(length + 1);
-    memcpy(&stringBuffer->at(0), str, length * sizeof(wchar_t));
+        return u16("");
+    std::vector<UChar>* stringBuffer = new std::vector<UChar>(length + 1);
+    memcpy(&stringBuffer->at(0), str, length * sizeof(UChar));
     stringBuffer->push_back(L'\0');
 
     if (!s_sharedStringBuffersW)
-        s_sharedStringBuffersW = new std::vector<std::vector<wchar_t>*>();
+        s_sharedStringBuffersW = new std::vector<std::vector<UChar>*>();
     s_sharedStringBuffersW->push_back(stringBuffer);
     return &stringBuffer->at(0);
 }

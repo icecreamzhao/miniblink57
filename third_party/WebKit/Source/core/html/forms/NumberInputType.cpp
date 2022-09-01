@@ -140,7 +140,7 @@ void NumberInputType::setValueAsDecimal(const Decimal& newValue,
 
 bool NumberInputType::typeMismatchFor(const String& value) const
 {
-    return !value.isEmpty() && !std::isfinite(parseToDoubleForNumberType(value));
+    return !value.isEmpty() && !std_isfinite(parseToDoubleForNumberType(value));
 }
 
 bool NumberInputType::typeMismatch() const
@@ -256,7 +256,7 @@ String NumberInputType::sanitizeValue(const String& proposedValue) const
 {
     if (proposedValue.isEmpty())
         return proposedValue;
-    return std::isfinite(parseToDoubleForNumberType(proposedValue))
+    return std_isfinite(parseToDoubleForNumberType(proposedValue))
         ? proposedValue
         : emptyString();
 }
@@ -275,7 +275,7 @@ void NumberInputType::warnIfValueIsInvalid(const String& value) const
 bool NumberInputType::hasBadInput() const
 {
     String standardValue = convertFromVisibleValue(element().innerEditorValue());
-    return !standardValue.isEmpty() && !std::isfinite(parseToDoubleForNumberType(standardValue));
+    return !standardValue.isEmpty() && !std_isfinite(parseToDoubleForNumberType(standardValue));
 }
 
 String NumberInputType::badInputText() const

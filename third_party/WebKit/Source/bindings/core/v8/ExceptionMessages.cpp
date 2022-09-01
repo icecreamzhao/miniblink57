@@ -142,9 +142,9 @@ String ExceptionMessages::notEnoughArguments(unsigned expected,
 
 String ExceptionMessages::notAFiniteNumber(double value, const char* name)
 {
-    ASSERT(!std::isfinite(value));
+    ASSERT(!std_isfinite(value));
     return String::format("The %s is %s.", name,
-        std::isinf(value) ? "infinite" : "not a number");
+        std_isinf(value) ? "infinite" : "not a number");
 }
 
 String ExceptionMessages::notAFiniteNumber(const Decimal& value,

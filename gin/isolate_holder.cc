@@ -122,6 +122,32 @@ void IsolateHolder::Initialize(ScriptMode mode,
     g_array_buffer_allocator = allocator;
 }
 
+
+IsolateHolder::MemoryHead* IsolateHolder::GetPointerHead(void* pointer)
+{
+    MemoryHead* head = ((MemoryHead*)pointer) - 1;
+    if (head->magicNum != gin::IsolateHolder::magicNum0) {
+        DebugBreak();
+    }
+    return head;
+}
+
+size_t IsolateHolder::GetPointerMemSize(void* pointer)
+{
+    return GetPointerHead(pointer)->size;
+}
+
+void* IsolateHolder::GetHeadToMemBegin(IsolateHolder::MemoryHead* head)
+{
+    return head + 1;
+}
+
+
+v8::ArrayBuffer::Allocator* IsolateHolder::get_allocator()
+{
+    return g_array_buffer_allocator;
+}
+
 void IsolateHolder::AddRunMicrotasksObserver()
 {
 #ifdef MINIBLINK_NOT_IMPLEMENTED

@@ -11,6 +11,11 @@
 #include "base/logging.h"
 #include "url/url_canon_internal.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 namespace url {
 
 namespace {

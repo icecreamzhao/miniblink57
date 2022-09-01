@@ -41,7 +41,7 @@ namespace blink {
 
 static void fixNANs(double& x)
 {
-    if (std::isnan(x) || std::isinf(x))
+    if (std_isnan(x) || std_isinf(x))
         x = 0.0;
 }
 

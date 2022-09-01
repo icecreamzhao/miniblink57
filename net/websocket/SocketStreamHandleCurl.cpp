@@ -40,7 +40,7 @@
 //#include "third_party/WebKit/Source/wtf/MainThread.h"
 //#include "base/thread.h"
 #include <process.h>
-#include <Netlistmgr.h>
+#include <netlistmgr.h>
 
 using namespace blink;
 
@@ -76,7 +76,7 @@ int SocketStreamHandle::platformSend(const char* data, int length)
 
     auto copy = createCopy(data, length);
 
-    WTF::Locker<WTF::Mutex> lock(m_mutexSend);
+    WTF::Locker<WTF::RecursiveMutex> lock(m_mutexSend);
     m_sendData.append((new SocketData(copy, length)));
 
     return length;
@@ -133,7 +133,7 @@ bool SocketStreamHandle::readData(CURL* curlHandle)
     CURLcode ret = curl_easy_recv(curlHandle, data, bufferSize, &bytesRead);
     ASSERT(bytesRead <= bufferSize);
 
-    if (ret == CURLE_OK && bytesRead >= 0) {
+    if (ret == CURLE_OK /*&& bytesRead >= 0*/) {
         m_mutexReceive.lock();
         m_receiveData.append((new SocketData(data, static_cast<int>(bytesRead))));
         m_mutexReceive.unlock();
@@ -184,7 +184,7 @@ bool SocketStreamHandle::sendData(CURL* curlHandle)
             const int restLength = sendData->size - totalBytesSent;
             auto copy = createCopy(sendData->data + totalBytesSent, restLength);
 
-            WTF::Locker<WTF::Mutex> lock(m_mutexSend);
+            WTF::Locker<WTF::RecursiveMutex> lock(m_mutexSend);
             m_sendData.prepend((new SocketData(copy, restLength)));
 
             return false;
@@ -262,6 +262,7 @@ void SocketStreamHandle::mainThreadRun()
     deref();
 }
 
+#if defined(OS_WIN)
 static int checkIsNetwork(INetworkListManager* pNetworkListManager)
 {
     static DWORD s_lastCheck = 0;
@@ -303,6 +304,7 @@ static INetworkListManager* getNetworkList(IUnknown** ppUnknown)
 
     return nullptr;
 }
+#endif
 
 void SocketStreamHandle::threadFunction()
 {
@@ -326,7 +328,7 @@ void SocketStreamHandle::threadFunction()
     curl_easy_setopt(curlHandle, CURLOPT_URL, url.utf8().data());
 
     curl_easy_setopt(curlHandle, CURLOPT_PORT, port);
-    curl_easy_setopt(curlHandle, CURLOPT_CONNECT_ONLY);
+    curl_easy_setopt(curlHandle, CURLOPT_CONNECT_ONLY, 1);
     curl_easy_setopt(curlHandle, CURLOPT_TIMEOUT_MS, 500);
 
     static const int kAllowedProtocols = CURLPROTO_FILE | CURLPROTO_FTP | CURLPROTO_FTPS | CURLPROTO_HTTP | CURLPROTO_HTTPS;
@@ -351,8 +353,10 @@ void SocketStreamHandle::threadFunction()
         return;
     }
 
+#if defined(OS_WIN)
     IUnknown* pUnknown = nullptr;
     INetworkListManager* pNetworkListManager = getNetworkList(&pUnknown);
+#endif
 
     ref();
 
@@ -373,20 +377,24 @@ void SocketStreamHandle::threadFunction()
             ++retryCount;
         }
 
+#if defined(OS_WIN)
         int checkNetwork = checkIsNetwork(pNetworkListManager);
         if (retryCount > 3 || 0 == checkNetwork) {
             ref();
             WTF::internal::callOnMainThread(s_mainThreadFail, this);
             break;
         }
+#endif
     }
 
     curl_easy_cleanup(curlHandle);
 
+#if defined(OS_WIN)
     if (pNetworkListManager)
         pNetworkListManager->Release();
     if (pUnknown)
         pUnknown->Release();
+#endif
 }
 
 void SocketStreamHandle::startThread()
@@ -426,7 +434,7 @@ void SocketStreamHandle::stopThread()
     if (!m_workerThread)
         return;
 
-    InterlockedExchange(reinterpret_cast<long volatile*>(&m_stopThread), 1);
+    _InterlockedExchange(reinterpret_cast<long volatile*>(&m_stopThread), 1);
     waitForThreadCompletion(m_workerThread);
     m_workerThread = 0;
     deref();

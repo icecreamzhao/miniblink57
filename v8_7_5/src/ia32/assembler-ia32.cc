@@ -34,11 +34,11 @@
 // significantly by Google Inc.
 // Copyright 2012 the V8 project authors. All rights reserved.
 
+#if V8_TARGET_ARCH_IA32
+
 #include "src/ia32/assembler-ia32.h"
 
 #include <cstring>
-
-#if V8_TARGET_ARCH_IA32
 
 #if V8_LIBC_MSVCRT
 #include <intrin.h> // _xgetbv()

@@ -80,12 +80,12 @@ SkColor PLATFORM_EXPORT scaleAlpha(SkColor, int);
 // Skia has problems when passed infinite, etc floats, filter them to 0.
 inline SkScalar WebCoreFloatToSkScalar(float f)
 {
-    return SkFloatToScalar(std::isfinite(f) ? f : 0);
+    return SkFloatToScalar(std_isfinite(f) ? f : 0);
 }
 
 inline SkScalar WebCoreDoubleToSkScalar(double d)
 {
-    return SkDoubleToScalar(std::isfinite(d) ? d : 0);
+    return SkDoubleToScalar(std_isfinite(d) ? d : 0);
 }
 
 inline bool WebCoreFloatNearlyEqual(float a, float b)

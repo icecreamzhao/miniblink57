@@ -10,6 +10,11 @@
 #include "media/base/bit_reader.h"
 #include "media/formats/mp2t/mp2t_common.h"
 
+#if defined(WIN32)
+#undef max
+#undef min
+#endif
+
 static bool IsCrcValid(const uint8_t* buf, int size)
 {
     uint32_t crc = 0xffffffffu;

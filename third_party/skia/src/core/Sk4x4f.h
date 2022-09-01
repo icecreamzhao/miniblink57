@@ -31,6 +31,10 @@ struct Sk4x4f {
 
 #if 1 && !defined(SKNX_NO_SIMD) && SK_CPU_SSE_LEVEL >= SK_CPU_SSE_LEVEL_SSE2
 
+#define MMMMM_MM_TRANSPOSE4_PS(row0, row1, row2, row3) {                  \
+            __m128 _Tmp3, _Tmp2, _Tmp1, _Tmp0;                       \
+                                                                               
+
 inline Sk4x4f Sk4x4f::Transpose(const Sk4f& x, const Sk4f& y, const Sk4f& z, const Sk4f& w)
 {
     auto r = x.fVec,
@@ -38,6 +42,19 @@ inline Sk4x4f Sk4x4f::Transpose(const Sk4f& x, const Sk4f& y, const Sk4f& z, con
          b = z.fVec,
          a = w.fVec;
     _MM_TRANSPOSE4_PS(r, g, b, a);
+
+//     __m128 _Tmp3, _Tmp2, _Tmp1, _Tmp0;
+// 
+//     _Tmp0 = _mm_shuffle_ps((r), (g), 0x44);
+//     _Tmp2 = _mm_shuffle_ps((r), (g), 0xEE);
+//     _Tmp1 = _mm_shuffle_ps((b), (a), 0x44);
+//     _Tmp3 = _mm_shuffle_ps((b), (a), 0xEE);
+// 
+//     (r) = _mm_shuffle_ps(_Tmp0, _Tmp1, 0x88);
+//     (g) = _mm_shuffle_ps(_Tmp0, _Tmp1, 0xDD);
+//     (b) = _mm_shuffle_ps(_Tmp2, _Tmp3, 0x88);
+//     (a) = _mm_shuffle_ps(_Tmp2, _Tmp3, 0xDD);
+
     return { r, g, b, a };
 }
 

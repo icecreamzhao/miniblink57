@@ -103,10 +103,10 @@ public:
     {
     }
     StringView(const UChar* chars);
-    StringView(const char16_t* chars)
-        : StringView(reinterpret_cast<const UChar*>(chars))
-    {
-    }
+//     StringView(const char16_t* chars)
+//         : StringView(reinterpret_cast<const UChar*>(chars))
+//     {
+//     }
 
 #if DCHECK_IS_ON()
     ~StringView();

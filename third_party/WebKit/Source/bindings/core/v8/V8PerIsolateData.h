@@ -199,8 +199,9 @@ public:
     }
 
     std::vector<std::pair<void*, void*>>* leakV8References();
-    static std::shared_ptr<v8::TaskRunner> getThreadRunner(v8::Isolate* isolate); // for V8Platform::GetForegroundTaskRunner;
 #endif
+    WebThread* getThread() const;
+    static std::shared_ptr<v8::TaskRunner> getThreadRunner(v8::Isolate* isolate); // for V8Platform::GetForegroundTaskRunner;
 
 private:
     explicit V8PerIsolateData(WebTaskRunner*);
@@ -222,8 +223,8 @@ private:
     WebThread* m_thread;
 #if V8_MAJOR_VERSION >= 7
     std::unique_ptr<UnifiedHeapController> m_unifiedHeapController;
-    std::shared_ptr<gin::V8ForegroundTaskRunner> m_threadRunner;
 #endif
+    std::shared_ptr<gin::V8ForegroundTaskRunner> m_threadRunner;
     std::unique_ptr<gin::IsolateHolder> m_isolateHolder;
 
     // m_interfaceTemplateMapFor{,Non}MainWorld holds function templates for
