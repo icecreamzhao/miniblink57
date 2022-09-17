@@ -53,6 +53,7 @@
 #include "libbf.h"
 #endif
 
+#pragma optimize("", off)
 // #define FORCE_GC_AT_MALLOC 1
 // #define DUMP_FREE 1
 // #define DUMP_LEAKS 1
@@ -118,6 +119,12 @@ void qjsPrint(const char* format, ...)
     free(output);
 
     va_end(argList);
+}
+
+static void qjsReleaseAssert(BOOL b)
+{
+    if (!b)
+        DebugBreak();
 }
 
 /* dump object free */
@@ -529,10 +536,11 @@ typedef enum {
 
 #define JS_ATOM_HASH_MASK  ((1 << 30) - 1)
 
-typedef struct _JSExternalStringInfo {
-    FreeExternalStringFunc free_func;
+typedef struct _JSStringUserdata {
+    JS_UserDataWeakFunc weak_func;
     void* userdata;
-} JSExternalStringInfo;
+    BOOL is_external;
+} JSStringUserdata;
 
 struct JSString {
     JSRefCountHeader header; /* must come first, 32-bit */
@@ -547,10 +555,14 @@ struct JSString {
 #ifdef DUMP_LEAKS
     struct list_head link; /* string list */
 #endif
-    JSExternalStringInfo* external_str;
+//     JSExternalStringInfo* external_str;
+//     void* userdata; // weolar
+//     JS_UserDataDetachFunc detach;
+    JSStringUserdata* userptr;
+
     union {
-        uint8_t str8[0]; /* 8 bit strings will get an extra null terminator */
-        uint16_t str16[0];
+        uint8_t* str8; /* 8 bit strings will get an extra null terminator */
+        uint16_t* str16;
     } u;
 };
 
@@ -1016,9 +1028,11 @@ struct JSObject {
 
     // can't add field
     int test;
-    char* hahah[4000];
+    char* hahaha[4000];
     struct JSObjectPropHook* prop_hook;
     void* userdata; // weolar
+    JS_UserDataWeakFunc weak_func;
+    int trace_count;
     JSValue testVal;
     int testCount;
 };
@@ -1112,55 +1126,55 @@ static JSValue js_function_apply(JSContext *ctx, JSValueConst this_val,
                                  int argc, JSValueConst *argv, int magic);
 static void js_array_finalizer(JSRuntime *rt, JSValue val);
 static void js_array_mark(JSRuntime *rt, JSValueConst val,
-                          JS_MarkFunc *mark_func);
+                          JS_MarkFunc *mark_func , void* userdata);
 static void js_object_data_finalizer(JSRuntime *rt, JSValue val);
 static void js_object_data_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_c_function_finalizer(JSRuntime *rt, JSValue val);
 static void js_c_function_mark(JSRuntime *rt, JSValueConst val,
-                               JS_MarkFunc *mark_func);
+                               JS_MarkFunc *mark_func , void* userdata);
 static void js_bytecode_function_finalizer(JSRuntime *rt, JSValue val);
 static void js_bytecode_function_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_bound_function_finalizer(JSRuntime *rt, JSValue val);
 static void js_bound_function_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_for_in_iterator_finalizer(JSRuntime *rt, JSValue val);
 static void js_for_in_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_regexp_finalizer(JSRuntime *rt, JSValue val);
 static void js_array_buffer_finalizer(JSRuntime *rt, JSValue val);
 static void js_typed_array_finalizer(JSRuntime *rt, JSValue val);
 static void js_typed_array_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_proxy_finalizer(JSRuntime *rt, JSValue val);
 static void js_proxy_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_map_finalizer(JSRuntime *rt, JSValue val);
 static void js_map_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_map_iterator_finalizer(JSRuntime *rt, JSValue val);
 static void js_map_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_array_iterator_finalizer(JSRuntime *rt, JSValue val);
 static void js_array_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_regexp_string_iterator_finalizer(JSRuntime *rt, JSValue val);
 static void js_regexp_string_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_generator_finalizer(JSRuntime *rt, JSValue obj);
 static void js_generator_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_promise_finalizer(JSRuntime *rt, JSValue val);
 static void js_promise_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 static void js_promise_resolve_function_finalizer(JSRuntime *rt, JSValue val);
 static void js_promise_resolve_function_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func);
+                                JS_MarkFunc *mark_func , void* userdata);
 #ifdef CONFIG_BIGNUM
 static void js_operator_set_finalizer(JSRuntime *rt, JSValue val);
 static void js_operator_set_mark(JSRuntime *rt, JSValueConst val,
-                                 JS_MarkFunc *mark_func);
+                                 JS_MarkFunc *mark_func , void* userdata);
 #endif
 static JSValue JS_ToStringFree(JSContext *ctx, JSValue val);
 static int JS_ToBoolFree(JSContext *ctx, JSValue val);
@@ -1257,13 +1271,13 @@ static JSValue js_generator_function_call(JSContext *ctx, JSValueConst func_obj,
                                           int flags);
 static void js_async_function_resolve_finalizer(JSRuntime *rt, JSValue val);
 static void js_async_function_resolve_mark(JSRuntime *rt, JSValueConst val,
-                                           JS_MarkFunc *mark_func);
+                                           JS_MarkFunc *mark_func , void* userdata);
 static JSValue JS_EvalInternal(JSContext *ctx, JSValueConst this_obj,
                                const char *input, size_t input_len,
                                const char *filename, int flags, int scope_idx);
 static void js_free_module_def(JSContext *ctx, JSModuleDef *m);
 static void js_mark_module_def(JSRuntime *rt, JSModuleDef *m,
-                               JS_MarkFunc *mark_func);
+                               JS_MarkFunc *mark_func , void* userdata);
 static JSValue js_import_meta(JSContext *ctx);
 static JSValue js_dynamic_import(JSContext *ctx, JSValueConst specifier);
 static void free_var_ref(JSRuntime *rt, JSVarRef *var_ref);
@@ -1288,7 +1302,7 @@ static int JS_GetOwnPropertyInternal(JSContext *ctx, JSPropertyDescriptor *desc,
                                      JSObject *p, JSAtom prop);
 static void js_free_desc(JSContext *ctx, JSPropertyDescriptor *desc);
 static void async_func_mark(JSRuntime *rt, JSAsyncFunctionState *s,
-                            JS_MarkFunc *mark_func);
+                            JS_MarkFunc *mark_func , void* userdata);
 static void JS_AddIntrinsicBasicObjects(JSContext *ctx);
 static void js_free_shape(JSRuntime *rt, JSShape *sh);
 static void js_free_shape_null(JSRuntime *rt, JSShape *sh);
@@ -1308,7 +1322,7 @@ static JSValue JS_CreateAsyncFromSyncIterator(JSContext *ctx,
                                               JSValueConst sync_iter);
 static void js_c_function_data_finalizer(JSRuntime *rt, JSValue val);
 static void js_c_function_data_mark(JSRuntime *rt, JSValueConst val,
-                                    JS_MarkFunc *mark_func);
+                                    JS_MarkFunc *mark_func , void* userdata);
 static JSValue js_c_function_data_call(JSContext *ctx, JSValueConst func_obj,
                                        JSValueConst this_val,
                                        int argc, JSValueConst *argv, int flags);
@@ -1332,22 +1346,21 @@ static JSClassID js_class_id_alloc = JS_CLASS_INIT_COUNT;
 
 static void js_trigger_gc(JSRuntime *rt, size_t size)
 {
-    BOOL force_gc;
-#ifdef FORCE_GC_AT_MALLOC
-    force_gc = TRUE;
-#else
-    force_gc = ((rt->malloc_state.malloc_size + size) >
-                rt->malloc_gc_threshold);
-#endif
-    if (force_gc) {
-#ifdef DUMP_GC
-        qjsPrint("GC: size=%" PRIu64 "\n",
-               (uint64_t)rt->malloc_state.malloc_size);
-#endif
-        JS_RunGC(rt);
-        rt->malloc_gc_threshold = rt->malloc_state.malloc_size +
-            (rt->malloc_state.malloc_size >> 1);
-    }
+    // 外部主导gc，这里就不主动gc了
+//     BOOL force_gc;
+// #ifdef FORCE_GC_AT_MALLOC
+//     force_gc = TRUE;
+// #else
+//     force_gc = ((rt->malloc_state.malloc_size + size) > rt->malloc_gc_threshold);
+// #endif
+//     if (force_gc) {
+// #ifdef DUMP_GC
+//         qjsPrint("GC: size=%" PRIu64 "\n",
+//                (uint64_t)rt->malloc_state.malloc_size);
+// #endif
+//         JS_RunGC(rt);
+//         rt->malloc_gc_threshold = rt->malloc_state.malloc_size + (rt->malloc_state.malloc_size >> 1);
+//     }
 }
 
 static size_t js_malloc_usable_size_unknown(const void *ptr)
@@ -1924,7 +1937,7 @@ BOOL JS_IsJobPending(JSRuntime *rt)
 
 /* return < 0 if exception, 0 if no job pending, 1 if a job was
    executed successfully. the context of the job is stored in '*pctx' */
-int JS_ExecutePendingJob(JSRuntime *rt, JSContext **pctx)
+int JS_ExecutePendingJob(JSRuntime *rt, JSContext **pctx, JSRunJobPendingCb* cb, void* cb_data)
 {
     JSContext *ctx;
     JSJobEntry *e;
@@ -1939,8 +1952,12 @@ int JS_ExecutePendingJob(JSRuntime *rt, JSContext **pctx)
     /* get the first pending job and execute it */
     e = list_entry(rt->job_list.next, JSJobEntry, link);
     list_del(&e->link);
+
     ctx = e->ctx;
+    if (cb) cb(ctx, TRUE, cb_data);
     res = e->job_func(e->ctx, e->argc, (JSValueConst *)e->argv);
+    if (cb) cb(ctx, FALSE, cb_data);
+
     for(i = 0; i < e->argc; i++)
         JS_FreeValue(ctx, e->argv[i]);
     if (JS_IsException(res))
@@ -1984,7 +2001,12 @@ static JSString *js_alloc_string_rt(JSRuntime *rt, int max_len, int is_wide_char
 #ifdef DUMP_LEAKS
     list_add_tail(&str->link, &rt->string_list);
 #endif
-    str->external_str = NULL;
+//     str->external_str = NULL;
+//     str->userdata = NULL;
+//     str->detach = NULL;
+    str->userptr = NULL;
+
+    str->u.str8 = (uint8_t*)(str + 1);
     return str;
 }
 
@@ -2009,8 +2031,14 @@ static inline void js_free_string(JSRuntime *rt, JSString *str)
 #ifdef DUMP_LEAKS
             list_del(&str->link);
 #endif
-            if (str->external_str)
-                str->external_str->free_func(str->external_str->userdata);
+//             if (str->external_str) {
+//                 str->external_str->free_func(str->external_str->userdata);
+//                 js_free_rt(rt, str->external_str);
+//             }
+            if (str->userptr) {
+                str->userptr->weak_func(JS_NULL, str->userptr->userdata, JS_USER_DATA_WEAK_FREE);
+                js_free_rt(rt, str->userptr);
+            }
             js_free_rt(rt, str);
         }
     }
@@ -2331,7 +2359,7 @@ JSContext *JS_DupContext(JSContext *ctx)
 
 /* used by the GC */
 static void JS_MarkContext(JSRuntime *rt, JSContext *ctx,
-                           JS_MarkFunc *mark_func)
+                           JS_MarkFunc *mark_func, void* userdata)
 {
     int i;
     struct list_head *el;
@@ -2340,32 +2368,32 @@ static void JS_MarkContext(JSRuntime *rt, JSContext *ctx,
        referenced by each module */
     list_for_each(el, &ctx->loaded_modules) {
         JSModuleDef *m = list_entry(el, JSModuleDef, link);
-        js_mark_module_def(rt, m, mark_func);
+        js_mark_module_def(rt, m, mark_func, userdata);
     }
 
-    JS_MarkValue(rt, ctx->global_obj, mark_func);
-    JS_MarkValue(rt, ctx->global_var_obj, mark_func);
+    JS_MarkValue(rt, ctx->global_obj, mark_func, userdata);
+    JS_MarkValue(rt, ctx->global_var_obj, mark_func, userdata);
 
-    JS_MarkValue(rt, ctx->throw_type_error, mark_func);
+    JS_MarkValue(rt, ctx->throw_type_error, mark_func, userdata);
     JS_MarkValue(rt, ctx->eval_obj, mark_func);
 
-    JS_MarkValue(rt, ctx->array_proto_values, mark_func);
+    JS_MarkValue(rt, ctx->array_proto_values, mark_func, userdata);
     for(i = 0; i < JS_NATIVE_ERROR_COUNT; i++) {
-        JS_MarkValue(rt, ctx->native_error_proto[i], mark_func);
+        JS_MarkValue(rt, ctx->native_error_proto[i], mark_func, userdata, userdata);
     }
     for(i = 0; i < rt->class_count; i++) {
         JS_MarkValue(rt, ctx->class_proto[i], mark_func);
     }
-    JS_MarkValue(rt, ctx->iterator_proto, mark_func);
-    JS_MarkValue(rt, ctx->async_iterator_proto, mark_func);
-    JS_MarkValue(rt, ctx->promise_ctor, mark_func);
-    JS_MarkValue(rt, ctx->array_ctor, mark_func);
-    JS_MarkValue(rt, ctx->regexp_ctor, mark_func);
-    JS_MarkValue(rt, ctx->function_ctor, mark_func);
-    JS_MarkValue(rt, ctx->function_proto, mark_func);
+    JS_MarkValue(rt, ctx->iterator_proto, mark_func, userdata);
+    JS_MarkValue(rt, ctx->async_iterator_proto, mark_func, userdata);
+    JS_MarkValue(rt, ctx->promise_ctor, mark_func, userdata);
+    JS_MarkValue(rt, ctx->array_ctor, mark_func, userdata);
+    JS_MarkValue(rt, ctx->regexp_ctor, mark_func, userdata);
+    JS_MarkValue(rt, ctx->function_ctor, mark_func, userdata);
+    JS_MarkValue(rt, ctx->function_proto, mark_func, userdata);
 
     if (ctx->array_shape)
-        mark_func(rt, &ctx->array_shape->header);
+        mark_func(rt, &ctx->array_shape->header, userdata);
 }
 
 void JS_FreeContext(JSContext *ctx)
@@ -2884,9 +2912,7 @@ static JSAtom __JS_NewAtom(JSRuntime *rt, JSString *str, int atom_type)
             p = str;
             p->atom_type = atom_type;
         } else {
-            p = js_malloc_rt(rt, sizeof(JSString) +
-                             (str->len << str->is_wide_char) +
-                             1 - str->is_wide_char);
+            p = js_malloc_rt(rt, sizeof(JSString) + (str->len << str->is_wide_char) + 1 - str->is_wide_char);
             if (unlikely(!p))
                 goto fail;
             p->header.ref_count = 1;
@@ -2895,8 +2921,9 @@ static JSAtom __JS_NewAtom(JSRuntime *rt, JSString *str, int atom_type)
 #ifdef DUMP_LEAKS
             list_add_tail(&p->link, &rt->string_list);
 #endif
-            memcpy(p->u.str8, str->u.str8, (str->len << str->is_wide_char) +
-                   1 - str->is_wide_char);
+            qjsReleaseAssert(!(str->userptr && str->userptr->is_external));
+            p->u.str8 = (JSString*)(p + 1);
+            memcpy(p->u.str8, str->u.str8, (str->len << str->is_wide_char) + 1 - str->is_wide_char);
             js_free_string(rt, str);
         }
     } else {
@@ -3146,6 +3173,7 @@ static const char *JS_AtomGetStrRT(JSRuntime *rt, char *buf, int buf_size,
             p = rt->atom_array[atom];
             assert(!atom_is_free(p));
             str = p;
+            qjsReleaseAssert(!(str->userptr && str->userptr->is_external));
             if (str) {
                 if (!str->is_wide_char) {
                     /* special case ASCII strings */
@@ -3285,6 +3313,7 @@ static JSValue JS_AtomIsNumericIndex1(JSContext *ctx, JSAtom atom)
                 return JS_UNDEFINED;
         }
     } else {
+        qjsReleaseAssert(!(p->userptr && p->userptr->is_external));
         const uint8_t *r = p->u.str8, *r_end = p->u.str8 + len;
         if (r >= r_end)
             return JS_UNDEFINED;
@@ -3681,9 +3710,14 @@ static no_inline int string_buffer_widen(StringBuffer *s, int size)
     if (s->error_status)
         return -1;
 
+    //qjsReleaseAssert(!(s->str) || !(s->str->external_str));
+    qjsReleaseAssert(!(s->str) || !(s->str->userptr && s->str->userptr->is_external));
+
     str = js_realloc2(s->ctx, s->str, sizeof(JSString) + (size << 1), &slack);
     if (!str)
         return string_buffer_set_error(s);
+    str->u.str16 = (JSString*)(str + 1);
+
     size += slack >> 1;
     for(i = s->len; i-- > 0;) {
         str->u.str16[i] = str->u.str8[i];
@@ -3711,10 +3745,15 @@ static no_inline int string_buffer_realloc(StringBuffer *s, int new_len, int c)
     if (!s->is_wide_char && c >= 0x100) {
         return string_buffer_widen(s, new_size);
     }
+
+    //qjsReleaseAssert(!(s->str) || !(s->str->external_str));
+    qjsReleaseAssert(!(s->str) || !(s->str->userptr && s->str->userptr->is_external));
+
     new_size_bytes = sizeof(JSString) + (new_size << s->is_wide_char) + 1 - s->is_wide_char;
     new_str = js_realloc2(s->ctx, s->str, new_size_bytes, &slack);
     if (!new_str)
         return string_buffer_set_error(s);
+    new_str->u.str8 = (JSString*)(new_str + 1);
     new_size = min_int(new_size + (slack >> s->is_wide_char), JS_STRING_LEN_MAX);
     s->size = new_size;
     s->str = new_str;
@@ -3938,14 +3977,19 @@ static JSValue string_buffer_end(StringBuffer *s)
         s->str = NULL;
         return JS_AtomToString(s->ctx, JS_ATOM_empty_string);
     }
+    //qjsReleaseAssert(!str->external_str);
+    qjsReleaseAssert(!(str->userptr && str->userptr->is_external));
+
     if (s->len < s->size) {
         /* smaller size so js_realloc should not fail, but OK if it does */
         /* XXX: should add some slack to avoid unnecessary calls */
         /* XXX: might need to use malloc+free to ensure smaller size */
-        str = js_realloc_rt(s->ctx->rt, str, sizeof(JSString) +
-                            (s->len << s->is_wide_char) + 1 - s->is_wide_char);
+        str = js_realloc_rt(s->ctx->rt, str, sizeof(JSString) + (s->len << s->is_wide_char) + 1 - s->is_wide_char);
         if (str == NULL)
             str = s->str;
+        else {
+            str->u.str8 = (uint8_t*)(str + 1);
+        }
         s->str = str;
     }
     if (!s->is_wide_char)
@@ -3959,18 +4003,58 @@ static JSValue string_buffer_end(StringBuffer *s)
     return JS_MKPTR(JS_TAG_STRING, str);
 }
 
-// JSValue JS_NewExternalStringLen(JSContext* ctx, const char* str, size_t len, FreeExternalStringFunc free_func, void* userdata)
+JSValue JS_ExternalString(JSContext* ctx, const char* utf8data, const uint16_t* utf16data, size_t len)
+{
+    if (len <= 0)
+        return JS_AtomToString(ctx->rt, JS_ATOM_empty_string);
+
+    JSString* str = js_malloc_rt(ctx->rt, sizeof(JSString));
+    if (unlikely(!str))
+        return JS_EXCEPTION;
+
+    str->header.ref_count = 1;
+    str->is_wide_char = !!utf16data;
+    str->len = len;
+    str->atom_type = 0;
+    str->hash = 0;          /* optional but costless */
+    str->hash_next = 0;     /* optional */
+#ifdef DUMP_LEAKS
+    list_add_tail(&str->link, &ctx->rt->string_list);
+#endif
+    str->userptr = js_malloc_rt(ctx->rt, sizeof(JSStringUserdata));
+    str->userptr->weak_func = NULL;
+    str->userptr->userdata = NULL;
+    str->userptr->is_external = TRUE;
+    if (utf16data)
+        str->u.str16 = utf16data;
+    else
+        str->u.str8 = utf8data;
+    return JS_MKPTR(JS_TAG_STRING, str);
+}
+
+// JSValue JS_NewExternalOneString(JSContext* ctx, const char* data, size_t len)
 // {
-//     JSString* str;
+//     if (len <= 0)
+//         return JS_AtomToString(ctx->rt, JS_ATOM_empty_string);
 // 
-//     if (len <= 0) {
-//         return JS_AtomToString(ctx, JS_ATOM_empty_string);
-//     }
-//     str = js_alloc_string(ctx, len, 0);
-//     if (!str)
+//     JSString* str = js_malloc_rt(ctx->rt, sizeof(JSString));
+//     if (unlikely(!str))
 //         return JS_EXCEPTION;
-//     memcpy(str->u.str8, buf, len);
-//     str->u.str8[len] = '\0';
+// 
+//     str->header.ref_count = 1;
+//     str->is_wide_char = FALSE;
+//     str->len = len;
+//     str->atom_type = 0;
+//     str->hash = 0;          /* optional but costless */
+//     str->hash_next = 0;     /* optional */
+// #ifdef DUMP_LEAKS
+//     list_add_tail(&str->link, &ctx->rt->string_list);
+// #endif
+//     str->userptr = js_malloc_rt(ctx->rt, sizeof(JSStringUserdata));
+//     str->userptr->free_func = NULL;
+//     str->userptr->userdata = NULL;
+//     str->userptr->is_external = TRUE;
+//     str->u.str8 = data;
 //     return JS_MKPTR(JS_TAG_STRING, str);
 // }
 
@@ -4081,6 +4165,87 @@ JSValue JS_NewAtomString(JSContext *ctx, const char *str)
     return val;
 }
 
+int JS_ContainsOnlyOneByte(JSContext* ctx, JSValueConst val)
+{
+    uint32_t tag = JS_VALUE_GET_TAG(val);
+    if (tag != JS_TAG_STRING)
+        return -1;
+
+    JSString* str = JS_VALUE_GET_STRING(val);
+    return str->is_wide_char ? 0 : 1;
+}
+
+size_t JS_GetStringSize(JSContext* ctx, JSValueConst val)
+{
+    uint32_t tag = JS_VALUE_GET_TAG(val);
+    if (tag != JS_TAG_STRING)
+        return 0;
+    JSString* str = JS_VALUE_GET_STRING(val);
+    return str->len;
+}
+
+const char* JS_GetStringData(JSContext* ctx, size_t* plen, JSValue* new_val, JSValueConst val1)
+{
+    JSValue val;
+    JSString* str, *str_new;
+    int pos, len, c, c1;
+    uint8_t* q;
+
+    uint32_t tag = JS_VALUE_GET_TAG(val1);
+    if (tag != JS_TAG_STRING)
+        return NULL;
+
+    val = JS_DupValue(ctx, val1);
+
+    str = JS_VALUE_GET_STRING(val);
+    len = str->len;
+    if (!str->is_wide_char) {
+        *new_val = val1;
+        *plen = str->len;
+        return str->u.str8;
+    }
+
+    const uint16_t *src = str->u.str16;
+    /* Allocate 3 bytes per 16 bit code point. Surrogate pairs may
+    produce 4 bytes but use 2 code points.
+    */
+    str_new = js_alloc_string(ctx, len * 3, 0);
+
+    q = str_new->u.str8;
+    pos = 0;
+    while (pos < len) {
+        c = src[pos++];
+        if (c < 0x80) {
+            *q++ = c;
+        } else {
+            if (c >= 0xd800 && c < 0xdc00) {
+                if (pos < len) {
+                    c1 = src[pos];
+                    if (c1 >= 0xdc00 && c1 < 0xe000) {
+                        pos++;
+                        /* surrogate pair */
+                        c = (((c & 0x3ff) << 10) | (c1 & 0x3ff)) + 0x10000;
+                    } else {
+                        /* Keep unmatched surrogate code points */
+                        /* c = 0xfffd; */ /* error */
+                    }
+                } else {
+                    /* Keep unmatched surrogate code points */
+                    /* c = 0xfffd; */ /* error */
+                }
+            }
+            q += unicode_to_utf8(q, c);
+        }
+    }
+    
+    *q = '\0';
+    str_new->len = q - str_new->u.str8;
+    JS_FreeValue(ctx, val);
+    *plen = str_new->len;
+    *new_val = JS_MKPTR(JS_TAG_STRING, str_new);
+    return (const char*)str_new->u.str8;
+}
+
 /* return (NULL, 0) if exception. */
 /* return pointer into a JSString with a live ref_count */
 /* cesu8 determines if non-BMP1 codepoints are encoded as 1 or 2 utf-8 sequences */
@@ -4119,19 +4284,25 @@ const char *JS_ToCStringLen2(JSContext *ctx, size_t *plen, JSValueConst val1, BO
         if (count == 0) {
             if (plen)
                 *plen = len;
-            return (const char *)src;
-        }
-        str_new = js_alloc_string(ctx, len + count, 0);
-        if (!str_new)
-            goto fail;
-        q = str_new->u.str8;
-        for (pos = 0; pos < len; pos++) {
-            c = src[pos];
-            if (c < 0x80) {
-                *q++ = c;
-            } else {
-                *q++ = (c >> 6) | 0xc0;
-                *q++ = (c & 0x3f) | 0x80;
+            if (str->userptr && str->userptr->is_external) { // 这里没搞懂要不要像下面那样做编码转换
+                str_new = js_alloc_string(ctx, len + 1, 0);
+                memcpy(str_new->u.str8, src, len);
+                q = str_new->u.str8 + len;
+            } else
+                return (const char *)src;
+        } else {
+            str_new = js_alloc_string(ctx, len + count, 0);
+            if (!str_new)
+                goto fail;
+            q = str_new->u.str8;
+            for (pos = 0; pos < len; pos++) {
+                c = src[pos];
+                if (c < 0x80) {
+                    *q++ = c;
+                } else {
+                    *q++ = (c >> 6) | 0xc0;
+                    *q++ = (c & 0x3f) | 0x80;
+                }
             }
         }
     } else {
@@ -4188,7 +4359,10 @@ void JS_FreeCString(JSContext *ctx, const char *ptr)
     if (!ptr)
         return;
     /* purposely removing constness */
-    p = (JSString *)(void *)(ptr - offsetof(JSString, u));
+    //p = (JSString *)(void *)(ptr - offsetof(JSString, u));
+    p = (JSString *)(ptr - sizeof(JSString));
+    qjsReleaseAssert(!(p->userptr && p->userptr->is_external));
+
     JS_FreeValue(ctx, JS_MKPTR(JS_TAG_STRING, p));
 }
 
@@ -4835,6 +5009,7 @@ static __maybe_unused void JS_DumpShapes(JSRuntime *rt)
 }
 
 static int s_count = 0;
+JSObject* g_testObj = NULL;
 
 static JSValue JS_NewObjectFromShape(JSContext *ctx, JSShape *sh, JSClassID class_id)
 {
@@ -4863,15 +5038,36 @@ static JSValue JS_NewObjectFromShape(JSContext *ctx, JSShape *sh, JSClassID clas
     p->testVal = JS_NULL;
     p->test = 0;
     p->testCount = ++s_count;
+    p->weak_func = NULL;
+    p->trace_count = 0;
+    memset(p->hahaha, 0, 4000);
 
-    if (4426 == p->testCount)
-        p->test = 1;
+//     if (2812 == p->testCount) {
+//         p->test = 1;
+//         g_testObj = p;
+//     }
 
-    if (4437 == p->testCount)
+    if (2812 == p->testCount) {
         p->test = 1;
-//     char* output[0x100];
-//     sprintf_s(output, 0x99, "JS_NewObjectFromShape: %p, %d\n", p, p->testCount);
-//     OutputDebugStringA(output);
+        g_testObj = p;
+    }
+
+//     if (139 == p->testCount)
+//         p->test = 1;
+// 
+//     if (833 == p->testCount)
+//         p->test = 1;
+//     
+//     if (2850 == p->testCount)
+//         p->test = 1;
+// 
+//     if (2997 == p->testCount)
+//         p->test = 1;
+// 
+//     if (3893 == p->testCount)
+//         p->test = 1;
+//    
+    qjsPrint("JS_NewObjectFromShape: %p, %d\n", p, p->testCount);
 
     p->prop = js_malloc(ctx, sizeof(JSProperty) * sh->prop_size);
     if (unlikely(!p->prop)) {
@@ -5187,8 +5383,7 @@ JSValue JS_NewCFunction2(JSContext *ctx, JSCFunction *func,
                          const char *name,
                          int length, JSCFunctionEnum cproto, int magic, void* userdata)
 {
-    return JS_NewCFunction3(ctx, func, name, length, cproto, magic,
-                            ctx->function_proto, userdata); // weolar
+    return JS_NewCFunction3(ctx, func, name, length, cproto, magic, ctx->function_proto, userdata); // weolar
 }
 
 typedef struct JSCFunctionDataRecord {
@@ -5292,9 +5487,9 @@ static void js_autoinit_free(JSRuntime *rt, JSProperty *pr)
 }
 
 static void js_autoinit_mark(JSRuntime *rt, JSProperty *pr,
-                             JS_MarkFunc *mark_func)
+                             JS_MarkFunc *mark_func, void* userdata)
 {
-    mark_func(rt, &js_autoinit_get_realm(pr)->header);
+    mark_func(rt, &js_autoinit_get_realm(pr)->header, userdata);
 }
 
 static void free_property(JSRuntime *rt, JSProperty *pr, int prop_flags)
@@ -5424,13 +5619,12 @@ static void js_c_function_finalizer(JSRuntime *rt, JSValue val)
         JS_FreeContext(p->u.cfunc.realm);
 }
 
-static void js_c_function_mark(JSRuntime *rt, JSValueConst val,
-                               JS_MarkFunc *mark_func)
+static void js_c_function_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
 
     if (p->u.cfunc.realm)
-        mark_func(rt, &p->u.cfunc.realm->header);
+        mark_func(rt, &p->u.cfunc.realm->header, userdata);
 }
 
 static void js_bytecode_function_finalizer(JSRuntime *rt, JSValue val)
@@ -5457,7 +5651,7 @@ static void js_bytecode_function_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_bytecode_function_mark(JSRuntime *rt, JSValueConst val,
-                                      JS_MarkFunc *mark_func)
+                                      JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSVarRef **var_refs = p->u.func.var_refs;
@@ -5473,13 +5667,13 @@ static void js_bytecode_function_mark(JSRuntime *rt, JSValueConst val,
             for(i = 0; i < b->closure_var_count; i++) {
                 JSVarRef *var_ref = var_refs[i];
                 if (var_ref && var_ref->is_detached) {
-                    mark_func(rt, &var_ref->header);
+                    mark_func(rt, &var_ref->header, userdata);
                 }
             }
         }
         /* must mark the function bytecode because template objects may be
            part of a cycle */
-        JS_MarkValue(rt, JS_MKPTR(JS_TAG_FUNCTION_BYTECODE, b), mark_func);
+        JS_MarkValue(rt, JS_MKPTR(JS_TAG_FUNCTION_BYTECODE, b), mark_func, userdata);
     }
 }
 
@@ -5634,6 +5828,12 @@ void __JS_FreeValueRT(JSRuntime *rt, JSValue v)
 #ifdef DUMP_LEAKS
                 list_del(&p->link);
 #endif
+                if (p->userptr) {
+                    p->userptr->weak_func(v, p->userptr->userdata, JS_USER_DATA_WEAK_FREE);
+                    js_free_rt(rt, p->userptr);
+                } else {
+                    qjsReleaseAssert(p->is_wide_char || p->u.str8[p->len] == 0);
+                }
                 js_free_rt(rt, p);
             }
         }
@@ -5641,6 +5841,11 @@ void __JS_FreeValueRT(JSRuntime *rt, JSValue v)
     case JS_TAG_OBJECT:
     case JS_TAG_FUNCTION_BYTECODE:
         {
+            if (JS_IsObject(v)) {
+                JSObject* obj = JS_VALUE_GET_PTR(v);
+                if (obj->weak_func)
+                    obj->weak_func(v, obj->userdata, JS_USER_DATA_WEAK_FREE);
+            }
             JSGCObjectHeader *p = JS_VALUE_GET_PTR(v);
             if (rt->gc_phase != JS_GC_PHASE_REMOVE_CYCLES) {
                 list_del(&p->link);
@@ -5693,6 +5898,10 @@ void JS_FreeValue(JSContext* ctx, JSValue v)
     uint32_t tag = JS_VALUE_GET_TAG(v);
     if (JS_VALUE_HAS_REF_COUNT(v)) {
         JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
+
+        if (g_testObj == p)
+            qjsPrint("JS_DupValue!\n");
+
         if (--p->ref_count <= 0) {
             __JS_FreeValue(ctx, v);
         }
@@ -5703,6 +5912,10 @@ void JS_FreeValueRT(JSRuntime* rt, JSValue v)
 {
     if (JS_VALUE_HAS_REF_COUNT(v)) {
         JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
+
+        if (g_testObj == p)
+            qjsPrint("JS_DupValue!\n");
+
         if (--p->ref_count <= 0) {
             __JS_FreeValueRT(rt, v);
         }
@@ -5714,6 +5927,9 @@ JSValue JS_DupValue(JSContext* ctx, JSValueConst v)
     if (JS_VALUE_HAS_REF_COUNT(v)) {
         JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
         p->ref_count++;
+
+        if (g_testObj == p)
+            qjsPrint("JS_DupValue!\n");
     }
     return /*(JSValue)*/v;
 }
@@ -5723,8 +5939,25 @@ JSValue JS_DupValueRT(JSRuntime* rt, JSValueConst v)
     if (JS_VALUE_HAS_REF_COUNT(v)) {
         JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
         p->ref_count++;
+
+        if (g_testObj == p)
+            qjsPrint("JS_DupValue!\n");
     }
     return /*(JSValue)*/v;
+}
+
+int JS_GetRefCount(JSContext* ctx, JSValue v)
+{
+    if (JS_VALUE_IS_EQ(v, JS_NULL) ||
+        JS_VALUE_IS_EQ(v, JS_SymbolGetIterator(NULL)) ||
+        JS_VALUE_IS_EQ(v, JS_SymbolToStringTag(NULL)))
+        return 0;
+
+    if (JS_VALUE_HAS_REF_COUNT(v)) {
+        JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
+        return p->ref_count;
+    }
+    return 0;
 }
 
 static __exception int JS_CloneDataProperties(JSContext* ctx, JSValueConst target, JSValueConst source, BOOL setprop);
@@ -5743,12 +5976,12 @@ JSValue JS_CloneValue(JSContext* ctx, JSValueConst v) // weolar
 
     JS_CloneDataProperties(ctx, new_v, v, TRUE);
     JSValue proto_v = JS_GetPrototype(ctx, v);
-    JS_DupValue(ctx, proto_v); // TODO:?
-    JS_DupValue(ctx, proto_v); // TODO:?
+//     JS_DupValue(ctx, proto_v); // TODO:?
+//     JS_DupValue(ctx, proto_v); // TODO:?
 
     JS_SetPrototype(ctx, new_v, proto_v);
 
-    JS_DupValue(ctx, new_v); // TODO:?
+    //JS_DupValue(ctx, new_v); // TODO:?
 
     return new_v;
 }
@@ -5768,13 +6001,41 @@ static void remove_gc_object(JSGCObjectHeader *h)
     list_del(&h->link);
 }
 
-void JS_MarkValue(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func)
+void JS_MarkTraceCountValue(JSRuntime* rt, JSValueConst val, int trace_count)
+{
+    if (!JS_VALUE_HAS_REF_COUNT(val))
+        return;
+
+    if (JS_TAG_OBJECT != JS_VALUE_GET_TAG(val))
+        return 0;
+
+    JSObject* p = (JSObject*)(JS_VALUE_GET_PTR(val));
+    if (!p)
+        return 0;
+    p->trace_count = trace_count;
+}
+
+int JS_GetTraceCountValue(JSRuntime* rt, JSValueConst val)
+{
+    if (!JS_VALUE_HAS_REF_COUNT(val))
+        return 0;
+
+    if (JS_TAG_OBJECT != JS_VALUE_GET_TAG(val))
+        return 0;
+
+    JSObject* p = (JSObject*)(JS_VALUE_GET_PTR(val));
+    if (!p)
+        return 0;
+    return p->trace_count;
+}
+
+void JS_MarkValue(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata)
 {
     if (JS_VALUE_HAS_REF_COUNT(val)) {
         switch(JS_VALUE_GET_TAG(val)) {
         case JS_TAG_OBJECT:
         case JS_TAG_FUNCTION_BYTECODE:
-            mark_func(rt, JS_VALUE_GET_PTR(val));
+            mark_func(rt, JS_VALUE_GET_PTR(val), userdata);
             break;
         default:
             break;
@@ -5782,8 +6043,148 @@ void JS_MarkValue(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func)
     }
 }
 
-static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp,
-                          JS_MarkFunc *mark_func)
+static void js_mark_gc_obj(JSRuntime *rt, JSValueConst val, JS_MarkUserdataFunc* mark_func, void* userdata)
+{
+    JSGCObjectHeader* gp;
+    if (JS_VALUE_HAS_REF_COUNT(val)) {
+        switch (JS_VALUE_GET_TAG(val)) {
+        case JS_TAG_OBJECT:
+        case JS_TAG_FUNCTION_BYTECODE:
+            gp = JS_VALUE_GET_PTR(val);
+            mark_func(rt, val, userdata);
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void JS_MarkUserdataObj(JSRuntime* rt, JSValueConst val, JS_MarkUserdataFunc* mark_func, void* userdata)
+{
+    if (!JS_VALUE_HAS_REF_COUNT(val))
+        return;
+    uint32_t tag = JS_VALUE_GET_TAG(val);
+    if (tag != JS_TAG_OBJECT && tag != JS_TAG_FUNCTION_BYTECODE)
+        return;
+
+    JSGCObjectHeader* gp = JS_VALUE_GET_PTR(val);
+    if (!gp)
+        return;
+    //mark_func(rt, val, userdata);
+
+//     JSValue JS_GetPrototypeFree(JSContext * ctx, JSValue obj);
+//     JSValue val;
+//     if (JS_VALUE_GET_TAG(obj) == JS_TAG_OBJECT) {
+//       JSObject* p;
+//       p = JS_VALUE_GET_OBJ(obj);
+//       if (unlikely(p->class_id == JS_CLASS_PROXY)) {
+//         val = js_proxy_getPrototypeOf(ctx, obj);
+//       } else {
+//         p = p->shape->proto;
+//         if (!p)
+//           val = JS_NULL;
+//         else
+//           val = JS_DupValue(ctx, JS_MKPTR(JS_TAG_OBJECT, p));
+//       }
+//     }
+
+    switch(gp->gc_obj_type) {
+    case JS_GC_OBJ_TYPE_JS_OBJECT:
+    {
+        JSObject *p = (JSObject*)gp;
+        JSShapeProperty *prs;
+        JSShape *sh;
+        int i;
+        sh = p->shape;
+        //mark_func(rt, JS_VALUE_GET_PTR(&sh->header), userdata);
+
+        if (p->class_id != JS_CLASS_PROXY) { //TODO: proxy类型proto暂时没考虑
+            JSObject* proto = p->shape->proto;
+            mark_func(rt, JS_MKPTR(JS_TAG_OBJECT, proto), userdata);
+        }
+
+        /* mark all the fields */
+        prs = get_shape_prop(sh);
+        for(i = 0; i < sh->prop_count; i++) {
+            JSProperty *pr = &p->prop[i];
+            if (prs->atom != JS_ATOM_NULL) {
+                if (prs->flags & JS_PROP_TMASK) {
+                    if ((prs->flags & JS_PROP_TMASK) == JS_PROP_GETSET) {
+                        if (pr->u.getset.getter)
+                            mark_func(rt, &pr->u.getset.getter->header, userdata);
+                        if (pr->u.getset.setter)
+                            mark_func(rt, &pr->u.getset.setter->header, userdata);
+                    } else if ((prs->flags & JS_PROP_TMASK) == JS_PROP_VARREF) {
+                        if (pr->u.var_ref->is_detached) {
+                            /* Note: the tag does not matter provided it is a GC object */
+                            //mark_func(rt, &pr->u.var_ref->header, userdata);
+                        }
+                    } else if ((prs->flags & JS_PROP_TMASK) == JS_PROP_AUTOINIT) {
+                        //js_autoinit_mark(rt, pr, mark_func, userdata);
+                    }
+                } else {
+                    js_mark_gc_obj(rt, pr->u.value, mark_func, userdata);
+                }
+            }
+            prs++;
+        }
+
+        if (p->class_id != JS_CLASS_OBJECT) {
+            JSClassGCMark *gc_mark;
+            gc_mark = rt->class_array[p->class_id].gc_mark;
+            if (gc_mark)
+                gc_mark(rt, JS_MKPTR(JS_TAG_OBJECT, p), mark_func, userdata);
+        }
+    }
+    break;
+    case JS_GC_OBJ_TYPE_FUNCTION_BYTECODE: /* the template objects can be part of a cycle */
+    {
+        JSFunctionBytecode *b = (JSFunctionBytecode *)gp;
+        int i;
+        for(i = 0; i < b->cpool_count; i++) {
+            js_mark_gc_obj(rt, b->cpool[i], mark_func, userdata);
+        }
+        if (b->realm)
+            mark_func(rt, &b->realm->header, userdata);
+    }
+    break;
+    case JS_GC_OBJ_TYPE_VAR_REF:
+    {
+        JSVarRef *var_ref = (JSVarRef *)gp;
+        /* only detached variable referenced are taken into account */
+        assert(var_ref->is_detached);
+        js_mark_gc_obj(rt, *var_ref->pvalue, mark_func, userdata);
+    }
+    break;
+    case JS_GC_OBJ_TYPE_ASYNC_FUNCTION:
+    {
+        JSAsyncFunctionData *s = (JSAsyncFunctionData *)gp;
+        if (s->is_active)
+            async_func_mark(rt, &s->func_state, mark_func, userdata);
+        js_mark_gc_obj(rt, s->resolving_funcs[0], mark_func, userdata);
+        js_mark_gc_obj(rt, s->resolving_funcs[1], mark_func, userdata);
+    }
+    break;
+    case JS_GC_OBJ_TYPE_SHAPE:
+    {
+        JSShape *sh = (JSShape *)gp;
+        if (sh->proto != NULL) {
+            mark_func(rt, &sh->proto->header, userdata);
+        }
+    }
+    break;
+    case JS_GC_OBJ_TYPE_JS_CONTEXT:
+    {
+//         JSContext *ctx = (JSContext *)gp;
+//         JS_MarkContext(rt, ctx, mark_func, userdata);
+    }
+    break;
+    default:
+        abort();
+    }
+}
+
+static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp, JS_MarkFunc *mark_func, void* userdata)
 {
     switch(gp->gc_obj_type) {
     case JS_GC_OBJ_TYPE_JS_OBJECT:
@@ -5793,7 +6194,7 @@ static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp,
             JSShape *sh;
             int i;
             sh = p->shape;
-            mark_func(rt, &sh->header);
+            mark_func(rt, &sh->header, userdata);
             /* mark all the fields */
             prs = get_shape_prop(sh);
             for(i = 0; i < sh->prop_count; i++) {
@@ -5802,20 +6203,20 @@ static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp,
                     if (prs->flags & JS_PROP_TMASK) {
                         if ((prs->flags & JS_PROP_TMASK) == JS_PROP_GETSET) {
                             if (pr->u.getset.getter)
-                                mark_func(rt, &pr->u.getset.getter->header);
+                                mark_func(rt, &pr->u.getset.getter->header, userdata);
                             if (pr->u.getset.setter)
-                                mark_func(rt, &pr->u.getset.setter->header);
+                                mark_func(rt, &pr->u.getset.setter->header, userdata);
                         } else if ((prs->flags & JS_PROP_TMASK) == JS_PROP_VARREF) {
                             if (pr->u.var_ref->is_detached) {
                                 /* Note: the tag does not matter
                                    provided it is a GC object */
-                                mark_func(rt, &pr->u.var_ref->header);
+                                mark_func(rt, &pr->u.var_ref->header, userdata);
                             }
                         } else if ((prs->flags & JS_PROP_TMASK) == JS_PROP_AUTOINIT) {
-                            js_autoinit_mark(rt, pr, mark_func);
+                            js_autoinit_mark(rt, pr, mark_func, userdata);
                         }
                     } else {
-                        JS_MarkValue(rt, pr->u.value, mark_func);
+                        JS_MarkValue(rt, pr->u.value, mark_func, userdata);
                     }
                 }
                 prs++;
@@ -5825,7 +6226,7 @@ static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp,
                 JSClassGCMark *gc_mark;
                 gc_mark = rt->class_array[p->class_id].gc_mark;
                 if (gc_mark)
-                    gc_mark(rt, JS_MKPTR(JS_TAG_OBJECT, p), mark_func);
+                    gc_mark(rt, JS_MKPTR(JS_TAG_OBJECT, p), mark_func, userdata);
             }
         }
         break;
@@ -5835,10 +6236,10 @@ static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp,
             JSFunctionBytecode *b = (JSFunctionBytecode *)gp;
             int i;
             for(i = 0; i < b->cpool_count; i++) {
-                JS_MarkValue(rt, b->cpool[i], mark_func);
+                JS_MarkValue(rt, b->cpool[i], mark_func, userdata);
             }
             if (b->realm)
-                mark_func(rt, &b->realm->header);
+                mark_func(rt, &b->realm->header, userdata);
         }
         break;
     case JS_GC_OBJ_TYPE_VAR_REF:
@@ -5846,30 +6247,30 @@ static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp,
             JSVarRef *var_ref = (JSVarRef *)gp;
             /* only detached variable referenced are taken into account */
             assert(var_ref->is_detached);
-            JS_MarkValue(rt, *var_ref->pvalue, mark_func);
+            JS_MarkValue(rt, *var_ref->pvalue, mark_func, userdata);
         }
         break;
     case JS_GC_OBJ_TYPE_ASYNC_FUNCTION:
         {
             JSAsyncFunctionData *s = (JSAsyncFunctionData *)gp;
             if (s->is_active)
-                async_func_mark(rt, &s->func_state, mark_func);
-            JS_MarkValue(rt, s->resolving_funcs[0], mark_func);
-            JS_MarkValue(rt, s->resolving_funcs[1], mark_func);
+                async_func_mark(rt, &s->func_state, mark_func, userdata);
+            JS_MarkValue(rt, s->resolving_funcs[0], mark_func, userdata);
+            JS_MarkValue(rt, s->resolving_funcs[1], mark_func, userdata);
         }
         break;
     case JS_GC_OBJ_TYPE_SHAPE:
         {
             JSShape *sh = (JSShape *)gp;
             if (sh->proto != NULL) {
-                mark_func(rt, &sh->proto->header);
+                mark_func(rt, &sh->proto->header, userdata);
             }
         }
         break;
     case JS_GC_OBJ_TYPE_JS_CONTEXT:
         {
             JSContext *ctx = (JSContext *)gp;
-            JS_MarkContext(rt, ctx, mark_func);
+            JS_MarkContext(rt, ctx, mark_func, userdata);
         }
         break;
     default:
@@ -5881,17 +6282,6 @@ static void gc_decref_child(JSRuntime *rt, JSGCObjectHeader *p)
 {
     assert(p->ref_count > 0);
     p->ref_count--;
-
-//     if (p->ref_count == 0) {
-//         static int s_init = 0;
-//         if (41800 == s_init)
-//             OutputDebugStringA("");
-// 
-//         char* output[64] = { 0 };
-//         sprintf_s(output, 63, "gc_decref_child: %p, %d\n", p, s_init);
-//         OutputDebugStringA(output);
-//         s_init++;
-//     }
 
     if (p->ref_count == 0 && p->mark == 1) {
         list_del(&p->link);
@@ -5912,7 +6302,7 @@ static void gc_decref(JSRuntime *rt)
     list_for_each_safe(el, el1, &rt->gc_obj_list) {
         p = list_entry(el, JSGCObjectHeader, link);
         assert(p->mark == 0);
-        mark_children(rt, p, gc_decref_child);
+        mark_children(rt, p, gc_decref_child, NULL);
         p->mark = 1;
         if (p->ref_count == 0) {
             list_del(&p->link);
@@ -5948,13 +6338,13 @@ static void gc_scan(JSRuntime *rt)
         p = list_entry(el, JSGCObjectHeader, link);
         assert(p->ref_count > 0);
         p->mark = 0; /* reset the mark for the next GC call */
-        mark_children(rt, p, gc_scan_incref_child);
+        mark_children(rt, p, gc_scan_incref_child, NULL);
     }
     
     /* restore the refcount of the objects to be deleted. */
     list_for_each(el, &rt->tmp_obj_list) {
         p = list_entry(el, JSGCObjectHeader, link);
-        mark_children(rt, p, gc_scan_incref_child2);
+        mark_children(rt, p, gc_scan_incref_child2, NULL);
     }
 }
 
@@ -7294,15 +7684,6 @@ void JS_PrintStack(JSContext* ctx)
 
 static JSValue JS_GetPropertyHook(JSContext* ctx, JSObject* p, JSAtom prop)
 {
-//     JSValueConst obj = JS_MKPTR(JS_TAG_OBJECT, p);
-//     uint32_t prot_tag = JS_VALUE_GET_TAG(this_obj);
-//     if (JS_TAG_OBJECT != prot_tag)
-//         return JS_UNDEFINED;
-//     
-//     JSObject* ptr = JS_VALUE_GET_OBJ(this_obj);
-//     if (!p->prop_hook)
-//         return JS_UNDEFINED;
-
     if (!p->prop_hook)
         return JS_UNDEFINED;
     JSValueConst obj = JS_MKPTR(JS_TAG_OBJECT, p);
@@ -8274,6 +8655,8 @@ static JSProperty *add_property(JSContext *ctx,
 {
     JSShape *sh, *new_sh;
 
+    static int s_count = 0;
+
     sh = p->shape;
     if (sh->is_hashed) {
         /* try to find an existing shape */
@@ -8283,8 +8666,7 @@ static JSProperty *add_property(JSContext *ctx,
             /*  the property array may need to be resized */
             if (new_sh->prop_size != sh->prop_size) {
                 JSProperty *new_prop;
-                new_prop = js_realloc(ctx, p->prop, sizeof(p->prop[0]) *
-                                      new_sh->prop_size);
+                new_prop = js_realloc(ctx, p->prop, sizeof(p->prop[0]) * new_sh->prop_size);
                 if (!new_prop)
                     return NULL;
                 p->prop = new_prop;
@@ -8297,6 +8679,10 @@ static JSProperty *add_property(JSContext *ctx,
             new_sh = js_clone_shape(ctx, sh);
             if (!new_sh)
                 return NULL;
+
+//             s_count++;
+//             qjsPrint("add_property: %p, %d\n", new_prop, s_count);
+
             /* hash the cloned shape */
             new_sh->is_hashed = TRUE;
             js_shape_hash_link(ctx->rt, new_sh);
@@ -8307,7 +8693,8 @@ static JSProperty *add_property(JSContext *ctx,
     assert(p->shape->header.ref_count == 1);
     if (add_shape_property(ctx, &p->shape, p, prop, prop_flags))
         return NULL;
-    return &p->prop[p->shape->prop_count - 1];
+    JSProperty* ret = &p->prop[p->shape->prop_count - 1];
+    return ret;
 }
 
 /* can be called on Array or Arguments objects. return < 0 if
@@ -8432,9 +8819,22 @@ static int delete_property(JSContext *ctx, JSObject *p, JSAtom atom)
     return TRUE;
 }
 
-static int call_setter(JSContext *ctx, JSObject *setter,
-                       JSValueConst this_obj, JSValue val, int flags)
+typedef DWORD TlsType;
+static TlsType s_tlsPatchForCreateDataProperty = 0;
+
+static int call_setter(JSContext *ctx, JSObject *setter, JSValueConst this_obj, JSValue val, int flags)
 {
+    if (0 == s_tlsPatchForCreateDataProperty) {
+        s_tlsPatchForCreateDataProperty = TlsAlloc();
+        TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
+    }
+
+    if (TlsGetValue(s_tlsPatchForCreateDataProperty) == setter) {
+        TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
+        return -1;
+    }
+    TlsSetValue(s_tlsPatchForCreateDataProperty, setter);
+
     JSValue ret, func;
     if (likely(setter)) {
         func = JS_MKPTR(JS_TAG_OBJECT, setter);
@@ -8442,17 +8842,22 @@ static int call_setter(JSContext *ctx, JSObject *setter,
         func = JS_DupValue(ctx, func);
         ret = JS_CallFree(ctx, func, this_obj, 1, (JSValueConst *)&val);
         JS_FreeValue(ctx, val);
-        if (JS_IsException(ret))
+        if (JS_IsException(ret)) {
+            TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
             return -1;
+        }
         JS_FreeValue(ctx, ret);
+        TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
         return TRUE;
     } else {
         JS_FreeValue(ctx, val);
         if ((flags & JS_PROP_THROW) ||
             ((flags & JS_PROP_THROW_STRICT) && is_strict_mode(ctx))) {
             JS_ThrowTypeError(ctx, "no setter for property");
+            TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
             return -1;
         }
+        TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
         return FALSE;
     }
 }
@@ -8715,7 +9120,7 @@ static int JS_SetPropertyGeneric(JSContext *ctx,
    freed by the function. 'flags' is a bitmask of JS_PROP_NO_ADD,
    JS_PROP_THROW or JS_PROP_THROW_STRICT. If JS_PROP_NO_ADD is set,
    the new property is not added and an error is raised. */
-int JS_SetPropertyInternal2(JSContext *ctx, JSValueConst this_obj, JSAtom prop, JSValue val, int flags, JS_BOOL focus, JS_BOOL ignore_hook)
+int JS_SetPropertyInternal2(JSContext *ctx, JSValueConst this_obj, JSAtom prop, JSValue val, int flags, JS_BOOL force_ignore_writable, JS_BOOL ignore_hook)
 {
     JSObject *p, *p1;
     JSShapeProperty *prs;
@@ -8748,7 +9153,7 @@ int JS_SetPropertyInternal2(JSContext *ctx, JSValueConst this_obj, JSAtom prop, 
 retry:
     prs = find_own_property(&pr, p, prop);
     if (prs) {
-        if (likely((prs->flags & (JS_PROP_TMASK | JS_PROP_WRITABLE | JS_PROP_LENGTH)) == JS_PROP_WRITABLE || focus)) {
+        if (likely((prs->flags & (JS_PROP_TMASK | JS_PROP_WRITABLE | JS_PROP_LENGTH)) == JS_PROP_WRITABLE || force_ignore_writable)) {
             /* fast case */
             set_value(ctx, &pr->u.value, val);
             return TRUE;
@@ -9880,8 +10285,8 @@ static JSValue JS_GetGlobalVar(JSContext *ctx, JSAtom prop,
             return JS_ThrowReferenceErrorUninitialized(ctx, prs->atom);
         return JS_DupValue(ctx, pr->u.value);
     }
-    return JS_GetPropertyInternal(ctx, ctx->global_obj, prop,
-                                 ctx->global_obj, throw_ref_error);
+    JSValue ret = JS_GetPropertyInternal(ctx, ctx->global_obj, prop, ctx->global_obj, throw_ref_error);
+    return ret;
 }
 
 /* construct a reference to a global variable */
@@ -9945,8 +10350,7 @@ static int JS_CheckGlobalVar(JSContext *ctx, JSAtom prop)
    flag = 1: initialize lexical variable
    flag = 2: normal variable write, strict check was done before
 */
-static int JS_SetGlobalVar(JSContext *ctx, JSAtom prop, JSValue val,
-                           int flag)
+static int JS_SetGlobalVar(JSContext *ctx, JSAtom prop, JSValue val, int flag)
 {
     JSObject *p;
     JSShapeProperty *prs;
@@ -9975,7 +10379,8 @@ static int JS_SetGlobalVar(JSContext *ctx, JSAtom prop, JSValue val,
     flags = JS_PROP_THROW_STRICT;
     if (is_strict_mode(ctx)) 
         flags |= JS_PROP_NO_ADD;
-    return JS_SetPropertyInternal(ctx, ctx->global_obj, prop, val, flags);
+    int ret = JS_SetPropertyInternal(ctx, ctx->global_obj, prop, val, flags);
+    return ret;
 }
 
 /* return -1, FALSE or TRUE. return FALSE if not configurable or
@@ -10131,8 +10536,17 @@ void *JS_GetOpaque2(JSContext *ctx, JSValueConst obj, JSClassID class_id)
     return p;
 }
 
-void JS_SetUserdata(JSValue obj, void* opaque)
+void JS_SetUserdata(JSContext *ctx, JSValue obj, JS_UserDataWeakFunc weak_func, void* opaque)
 {
+    if (JS_VALUE_GET_TAG(obj) == JS_TAG_STRING) {
+        JSString* str = JS_VALUE_GET_STRING(obj);
+        if (!str->userptr)
+            str->userptr = js_malloc_rt(ctx->rt, sizeof(JSStringUserdata));
+        str->userptr->weak_func = weak_func;
+        str->userptr->userdata = opaque;
+        return;
+    }
+
     JSObject* p;
     if (JS_VALUE_GET_TAG(obj) == JS_TAG_OBJECT) {
         p = JS_VALUE_GET_OBJ(obj);
@@ -10140,11 +10554,12 @@ void JS_SetUserdata(JSValue obj, void* opaque)
             if (p->userdata)
                 DebugBreak();
             p->userdata = opaque;
+            p->weak_func = weak_func;
         }
     }
 }
 
-void JS_SetUserdataFromClone(JSValue obj, void* opaque)
+void JS_SetUserdataFromClone(JSValue obj, JS_UserDataWeakFunc weak_func, void* opaque)
 {
     JSObject* p;
     if (JS_VALUE_GET_TAG(obj) == JS_TAG_OBJECT) {
@@ -10153,6 +10568,7 @@ void JS_SetUserdataFromClone(JSValue obj, void* opaque)
 //             if (!p->userdata)
 //                 DebugBreak();
             p->userdata = opaque;
+            p->weak_func = weak_func;
         }
     }
 }
@@ -10188,8 +10604,8 @@ void JS_SetTestValFromClone(JSValue obj, JSValue v)
     if (JS_VALUE_GET_TAG(obj) == JS_TAG_OBJECT) {
         p = JS_VALUE_GET_OBJ(obj);
         if (p) {
-//             if (!p->testVal)
-//                 DebugBreak();
+            if (0)
+                g_testObj = p;
             p->testVal = v;
         }
     }
@@ -16049,17 +16465,18 @@ static __exception int JS_CloneDataProperties(JSContext* ctx, JSValueConst targe
 
     if (JS_VALUE_GET_TAG(source) != JS_TAG_OBJECT || JS_VALUE_GET_TAG(target) != JS_TAG_OBJECT)
         return FALSE;
+
     source_ptr = JS_VALUE_GET_OBJ(source);
     target_ptr = JS_VALUE_GET_OBJ(target);
-
-    if (target_ptr->prop_hook)
-        DebugBreak();
+    qjsReleaseAssert(!target_ptr->prop_hook && !target_ptr->weak_func && !target_ptr->userdata);
 
     if (source_ptr->prop_hook) {
         //js_free(ctx, target_ptr->prop_hook);
         target_ptr->prop_hook = js_malloc(ctx, sizeof(struct JSObjectPropHook));
         memcpy(target_ptr->prop_hook, source_ptr->prop_hook, sizeof(struct JSObjectPropHook));
     }
+//     target_ptr->weak_func = source_ptr->weak_func;
+//     target_ptr->userdata = source_ptr->userdata;
 
     shape = source_ptr->shape;
 
@@ -19417,22 +19834,21 @@ static __exception int async_func_init(JSContext *ctx, JSAsyncFunctionState *s,
     return 0;
 }
 
-static void async_func_mark(JSRuntime *rt, JSAsyncFunctionState *s,
-                            JS_MarkFunc *mark_func)
+static void async_func_mark(JSRuntime *rt, JSAsyncFunctionState *s, JS_MarkFunc *mark_func, void* userdata)
 {
     JSStackFrame *sf;
     JSValue *sp;
 
     sf = &s->frame;
-    JS_MarkValue(rt, sf->cur_func, mark_func);
-    JS_MarkValue(rt, s->this_val, mark_func);
+    JS_MarkValue(rt, sf->cur_func, mark_func, userdata);
+    JS_MarkValue(rt, s->this_val, mark_func, userdata);
     if (sf->cur_sp) {
         /* if the function is running, cur_sp is not known so we
            cannot mark the stack. Marking the variables is not needed
            because a running function cannot be part of a removable
            cycle */
         for(sp = sf->arg_buf; sp < sf->cur_sp; sp++)
-            JS_MarkValue(rt, *sp, mark_func);
+            JS_MarkValue(rt, *sp, mark_func, userdata);
     }
 }
 
@@ -19509,15 +19925,14 @@ static void free_generator_stack(JSContext *ctx, JSGeneratorData *s)
     free_generator_stack_rt(ctx->rt, s);
 }
 
-static void js_generator_mark(JSRuntime *rt, JSValueConst val,
-                              JS_MarkFunc *mark_func)
+static void js_generator_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSGeneratorData *s = p->u.generator_data;
 
     if (!s || s->state == JS_GENERATOR_STATE_COMPLETED)
         return;
-    async_func_mark(rt, &s->func_state, mark_func);
+    async_func_mark(rt, &s->func_state, mark_func, userdata);
 }
 
 /* XXX: use enum */
@@ -19682,12 +20097,12 @@ static void js_async_function_resolve_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_async_function_resolve_mark(JSRuntime *rt, JSValueConst val,
-                                           JS_MarkFunc *mark_func)
+                                           JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSAsyncFunctionData *s = p->u.async_function_data;
     if (s) {
-        mark_func(rt, &s->header);
+        mark_func(rt, &s->header, userdata);
     }
 }
 
@@ -19891,7 +20306,7 @@ static void js_async_generator_finalizer(JSRuntime *rt, JSValue obj)
 }
 
 static void js_async_generator_mark(JSRuntime *rt, JSValueConst val,
-                                    JS_MarkFunc *mark_func)
+                                    JS_MarkFunc *mark_func, void* userdata)
 {
     JSAsyncGeneratorData *s = JS_GetOpaque(val, JS_CLASS_ASYNC_GENERATOR);
     struct list_head *el;
@@ -19899,14 +20314,14 @@ static void js_async_generator_mark(JSRuntime *rt, JSValueConst val,
     if (s) {
         list_for_each(el, &s->queue) {
             req = list_entry(el, JSAsyncGeneratorRequest, link);
-            JS_MarkValue(rt, req->result, mark_func);
-            JS_MarkValue(rt, req->promise, mark_func);
-            JS_MarkValue(rt, req->resolving_funcs[0], mark_func);
-            JS_MarkValue(rt, req->resolving_funcs[1], mark_func);
+            JS_MarkValue(rt, req->result, mark_func, userdata);
+            JS_MarkValue(rt, req->promise, mark_func, userdata);
+            JS_MarkValue(rt, req->resolving_funcs[0], mark_func, userdata);
+            JS_MarkValue(rt, req->resolving_funcs[1], mark_func, userdata);
         }
         if (s->state != JS_ASYNC_GENERATOR_STATE_COMPLETED &&
             s->state != JS_ASYNC_GENERATOR_STATE_AWAITING_RETURN) {
-            async_func_mark(rt, &s->func_state, mark_func);
+            async_func_mark(rt, &s->func_state, mark_func, userdata);
         }
     }
 }
@@ -27542,7 +27957,7 @@ static JSModuleDef *js_new_module_def(JSContext *ctx, JSAtom name)
 }
 
 static void js_mark_module_def(JSRuntime *rt, JSModuleDef *m,
-                               JS_MarkFunc *mark_func)
+                               JS_MarkFunc *mark_func, void* userdata)
 {
     int i;
 
@@ -27550,14 +27965,14 @@ static void js_mark_module_def(JSRuntime *rt, JSModuleDef *m,
         JSExportEntry *me = &m->export_entries[i];
         if (me->export_type == JS_EXPORT_TYPE_LOCAL &&
             me->u.local.var_ref) {
-            mark_func(rt, &me->u.local.var_ref->header);
+            mark_func(rt, &me->u.local.var_ref->header, userdata);
         }
     }
 
-    JS_MarkValue(rt, m->module_ns, mark_func);
-    JS_MarkValue(rt, m->func_obj, mark_func);
-    JS_MarkValue(rt, m->eval_exception, mark_func);
-    JS_MarkValue(rt, m->meta_obj, mark_func);
+    JS_MarkValue(rt, m->module_ns, mark_func, userdata);
+    JS_MarkValue(rt, m->func_obj, mark_func, userdata);
+    JS_MarkValue(rt, m->eval_exception, mark_func, userdata);
+    JS_MarkValue(rt, m->meta_obj, mark_func, userdata);
 }
 
 static void js_free_module_def(JSContext *ctx, JSModuleDef *m)
@@ -40079,12 +40494,12 @@ static void js_array_iterator_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_array_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                   JS_MarkFunc *mark_func)
+                                   JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSArrayIteratorData *it = p->u.array_iterator_data;
     if (it) {
-        JS_MarkValue(rt, it->obj, mark_func);
+        JS_MarkValue(rt, it->obj, mark_func, userdata);
     }
 }
 
@@ -43573,13 +43988,13 @@ static void js_regexp_string_iterator_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_regexp_string_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                           JS_MarkFunc *mark_func)
+                                           JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSRegExpStringIteratorData *it = p->u.regexp_string_iterator_data;
     if (it) {
-        JS_MarkValue(rt, it->iterating_regexp, mark_func);
-        JS_MarkValue(rt, it->iterated_string, mark_func);
+        JS_MarkValue(rt, it->iterating_regexp, mark_func, userdata);
+        JS_MarkValue(rt, it->iterated_string, mark_func, userdata);
     }
 }
 
@@ -45093,12 +45508,12 @@ static void js_proxy_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_proxy_mark(JSRuntime *rt, JSValueConst val,
-                          JS_MarkFunc *mark_func)
+                          JS_MarkFunc *mark_func, void* userdata)
 {
     JSProxyData *s = JS_GetOpaque(val, JS_CLASS_PROXY);
     if (s) {
-        JS_MarkValue(rt, s->target, mark_func);
-        JS_MarkValue(rt, s->handler, mark_func);
+        JS_MarkValue(rt, s->target, mark_func, userdata);
+        JS_MarkValue(rt, s->handler, mark_func, userdata);
     }
 }
 
@@ -46665,7 +47080,7 @@ static void js_map_finalizer(JSRuntime *rt, JSValue val)
     }
 }
 
-static void js_map_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func)
+static void js_map_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSMapState *s;
@@ -46677,8 +47092,8 @@ static void js_map_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func)
         list_for_each(el, &s->records) {
             mr = list_entry(el, JSMapRecord, link);
             if (!s->is_weak)
-                JS_MarkValue(rt, mr->key, mark_func);
-            JS_MarkValue(rt, mr->value, mark_func);
+                JS_MarkValue(rt, mr->key, mark_func, userdata);
+            JS_MarkValue(rt, mr->value, mark_func, userdata);
         }
     }
 }
@@ -46709,15 +47124,14 @@ static void js_map_iterator_finalizer(JSRuntime *rt, JSValue val)
     }
 }
 
-static void js_map_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                 JS_MarkFunc *mark_func)
+static void js_map_iterator_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc* mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSMapIteratorData *it;
     it = p->u.map_iterator_data;
     if (it) {
         /* the record is already marked by the object */
-        JS_MarkValue(rt, it->obj, mark_func);
+        JS_MarkValue(rt, it->obj, mark_func, userdata);
     }
 }
 
@@ -47164,11 +47578,11 @@ static void js_promise_resolve_function_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_promise_resolve_function_mark(JSRuntime *rt, JSValueConst val,
-                                             JS_MarkFunc *mark_func)
+                                             JS_MarkFunc *mark_func, void* userdata)
 {
     JSPromiseFunctionData *s = JS_VALUE_GET_OBJ(val)->u.promise_function_data;
     if (s) {
-        JS_MarkValue(rt, s->promise, mark_func);
+        JS_MarkValue(rt, s->promise, mark_func, userdata);
     }
 }
 
@@ -47245,7 +47659,7 @@ static void js_promise_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_promise_mark(JSRuntime *rt, JSValueConst val,
-                            JS_MarkFunc *mark_func)
+                            JS_MarkFunc *mark_func , void* userdata)
 {
     JSPromiseData *s = JS_GetOpaque(val, JS_CLASS_PROMISE);
     struct list_head *el;
@@ -47257,12 +47671,12 @@ static void js_promise_mark(JSRuntime *rt, JSValueConst val,
         list_for_each(el, &s->promise_reactions[i]) {
             JSPromiseReactionData *rd =
                 list_entry(el, JSPromiseReactionData, link);
-            JS_MarkValue(rt, rd->resolving_funcs[0], mark_func);
-            JS_MarkValue(rt, rd->resolving_funcs[1], mark_func);
-            JS_MarkValue(rt, rd->handler, mark_func);
+            JS_MarkValue(rt, rd->resolving_funcs[0], mark_func, userdata);
+            JS_MarkValue(rt, rd->resolving_funcs[1], mark_func, userdata);
+            JS_MarkValue(rt, rd->handler, mark_func, userdata);
         }
     }
-    JS_MarkValue(rt, s->promise_result, mark_func);
+    JS_MarkValue(rt, s->promise_result, mark_func, userdata);
 }
 
 static JSValue js_promise_constructor(JSContext *ctx, JSValueConst new_target,
@@ -47986,13 +48400,13 @@ static void js_async_from_sync_iterator_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_async_from_sync_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                             JS_MarkFunc *mark_func)
+                                             JS_MarkFunc *mark_func , void* userdata)
 {
     JSAsyncFromSyncIteratorData *s =
         JS_GetOpaque(val, JS_CLASS_ASYNC_FROM_SYNC_ITERATOR);
     if (s) {
-        JS_MarkValue(rt, s->sync_iter, mark_func);
-        JS_MarkValue(rt, s->next_method, mark_func);
+        JS_MarkValue(rt, s->sync_iter, mark_func, userdata);
+        JS_MarkValue(rt, s->next_method, mark_func, userdata);
     }
 }
 
@@ -49534,7 +49948,7 @@ static void js_operator_set_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_operator_set_mark(JSRuntime *rt, JSValueConst val,
-                                 JS_MarkFunc *mark_func)
+                                 JS_MarkFunc *mark_func , void* userdata)
 {
     JSOperatorSetData *opset = JS_GetOpaque(val, JS_CLASS_OPERATOR_SET);
     int i, j;
@@ -49544,14 +49958,14 @@ static void js_operator_set_mark(JSRuntime *rt, JSValueConst val,
         for(i = 0; i < JS_OVOP_COUNT; i++) {
             if (opset->self_ops[i])
                 JS_MarkValue(rt, JS_MKPTR(JS_TAG_OBJECT, opset->self_ops[i]),
-                             mark_func);
+                             mark_func, userdata);
         }
         for(j = 0; j < opset->left.count; j++) {
             ent = &opset->left.tab[j];
             for(i = 0; i < JS_OVOP_BINARY_COUNT; i++) {
                 if (ent->ops[i])
                     JS_MarkValue(rt, JS_MKPTR(JS_TAG_OBJECT, ent->ops[i]),
-                                 mark_func);
+                                 mark_func, userdata);
             }
         }
         for(j = 0; j < opset->right.count; j++) {
@@ -49559,7 +49973,7 @@ static void js_operator_set_mark(JSRuntime *rt, JSValueConst val,
             for(i = 0; i < JS_OVOP_BINARY_COUNT; i++) {
                 if (ent->ops[i])
                     JS_MarkValue(rt, JS_MKPTR(JS_TAG_OBJECT, ent->ops[i]),
-                                 mark_func);
+                                 mark_func, userdata);
             }
         }
     }
@@ -53866,12 +54280,12 @@ static void js_typed_array_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_typed_array_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func)
+                                JS_MarkFunc *mark_func , void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSTypedArray *ta = p->u.typed_array;
     if (ta) {
-        JS_MarkValue(rt, JS_MKPTR(JS_TAG_OBJECT, ta->buffer), mark_func);
+        JS_MarkValue(rt, JS_MKPTR(JS_TAG_OBJECT, ta->buffer), mark_func, userdata);
     }
 }
 

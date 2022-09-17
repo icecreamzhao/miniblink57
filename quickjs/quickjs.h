@@ -373,10 +373,16 @@ JSRuntime *JS_NewRuntime2(const JSMallocFunctions *mf, void *opaque);
 void JS_FreeRuntime(JSRuntime *rt);
 void *JS_GetRuntimeOpaque(JSRuntime *rt);
 void JS_SetRuntimeOpaque(JSRuntime *rt, void *opaque);
-typedef void JS_MarkFunc(JSRuntime *rt, JSGCObjectHeader *gp);
+typedef void JS_MarkFunc(JSRuntime *rt, JSGCObjectHeader *gp, void* userdata);
 void JS_MarkValue(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func);
 void JS_RunGC(JSRuntime *rt);
 JS_BOOL JS_IsLiveObject(JSRuntime *rt, JSValueConst obj);
+void JS_MarkTraceCountValue(JSRuntime *rt, JSValueConst val, int trace_count);
+int JS_GetTraceCountValue(JSRuntime *rt, JSValueConst val);
+
+// miniv8绑定了userdata对象以后，用这函数可以遍历有userdata的子对象
+typedef void JS_MarkUserdataFunc(JSRuntime *rt, JSValueConst val, void* userdata);
+void JS_MarkUserdataObj(JSRuntime* rt, JSValueConst val, JS_MarkUserdataFunc* mark_func, void* userdata);
 
 JSContext *JS_NewContext(JSRuntime *rt);
 void JS_FreeContext(JSContext *s);
@@ -510,8 +516,7 @@ typedef struct JSClassExoticMethods {
 } JSClassExoticMethods;
 
 typedef void JSClassFinalizer(JSRuntime *rt, JSValue val);
-typedef void JSClassGCMark(JSRuntime *rt, JSValueConst val,
-                           JS_MarkFunc *mark_func);
+typedef void JSClassGCMark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata);
 #define JS_CALL_FLAG_CONSTRUCTOR (1 << 0)
 typedef JSValue JSClassCall(JSContext *ctx, JSValueConst func_obj,
                             JSValueConst this_val, int argc, JSValueConst *argv,
@@ -557,9 +562,9 @@ static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
 {
     JSValue v;
     if (val == (int32_t)val) {
-        v = JS_NewInt32(ctx, val);
+        v = JS_NewInt32(ctx, (int32_t)val);
     } else {
-        v = __JS_NewFloat64(ctx, val);
+        v = __JS_NewFloat64(ctx, (double)val);
     }
     return v;
 }
@@ -713,6 +718,8 @@ JSValue __js_printf_like(2, 3) JS_ThrowRangeError(JSContext *ctx, const char *fm
 JSValue __js_printf_like(2, 3) JS_ThrowInternalError(JSContext *ctx, const char *fmt, ...);
 JSValue JS_ThrowOutOfMemory(JSContext *ctx);
 
+int JS_GetRefCount(JSContext* ctx, JSValue v);
+
 void JS_FreeValue(JSContext* ctx, JSValue v);
 void JS_FreeValueRT(JSRuntime* rt, JSValue v);
 JSValue JS_DupValue(JSContext* ctx, JSValueConst v);
@@ -735,13 +742,21 @@ int JS_ToInt64Ext(JSContext *ctx, int64_t *pres, JSValueConst val);
 
 // 对应v8的ExternalStringResourceBase，表示外部申请的字符串，quickjs来管理生命周期
 typedef void(*FreeExternalStringFunc)(void* userdata);
-JSValue JS_NewExternalStringLen(JSContext *ctx, const char* str, size_t len, FreeExternalStringFunc free_func, void* userdata);
+// JSValue JS_NewExternalOneString(JSContext *ctx, const char* str, size_t len,);
+// JSValue JS_NewExternalTwoString(JSContext *ctx, const uint16_t* str, size_t len);
+JSValue JS_ExternalString(JSContext* ctx, const char* utf8data, const uint16_t* utf16data, size_t len);
 
 JSValue JS_NewStringLen(JSContext *ctx, const char *str1, size_t len1);
 JSValue JS_NewString(JSContext *ctx, const char *str);
 JSValue JS_NewAtomString(JSContext *ctx, const char *str);
 JSValue JS_ToString(JSContext *ctx, JSValueConst val);
 JSValue JS_ToPropertyKey(JSContext *ctx, JSValueConst val);
+
+// 获取原始数据，如果是1byte就不拷贝，如果是2btye就拷贝
+const char *JS_GetStringData(JSContext *ctx, size_t *plen, JSValue* new_val, JSValueConst val);
+size_t JS_GetStringSize(JSContext* ctx, JSValueConst val);
+int JS_ContainsOnlyOneByte(JSContext *ctx, JSValueConst val);
+
 const char *JS_ToCStringLen2(JSContext *ctx, size_t *plen, JSValueConst val1, JS_BOOL cesu8);
 static inline const char *JS_ToCStringLen(JSContext *ctx, size_t *plen, JSValueConst val1)
 {
@@ -779,7 +794,7 @@ static inline int JS_SetProperty(JSContext *ctx, JSValueConst this_obj, JSAtom p
     return JS_SetPropertyInternal(ctx, this_obj, prop, val, JS_PROP_THROW);
 }
 
-int JS_SetPropertyInternal2(JSContext* ctx, JSValueConst this_obj, JSAtom prop, JSValue val, int flags, JS_BOOL focus_ignore_writable, JS_BOOL ignore_hook);
+int JS_SetPropertyInternal2(JSContext* ctx, JSValueConst this_obj, JSAtom prop, JSValue val, int flags, JS_BOOL force_ignore_writable, JS_BOOL ignore_hook);
 static inline int JS_SetPropertyFocus(JSContext* ctx, JSValueConst this_obj, JSAtom prop, JSValue val)
 {
     return JS_SetPropertyInternal2(ctx, this_obj, prop, val, JS_PROP_THROW, 1, 0);
@@ -840,9 +855,15 @@ void JS_SetOpaque(JSValue obj, void *opaque);
 void *JS_GetOpaque(JSValueConst obj, JSClassID class_id);
 void *JS_GetOpaque2(JSContext *ctx, JSValueConst obj, JSClassID class_id);
 
+typedef enum JS_USER_DATA_WEAK_STEP {
+    JS_USER_DATA_WEAK_SCAN,
+    JS_USER_DATA_WEAK_FREE,
+} JS_USER_DATA_WEAK_STEP;
+
+typedef void (*JS_UserDataWeakFunc)(JSValue obj, void* userdata, JS_USER_DATA_WEAK_STEP step);
 void* JS_GetUserdata(JSValueConst obj); // weolar
-void JS_SetUserdata(JSValue obj, void* opaque);
-void JS_SetUserdataFromClone(JSValue obj, void* opaque); // for test
+void JS_SetUserdata(JSContext *ctx, JSValue obj, JS_UserDataWeakFunc weak_fun, void* opaque);
+void JS_SetUserdataFromClone(JSValue obj, JS_UserDataWeakFunc weak_fun, void* opaque); // for test
 void JS_SetTestVal(JSValue obj, JSValue v);
 void JS_SetTestValFromClone(JSValue obj, JSValue v);
 JSValue JS_GetTestVal(JSValueConst obj);
@@ -908,7 +929,8 @@ typedef JSValue JSJobFunc(JSContext *ctx, int argc, JSValueConst *argv);
 int JS_EnqueueJob(JSContext *ctx, JSJobFunc *job_func, int argc, JSValueConst *argv);
 
 JS_BOOL JS_IsJobPending(JSRuntime *rt);
-int JS_ExecutePendingJob(JSRuntime *rt, JSContext **pctx);
+typedef void JSRunJobPendingCb(JSContext *ctx, BOOL is_pre_call, void* cb_data);
+int JS_ExecutePendingJob(JSRuntime *rt, JSContext **pctx, JSRunJobPendingCb* cb, void* cb_data);
 
 /* Object Writer/Reader (currently only used to handle precompiled code) */
 #define JS_WRITE_OBJ_BYTECODE  (1 << 0) /* allow function/module */
