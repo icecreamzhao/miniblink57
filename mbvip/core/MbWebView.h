@@ -36,6 +36,7 @@ public:
     void createWkeWebWindowOrViewInBlinkThread(bool isWebWindowMode);
     void createWkeWebWindowInUiThread(mbWindowType type, HWND parent, int x, int y, int width, int height);
     void createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD styleEx, int x, int y, int width, int height);
+    void bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height);
 
     int64_t getId() const { return m_id; }
     mbWebView getWebviewHandle() const { return (mbWebView)m_id; }
@@ -222,7 +223,7 @@ private:
     struct MouseMsg {
         MouseMsg(const MouseMsg& other)
         {
-            init(message, x, y, flags);
+            init(other.message, other.x, other.y, other.flags);
         }
 
         MouseMsg(unsigned int message, int x, int y, unsigned int flags)

@@ -1,8 +1,8 @@
 
 #include "FastMakeMain.h"
 
-#include "G:/mycode/quickjs-vs/quickjs.h"
-#include "G:/mycode/quickjs-vs/quickjs-libc.h"
+#include "quickjs-vs/quickjs.h"
+#include "quickjs-vs/quickjs-libc.h"
 
 #include "mbvip/common/Util.h"
 #include "mbvip/common/StringUtil.h"

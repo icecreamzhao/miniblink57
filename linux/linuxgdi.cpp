@@ -535,19 +535,7 @@ LRESULT DefWindowProcW(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-HWND CreateWindowExW(
-    DWORD dwExStyle,
-    LPCWSTR lpClassName,
-    LPCWSTR lpWindowName,
-    DWORD dwStyle,
-    int X,
-    int Y,
-    int nWidth,
-    int nHeight,
-    HWND hWndParent,
-    HMENU hMenu,
-    HINSTANCE hInstance,
-    LPVOID lpParam)
+HWND CreateWindowExW(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
 {
     if (!HwndLinux::s_hwnds) {
         HwndLinux::s_hwnds = new std::set<HWND>();
@@ -587,28 +575,25 @@ HWND CreateWindowExW(
     gtk_container_add(GTK_CONTAINER(widget), frame);
 
     GtkWidget* drawingArea = gtk_drawing_area_new();
-    /* set a minimum size */
+
     gtk_widget_set_size_request(drawingArea, nWidth, nHeight);
     gtk_container_add(GTK_CONTAINER(frame), drawingArea);
-    /* Signals used to handle the backing surface */
+
     g_signal_connect(drawingArea, "draw", G_CALLBACK(&HwndLinux::onDraw), self);
     g_signal_connect(drawingArea, "configure-event", G_CALLBACK(&HwndLinux::onConfigureEvent), self);
-    g_signal_connect(GTK_WINDOW(widget), "destroy", G_CALLBACK(&HwndLinux::onDestroy), self);
-    g_signal_connect(GTK_WINDOW(widget), "delete-event", G_CALLBACK(&HwndLinux::onDeleteEvent), self);
-
-    g_signal_connect(GTK_WINDOW(widget), "key-press-event", G_CALLBACK(&HwndLinux::onKeyPress), self);
-    g_signal_connect(GTK_WINDOW(widget), "key-release-event", G_CALLBACK(&HwndLinux::onKeyRelease), self);
     g_signal_connect(drawingArea, "motion-notify-event", G_CALLBACK(&HwndLinux::onMotionNotifyEvent), self);
     g_signal_connect(drawingArea, "button-press-event", G_CALLBACK(&HwndLinux::onButtonPressEvent), self);
     g_signal_connect(drawingArea, "button-release-event", G_CALLBACK(&HwndLinux::onButtonReleaseEvent), self);
     g_signal_connect(drawingArea, "scroll-event", G_CALLBACK(&HwndLinux::onScroll), self);
 
-    /* Ask to receive events the drawing area doesn't normally
-    * subscribe to. In particular, we need to ask for the
-    * button press and motion notify events that want to handle.
-    */
-    gtk_widget_set_events(drawingArea, gtk_widget_get_events(drawingArea) 
-        | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
+    g_signal_connect(GTK_WINDOW(widget), "destroy", G_CALLBACK(&HwndLinux::onDestroy), self);
+    g_signal_connect(GTK_WINDOW(widget), "delete-event", G_CALLBACK(&HwndLinux::onDeleteEvent), self);
+    g_signal_connect(GTK_WINDOW(widget), "key-press-event", G_CALLBACK(&HwndLinux::onKeyPress), self);
+    g_signal_connect(GTK_WINDOW(widget), "key-release-event", G_CALLBACK(&HwndLinux::onKeyRelease), self);
+
+    //Ask to receive events the drawing area doesn't normally subscribe to. In particular, 
+    //we need to ask for the button press and motion notify events that want to handle.
+    gtk_widget_set_events(drawingArea, gtk_widget_get_events(drawingArea) | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
 
     CREATESTRUCTW createStruct = { 0 };
     createStruct.lpCreateParams = lpParam;
@@ -618,6 +603,68 @@ HWND CreateWindowExW(
     self->m_drawingArea = drawingArea;
 
     printf("CreateWindowExW: %d, %d", nWidth, nHeight);
+
+    pthread_mutex_lock(&HwndLinux::s_hwndMutex);
+    HwndLinux::s_hwnds->insert(self); // TODO: delete
+    pthread_mutex_unlock(&HwndLinux::s_hwndMutex);
+
+    return self;
+}
+
+HWND BindWindowByGTK(void* rootWindow, void* drawingArea, DWORD dwExStyle, LPCWSTR lpClassName, DWORD dwStyle, int nWidth, int nHeight, LPVOID lpParam)
+{
+    if (!HwndLinux::s_hwnds) {
+        HwndLinux::s_hwnds = new std::set<HWND>();
+        pthread_mutexattr_t attr;
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+        pthread_mutex_init(&HwndLinux::s_hwndMutex, &attr);
+    }
+
+    if ((dwStyle & WS_CHILD) != 0)
+        DebugBreak();
+
+    if (nWidth == -1)
+        nWidth = 1000;
+    if (nHeight == -1)
+        nHeight = 800;
+
+    HwndLinux* self = new HwndLinux();
+    self->m_userdata = lpParam;
+
+    self->m_style = dwStyle;
+    self->m_styleex = dwExStyle;
+
+    unsigned int hash = common::hashStringW(lpClassName);
+    std::map<int, WNDCLASSEXW *>::iterator it = HwndLinux::s_wndClassMap->find(hash);
+    if (it == HwndLinux::s_wndClassMap->end())
+        DebugBreak();
+    self->m_wndProc = it->second->lpfnWndProc;
+
+    gtk_widget_set_size_request((GtkWidget*)drawingArea, nWidth, nHeight);
+
+    g_signal_connect((GtkWidget*)drawingArea, "draw", G_CALLBACK(&HwndLinux::onDraw), self);
+    g_signal_connect((GtkWidget*)drawingArea, "configure-event", G_CALLBACK(&HwndLinux::onConfigureEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "motion-notify-event", G_CALLBACK(&HwndLinux::onMotionNotifyEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "button-press-event", G_CALLBACK(&HwndLinux::onButtonPressEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "button-release-event", G_CALLBACK(&HwndLinux::onButtonReleaseEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "scroll-event", G_CALLBACK(&HwndLinux::onScroll), self);
+
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "destroy", G_CALLBACK(&HwndLinux::onDestroy), self);
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "delete-event", G_CALLBACK(&HwndLinux::onDeleteEvent), self);
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "key-press-event", G_CALLBACK(&HwndLinux::onKeyPress), self);
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "key-release-event", G_CALLBACK(&HwndLinux::onKeyRelease), self);
+
+    gtk_widget_set_events((GtkWidget*)drawingArea, gtk_widget_get_events((GtkWidget*)drawingArea) | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
+
+    CREATESTRUCTW createStruct = { 0 };
+    createStruct.lpCreateParams = lpParam;
+    self->m_wndProc(self, WM_CREATE, 0, (LPARAM)&createStruct);
+
+    self->m_widget = (GtkWidget*)rootWindow;
+    self->m_drawingArea = (GtkWidget*)drawingArea;
+
+    //printf("BindWindow: %d, %d", nWidth, nHeight);
 
     pthread_mutex_lock(&HwndLinux::s_hwndMutex);
     HwndLinux::s_hwnds->insert(self); // TODO: delete

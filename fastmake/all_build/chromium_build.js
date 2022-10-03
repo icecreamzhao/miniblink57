@@ -9,6 +9,7 @@ var json = [{
 		{"ndkBinPath":constVal.ndkBinPath},
 		{"v8dir": constVal.v8dir},
 		{"targetDir": constVal.targetDir},
+		{"sysroot": constVal.sysroot},
 	],
 	"compile":{
 		"ccompiler":"${clangPath}/clang.exe",
@@ -18,8 +19,8 @@ var json = [{
 			"${sdkPath}/include/c++/7.2.0",
 			"${sdkPath}/include/c++/7.2.0/include",
 			"${ndkIncludePath}",
-			"G:/chromium/M84/build/linux/debian_sid_amd64-sysroot/usr/include/glib-2.0",
-			"G:/chromium/M84/build/linux/debian_sid_amd64-sysroot/usr/lib/x86_64-linux-gnu/glib-2.0/include/",
+			"${sysroot}/usr/include/glib-2.0",
+			"${sysroot}/usr/lib/x86_64-linux-gnu/glib-2.0/include/",
 			"${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
 			"${sdkPath}/sysroot/usr/include",
 			"${sdkPath}/sysroot/usr/",

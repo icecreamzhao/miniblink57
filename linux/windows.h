@@ -1246,19 +1246,8 @@ EXTERN_C BOOL FindClose(HANDLE hFindFile);
 EXTERN_C BOOL PathAppendW(LPWSTR pszPath, LPCWSTR pMore);
 EXTERN_C DWORD GetTempPathW(DWORD nBufferLength, LPWSTR lpBuffer);
 EXTERN_C BOOL FindNextFileW(HANDLE hFindFile, LPWIN32_FIND_DATAW lpFindFileData);
-EXTERN_C HWND CreateWindowExW(
-    DWORD dwExStyle,
-    LPCWSTR lpClassName,
-    LPCWSTR lpWindowName,
-    DWORD dwStyle,
-    int X,
-    int Y,
-    int nWidth,
-    int nHeight,
-    HWND hWndParent,
-    HMENU hMenu,
-    HINSTANCE hInstance,
-    LPVOID lpParam);
+EXTERN_C HWND CreateWindowExW(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
+EXTERN_C HWND BindWindowByGTK(void* rootWindow, void* drawingArea, DWORD dwExStyle, LPCWSTR lpClassName, DWORD dwStyle, int nWidth, int nHeight, LPVOID lpParam);
 EXTERN_C BOOL ShowWindow(HWND hWnd, int nCmdShow);
 
 EXTERN_C HFONT CreateFontW(int cHeight, int cWidth, int cEscapement, int cOrientation, int cWeight, DWORD bItalic,

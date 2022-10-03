@@ -507,6 +507,47 @@ void MbWebView::createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD
     m_isWebWindowMode = true; // TODO
 }
 
+void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height)
+{
+    const WCHAR* szClassName = u16("MtMbWebWindow");
+    MSG msg = { 0 };
+    WNDCLASSEXW wndClass = { 0 };
+    static bool isFirstRegister = true;
+    if (isFirstRegister) {
+        isFirstRegister = false;
+        wndClass.cbSize = sizeof(WNDCLASSEXW);
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+        wndClass.lpfnWndProc = &MbWebView::windowProc;
+        wndClass.cbClsExtra = 200;
+        wndClass.cbWndExtra = 200;
+        wndClass.hInstance = GetModuleHandleW(NULL);
+        wndClass.hIcon = LoadIconW(NULL, IDI_APPLICATION);
+        wndClass.hCursor = LoadCursorW(NULL, IDC_ARROW);
+        wndClass.hbrBackground = NULL;
+        wndClass.lpszMenuName = NULL;
+        wndClass.lpszClassName = szClassName;
+        RegisterClassExW(&wndClass);
+    }
+
+    m_hWnd = BindWindowByGTK(
+        rootWindow,
+        drawingArea,
+        styleEx,        // window ex-style
+        szClassName,    // window class name
+        style,         // window style
+        width,          // initial x size
+        height,         // initial y size
+        this);         // creation parameters
+
+    if (!IsWindow(m_hWnd))
+        return;
+
+    if (m_isShow)
+        mbShowWindow(getWebviewHandle(), true);
+
+    m_isWebWindowMode = true; // TODO
+}
+
 void MbWebView::createWkeWebWindowInUiThread(mbWindowType type, HWND parent, int x, int y, int width, int height)
 {
     if (IsWindow(m_hWnd))

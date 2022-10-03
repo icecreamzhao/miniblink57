@@ -213,6 +213,18 @@ mbWebView MB_CALL_TYPE mbCreateWebCustomWindow(HWND parent, DWORD style, DWORD s
     return (int)result->getId();
 }
 
+mbWebView MB_CALL_TYPE mbCreateWebViewBindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height)
+{
+    checkThreadCallIsValid(__FUNCTION__);
+    mb::MbWebView* result = new mb::MbWebView();
+    result->bindGTKWindow(rootWindow, drawingArea, style, styleEx, width, height);
+    common::ThreadCall::callBlinkThreadAsync(MB_FROM_HERE, [result] {
+        result->createWkeWebWindowOrViewInBlinkThread(true);
+        });
+
+    return (int)result->getId();
+}
+
 mbWebView MB_CALL_TYPE mbCreateWebView()
 {
     checkThreadCallIsValid(__FUNCTION__);

@@ -846,6 +846,7 @@ ITERATOR0(void, mbUninit, "") \
 ITERATOR0(mbSettings*, mbCreateInitSettings, "方便c#等其他语言创建setting结构体") \
 ITERATOR3(void, mbSetInitSettings, mbSettings* settings, const char* name, const char* value, "") \
 ITERATOR0(mbWebView, mbCreateWebView, "") \
+ITERATOR6(mbWebView, mbCreateWebViewBindGTKWindow, void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height, "用于GTK绑定窗口") \
 ITERATOR1(void, mbDestroyWebView, mbWebView, "") \
 ITERATOR6(mbWebView, mbCreateWebWindow, mbWindowType type, HWND parent, int x, int y, int width, int height, "") \
 ITERATOR7(mbWebView, mbCreateWebCustomWindow, HWND parent, DWORD style, DWORD styleEx, int x, int y, int width, int height, "") \
