@@ -35,6 +35,8 @@ public:
     template<class From, class To>
     static inline Local<To> convert(From* obj);
 
+    static inline void resetPtr(v8::Local<v8::Value> oldObj, void* that);
+
     template<class To>
     static inline To* toHandle(uintptr_t p);
 
@@ -133,6 +135,9 @@ struct V8Head {
     void** m_isolatHandleScopeIndex; // 方便v8::HandleScope::CreateHandle
     void** m_isolatGlobalScopeIndex;
 
+    int m_countTest;
+    JSValue m_qjsValue;
+
     intptr_t m_objectGroupId;
     uint16_t m_wrapperClassId;
     uint8_t m_nodeFlag;
@@ -145,20 +150,17 @@ struct V8Head {
     void* m_weakCallbackParam;
 
     enum { 
-        kIsEternal = 1, 
+        kIsEternal = 1,
         kIsTemplateInFunction = 1 << 1, 
         kIsSetInternalField = 1 << 2, 
         kIsSetObjectField = 1 << 3,
+        kIsRootIndex = 1, // 默认的几个V8Value
     };
     uint8_t m_unGcType; // 有这几种类型的不gc了
-    uint8_t m_isWeak;
+    //uint8_t m_isWeak;
     uint8_t m_markGC;
     uint8_t m_isInMember; // 
-    uint8_t m_isWeaked; // 已经调用过weak回调后，不允许再进行其他操作了
-
-    int m_countTest;
-
-    JSValue m_qjsValue;
+    uint8_t m_hasCallWeakCallback; // 已经调用过weak回调后，不允许再进行其他操作了
 
     V8Head();
     ~V8Head();
@@ -174,6 +176,7 @@ struct V8Head {
 };
 
 class V8Context;
+class V8Value;
 
 class V8Isolate {
 public:
@@ -188,6 +191,8 @@ public:
     void runGC();
     void runMicrotasks();
     void gcHandleScopeHandles(bool isForce);
+
+    void onHeadDelete(V8Head* head);
 
     class AutoEnterExitContext {
     public:
@@ -224,6 +229,7 @@ public:
     JSValue getErrAndClear();
 
     void disposeGlobal(void* obj);
+    void disposeGlobalImpl(V8Head* head, bool fromRunGlobalWeakCallback);
 
     void addGCPrologueCallback(v8::Isolate::GCCallback callback, v8::GCType gc_type);
     void addGCEpilogueCallback(v8::Isolate::GCCallback callback, v8::GCType gc_type);
@@ -233,6 +239,7 @@ public:
     static const int kSlotSize = 64 * 10;
     void* m_apiPointer[kSlotSize]; // 这个必须放最前面，v8的机制如此
     void* m_eternals[kSlotSize]; // 这个好像是存放固定的v8::Value
+    v8::Persistent<v8::Value>* m_eternalsPersistents[kSlotSize];
 
     enum GcStep {
         kGcStepBeging,
@@ -258,9 +265,12 @@ public:
     }
 
 private:
-    void freedHeads(JSContext* ctx, std::vector<V8Head*>& needFreedHeads, bool isFirstCall);
+    void freedHeads(JSContext* ctx, bool isFirstCall);
     void runGlobalWeakCallback(V8Head* head);
     void runV8GcCallback(bool isPrologue);
+
+    int getGlobalizeCountHandlesIndex(V8Head* head);
+    V8Value* getEternalByIndex(int i);
 
     friend class v8::Isolate;
     friend struct V8Head;
@@ -269,6 +279,8 @@ private:
     std::vector<void*> m_globalizeHandles;
     std::vector<int32_t> m_globalizeCountHandles; // 上面那个数组的引用计数
     int m_globalHandleIndex;
+
+    bool m_isExiting;
 
     std::vector<void*> m_handleScopeHandles;
     int m_handleScopeHandleIndex;
@@ -289,7 +301,9 @@ private:
     v8::Isolate::CreateParams m_v8CreateParams;
 
     miniv8::V8Context* m_emptyContext; // 有时候操作系统js api的时候没有ctx，只能用这个ctx了
+    v8::Persistent<v8::Context> m_emptyContextPersistents;
 
+    std::vector<V8Head*> m_needFreedHeads;
     V8Head* m_gcObjects; // 所有分配的v8对象都在这个链表里
 
     friend void V8Head::onTrace(void* tracer, V8Head* self);
@@ -420,6 +434,7 @@ public:
         m_ctx = ctx;
         m_head.m_qjsValue = value;
         m_nodeClassId = 0;
+
         if (ctx && ctx->ctx())
             JS_DupValue(ctx->ctx(), value); // TODO:free
 
@@ -664,7 +679,7 @@ public:
 
 class V8String : public V8Name {
 public:
-    V8String(V8Context* ctx, JSValue value);
+    V8String();
     V8String(const std::string& str);
     V8String(v8::String::ExternalOneByteStringResource* resource);
     V8String(v8::String::ExternalStringResource* resource);
@@ -679,16 +694,22 @@ public:
     //void ensureQjsVal(V8Context* ctx, bool useEmptyCtx);
 
 protected:
+    friend class v8::String;
+    friend V8Value* V8Value::create(V8Context* context, JSValue value);
+
     void init();
 
     void bindJsValue();
 
     static void onV8HeadRefOrDerefOfV8String(V8Head* head, bool reference);
     static void onJsUserDataWeakFuncOfV8String(JSValue obj, void* userdata, JS_USER_DATA_WEAK_STEP step);
-
-    friend class v8::String;
+   
     std::string* m_str;
     size_t m_strCount;
+
+private:
+    V8String(V8Context* ctx, JSValue value);
+    
     int m_isContainsOnlyOneByte; // 1:true,0:false,-1:uninit
 
     v8::String::ExternalStringResource* m_twoByteExternalString;
@@ -697,7 +718,12 @@ protected:
 
 class V8Private : public V8String { // 暂时设定为string的子类
 public:
-    V8Private(V8Context* ctx, JSValue value) : V8String(ctx, value)
+//     V8Private(V8Context* ctx, JSValue value) : V8String(ctx, value)
+//     {
+//         m_head.m_type = kOTPrivate;
+//     }
+
+    V8Private() : V8String()
     {
         m_head.m_type = kOTPrivate;
     }
@@ -782,6 +808,11 @@ public:
     {
         // TODO: m_signature
         printDebug("~~V8Function: %p\n", this);
+        if (m_head.m_countTest == 1131)
+            OutputDebugStringA("");
+
+        m_data.Reset();
+        m_signature.Reset();
     }
 
     // 为了延迟初始化
@@ -844,13 +875,7 @@ private:
 class V8Template : public V8Data {
 public:
     V8Template();
-    ~V8Template()
-    {
-        if (m_funInst) {
-            DebugBreak();
-            delete m_funInst;
-        }
-    }
+    ~V8Template();
 
     struct Accessor {
         std::string name;
@@ -882,23 +907,47 @@ public:
 
     void Set(v8::Local<v8::Name> name, v8::Local<v8::Data> value, v8::PropertyAttribute attr);
 
-    V8Template* getParentTemplate() const { return m_parentTemplate; }
+    V8Template* getParentTemplate() const
+    {
+//         v8::Isolate* isolate = v8::Isolate::GetCurrent();
+//         v8::Local<v8::Template> templ = m_parentTemplate.Get(isolate);
+//         miniv8::V8Template* objTempl = v8::Utils::openHandle<v8::Template, miniv8::V8Template>(*templ);
+//         return objTempl;
+        return m_parentTemplate;
+    }
+
+    V8ObjectTemplate* getInstanceTemplate() const
+    {
+//         v8::Isolate* isolate = v8::Isolate::GetCurrent();
+//         v8::Local<v8::ObjectTemplate> templ = m_instanceTemplate.Get(isolate);
+//         miniv8::V8ObjectTemplate* objTempl = v8::Utils::openHandle<v8::ObjectTemplate, miniv8::V8ObjectTemplate>(*templ);
+//         return objTempl;
+        return m_instanceTemplate;
+    }
+
+    V8ObjectTemplate* getPrototypeTemplate() const
+    {
+//         v8::Isolate* isolate = v8::Isolate::GetCurrent();
+//         v8::Local<v8::ObjectTemplate> templ = m_prototypeTemplate.Get(isolate);
+//         miniv8::V8ObjectTemplate* objTempl = v8::Utils::openHandle<v8::ObjectTemplate, miniv8::V8ObjectTemplate>(*templ);
+// 
+//         return objTempl;
+        return m_prototypeTemplate;
+    }
 protected:
     friend class v8::ObjectTemplate;
     friend class v8::FunctionTemplate;
     friend class v8::Template;
     friend class v8::Function;
 
-    static void onV8HeadRefOrDerefOfV8Template(V8Head* head, bool ref)
-    {
-        V8Template* self = (V8Template*)head;
-        if (!ref)
-            delete self;
-    }
-
+    static void onV8HeadRefOrDerefOfV8Template(V8Head* head, bool ref);
     static void onV8HeadTraceOfV8Template(void* tracer, V8Head* ptr);
+    static void onJsUserDataWeakFuncOfV8Template(JSValue obj, void* userdata, JS_USER_DATA_WEAK_STEP step);
 
     int m_internalFieldCount;
+//     v8::Persistent<v8::Template> m_parentTemplate;
+//     v8::Persistent<v8::ObjectTemplate> m_instanceTemplate;
+//     v8::Persistent<v8::ObjectTemplate> m_prototypeTemplate;
     V8Template* m_parentTemplate;
     V8ObjectTemplate* m_instanceTemplate;
     V8ObjectTemplate* m_prototypeTemplate;
@@ -936,8 +985,8 @@ public:
     {
         m_head.m_type = kOTFunctionTemplate;
         m_userdata = nullptr;
-        m_instanceTemplate = nullptr;
-        m_prototypeTemplate = nullptr;
+//         m_instanceTemplate = nullptr;
+//         m_prototypeTemplate = nullptr;
         m_argLength = 0;
     }
 
@@ -1303,10 +1352,31 @@ void* Utils::maskPtr(void* obj)
     return (void*)((uintptr_t)obj | v8::internal::kSmiTagMask);
 }
 
+inline void Utils::resetPtr(v8::Local<v8::Value> oldObj, void* thatPtr)
+{
+    miniv8::V8Head* that = (miniv8::V8Head*)thatPtr;
+    void* ptr = (void*)(*oldObj);
+    miniv8::V8Head* head = openHandle<v8::Value, miniv8::V8Head>((const v8::Value*)ptr);
+    miniv8ReleaseAssert(
+        !that->m_isolatGlobalScopeIndex &&
+        (head->m_isolatGlobalScopeIndex) &&
+        (head->m_type > miniv8::V8ObjectType::kOTMin && head->m_type < miniv8::V8ObjectType::kOTMax),
+        "Utils::resetPtr fail\n");
+
+    int refCount1 = JS_GetRefCount(NULL, head->m_qjsValue);
+    int refCount2 = JS_GetRefCount(NULL, that->m_qjsValue);
+
+    void** indexPtr = (void**)head->m_isolatGlobalScopeIndex;
+    miniv8::V8Isolate* isolate = miniv8::V8Isolate::GetCurrent();
+    isolate->disposeGlobal(ptr);
+
+    that->m_isolatGlobalScopeIndex = indexPtr;
+    *indexPtr = maskPtr(that);
+}
+
 template<class From, class To>
 static inline v8::Local<To> Utils::convert(From* obj)
 {
-    //return Local<To>(reinterpret_cast<To*>(obj));
     if (!obj)
         return Local<To>(nullptr);
 
@@ -1330,7 +1400,6 @@ static inline v8::Local<To> Utils::convert(From* obj)
         ret = (void**)head->m_isolatHandleScopeIndex;
     }
 
-    //void** ret = isolate->findHandleScopeEmptyIndex();
     *ret = maskPtr(obj);
     
     return Local<To>(reinterpret_cast<To*>(ret));

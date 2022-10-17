@@ -496,7 +496,7 @@ struct JSContext {
     int interrupt_counter;
     BOOL is_error_property_enabled;
 
-    JSValue typed_arrays_constructor[JS_TYPED_ARRAY_COUNT];
+    JSValue typed_arrays_constructor[JS_TYPED_ARRAY_COUNT]; // weolar: 缓存
 
     struct list_head loaded_modules; /* list of JSModuleDef.link */
 
@@ -1321,8 +1321,7 @@ static BOOL js_get_fast_array(JSContext *ctx, JSValueConst obj,
 static JSValue JS_CreateAsyncFromSyncIterator(JSContext *ctx,
                                               JSValueConst sync_iter);
 static void js_c_function_data_finalizer(JSRuntime *rt, JSValue val);
-static void js_c_function_data_mark(JSRuntime *rt, JSValueConst val,
-                                    JS_MarkFunc *mark_func , void* userdata);
+static void js_c_function_data_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func , void* userdata);
 static JSValue js_c_function_data_call(JSContext *ctx, JSValueConst func_obj,
                                        JSValueConst this_val,
                                        int argc, JSValueConst *argv, int flags);
@@ -1744,8 +1743,7 @@ JSRuntime *JS_NewRuntime2(const JSMallocFunctions *mf, void *opaque)
         goto fail;
 
     /* create the object, array and function classes */
-    if (init_class_range(rt, js_std_class_def, JS_CLASS_OBJECT,
-                         countof(js_std_class_def)) < 0)
+    if (init_class_range(rt, js_std_class_def, JS_CLASS_OBJECT, countof(js_std_class_def)) < 0)
         goto fail;
     rt->class_array[JS_CLASS_ARGUMENTS].exotic = &js_arguments_exotic_methods;
     rt->class_array[JS_CLASS_STRING].exotic = &js_string_exotic_methods;
@@ -1985,6 +1983,10 @@ static inline JSAtomStruct *atom_set_free(uint32_t v)
     return (JSAtomStruct *)(((uintptr_t)v << 1) | 1);
 }
 
+extern JSObject* g_testObj;
+JSString* g_testStr = NULL;
+JSContext* g_testCtx = NULL;
+
 /* Note: the string contents are uninitialized */
 static JSString *js_alloc_string_rt(JSRuntime *rt, int max_len, int is_wide_char)
 {
@@ -2001,9 +2003,12 @@ static JSString *js_alloc_string_rt(JSRuntime *rt, int max_len, int is_wide_char
 #ifdef DUMP_LEAKS
     list_add_tail(&str->link, &rt->string_list);
 #endif
-//     str->external_str = NULL;
-//     str->userdata = NULL;
-//     str->detach = NULL;
+//     static int s_count = 0;
+//     qjsPrint("js_alloc_string_rt: %p, %d\n", str, s_count);
+//     if (s_count == 3211)
+//         g_testStr = str;
+//     s_count++;
+
     str->userptr = NULL;
 
     str->u.str8 = (uint8_t*)(str + 1);
@@ -2050,6 +2055,8 @@ void JS_SetRuntimeInfo(JSRuntime *rt, const char *s)
         rt->rt_info = s;
 }
 
+extern JSObject* g_testObj3180;
+
 void JS_FreeRuntime(JSRuntime *rt)
 {
     struct list_head *el, *el1;
@@ -2067,7 +2074,7 @@ void JS_FreeRuntime(JSRuntime *rt)
 
     JS_RunGC(rt);
 
-#ifdef DUMP_LEAKS
+#if 1 //def DUMP_LEAKS
     /* leaking objects */
     {
         BOOL header_done;
@@ -2085,6 +2092,9 @@ void JS_FreeRuntime(JSRuntime *rt)
         header_done = FALSE;
         list_for_each(el, &rt->gc_obj_list) {
             p = list_entry(el, JSGCObjectHeader, link);
+            if (p == g_testObj3180)
+                OutputDebugStringA("");
+
             if (p->ref_count != 0) {
                 if (!header_done) {
                     qjsPrint("Object leaks:\n");
@@ -2106,7 +2116,7 @@ void JS_FreeRuntime(JSRuntime *rt)
             qjsPrint("Secondary object leaks: %d\n", count);
     }
 #endif
-    assert(list_empty(&rt->gc_obj_list));
+    qjsReleaseAssert(list_empty(&rt->gc_obj_list));
 
     /* free the classes */
     for(i = 0; i < rt->class_count; i++) {
@@ -2249,6 +2259,10 @@ JSContext *JS_NewContextRaw(JSRuntime *rt)
     ctx->header.ref_count = 1;
     add_gc_object(rt, &ctx->header, JS_GC_OBJ_TYPE_JS_CONTEXT);
 
+    qjsPrint("JS_NewContextRawL %p\n", &ctx->header);
+    if (!g_testCtx)
+        g_testCtx = ctx;
+
     ctx->class_proto = js_malloc_rt(rt, sizeof(ctx->class_proto[0]) *
                                     rt->class_count);
     if (!ctx->class_proto) {
@@ -2351,12 +2365,6 @@ static void js_free_modules(JSContext *ctx, JSFreeModuleEnum flag)
     }
 }
 
-JSContext *JS_DupContext(JSContext *ctx)
-{
-    ctx->header.ref_count++;
-    return ctx;
-}
-
 /* used by the GC */
 static void JS_MarkContext(JSRuntime *rt, JSContext *ctx,
                            JS_MarkFunc *mark_func, void* userdata)
@@ -2375,14 +2383,14 @@ static void JS_MarkContext(JSRuntime *rt, JSContext *ctx,
     JS_MarkValue(rt, ctx->global_var_obj, mark_func, userdata);
 
     JS_MarkValue(rt, ctx->throw_type_error, mark_func, userdata);
-    JS_MarkValue(rt, ctx->eval_obj, mark_func);
+    JS_MarkValue(rt, ctx->eval_obj, mark_func, userdata);
 
     JS_MarkValue(rt, ctx->array_proto_values, mark_func, userdata);
     for(i = 0; i < JS_NATIVE_ERROR_COUNT; i++) {
-        JS_MarkValue(rt, ctx->native_error_proto[i], mark_func, userdata, userdata);
+        JS_MarkValue(rt, ctx->native_error_proto[i], mark_func, userdata);
     }
     for(i = 0; i < rt->class_count; i++) {
-        JS_MarkValue(rt, ctx->class_proto[i], mark_func);
+        JS_MarkValue(rt, ctx->class_proto[i], mark_func, userdata);
     }
     JS_MarkValue(rt, ctx->iterator_proto, mark_func, userdata);
     JS_MarkValue(rt, ctx->async_iterator_proto, mark_func, userdata);
@@ -2392,19 +2400,29 @@ static void JS_MarkContext(JSRuntime *rt, JSContext *ctx,
     JS_MarkValue(rt, ctx->function_ctor, mark_func, userdata);
     JS_MarkValue(rt, ctx->function_proto, mark_func, userdata);
 
+    for (i = 0; i < JS_TYPED_ARRAY_COUNT; i++) {
+        JS_MarkValue(rt, ctx->typed_arrays_constructor[i], mark_func, userdata);
+    }
+
     if (ctx->array_shape)
         mark_func(rt, &ctx->array_shape->header, userdata);
 }
 
+JSContext* JS_DupContext(JSContext* ctx)
+{
+    ctx->header.ref_count++;
+    return ctx;
+}
+
 void JS_FreeContext(JSContext *ctx)
 {
-    JSRuntime *rt = ctx->rt;
+    JSRuntime* rt = ctx->rt;
     int i;
 
     if (--ctx->header.ref_count > 0)
         return;
     assert(ctx->header.ref_count == 0);
-    
+
 #ifdef DUMP_ATOMS
     JS_DumpAtoms(ctx->rt);
 #endif
@@ -2413,11 +2431,12 @@ void JS_FreeContext(JSContext *ctx)
 #endif
 #ifdef DUMP_OBJECTS
     {
-        struct list_head *el;
-        JSGCObjectHeader *p;
+        struct list_head* el;
+        JSGCObjectHeader* p;
         qjsPrint("JSObjects: {\n");
         JS_DumpObjectHeader(ctx->rt);
-        list_for_each(el, &rt->gc_obj_list) {
+        list_for_each(el, &rt->gc_obj_list)
+        {
             p = list_entry(el, JSGCObjectHeader, link);
             JS_DumpGCObject(rt, p);
         }
@@ -2441,10 +2460,10 @@ void JS_FreeContext(JSContext *ctx)
     JS_FreeValue(ctx, ctx->eval_obj);
 
     JS_FreeValue(ctx, ctx->array_proto_values);
-    for(i = 0; i < JS_NATIVE_ERROR_COUNT; i++) {
+    for (i = 0; i < JS_NATIVE_ERROR_COUNT; i++) {
         JS_FreeValue(ctx, ctx->native_error_proto[i]);
     }
-    for(i = 0; i < rt->class_count; i++) {
+    for (i = 0; i < rt->class_count; i++) {
         JS_FreeValue(ctx, ctx->class_proto[i]);
     }
     js_free_rt(rt, ctx->class_proto);
@@ -3015,6 +3034,13 @@ static void JS_FreeAtomStruct(JSRuntime *rt, JSAtomStruct *p)
     }
 #endif
     uint32_t i = p->hash_next;  /* atom_index */
+
+    if (p->userptr && p->userptr->weak_func) {
+        if (p->userptr->weak_func == 0xDDDDDDDD)
+            OutputDebugStringA("");
+        p->userptr->weak_func(JS_MKPTR(JS_TAG_STRING, p), p->userptr->userdata, JS_USER_DATA_WEAK_FREE);
+    }
+
     if (p->atom_type != JS_ATOM_TYPE_SYMBOL) {
         JSAtomStruct *p0, *p1;
         uint32_t h0;
@@ -4012,6 +4038,7 @@ JSValue JS_ExternalString(JSContext* ctx, const char* utf8data, const uint16_t* 
     if (unlikely(!str))
         return JS_EXCEPTION;
 
+    qjsPrint("JS_ExternalString: %p\n", str);
     str->header.ref_count = 1;
     str->is_wide_char = !!utf16data;
     str->len = len;
@@ -4031,32 +4058,6 @@ JSValue JS_ExternalString(JSContext* ctx, const char* utf8data, const uint16_t* 
         str->u.str8 = utf8data;
     return JS_MKPTR(JS_TAG_STRING, str);
 }
-
-// JSValue JS_NewExternalOneString(JSContext* ctx, const char* data, size_t len)
-// {
-//     if (len <= 0)
-//         return JS_AtomToString(ctx->rt, JS_ATOM_empty_string);
-// 
-//     JSString* str = js_malloc_rt(ctx->rt, sizeof(JSString));
-//     if (unlikely(!str))
-//         return JS_EXCEPTION;
-// 
-//     str->header.ref_count = 1;
-//     str->is_wide_char = FALSE;
-//     str->len = len;
-//     str->atom_type = 0;
-//     str->hash = 0;          /* optional but costless */
-//     str->hash_next = 0;     /* optional */
-// #ifdef DUMP_LEAKS
-//     list_add_tail(&str->link, &ctx->rt->string_list);
-// #endif
-//     str->userptr = js_malloc_rt(ctx->rt, sizeof(JSStringUserdata));
-//     str->userptr->free_func = NULL;
-//     str->userptr->userdata = NULL;
-//     str->userptr->is_external = TRUE;
-//     str->u.str8 = data;
-//     return JS_MKPTR(JS_TAG_STRING, str);
-// }
 
 /* create a string from a UTF-8 buffer */
 JSValue JS_NewStringLen(JSContext *ctx, const char *buf, size_t buf_len)
@@ -4521,7 +4522,15 @@ static inline size_t get_shape_size(size_t hash_size, size_t prop_size)
 
 static inline JSShape *get_shape_from_alloc(void *sh_alloc, size_t hash_size)
 {
-    return (JSShape *)(void *)((uint32_t *)sh_alloc + hash_size);
+    JSShape* ret =(JSShape *)(void *)((uint32_t *)sh_alloc + hash_size);
+
+    static int s_count = 0;
+    if (701 == s_count)
+        OutputDebugStringA("");
+    qjsPrint("get_shape_from_alloc: %p, %d\n", ret, s_count);
+    s_count++;
+
+    return ret;
 }
 
 static inline uint32_t *prop_hash_end(JSShape *sh)
@@ -4554,7 +4563,8 @@ static int init_shape_hash(JSRuntime *rt)
 /* same magic hash multiplier as the Linux kernel */
 static uint32_t shape_hash(uint32_t h, uint32_t val)
 {
-    return (h + val) * 0x9e370001;
+    uint32_t ret = (h + val) * 0x9e370001;
+    return ret;
 }
 
 /* truncate the shape hash to 'hash_bits' bits */
@@ -4639,6 +4649,7 @@ static no_inline JSShape *js_new_shape2(JSContext *ctx, JSObject *proto,
     sh = get_shape_from_alloc(sh_alloc, hash_size);
     sh->header.ref_count = 1;
     add_gc_object(rt, &sh->header, JS_GC_OBJ_TYPE_SHAPE);
+
     if (proto)
         JS_DupValue(ctx, JS_MKPTR(JS_TAG_OBJECT, proto));
     sh->proto = proto;
@@ -5010,6 +5021,15 @@ static __maybe_unused void JS_DumpShapes(JSRuntime *rt)
 
 static int s_count = 0;
 JSObject* g_testObj = NULL;
+JSObject* g_testObj154 = NULL;
+JSObject* g_testObj1050 = NULL;
+JSObject* g_testObj17 = NULL;
+JSObject* g_testObj2417 = NULL;
+JSObject* g_testObj3179 = NULL;
+JSObject* g_testObj3180 = NULL;
+JSObject* g_testObjGlobalProto = NULL;
+JSObject* g_testObjGlobal = NULL;
+JSObject* g_testObjDoc = NULL;
 
 static JSValue JS_NewObjectFromShape(JSContext *ctx, JSShape *sh, JSClassID class_id)
 {
@@ -5042,32 +5062,60 @@ static JSValue JS_NewObjectFromShape(JSContext *ctx, JSShape *sh, JSClassID clas
     p->trace_count = 0;
     memset(p->hahaha, 0, 4000);
 
-//     if (2812 == p->testCount) {
-//         p->test = 1;
-//         g_testObj = p;
-//     }
+    if (154 == p->testCount) // Global 
+        g_testObjGlobal = p;
 
-    if (2812 == p->testCount) {
-        p->test = 1;
+    if (278 == p->testCount) // globalProto 
+        g_testObjGlobalProto = p;
+
+    if (2812 == p->testCount) // document
+        g_testObjDoc = p;
+
+    if (289 == p->testCount) // 模版对象没被析构
         g_testObj = p;
-    }
 
-//     if (139 == p->testCount)
-//         p->test = 1;
+    if (17 == p->testCount) // 
+        g_testObj17 = p;
+
+//     if (1052 == p->testCount) // 模版对象没被析构
+//         g_testObj = p;
+
+    if (1050 == p->testCount) // 
+        g_testObj1050 = p;
+
+    if (154 == p->testCount) // 
+        g_testObj154 = p;
+
+    if (2417 == p->testCount) // 
+        g_testObj2417 = p;
+
+    if (3179 == p->testCount) // 
+        g_testObj3179 = p;
+
+    if (3180 == p->testCount) // 
+        g_testObj3180 = p;
+    
+//     if (2417 == p->testCount) // 
+//         g_testObj = p;
 // 
-//     if (833 == p->testCount)
-//         p->test = 1;
-//     
-//     if (2850 == p->testCount)
-//         p->test = 1;
-// 
-//     if (2997 == p->testCount)
-//         p->test = 1;
-// 
-//     if (3893 == p->testCount)
-//         p->test = 1;
-//    
-    qjsPrint("JS_NewObjectFromShape: %p, %d\n", p, p->testCount);
+//     if (715 == p->testCount) // 字符串
+//         p = p;
+//     if (876 == p->testCount) // 715在876的V8Template::newTemplateInstance上
+//         p = p;
+//     if (1053 == p->testCount) // 1053在876的FunctionCallbackArguments::onConstructorCallback上
+//         p = p;
+
+//     if (1049 == p->testCount) // ext
+//         p = p;
+//     if (1050 == p->testCount) // 1049的ext所属的func
+//         g_testObj = p;
+
+
+    if (3183 == p->testCount)
+        p = p;
+
+    JSValue ret_v = JS_MKPTR(JS_TAG_OBJECT, p);
+    qjsPrint("JS_NewObjectFromShape: %p, %d, %I64u\n", p, p->testCount, ret_v);
 
     p->prop = js_malloc(ctx, sizeof(JSProperty) * sh->prop_size);
     if (unlikely(!p->prop)) {
@@ -5407,15 +5455,14 @@ static void js_c_function_data_finalizer(JSRuntime *rt, JSValue val)
     }
 }
 
-static void js_c_function_data_mark(JSRuntime *rt, JSValueConst val,
-                                    JS_MarkFunc *mark_func)
+static void js_c_function_data_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata)
 {
     JSCFunctionDataRecord *s = JS_GetOpaque(val, JS_CLASS_C_FUNCTION_DATA);
     int i;
 
     if (s) {
         for(i = 0; i < s->data_len; i++) {
-            JS_MarkValue(rt, s->data[i], mark_func);
+            JS_MarkValue(rt, s->data[i], mark_func, userdata);
         }
     }
 }
@@ -5587,13 +5634,13 @@ static void js_array_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_array_mark(JSRuntime *rt, JSValueConst val,
-                          JS_MarkFunc *mark_func)
+                          JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     int i;
 
     for(i = 0; i < p->u.array.count; i++) {
-        JS_MarkValue(rt, p->u.array.u.values[i], mark_func);
+        JS_MarkValue(rt, p->u.array.u.values[i], mark_func, userdata);
     }
 }
 
@@ -5604,11 +5651,10 @@ static void js_object_data_finalizer(JSRuntime *rt, JSValue val)
     p->u.object_data = JS_UNDEFINED;
 }
 
-static void js_object_data_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func)
+static void js_object_data_mark(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
-    JS_MarkValue(rt, p->u.object_data, mark_func);
+    JS_MarkValue(rt, p->u.object_data, mark_func, userdata);
 }
 
 static void js_c_function_finalizer(JSRuntime *rt, JSValue val)
@@ -5659,8 +5705,7 @@ static void js_bytecode_function_mark(JSRuntime *rt, JSValueConst val,
     int i;
 
     if (p->u.func.home_object) {
-        JS_MarkValue(rt, JS_MKPTR(JS_TAG_OBJECT, p->u.func.home_object),
-                     mark_func);
+        JS_MarkValue(rt, JS_MKPTR(JS_TAG_OBJECT, p->u.func.home_object), mark_func, userdata);
     }
     if (b) {
         if (var_refs) {
@@ -5692,16 +5737,16 @@ static void js_bound_function_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_bound_function_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func)
+                                JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSBoundFunction *bf = p->u.bound_function;
     int i;
 
-    JS_MarkValue(rt, bf->func_obj, mark_func);
-    JS_MarkValue(rt, bf->this_val, mark_func);
+    JS_MarkValue(rt, bf->func_obj, mark_func, userdata);
+    JS_MarkValue(rt, bf->this_val, mark_func, userdata);
     for(i = 0; i < bf->argc; i++)
-        JS_MarkValue(rt, bf->argv[i], mark_func);
+        JS_MarkValue(rt, bf->argv[i], mark_func, userdata);
 }
 
 static void js_for_in_iterator_finalizer(JSRuntime *rt, JSValue val)
@@ -5713,11 +5758,11 @@ static void js_for_in_iterator_finalizer(JSRuntime *rt, JSValue val)
 }
 
 static void js_for_in_iterator_mark(JSRuntime *rt, JSValueConst val,
-                                JS_MarkFunc *mark_func)
+                                JS_MarkFunc *mark_func, void* userdata)
 {
     JSObject *p = JS_VALUE_GET_OBJ(val);
     JSForInIterator *it = p->u.for_in_iterator;
-    JS_MarkValue(rt, it->obj, mark_func);
+    JS_MarkValue(rt, it->obj, mark_func, userdata);
 }
 
 static void free_object(JSRuntime *rt, JSObject *p)
@@ -5821,19 +5866,29 @@ void __JS_FreeValueRT(JSRuntime *rt, JSValue v)
     switch(tag) {
     case JS_TAG_STRING:
         {
+            static int s_JS_TAG_STRING = 0;
             JSString *p = JS_VALUE_GET_STRING(v);
+            qjsPrint("__JS_FreeValueRT, JS_TAG_STRING: %p, %d, %p\n", p, s_JS_TAG_STRING, p->userptr);
+            if (308 == s_JS_TAG_STRING)
+                OutputDebugStringA("");
+            s_JS_TAG_STRING++;
+            if (g_testStr == p)
+                qjsPrint("");
+
+            if (p->userptr) {
+                p->userptr->weak_func(v, p->userptr->userdata, JS_USER_DATA_WEAK_FREE);
+                js_free_rt(rt, p->userptr);
+                p->userptr = NULL;
+            } else {
+                qjsReleaseAssert(p->is_wide_char || p->u.str8[p->len] == 0);
+            }
+
             if (p->atom_type) {
                 JS_FreeAtomStruct(rt, p);
             } else {
 #ifdef DUMP_LEAKS
                 list_del(&p->link);
 #endif
-                if (p->userptr) {
-                    p->userptr->weak_func(v, p->userptr->userdata, JS_USER_DATA_WEAK_FREE);
-                    js_free_rt(rt, p->userptr);
-                } else {
-                    qjsReleaseAssert(p->is_wide_char || p->u.str8[p->len] == 0);
-                }
                 js_free_rt(rt, p);
             }
         }
@@ -5843,6 +5898,10 @@ void __JS_FreeValueRT(JSRuntime *rt, JSValue v)
         {
             if (JS_IsObject(v)) {
                 JSObject* obj = JS_VALUE_GET_PTR(v);
+
+                if ((JSObject*)0xCCCCCCCC == obj || (void*)0xDDDDDDDD == (obj->weak_func))
+                    qjsPrint("break!!!!!!!\n");
+
                 if (obj->weak_func)
                     obj->weak_func(v, obj->userdata, JS_USER_DATA_WEAK_FREE);
             }
@@ -5893,14 +5952,22 @@ void __JS_FreeValue(JSContext *ctx, JSValue v)
     __JS_FreeValueRT(ctx->rt, v);
 }
 
+BOOL g_isFromContextGlobal = FALSE;
+
 void JS_FreeValue(JSContext* ctx, JSValue v)
 {
     uint32_t tag = JS_VALUE_GET_TAG(v);
     if (JS_VALUE_HAS_REF_COUNT(v)) {
         JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
 
-        if (g_testObj == p)
-            qjsPrint("JS_DupValue!\n");
+        if (g_testObj3179 == p)
+            qjsPrint("JS_FreeValue: %p, %d\n", p, p->ref_count - 1);
+
+        if (g_testObj3180 == p)
+            qjsPrint("JS_FreeValue: %p, %d\n", p, p->ref_count - 1);
+        
+        if (!g_isFromContextGlobal && g_testObj154 == p)
+            qjsPrint("JS_FreeValue: %p, %d\n", p, p->ref_count - 1);
 
         if (--p->ref_count <= 0) {
             __JS_FreeValue(ctx, v);
@@ -5908,13 +5975,37 @@ void JS_FreeValue(JSContext* ctx, JSValue v)
     }
 }
 
+JSValue JS_DupValueRT(JSRuntime* rt, JSValueConst v)
+{
+    if (JS_VALUE_HAS_REF_COUNT(v)) {
+        JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
+        p->ref_count++;
+
+        if (g_testObj3179 == p)
+            qjsPrint("JS_DupValue: %p, %d\n", p, p->ref_count);
+
+        if (g_testObj3180 == p)
+            qjsPrint("JS_FreeValue: %p, %d\n", p, p->ref_count - 1);
+
+        if (!g_isFromContextGlobal && g_testObj154 == p)
+            qjsPrint("JS_FreeValue: %p, %d\n", p, p->ref_count);
+    }
+    return /*(JSValue)*/v;
+}
+
 void JS_FreeValueRT(JSRuntime* rt, JSValue v)
 {
     if (JS_VALUE_HAS_REF_COUNT(v)) {
         JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
 
-        if (g_testObj == p)
-            qjsPrint("JS_DupValue!\n");
+        if (g_testObj3179 == p)
+            qjsPrint("JS_FreeValueRT: %p, %d\n", p, p->ref_count - 1);
+
+        if (g_testObj3180 == p)
+            qjsPrint("JS_FreeValue: %p, %d\n", p, p->ref_count - 1);
+
+        if (!g_isFromContextGlobal && g_testObj154 == p)
+            qjsPrint("JS_FreeValue: %p, %d\n", p, p->ref_count - 1);
 
         if (--p->ref_count <= 0) {
             __JS_FreeValueRT(rt, v);
@@ -5924,26 +6015,12 @@ void JS_FreeValueRT(JSRuntime* rt, JSValue v)
 
 JSValue JS_DupValue(JSContext* ctx, JSValueConst v)
 {
-    if (JS_VALUE_HAS_REF_COUNT(v)) {
-        JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
-        p->ref_count++;
-
-        if (g_testObj == p)
-            qjsPrint("JS_DupValue!\n");
-    }
-    return /*(JSValue)*/v;
-}
-
-JSValue JS_DupValueRT(JSRuntime* rt, JSValueConst v)
-{
-    if (JS_VALUE_HAS_REF_COUNT(v)) {
-        JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
-        p->ref_count++;
-
-        if (g_testObj == p)
-            qjsPrint("JS_DupValue!\n");
-    }
-    return /*(JSValue)*/v;
+    //     if (JS_VALUE_HAS_REF_COUNT(v)) {
+    //         JSRefCountHeader* p = (JSRefCountHeader*)JS_VALUE_GET_PTR(v);
+    //         p->ref_count++;
+    //     }
+    //     return /*(JSValue)*/v;
+    return JS_DupValueRT(NULL, v);
 }
 
 int JS_GetRefCount(JSContext* ctx, JSValue v)
@@ -5980,6 +6057,7 @@ JSValue JS_CloneValue(JSContext* ctx, JSValueConst v) // weolar
 //     JS_DupValue(ctx, proto_v); // TODO:?
 
     JS_SetPrototype(ctx, new_v, proto_v);
+    JS_FreeValue(ctx, proto_v);
 
     //JS_DupValue(ctx, new_v); // TODO:?
 
@@ -6072,22 +6150,6 @@ void JS_MarkUserdataObj(JSRuntime* rt, JSValueConst val, JS_MarkUserdataFunc* ma
         return;
     //mark_func(rt, val, userdata);
 
-//     JSValue JS_GetPrototypeFree(JSContext * ctx, JSValue obj);
-//     JSValue val;
-//     if (JS_VALUE_GET_TAG(obj) == JS_TAG_OBJECT) {
-//       JSObject* p;
-//       p = JS_VALUE_GET_OBJ(obj);
-//       if (unlikely(p->class_id == JS_CLASS_PROXY)) {
-//         val = js_proxy_getPrototypeOf(ctx, obj);
-//       } else {
-//         p = p->shape->proto;
-//         if (!p)
-//           val = JS_NULL;
-//         else
-//           val = JS_DupValue(ctx, JS_MKPTR(JS_TAG_OBJECT, p));
-//       }
-//     }
-
     switch(gp->gc_obj_type) {
     case JS_GC_OBJ_TYPE_JS_OBJECT:
     {
@@ -6175,8 +6237,8 @@ void JS_MarkUserdataObj(JSRuntime* rt, JSValueConst val, JS_MarkUserdataFunc* ma
     break;
     case JS_GC_OBJ_TYPE_JS_CONTEXT:
     {
-//         JSContext *ctx = (JSContext *)gp;
-//         JS_MarkContext(rt, ctx, mark_func, userdata);
+        JSContext *ctx = (JSContext *)gp;
+        JS_MarkContext(rt, ctx, mark_func, userdata);
     }
     break;
     default:
@@ -6195,6 +6257,7 @@ static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp, JS_MarkFunc *mark
             int i;
             sh = p->shape;
             mark_func(rt, &sh->header, userdata);
+
             /* mark all the fields */
             prs = get_shape_prop(sh);
             for(i = 0; i < sh->prop_count; i++) {
@@ -6280,7 +6343,16 @@ static void mark_children(JSRuntime *rt, JSGCObjectHeader *gp, JS_MarkFunc *mark
 
 static void gc_decref_child(JSRuntime *rt, JSGCObjectHeader *p)
 {
-    assert(p->ref_count > 0);
+    if (g_testObj == p)
+        qjsPrint("");
+
+    if (g_testObj1050 == p)
+        qjsPrint("");
+
+    if (g_testObjGlobalProto == p)
+        qjsPrint("");
+    
+    qjsReleaseAssert(p->ref_count > 0);
     p->ref_count--;
 
     if (p->ref_count == 0 && p->mark == 1) {
@@ -6289,6 +6361,7 @@ static void gc_decref_child(JSRuntime *rt, JSGCObjectHeader *p)
     }
 }
 
+// 先找到有外部引用的节点，放到gc_obj_list
 static void gc_decref(JSRuntime *rt)
 {
     struct list_head *el, *el1;
@@ -6328,6 +6401,7 @@ static void gc_scan_incref_child2(JSRuntime *rt, JSGCObjectHeader *p)
     p->ref_count++;
 }
 
+// 此时gc_obj_list只剩下有外部引用的，然后顺着gc_obj_list的把相关关联的子节点放回gc_obj_list
 static void gc_scan(JSRuntime *rt)
 {
     struct list_head *el;
@@ -6336,6 +6410,7 @@ static void gc_scan(JSRuntime *rt)
     /* keep the objects with a refcount > 0 and their children. */
     list_for_each(el, &rt->gc_obj_list) {
         p = list_entry(el, JSGCObjectHeader, link);
+
         assert(p->ref_count > 0);
         p->mark = 0; /* reset the mark for the next GC call */
         mark_children(rt, p, gc_scan_incref_child, NULL);
@@ -6924,6 +6999,12 @@ void JS_DumpMemoryUsage(FILE *fp, const JSMemoryUsage *s, JSRuntime *rt)
 JSValue JS_GetGlobalObject(JSContext *ctx)
 {
     return JS_DupValue(ctx, ctx->global_obj);
+}
+
+void JS_ClearGlobalObject(JSContext* ctx)
+{
+    JS_FreeValue(ctx, ctx->global_obj);
+    ctx->global_obj = JS_NULL;
 }
 
 /* WARNING: obj is freed */
@@ -8829,9 +8910,8 @@ static int call_setter(JSContext *ctx, JSObject *setter, JSValueConst this_obj, 
         TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
     }
 
-    if (TlsGetValue(s_tlsPatchForCreateDataProperty) == setter) {
-        TlsSetValue(s_tlsPatchForCreateDataProperty, NULL);
-        return -1;
+    if (setter && TlsGetValue(s_tlsPatchForCreateDataProperty) == setter) {
+        setter = NULL; // 模拟一个失败的分支路径
     }
     TlsSetValue(s_tlsPatchForCreateDataProperty, setter);
 
@@ -10408,6 +10488,14 @@ int JS_DeleteProperty(JSContext *ctx, JSValueConst obj, JSAtom prop, int flags)
     return FALSE;
 }
 
+int JS_DeletePropertyStr(JSContext* ctx, JSValueConst obj, const char* prop, int flags)
+{
+    JSAtom atom = JS_NewAtom(ctx, prop);
+    int ret = JS_DeleteProperty(ctx, obj, atom, flags);
+    JS_FreeAtom(ctx, atom);
+    return ret;
+}
+
 int JS_DeletePropertyInt64(JSContext *ctx, JSValueConst obj, int64_t idx, int flags)
 {
     JSAtom prop;
@@ -10544,6 +10632,7 @@ void JS_SetUserdata(JSContext *ctx, JSValue obj, JS_UserDataWeakFunc weak_func, 
             str->userptr = js_malloc_rt(ctx->rt, sizeof(JSStringUserdata));
         str->userptr->weak_func = weak_func;
         str->userptr->userdata = opaque;
+        str->userptr->is_external = FALSE;
         return;
     }
 
@@ -10577,6 +10666,14 @@ void* JS_GetUserdata(JSValueConst obj)
 {
     JSObject* p;
     uint32_t tag = JS_VALUE_GET_TAG(obj);
+
+    if (JS_VALUE_GET_TAG(obj) == JS_TAG_STRING) {
+        JSString* str = JS_VALUE_GET_STRING(obj);
+        if (!str->userptr)
+            return NULL;
+        return str->userptr->userdata;
+    }
+
     if (tag != JS_TAG_OBJECT)
         return NULL;
     p = JS_VALUE_GET_OBJ(obj);
@@ -10585,7 +10682,7 @@ void* JS_GetUserdata(JSValueConst obj)
     return NULL;
 }
 
-void JS_SetTestVal(JSValue obj, JSValue v)
+void JS_SetTestVal(JSValue obj, void* v)
 {
     JSObject* p;
     if (JS_VALUE_GET_TAG(obj) == JS_TAG_OBJECT) {
@@ -10593,7 +10690,7 @@ void JS_SetTestVal(JSValue obj, JSValue v)
         if (p) {
             if (!JS_VALUE_IS_EQ(p->testVal, JS_NULL))
                 DebugBreak();
-            p->testVal = v;
+            p->test = (int)v;
         }
     }
 }
@@ -10604,29 +10701,27 @@ void JS_SetTestValFromClone(JSValue obj, JSValue v)
     if (JS_VALUE_GET_TAG(obj) == JS_TAG_OBJECT) {
         p = JS_VALUE_GET_OBJ(obj);
         if (p) {
-            if (0)
-                g_testObj = p;
             p->testVal = v;
         }
     }
 }
 
-JSValue JS_GetTestVal(JSValueConst obj)
-{
-    JSObject* p;
-    uint32_t tag = JS_VALUE_GET_TAG(obj);
-    if (tag != JS_TAG_OBJECT)
-        return JS_NULL;
-    p = JS_VALUE_GET_OBJ(obj);
-//     if (p->class_id != JS_CLASS_C_FUNCTION && 
-//         p->class_id != JS_CLASS_BYTECODE_FUNCTION && 
-//         p->class_id != JS_CLASS_OBJECT &&
-//         p->class_id != JS_CLASS_BOUND_FUNCTION)
-//         return NULL;
-    if (p)
-        return p->testVal;
-    return JS_NULL;
-}
+// JSValue JS_GetTestVal(JSValueConst obj)
+// {
+//     JSObject* p;
+//     uint32_t tag = JS_VALUE_GET_TAG(obj);
+//     if (tag != JS_TAG_OBJECT)
+//         return JS_NULL;
+//     p = JS_VALUE_GET_OBJ(obj);
+// //     if (p->class_id != JS_CLASS_C_FUNCTION && 
+// //         p->class_id != JS_CLASS_BYTECODE_FUNCTION && 
+// //         p->class_id != JS_CLASS_OBJECT &&
+// //         p->class_id != JS_CLASS_BOUND_FUNCTION)
+// //         return NULL;
+//     if (p)
+//         return p->testVal;
+//     return JS_NULL;
+// }
 
 #define HINT_STRING  0
 #define HINT_NUMBER  1
@@ -37114,25 +37209,35 @@ int JS_SetModuleExportList(JSContext *ctx, JSModuleDef *m,
 }
 
 /* Note: 'func_obj' is not necessarily a constructor */
-static void JS_SetConstructor2(JSContext *ctx,
-                               JSValueConst func_obj,
-                               JSValueConst proto,
-                               int proto_flags, int ctor_flags)
+static void JS_SetConstructor2(JSContext *ctx, JSValueConst func_obj, JSValueConst proto, int proto_flags, int ctor_flags)
 {
-    JS_DefinePropertyValue(ctx, func_obj, JS_ATOM_prototype,
-                           JS_DupValue(ctx, proto), proto_flags);
-    JS_DefinePropertyValue(ctx, proto, JS_ATOM_constructor,
-                           JS_DupValue(ctx, func_obj),
-                           ctor_flags);
+    JS_DefinePropertyValue(ctx, func_obj, JS_ATOM_prototype, JS_DupValue(ctx, proto), proto_flags);
+    JS_DefinePropertyValue(ctx, proto, JS_ATOM_constructor, JS_DupValue(ctx, func_obj), ctor_flags);
     set_cycle_flag(ctx, func_obj);
     set_cycle_flag(ctx, proto);
 }
 
-void JS_SetConstructor(JSContext *ctx, JSValueConst func_obj, 
-                       JSValueConst proto)
+void JS_SetConstructor(JSContext *ctx, JSValueConst func_obj, JSValueConst proto)
 {
-    JS_SetConstructor2(ctx, func_obj, proto,
-                       0, JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE);
+    JS_SetConstructor2(ctx, func_obj, proto, 0, JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE);
+}
+
+void JS_DelConstructor(JSContext* ctx, JSValueConst func_obj)
+{
+    JSValueConst proto;
+    proto = JS_GetProperty(ctx, func_obj, JS_ATOM_prototype);
+    if (!JS_IsObject(proto))
+        return;
+    
+    JS_OrOpPropertyFlags(ctx, func_obj, JS_ATOM_prototype, JS_PROP_CONFIGURABLE);
+    JS_OrOpPropertyFlags(ctx, func_obj, JS_ATOM_prototype, JS_PROP_WRITABLE);
+    JS_DeleteProperty(ctx, func_obj, JS_ATOM_prototype, 0);
+
+    JS_OrOpPropertyFlags(ctx, proto, JS_ATOM_constructor, JS_PROP_CONFIGURABLE);
+    JS_OrOpPropertyFlags(ctx, proto, JS_ATOM_constructor, JS_PROP_WRITABLE);
+    JS_DeleteProperty(ctx, proto, JS_ATOM_constructor, 0);
+
+    JS_FreeValue(ctx, proto); // balance JS_GetProperty
 }
 
 static void JS_NewGlobalCConstructor2(JSContext *ctx,

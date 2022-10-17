@@ -374,7 +374,7 @@ void JS_FreeRuntime(JSRuntime *rt);
 void *JS_GetRuntimeOpaque(JSRuntime *rt);
 void JS_SetRuntimeOpaque(JSRuntime *rt, void *opaque);
 typedef void JS_MarkFunc(JSRuntime *rt, JSGCObjectHeader *gp, void* userdata);
-void JS_MarkValue(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func);
+void JS_MarkValue(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata);
 void JS_RunGC(JSRuntime *rt);
 JS_BOOL JS_IsLiveObject(JSRuntime *rt, JSValueConst obj);
 void JS_MarkTraceCountValue(JSRuntime *rt, JSValueConst val, int trace_count);
@@ -808,6 +808,7 @@ int JS_HasProperty(JSContext *ctx, JSValueConst this_obj, JSAtom prop);
 int JS_IsExtensible(JSContext *ctx, JSValueConst obj);
 int JS_PreventExtensions(JSContext *ctx, JSValueConst obj);
 int JS_DeleteProperty(JSContext *ctx, JSValueConst obj, JSAtom prop, int flags);
+int JS_DeletePropertyStr(JSContext *ctx, JSValueConst obj, const char *prop, int flags);
 int JS_SetPrototype(JSContext *ctx, JSValueConst obj, JSValueConst proto_val);
 JSValue JS_GetPrototype(JSContext *ctx, JSValueConst val);
 static inline JSValue JS_GetPrototypeFree(JSContext* ctx, JSValue obj)
@@ -843,6 +844,7 @@ JSValue JS_EvalThis(JSContext *ctx, JSValueConst this_obj,
                     const char *input, size_t input_len,
                     const char *filename, int eval_flags);
 JSValue JS_GetGlobalObject(JSContext *ctx);
+void JS_ClearGlobalObject(JSContext* ctx);
 int JS_IsInstanceOf(JSContext *ctx, JSValueConst val, JSValueConst obj);
 int JS_DefineProperty(JSContext *ctx, JSValueConst this_obj,
                       JSAtom prop, JSValueConst val,
@@ -864,7 +866,7 @@ typedef void (*JS_UserDataWeakFunc)(JSValue obj, void* userdata, JS_USER_DATA_WE
 void* JS_GetUserdata(JSValueConst obj); // weolar
 void JS_SetUserdata(JSContext *ctx, JSValue obj, JS_UserDataWeakFunc weak_fun, void* opaque);
 void JS_SetUserdataFromClone(JSValue obj, JS_UserDataWeakFunc weak_fun, void* opaque); // for test
-void JS_SetTestVal(JSValue obj, JSValue v);
+void JS_SetTestVal(JSValue obj, void* v);
 void JS_SetTestValFromClone(JSValue obj, JSValue v);
 JSValue JS_GetTestVal(JSValueConst obj);
 
@@ -929,7 +931,7 @@ typedef JSValue JSJobFunc(JSContext *ctx, int argc, JSValueConst *argv);
 int JS_EnqueueJob(JSContext *ctx, JSJobFunc *job_func, int argc, JSValueConst *argv);
 
 JS_BOOL JS_IsJobPending(JSRuntime *rt);
-typedef void JSRunJobPendingCb(JSContext *ctx, BOOL is_pre_call, void* cb_data);
+typedef void JSRunJobPendingCb(JSContext *ctx, JS_BOOL is_pre_call, void* cb_data);
 int JS_ExecutePendingJob(JSRuntime *rt, JSContext **pctx, JSRunJobPendingCb* cb, void* cb_data);
 
 /* Object Writer/Reader (currently only used to handle precompiled code) */
@@ -1021,6 +1023,7 @@ static inline JSValue JS_NewCFunctionMagic(JSContext *ctx, JSCFunctionMagic *fun
     return JS_NewCFunction2(ctx, (JSCFunction *)func, name, length, cproto, magic, NULL); // weolar
 }
 void JS_SetConstructor(JSContext *ctx, JSValueConst func_obj, JSValueConst proto);
+void JS_DelConstructor(JSContext* ctx, JSValueConst func_obj);
 
 /* C property definition */
 

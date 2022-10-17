@@ -137,12 +137,17 @@ V8Context::V8Context(const V8Context& other)
 V8Context::~V8Context()
 {
     printDebug("V8Context::~~V8Context: %p\n", this);
-}
 
-// void* V8Context::operator new(size_t size)
-// {
-//     return malloc(size);
-// }
+    if (m_ctx) {
+        JSValue global = JS_GetGlobalObject(m_ctx);
+        JS_SetPrototype(m_ctx, global, JS_NULL);
+        JS_FreeValue(m_ctx, global);
+
+        JS_ClearGlobalObject(m_ctx);
+
+        JS_FreeContext(m_ctx);
+    }
+}
 
 } // miniv8
 
@@ -272,7 +277,7 @@ void v8::V8::MakeWeak(v8::internal::Object** obj, void* param, v8::WeakCallbackI
     miniv8::V8Isolate* isolate = miniv8::V8Isolate::GetCurrent();
 
     miniv8::V8Head* head = (miniv8::V8Head*)v8::Utils::toHandle<miniv8::V8Data>(*(intptr_t*)obj);
-    head->m_isWeak = 1;
+    //head->m_isWeak = 1;
     head->m_weakCallback = (void*)callback;
     head->m_weakCallbackParam = param;
 
@@ -466,6 +471,8 @@ v8::internal::Object** v8::HandleScope::CreateHandle(v8::internal::Isolate* isol
     if (head->m_isolatGlobalScopeIndex) { // 如果有全局句柄表引用，则用全局的
         index = (void**)head->m_isolatGlobalScopeIndex;
         //iso->refGlobalizeHandleIndex((intptr_t)index);
+        if (1896 == head->m_countTest)
+            OutputDebugStringA("");
     } else if (head->m_isolatHandleScopeIndex) {
         index = (void**)head->m_isolatHandleScopeIndex;
     } else {
@@ -507,6 +514,8 @@ JSValue wrapGetter(JSContext* ctx, JSValueConst thisVal, void* userdata)
 {
     miniv8::V8Object* self = (miniv8::V8Object*)JS_GetUserdata(thisVal);
     intptr_t hashVal = (intptr_t)userdata;
+    miniv8::V8Context* contextOfSelf = self->v8Ctx();
+    miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
 
     std::map<intptr_t, miniv8::V8Object::AccessorData*>::iterator it = self->m_accessorMap.find(hashVal);
     if (it != self->m_accessorMap.end())
@@ -514,15 +523,13 @@ JSValue wrapGetter(JSContext* ctx, JSValueConst thisVal, void* userdata)
 
     miniv8::V8Object::AccessorData* accessor = it->second;
 
-    JSValue propQjs = JS_NewStringLen(ctx, accessor->name.c_str(), accessor->name.size());
-    miniv8::V8String prop(self->v8Ctx(), propQjs);
-    v8::Local<v8::String> propV8 = v8::Utils::convert<miniv8::V8String, v8::String>(&prop);
+    miniv8::V8String* prop = new miniv8::V8String(accessor->name);
+    v8::Local<v8::String> propV8 = v8::Utils::convert<miniv8::V8String, v8::String>(prop);
 
     JSRuntime* runtime = JS_GetRuntime(ctx);
     miniv8::V8Isolate* isolate = miniv8::V8Isolate::GetCurrent();
 
-    miniv8::V8Context* contextOfSelf = self->v8Ctx();
-    miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
+
     miniv8ReleaseAssert(contextOfSelf == context, "wrapGetter fail\n");
     miniv8::V8Object* thisValV8 = miniv8::V8Object::create(context, thisVal); // TODO: free
 
@@ -564,9 +571,8 @@ JSValue wrapSetter(JSContext* ctx, JSValueConst thisVal, JSValueConst val, void*
 
     miniv8::V8Object::AccessorData* accessor = it->second;
 
-    JSValue propQjs = JS_NewStringLen(ctx, accessor->name.c_str(), accessor->name.size());
-    miniv8::V8String prop(self->v8Ctx(), propQjs);
-    v8::Local<v8::String> propV8 = v8::Utils::convert<miniv8::V8String, v8::String>(&prop);
+    miniv8::V8String* prop = new miniv8::V8String(accessor->name);
+    v8::Local<v8::String> propV8 = v8::Utils::convert<miniv8::V8String, v8::String>(prop);
 
     miniv8::V8Isolate* isolate = miniv8::V8Isolate::GetCurrent();
     miniv8::V8Context* contextOfSelf = self->v8Ctx();
@@ -615,6 +621,7 @@ v8::Maybe<bool> v8::Object::SetAccessor(
     miniv8::V8Context* context = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(*v8context);
     miniv8::V8Object* self = v8::Utils::openHandle<v8::Object, miniv8::V8Object>(this);
     miniv8::V8String* namePtr = v8::Utils::openHandle<v8::String, miniv8::V8String>(*(name.As<v8::String>()));
+    JSContext* ctx = context->ctx();
 
     miniv8ReleaseAssert(namePtr->m_head.m_type == miniv8::V8ObjectType::kOTString, "v8::Object::SetAccessor fail\n");
 
@@ -652,9 +659,14 @@ v8::Maybe<bool> v8::Object::SetAccessor(
     accessorData->data = data.IsEmpty() ? nullptr : v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*(data.ToLocalChecked()));
 
     self->m_accessorMap.insert(std::make_pair(hashVal, accessorData));
-    JS_SetPropertyFunctionList(context->ctx(), self->v(self), self->m_props->data(), self->m_props->size());
+    JS_SetPropertyFunctionList(ctx, self->v(self), self->m_props->data(), self->m_props->size());
 
-    JS_FreeCString(context->ctx(), nameStr);
+    if (accessorData->data) {
+        JSValue accessorDataV = accessorData->data->v(accessorData->data);
+        JS_DupValue(ctx, accessorDataV);
+        JS_SetPropertyStr(ctx, self->v(self), "SetAccessorData", accessorDataV); // TODO: free
+    }
+    JS_FreeCString(ctx, nameStr);
     return v8::Just<bool>(true);
 }
 
@@ -964,7 +976,7 @@ v8::MaybeLocal<v8::Value> v8::Object::Get(v8::Local<v8::Context> context, v8::Lo
         JS_FreeAtom(jsCtx, prop);
     }
 
-    miniv8::V8Value* v = miniv8::V8Value::create(ctx, val); // TODO: 放到句柄域
+    miniv8::V8Value* v = miniv8::V8Value::create(ctx, val);
     v8::Local<v8::Value> ret = v8::Utils::convert<miniv8::V8Value, v8::Value>(v);
     JS_FreeValue(jsCtx, val);
 
@@ -1331,10 +1343,12 @@ void* v8::Object::SlowGetAlignedPointerFromInternalField(int index)
         return it;
 
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    v8::Local<v8::Context> context = isolate->GetCurrentContext();
-    miniv8::V8Context* ctx = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(*context);
+//     v8::Local<v8::Context> context = isolate->GetCurrentContext();
+//     miniv8::V8Context* ctx = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(*context);
+    JSContext* ctx = miniv8::V8Context::getEmptyJsCtx();
 
-    JSValueConst prototype = JS_GetPrototype(miniv8::V8Context::getCtx(ctx), self->v(self));
+    JSValueConst prototype = JS_GetPrototype(ctx, self->v(self));
+    JS_FreeValue(ctx, prototype);
     miniv8::V8Object* prototypeObj = (miniv8::V8Object*)JS_GetUserdata(prototype);
     if (prototypeObj) {
         it = prototypeObj->m_alignedPointerInInternalFields[index];
@@ -1345,8 +1359,9 @@ void* v8::Object::SlowGetAlignedPointerFromInternalField(int index)
     }
 
     // 见WindowProxy::installDOMWindow()，要查找原型的原型
-    prototype = JS_GetPrototype(miniv8::V8Context::getCtx(ctx), prototype);
+    prototype = JS_GetPrototype(ctx, prototype);
     prototypeObj = (miniv8::V8Object*)JS_GetUserdata(prototype);
+    JS_FreeValue(ctx, prototype);
     if (!prototypeObj)
         return nullptr;
 
@@ -1435,9 +1450,10 @@ v8::Local<v8::Object> v8::Object::FindInstanceInPrototypeChain(v8::Local<v8::Fun
             }
         }
 
-        JSValue next = JS_GetPrototypeFree(NULL, proto);
+        JSValue next = JS_GetPrototype(NULL, proto);
         if (JS_VALUE_IS_EQ(next, proto) || JS_VALUE_IS_EQ(next, JS_NULL) || JS_VALUE_IS_EQ(JS_UNDEFINED, next))
             return v8::Local<v8::Object>();
+        JS_FreeValue(NULL, next);
         proto = next;
     }
     return v8::Local<v8::Object>();
@@ -1447,12 +1463,13 @@ v8::Local<v8::Object> v8::Object::New(v8::Isolate* isolate)
 {
     printEmptyFuncInfo(__FUNCTION__, true);
 
-    v8::Local<v8::Context> context = isolate->GetCurrentContext();
-    miniv8::V8Context* ctx = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(*context);
-    JSValue val = JS_NewObject(ctx->ctx());
+    miniv8::V8Context* context = ((miniv8::V8Isolate*)isolate)->getEmptyCtx();
+    JSContext* ctx = context->ctx();
+    JSValue val = JS_NewObject(ctx);
 
-    miniv8::V8Object* v = new miniv8::V8Object(ctx, val); // TODO: 放到句柄域
+    miniv8::V8Object* v = new miniv8::V8Object(context, val); // TODO: 放到句柄域
     v8::Local<v8::Object> ret = v8::Utils::convert<miniv8::V8Object, v8::Object>(v);
+    JS_FreeValue(ctx, val);
 
     return ret;
 }
@@ -2494,9 +2511,14 @@ void v8::V8::Eternalize(v8::Isolate* iso, v8::Value* v, int* index)
             *index = i;
             return;
         }
+
         if (!isolate->m_eternals[i]) {
             isolate->m_eternals[i] = val;
             *index = i;
+
+            v8::Persistent<v8::Value>* eternalizePersistent;
+            eternalizePersistent = new v8::Persistent<v8::Value>((v8::Isolate*)isolate, v8::Utils::convert<miniv8::V8Value, v8::Value>(val));
+            isolate->m_eternalsPersistents[i] = eternalizePersistent;
             return;
         }
     }
@@ -2521,6 +2543,11 @@ v8::Value* v8::V8::Eternalize(v8::Isolate* iso, v8::Value* v)
         if (!isolate->m_eternals[i]) {
             isolate->m_eternals[i] = v8::Utils::maskPtr(val);
             void* ptr = &isolate->m_eternals[i];
+
+            v8::Persistent<v8::Value>* eternalizePersistent;
+            eternalizePersistent = new v8::Persistent<v8::Value>((v8::Isolate*)isolate, v8::Utils::convert<miniv8::V8Value, v8::Value>(val));
+            isolate->m_eternalsPersistents[i] = eternalizePersistent;
+
             return (v8::Value*)ptr;
         }
     }
@@ -2785,7 +2812,9 @@ v8::Local<v8::Array> v8::Array::New(v8::Isolate* v8Isolate, int length)
     miniv8::V8Context* ctx = isolate->getCurrentCtx();
 
     JSValue val = JS_NewArray(ctx->ctx());
-    return v8::Utils::convert<miniv8::V8Array, v8::Array>(new miniv8::V8Array(ctx, val));
+    miniv8::V8Array* ret = new miniv8::V8Array(ctx, val);
+    JS_FreeValue(ctx->ctx(), val);
+    return v8::Utils::convert<miniv8::V8Array, v8::Array>(ret);
 }
 
 v8::Local<v8::Array> v8::Map::AsArray(void) const
@@ -2867,6 +2896,7 @@ v8::Local<v8::ArrayBuffer> v8::ArrayBuffer::New(v8::Isolate* v8Isolate, void* bu
     void* arrayBufferAllocator = isolate->getCreateParams().array_buffer_allocator;
     JSValue v = JS_NewArrayBuffer(jsCtx, (uint8_t*)buf, byte_length, onFreeArrayBufferDataFunc, arrayBufferAllocator, TRUE);
     miniv8::V8ArrayBuffer* ret = new miniv8::V8ArrayBuffer(ctx, v);
+    JS_FreeValue(jsCtx, v);
     ret->m_internalFieldCount = 2;
 
     return v8::Utils::convert<miniv8::V8ArrayBuffer, v8::ArrayBuffer>(ret);
@@ -2898,47 +2928,6 @@ v8::Local<v8::ArrayBuffer> v8::ArrayBufferView::Buffer(void)
     printEmptyFuncInfo(__FUNCTION__, true);
     miniv8::V8ArrayBufferView* self = v8::Utils::openHandle<v8::ArrayBufferView, miniv8::V8ArrayBufferView>(this);
     return self->getBuffer();
-}
-
-v8::Local<v8::Object> v8::Context::Global(void)
-{
-    printEmptyFuncInfo(__FUNCTION__, true);
-    miniv8::V8Context* self = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(this);
-    JSValue val = JS_GetGlobalObject(self->ctx());
-
-    miniv8::V8Object* ret = miniv8::V8Object::create(self, val);
-    return v8::Utils::convert<miniv8::V8Object, v8::Object>(ret);
-}
-
-v8::Local<v8::Context> v8::Context::New(v8::Isolate* isolate, v8::ExtensionConfiguration*, v8::MaybeLocal<v8::ObjectTemplate> globalTemplate, v8::MaybeLocal<v8::Value>)
-{
-    printEmptyFuncInfo(__FUNCTION__, true);
-
-    miniv8::V8Isolate* iso = (miniv8::V8Isolate*)isolate;
-    JSContext* ctx = JS_NewContext(iso->getRuntime());
-    miniv8::V8Context* ret = new miniv8::V8Context(iso, ctx);
-
-    JSValue global = JS_GetGlobalObject(ctx);
-    miniv8::V8Object* globalObj = miniv8::V8Object::create(ret, global);
-
-    // blink会设置global的原型的原型，如果这里不设置一下，那么global的原型就是Object对象了
-    // 这会导致innerGlobalObject->SetPrototype(context, windowWrapper)设置失败
-    JSValue globalProto = JS_NewObject(ctx);
-    JS_SetPrototype(ctx, global, globalProto);
-
-    JS_SetPropertyStr(ctx, global, "jsPrint", JS_NewCFunction(ctx, jsPrint, "print", 0));
-    JS_SetPropertyStr(ctx, global, "mbConsoleLog", JS_NewCFunction(ctx, jsPrint, "mbConsoleLog", 0));    
-    JS_SetPropertyStr(ctx, global, "jsTestNode", JS_NewCFunction(ctx, jsTestNode, "jsTestNode", 0));
-    JS_SetPropertyStr(ctx, global, "jsPrintStack", JS_NewCFunction(ctx, jsPrintStack, "jsPrintStack", 0));
-
-    miniv8::V8ObjectTemplate* globalTempl = v8::Utils::openHandle<v8::ObjectTemplate, miniv8::V8ObjectTemplate>(*(globalTemplate.ToLocalChecked()));
-    if (globalTempl) {
-        globalTempl->newTemplateInstance(globalObj, false);
-        globalObj->setTemplId(globalTempl->getId());
-    }
-    // TODO: 没考虑m_instanceTemplate等情况
-
-    return v8::Utils::convert<miniv8::V8Context, v8::Context>(ret);
 }
 
 v8::Local<v8::Context> v8::Isolate::GetCallingContext(void)
@@ -3077,8 +3066,8 @@ v8::Local<v8::Value> v8::Function::GetName(void) const
     JSContext* ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     std::string name = self->getName();
 
-    JSValue ret = JS_NewStringLen(ctx, name.c_str(), name.size());
-    return v8::Utils::convert<miniv8::V8String, v8::String>(new miniv8::V8String(self->v8Ctx(), ret)); // TODO free
+    miniv8::V8String* ret = new miniv8::V8String(name);
+    return v8::Utils::convert<miniv8::V8String, v8::String>(ret); // TODO free!
 }
 
 v8::MaybeLocal<v8::Object> v8::Function::NewInstance(v8::Local<Context> context, int argc, v8::Local<Value> argv[]) const
@@ -3101,16 +3090,18 @@ v8::MaybeLocal<v8::Object> v8::Function::NewInstance(v8::Local<Context> context,
     JSValue ret = JS_CallConstructor(ctx->ctx(), v, argc, 0 != argc ? &argvWrap[0] : nullptr);
 
     miniv8::V8Object* inst = miniv8::V8Object::create(ctx, ret);
+    JS_FreeValue(ctx->ctx(), ret);
+
     inst->setTemplId(self->getTemplId());
 
     inst->m_internalFieldCount = self->m_internalFieldCount;
 
     miniv8::V8Template* templ = isolate->getTemplateById(self->getTemplId());
     if (templ && templ->m_instanceTemplate) {
-        templ->m_instanceTemplate->newTemplateInstance(inst, false);
+        templ->getInstanceTemplate()->newTemplateInstance(inst, false);
 
         if (0 == inst->m_internalFieldCount)
-            inst->m_internalFieldCount = templ->m_instanceTemplate->m_internalFieldCount;
+            inst->m_internalFieldCount = templ->getInstanceTemplate()->m_internalFieldCount;
     }
     return (v8::Utils::convert<miniv8::V8Object, v8::Object>(inst)); // TODO free
 }
@@ -3120,12 +3111,9 @@ v8::ScriptOrigin v8::Function::GetScriptOrigin(void) const
     printEmptyFuncInfo(__FUNCTION__, true);
     miniv8::V8Function* self = v8::Utils::openHandle<v8::Function, miniv8::V8Function>(this);
     std::string name = self->getName();
-
     miniv8::V8Context* context = miniv8::V8Context::getCurrentOrEmptyCtx();
 
-    JSValue nameVal = JS_NewStringLen(context->ctx(), name.c_str(), name.size());
-    v8::Local<v8::String> nameStr = v8::Utils::convert<miniv8::V8String, v8::String>(new miniv8::V8String(context, nameVal));
-
+    v8::Local<v8::String> nameStr = v8::Utils::convert<miniv8::V8String, v8::String>(new miniv8::V8String(name));
     return ScriptOrigin(nameStr);
 }
 
@@ -3181,6 +3169,8 @@ bool v8::FunctionTemplate::HasInstance(v8::Local<v8::Value> object)
         return false;
 
     miniv8::V8FunctionTemplate* self = v8::Utils::openHandle<v8::FunctionTemplate, miniv8::V8FunctionTemplate>(this);
+    if (!self)
+        return false;
     miniv8::V8Isolate* isolate = (miniv8::V8Isolate*)v8::Isolate::GetCurrent();
     miniv8::V8Value* objVal = v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*object);
     miniv8::V8Object* obj = miniv8::V8Object::getByQjsValue(objVal->v(objVal));
@@ -3199,7 +3189,7 @@ bool v8::FunctionTemplate::HasInstance(v8::Local<v8::Value> object)
     while (objTempl) {
         if (objTempl->getId() == self->getId())
             return true;
-        objTempl = objTempl->m_parentTemplate;
+        objTempl = objTempl->getParentTemplate();
     }
     return false;
 }
@@ -3208,13 +3198,23 @@ v8::Local<v8::ObjectTemplate> v8::FunctionTemplate::InstanceTemplate(void)
 {
     printEmptyFuncInfo(__FUNCTION__, true);
     miniv8::V8FunctionTemplate* self = v8::Utils::openHandle<v8::FunctionTemplate, miniv8::V8FunctionTemplate>(this);
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::ObjectTemplate> ret;
+    JSContext* ctx = miniv8::V8Context::getEmptyJsCtx();
 
-    if (!self->m_instanceTemplate) { // TODO: 要记得检查m_parentTemplate是否设置过
-        self->m_instanceTemplate = (new miniv8::V8ObjectTemplate());
-        self->m_instanceTemplate->m_parentTemplate = self;
-        self->m_instanceTemplate->m_internalFieldCount = self->m_internalFieldCount;
+    if (!self->m_instanceTemplate) {
+        miniv8::V8ObjectTemplate* templ = new miniv8::V8ObjectTemplate();
+        templ->m_internalFieldCount = self->m_internalFieldCount;
+        templ->m_parentTemplate = self;
+        JS_DupValue(ctx, self->v(self));
+        JS_SetPropertyStr(ctx, templ->v(templ), "parentTemplate", self->v(self));
+
+        self->m_instanceTemplate = templ;
+        JS_DupValue(ctx, templ->v(templ));
+        JS_SetPropertyStr(ctx, self->v(self), "instanceTemplate", templ->v(templ));
     }
-    v8::Local<v8::ObjectTemplate> ret = v8::Utils::convert<miniv8::V8ObjectTemplate, v8::ObjectTemplate>(self->m_instanceTemplate);
+
+    ret = v8::Utils::convert<miniv8::V8ObjectTemplate, v8::ObjectTemplate>(self->m_instanceTemplate);
     return ret;
 }
 
@@ -3222,13 +3222,23 @@ v8::Local<v8::ObjectTemplate> v8::FunctionTemplate::PrototypeTemplate(void)
 {
     printEmptyFuncInfo(__FUNCTION__, true);
     miniv8::V8FunctionTemplate* self = v8::Utils::openHandle<v8::FunctionTemplate, miniv8::V8FunctionTemplate>(this);
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::ObjectTemplate> ret;
+    JSContext* ctx = miniv8::V8Context::getEmptyJsCtx();
 
-    if (!self->m_prototypeTemplate) { // TODO: 要记得检查m_parentTemplate是否设置过
-        self->m_prototypeTemplate = (new miniv8::V8ObjectTemplate());
-        self->m_prototypeTemplate->m_parentTemplate = self;
-        self->m_prototypeTemplate->m_internalFieldCount = self->m_internalFieldCount;
+    if (!self->m_prototypeTemplate) {
+        miniv8::V8ObjectTemplate* templ = new miniv8::V8ObjectTemplate();
+        templ->m_internalFieldCount = self->m_internalFieldCount;
+        templ->m_parentTemplate = self;
+        JS_DupValue(ctx, self->v(self));
+        JS_SetPropertyStr(ctx, templ->v(templ), "parentTemplate", self->v(self));
+
+        self->m_prototypeTemplate = templ;
+        JS_DupValue(ctx, templ->v(templ));
+        JS_SetPropertyStr(ctx, self->v(self), "prototypeTemplate", templ->v(templ));
     }
-    v8::Local<v8::ObjectTemplate> ret = v8::Utils::convert<miniv8::V8ObjectTemplate, v8::ObjectTemplate>(self->m_prototypeTemplate);
+
+    ret = v8::Utils::convert<miniv8::V8ObjectTemplate, v8::ObjectTemplate>(self->m_prototypeTemplate);
     return ret;
 }
 
@@ -3487,10 +3497,10 @@ void v8::ObjectTemplate::SetInternalFieldCount(int count)
     self->m_internalFieldCount = count;
 
     if (self->m_parentTemplate) {
-        int parentCount = self->m_parentTemplate->m_internalFieldCount;
+        int parentCount = self->getParentTemplate()->m_internalFieldCount;
         //miniv8ReleaseAssert(parentCount == 0 || parentCount == count, "v8::ObjectTemplate::SetInternalFieldCount fail\n");
         if (parentCount == 0)
-            self->m_parentTemplate->m_internalFieldCount = count;
+            self->getParentTemplate()->m_internalFieldCount = count;
     }
     //printDebug("v8::ObjectTemplate::SetInternalFieldCount: %p, %d\n", this, count);
 }
@@ -3546,6 +3556,7 @@ v8::MaybeLocal<v8::Object> v8::ObjectTemplate::NewInstance(v8::Local<v8::Context
 
     JSValue v = JS_NewObject(ctx->ctx());
     miniv8::V8Object* obj = new miniv8::V8Object(ctx, v);
+    JS_FreeValue(ctx->ctx(), v);
     self->newTemplateInstance(obj, false);
 
     v8::Local<v8::Object> ret = v8::Utils::convert<miniv8::V8Object, v8::Object>(obj);
@@ -4021,12 +4032,13 @@ v8::Local<v8::String> v8::Value::ToString(v8::Isolate*) const
     miniv8::V8Value* self = v8::Utils::openHandle<v8::Value, miniv8::V8Value>(this);
 
     JSValue v = self->v(self);
-    JSValue retVal = JS_ToString(ctx, v);
+    JSValue strVal = JS_ToString(ctx, v);
     size_t len = 0;
-    const char* ret = JS_ToCStringLen(ctx, &len, retVal);
+    const char* ret = JS_ToCStringLen(ctx, &len, strVal);
+    miniv8::V8Value* str = miniv8::V8Value::create(context, strVal);
     JS_FreeCString(ctx, ret);
-    JS_FreeValue(ctx, retVal);
-    return v8::Utils::convert<miniv8::V8String, v8::String>(new miniv8::V8String(context, retVal));
+    JS_FreeValue(ctx, strVal);
+    return v8::Utils::convert<miniv8::V8Value, v8::String>(str);
 }
 
 v8::Local<v8::Symbol> v8::Symbol::GetIterator(v8::Isolate*)
@@ -4552,6 +4564,7 @@ v8::MaybeLocal<v8::Value> v8::Script::Run(v8::Local<v8::Context> context)
     }
 
     miniv8::V8Value* retVal = miniv8::V8Value::create(ctx, ret);
+    JS_FreeValue(ctx->ctx(), ret);
     return v8::Utils::convert<miniv8::V8Value, v8::Value>(retVal);
 }
 
@@ -4624,7 +4637,7 @@ v8::MaybeLocal<v8::String> v8::Value::ToString(v8::Local<v8::Context> context) c
         return v8::Utils::convert<miniv8::V8String, v8::String>(str);
     }
     case JS_TAG_STRING: {
-        str = new miniv8::V8String(ctx, v);
+        str = (miniv8::V8String*)miniv8::V8Value::create(ctx, v);
         return v8::Utils::convert<miniv8::V8String, v8::String>(str);
     }
     default: {
@@ -4746,11 +4759,78 @@ void v8::Context::AllowCodeGenerationFromStrings(bool)
     printEmptyFuncInfo(__FUNCTION__, true);
 }
 
+extern "C" BOOL g_isFromContextGlobal;
+
+v8::Local<v8::Object> v8::Context::Global(void)
+{
+    printEmptyFuncInfo(__FUNCTION__, true);
+    miniv8::V8Context* self = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(this);
+    if (self->m_isDetachGlobal) {
+        DebugBreak(); // 按理来说调用DetachGlobal后不应该再调用本api Global了
+        return v8::Local<v8::Object>();
+    }
+
+    g_isFromContextGlobal = TRUE;
+    JSValue val = JS_GetGlobalObject(self->ctx());
+    miniv8::V8Object* ret = miniv8::V8Object::create(self, val);
+    JS_FreeValue(self->ctx(), val); // JS_GetGlobalObject里面会增加引用计数
+    g_isFromContextGlobal = FALSE;
+
+    return v8::Utils::convert<miniv8::V8Object, v8::Object>(ret);
+}
+
 void v8::Context::DetachGlobal(void)
 {
     printEmptyFuncInfo(__FUNCTION__, true);
     miniv8::V8Context* self = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(this);
+    miniv8ReleaseAssert(!self->m_isDetachGlobal, "m_isDetachGlobal call much\n");
+
+    JSValue val = JS_GetGlobalObject(self->ctx());
+//     miniv8::V8Object* global = miniv8::V8Object::create(self, val);
+//     v8::Local<v8::Object> globalV8 = v8::Utils::convert<miniv8::V8Object, v8::Object>(global);
+//     v8::V8::DisposeGlobal((v8::internal::Object **)(*globalV8));
+    JS_FreeValue(self->ctx(), val);
+
     self->m_isDetachGlobal = true;
+}
+
+v8::Local<v8::Context> v8::Context::New(v8::Isolate* isolate, v8::ExtensionConfiguration*, v8::MaybeLocal<v8::ObjectTemplate> globalTemplate, v8::MaybeLocal<v8::Value> oldGlobal)
+{
+    printEmptyFuncInfo(__FUNCTION__, true);
+
+    miniv8::V8Isolate* iso = (miniv8::V8Isolate*)isolate;
+    JSContext* ctx = JS_NewContext(iso->getRuntime());
+    miniv8::V8Context* ret = new miniv8::V8Context(iso, ctx);
+
+    JSValue global = JS_GetGlobalObject(ctx);
+    miniv8::V8Object* globalObj = miniv8::V8Object::create(ret, global);
+
+    // blink会设置global的原型的原型，如果这里不设置一下，那么global的原型就是Object对象了
+    // 这会导致innerGlobalObject->SetPrototype(context, windowWrapper)设置失败
+    JSValue globalProto = JS_NewObject(ctx);
+    JS_SetPrototype(ctx, global, globalProto);
+    JS_FreeValue(ctx, globalProto);
+
+    JS_SetPropertyStr(ctx, global, "jsPrint", JS_NewCFunction(ctx, jsPrint, "print", 0));
+    JS_SetPropertyStr(ctx, global, "mbConsoleLog", JS_NewCFunction(ctx, jsPrint, "mbConsoleLog", 0));
+    JS_SetPropertyStr(ctx, global, "jsTestNode", JS_NewCFunction(ctx, jsTestNode, "jsTestNode", 0));
+    JS_SetPropertyStr(ctx, global, "jsPrintStack", JS_NewCFunction(ctx, jsPrintStack, "jsPrintStack", 0));
+
+    miniv8::V8ObjectTemplate* globalTempl = v8::Utils::openHandle<v8::ObjectTemplate, miniv8::V8ObjectTemplate>(*(globalTemplate.ToLocalChecked()));
+    if (globalTempl) {
+        globalTempl->newTemplateInstance(globalObj, false);
+        globalObj->setTemplId(globalTempl->getId());
+    }
+    // TODO: 没考虑m_instanceTemplate等情况
+    JS_FreeValue(ctx, global);
+
+    if (oldGlobal.IsEmpty())
+        return v8::Utils::convert<miniv8::V8Context, v8::Context>(ret);
+
+    // 按照v8的规范，要把老的global对象替换成新的。
+    v8::Utils::resetPtr(oldGlobal.ToLocalChecked(), &globalObj->m_head);
+
+    return v8::Utils::convert<miniv8::V8Context, v8::Context>(ret);
 }
 
 void v8::Context::Enter(void)
@@ -4839,6 +4919,30 @@ void v8::Isolate::CancelTerminateExecution(void)
 void v8::Isolate::Dispose(void)
 {
     printEmptyFuncInfo(__FUNCTION__, true);
+    miniv8::V8Isolate* isolate = (miniv8::V8Isolate*)this;
+    if (isolate->m_isExiting)
+        return;
+    isolate->m_isExiting = true;
+
+    for (int i = 0; i < miniv8::V8Isolate::kSlotSize; ++i) {
+        miniv8::V8Value* val = isolate->getEternalByIndex(i);
+        if (!val)
+            continue;
+        val->m_head.m_unGcType &= ~(miniv8::V8Head::kIsEternal);
+
+        v8::Persistent<v8::Value>* valuePersistent = isolate->m_eternalsPersistents[i];
+        valuePersistent->Reset();
+        delete valuePersistent;
+
+        int index = isolate->getGlobalizeCountHandlesIndex(&val->m_head);
+        int count = isolate->m_globalizeCountHandles[index];
+        miniv8ReleaseAssert(0 == count, "");
+        isolate->m_eternals[i] = nullptr; // 不需要再走trace了
+    }
+
+    isolate->runGC();
+    //isolate->m_emptyContextPersistents.Reset();
+    isolate->runGC();
 }
 
 void v8::Isolate::Enter(void)
@@ -4849,6 +4953,12 @@ void v8::Isolate::Enter(void)
 void v8::Isolate::Exit(void)
 {
     printEmptyFuncInfo(__FUNCTION__, true);
+    // 此时m_emptyContext 已经被析构了
+    miniv8::V8Isolate* isolate = (miniv8::V8Isolate*)this;
+    isolate->runGC();
+    isolate->m_emptyContextPersistents.Reset();
+    isolate->runGC();
+    JS_FreeRuntime(isolate->m_runtime);
 }
 
 void v8::Isolate::GetCodeRange(void**, size_t*)
