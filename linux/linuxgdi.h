@@ -45,6 +45,7 @@ public:
     static gboolean onScroll(GtkWidget* widget, GdkEventScroll* event, gpointer data);
     static gboolean onKeyPress(GtkWidget* widget, GdkEventKey* event, gpointer data);
     static gboolean onKeyRelease(GtkWidget* widget, GdkEventKey* event, gpointer data);
+    static gboolean onFocusOut(GtkWidget *widget, GdkEventFocus *event, gpointer data);
     
     void clearSurface(void);
 

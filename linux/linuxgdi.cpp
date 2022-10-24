@@ -321,6 +321,7 @@ gboolean HwndLinux::onButtonReleaseEvent(GtkWidget* widget, GdkEventButton* even
 
 gboolean HwndLinux::onButtonPressEvent(GtkWidget* widget, GdkEventButton* event, gpointer data)
 {
+    gtk_widget_grab_focus(widget);
     HwndLinux* self = (HwndLinux*)data;
     self->updataPosOnScreen();
     CrossThreadUiState::get()->updata(&event->state);
@@ -396,6 +397,13 @@ gboolean HwndLinux::onKeyPress(GtkWidget* widget, GdkEventKey* event, gpointer d
     self->m_wndProc(self, WM_KEYDOWN, (WPARAM)key, 0);
     self->m_wndProc(self, WM_CHAR, (WPARAM)key, 0);
     
+    return TRUE;
+}
+
+gboolean HwndLinux::onFocusOut(GtkWidget *widget, GdkEventFocus *event, gpointer data)
+{
+    HwndLinux *self = (HwndLinux *)data;
+    self->m_wndProc(self, WM_KILLFOCUS, 0, 0);
     return TRUE;
 }
 
@@ -643,17 +651,20 @@ HWND BindWindowByGTK(void* rootWindow, void* drawingArea, DWORD dwExStyle, LPCWS
 
     gtk_widget_set_size_request((GtkWidget*)drawingArea, nWidth, nHeight);
 
-    g_signal_connect((GtkWidget*)drawingArea, "draw", G_CALLBACK(&HwndLinux::onDraw), self);
-    g_signal_connect((GtkWidget*)drawingArea, "configure-event", G_CALLBACK(&HwndLinux::onConfigureEvent), self);
-    g_signal_connect((GtkWidget*)drawingArea, "motion-notify-event", G_CALLBACK(&HwndLinux::onMotionNotifyEvent), self);
-    g_signal_connect((GtkWidget*)drawingArea, "button-press-event", G_CALLBACK(&HwndLinux::onButtonPressEvent), self);
-    g_signal_connect((GtkWidget*)drawingArea, "button-release-event", G_CALLBACK(&HwndLinux::onButtonReleaseEvent), self);
-    g_signal_connect((GtkWidget*)drawingArea, "scroll-event", G_CALLBACK(&HwndLinux::onScroll), self);
+    g_signal_connect(drawingArea, "draw", G_CALLBACK(&HwndLinux::onDraw), self);
+    g_signal_connect(drawingArea, "configure-event", G_CALLBACK(&HwndLinux::onConfigureEvent), self);
+    g_signal_connect(drawingArea, "motion-notify-event", G_CALLBACK(&HwndLinux::onMotionNotifyEvent), self);
+    g_signal_connect(drawingArea, "button-press-event", G_CALLBACK(&HwndLinux::onButtonPressEvent), self);
+    g_signal_connect(drawingArea, "button-release-event", G_CALLBACK(&HwndLinux::onButtonReleaseEvent), self);
+    g_signal_connect(drawingArea, "scroll-event", G_CALLBACK(&HwndLinux::onScroll), self);
+    g_signal_connect(drawingArea, "key-press-event", G_CALLBACK(&HwndLinux::onKeyPress), self);
+    g_signal_connect(drawingArea, "key-release-event", G_CALLBACK(&HwndLinux::onKeyRelease), self);
+    g_signal_connect(drawingArea, "focus-out-event", G_CALLBACK(&HwndLinux::onFocusOut), self);
+    g_object_set(G_OBJECT(drawingArea), "can-focus", TRUE, NULL);
 
     g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "destroy", G_CALLBACK(&HwndLinux::onDestroy), self);
     g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "delete-event", G_CALLBACK(&HwndLinux::onDeleteEvent), self);
-    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "key-press-event", G_CALLBACK(&HwndLinux::onKeyPress), self);
-    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "key-release-event", G_CALLBACK(&HwndLinux::onKeyRelease), self);
+
 
     gtk_widget_set_events((GtkWidget*)drawingArea, gtk_widget_get_events((GtkWidget*)drawingArea) | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
 
