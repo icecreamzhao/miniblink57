@@ -33,6 +33,7 @@ var json = [{
 			"${sysroot}/usr/include/pango-1.0",
 			"${sysroot}/usr/lib/x86_64-linux-gnu/glib-2.0/include",
 			"${srcPath}/linux",
+			"${srcPath}/mbvip",
 			"${srcPath}/gen/${v8dir}/include",
 			"${srcPath}/${v8dir}",
 			"${srcPath}/${v8dir}/include",
@@ -3868,7 +3869,8 @@ var json = [{
 			],
 		"endLibs":[
 			"${srcPath}/out/${targetDir}/libskia.a",
-			"${srcPath}/out/${targetDir}/lib${v8dir}.a",
+			"${srcPath}/out/${targetDir}/lib${v8dir}_1.a",
+			"${srcPath}/out/${targetDir}/lib${v8dir}_2.a",
 			"${srcPath}/out/${targetDir}/libchromium.a",
 			"${srcPath}/out/${targetDir}/libcurl.a",
 			"${srcPath}/out/${targetDir}/libnodejs.a",

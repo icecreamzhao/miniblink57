@@ -912,16 +912,32 @@ void MbWebView::onPaintUpdatedInCompositeThread(const HDC hdc, int x, int y, int
         m_surface = createSurfaceByHwnd(m_hWnd, cx, cy);
 
         m_bitmap = new SkBitmap();
-        SkImageInfo info = SkImageInfo::MakeN32(cx, cy,kOpaque_SkAlphaType);
+        SkImageInfo info = SkImageInfo::MakeN32(cx, cy, kOpaque_SkAlphaType);
         byteData = cairo_image_surface_get_data(m_surface);
         m_bitmap->installPixels(info, byteData, cairo_image_surface_get_stride(m_surface), NULL, nullptr, nullptr);
         m_memoryCanvas = new SkCanvas(*m_bitmap);
     }
+    else if (m_isTransparent){
+        //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);       // 设置无边框
+    }
 
-    if (m_memoryCanvas) {        
+    if (m_memoryCanvas) {
         SkRect isrc = SkRect::MakeXYWH(x, y, cx, cy);
         SkRect dst = isrc;
         m_memoryCanvas->drawBitmapRect(bitmap, isrc, dst, nullptr);
+
+//         unsigned char* line = cairo_image_surface_get_data(m_surface) + x * 4;
+//         unsigned char* p;
+//         for (int start_y = y; start_y < y + cy; start_y++) {
+//             p = line;
+//             for (int start_x = x; start_x < x + cx; start_x++) {
+//                 unsigned char tmp = p[0];
+//                 p[0] = p[2];
+//                 p[2] = tmp;
+//                 p += 4;
+//             }
+//             line += cairo_image_surface_get_stride(m_surface);
+//         }
     }
 #endif
 }
@@ -961,7 +977,7 @@ void MbWebView::onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, in
         
         ::ReleaseDC(m_hWnd, hdcScreen);
 #else
-        ;
+        //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);       // 设置无边框
 #endif
     }
 
@@ -980,6 +996,8 @@ void MbWebView::onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, in
         mbRect r = { x, y, cx, cy };
         paintBitUpdatedCallback(getWebviewHandle(), getClosure().m_PaintBitUpdatedParam, m_bits, &r, clientSize.cx, clientSize.cy);
     }
+#else
+    ;
 #endif
     ::LeaveCriticalSection(&m_memoryCanvasLock);
 
@@ -1348,8 +1366,23 @@ void MbWebView::onPaint(HWND hWnd, WPARAM wParam)
 //                     source_data[y * stride + x] = 0xff112233;
 //                 }
 //             }
+
+//             unsigned char* line = cairo_image_surface_get_data(m_surface) + destX * 4;
+//             unsigned char* p;
+//             for (int start_y = destY; start_y < destY + height; start_y++) {
+//                 p = line;
+//                 for (int start_x = destX; start_x < destX + width; start_x++) {
+//                     unsigned char tmp = p[0];
+//                     p[0] = p[2];
+//                     p[2] = tmp;
+//                     p += 4;
+//                 }
+//                 line += cairo_image_surface_get_stride(m_surface);
+//             }
+            
             cairo_surface_mark_dirty(m_surface);
             cairo_set_source_surface(cr, m_surface, 0, 0);
+            cairo_paint(cr);
             ::LeaveCriticalSection(&m_memoryCanvasLock);
         }
 #endif

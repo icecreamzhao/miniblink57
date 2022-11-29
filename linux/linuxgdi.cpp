@@ -195,7 +195,7 @@ gboolean HwndLinux::onDraw(GtkWidget* widget, cairo_t* cr, gpointer data)
     int height = gtk_widget_get_allocated_height(widget);
 
     self->m_wndProc(self, WM_SIZE, 0, MAKELPARAM(width, height));
-    
+
     PAINTSTRUCT paintStrct = { 0 };
     paintStrct.hdc = (HDC)cr;
     paintStrct.fErase = TRUE;

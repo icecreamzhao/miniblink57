@@ -37,7 +37,7 @@ var json = [{
 			"${srcPath}/v8_7_5/src/trap-handler/handler-outside.cc"
 		],
 		"src":[
-			"${srcPath}/v8_7_5/src/asmjs/asm-parser.cc",
+			/*"${srcPath}/v8_7_5/src/asmjs/asm-parser.cc",
 			"${srcPath}/v8_7_5/src/asmjs/asm-scanner.cc",
 			"${srcPath}/v8_7_5/src/asmjs/asm-types.cc",
 			"${srcPath}/v8_7_5/src/asmjs/asm-js.cc",
@@ -397,7 +397,7 @@ var json = [{
 			"${srcPath}/v8_7_5/src/parsing/preparser.cc",
 			"${srcPath}/v8_7_5/src/parsing/rewriter.cc",
 			"${srcPath}/v8_7_5/src/parsing/scanner.cc",
-			"${srcPath}/v8_7_5/src/parsing/scanner-character-streams.cc",
+			"${srcPath}/v8_7_5/src/parsing/scanner-character-streams.cc",*/
 			"${srcPath}/v8_7_5/src/parsing/token.cc",
 			"${srcPath}/v8_7_5/src/zone/zone-segment.cc",
 			"${srcPath}/v8_7_5/src/zone/accounting-allocator.cc",
@@ -766,7 +766,7 @@ var json = [{
 		"objdir":"${srcPath}/out/tmp/v8_7_5/${targetDir}",
 		"outdir":"${srcPath}/out/${targetDir}",
 				
-		"target":"libv8_7_5.a",
+		"target":"libv8_7_5_2.a",
 		"beginLibs":[
 		],
 		"linkerCmd":[],

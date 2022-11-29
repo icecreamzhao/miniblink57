@@ -3,18 +3,13 @@
 #define CallbackClosure_h
 
 #include <functional>
-#include "wke/wkedefine.h"
+#include "mbvip/core/mb.h"
 
 namespace mb {
 
 class CallbackClosure {
+
 public:
-
-    ~CallbackClosure()
-    {
-
-    }
-
     std::function<bool(mbNavigationType, const char*)>* m_navigationClosure{ nullptr };
     void setNavigationClosure(std::function<bool(mbNavigationType, const char*)>* closure)
     {
@@ -99,40 +94,109 @@ public:
 //         m_LoadingFinishParam = param;
 //     }
 
-    mbNavigationCallback m_NavigationCallback{ nullptr }; void* m_NavigationParam{ nullptr }; void setNavigationCallback(mbNavigationCallback callback, void* param) {
-        m_NavigationCallback = callback; m_NavigationParam = param;
-    };
-    mbNavigationCallback m_NavigationSyncCallback{ nullptr }; void* m_NavigationSyncParam{ nullptr }; void setNavigationSyncCallback(mbNavigationCallback callback, void* param) {
-        m_NavigationSyncCallback = callback; m_NavigationSyncParam = param;
-    };
-    mbDocumentReadyCallback m_DocumentReadyInBlinkCallback{ nullptr }; void* m_DocumentReadyInBlinkParam{ nullptr }; void setDocumentReadyInBlinkCallback(mbDocumentReadyCallback callback, void* param) { m_DocumentReadyInBlinkCallback = callback; m_DocumentReadyInBlinkParam = param; };
-	mbDocumentReadyCallback m_DocumentReadyCallback{ nullptr }; void* m_DocumentReadyParam{ nullptr }; void setDocumentReadyCallback(mbDocumentReadyCallback callback, void* param) { m_DocumentReadyCallback = callback; m_DocumentReadyParam = param; };
-	mbLoadUrlBeginCallback m_LoadUrlBeginCallback{ nullptr }; void* m_LoadUrlBeginParam{ nullptr }; void setLoadUrlBeginCallback(mbLoadUrlBeginCallback callback, void* param) { m_LoadUrlBeginCallback = callback; m_LoadUrlBeginParam = param; };
-	mbLoadUrlEndCallback m_LoadUrlEndCallback{ nullptr }; void* m_LoadUrlEndParam{ nullptr }; void setLoadUrlEndCallback(mbLoadUrlEndCallback callback, void* param) { m_LoadUrlEndCallback = callback; m_LoadUrlEndParam = param; };
-    mbLoadUrlFailCallback m_LoadUrlFailCallback{ nullptr }; void* m_LoadUrlFailParam{ nullptr }; void setLoadUrlFailCallback(mbLoadUrlFailCallback callback, void* param) {
-        m_LoadUrlFailCallback = callback; m_LoadUrlFailParam = param;
-    };
-	mbTitleChangedCallback m_TitleChangedCallback{ nullptr }; void* m_TitleChangedParam{ nullptr }; void setTitleChangedCallback(mbTitleChangedCallback callback, void* param) { m_TitleChangedCallback = callback; m_TitleChangedParam = param; };
-    mbMouseOverUrlChangedCallback m_MouseOverUrlChangedCallback{ nullptr }; void* m_MouseOverUrlChangedParam{ nullptr }; void setMouseOverUrlChangedCallback(mbMouseOverUrlChangedCallback callback, void* param) { m_MouseOverUrlChangedCallback = callback; m_MouseOverUrlChangedParam = param; };
-	mbURLChangedCallback m_URLChangedCallback{ nullptr }; void* m_URLChangedParam{ nullptr }; void setURLChangedCallback(mbURLChangedCallback callback, void* param) { m_URLChangedCallback = callback; m_URLChangedParam = param; };
-	mbLoadingFinishCallback m_LoadingFinishCallback{ nullptr }; void* m_LoadingFinishParam{ nullptr }; void setLoadingFinishCallback(mbLoadingFinishCallback callback, void* param) { m_LoadingFinishCallback = callback; m_LoadingFinishParam = param; };
-	mbPaintUpdatedCallback m_PaintUpdatedCallback{ nullptr }; void* m_PaintUpdatedParam{ nullptr }; void setPaintUpdatedCallback(mbPaintUpdatedCallback callback, void* param) { m_PaintUpdatedCallback = callback; m_PaintUpdatedParam = param; };
-    mbPaintBitUpdatedCallback m_PaintBitUpdatedCallback{ nullptr }; void* m_PaintBitUpdatedParam{ nullptr }; void setPaintBitUpdatedCallback(mbPaintBitUpdatedCallback callback, void* param) {
-        m_PaintBitUpdatedCallback = callback; m_PaintBitUpdatedParam = param;
-    };
-	mbCreateViewCallback m_CreateViewCallback{ nullptr }; void* m_CreateViewParam{ nullptr }; void setCreateViewCallback(mbCreateViewCallback callback, void* param) { m_CreateViewCallback = callback; m_CreateViewParam = param; };
-	mbDownloadCallback m_DownloadCallback{ nullptr }; void* m_DownloadParam{ nullptr }; void setDownloadCallback(mbDownloadCallback callback, void* param) { m_DownloadCallback = callback; m_DownloadParam = param; };
-	mbDownloadInBlinkThreadCallback m_DownloadInBlinkThreadCallback{ nullptr }; void* m_DownloadInBlinkThreadParam{ nullptr }; void setDownloadInBlinkThreadCallback(mbDownloadInBlinkThreadCallback callback, void* param) { m_DownloadInBlinkThreadCallback = callback; m_DownloadInBlinkThreadParam = param; };
-	mbAlertBoxCallback m_AlertBoxCallback{ nullptr }; void* m_AlertBoxParam{ nullptr }; void setAlertBoxCallback(mbAlertBoxCallback callback, void* param) { m_AlertBoxCallback = callback; m_AlertBoxParam = param; };
-	mbConfirmBoxCallback m_ConfirmBoxCallback{ nullptr }; void* m_ConfirmBoxParam{ nullptr }; void setConfirmBoxCallback(mbConfirmBoxCallback callback, void* param) { m_ConfirmBoxCallback = callback; m_ConfirmBoxParam = param; };
-	mbPromptBoxCallback m_PromptBoxCallback{ nullptr }; void* m_PromptBoxParam{ nullptr }; void setPromptBoxCallback(mbPromptBoxCallback callback, void* param) { m_PromptBoxCallback = callback; m_PromptBoxParam = param; };
-	mbConsoleCallback m_ConsoleCallback{ nullptr }; void* m_ConsoleParam{ nullptr }; void setConsoleCallback(mbConsoleCallback callback, void* param) { m_ConsoleCallback = callback; m_ConsoleParam = param; };
-	mbNetGetFaviconCallback m_NetGetFaviconCallback{ nullptr }; void* m_NetGetFaviconParam{ nullptr }; void setNetGetFaviconCallback(mbNetGetFaviconCallback callback, void* param) { m_NetGetFaviconCallback = callback; m_NetGetFaviconParam = param; };
-	mbCloseCallback m_ClosingCallback{ nullptr }; void* m_ClosingParam{ nullptr }; void setCloseCallback(mbCloseCallback callback, void* param) { m_ClosingCallback = callback; m_ClosingParam = param; };
-    mbDidCreateScriptContextCallback m_DidCreateScriptContextCallback{ nullptr }; void* m_DidCreateScriptContextParam{ nullptr }; void setDidCreateScriptContextCallback(mbDidCreateScriptContextCallback callback, void* param) { m_DidCreateScriptContextCallback = callback; m_DidCreateScriptContextParam = param; };
-    mbWillReleaseScriptContextCallback m_WillReleaseScriptContextCallback{ nullptr }; void* m_WillReleaseScriptContextParam{ nullptr }; void setWillReleaseScriptContextCallback(mbWillReleaseScriptContextCallback callback, void* param) { m_WillReleaseScriptContextCallback = callback; m_WillReleaseScriptContextParam = param; };
-    mbImageBufferToDataURLCallback m_ImageBufferToDataURLCallback{ nullptr }; void* m_ImageBufferToDataURLParam{ nullptr }; void setImageBufferToDataURLCallback(mbImageBufferToDataURLCallback callback, void* param) { m_ImageBufferToDataURLCallback = callback; m_ImageBufferToDataURLParam = param; };
-    mbNetResponseCallback m_NetResponseCallback{ nullptr }; void* m_NetResponseParam{ nullptr }; void setNetResponseCallback(mbNetResponseCallback callback, void* param) { m_NetResponseCallback = callback; m_NetResponseParam = param; };
+    mbNavigationCallback m_NavigationCallback{ nullptr }; 
+    void* m_NavigationParam{ nullptr }; 
+    void setNavigationCallback(mbNavigationCallback callback, void* param) { m_NavigationCallback = callback; m_NavigationParam = param; };
+
+    mbNavigationCallback m_NavigationSyncCallback{ nullptr }; 
+    void* m_NavigationSyncParam{ nullptr }; 
+    void setNavigationSyncCallback(mbNavigationCallback callback, void* param) { m_NavigationSyncCallback = callback; m_NavigationSyncParam = param; };
+
+    mbDocumentReadyCallback m_DocumentReadyInBlinkCallback{ nullptr }; 
+    void* m_DocumentReadyInBlinkParam{ nullptr }; 
+    void setDocumentReadyInBlinkCallback(mbDocumentReadyCallback callback, void* param) { m_DocumentReadyInBlinkCallback = callback; m_DocumentReadyInBlinkParam = param; };
+
+	mbDocumentReadyCallback m_DocumentReadyCallback{ nullptr }; 
+    void* m_DocumentReadyParam{ nullptr }; 
+    void setDocumentReadyCallback(mbDocumentReadyCallback callback, void* param) { m_DocumentReadyCallback = callback; m_DocumentReadyParam = param; };
+
+	mbLoadUrlBeginCallback m_LoadUrlBeginCallback{ nullptr }; 
+    void* m_LoadUrlBeginParam{ nullptr }; 
+    void setLoadUrlBeginCallback(mbLoadUrlBeginCallback callback, void* param) { m_LoadUrlBeginCallback = callback; m_LoadUrlBeginParam = param; };
+
+	mbLoadUrlEndCallback m_LoadUrlEndCallback{ nullptr }; 
+    void* m_LoadUrlEndParam{ nullptr }; 
+    void setLoadUrlEndCallback(mbLoadUrlEndCallback callback, void* param) { m_LoadUrlEndCallback = callback; m_LoadUrlEndParam = param; };
+
+    mbLoadUrlFailCallback m_LoadUrlFailCallback{ nullptr }; 
+    void* m_LoadUrlFailParam{ nullptr }; 
+    void setLoadUrlFailCallback(mbLoadUrlFailCallback callback, void* param) { m_LoadUrlFailCallback = callback; m_LoadUrlFailParam = param; };
+
+	mbTitleChangedCallback m_TitleChangedCallback{ nullptr }; 
+    void* m_TitleChangedParam{ nullptr }; 
+    void setTitleChangedCallback(mbTitleChangedCallback callback, void* param) { m_TitleChangedCallback = callback; m_TitleChangedParam = param; };
+
+    mbMouseOverUrlChangedCallback m_MouseOverUrlChangedCallback{ nullptr }; 
+    void* m_MouseOverUrlChangedParam{ nullptr }; 
+    void setMouseOverUrlChangedCallback(mbMouseOverUrlChangedCallback callback, void* param) { m_MouseOverUrlChangedCallback = callback; m_MouseOverUrlChangedParam = param; };
+
+	mbURLChangedCallback m_URLChangedCallback{ nullptr }; 
+    void* m_URLChangedParam{ nullptr }; 
+    void setURLChangedCallback(mbURLChangedCallback callback, void* param) { m_URLChangedCallback = callback; m_URLChangedParam = param; };
+
+	mbLoadingFinishCallback m_LoadingFinishCallback{ nullptr }; 
+    void* m_LoadingFinishParam{ nullptr }; 
+    void setLoadingFinishCallback(mbLoadingFinishCallback callback, void* param) { m_LoadingFinishCallback = callback; m_LoadingFinishParam = param; };
+
+	mbPaintUpdatedCallback m_PaintUpdatedCallback{ nullptr }; 
+    void* m_PaintUpdatedParam{ nullptr }; 
+    void setPaintUpdatedCallback(mbPaintUpdatedCallback callback, void* param) { m_PaintUpdatedCallback = callback; m_PaintUpdatedParam = param; };
+
+    mbPaintBitUpdatedCallback m_PaintBitUpdatedCallback{ nullptr }; 
+    void* m_PaintBitUpdatedParam{ nullptr }; 
+    void setPaintBitUpdatedCallback(mbPaintBitUpdatedCallback callback, void* param) { m_PaintBitUpdatedCallback = callback; m_PaintBitUpdatedParam = param; };
+
+	mbCreateViewCallback m_CreateViewCallback{ nullptr }; 
+    void* m_CreateViewParam{ nullptr }; 
+    void setCreateViewCallback(mbCreateViewCallback callback, void* param) { m_CreateViewCallback = callback; m_CreateViewParam = param; };
+
+	mbDownloadCallback m_DownloadCallback{ nullptr }; 
+    void* m_DownloadParam{ nullptr }; 
+    void setDownloadCallback(mbDownloadCallback callback, void* param) { m_DownloadCallback = callback; m_DownloadParam = param; };
+
+	mbDownloadInBlinkThreadCallback m_DownloadInBlinkThreadCallback{ nullptr }; 
+    void* m_DownloadInBlinkThreadParam{ nullptr }; 
+    void setDownloadInBlinkThreadCallback(mbDownloadInBlinkThreadCallback callback, void* param) { m_DownloadInBlinkThreadCallback = callback; m_DownloadInBlinkThreadParam = param; };
+
+	mbAlertBoxCallback m_AlertBoxCallback{ nullptr }; 
+    void* m_AlertBoxParam{ nullptr }; 
+    void setAlertBoxCallback(mbAlertBoxCallback callback, void* param) { m_AlertBoxCallback = callback; m_AlertBoxParam = param; };
+
+	mbConfirmBoxCallback m_ConfirmBoxCallback{ nullptr }; 
+    void* m_ConfirmBoxParam{ nullptr }; 
+    void setConfirmBoxCallback(mbConfirmBoxCallback callback, void* param) { m_ConfirmBoxCallback = callback; m_ConfirmBoxParam = param; };
+
+	mbPromptBoxCallback m_PromptBoxCallback{ nullptr }; 
+    void* m_PromptBoxParam{ nullptr }; 
+    void setPromptBoxCallback(mbPromptBoxCallback callback, void* param) { m_PromptBoxCallback = callback; m_PromptBoxParam = param; };
+
+	mbConsoleCallback m_ConsoleCallback{ nullptr }; 
+    void* m_ConsoleParam{ nullptr }; 
+    void setConsoleCallback(mbConsoleCallback callback, void* param) { m_ConsoleCallback = callback; m_ConsoleParam = param; };
+
+	mbNetGetFaviconCallback m_NetGetFaviconCallback{ nullptr }; 
+    void* m_NetGetFaviconParam{ nullptr }; 
+    void setNetGetFaviconCallback(mbNetGetFaviconCallback callback, void* param) { m_NetGetFaviconCallback = callback; m_NetGetFaviconParam = param; };
+
+	mbCloseCallback m_ClosingCallback{ nullptr }; 
+    void* m_ClosingParam{ nullptr }; 
+    void setCloseCallback(mbCloseCallback callback, void* param) { m_ClosingCallback = callback; m_ClosingParam = param; };
+
+    mbDidCreateScriptContextCallback m_DidCreateScriptContextCallback{ nullptr }; 
+    void* m_DidCreateScriptContextParam{ nullptr }; 
+    void setDidCreateScriptContextCallback(mbDidCreateScriptContextCallback callback, void* param) { m_DidCreateScriptContextCallback = callback; m_DidCreateScriptContextParam = param; };
+
+    mbWillReleaseScriptContextCallback m_WillReleaseScriptContextCallback{ nullptr }; 
+    void* m_WillReleaseScriptContextParam{ nullptr }; 
+    void setWillReleaseScriptContextCallback(mbWillReleaseScriptContextCallback callback, void* param) { m_WillReleaseScriptContextCallback = callback; m_WillReleaseScriptContextParam = param; };
+
+    mbImageBufferToDataURLCallback m_ImageBufferToDataURLCallback{ nullptr }; 
+    void* m_ImageBufferToDataURLParam{ nullptr }; 
+    void setImageBufferToDataURLCallback(mbImageBufferToDataURLCallback callback, void* param) { m_ImageBufferToDataURLCallback = callback; m_ImageBufferToDataURLParam = param; };
+
+    mbNetResponseCallback m_NetResponseCallback{ nullptr }; 
+    void* m_NetResponseParam{ nullptr }; 
+    void setNetResponseCallback(mbNetResponseCallback callback, void* param) { m_NetResponseCallback = callback; m_NetResponseParam = param; };
 
     std::function<void(mbJsExecState es, int64_t queryId, int customMsg, const utf8* request)>* m_jsQueryClosure{ nullptr };
     void setJsQueryClosure(std::function<void(mbJsExecState es, int64_t queryId, int customMsg, const utf8* request)>* closure)
@@ -142,7 +206,6 @@ public:
         m_jsQueryClosure = closure;
     }
 };
-
 
 }
 
