@@ -3869,8 +3869,9 @@ var json = [{
 			],
 		"endLibs":[
 			"${srcPath}/out/${targetDir}/libskia.a",
-			"${srcPath}/out/${targetDir}/lib${v8dir}_1.a",
-			"${srcPath}/out/${targetDir}/lib${v8dir}_2.a",
+			//"${srcPath}/out/${targetDir}/lib${v8dir}_1.a",
+			//"${srcPath}/out/${targetDir}/lib${v8dir}_2.a",
+			"${srcPath}/out/${targetDir}/lib${v8dir}.a",
 			"${srcPath}/out/${targetDir}/libchromium.a",
 			"${srcPath}/out/${targetDir}/libcurl.a",
 			"${srcPath}/out/${targetDir}/libnodejs.a",
