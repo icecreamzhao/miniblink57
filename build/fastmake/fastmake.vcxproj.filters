@@ -37,9 +37,6 @@
     <Filter Include="src\quickjs">
       <UniqueIdentifier>{303c2ea9-e884-4a28-8b66-bd8898985af0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\qjs">
-      <UniqueIdentifier>{5ee33d5f-5a56-4062-b214-6f95f9190d9f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1704,74 +1701,38 @@
     <ClInclude Include="..\..\fastmake\FastMakeMain.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\cutils.h">
+    <ClInclude Include="..\..\quickjs-vs\cutils.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libbf.h">
+    <ClInclude Include="..\..\quickjs-vs\libbf.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libregexp.h">
+    <ClInclude Include="..\..\quickjs-vs\libregexp.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libregexp-opcode.h">
+    <ClInclude Include="..\..\quickjs-vs\libregexp-opcode.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libunicode.h">
+    <ClInclude Include="..\..\quickjs-vs\libunicode.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libunicode-table.h">
+    <ClInclude Include="..\..\quickjs-vs\libunicode-table.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\list.h">
+    <ClInclude Include="..\..\quickjs-vs\list.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs.h">
+    <ClInclude Include="..\..\quickjs-vs\quickjs.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-atom.h">
+    <ClInclude Include="..\..\quickjs-vs\quickjs-atom.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-libc.h">
+    <ClInclude Include="..\..\quickjs-vs\quickjs-libc.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-opcode.h">
+    <ClInclude Include="..\..\quickjs-vs\quickjs-opcode.h">
       <Filter>src\quickjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\unicode_gen_def.h">
-      <Filter>src\quickjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\libregexp-opcode.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\libunicode.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\libunicode-table.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\list.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs-atom.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs-libc.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs-opcode.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\cutils.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\libbf.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\libregexp.h">
-      <Filter>src\qjs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1793,41 +1754,26 @@
     <ClCompile Include="..\..\fastmake\QjsFastMake.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\quickjs-libc.c">
+    <ClCompile Include="..\..\quickjs-vs\libbf.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\cutils.c">
+    <ClCompile Include="..\..\quickjs-vs\libregexp.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libbf.c">
+    <ClCompile Include="..\..\quickjs-vs\libunicode.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libregexp.c">
+    <ClCompile Include="..\..\quickjs-vs\quickjs.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libunicode.c">
+    <ClCompile Include="..\..\quickjs-vs\quickjs-libc.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\quickjs.c">
+    <ClCompile Include="..\..\quickjs-vs\bjson.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\libunicode.c">
-      <Filter>src\qjs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\quickjs.c">
-      <Filter>src\qjs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\quickjs-libc.c">
-      <Filter>src\qjs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\cutils.c">
-      <Filter>src\qjs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\libbf.c">
-      <Filter>src\qjs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\libregexp.c">
-      <Filter>src\qjs</Filter>
+    <ClCompile Include="..\..\quickjs-vs\cutils.c">
+      <Filter>src\quickjs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

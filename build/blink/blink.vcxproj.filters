@@ -11418,9 +11418,6 @@
     <ClCompile Include="..\..\mbvip\core\MbWebView.cpp">
       <Filter>mbvip\core</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\content\web_impl_win\WebViewSchedulerImpl.cpp">
       <Filter>content\web_impl_win</Filter>
     </ClCompile>
@@ -27216,8 +27213,8 @@
     <None Include="..\..\third_party\WebKit\Source\platform\audio\OWNERS">
       <Filter>third_party\WebKit\Source\platform\audio</Filter>
     </None>
-    <None Include="mtmb.def">
-      <Filter>Source Files</Filter>
+    <None Include="..\..\mbvip\core\mtmb.def">
+      <Filter>mbvip\core</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

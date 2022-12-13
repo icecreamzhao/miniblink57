@@ -14,19 +14,19 @@
     <ProjectGuid>{94A5A47D-9E58-4D7D-B7D4-F1463FC123F8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>zlib</RootNamespace>
-    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -41,12 +41,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\tmp\zlib\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(SolutionDir)..\tmp\zlib\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -639,73 +639,25 @@
     <ClInclude Include="..\..\..\..\chromium\M84\build\linux\debian_sid_amd64-sysroot\usr\include\xf86drmMode.h" />
     <ClInclude Include="..\..\..\..\chromium\M84\build\linux\debian_sid_amd64-sysroot\usr\include\zconf.h" />
     <ClInclude Include="..\..\..\..\chromium\M84\build\linux\debian_sid_amd64-sysroot\usr\include\zlib.h" />
-    <ClInclude Include="..\..\..\quickjs-master\cutils.h" />
-    <ClInclude Include="..\..\..\quickjs-master\libbf.h" />
-    <ClInclude Include="..\..\..\quickjs-master\libregexp-opcode.h" />
-    <ClInclude Include="..\..\..\quickjs-master\libregexp.h" />
-    <ClInclude Include="..\..\..\quickjs-master\libunicode-table.h" />
-    <ClInclude Include="..\..\..\quickjs-master\libunicode.h" />
-    <ClInclude Include="..\..\..\quickjs-master\list.h" />
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-atom.h" />
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-libc.h" />
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-opcode.h" />
-    <ClInclude Include="..\..\..\quickjs-master\quickjs.h" />
-    <ClInclude Include="..\..\..\quickjs-master\unicode_gen_def.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\cutils.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\libbf.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\libregexp-opcode.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\libregexp.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\libunicode-table.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\libunicode.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\list.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs-atom.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs-libc.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs-opcode.h" />
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs.h" />
     <ClInclude Include="..\..\fastmake\CmdHandler.h" />
     <ClInclude Include="..\..\fastmake\FastMakeMain.h" />
     <ClInclude Include="..\..\mbvip\common\cJSON.h" />
     <ClInclude Include="..\..\mbvip\common\StringUtil.h" />
+    <ClInclude Include="..\..\quickjs-vs\cutils.h" />
+    <ClInclude Include="..\..\quickjs-vs\libbf.h" />
+    <ClInclude Include="..\..\quickjs-vs\libregexp-opcode.h" />
+    <ClInclude Include="..\..\quickjs-vs\libregexp.h" />
+    <ClInclude Include="..\..\quickjs-vs\libunicode-table.h" />
+    <ClInclude Include="..\..\quickjs-vs\libunicode.h" />
+    <ClInclude Include="..\..\quickjs-vs\list.h" />
+    <ClInclude Include="..\..\quickjs-vs\quickjs-atom.h" />
+    <ClInclude Include="..\..\quickjs-vs\quickjs-libc.h" />
+    <ClInclude Include="..\..\quickjs-vs\quickjs-opcode.h" />
+    <ClInclude Include="..\..\quickjs-vs\quickjs.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\quickjs-master\cutils.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libbf.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libregexp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libunicode.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\quickjs-libc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\quickjs.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\cutils.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\libbf.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\libregexp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\libunicode.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\quickjs-libc.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-vs\quickjs.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\fastmake\CmdHandler.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -721,6 +673,13 @@
     <ClCompile Include="..\..\mbvip\common\StringUtil.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\quickjs-vs\bjson.c" />
+    <ClCompile Include="..\..\quickjs-vs\cutils.c" />
+    <ClCompile Include="..\..\quickjs-vs\libbf.c" />
+    <ClCompile Include="..\..\quickjs-vs\libregexp.c" />
+    <ClCompile Include="..\..\quickjs-vs\libunicode.c" />
+    <ClCompile Include="..\..\quickjs-vs\quickjs-libc.c" />
+    <ClCompile Include="..\..\quickjs-vs\quickjs.c" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

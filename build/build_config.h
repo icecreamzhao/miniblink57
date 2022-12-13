@@ -91,12 +91,12 @@ constexpr const _Ty& std_min(const _Ty& _Left, const _Ty& _Right)
     return _Left > _Right ? _Right : _Left;
 }
 
-#if (defined(OS_WIN))
+#if defined(OS_WIN)
 #define std_isfinite std::isfinite
 #define std_isnan std::isnan
 #define std_isinf std::isinf
 #define std_signbit std::signbit
-#elif (defined(OS_LINUX))
+#elif defined(OS_LINUX)
 #define std_isfinite isfinite
 #define std_isnan isnan
 #define std_isinf isinf

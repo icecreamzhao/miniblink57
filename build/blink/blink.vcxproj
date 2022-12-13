@@ -14,8 +14,8 @@
     <ProjectGuid>{D4CF74E8-8AE3-4534-92BE-10503E556E87}</ProjectGuid>
     <RootNamespace>blink</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>blink</ProjectName>
-    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+    <ProjectName>MiniBlink</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup>
@@ -23,13 +23,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -46,14 +46,16 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\tmp\blink\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\tmp\blink\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -70,18 +72,19 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>config.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>config.h</ForcedIncludeFiles>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Debug;$(SolutionDir)..\Debug\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia_d.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib_d.lib;ots_d.lib;chromium_d.lib;libcurl.lib;libpng.lib;openssl.lib;harfbuzz.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)..\Debug\miniblink_5775_x32.dll</OutputFile>
-      <ImportLibrary>$(OutDir)libcef.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(SolutionDir)..\third_party\ffmpeg\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;libpng.lib;openssl.lib;harfbuzz.lib;angle.lib;version.lib;libjpeg.lib;nodejs.lib;DbgHelp.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\miniblink$(TargetExt)</OutputFile>
+      <ImportLibrary>
+      </ImportLibrary>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>$(SolutionDir)/blink/mtmb.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>$(SolutionDir)../mbvip/core/mtmb.def</ModuleDefinitionFile>
       <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
@@ -110,11 +113,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\release\;$(SolutionDir)..\out\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;libjpeg.lib;libpng.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;openssl.lib;harfbuzz.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(SolutionDir)..\third_party\ffmpeg\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;libjpeg.lib;libpng.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;openssl.lib;harfbuzz.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:UNRESOLVED /NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
-      <OutputFile>$(OutDir)node$(TargetExt)</OutputFile>
-      <ModuleDefinitionFile>mtmb.def</ModuleDefinitionFile>
+      <OutputFile>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\miniblink$(TargetExt)</OutputFile>
+      <ModuleDefinitionFile>$(SolutionDir)../mbvip/core/mtmb.def</ModuleDefinitionFile>
       <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
@@ -3868,7 +3871,6 @@
     <ClCompile Include="..\..\wke\wkeString.cpp" />
     <ClCompile Include="..\..\wke\wkeWebView.cpp" />
     <ClCompile Include="..\..\wke\wkeWebWindow.cpp" />
-    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -8732,6 +8734,7 @@
     <None Include="..\..\content\resources\HeaderFooterHtml.htm">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="..\..\mbvip\core\mtmb.def" />
     <None Include="..\..\mbvip\core\RenderInit.js" />
     <None Include="..\..\tencent\third_party\WebKit\SpecialsiteInjectScript.js" />
     <None Include="..\..\third_party\modp_b64\BUILD.gn" />
@@ -8803,7 +8806,6 @@
     <None Include="..\..\ui\gfx\geometry\OWNERS" />
     <None Include="..\..\ui\gl\BUILD.gn" />
     <None Include="..\..\ui\gl\DEPS" />
-    <None Include="mtmb.def" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\third_party\smhasher\src\CMakeLists.txt" />

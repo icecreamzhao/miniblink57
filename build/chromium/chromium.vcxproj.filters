@@ -5396,9 +5396,6 @@
     <ClCompile Include="..\..\media\filters\ffmpeg_audio_decoder.cc">
       <Filter>media\filters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\media\filters\ffmpeg_demuxer.cc">
-      <Filter>media\filters</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\media\filters\ffmpeg_glue.cc">
       <Filter>media\filters</Filter>
     </ClCompile>
@@ -6079,6 +6076,9 @@
     </ClCompile>
     <ClCompile Include="..\..\media\blink\resource_multibuffer_data_provider.cc">
       <Filter>media\blink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\media\filters\ffmpeg_demuxer.cc">
+      <Filter>media\filters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
