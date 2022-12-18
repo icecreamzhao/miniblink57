@@ -377,12 +377,13 @@ typedef void JS_MarkFunc(JSRuntime *rt, JSGCObjectHeader *gp, void* userdata);
 void JS_MarkValue(JSRuntime *rt, JSValueConst val, JS_MarkFunc *mark_func, void* userdata);
 void JS_RunGC(JSRuntime *rt);
 JS_BOOL JS_IsLiveObject(JSRuntime *rt, JSValueConst obj);
-void JS_MarkTraceCountValue(JSRuntime *rt, JSValueConst val, int trace_count);
-int JS_GetTraceCountValue(JSRuntime *rt, JSValueConst val);
+void JS_MarkTraceCountValue(JSRuntime *rt, JSGCObjectHeader* gbh, int trace_count);
+int JS_GetTraceCountValue(JSRuntime *rt, JSGCObjectHeader* gbh);
 
 // miniv8绑定了userdata对象以后，用这函数可以遍历有userdata的子对象
-typedef void JS_MarkUserdataFunc(JSRuntime *rt, JSValueConst val, void* userdata);
-void JS_MarkUserdataObj(JSRuntime* rt, JSValueConst val, JS_MarkUserdataFunc* mark_func, void* userdata);
+//typedef void JS_MarkUserdataFunc(JSRuntime *rt, JSValueConst val, void* userdata);
+void JS_MarkUserdataObj(JSRuntime* rt, JSValueConst val, JS_MarkFunc* mark_func, void* userdata);
+void JS_MarkUserdataObjByGP(JSRuntime* rt, JSGCObjectHeader* gp, JS_MarkFunc* mark_func, void* userdata);
 
 JSContext *JS_NewContext(JSRuntime *rt);
 void JS_FreeContext(JSContext *s);
@@ -766,7 +767,8 @@ static inline const char *JS_ToCString(JSContext *ctx, JSValueConst val1)
 {
     return JS_ToCStringLen2(ctx, NULL, val1, 0);
 }
-void JS_FreeCString(JSContext *ctx, const char *ptr);
+void JS_FreeCString(JSContext *ctx, JSValueConst val, const char *ptr);
+void JS_FreeAtomCString(JSContext* ctx, JSAtom val, const char* ptr);
 
 JSValue JS_NewObjectProtoClass(JSContext *ctx, JSValueConst proto, JSClassID class_id);
 JSValue JS_NewObjectClass(JSContext *ctx, int class_id);
@@ -844,7 +846,7 @@ JSValue JS_EvalThis(JSContext *ctx, JSValueConst this_obj,
                     const char *input, size_t input_len,
                     const char *filename, int eval_flags);
 JSValue JS_GetGlobalObject(JSContext *ctx);
-void JS_ClearGlobalObject(JSContext* ctx);
+void JS_DetachGlobalObject(JSContext* ctx);
 int JS_IsInstanceOf(JSContext *ctx, JSValueConst val, JSValueConst obj);
 int JS_DefineProperty(JSContext *ctx, JSValueConst this_obj,
                       JSAtom prop, JSValueConst val,
@@ -864,6 +866,7 @@ typedef enum JS_USER_DATA_WEAK_STEP {
 
 typedef void (*JS_UserDataWeakFunc)(JSValue obj, void* userdata, JS_USER_DATA_WEAK_STEP step);
 void* JS_GetUserdata(JSValueConst obj); // weolar
+void* JS_GetUserdataByGCObjectHeader(JSGCObjectHeader* gbh);
 void JS_SetUserdata(JSContext *ctx, JSValue obj, JS_UserDataWeakFunc weak_fun, void* opaque);
 void JS_SetUserdataFromClone(JSValue obj, JS_UserDataWeakFunc weak_fun, void* opaque); // for test
 void JS_SetTestVal(JSValue obj, void* v);
