@@ -17,62 +17,67 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
 
-namespace rx {
+namespace rx
+{
 
 class Renderer9;
 
-namespace d3d9 {
+namespace d3d9
+{
 
-    typedef std::map<std::pair<GLenum, GLenum>, ColorCopyFunction> FastCopyFunctionMap;
+typedef std::map<std::pair<GLenum, GLenum>, ColorCopyFunction> FastCopyFunctionMap;
 
-    struct D3DFormat {
-        D3DFormat();
+struct D3DFormat
+{
+    D3DFormat();
 
-        GLuint pixelBytes;
-        GLuint blockWidth;
-        GLuint blockHeight;
+    GLuint pixelBytes;
+    GLuint blockWidth;
+    GLuint blockHeight;
 
-        GLuint redBits;
-        GLuint greenBits;
-        GLuint blueBits;
-        GLuint alphaBits;
-        GLuint luminanceBits;
+    GLuint redBits;
+    GLuint greenBits;
+    GLuint blueBits;
+    GLuint alphaBits;
+    GLuint luminanceBits;
 
-        GLuint depthBits;
-        GLuint stencilBits;
+    GLuint depthBits;
+    GLuint stencilBits;
 
-        GLenum internalFormat;
+    GLenum internalFormat;
 
-        MipGenerationFunction mipGenerationFunction;
-        ColorReadFunction colorReadFunction;
+    MipGenerationFunction mipGenerationFunction;
+    ColorReadFunction colorReadFunction;
 
-        FastCopyFunctionMap fastCopyFunctions;
-        ColorCopyFunction getFastCopyFunction(GLenum format, GLenum type) const;
-    };
-    const D3DFormat& GetD3DFormatInfo(D3DFORMAT format);
+    FastCopyFunctionMap fastCopyFunctions;
+    ColorCopyFunction getFastCopyFunction(GLenum format, GLenum type) const;
+};
+const D3DFormat &GetD3DFormatInfo(D3DFORMAT format);
 
-    struct VertexFormat {
-        VertexFormat();
+struct VertexFormat
+{
+    VertexFormat();
 
-        VertexConversionType conversionType;
-        size_t outputElementSize;
-        VertexCopyFunction copyFunction;
-        D3DDECLTYPE nativeFormat;
-        GLenum componentType;
-    };
-    const VertexFormat& GetVertexFormatInfo(DWORD supportedDeclTypes, gl::VertexFormatType vertexFormatType);
+    VertexConversionType conversionType;
+    size_t outputElementSize;
+    VertexCopyFunction copyFunction;
+    D3DDECLTYPE nativeFormat;
+    GLenum componentType;
+};
+const VertexFormat &GetVertexFormatInfo(DWORD supportedDeclTypes, gl::VertexFormatType vertexFormatType);
 
-    struct TextureFormat {
-        TextureFormat();
+struct TextureFormat
+{
+    TextureFormat();
 
-        D3DFORMAT texFormat;
-        D3DFORMAT renderFormat;
+    D3DFORMAT texFormat;
+    D3DFORMAT renderFormat;
 
-        InitializeTextureDataFunction dataInitializerFunction;
+    InitializeTextureDataFunction dataInitializerFunction;
 
-        LoadImageFunction loadFunction;
-    };
-    const TextureFormat& GetTextureFormatInfo(GLenum internalFormat);
+    LoadImageFunction loadFunction;
+};
+const TextureFormat &GetTextureFormatInfo(GLenum internalFormat);
 
 }
 

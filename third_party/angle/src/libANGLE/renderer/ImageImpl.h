@@ -12,18 +12,21 @@
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
 
-namespace egl {
+namespace egl
+{
 class ImageSibling;
 }
 
-namespace rx {
-class ImageImpl : angle::NonCopyable {
-public:
-    virtual ~ImageImpl() { }
+namespace rx
+{
+class ImageImpl : angle::NonCopyable
+{
+  public:
+    virtual ~ImageImpl() {}
     virtual egl::Error initialize() = 0;
 
-    virtual gl::Error orphan(egl::ImageSibling* sibling) = 0;
+    virtual gl::Error orphan(egl::ImageSibling *sibling) = 0;
 };
 }
 
-#endif // LIBANGLE_RENDERER_IMAGEIMPL_H_
+#endif  // LIBANGLE_RENDERER_IMAGEIMPL_H_

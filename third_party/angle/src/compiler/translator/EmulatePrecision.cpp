@@ -6,7 +6,8 @@
 
 #include "compiler/translator/EmulatePrecision.h"
 
-namespace {
+namespace
+{
 
 static void writeVectorPrecisionEmulationHelpers(
     TInfoSinkBase& sink, ShShaderOutput outputLanguage, unsigned int size)
@@ -17,28 +18,27 @@ static void writeVectorPrecisionEmulationHelpers(
     vecTypeStrStr << "vec" << size;
     std::string vecType = vecTypeStrStr.str();
 
-    sink << vecType << " angle_frm(in " << vecType << " v) {\n"
-                                                      "    v = clamp(v, -65504.0, 65504.0);\n"
-                                                      "    "
-         << vecType << " exponent = floor(log2(abs(v) + 1e-30)) - 10.0;\n"
-                       "    bvec"
-         << size << " isNonZero = greaterThanEqual(exponent, vec" << size << "(-25.0));\n"
-                                                                             "    v = v * exp2(-exponent);\n"
-                                                                             "    v = sign(v) * floor(abs(v));\n"
-                                                                             "    return v * exp2(exponent) * vec"
-         << size << "(isNonZero);\n"
-                    "}\n";
+    sink <<
+    vecType << " angle_frm(in " << vecType << " v) {\n"
+    "    v = clamp(v, -65504.0, 65504.0);\n"
+    "    " << vecType << " exponent = floor(log2(abs(v) + 1e-30)) - 10.0;\n"
+    "    bvec" << size << " isNonZero = greaterThanEqual(exponent, vec" << size << "(-25.0));\n"
+    "    v = v * exp2(-exponent);\n"
+    "    v = sign(v) * floor(abs(v));\n"
+    "    return v * exp2(exponent) * vec" << size << "(isNonZero);\n"
+    "}\n";
 
-    sink << vecType << " angle_frl(in " << vecType << " v) {\n"
-                                                      "    v = clamp(v, -2.0, 2.0);\n"
-                                                      "    v = v * 256.0;\n"
-                                                      "    v = sign(v) * floor(abs(v));\n"
-                                                      "    return v * 0.00390625;\n"
-                                                      "}\n";
+    sink <<
+    vecType << " angle_frl(in " << vecType << " v) {\n"
+    "    v = clamp(v, -2.0, 2.0);\n"
+    "    v = v * 256.0;\n"
+    "    v = sign(v) * floor(abs(v));\n"
+    "    return v * 0.00390625;\n"
+    "}\n";
 }
 
 static void writeMatrixPrecisionEmulationHelper(
-    TInfoSinkBase& sink, ShShaderOutput outputLanguage, unsigned int size, const char* functionName)
+    TInfoSinkBase& sink, ShShaderOutput outputLanguage, unsigned int size, const char *functionName)
 {
     std::stringstream matTypeStrStr;
     if (outputLanguage == SH_ESSL_OUTPUT)
@@ -47,10 +47,10 @@ static void writeMatrixPrecisionEmulationHelper(
     std::string matType = matTypeStrStr.str();
 
     sink << matType << " " << functionName << "(in " << matType << " m) {\n"
-                                                                   "    "
-         << matType << " rounded;\n";
+            "    " << matType << " rounded;\n";
 
-    for (unsigned int i = 0; i < size; ++i) {
+    for (unsigned int i = 0; i < size; ++i)
+    {
         sink << "    rounded[" << i << "] = " << functionName << "(m[" << i << "]);\n";
     }
 
@@ -113,27 +113,29 @@ static void writeCommonPrecisionEmulationHelpers(TInfoSinkBase& sink, ShShaderOu
     if (outputLanguage == SH_ESSL_OUTPUT)
         floatType = "highp float";
 
-    sink << floatType << " angle_frm(in " << floatType << " x) {\n"
-                                                          "    x = clamp(x, -65504.0, 65504.0);\n"
-                                                          "    "
-         << floatType << " exponent = floor(log2(abs(x) + 1e-30)) - 10.0;\n"
-                         "    bool isNonZero = (exponent >= -25.0);\n"
-                         "    x = x * exp2(-exponent);\n"
-                         "    x = sign(x) * floor(abs(x));\n"
-                         "    return x * exp2(exponent) * float(isNonZero);\n"
-                         "}\n";
+    sink <<
+    floatType << " angle_frm(in " << floatType << " x) {\n"
+    "    x = clamp(x, -65504.0, 65504.0);\n"
+    "    " << floatType << " exponent = floor(log2(abs(x) + 1e-30)) - 10.0;\n"
+    "    bool isNonZero = (exponent >= -25.0);\n"
+    "    x = x * exp2(-exponent);\n"
+    "    x = sign(x) * floor(abs(x));\n"
+    "    return x * exp2(exponent) * float(isNonZero);\n"
+    "}\n";
 
-    sink << floatType << " angle_frl(in " << floatType << " x) {\n"
-                                                          "    x = clamp(x, -2.0, 2.0);\n"
-                                                          "    x = x * 256.0;\n"
-                                                          "    x = sign(x) * floor(abs(x));\n"
-                                                          "    return x * 0.00390625;\n"
-                                                          "}\n";
+    sink <<
+    floatType << " angle_frl(in " << floatType << " x) {\n"
+    "    x = clamp(x, -2.0, 2.0);\n"
+    "    x = x * 256.0;\n"
+    "    x = sign(x) * floor(abs(x));\n"
+    "    return x * 0.00390625;\n"
+    "}\n";
 
     writeVectorPrecisionEmulationHelpers(sink, outputLanguage, 2);
     writeVectorPrecisionEmulationHelpers(sink, outputLanguage, 3);
     writeVectorPrecisionEmulationHelpers(sink, outputLanguage, 4);
-    for (unsigned int size = 2; size <= 4; ++size) {
+    for (unsigned int size = 2; size <= 4; ++size)
+    {
         writeMatrixPrecisionEmulationHelper(sink, outputLanguage, size, "angle_frm");
         writeMatrixPrecisionEmulationHelper(sink, outputLanguage, size, "angle_frl");
     }
@@ -141,11 +143,12 @@ static void writeCommonPrecisionEmulationHelpers(TInfoSinkBase& sink, ShShaderOu
 
 static void writeCompoundAssignmentPrecisionEmulation(
     TInfoSinkBase& sink, ShShaderOutput outputLanguage,
-    const char* lType, const char* rType, const char* opStr, const char* opNameStr)
+    const char *lType, const char *rType, const char *opStr, const char *opNameStr)
 {
     std::string lTypeStr = lType;
     std::string rTypeStr = rType;
-    if (outputLanguage == SH_ESSL_OUTPUT) {
+    if (outputLanguage == SH_ESSL_OUTPUT)
+    {
         std::stringstream lTypeStrStr;
         lTypeStrStr << "highp " << lType;
         lTypeStr = lTypeStrStr.str();
@@ -157,79 +160,84 @@ static void writeCompoundAssignmentPrecisionEmulation(
     // Note that y should be passed through angle_frm at the function call site,
     // but x can't be passed through angle_frm there since it is an inout parameter.
     // So only pass x and the result through angle_frm here.
-    sink << lTypeStr << " angle_compound_" << opNameStr << "_frm(inout " << lTypeStr << " x, in " << rTypeStr << " y) {\n"
-                                                                                                                 "    x = angle_frm(angle_frm(x) "
-         << opStr << " y);\n"
-                     "    return x;\n"
-                     "}\n";
-    sink << lTypeStr << " angle_compound_" << opNameStr << "_frl(inout " << lTypeStr << " x, in " << rTypeStr << " y) {\n"
-                                                                                                                 "    x = angle_frl(angle_frm(x) "
-         << opStr << " y);\n"
-                     "    return x;\n"
-                     "}\n";
+    sink <<
+    lTypeStr << " angle_compound_" << opNameStr << "_frm(inout " << lTypeStr << " x, in " << rTypeStr << " y) {\n"
+    "    x = angle_frm(angle_frm(x) " << opStr << " y);\n"
+    "    return x;\n"
+    "}\n";
+    sink <<
+    lTypeStr << " angle_compound_" << opNameStr << "_frl(inout " << lTypeStr << " x, in " << rTypeStr << " y) {\n"
+    "    x = angle_frl(angle_frm(x) " << opStr << " y);\n"
+    "    return x;\n"
+    "}\n";
 }
 
-const char* getFloatTypeStr(const TType& type)
+const char *getFloatTypeStr(const TType& type)
 {
-    switch (type.getNominalSize()) {
-    case 1:
+    switch (type.getNominalSize())
+    {
+      case 1:
         return "float";
-    case 2:
-        switch (type.getSecondarySize()) {
-        case 1:
+      case 2:
+        switch(type.getSecondarySize())
+        {
+          case 1:
             return "vec2";
-        case 2:
+          case 2:
             return "mat2";
-        case 3:
+          case 3:
             return "mat2x3";
-        case 4:
+          case 4:
             return "mat2x4";
-        default:
+          default:
             UNREACHABLE();
             return NULL;
         }
-    case 3:
-        switch (type.getSecondarySize()) {
-        case 1:
+      case 3:
+        switch(type.getSecondarySize())
+        {
+          case 1:
             return "vec3";
-        case 2:
+          case 2:
             return "mat3x2";
-        case 3:
+          case 3:
             return "mat3";
-        case 4:
+          case 4:
             return "mat3x4";
-        default:
+          default:
             UNREACHABLE();
             return NULL;
         }
-    case 4:
-        switch (type.getSecondarySize()) {
-        case 1:
+      case 4:
+        switch(type.getSecondarySize())
+        {
+          case 1:
             return "vec4";
-        case 2:
+          case 2:
             return "mat4x2";
-        case 3:
+          case 3:
             return "mat4x3";
-        case 4:
+          case 4:
             return "mat4";
-        default:
+          default:
             UNREACHABLE();
             return NULL;
         }
-    default:
+      default:
         UNREACHABLE();
         return NULL;
     }
 }
 
-bool canRoundFloat(const TType& type)
+bool canRoundFloat(const TType &type)
 {
-    return type.getBasicType() == EbtFloat && !type.isNonSquareMatrix() && !type.isArray() && (type.getPrecision() == EbpLow || type.getPrecision() == EbpMedium);
+    return type.getBasicType() == EbtFloat && !type.isNonSquareMatrix() && !type.isArray() &&
+        (type.getPrecision() == EbpLow || type.getPrecision() == EbpMedium);
 }
 
-TIntermAggregate* createInternalFunctionCallNode(TString name, TIntermNode* child)
+TIntermAggregate *createInternalFunctionCallNode(TString name, TIntermNode *child)
 {
-    TIntermAggregate* callNode = new TIntermAggregate();
+    TIntermAggregate *callNode = new TIntermAggregate();
     callNode->setOp(EOpFunctionCall);
     TName nameObj(TFunction::mangleName(name));
     nameObj.setInternal(true);
@@ -238,7 +246,7 @@ TIntermAggregate* createInternalFunctionCallNode(TString name, TIntermNode* chil
     return callNode;
 }
 
-TIntermAggregate* createRoundingFunctionCallNode(TIntermTyped* roundedChild)
+TIntermAggregate *createRoundingFunctionCallNode(TIntermTyped *roundedChild)
 {
     TString roundFunctionName;
     if (roundedChild->getPrecision() == EbpMedium)
@@ -248,7 +256,7 @@ TIntermAggregate* createRoundingFunctionCallNode(TIntermTyped* roundedChild)
     return createInternalFunctionCallNode(roundFunctionName, roundedChild);
 }
 
-TIntermAggregate* createCompoundAssignmentFunctionCallNode(TIntermTyped* left, TIntermTyped* right, const char* opNameStr)
+TIntermAggregate *createCompoundAssignmentFunctionCallNode(TIntermTyped *left, TIntermTyped *right, const char *opNameStr)
 {
     std::stringstream strstr;
     if (left->getPrecision() == EbpMedium)
@@ -256,48 +264,52 @@ TIntermAggregate* createCompoundAssignmentFunctionCallNode(TIntermTyped* left, T
     else
         strstr << "angle_compound_" << opNameStr << "_frl";
     TString functionName = strstr.str().c_str();
-    TIntermAggregate* callNode = createInternalFunctionCallNode(functionName, left);
+    TIntermAggregate *callNode = createInternalFunctionCallNode(functionName, left);
     callNode->getSequence()->push_back(right);
     return callNode;
 }
 
 bool parentUsesResult(TIntermNode* parent, TIntermNode* node)
 {
-    if (!parent) {
+    if (!parent)
+    {
         return false;
     }
 
-    TIntermAggregate* aggParent = parent->getAsAggregate();
+    TIntermAggregate *aggParent = parent->getAsAggregate();
     // If the parent's op is EOpSequence, the result is not assigned anywhere,
     // so rounding it is not needed. In particular, this can avoid a lot of
     // unnecessary rounding of unused return values of assignment.
-    if (aggParent && aggParent->getOp() == EOpSequence) {
+    if (aggParent && aggParent->getOp() == EOpSequence)
+    {
         return false;
     }
-    if (aggParent && aggParent->getOp() == EOpComma && (aggParent->getSequence()->back() != node)) {
+    if (aggParent && aggParent->getOp() == EOpComma && (aggParent->getSequence()->back() != node))
+    {
         return false;
     }
     return true;
 }
 
-} // namespace anonymous
+}  // namespace anonymous
 
-EmulatePrecision::EmulatePrecision(const TSymbolTable& symbolTable, int shaderVersion)
-    : TLValueTrackingTraverser(true, true, true, symbolTable, shaderVersion)
-    , mDeclaringVariables(false)
-{
-}
+EmulatePrecision::EmulatePrecision(const TSymbolTable &symbolTable, int shaderVersion)
+    : TLValueTrackingTraverser(true, true, true, symbolTable, shaderVersion),
+      mDeclaringVariables(false)
+{}
 
-void EmulatePrecision::visitSymbol(TIntermSymbol* node)
+void EmulatePrecision::visitSymbol(TIntermSymbol *node)
 {
-    if (canRoundFloat(node->getType()) && !mDeclaringVariables && !isLValueRequiredHere()) {
-        TIntermNode* parent = getParentNode();
-        TIntermNode* replacement = createRoundingFunctionCallNode(node);
+    if (canRoundFloat(node->getType()) && !mDeclaringVariables && !isLValueRequiredHere())
+    {
+        TIntermNode *parent = getParentNode();
+        TIntermNode *replacement = createRoundingFunctionCallNode(node);
         mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
     }
 }
 
-bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary* node)
+
+bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary *node)
 {
     bool visitChildren = true;
 
@@ -318,62 +330,68 @@ bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary* node)
 
     if (roundFloat) {
         switch (op) {
-        // Math operators that can result in a float may need to apply rounding to the return
-        // value. Note that in the case of assignment, the rounding is applied to its return
-        // value here, not the value being assigned.
-        case EOpAssign:
-        case EOpAdd:
-        case EOpSub:
-        case EOpMul:
-        case EOpDiv:
-        case EOpVectorTimesScalar:
-        case EOpVectorTimesMatrix:
-        case EOpMatrixTimesVector:
-        case EOpMatrixTimesScalar:
-        case EOpMatrixTimesMatrix: {
-            TIntermNode* parent = getParentNode();
-            if (!parentUsesResult(parent, node)) {
+          // Math operators that can result in a float may need to apply rounding to the return
+          // value. Note that in the case of assignment, the rounding is applied to its return
+          // value here, not the value being assigned.
+          case EOpAssign:
+          case EOpAdd:
+          case EOpSub:
+          case EOpMul:
+          case EOpDiv:
+          case EOpVectorTimesScalar:
+          case EOpVectorTimesMatrix:
+          case EOpMatrixTimesVector:
+          case EOpMatrixTimesScalar:
+          case EOpMatrixTimesMatrix:
+          {
+            TIntermNode *parent = getParentNode();
+            if (!parentUsesResult(parent, node))
+            {
                 break;
             }
-            TIntermNode* replacement = createRoundingFunctionCallNode(node);
+            TIntermNode *replacement = createRoundingFunctionCallNode(node);
             mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
             break;
-        }
+          }
 
-        // Compound assignment cases need to replace the operator with a function call.
-        case EOpAddAssign: {
+          // Compound assignment cases need to replace the operator with a function call.
+          case EOpAddAssign:
+          {
             mEmulateCompoundAdd.insert(TypePair(getFloatTypeStr(type), getFloatTypeStr(node->getRight()->getType())));
-            TIntermNode* parent = getParentNode();
-            TIntermNode* replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "add");
+            TIntermNode *parent = getParentNode();
+            TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "add");
             mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
             break;
-        }
-        case EOpSubAssign: {
+          }
+          case EOpSubAssign:
+          {
             mEmulateCompoundSub.insert(TypePair(getFloatTypeStr(type), getFloatTypeStr(node->getRight()->getType())));
-            TIntermNode* parent = getParentNode();
-            TIntermNode* replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "sub");
+            TIntermNode *parent = getParentNode();
+            TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "sub");
             mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
             break;
-        }
-        case EOpMulAssign:
-        case EOpVectorTimesMatrixAssign:
-        case EOpVectorTimesScalarAssign:
-        case EOpMatrixTimesScalarAssign:
-        case EOpMatrixTimesMatrixAssign: {
+          }
+          case EOpMulAssign:
+          case EOpVectorTimesMatrixAssign:
+          case EOpVectorTimesScalarAssign:
+          case EOpMatrixTimesScalarAssign:
+          case EOpMatrixTimesMatrixAssign:
+          {
             mEmulateCompoundMul.insert(TypePair(getFloatTypeStr(type), getFloatTypeStr(node->getRight()->getType())));
-            TIntermNode* parent = getParentNode();
-            TIntermNode* replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "mul");
+            TIntermNode *parent = getParentNode();
+            TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "mul");
             mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
             break;
-        }
-        case EOpDivAssign: {
+          }
+          case EOpDivAssign:
+          {
             mEmulateCompoundDiv.insert(TypePair(getFloatTypeStr(type), getFloatTypeStr(node->getRight()->getType())));
-            TIntermNode* parent = getParentNode();
-            TIntermNode* replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "div");
+            TIntermNode *parent = getParentNode();
+            TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(node->getLeft(), node->getRight(), "div");
             mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
             break;
-        }
-        default:
+          }
+          default:
             // The rest of the binary operations should not need precision emulation.
             break;
         }
@@ -381,50 +399,61 @@ bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary* node)
     return visitChildren;
 }
 
-bool EmulatePrecision::visitAggregate(Visit visit, TIntermAggregate* node)
+bool EmulatePrecision::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     bool visitChildren = true;
-    switch (node->getOp()) {
-    case EOpSequence:
-    case EOpConstructStruct:
-    case EOpFunction:
+    switch (node->getOp())
+    {
+      case EOpSequence:
+      case EOpConstructStruct:
+      case EOpFunction:
         break;
-    case EOpPrototype:
+      case EOpPrototype:
         visitChildren = false;
         break;
-    case EOpParameters:
+      case EOpParameters:
         visitChildren = false;
         break;
-    case EOpInvariantDeclaration:
+      case EOpInvariantDeclaration:
         visitChildren = false;
         break;
-    case EOpDeclaration:
+      case EOpDeclaration:
         // Variable declaration.
-        if (visit == PreVisit) {
+        if (visit == PreVisit)
+        {
             mDeclaringVariables = true;
-        } else if (visit == InVisit) {
+        }
+        else if (visit == InVisit)
+        {
             mDeclaringVariables = true;
-        } else {
+        }
+        else
+        {
             mDeclaringVariables = false;
         }
         break;
-    case EOpFunctionCall: {
+      case EOpFunctionCall:
+      {
         // Function call.
-        if (visit == PreVisit) {
+        if (visit == PreVisit)
+        {
             // User-defined function return values are not rounded, this relies on that
             // calculations producing the value were rounded.
-            TIntermNode* parent = getParentNode();
-            if (canRoundFloat(node->getType()) && !isInFunctionMap(node) && parentUsesResult(parent, node)) {
-                TIntermNode* replacement = createRoundingFunctionCallNode(node);
+            TIntermNode *parent = getParentNode();
+            if (canRoundFloat(node->getType()) && !isInFunctionMap(node) &&
+                parentUsesResult(parent, node))
+            {
+                TIntermNode *replacement = createRoundingFunctionCallNode(node);
                 mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
             }
         }
         break;
-    }
-    default:
-        TIntermNode* parent = getParentNode();
-        if (canRoundFloat(node->getType()) && visit == PreVisit && parentUsesResult(parent, node)) {
-            TIntermNode* replacement = createRoundingFunctionCallNode(node);
+      }
+      default:
+        TIntermNode *parent = getParentNode();
+        if (canRoundFloat(node->getType()) && visit == PreVisit && parentUsesResult(parent, node))
+        {
+            TIntermNode *replacement = createRoundingFunctionCallNode(node);
             mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
         }
         break;
@@ -432,21 +461,23 @@ bool EmulatePrecision::visitAggregate(Visit visit, TIntermAggregate* node)
     return visitChildren;
 }
 
-bool EmulatePrecision::visitUnary(Visit visit, TIntermUnary* node)
+bool EmulatePrecision::visitUnary(Visit visit, TIntermUnary *node)
 {
-    switch (node->getOp()) {
-    case EOpNegative:
-    case EOpVectorLogicalNot:
-    case EOpLogicalNot:
-    case EOpPostIncrement:
-    case EOpPostDecrement:
-    case EOpPreIncrement:
-    case EOpPreDecrement:
+    switch (node->getOp())
+    {
+      case EOpNegative:
+      case EOpVectorLogicalNot:
+      case EOpLogicalNot:
+      case EOpPostIncrement:
+      case EOpPostDecrement:
+      case EOpPreIncrement:
+      case EOpPreDecrement:
         break;
-    default:
-        if (canRoundFloat(node->getType()) && visit == PreVisit) {
-            TIntermNode* parent = getParentNode();
-            TIntermNode* replacement = createRoundingFunctionCallNode(node);
+      default:
+        if (canRoundFloat(node->getType()) && visit == PreVisit)
+        {
+            TIntermNode *parent = getParentNode();
+            TIntermNode *replacement = createRoundingFunctionCallNode(node);
             mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
         }
         break;
@@ -458,7 +489,9 @@ bool EmulatePrecision::visitUnary(Visit visit, TIntermUnary* node)
 void EmulatePrecision::writeEmulationHelpers(TInfoSinkBase& sink, ShShaderOutput outputLanguage)
 {
     // Other languages not yet supported
-    ASSERT(outputLanguage == SH_GLSL_COMPATIBILITY_OUTPUT || IsGLSL130OrNewer(outputLanguage) || outputLanguage == SH_ESSL_OUTPUT);
+    ASSERT(outputLanguage == SH_GLSL_COMPATIBILITY_OUTPUT ||
+           IsGLSL130OrNewer(outputLanguage) ||
+           outputLanguage == SH_ESSL_OUTPUT);
     writeCommonPrecisionEmulationHelpers(sink, outputLanguage);
 
     EmulationSet::const_iterator it;
@@ -471,3 +504,4 @@ void EmulatePrecision::writeEmulationHelpers(TInfoSinkBase& sink, ShShaderOutput
     for (it = mEmulateCompoundMul.begin(); it != mEmulateCompoundMul.end(); it++)
         writeCompoundAssignmentPrecisionEmulation(sink, outputLanguage, it->lType, it->rType, "*", "mul");
 }
+

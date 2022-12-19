@@ -15,7 +15,8 @@
 
 #include "libANGLE/Error.h"
 
-namespace gl {
+namespace gl
+{
 class Framebuffer;
 struct ImageIndex;
 struct Box;
@@ -25,13 +26,15 @@ struct Rectangle;
 struct PixelUnpackState;
 }
 
-namespace rx {
+namespace rx
+{
 class TextureStorage;
 class RendererD3D;
 class RenderTargetD3D;
 
-class ImageD3D : angle::NonCopyable {
-public:
+class ImageD3D : angle::NonCopyable
+{
+  public:
     ImageD3D();
     virtual ~ImageD3D() {};
 
@@ -46,26 +49,26 @@ public:
     void markClean() { mDirty = false; }
     virtual bool isDirty() const = 0;
 
-    virtual bool redefine(GLenum target, GLenum internalformat, const gl::Extents& size, bool forceRelease) = 0;
+    virtual bool redefine(GLenum target, GLenum internalformat, const gl::Extents &size, bool forceRelease) = 0;
 
-    virtual gl::Error loadData(const gl::Box& area, const gl::PixelUnpackState& unpack, GLenum type, const void* input) = 0;
-    virtual gl::Error loadCompressedData(const gl::Box& area, const void* input) = 0;
+    virtual gl::Error loadData(const gl::Box &area, const gl::PixelUnpackState &unpack, GLenum type, const void *input) = 0;
+    virtual gl::Error loadCompressedData(const gl::Box &area, const void *input) = 0;
 
-    virtual gl::Error setManagedSurface2D(TextureStorage* storage, int level) { return gl::Error(GL_NO_ERROR); };
-    virtual gl::Error setManagedSurfaceCube(TextureStorage* storage, int face, int level) { return gl::Error(GL_NO_ERROR); };
-    virtual gl::Error setManagedSurface3D(TextureStorage* storage, int level) { return gl::Error(GL_NO_ERROR); };
-    virtual gl::Error setManagedSurface2DArray(TextureStorage* storage, int layer, int level) { return gl::Error(GL_NO_ERROR); };
-    virtual gl::Error copyToStorage(TextureStorage* storage, const gl::ImageIndex& index, const gl::Box& region) = 0;
+    virtual gl::Error setManagedSurface2D(TextureStorage *storage, int level) { return gl::Error(GL_NO_ERROR); };
+    virtual gl::Error setManagedSurfaceCube(TextureStorage *storage, int face, int level) { return gl::Error(GL_NO_ERROR); };
+    virtual gl::Error setManagedSurface3D(TextureStorage *storage, int level) { return gl::Error(GL_NO_ERROR); };
+    virtual gl::Error setManagedSurface2DArray(TextureStorage *storage, int layer, int level) { return gl::Error(GL_NO_ERROR); };
+    virtual gl::Error copyToStorage(TextureStorage *storage, const gl::ImageIndex &index, const gl::Box &region) = 0;
 
-    virtual gl::Error copyFromTexStorage(const gl::ImageIndex& imageIndex,
-        TextureStorage* source)
-        = 0;
-    virtual gl::Error copyFromFramebuffer(const gl::Offset& destOffset,
-        const gl::Rectangle& sourceArea,
-        const gl::Framebuffer* source)
-        = 0;
+    virtual gl::Error copy(const gl::Offset &destOffset, const gl::Box &sourceArea,
+                           const gl::ImageIndex &sourceIndex, TextureStorage *source) = 0;
 
-protected:
+    gl::Error copy(const gl::Offset &destOffset, const gl::Rectangle &sourceArea, const gl::Framebuffer *source);
+    virtual gl::Error copy(const gl::Offset &destOffset,
+                           const gl::Rectangle &sourceArea,
+                           RenderTargetD3D *source) = 0;
+
+  protected:
     GLsizei mWidth;
     GLsizei mHeight;
     GLsizei mDepth;

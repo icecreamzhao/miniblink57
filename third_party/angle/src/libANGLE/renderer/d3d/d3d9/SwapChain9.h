@@ -13,17 +13,15 @@
 #include "libANGLE/renderer/d3d/SwapChainD3D.h"
 #include "libANGLE/renderer/d3d/d3d9/RenderTarget9.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer9;
 
-class SwapChain9 : public SwapChainD3D {
-public:
-    SwapChain9(Renderer9* renderer,
-        NativeWindow nativeWindow,
-        HANDLE shareHandle,
-        GLenum backBufferFormat,
-        GLenum depthBufferFormat,
-        EGLint orientation);
+class SwapChain9 : public SwapChainD3D
+{
+  public:
+    SwapChain9(Renderer9 *renderer, NativeWindow nativeWindow, HANDLE shareHandle,
+               GLenum backBufferFormat, GLenum depthBufferFormat);
     virtual ~SwapChain9();
 
     EGLint resize(EGLint backbufferWidth, EGLint backbufferHeight);
@@ -31,30 +29,30 @@ public:
     virtual EGLint swapRect(EGLint x, EGLint y, EGLint width, EGLint height);
     virtual void recreate();
 
-    RenderTargetD3D* getColorRenderTarget() override { return &mColorRenderTarget; }
-    RenderTargetD3D* getDepthStencilRenderTarget() override { return &mDepthStencilRenderTarget; }
+    RenderTargetD3D *getColorRenderTarget() override { return &mColorRenderTarget; }
+    RenderTargetD3D *getDepthStencilRenderTarget() override { return &mDepthStencilRenderTarget; }
 
-    virtual IDirect3DSurface9* getRenderTarget();
-    virtual IDirect3DSurface9* getDepthStencil();
-    virtual IDirect3DTexture9* getOffscreenTexture();
+    virtual IDirect3DSurface9 *getRenderTarget();
+    virtual IDirect3DSurface9 *getDepthStencil();
+    virtual IDirect3DTexture9 *getOffscreenTexture();
 
     EGLint getWidth() const { return mWidth; }
     EGLint getHeight() const { return mHeight; }
 
-    void* getKeyedMutex() override;
+    void *getKeyedMutex() override;
 
-private:
+  private:
     void release();
 
-    Renderer9* mRenderer;
-    EGLint mWidth;
+    Renderer9 *mRenderer;
     EGLint mHeight;
+    EGLint mWidth;
     EGLint mSwapInterval;
 
-    IDirect3DSwapChain9* mSwapChain;
-    IDirect3DSurface9* mBackBuffer;
-    IDirect3DSurface9* mRenderTarget;
-    IDirect3DSurface9* mDepthStencil;
+    IDirect3DSwapChain9 *mSwapChain;
+    IDirect3DSurface9 *mBackBuffer;
+    IDirect3DSurface9 *mRenderTarget;
+    IDirect3DSurface9 *mDepthStencil;
     IDirect3DTexture9* mOffscreenTexture;
 
     SurfaceRenderTarget9 mColorRenderTarget;

@@ -9,27 +9,17 @@
 #include "libANGLE/Query.h"
 #include "libANGLE/renderer/QueryImpl.h"
 
-namespace gl {
-Query::Query(rx::QueryImpl* impl, GLuint id)
-    : RefCountObject(id)
-    , mQuery(impl)
-    , mLabel()
+namespace gl
+{
+Query::Query(rx::QueryImpl *impl, GLuint id)
+    : RefCountObject(id),
+      mQuery(impl)
 {
 }
 
 Query::~Query()
 {
     SafeDelete(mQuery);
-}
-
-void Query::setLabel(const std::string& label)
-{
-    mLabel = label;
-}
-
-const std::string& Query::getLabel() const
-{
-    return mLabel;
 }
 
 Error Query::begin()
@@ -42,32 +32,12 @@ Error Query::end()
     return mQuery->end();
 }
 
-Error Query::queryCounter()
-{
-    return mQuery->queryCounter();
-}
-
-Error Query::getResult(GLint* params)
+Error Query::getResult(GLuint *params)
 {
     return mQuery->getResult(params);
 }
 
-Error Query::getResult(GLuint* params)
-{
-    return mQuery->getResult(params);
-}
-
-Error Query::getResult(GLint64* params)
-{
-    return mQuery->getResult(params);
-}
-
-Error Query::getResult(GLuint64* params)
-{
-    return mQuery->getResult(params);
-}
-
-Error Query::isResultAvailable(bool* available)
+Error Query::isResultAvailable(GLuint *available)
 {
     return mQuery->isResultAvailable(available);
 }
@@ -77,12 +47,12 @@ GLenum Query::getType() const
     return mQuery->getType();
 }
 
-rx::QueryImpl* Query::getImplementation()
+rx::QueryImpl *Query::getImplementation()
 {
     return mQuery;
 }
 
-const rx::QueryImpl* Query::getImplementation() const
+const rx::QueryImpl *Query::getImplementation() const
 {
     return mQuery;
 }

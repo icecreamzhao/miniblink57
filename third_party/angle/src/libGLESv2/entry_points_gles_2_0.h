@@ -12,7 +12,8 @@
 #include <GLES2/gl2.h>
 #include <export.h>
 
-namespace gl {
+namespace gl
+{
 
 ANGLE_EXPORT void GL_APIENTRY ActiveTexture(GLenum texture);
 ANGLE_EXPORT void GL_APIENTRY AttachShader(GLuint program, GLuint shader);
@@ -85,7 +86,7 @@ ANGLE_EXPORT void GL_APIENTRY GetShaderiv(GLuint shader, GLenum pname, GLint* pa
 ANGLE_EXPORT void GL_APIENTRY GetShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei* length, GLchar* infolog);
 ANGLE_EXPORT void GL_APIENTRY GetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint* range, GLint* precision);
 ANGLE_EXPORT void GL_APIENTRY GetShaderSource(GLuint shader, GLsizei bufsize, GLsizei* length, GLchar* source);
-ANGLE_EXPORT const GLubyte* GL_APIENTRY GetString(GLenum name);
+ANGLE_EXPORT const GLubyte *GL_APIENTRY GetString(GLenum name);
 ANGLE_EXPORT void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat* params);
 ANGLE_EXPORT void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint* params);
 ANGLE_EXPORT void GL_APIENTRY GetUniformfv(GLuint program, GLint location, GLfloat* params);

@@ -12,63 +12,61 @@
 #define LIBANGLE_BUFFER_H_
 
 #include "common/angleutils.h"
-#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/IndexRangeCache.h"
 #include "libANGLE/RefCountObject.h"
 
-namespace rx {
+namespace rx
+{
 class BufferImpl;
 };
 
-namespace gl {
+namespace gl
+{
 
-class Buffer final : public RefCountObject, public LabeledObject {
-public:
-    Buffer(rx::BufferImpl* impl, GLuint id);
+class Buffer : public RefCountObject
+{
+  public:
+    Buffer(rx::BufferImpl *impl, GLuint id);
+
     virtual ~Buffer();
 
-    void setLabel(const std::string& label) override;
-    const std::string& getLabel() const override;
-
-    Error bufferData(const void* data, GLsizeiptr size, GLenum usage);
-    Error bufferSubData(const void* data, GLsizeiptr size, GLintptr offset);
+    Error bufferData(const void *data, GLsizeiptr size, GLenum usage);
+    Error bufferSubData(const void *data, GLsizeiptr size, GLintptr offset);
     Error copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size);
     Error map(GLenum access);
     Error mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access);
-    Error unmap(GLboolean* result);
+    Error unmap(GLboolean *result);
 
     void onTransformFeedback();
     void onPixelUnpack();
 
     Error getIndexRange(GLenum type,
-        size_t offset,
-        size_t count,
-        bool primitiveRestartEnabled,
-        IndexRange* outRange) const;
+                        size_t offset,
+                        size_t count,
+                        bool primitiveRestartEnabled,
+                        IndexRange *outRange) const;
 
     GLenum getUsage() const { return mUsage; }
     GLbitfield getAccessFlags() const { return mAccessFlags; }
     GLenum getAccess() const { return mAccess; }
     GLboolean isMapped() const { return mMapped; }
-    GLvoid* getMapPointer() const { return mMapPointer; }
+    GLvoid *getMapPointer() const { return mMapPointer; }
     GLint64 getMapOffset() const { return mMapOffset; }
     GLint64 getMapLength() const { return mMapLength; }
     GLint64 getSize() const { return mSize; }
 
-    rx::BufferImpl* getImplementation() const { return mBuffer; }
+    rx::BufferImpl *getImplementation() const { return mBuffer; }
 
-private:
-    rx::BufferImpl* mBuffer;
-
-    std::string mLabel;
+  private:
+    rx::BufferImpl *mBuffer;
 
     GLenum mUsage;
     GLint64 mSize;
     GLbitfield mAccessFlags;
     GLenum mAccess;
     GLboolean mMapped;
-    GLvoid* mMapPointer;
+    GLvoid *mMapPointer;
     GLint64 mMapOffset;
     GLint64 mMapLength;
 
@@ -77,4 +75,4 @@ private:
 
 }
 
-#endif // LIBANGLE_BUFFER_H_
+#endif   // LIBANGLE_BUFFER_H_

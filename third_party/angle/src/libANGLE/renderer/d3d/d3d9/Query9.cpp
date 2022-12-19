@@ -7,18 +7,19 @@
 // Query9.cpp: Defines the rx::Query9 class which implements rx::QueryImpl.
 
 #include "libANGLE/renderer/d3d/d3d9/Query9.h"
-#include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 #include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
+#include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
 #include <GLES2/gl2ext.h>
 
-namespace rx {
-Query9::Query9(Renderer9* renderer, GLenum type)
-    : QueryImpl(type)
-    , mResult(GL_FALSE)
-    , mQueryFinished(false)
-    , mRenderer(renderer)
-    , mQuery(NULL)
+namespace rx
+{
+Query9::Query9(Renderer9 *renderer, GLenum type)
+    : QueryImpl(type),
+      mResult(GL_FALSE),
+      mQueryFinished(false),
+      mRenderer(renderer),
+      mQuery(NULL)
 {
 }
 
@@ -29,16 +30,19 @@ Query9::~Query9()
 
 gl::Error Query9::begin()
 {
-    if (mQuery == NULL) {
+    if (mQuery == NULL)
+    {
         HRESULT result = mRenderer->getDevice()->CreateQuery(D3DQUERYTYPE_OCCLUSION, &mQuery);
-        if (FAILED(result)) {
+        if (FAILED(result))
+        {
             return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.", result);
         }
     }
 
     HRESULT result = mQuery->Issue(D3DISSUE_BEGIN);
     ASSERT(SUCCEEDED(result));
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to begin internal query, result: 0x%X.", result);
     }
 
@@ -51,7 +55,8 @@ gl::Error Query9::end()
 
     HRESULT result = mQuery->Issue(D3DISSUE_END);
     ASSERT(SUCCEEDED(result));
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to end internal query, result: 0x%X.", result);
     }
 
@@ -61,88 +66,73 @@ gl::Error Query9::end()
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Query9::queryCounter()
+gl::Error Query9::getResult(GLuint *params)
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION, "Unimplemented");
-}
-
-template <typename T>
-gl::Error Query9::getResultBase(T* params)
-{
-    while (!mQueryFinished) {
+    while (!mQueryFinished)
+    {
         gl::Error error = testQuery();
-        if (error.isError()) {
+        if (error.isError())
+        {
             return error;
         }
 
-        if (!mQueryFinished) {
+        if (!mQueryFinished)
+        {
             Sleep(0);
         }
     }
 
     ASSERT(mQueryFinished);
-    *params = static_cast<T>(mResult);
+    *params = mResult;
+
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Query9::getResult(GLint* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error Query9::getResult(GLuint* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error Query9::getResult(GLint64* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error Query9::getResult(GLuint64* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error Query9::isResultAvailable(bool* available)
+gl::Error Query9::isResultAvailable(GLuint *available)
 {
     gl::Error error = testQuery();
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
-    *available = mQueryFinished;
+    *available = (mQueryFinished ? GL_TRUE : GL_FALSE);
 
     return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error Query9::testQuery()
 {
-    if (!mQueryFinished) {
+    if (!mQueryFinished)
+    {
         ASSERT(mQuery);
 
         DWORD numPixels = 0;
 
         HRESULT hres = mQuery->GetData(&numPixels, sizeof(DWORD), D3DGETDATA_FLUSH);
-        if (hres == S_OK) {
+        if (hres == S_OK)
+        {
             mQueryFinished = true;
 
-            switch (getType()) {
-            case GL_ANY_SAMPLES_PASSED_EXT:
-            case GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT:
+            switch (getType())
+            {
+              case GL_ANY_SAMPLES_PASSED_EXT:
+              case GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT:
                 mResult = (numPixels > 0) ? GL_TRUE : GL_FALSE;
                 break;
 
-            default:
+              default:
                 UNREACHABLE();
                 break;
             }
-        } else if (d3d9::isDeviceLostError(hres)) {
+        }
+        else if (d3d9::isDeviceLostError(hres))
+        {
             mRenderer->notifyDeviceLost();
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to test get query result, device is lost.");
-        } else if (mRenderer->testDeviceLost()) {
+        }
+        else if (mRenderer->testDeviceLost())
+        {
             mRenderer->notifyDeviceLost();
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to test get query result, device is lost.");
         }

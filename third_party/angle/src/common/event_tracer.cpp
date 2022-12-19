@@ -6,15 +6,17 @@
 
 #include "common/debug.h"
 
-namespace angle {
-
-const unsigned char* GetTraceCategoryEnabledFlag(const char* name)
+namespace angle
 {
-    angle::Platform* platform = ANGLEPlatformCurrent();
+
+const unsigned char *GetTraceCategoryEnabledFlag(const char *name)
+{
+    angle::Platform *platform = ANGLEPlatformCurrent();
     ASSERT(platform);
 
-    const unsigned char* categoryEnabledFlag = platform->getTraceCategoryEnabledFlag(name);
-    if (categoryEnabledFlag != nullptr) {
+    const unsigned char *categoryEnabledFlag = platform->getTraceCategoryEnabledFlag(name);
+    if (categoryEnabledFlag != nullptr)
+    {
         return categoryEnabledFlag;
     }
 
@@ -23,25 +25,27 @@ const unsigned char* GetTraceCategoryEnabledFlag(const char* name)
 }
 
 Platform::TraceEventHandle AddTraceEvent(char phase, const unsigned char* categoryGroupEnabled, const char* name, unsigned long long id,
-    int numArgs, const char** argNames, const unsigned char* argTypes,
-    const unsigned long long* argValues, unsigned char flags)
+                                         int numArgs, const char** argNames, const unsigned char* argTypes,
+                                         const unsigned long long* argValues, unsigned char flags)
 {
-    angle::Platform* platform = ANGLEPlatformCurrent();
+    angle::Platform *platform = ANGLEPlatformCurrent();
     ASSERT(platform);
 
     double timestamp = platform->monotonicallyIncreasingTime();
 
-    if (timestamp != 0) {
-        angle::Platform::TraceEventHandle handle = platform->addTraceEvent(phase,
-            categoryGroupEnabled,
-            name,
-            id,
-            timestamp,
-            numArgs,
-            argNames,
-            argTypes,
-            argValues,
-            flags);
+    if (timestamp != 0)
+    {
+        angle::Platform::TraceEventHandle handle =
+            platform->addTraceEvent(phase,
+                                    categoryGroupEnabled,
+                                    name,
+                                    id,
+                                    timestamp,
+                                    numArgs,
+                                    argNames,
+                                    argTypes,
+                                    argValues,
+                                    flags);
         ASSERT(handle != 0);
         return handle;
     }
@@ -49,4 +53,4 @@ Platform::TraceEventHandle AddTraceEvent(char phase, const unsigned char* catego
     return static_cast<Platform::TraceEventHandle>(0);
 }
 
-} // namespace angle
+}  // namespace angle

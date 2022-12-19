@@ -50,10 +50,7 @@ public:
     virtual ~TShHandleBase();
     virtual TCompiler* getAsCompiler() { return 0; }
 #ifdef ANGLE_ENABLE_HLSL
-    virtual TranslatorHLSL* getAsTranslatorHLSL()
-    {
-        return 0;
-    }
+    virtual TranslatorHLSL* getAsTranslatorHLSL() { return 0; }
 #endif // ANGLE_ENABLE_HLSL
 
 protected:
@@ -66,18 +63,19 @@ protected:
 // The base class for the machine dependent compiler to derive from
 // for managing object code from the compile.
 //
-class TCompiler : public TShHandleBase {
-public:
+class TCompiler : public TShHandleBase
+{
+  public:
     TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output);
     ~TCompiler() override;
-    TCompiler* getAsCompiler() override { return this; }
+    TCompiler *getAsCompiler() override { return this; }
 
     bool Init(const ShBuiltInResources& resources);
 
     // compileTreeForTesting should be used only when tests require access to
     // the AST. Users of this function need to manually manage the global pool
     // allocator. Returns NULL whenever there are compilation errors.
-    TIntermNode* compileTreeForTesting(const char* const shaderStrings[],
+    TIntermNode *compileTreeForTesting(const char* const shaderStrings[],
         size_t numStrings, int compileOptions);
 
     bool compile(const char* const shaderStrings[],
@@ -90,25 +88,25 @@ public:
     // Clears the results from the previous compilation.
     void clearResults();
 
-    const std::vector<sh::Attribute>& getAttributes() const { return attributes; }
-    const std::vector<sh::OutputVariable>& getOutputVariables() const { return outputVariables; }
-    const std::vector<sh::Uniform>& getUniforms() const { return uniforms; }
-    const std::vector<sh::Varying>& getVaryings() const { return varyings; }
-    const std::vector<sh::InterfaceBlock>& getInterfaceBlocks() const { return interfaceBlocks; }
+    const std::vector<sh::Attribute> &getAttributes() const { return attributes; }
+    const std::vector<sh::OutputVariable> &getOutputVariables() const { return outputVariables; }
+    const std::vector<sh::Uniform> &getUniforms() const { return uniforms; }
+    const std::vector<sh::Varying> &getVaryings() const { return varyings; }
+    const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const { return interfaceBlocks; }
 
     ShHashFunction64 getHashFunction() const { return hashFunction; }
     NameMap& getNameMap() { return nameMap; }
     TSymbolTable& getSymbolTable() { return symbolTable; }
     ShShaderSpec getShaderSpec() const { return shaderSpec; }
     ShShaderOutput getOutputType() const { return outputType; }
-    const std::string& getBuiltInResourcesString() const { return builtInResourcesString; }
+    const std::string &getBuiltInResourcesString() const { return builtInResourcesString; }
 
     bool shouldRunLoopAndIndexingValidation(int compileOptions) const;
 
     // Get the resources set by InitBuiltInSymbolTable
     const ShBuiltInResources& getResources() const;
 
-protected:
+  protected:
     sh::GLenum getShaderType() const { return shaderType; }
     // Initialize symbol-table with built-in symbols.
     bool InitBuiltInSymbolTable(const ShBuiltInResources& resources);
@@ -126,9 +124,9 @@ protected:
     // Collect info for all attribs, uniforms, varyings.
     void collectVariables(TIntermNode* root);
     // Add emulated functions to the built-in function emulator.
-    virtual void initBuiltInFunctionEmulator(BuiltInFunctionEmulator* emu, int compileOptions) {};
+    virtual void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu, int compileOptions) {};
     // Translate to object code.
-    virtual void translate(TIntermNode* root, int compileOptions) = 0;
+    virtual void translate(TIntermNode *root, int compileOptions) = 0;
     // Returns true if, after applying the packing rules in the GLSL 1.017 spec
     // Appendix A, section 7, the shader does not use too many uniforms.
     bool enforcePackingRestrictions();
@@ -153,10 +151,10 @@ protected:
     bool limitExpressionComplexity(TIntermNode* root);
     // Get built-in extensions with default behavior.
     const TExtensionBehavior& getExtensionBehavior() const;
-    const char* getSourcePath() const;
+    const char *getSourcePath() const;
     const TPragma& getPragma() const { return mPragma; }
     void writePragma();
-    unsigned int* getTemporaryIndex() { return &mTemporaryIndex; }
+    unsigned int *getTemporaryIndex() { return &mTemporaryIndex; }
 
     const ArrayBoundsClamper& getArrayBoundsClamper() const;
     ShArrayIndexClampingStrategy getArrayIndexClampingStrategy() const;
@@ -174,28 +172,27 @@ protected:
         return (compileOptions & SH_VARIABLES) != 0;
     }
 
-private:
+  private:
     // Creates the function call DAG for further analysis, returning false if there is a recursion
-    bool initCallDag(TIntermNode* root);
+    bool initCallDag(TIntermNode *root);
     // Return false if "main" doesn't exist
     bool tagUsedFunctions();
     void internalTagUsedFunction(size_t index);
 
-    void initSamplerDefaultPrecision(TBasicType samplerType);
-
     // Removes unused function declarations and prototypes from the AST
     class UnusedPredicate;
-    bool pruneUnusedFunctions(TIntermNode* root);
+    bool pruneUnusedFunctions(TIntermNode *root);
 
-    TIntermNode* compileTreeImpl(const char* const shaderStrings[],
-        size_t numStrings,
-        const int compileOptions);
+    TIntermNode *compileTreeImpl(const char *const shaderStrings[],
+                                 size_t numStrings,
+                                 const int compileOptions);
 
     sh::GLenum shaderType;
     ShShaderSpec shaderSpec;
     ShShaderOutput outputType;
 
-    struct FunctionMetadata {
+    struct FunctionMetadata
+    {
         FunctionMetadata()
             : used(false)
         {
@@ -226,8 +223,8 @@ private:
 
     // Results of compilation.
     int shaderVersion;
-    TInfoSink infoSink; // Output sink.
-    const char* mSourcePath; // Path of source file or NULL
+    TInfoSink infoSink;  // Output sink.
+    const char *mSourcePath; // Path of source file or NULL
 
     // name hashing.
     ShHashFunction64 hashFunction;

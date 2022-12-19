@@ -17,30 +17,33 @@
 
 #include <map>
 
-namespace gl {
+namespace gl
+{
 
-class IndexRangeCache {
-public:
+class IndexRangeCache
+{
+  public:
     void addRange(GLenum type,
-        size_t offset,
-        size_t count,
-        bool primitiveRestartEnabled,
-        const IndexRange& range);
+                  size_t offset,
+                  size_t count,
+                  bool primitiveRestartEnabled,
+                  const IndexRange &range);
     bool findRange(GLenum type,
-        size_t offset,
-        size_t count,
-        bool primitiveRestartEnabled,
-        IndexRange* outRange) const;
+                   size_t offset,
+                   size_t count,
+                   bool primitiveRestartEnabled,
+                   IndexRange *outRange) const;
 
     void invalidateRange(size_t offset, size_t size);
     void clear();
 
-private:
-    struct IndexRangeKey {
+  private:
+    struct IndexRangeKey
+    {
         IndexRangeKey();
         IndexRangeKey(GLenum type, size_t offset, size_t count, bool primitiveRestart);
 
-        bool operator<(const IndexRangeKey& rhs) const;
+        bool operator<(const IndexRangeKey &rhs) const;
 
         GLenum type;
         size_t offset;

@@ -185,6 +185,7 @@ extern "C" {
 #define BORINGSSL_API_VERSION 9
 
 #if defined(BORINGSSL_SHARED_LIBRARY)
+
 #if defined(OPENSSL_WINDOWS)
 
 #if defined(BORINGSSL_IMPLEMENTATION)

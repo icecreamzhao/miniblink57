@@ -11,10 +11,10 @@
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
-namespace rx {
+namespace rx
+{
 
-IndexBuffer11::IndexBuffer11(Renderer11* const renderer)
-    : mRenderer(renderer)
+IndexBuffer11::IndexBuffer11(Renderer11 *const renderer) : mRenderer(renderer)
 {
     mBuffer = NULL;
     mBufferSize = 0;
@@ -32,7 +32,8 @@ gl::Error IndexBuffer11::initialize(unsigned int bufferSize, GLenum indexType, b
 
     updateSerial();
 
-    if (bufferSize > 0) {
+    if (bufferSize > 0)
+    {
         ID3D11Device* dxDevice = mRenderer->getDevice();
 
         D3D11_BUFFER_DESC bufferDesc;
@@ -44,13 +45,17 @@ gl::Error IndexBuffer11::initialize(unsigned int bufferSize, GLenum indexType, b
         bufferDesc.StructureByteStride = 0;
 
         HRESULT result = dxDevice->CreateBuffer(&bufferDesc, NULL, &mBuffer);
-        if (FAILED(result)) {
+        if (FAILED(result))
+        {
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal index buffer of size, %lu.", bufferSize);
         }
 
-        if (dynamic) {
+        if (dynamic)
+        {
             d3d11::SetDebugName(mBuffer, "IndexBuffer11 (dynamic)");
-        } else {
+        }
+        else
+        {
             d3d11::SetDebugName(mBuffer, "IndexBuffer11 (static)");
         }
     }
@@ -64,20 +69,23 @@ gl::Error IndexBuffer11::initialize(unsigned int bufferSize, GLenum indexType, b
 
 gl::Error IndexBuffer11::mapBuffer(unsigned int offset, unsigned int size, void** outMappedMemory)
 {
-    if (!mBuffer) {
+    if (!mBuffer)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal index buffer is not initialized.");
     }
 
     // Check for integer overflows and out-out-bounds map requests
-    if (offset + size < offset || offset + size > mBufferSize) {
+    if (offset + size < offset || offset + size > mBufferSize)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Index buffer map range is not inside the buffer.");
     }
 
-    ID3D11DeviceContext* dxContext = mRenderer->getDeviceContext();
+    ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
     HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to map internal index buffer, HRESULT: 0x%08x.", result);
     }
 
@@ -87,11 +95,12 @@ gl::Error IndexBuffer11::mapBuffer(unsigned int offset, unsigned int size, void*
 
 gl::Error IndexBuffer11::unmapBuffer()
 {
-    if (!mBuffer) {
+    if (!mBuffer)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal index buffer is not initialized.");
     }
 
-    ID3D11DeviceContext* dxContext = mRenderer->getDeviceContext();
+    ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
     dxContext->Unmap(mBuffer, 0);
     return gl::Error(GL_NO_ERROR);
 }
@@ -108,24 +117,29 @@ unsigned int IndexBuffer11::getBufferSize() const
 
 gl::Error IndexBuffer11::setSize(unsigned int bufferSize, GLenum indexType)
 {
-    if (bufferSize > mBufferSize || indexType != mIndexType) {
+    if (bufferSize > mBufferSize || indexType != mIndexType)
+    {
         return initialize(bufferSize, indexType, mDynamicUsage);
-    } else {
+    }
+    else
+    {
         return gl::Error(GL_NO_ERROR);
     }
 }
 
 gl::Error IndexBuffer11::discard()
 {
-    if (!mBuffer) {
+    if (!mBuffer)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal index buffer is not initialized.");
     }
 
-    ID3D11DeviceContext* dxContext = mRenderer->getDeviceContext();
+    ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
     HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to map internal index buffer, HRESULT: 0x%08x.", result);
     }
 
@@ -136,20 +150,16 @@ gl::Error IndexBuffer11::discard()
 
 DXGI_FORMAT IndexBuffer11::getIndexFormat() const
 {
-    switch (mIndexType) {
-    case GL_UNSIGNED_BYTE:
-        return DXGI_FORMAT_R16_UINT;
-    case GL_UNSIGNED_SHORT:
-        return DXGI_FORMAT_R16_UINT;
-    case GL_UNSIGNED_INT:
-        return DXGI_FORMAT_R32_UINT;
-    default:
-        UNREACHABLE();
-        return DXGI_FORMAT_UNKNOWN;
+    switch (mIndexType)
+    {
+      case GL_UNSIGNED_BYTE:    return DXGI_FORMAT_R16_UINT;
+      case GL_UNSIGNED_SHORT:   return DXGI_FORMAT_R16_UINT;
+      case GL_UNSIGNED_INT:     return DXGI_FORMAT_R32_UINT;
+      default: UNREACHABLE();   return DXGI_FORMAT_UNKNOWN;
     }
 }
 
-ID3D11Buffer* IndexBuffer11::getBuffer() const
+ID3D11Buffer *IndexBuffer11::getBuffer() const
 {
     return mBuffer;
 }

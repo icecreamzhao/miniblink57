@@ -13,19 +13,20 @@
 // Creates a dependency graph of symbols, function calls, conditions etc. by
 // traversing a intermediate tree.
 //
-class TDependencyGraphBuilder : public TIntermTraverser {
-public:
-    static void build(TIntermNode* node, TDependencyGraph* graph);
+class TDependencyGraphBuilder : public TIntermTraverser
+{
+  public:
+    static void build(TIntermNode *node, TDependencyGraph *graph);
 
-    void visitSymbol(TIntermSymbol*) override;
-    bool visitBinary(Visit visit, TIntermBinary*) override;
-    bool visitSelection(Visit visit, TIntermSelection*) override;
-    bool visitAggregate(Visit visit, TIntermAggregate*) override;
-    bool visitLoop(Visit visit, TIntermLoop*) override;
+    void visitSymbol(TIntermSymbol *) override;
+    bool visitBinary(Visit visit, TIntermBinary *) override;
+    bool visitSelection(Visit visit, TIntermSelection *) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *) override;
+    bool visitLoop(Visit visit, TIntermLoop *) override;
 
-private:
-    typedef std::stack<TGraphSymbol*> TSymbolStack;
-    typedef std::set<TGraphParentNode*> TParentNodeSet;
+  private:
+    typedef std::stack<TGraphSymbol *> TSymbolStack;
+    typedef std::set<TGraphParentNode *> TParentNodeSet;
 
     //
     // For collecting the dependent nodes of assignments, conditions, etc.
@@ -34,17 +35,18 @@ private:
     // This data structure is stack of sets. Each set contains dependency graph
     // parent nodes.
     //
-    class TNodeSetStack {
-    public:
+    class TNodeSetStack
+    {
+      public:
         TNodeSetStack() {};
         ~TNodeSetStack() { clear(); }
 
         // This should only be called after a pushSet.
         // Returns NULL if the top set is empty.
-        TParentNodeSet* getTopSet() const
+        TParentNodeSet *getTopSet() const
         {
             ASSERT(!mNodeSets.empty());
-            TParentNodeSet* topSet = mNodeSets.top();
+            TParentNodeSet *topSet = mNodeSets.top();
             return !topSet->empty() ? topSet : NULL;
         }
 
@@ -62,12 +64,17 @@ private:
         void popSetIntoNext()
         {
             ASSERT(!mNodeSets.empty());
-            TParentNodeSet* oldTopSet = mNodeSets.top();
+            TParentNodeSet *oldTopSet = mNodeSets.top();
             mNodeSets.pop();
 
-            if (!mNodeSets.empty()) {
-                TParentNodeSet* newTopSet = mNodeSets.top();
-                newTopSet->insert(oldTopSet->begin(), oldTopSet->end());
+            if (!mNodeSets.empty())
+            {
+                TParentNodeSet *newTopSet = mNodeSets.top();
+                //newTopSet->insert(oldTopSet->begin(), oldTopSet->end());
+                for (TParentNodeSet::iterator it = oldTopSet->begin(); it != oldTopSet->end(); ++it) {
+                    TGraphParentNode* n = *it;
+                    newTopSet->insert(n);
+                }
             }
 
             delete oldTopSet;
@@ -77,7 +84,7 @@ private:
         // This can be called when there is no top set if we are visiting
         // symbols that are not under an assignment or condition.
         // We don't need to track those symbols.
-        void insertIntoTopSet(TGraphParentNode* node)
+        void insertIntoTopSet(TGraphParentNode *node)
         {
             if (mNodeSets.empty())
                 return;
@@ -91,8 +98,8 @@ private:
                 popSet();
         }
 
-    private:
-        typedef std::stack<TParentNodeSet*> TParentNodeSetStack;
+      private:
+        typedef std::stack<TParentNodeSet *> TParentNodeSetStack;
 
         TParentNodeSetStack mNodeSets;
     };
@@ -101,17 +108,17 @@ private:
     // An instance of this class pushes a new node set when instantiated.
     // When the instance goes out of scope, it and pops the node set.
     //
-    class TNodeSetMaintainer : angle::NonCopyable {
-    public:
-        TNodeSetMaintainer(TDependencyGraphBuilder* factory)
+    class TNodeSetMaintainer : angle::NonCopyable
+    {
+      public:
+        TNodeSetMaintainer(TDependencyGraphBuilder *factory)
             : mSets(factory->mNodeSets)
         {
             mSets.pushSet();
         }
         ~TNodeSetMaintainer() { mSets.popSet(); }
-
-    protected:
-        TNodeSetStack& mSets;
+      protected:
+        TNodeSetStack &mSets;
     };
 
     //
@@ -119,17 +126,17 @@ private:
     // When the instance goes out of scope, it and pops the top node set and adds
     // its contents to the new top node set.
     //
-    class TNodeSetPropagatingMaintainer : angle::NonCopyable {
-    public:
-        TNodeSetPropagatingMaintainer(TDependencyGraphBuilder* factory)
+    class TNodeSetPropagatingMaintainer : angle::NonCopyable
+    {
+      public:
+        TNodeSetPropagatingMaintainer(TDependencyGraphBuilder *factory)
             : mSets(factory->mNodeSets)
         {
             mSets.pushSet();
         }
         ~TNodeSetPropagatingMaintainer() { mSets.popSetIntoNext(); }
-
-    protected:
-        TNodeSetStack& mSets;
+      protected:
+        TNodeSetStack &mSets;
     };
 
     //
@@ -144,13 +151,15 @@ private:
     // kRightSubtree will never be replaced by a real symbol because we are tracking
     // the leftmost symbol.
     //
-    class TLeftmostSymbolMaintainer : angle::NonCopyable {
-    public:
+    class TLeftmostSymbolMaintainer : angle::NonCopyable
+    {
+      public:
         TLeftmostSymbolMaintainer(
-            TDependencyGraphBuilder* factory, TGraphSymbol& subtree)
+            TDependencyGraphBuilder *factory, TGraphSymbol &subtree)
             : mLeftmostSymbols(factory->mLeftmostSymbols)
         {
-            mNeedsPlaceholderSymbol = mLeftmostSymbols.empty() || mLeftmostSymbols.top() != &subtree;
+            mNeedsPlaceholderSymbol =
+                mLeftmostSymbols.empty() || mLeftmostSymbols.top() != &subtree;
             if (mNeedsPlaceholderSymbol)
                 mLeftmostSymbols.push(&subtree);
         }
@@ -161,36 +170,34 @@ private:
                 mLeftmostSymbols.pop();
         }
 
-    protected:
+      protected:
         TSymbolStack& mLeftmostSymbols;
         bool mNeedsPlaceholderSymbol;
     };
 
-    TDependencyGraphBuilder(TDependencyGraph* graph)
-        : TIntermTraverser(true, false, false)
-        , mLeftSubtree(NULL)
-        , mRightSubtree(NULL)
-        , mGraph(graph)
-    {
-    }
-    void build(TIntermNode* intermNode) { intermNode->traverse(this); }
+    TDependencyGraphBuilder(TDependencyGraph *graph)
+        : TIntermTraverser(true, false, false),
+          mLeftSubtree(NULL),
+          mRightSubtree(NULL),
+          mGraph(graph) {}
+    void build(TIntermNode *intermNode) { intermNode->traverse(this); }
 
     void connectMultipleNodesToSingleNode(
-        TParentNodeSet* nodes, TGraphNode* node) const;
+        TParentNodeSet *nodes, TGraphNode *node) const;
 
-    void visitAssignment(TIntermBinary*);
-    void visitLogicalOp(TIntermBinary*);
-    void visitBinaryChildren(TIntermBinary*);
-    void visitFunctionDefinition(TIntermAggregate*);
-    void visitFunctionCall(TIntermAggregate* intermFunctionCall);
-    void visitAggregateChildren(TIntermAggregate*);
+    void visitAssignment(TIntermBinary *);
+    void visitLogicalOp(TIntermBinary *);
+    void visitBinaryChildren(TIntermBinary *);
+    void visitFunctionDefinition(TIntermAggregate *);
+    void visitFunctionCall(TIntermAggregate *intermFunctionCall);
+    void visitAggregateChildren(TIntermAggregate *);
 
     TGraphSymbol mLeftSubtree;
     TGraphSymbol mRightSubtree;
 
-    TDependencyGraph* mGraph;
+    TDependencyGraph *mGraph;
     TNodeSetStack mNodeSets;
     TSymbolStack mLeftmostSymbols;
 };
 
-#endif // COMPILER_TRANSLATOR_DEPGRAPH_DEPENDENCYGRAPHBUILDER_H_
+#endif  // COMPILER_TRANSLATOR_DEPGRAPH_DEPENDENCYGRAPHBUILDER_H_

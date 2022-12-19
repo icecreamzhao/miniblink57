@@ -11,31 +11,34 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
-namespace {
+namespace
+{
 
 template <typename T>
-static inline void SyncSamplerStateMember(const rx::FunctionsGL* functions,
-    GLuint sampler,
-    const gl::SamplerState& newState,
-    gl::SamplerState& curState,
-    GLenum name,
-    T(gl::SamplerState::*samplerMember))
+static inline void SyncSamplerStateMember(const rx::FunctionsGL *functions,
+                                          GLuint sampler,
+                                          const gl::SamplerState &newState,
+                                          gl::SamplerState &curState,
+                                          GLenum name,
+                                          T(gl::SamplerState::*samplerMember))
 {
-    if (curState.*samplerMember != newState.*samplerMember) {
+    if (curState.*samplerMember != newState.*samplerMember)
+    {
         curState.*samplerMember = newState.*samplerMember;
         functions->samplerParameterf(sampler, name, static_cast<GLfloat>(curState.*samplerMember));
     }
 }
 }
 
-namespace rx {
+namespace rx
+{
 
-SamplerGL::SamplerGL(const FunctionsGL* functions, StateManagerGL* stateManager)
-    : SamplerImpl()
-    , mFunctions(functions)
-    , mStateManager(stateManager)
-    , mAppliedSamplerState()
-    , mSamplerID(0)
+SamplerGL::SamplerGL(const FunctionsGL *functions, StateManagerGL *stateManager)
+    : SamplerImpl(),
+      mFunctions(functions),
+      mStateManager(stateManager),
+      mAppliedSamplerState(),
+      mSamplerID(0)
 {
     mFunctions->genSamplers(1, &mSamplerID);
 }
@@ -46,7 +49,7 @@ SamplerGL::~SamplerGL()
     mSamplerID = 0;
 }
 
-void SamplerGL::syncState(const gl::SamplerState& samplerState) const
+void SamplerGL::syncState(const gl::SamplerState &samplerState) const
 {
     // clang-format off
     SyncSamplerStateMember(mFunctions, mSamplerID, samplerState, mAppliedSamplerState, GL_TEXTURE_MIN_FILTER, &gl::SamplerState::minFilter);

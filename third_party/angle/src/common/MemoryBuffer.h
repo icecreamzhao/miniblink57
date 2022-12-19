@@ -12,10 +12,12 @@
 #include <cstddef>
 #include <stdint.h>
 
-namespace rx {
+namespace rx
+{
 
-class MemoryBuffer : angle::NonCopyable {
-public:
+class MemoryBuffer : angle::NonCopyable
+{
+  public:
     MemoryBuffer();
     ~MemoryBuffer();
 
@@ -23,12 +25,12 @@ public:
     size_t size() const;
     bool empty() const { return mSize == 0; }
 
-    const uint8_t* data() const;
-    uint8_t* data();
+    const uint8_t *data() const;
+    uint8_t *data();
 
-private:
+  private:
     size_t mSize;
-    uint8_t* mData;
+    uint8_t *mData;
 };
 
 }

@@ -13,12 +13,14 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
 
-namespace {
-
-bool IsProblematicPow(TIntermTyped* node)
+namespace
 {
-    TIntermAggregate* agg = node->getAsAggregate();
-    if (agg != nullptr && agg->getOp() == EOpPow) {
+
+bool IsProblematicPow(TIntermTyped *node)
+{
+    TIntermAggregate *agg = node->getAsAggregate();
+    if (agg != nullptr && agg->getOp() == EOpPow)
+    {
         ASSERT(agg->getSequence()->size() == 2);
         return agg->getSequence()->at(1)->getAsConstantUnion() != nullptr;
     }
@@ -26,39 +28,41 @@ bool IsProblematicPow(TIntermTyped* node)
 }
 
 // Traverser that converts all pow operations simultaneously.
-class RemovePowTraverser : public TIntermTraverser {
-public:
+class RemovePowTraverser : public TIntermTraverser
+{
+  public:
     RemovePowTraverser();
 
-    bool visitAggregate(Visit visit, TIntermAggregate* node) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
 
     void nextIteration() { mNeedAnotherIteration = false; }
     bool needAnotherIteration() const { return mNeedAnotherIteration; }
 
-protected:
+  protected:
     bool mNeedAnotherIteration;
 };
 
 RemovePowTraverser::RemovePowTraverser()
-    : TIntermTraverser(true, false, false)
-    , mNeedAnotherIteration(false)
+    : TIntermTraverser(true, false, false),
+      mNeedAnotherIteration(false)
 {
 }
 
-bool RemovePowTraverser::visitAggregate(Visit visit, TIntermAggregate* node)
+bool RemovePowTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
-    if (IsProblematicPow(node)) {
+    if (IsProblematicPow(node))
+    {
         TInfoSink nullSink;
 
-        TIntermTyped* x = node->getSequence()->at(0)->getAsTyped();
-        TIntermTyped* y = node->getSequence()->at(1)->getAsTyped();
+        TIntermTyped *x = node->getSequence()->at(0)->getAsTyped();
+        TIntermTyped *y = node->getSequence()->at(1)->getAsTyped();
 
-        TIntermUnary* log = new TIntermUnary(EOpLog2);
+        TIntermUnary *log = new TIntermUnary(EOpLog2);
         log->setOperand(x);
         log->setLine(node->getLine());
         log->setType(x->getType());
 
-        TIntermBinary* mul = new TIntermBinary(EOpMul);
+        TIntermBinary *mul = new TIntermBinary(EOpMul);
         mul->setLeft(y);
         mul->setRight(log);
         mul->setLine(node->getLine());
@@ -66,7 +70,7 @@ bool RemovePowTraverser::visitAggregate(Visit visit, TIntermAggregate* node)
         UNUSED_ASSERTION_VARIABLE(valid);
         ASSERT(valid);
 
-        TIntermUnary* exp = new TIntermUnary(EOpExp2);
+        TIntermUnary *exp = new TIntermUnary(EOpExp2);
         exp->setOperand(mul);
         exp->setLine(node->getLine());
         exp->setType(node->getType());
@@ -76,7 +80,8 @@ bool RemovePowTraverser::visitAggregate(Visit visit, TIntermAggregate* node)
 
         // If the x parameter also needs to be replaced, we need to do that in another traversal,
         // since it's parent node will change in a way that's not handled correctly by updateTree().
-        if (IsProblematicPow(x)) {
+        if (IsProblematicPow(x))
+        {
             mNeedAnotherIteration = true;
             return false;
         }
@@ -86,13 +91,15 @@ bool RemovePowTraverser::visitAggregate(Visit visit, TIntermAggregate* node)
 
 } // namespace
 
-void RemovePow(TIntermNode* root)
+void RemovePow(TIntermNode *root)
 {
     RemovePowTraverser traverser;
     // Iterate as necessary, and reset the traverser between iterations.
-    do {
+    do
+    {
         traverser.nextIteration();
         root->traverse(&traverser);
         traverser.updateTree();
-    } while (traverser.needAnotherIteration());
+    }
+    while (traverser.needAnotherIteration());
 }

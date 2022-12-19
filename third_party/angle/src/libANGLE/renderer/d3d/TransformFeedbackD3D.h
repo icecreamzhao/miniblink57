@@ -9,13 +9,15 @@
 #ifndef LIBANGLE_RENDERER_D3D_TRANSFORMFEEDBACKD3D_H_
 #define LIBANGLE_RENDERER_D3D_TRANSFORMFEEDBACKD3D_H_
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/TransformFeedbackImpl.h"
+#include "libANGLE/angletypes.h"
 
-namespace rx {
+namespace rx
+{
 
-class TransformFeedbackD3D : public TransformFeedbackImpl {
-public:
+class TransformFeedbackD3D : public TransformFeedbackImpl
+{
+  public:
     TransformFeedbackD3D();
     virtual ~TransformFeedbackD3D();
 
@@ -24,8 +26,8 @@ public:
     void pause() override;
     void resume() override;
 
-    void bindGenericBuffer(const BindingPointer<gl::Buffer>& binding) override;
-    void bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer>& binding) override;
+    void bindGenericBuffer(const BindingPointer<gl::Buffer> &binding) override;
+    void bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding) override;
 };
 
 }

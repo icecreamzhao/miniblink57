@@ -11,69 +11,71 @@
 
 #include "libANGLE/renderer/ProgramImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsGL;
 class StateManagerGL;
 
-struct SamplerBindingGL {
+struct SamplerBindingGL
+{
     GLenum textureType;
     std::vector<GLuint> boundTextureUnits;
 };
 
-class ProgramGL : public ProgramImpl {
-public:
-    ProgramGL(const gl::Program::Data& data,
-        const FunctionsGL* functions,
-        StateManagerGL* stateManager);
+class ProgramGL : public ProgramImpl
+{
+  public:
+    ProgramGL(const gl::Program::Data &data,
+              const FunctionsGL *functions,
+              StateManagerGL *stateManager);
     ~ProgramGL() override;
 
-    LinkResult load(gl::InfoLog& infoLog, gl::BinaryInputStream* stream) override;
-    gl::Error save(gl::BinaryOutputStream* stream) override;
-    void setBinaryRetrievableHint(bool retrievable) override;
+    LinkResult load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream) override;
+    gl::Error save(gl::BinaryOutputStream *stream) override;
 
-    LinkResult link(const gl::Data& data, gl::InfoLog& infoLog) override;
-    GLboolean validate(const gl::Caps& caps, gl::InfoLog* infoLog) override;
+    LinkResult link(const gl::Data &data, gl::InfoLog &infoLog) override;
+    GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
-    void setUniform1fv(GLint location, GLsizei count, const GLfloat* v) override;
-    void setUniform2fv(GLint location, GLsizei count, const GLfloat* v) override;
-    void setUniform3fv(GLint location, GLsizei count, const GLfloat* v) override;
-    void setUniform4fv(GLint location, GLsizei count, const GLfloat* v) override;
-    void setUniform1iv(GLint location, GLsizei count, const GLint* v) override;
-    void setUniform2iv(GLint location, GLsizei count, const GLint* v) override;
-    void setUniform3iv(GLint location, GLsizei count, const GLint* v) override;
-    void setUniform4iv(GLint location, GLsizei count, const GLint* v) override;
-    void setUniform1uiv(GLint location, GLsizei count, const GLuint* v) override;
-    void setUniform2uiv(GLint location, GLsizei count, const GLuint* v) override;
-    void setUniform3uiv(GLint location, GLsizei count, const GLuint* v) override;
-    void setUniform4uiv(GLint location, GLsizei count, const GLuint* v) override;
-    void setUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
-    void setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value) override;
+    void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setUniform2fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setUniform3fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setUniform4fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setUniform1iv(GLint location, GLsizei count, const GLint *v) override;
+    void setUniform2iv(GLint location, GLsizei count, const GLint *v) override;
+    void setUniform3iv(GLint location, GLsizei count, const GLint *v) override;
+    void setUniform4iv(GLint location, GLsizei count, const GLint *v) override;
+    void setUniform1uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setUniform2uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setUniform3uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setUniform4uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
+    void setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
 
     void setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding) override;
 
-    bool getUniformBlockSize(const std::string& blockName, size_t* sizeOut) const override;
-    bool getUniformBlockMemberInfo(const std::string& memberUniformName,
-        sh::BlockMemberInfo* memberInfoOut) const override;
+    bool getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const override;
+    bool getUniformBlockMemberInfo(const std::string &memberUniformName,
+                                   sh::BlockMemberInfo *memberInfoOut) const override;
 
     GLuint getProgramID() const;
-    const std::vector<SamplerBindingGL>& getAppliedSamplerUniforms() const;
+    const std::vector<SamplerBindingGL> &getAppliedSamplerUniforms() const;
 
-private:
+  private:
     void reset();
 
     // Helper function, makes it simpler to type.
     GLint uniLoc(GLint glLocation) const { return mUniformRealLocationMap[glLocation]; }
 
-    const FunctionsGL* mFunctions;
-    StateManagerGL* mStateManager;
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
 
     std::vector<GLint> mUniformRealLocationMap;
     std::vector<GLuint> mUniformBlockRealLocationMap;

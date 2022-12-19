@@ -18,50 +18,45 @@
 
 #include <iostream>
 
-namespace egl {
+namespace egl
+{
 
-Surface::Surface(rx::SurfaceImpl* impl,
-    EGLint surfaceType,
-    const egl::Config* config,
-    const AttributeMap& attributes)
-    : FramebufferAttachmentObject()
-    , mImplementation(impl)
-    , mDefaultFramebuffer(nullptr)
-    , mCurrentCount(0)
-    , mDestroyed(false)
-    , mType(surfaceType)
-    , mConfig(config)
-    , mPostSubBufferRequested(false)
-    , mFixedSize(false)
-    , mFixedWidth(0)
-    , mFixedHeight(0)
-    , mTextureFormat(EGL_NO_TEXTURE)
-    , mTextureTarget(EGL_NO_TEXTURE)
-    ,
-    // FIXME: Determine actual pixel aspect ratio
-    mPixelAspectRatio(static_cast<EGLint>(1.0 * EGL_DISPLAY_SCALING))
-    , mRenderBuffer(EGL_BACK_BUFFER)
-    , mSwapBehavior(impl->getSwapBehavior())
-    , mOrientation(0)
-    , mTexture()
+Surface::Surface(rx::SurfaceImpl *impl,
+                 EGLint surfaceType,
+                 const egl::Config *config,
+                 const AttributeMap &attributes)
+    : FramebufferAttachmentObject(),
+      mImplementation(impl),
+      mDefaultFramebuffer(nullptr),
+      mCurrentCount(0),
+      mDestroyed(false),
+      mType(surfaceType),
+      mConfig(config),
+      mPostSubBufferRequested(false),
+      mFixedSize(false),
+      mFixedWidth(0),
+      mFixedHeight(0),
+      mTextureFormat(EGL_NO_TEXTURE),
+      mTextureTarget(EGL_NO_TEXTURE),
+      // FIXME: Determine actual pixel aspect ratio
+      mPixelAspectRatio(static_cast<EGLint>(1.0 * EGL_DISPLAY_SCALING)),
+      mRenderBuffer(EGL_BACK_BUFFER),
+      mSwapBehavior(impl->getSwapBehavior())
 {
     mPostSubBufferRequested = (attributes.get(EGL_POST_SUB_BUFFER_SUPPORTED_NV, EGL_FALSE) == EGL_TRUE);
-    mFlexibleSurfaceCompatibilityRequested = (attributes.get(EGL_FLEXIBLE_SURFACE_COMPATIBILITY_SUPPORTED_ANGLE, EGL_FALSE) == EGL_TRUE);
-
-    mDirectComposition = (attributes.get(EGL_DIRECT_COMPOSITION_ANGLE, EGL_FALSE) == EGL_TRUE);
 
     mFixedSize = (attributes.get(EGL_FIXED_SIZE_ANGLE, EGL_FALSE) == EGL_TRUE);
-    if (mFixedSize) {
+    if (mFixedSize)
+    {
         mFixedWidth = attributes.get(EGL_WIDTH, 0);
         mFixedHeight = attributes.get(EGL_HEIGHT, 0);
     }
 
-    if (mType != EGL_WINDOW_BIT) {
+    if (mType != EGL_WINDOW_BIT)
+    {
         mTextureFormat = attributes.get(EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE);
         mTextureTarget = attributes.get(EGL_TEXTURE_TARGET, EGL_NO_TEXTURE);
     }
-
-    mOrientation = attributes.get(EGL_SURFACE_ORIENTATION_ANGLE, 0);
 
     mDefaultFramebuffer = createDefaultFramebuffer();
     ASSERT(mDefaultFramebuffer != nullptr);
@@ -69,8 +64,10 @@ Surface::Surface(rx::SurfaceImpl* impl,
 
 Surface::~Surface()
 {
-    if (mTexture.get()) {
-        if (mImplementation) {
+    if (mTexture.get())
+    {
+        if (mImplementation)
+        {
             mImplementation->releaseTexImage(EGL_BACK_BUFFER);
         }
         mTexture->releaseTexImageFromSurface();
@@ -83,12 +80,16 @@ Surface::~Surface()
 
 void Surface::setIsCurrent(bool isCurrent)
 {
-    if (isCurrent) {
+    if (isCurrent)
+    {
         mCurrentCount++;
-    } else {
+    }
+    else
+    {
         ASSERT(mCurrentCount > 0);
         mCurrentCount--;
-        if (mCurrentCount == 0 && mDestroyed) {
+        if (mCurrentCount == 0 && mDestroyed)
+        {
             delete this;
         }
     }
@@ -97,7 +98,8 @@ void Surface::setIsCurrent(bool isCurrent)
 void Surface::onDestroy()
 {
     mDestroyed = true;
-    if (mCurrentCount == 0) {
+    if (mCurrentCount == 0)
+    {
         delete this;
     }
 }
@@ -117,7 +119,7 @@ Error Surface::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
     return mImplementation->postSubBuffer(x, y, width, height);
 }
 
-Error Surface::querySurfacePointerANGLE(EGLint attribute, void** value)
+Error Surface::querySurfacePointerANGLE(EGLint attribute, void **value)
 {
     return mImplementation->querySurfacePointerANGLE(attribute, value);
 }
@@ -132,7 +134,7 @@ void Surface::setSwapInterval(EGLint interval)
     mImplementation->setSwapInterval(interval);
 }
 
-const Config* Surface::getConfig() const
+const Config *Surface::getConfig() const
 {
     return mConfig;
 }
@@ -177,13 +179,13 @@ EGLint Surface::getHeight() const
     return mFixedSize ? static_cast<EGLint>(mFixedHeight) : mImplementation->getHeight();
 }
 
-Error Surface::bindTexImage(gl::Texture* texture, EGLint buffer)
+Error Surface::bindTexImage(gl::Texture *texture, EGLint buffer)
 {
     ASSERT(!mTexture.get());
 
     texture->bindTexImageFromSurface(this);
     mTexture.set(texture);
-    return mImplementation->bindTexImage(texture, buffer);
+    return mImplementation->bindTexImage(buffer);
 }
 
 Error Surface::releaseTexImage(EGLint buffer)
@@ -201,18 +203,13 @@ void Surface::releaseTexImageFromTexture()
     mTexture.set(nullptr);
 }
 
-gl::Extents Surface::getAttachmentSize(const gl::FramebufferAttachment::Target& /*target*/) const
+GLenum Surface::getAttachmentInternalFormat(const gl::FramebufferAttachment::Target &target) const
 {
-    return gl::Extents(getWidth(), getHeight(), 1);
-}
-
-GLenum Surface::getAttachmentInternalFormat(const gl::FramebufferAttachment::Target& target) const
-{
-    const egl::Config* config = getConfig();
+    const egl::Config *config = getConfig();
     return (target.binding() == GL_BACK ? config->renderTargetFormat : config->depthStencilFormat);
 }
 
-GLsizei Surface::getAttachmentSamples(const gl::FramebufferAttachment::Target& target) const
+GLsizei Surface::getAttachmentSamples(const gl::FramebufferAttachment::Target &target) const
 {
     return getConfig()->samples;
 }
@@ -223,25 +220,27 @@ GLuint Surface::getId() const
     return 0;
 }
 
-gl::Framebuffer* Surface::createDefaultFramebuffer()
+gl::Framebuffer *Surface::createDefaultFramebuffer()
 {
-    gl::Framebuffer* framebuffer = new gl::Framebuffer(mImplementation);
+    gl::Framebuffer *framebuffer = new gl::Framebuffer(mImplementation);
 
     GLenum drawBufferState = GL_BACK;
     framebuffer->setDrawBuffers(1, &drawBufferState);
     framebuffer->setReadBuffer(GL_BACK);
 
     framebuffer->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_BACK, gl::ImageIndex::MakeInvalid(),
-        this);
+                               this);
 
-    if (mConfig->depthSize > 0) {
+    if (mConfig->depthSize > 0)
+    {
         framebuffer->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, gl::ImageIndex::MakeInvalid(),
-            this);
+                                   this);
     }
 
-    if (mConfig->stencilSize > 0) {
+    if (mConfig->stencilSize > 0)
+    {
         framebuffer->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_STENCIL,
-            gl::ImageIndex::MakeInvalid(), this);
+                                   gl::ImageIndex::MakeInvalid(), this);
     }
 
     return framebuffer;

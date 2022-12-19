@@ -11,11 +11,12 @@
 
 #include "common/debug.h"
 
-namespace rx {
+namespace rx
+{
 
 MemoryBuffer::MemoryBuffer()
-    : mSize(0)
-    , mData(NULL)
+    : mSize(0),
+      mData(NULL)
 {
 }
 
@@ -27,26 +28,31 @@ MemoryBuffer::~MemoryBuffer()
 
 bool MemoryBuffer::resize(size_t size)
 {
-    if (size == 0) {
+    if (size == 0)
+    {
         free(mData);
         mData = NULL;
         mSize = 0;
         return true;
     }
 
-    if (size == mSize) {
+    if (size == mSize)
+    {
         return true;
     }
 
     // Only reallocate if the size has changed.
-    uint8_t* newMemory = reinterpret_cast<uint8_t*>(malloc(sizeof(uint8_t) * size));
-    if (newMemory == NULL) {
+    uint8_t *newMemory = reinterpret_cast<uint8_t*>(malloc(sizeof(uint8_t) * size));
+    if (newMemory == NULL)
+    {
         return false;
     }
 
-    if (mData) {
+    if (mData)
+    {
         // Copy the intersection of the old data and the new data
-        std::copy(mData, mData + std::min(mSize, size), newMemory);
+        //std::copy(mData, mData + std::min(mSize, size), newMemory);
+        memcpy(newMemory, mData, std::min(mSize, size));
         free(mData);
     }
 
@@ -61,12 +67,12 @@ size_t MemoryBuffer::size() const
     return mSize;
 }
 
-const uint8_t* MemoryBuffer::data() const
+const uint8_t *MemoryBuffer::data() const
 {
     return mData;
 }
 
-uint8_t* MemoryBuffer::data()
+uint8_t *MemoryBuffer::data()
 {
     ASSERT(mData);
     return mData;

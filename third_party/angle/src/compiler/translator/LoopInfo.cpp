@@ -6,17 +6,18 @@
 
 #include "compiler/translator/LoopInfo.h"
 
-namespace {
+namespace
+{
 
-int EvaluateIntConstant(TIntermConstantUnion* node)
+int EvaluateIntConstant(TIntermConstantUnion *node)
 {
     ASSERT(node && node->getUnionArrayPointer());
     return node->getIConst(0);
 }
 
-int GetLoopIntIncrement(TIntermLoop* node)
+int GetLoopIntIncrement(TIntermLoop *node)
 {
-    TIntermNode* expr = node->getExpression();
+    TIntermNode *expr = node->getExpression();
     // for expression has one of the following forms:
     //     loop_index++
     //     loop_index--
@@ -26,14 +27,17 @@ int GetLoopIntIncrement(TIntermLoop* node)
     //     --loop_index
     // The last two forms are not specified in the spec, but I am assuming
     // its an oversight.
-    TIntermUnary* unOp = expr->getAsUnaryNode();
-    TIntermBinary* binOp = unOp ? NULL : expr->getAsBinaryNode();
+    TIntermUnary *unOp = expr->getAsUnaryNode();
+    TIntermBinary *binOp = unOp ? NULL : expr->getAsBinaryNode();
 
     TOperator op = EOpNull;
-    TIntermConstantUnion* incrementNode = NULL;
-    if (unOp) {
+    TIntermConstantUnion *incrementNode = NULL;
+    if (unOp)
+    {
         op = unOp->getOp();
-    } else if (binOp) {
+    }
+    else if (binOp)
+    {
         op = binOp->getOp();
         ASSERT(binOp->getRight());
         incrementNode = binOp->getRight()->getAsConstantUnion();
@@ -42,60 +46,63 @@ int GetLoopIntIncrement(TIntermLoop* node)
 
     int increment = 0;
     // The operator is one of: ++ -- += -=.
-    switch (op) {
-    case EOpPostIncrement:
-    case EOpPreIncrement:
+    switch (op)
+    {
+      case EOpPostIncrement:
+      case EOpPreIncrement:
         ASSERT(unOp && !binOp);
         increment = 1;
         break;
-    case EOpPostDecrement:
-    case EOpPreDecrement:
+      case EOpPostDecrement:
+      case EOpPreDecrement:
         ASSERT(unOp && !binOp);
         increment = -1;
         break;
-    case EOpAddAssign:
+      case EOpAddAssign:
         ASSERT(!unOp && binOp);
         increment = EvaluateIntConstant(incrementNode);
         break;
-    case EOpSubAssign:
+      case EOpSubAssign:
         ASSERT(!unOp && binOp);
-        increment = -EvaluateIntConstant(incrementNode);
+        increment = - EvaluateIntConstant(incrementNode);
         break;
-    default:
+      default:
         UNREACHABLE();
     }
 
     return increment;
 }
 
-} // namespace anonymous
+}  // namespace anonymous
 
 TLoopIndexInfo::TLoopIndexInfo()
-    : mId(-1)
-    , mType(EbtVoid)
-    , mInitValue(0)
-    , mStopValue(0)
-    , mIncrementValue(0)
-    , mOp(EOpNull)
-    , mCurrentValue(0)
+    : mId(-1),
+      mType(EbtVoid),
+      mInitValue(0),
+      mStopValue(0),
+      mIncrementValue(0),
+      mOp(EOpNull),
+      mCurrentValue(0)
 {
 }
 
-void TLoopIndexInfo::fillInfo(TIntermLoop* node)
+void TLoopIndexInfo::fillInfo(TIntermLoop *node)
 {
     if (node == NULL)
         return;
 
     // Here we assume all the operations are valid, because the loop node is
     // already validated in ValidateLimitations.
-    TIntermSequence* declSeq = node->getInit()->getAsAggregate()->getSequence();
-    TIntermBinary* declInit = (*declSeq)[0]->getAsBinaryNode();
-    TIntermSymbol* symbol = declInit->getLeft()->getAsSymbolNode();
+    TIntermSequence *declSeq =
+        node->getInit()->getAsAggregate()->getSequence();
+    TIntermBinary *declInit = (*declSeq)[0]->getAsBinaryNode();
+    TIntermSymbol *symbol = declInit->getLeft()->getAsSymbolNode();
 
     mId = symbol->getId();
     mType = symbol->getBasicType();
 
-    if (mType == EbtInt) {
+    if (mType == EbtInt)
+    {
         TIntermConstantUnion* initNode = declInit->getRight()->getAsConstantUnion();
         mInitValue = EvaluateIntConstant(initNode);
         mCurrentValue = mInitValue;
@@ -111,20 +118,21 @@ void TLoopIndexInfo::fillInfo(TIntermLoop* node)
 bool TLoopIndexInfo::satisfiesLoopCondition() const
 {
     // Relational operator is one of: > >= < <= == or !=.
-    switch (mOp) {
-    case EOpEqual:
+    switch (mOp)
+    {
+      case EOpEqual:
         return (mCurrentValue == mStopValue);
-    case EOpNotEqual:
+      case EOpNotEqual:
         return (mCurrentValue != mStopValue);
-    case EOpLessThan:
+      case EOpLessThan:
         return (mCurrentValue < mStopValue);
-    case EOpGreaterThan:
+      case EOpGreaterThan:
         return (mCurrentValue > mStopValue);
-    case EOpLessThanEqual:
+      case EOpLessThanEqual:
         return (mCurrentValue <= mStopValue);
-    case EOpGreaterThanEqual:
+      case EOpGreaterThanEqual:
         return (mCurrentValue >= mStopValue);
-    default:
+      default:
         UNREACHABLE();
         return false;
     }
@@ -135,28 +143,30 @@ TLoopInfo::TLoopInfo()
 {
 }
 
-TLoopInfo::TLoopInfo(TIntermLoop* node)
+TLoopInfo::TLoopInfo(TIntermLoop *node)
     : loop(node)
 {
     index.fillInfo(node);
 }
 
-TIntermLoop* TLoopStack::findLoop(TIntermSymbol* symbol)
+TIntermLoop *TLoopStack::findLoop(TIntermSymbol *symbol)
 {
     if (!symbol)
         return NULL;
-    for (iterator iter = begin(); iter != end(); ++iter) {
+    for (iterator iter = begin(); iter != end(); ++iter)
+    {
         if (iter->index.getId() == symbol->getId())
             return iter->loop;
     }
     return NULL;
 }
 
-TLoopIndexInfo* TLoopStack::getIndexInfo(TIntermSymbol* symbol)
+TLoopIndexInfo *TLoopStack::getIndexInfo(TIntermSymbol *symbol)
 {
     if (!symbol)
         return NULL;
-    for (iterator iter = begin(); iter != end(); ++iter) {
+    for (iterator iter = begin(); iter != end(); ++iter)
+    {
         if (iter->index.getId() == symbol->getId())
             return &(iter->index);
     }
@@ -175,20 +185,20 @@ bool TLoopStack::satisfiesLoopCondition()
     return rbegin()->index.satisfiesLoopCondition();
 }
 
-bool TLoopStack::needsToReplaceSymbolWithValue(TIntermSymbol* symbol)
+bool TLoopStack::needsToReplaceSymbolWithValue(TIntermSymbol *symbol)
 {
-    TIntermLoop* loop = findLoop(symbol);
+    TIntermLoop *loop = findLoop(symbol);
     return loop && loop->getUnrollFlag();
 }
 
-int TLoopStack::getLoopIndexValue(TIntermSymbol* symbol)
+int TLoopStack::getLoopIndexValue(TIntermSymbol *symbol)
 {
-    TLoopIndexInfo* info = getIndexInfo(symbol);
+    TLoopIndexInfo *info = getIndexInfo(symbol);
     ASSERT(info);
     return info->getCurrentValue();
 }
 
-void TLoopStack::push(TIntermLoop* loop)
+void TLoopStack::push(TIntermLoop *loop)
 {
     TLoopInfo info(loop);
     push_back(info);
@@ -198,3 +208,4 @@ void TLoopStack::pop()
 {
     pop_back();
 }
+

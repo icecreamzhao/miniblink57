@@ -15,15 +15,17 @@
 
 #include "angle_gl.h"
 
-namespace rx {
+namespace rx
+{
 
-class FenceNVImpl : angle::NonCopyable {
-public:
-    FenceNVImpl() {};
-    virtual ~FenceNVImpl() {};
+class FenceNVImpl : angle::NonCopyable
+{
+  public:
+    FenceNVImpl() { };
+    virtual ~FenceNVImpl() { };
 
     virtual gl::Error set(GLenum condition) = 0;
-    virtual gl::Error test(GLboolean* outFinished) = 0;
+    virtual gl::Error test(GLboolean *outFinished) = 0;
     virtual gl::Error finish() = 0;
 };
 

@@ -12,42 +12,45 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/ImageImpl.h"
 
-namespace egl {
+namespace egl
+{
 class AttributeMap;
 }
 
-namespace rx {
+namespace rx
+{
 class TextureD3D;
 class RenderbufferD3D;
 class RendererD3D;
 class RenderTargetD3D;
 
-class EGLImageD3D final : public ImageImpl {
-public:
-    EGLImageD3D(RendererD3D* renderer,
-        EGLenum target,
-        egl::ImageSibling* buffer,
-        const egl::AttributeMap& attribs);
+class EGLImageD3D final : public ImageImpl
+{
+  public:
+    EGLImageD3D(RendererD3D *renderer,
+                EGLenum target,
+                egl::ImageSibling *buffer,
+                const egl::AttributeMap &attribs);
     ~EGLImageD3D() override;
 
     egl::Error initialize() override;
 
-    gl::Error orphan(egl::ImageSibling* sibling) override;
+    gl::Error orphan(egl::ImageSibling *sibling) override;
 
-    gl::Error getRenderTarget(RenderTargetD3D** outRT) const;
+    gl::Error getRenderTarget(RenderTargetD3D **outRT) const;
 
-private:
+  private:
     gl::Error copyToLocalRendertarget();
 
-    RendererD3D* mRenderer;
+    RendererD3D *mRenderer;
 
-    egl::ImageSibling* mBuffer;
+    egl::ImageSibling *mBuffer;
 
     gl::FramebufferAttachment::Target mAttachmentTarget;
-    FramebufferAttachmentObjectImpl* mAttachmentBuffer;
+    FramebufferAttachmentObjectImpl *mAttachmentBuffer;
 
-    RenderTargetD3D* mRenderTarget;
+    RenderTargetD3D *mRenderTarget;
 };
 }
 
-#endif // LIBANGLE_RENDERER_D3D_EGLIMAGED3D_H_
+#endif  // LIBANGLE_RENDERER_D3D_EGLIMAGED3D_H_

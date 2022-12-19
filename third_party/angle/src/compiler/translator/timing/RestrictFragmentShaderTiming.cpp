@@ -4,10 +4,10 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/timing/RestrictFragmentShaderTiming.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/ParseContext.h"
 #include "compiler/translator/depgraph/DependencyGraphOutput.h"
+#include "compiler/translator/timing/RestrictFragmentShaderTiming.h"
 
 RestrictFragmentShaderTiming::RestrictFragmentShaderTiming(TInfoSinkBase& sink)
     : mSink(sink)
@@ -54,7 +54,11 @@ void RestrictFragmentShaderTiming::enforceRestrictions(const TDependencyGraph& g
 
     // Starting from each sampler, traverse the dependency graph and generate an error each time we
     // hit a node where sampler dependent values are not allowed.
-    for (auto samplerSymbol : graph.samplerSymbols()) {
+    for (TGraphSymbolVector::const_iterator iter = graph.beginSamplerSymbols();
+         iter != graph.endSamplerSymbols();
+         ++iter)
+    {
+        TGraphSymbol* samplerSymbol = *iter;
         clearVisited();
         samplerSymbol->traverse(this);
     }
@@ -62,7 +66,11 @@ void RestrictFragmentShaderTiming::enforceRestrictions(const TDependencyGraph& g
 
 void RestrictFragmentShaderTiming::validateUserDefinedFunctionCallUsage(const TDependencyGraph& graph)
 {
-    for (const auto* functionCall : graph.userDefinedFunctionCalls()) {
+    for (TFunctionCallVector::const_iterator iter = graph.beginUserDefinedFunctionCalls();
+         iter != graph.endUserDefinedFunctionCalls();
+         ++iter)
+    {
+        TGraphFunctionCall* functionCall = *iter;
         beginError(functionCall->getIntermFunctionCall());
         mSink << "A call to a user defined function is not permitted.\n";
     }
@@ -77,7 +85,8 @@ void RestrictFragmentShaderTiming::beginError(const TIntermNode* node)
 
 bool RestrictFragmentShaderTiming::isSamplingOp(const TIntermAggregate* intermFunctionCall) const
 {
-    return !intermFunctionCall->isUserDefined() && mSamplingOps.find(intermFunctionCall->getName()) != mSamplingOps.end();
+    return !intermFunctionCall->isUserDefined() &&
+           mSamplingOps.find(intermFunctionCall->getName()) != mSamplingOps.end();
 }
 
 void RestrictFragmentShaderTiming::visitArgument(TGraphArgument* parameter)
@@ -87,21 +96,21 @@ void RestrictFragmentShaderTiming::visitArgument(TGraphArgument* parameter)
     // sampling operation.
     if (isSamplingOp(parameter->getIntermFunctionCall())) {
         switch (parameter->getArgumentNumber()) {
-        case 1:
-            // Second argument (coord)
-            beginError(parameter->getIntermFunctionCall());
-            mSink << "An expression dependent on a sampler is not permitted to be the"
-                  << " coordinate argument of a sampling operation.\n";
-            break;
-        case 2:
-            // Third argument (bias)
-            beginError(parameter->getIntermFunctionCall());
-            mSink << "An expression dependent on a sampler is not permitted to be the"
-                  << " bias argument of a sampling operation.\n";
-            break;
-        default:
-            // First argument (sampler)
-            break;
+            case 1:
+                // Second argument (coord)
+                beginError(parameter->getIntermFunctionCall());
+                mSink << "An expression dependent on a sampler is not permitted to be the"
+                      << " coordinate argument of a sampling operation.\n";
+                break;
+            case 2:
+                // Third argument (bias)
+                beginError(parameter->getIntermFunctionCall());
+                mSink << "An expression dependent on a sampler is not permitted to be the"
+                      << " bias argument of a sampling operation.\n";
+                break;
+            default:
+                // First argument (sampler)
+                break;
         }
     }
 }

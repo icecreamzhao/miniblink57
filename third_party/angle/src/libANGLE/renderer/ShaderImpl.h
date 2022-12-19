@@ -12,29 +12,25 @@
 #include "common/angleutils.h"
 #include "libANGLE/Shader.h"
 
-namespace rx {
+namespace rx
+{
 
-class ShaderImpl : angle::NonCopyable {
-public:
-    ShaderImpl(const gl::Shader::Data& data)
-        : mData(data)
-    {
-    }
+class ShaderImpl : angle::NonCopyable
+{
+  public:
+    ShaderImpl(const gl::Shader::Data &data) : mData(data) {}
     virtual ~ShaderImpl() { }
 
     // Returns additional ShCompile options.
-    virtual int prepareSourceAndReturnOptions(std::stringstream* sourceStream,
-        std::string* sourcePath)
-        = 0;
+    virtual int prepareSourceAndReturnOptions(std::stringstream *sourceStream,
+                                              std::string *sourcePath) = 0;
     // Returns success for compiling on the driver. Returns success.
-    virtual bool postTranslateCompile(gl::Compiler* compiler, std::string* infoLog) = 0;
+    virtual bool postTranslateCompile(gl::Compiler *compiler, std::string *infoLog) = 0;
 
     virtual std::string getDebugInfo() const = 0;
 
-    const gl::Shader::Data& getData() const { return mData; }
-
-protected:
-    const gl::Shader::Data& mData;
+  protected:
+    const gl::Shader::Data &mData;
 };
 
 }

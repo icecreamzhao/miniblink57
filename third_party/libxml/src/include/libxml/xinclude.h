@@ -13,8 +13,8 @@
 #ifndef __XML_XINCLUDE_H__
 #define __XML_XINCLUDE_H__
 
-#include <libxml/tree.h>
 #include <libxml/xmlversion.h>
+#include <libxml/tree.h>
 
 #ifdef LIBXML_XINCLUDE_ENABLED
 
@@ -27,99 +27,99 @@ extern "C" {
  *
  * Macro defining the Xinclude namespace: http://www.w3.org/2003/XInclude
  */
-#define XINCLUDE_NS (const xmlChar*)"http://www.w3.org/2003/XInclude"
+#define XINCLUDE_NS (const xmlChar *) "http://www.w3.org/2003/XInclude"
 /**
  * XINCLUDE_OLD_NS:
  *
  * Macro defining the draft Xinclude namespace: http://www.w3.org/2001/XInclude
  */
-#define XINCLUDE_OLD_NS (const xmlChar*)"http://www.w3.org/2001/XInclude"
+#define XINCLUDE_OLD_NS (const xmlChar *) "http://www.w3.org/2001/XInclude"
 /**
  * XINCLUDE_NODE:
  *
  * Macro defining "include"
  */
-#define XINCLUDE_NODE (const xmlChar*)"include"
+#define XINCLUDE_NODE (const xmlChar *) "include"
 /**
  * XINCLUDE_FALLBACK:
  *
  * Macro defining "fallback"
  */
-#define XINCLUDE_FALLBACK (const xmlChar*)"fallback"
+#define XINCLUDE_FALLBACK (const xmlChar *) "fallback"
 /**
  * XINCLUDE_HREF:
  *
  * Macro defining "href"
  */
-#define XINCLUDE_HREF (const xmlChar*)"href"
+#define XINCLUDE_HREF (const xmlChar *) "href"
 /**
  * XINCLUDE_PARSE:
  *
  * Macro defining "parse"
  */
-#define XINCLUDE_PARSE (const xmlChar*)"parse"
+#define XINCLUDE_PARSE (const xmlChar *) "parse"
 /**
  * XINCLUDE_PARSE_XML:
  *
  * Macro defining "xml"
  */
-#define XINCLUDE_PARSE_XML (const xmlChar*)"xml"
+#define XINCLUDE_PARSE_XML (const xmlChar *) "xml"
 /**
  * XINCLUDE_PARSE_TEXT:
  *
  * Macro defining "text"
  */
-#define XINCLUDE_PARSE_TEXT (const xmlChar*)"text"
+#define XINCLUDE_PARSE_TEXT (const xmlChar *) "text"
 /**
  * XINCLUDE_PARSE_ENCODING:
  *
  * Macro defining "encoding"
  */
-#define XINCLUDE_PARSE_ENCODING (const xmlChar*)"encoding"
+#define XINCLUDE_PARSE_ENCODING (const xmlChar *) "encoding"
 /**
  * XINCLUDE_PARSE_XPOINTER:
  *
  * Macro defining "xpointer"
  */
-#define XINCLUDE_PARSE_XPOINTER (const xmlChar*)"xpointer"
+#define XINCLUDE_PARSE_XPOINTER (const xmlChar *) "xpointer"
 
 typedef struct _xmlXIncludeCtxt xmlXIncludeCtxt;
-typedef xmlXIncludeCtxt* xmlXIncludeCtxtPtr;
+typedef xmlXIncludeCtxt *xmlXIncludeCtxtPtr;
 
 /*
  * standalone processing
  */
 XMLPUBFUN int XMLCALL
-xmlXIncludeProcess(xmlDocPtr doc);
+		xmlXIncludeProcess	(xmlDocPtr doc);
 XMLPUBFUN int XMLCALL
-xmlXIncludeProcessFlags(xmlDocPtr doc,
-    int flags);
+		xmlXIncludeProcessFlags	(xmlDocPtr doc,
+					 int flags);
 XMLPUBFUN int XMLCALL
-xmlXIncludeProcessFlagsData(xmlDocPtr doc,
-    int flags,
-    void* data);
+		xmlXIncludeProcessFlagsData(xmlDocPtr doc,
+					 int flags,
+					 void *data);
 XMLPUBFUN int XMLCALL
-xmlXIncludeProcessTreeFlagsData(xmlNodePtr tree,
-    int flags,
-    void* data);
+                xmlXIncludeProcessTreeFlagsData(xmlNodePtr tree,
+                                         int flags,
+                                         void *data);
 XMLPUBFUN int XMLCALL
-xmlXIncludeProcessTree(xmlNodePtr tree);
+		xmlXIncludeProcessTree	(xmlNodePtr tree);
 XMLPUBFUN int XMLCALL
-xmlXIncludeProcessTreeFlags(xmlNodePtr tree,
-    int flags);
+		xmlXIncludeProcessTreeFlags(xmlNodePtr tree,
+					 int flags);
 /*
  * contextual processing
  */
 XMLPUBFUN xmlXIncludeCtxtPtr XMLCALL
-xmlXIncludeNewContext(xmlDocPtr doc);
+		xmlXIncludeNewContext	(xmlDocPtr doc);
 XMLPUBFUN int XMLCALL
-xmlXIncludeSetFlags(xmlXIncludeCtxtPtr ctxt,
-    int flags);
+		xmlXIncludeSetFlags	(xmlXIncludeCtxtPtr ctxt,
+					 int flags);
 XMLPUBFUN void XMLCALL
-xmlXIncludeFreeContext(xmlXIncludeCtxtPtr ctxt);
+		xmlXIncludeFreeContext	(xmlXIncludeCtxtPtr ctxt);
 XMLPUBFUN int XMLCALL
-xmlXIncludeProcessNode(xmlXIncludeCtxtPtr ctxt,
-    xmlNodePtr tree);
+		xmlXIncludeProcessNode	(xmlXIncludeCtxtPtr ctxt,
+					 xmlNodePtr tree);
 #ifdef __cplusplus
 }
 #endif

@@ -20,9 +20,9 @@ TranslatorHLSL::TranslatorHLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutpu
 {
 }
 
-void TranslatorHLSL::translate(TIntermNode* root, int compileOptions)
+void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
 {
-    const ShBuiltInResources& resources = getResources();
+    const ShBuiltInResources &resources = getResources();
     int numRenderTargets = resources.EXT_draw_buffers ? resources.MaxDrawBuffers : 1;
 
     SeparateDeclarations(root);
@@ -39,14 +39,16 @@ void TranslatorHLSL::translate(TIntermNode* root, int compileOptions)
     // as a return value to use an out parameter to transfer the array data instead.
     ArrayReturnValueToOutParameter(root, getTemporaryIndex());
 
-    if (!shouldRunLoopAndIndexingValidation(compileOptions)) {
+    if (!shouldRunLoopAndIndexingValidation(compileOptions))
+    {
         // HLSL doesn't support dynamic indexing of vectors and matrices.
         RemoveDynamicIndexing(root, getTemporaryIndex(), getSymbolTable(), getShaderVersion());
     }
 
     // Work around D3D9 bug that would manifest in vertex shaders with selection blocks which
     // use a vertex attribute as a condition, and some related computation in the else block.
-    if (getOutputType() == SH_HLSL_3_0_OUTPUT && getShaderType() == GL_VERTEX_SHADER) {
+    if (getOutputType() == SH_HLSL9_OUTPUT && getShaderType() == GL_VERTEX_SHADER)
+    {
         sh::RewriteElseBlocks(root, getTemporaryIndex());
     }
 
@@ -59,23 +61,23 @@ void TranslatorHLSL::translate(TIntermNode* root, int compileOptions)
     mUniformRegisterMap = outputHLSL.getUniformRegisterMap();
 }
 
-bool TranslatorHLSL::hasInterfaceBlock(const std::string& interfaceBlockName) const
+bool TranslatorHLSL::hasInterfaceBlock(const std::string &interfaceBlockName) const
 {
     return (mInterfaceBlockRegisterMap.count(interfaceBlockName) > 0);
 }
 
-unsigned int TranslatorHLSL::getInterfaceBlockRegister(const std::string& interfaceBlockName) const
+unsigned int TranslatorHLSL::getInterfaceBlockRegister(const std::string &interfaceBlockName) const
 {
     ASSERT(hasInterfaceBlock(interfaceBlockName));
     return mInterfaceBlockRegisterMap.find(interfaceBlockName)->second;
 }
 
-bool TranslatorHLSL::hasUniform(const std::string& uniformName) const
+bool TranslatorHLSL::hasUniform(const std::string &uniformName) const
 {
     return (mUniformRegisterMap.count(uniformName) > 0);
 }
 
-unsigned int TranslatorHLSL::getUniformRegister(const std::string& uniformName) const
+unsigned int TranslatorHLSL::getUniformRegister(const std::string &uniformName) const
 {
     ASSERT(hasUniform(uniformName));
     return mUniformRegisterMap.find(uniformName)->second;

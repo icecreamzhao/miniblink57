@@ -12,37 +12,40 @@
 
 #include "common/debug.h"
 
-#include <cstdint>
 #include <vector>
+#include <cstdint>
 
-namespace rx {
+namespace rx
+{
 
-class ShaderExecutableD3D : angle::NonCopyable {
-public:
-    ShaderExecutableD3D(const void* function, size_t length);
+class ShaderExecutableD3D : angle::NonCopyable
+{
+  public:
+    ShaderExecutableD3D(const void *function, size_t length);
     virtual ~ShaderExecutableD3D();
 
-    const uint8_t* getFunction() const;
+    const unsigned char *getFunction() const;
 
     size_t getLength() const;
 
-    const std::string& getDebugInfo() const;
+    const std::string &getDebugInfo() const;
 
-    void appendDebugInfo(const std::string& info);
+    void appendDebugInfo(const std::string &info);
 
-private:
-    std::vector<uint8_t> mFunctionBuffer;
+  private:
+    std::vector<unsigned char> mFunctionBuffer;
     std::string mDebugInfo;
 };
 
-class UniformStorageD3D : angle::NonCopyable {
-public:
+class UniformStorageD3D : angle::NonCopyable
+{
+  public:
     UniformStorageD3D(size_t initialSize);
     virtual ~UniformStorageD3D();
 
     size_t size() const;
 
-private:
+  private:
     size_t mSize;
 };
 

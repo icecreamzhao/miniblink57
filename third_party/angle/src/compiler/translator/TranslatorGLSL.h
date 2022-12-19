@@ -9,18 +9,19 @@
 
 #include "compiler/translator/Compiler.h"
 
-class TranslatorGLSL : public TCompiler {
-public:
+class TranslatorGLSL : public TCompiler
+{
+  public:
     TranslatorGLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output);
 
-protected:
-    void initBuiltInFunctionEmulator(BuiltInFunctionEmulator* emu, int compileOptions) override;
+  protected:
+    void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu, int compileOptions) override;
 
-    void translate(TIntermNode* root, int compileOptions) override;
+    void translate(TIntermNode *root, int compileOptions) override;
 
-private:
-    void writeVersion(TIntermNode* root);
-    void writeExtensionBehavior(TIntermNode* root);
+  private:
+    void writeVersion(TIntermNode *root);
+    void writeExtensionBehavior(TIntermNode *root);
 };
 
-#endif // COMPILER_TRANSLATOR_TRANSLATORGLSL_H_
+#endif  // COMPILER_TRANSLATOR_TRANSLATORGLSL_H_

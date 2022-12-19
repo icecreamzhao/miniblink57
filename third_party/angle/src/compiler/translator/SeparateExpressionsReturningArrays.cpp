@@ -13,37 +13,39 @@
 
 #include "compiler/translator/IntermNode.h"
 
-namespace {
+namespace
+{
 
 // Traverser that separates one array expression into a statement at a time.
-class SeparateExpressionsTraverser : public TIntermTraverser {
-public:
+class SeparateExpressionsTraverser : public TIntermTraverser
+{
+  public:
     SeparateExpressionsTraverser();
 
-    bool visitBinary(Visit visit, TIntermBinary* node) override;
-    bool visitAggregate(Visit visit, TIntermAggregate* node) override;
+    bool visitBinary(Visit visit, TIntermBinary *node) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
 
     void nextIteration();
     bool foundArrayExpression() const { return mFoundArrayExpression; }
 
-protected:
+  protected:
     // Marked to true once an operation that needs to be hoisted out of the expression has been found.
     // After that, no more AST updates are performed on that traversal.
     bool mFoundArrayExpression;
 };
 
 SeparateExpressionsTraverser::SeparateExpressionsTraverser()
-    : TIntermTraverser(true, false, false)
-    , mFoundArrayExpression(false)
+    : TIntermTraverser(true, false, false),
+      mFoundArrayExpression(false)
 {
 }
 
 // Performs a shallow copy of an assignment node.
 // These shallow copies are useful when a node gets inserted into an aggregate node
 // and also needs to be replaced in its original location by a different node.
-TIntermBinary* CopyAssignmentNode(TIntermBinary* node)
+TIntermBinary *CopyAssignmentNode(TIntermBinary *node)
 {
-    TIntermBinary* copyNode = new TIntermBinary(node->getOp());
+    TIntermBinary *copyNode = new TIntermBinary(node->getOp());
     copyNode->setLeft(node->getLeft());
     copyNode->setRight(node->getRight());
     copyNode->setType(node->getType());
@@ -51,21 +53,22 @@ TIntermBinary* CopyAssignmentNode(TIntermBinary* node)
 }
 
 // Performs a shallow copy of a constructor/function call node.
-TIntermAggregate* CopyAggregateNode(TIntermAggregate* node)
+TIntermAggregate *CopyAggregateNode(TIntermAggregate *node)
 {
-    TIntermAggregate* copyNode = new TIntermAggregate(node->getOp());
-    TIntermSequence* copySeq = copyNode->getSequence();
+    TIntermAggregate *copyNode = new TIntermAggregate(node->getOp());
+    TIntermSequence *copySeq = copyNode->getSequence();
     copySeq->insert(copySeq->begin(), node->getSequence()->begin(), node->getSequence()->end());
     copyNode->setType(node->getType());
     copyNode->setFunctionId(node->getFunctionId());
-    if (node->isUserDefined()) {
+    if (node->isUserDefined())
+    {
         copyNode->setUserDefined();
     }
     copyNode->setNameObj(node->getNameObj());
     return copyNode;
 }
 
-bool SeparateExpressionsTraverser::visitBinary(Visit visit, TIntermBinary* node)
+bool SeparateExpressionsTraverser::visitBinary(Visit visit, TIntermBinary *node)
 {
     if (mFoundArrayExpression)
         return false;
@@ -74,40 +77,45 @@ bool SeparateExpressionsTraverser::visitBinary(Visit visit, TIntermBinary* node)
     if (!node->getType().isArray() || parentNodeIsBlock())
         return true;
 
-    switch (node->getOp()) {
-    case EOpAssign: {
-        mFoundArrayExpression = true;
+    switch (node->getOp())
+    {
+      case EOpAssign:
+        {
+            mFoundArrayExpression = true;
 
-        TIntermSequence insertions;
-        insertions.push_back(CopyAssignmentNode(node));
-        // TODO(oetuaho): In some cases it would be more optimal to not add the temporary node, but just use the
-        // original target of the assignment. Care must be taken so that this doesn't happen when the same array
-        // symbol is a target of assignment more than once in one expression.
-        insertions.push_back(createTempInitDeclaration(node->getLeft()));
-        insertStatementsInParentBlock(insertions);
+            TIntermSequence insertions;
+            insertions.push_back(CopyAssignmentNode(node));
+            // TODO(oetuaho): In some cases it would be more optimal to not add the temporary node, but just use the
+            // original target of the assignment. Care must be taken so that this doesn't happen when the same array
+            // symbol is a target of assignment more than once in one expression.
+            insertions.push_back(createTempInitDeclaration(node->getLeft()));
+            insertStatementsInParentBlock(insertions);
 
-        NodeUpdateEntry replaceVariable(getParentNode(), node, createTempSymbol(node->getType()), false);
-        mReplacements.push_back(replaceVariable);
-    }
+            NodeUpdateEntry replaceVariable(getParentNode(), node, createTempSymbol(node->getType()), false);
+            mReplacements.push_back(replaceVariable);
+        }
         return false;
-    default:
+      default:
         return true;
     }
 }
 
-bool SeparateExpressionsTraverser::visitAggregate(Visit visit, TIntermAggregate* node)
+bool SeparateExpressionsTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     if (mFoundArrayExpression)
         return false; // No need to traverse further
 
-    if (getParentNode() != nullptr) {
-        TIntermBinary* parentBinary = getParentNode()->getAsBinaryNode();
-        bool parentIsAssignment = (parentBinary != nullptr && (parentBinary->getOp() == EOpAssign || parentBinary->getOp() == EOpInitialize));
+    if (getParentNode() != nullptr)
+    {
+        TIntermBinary *parentBinary = getParentNode()->getAsBinaryNode();
+        bool parentIsAssignment = (parentBinary != nullptr &&
+            (parentBinary->getOp() == EOpAssign || parentBinary->getOp() == EOpInitialize));
 
         if (!node->getType().isArray() || parentNodeIsBlock() || parentIsAssignment)
             return true;
 
-        if (node->isConstructor()) {
+        if (node->isConstructor())
+        {
             mFoundArrayExpression = true;
 
             TIntermSequence insertions;
@@ -118,7 +126,9 @@ bool SeparateExpressionsTraverser::visitAggregate(Visit visit, TIntermAggregate*
             mReplacements.push_back(replaceVariable);
 
             return false;
-        } else if (node->getOp() == EOpFunctionCall) {
+        }
+        else if (node->getOp() == EOpFunctionCall)
+        {
             mFoundArrayExpression = true;
 
             TIntermSequence insertions;
@@ -142,16 +152,18 @@ void SeparateExpressionsTraverser::nextIteration()
 
 } // namespace
 
-void SeparateExpressionsReturningArrays(TIntermNode* root, unsigned int* temporaryIndex)
+void SeparateExpressionsReturningArrays(TIntermNode *root, unsigned int *temporaryIndex)
 {
     SeparateExpressionsTraverser traverser;
     ASSERT(temporaryIndex != nullptr);
     traverser.useTemporaryIndex(temporaryIndex);
     // Separate one expression at a time, and reset the traverser between iterations.
-    do {
+    do
+    {
         traverser.nextIteration();
         root->traverse(&traverser);
         if (traverser.foundArrayExpression())
             traverser.updateTree();
-    } while (traverser.foundArrayExpression());
+    }
+    while (traverser.foundArrayExpression());
 }

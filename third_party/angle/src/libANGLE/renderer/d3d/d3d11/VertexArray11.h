@@ -12,16 +12,18 @@
 #include "libANGLE/renderer/VertexArrayImpl.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer11;
 
-class VertexArray11 : public VertexArrayImpl {
-public:
-    VertexArray11(const gl::VertexArray::Data& data)
+class VertexArray11 : public VertexArrayImpl
+{
+  public:
+    VertexArray11(const gl::VertexArray::Data &data)
         : VertexArrayImpl(data)
     {
     }
-    virtual ~VertexArray11() { }
+    virtual ~VertexArray11() {}
 };
 
 }

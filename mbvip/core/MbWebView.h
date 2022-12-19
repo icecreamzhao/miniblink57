@@ -36,8 +36,9 @@ public:
     void createWkeWebWindowOrViewInBlinkThread(bool isWebWindowMode);
     void createWkeWebWindowInUiThread(mbWindowType type, HWND parent, int x, int y, int width, int height);
     void createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD styleEx, int x, int y, int width, int height);
+#ifdef OS_LINUX
     void bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height);
-
+#endif
     int64_t getId() const { return m_id; }
     mbWebView getWebviewHandle() const { return (mbWebView)m_id; }
 

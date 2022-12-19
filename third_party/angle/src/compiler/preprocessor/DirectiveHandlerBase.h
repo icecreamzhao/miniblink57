@@ -9,7 +9,8 @@
 
 #include <string>
 
-namespace pp {
+namespace pp
+{
 
 struct SourceLocation;
 
@@ -17,31 +18,28 @@ struct SourceLocation;
 // Preprocessor uses this class to notify the clients about certain
 // preprocessor directives. Derived classes are responsible for
 // handling them in an appropriate manner.
-class DirectiveHandler {
-public:
+class DirectiveHandler
+{
+  public:
     virtual ~DirectiveHandler();
 
-    virtual void handleError(const SourceLocation& loc,
-        const std::string& msg)
-        = 0;
+    virtual void handleError(const SourceLocation &loc,
+                             const std::string &msg) = 0;
 
     // Handle pragma of form: #pragma name[(value)]
-    virtual void handlePragma(const SourceLocation& loc,
-        const std::string& name,
-        const std::string& value,
-        bool stdgl)
-        = 0;
+    virtual void handlePragma(const SourceLocation &loc,
+                              const std::string &name,
+                              const std::string &value,
+                              bool stdgl) = 0;
 
-    virtual void handleExtension(const SourceLocation& loc,
-        const std::string& name,
-        const std::string& behavior)
-        = 0;
+    virtual void handleExtension(const SourceLocation &loc,
+                                 const std::string &name,
+                                 const std::string &behavior) = 0;
 
-    virtual void handleVersion(const SourceLocation& loc,
-        int version)
-        = 0;
+    virtual void handleVersion(const SourceLocation &loc,
+                               int version) = 0;
 };
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_DIRECTIVEHANDLERBASE_H_
+#endif  // COMPILER_PREPROCESSOR_DIRECTIVEHANDLERBASE_H_

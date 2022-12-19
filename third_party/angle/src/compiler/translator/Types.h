@@ -17,56 +17,58 @@ struct TPublicType;
 class TType;
 class TSymbol;
 
-class TField : angle::NonCopyable {
-public:
+class TField : angle::NonCopyable
+{
+  public:
     POOL_ALLOCATOR_NEW_DELETE();
-    TField(TType* type, TString* name, const TSourceLoc& line)
-        : mType(type)
-        , mName(name)
-        , mLine(line)
+    TField(TType *type, TString *name, const TSourceLoc &line)
+        : mType(type),
+          mName(name),
+          mLine(line)
     {
     }
 
     // TODO(alokp): We should only return const type.
     // Fix it by tweaking grammar.
-    TType* type()
+    TType *type()
     {
         return mType;
     }
-    const TType* type() const
+    const TType *type() const
     {
         return mType;
     }
 
-    const TString& name() const
+    const TString &name() const
     {
         return *mName;
     }
-    const TSourceLoc& line() const
+    const TSourceLoc &line() const
     {
         return mLine;
     }
 
-private:
-    TType* mType;
-    TString* mName;
+  private:
+    TType *mType;
+    TString *mName;
     TSourceLoc mLine;
 };
 
-typedef TVector<TField*> TFieldList;
-inline TFieldList* NewPoolTFieldList()
+typedef TVector<TField *> TFieldList;
+inline TFieldList *NewPoolTFieldList()
 {
-    void* memory = GetGlobalPoolAllocator()->allocate(sizeof(TFieldList));
-    return new (memory) TFieldList;
+    void *memory = GetGlobalPoolAllocator()->allocate(sizeof(TFieldList));
+    return new(memory) TFieldList;
 }
 
-class TFieldListCollection : angle::NonCopyable {
-public:
-    const TString& name() const
+class TFieldListCollection : angle::NonCopyable
+{
+  public:
+    const TString &name() const
     {
         return *mName;
     }
-    const TFieldList& fields() const
+    const TFieldList &fields() const
     {
         return *mFields;
     }
@@ -78,32 +80,33 @@ public:
         return mObjectSize;
     };
 
-protected:
-    TFieldListCollection(const TString* name, TFieldList* fields)
-        : mName(name)
-        , mFields(fields)
-        , mObjectSize(0)
+  protected:
+    TFieldListCollection(const TString *name, TFieldList *fields)
+        : mName(name),
+          mFields(fields),
+          mObjectSize(0)
     {
     }
-    TString buildMangledName(const TString& mangledNamePrefix) const;
+    TString buildMangledName(const TString &mangledNamePrefix) const;
     size_t calculateObjectSize() const;
 
-    const TString* mName;
-    TFieldList* mFields;
+    const TString *mName;
+    TFieldList *mFields;
 
     mutable TString mMangledName;
     mutable size_t mObjectSize;
 };
 
 // May also represent interface blocks
-class TStructure : public TFieldListCollection {
-public:
+class TStructure : public TFieldListCollection
+{
+  public:
     POOL_ALLOCATOR_NEW_DELETE();
-    TStructure(const TString* name, TFieldList* fields)
-        : TFieldListCollection(name, fields)
-        , mDeepestNesting(0)
-        , mUniqueId(0)
-        , mAtGlobalScope(false)
+    TStructure(const TString *name, TFieldList *fields)
+        : TFieldListCollection(name, fields),
+          mDeepestNesting(0),
+          mUniqueId(0),
+          mAtGlobalScope(false)
     {
     }
 
@@ -117,7 +120,7 @@ public:
     bool containsType(TBasicType t) const;
     bool containsSamplers() const;
 
-    bool equals(const TStructure& other) const;
+    bool equals(const TStructure &other) const;
 
     void setUniqueId(int uniqueId)
     {
@@ -140,21 +143,21 @@ public:
         return mAtGlobalScope;
     }
 
-    const TString& mangledName() const
+    const TString &mangledName() const
     {
         if (mMangledName.empty())
             mMangledName = buildMangledName("struct-");
         return mMangledName;
     }
 
-private:
+  private:
     // TODO(zmo): Find a way to get rid of the const_cast in function
     // setName().  At the moment keep this function private so only
     // friend class RegenerateStructNames may call it.
     friend class RegenerateStructNames;
-    void setName(const TString& name)
+    void setName(const TString &name)
     {
-        TString* mutableName = const_cast<TString*>(mName);
+        TString *mutableName = const_cast<TString *>(mName);
         *mutableName = name;
     }
 
@@ -165,20 +168,21 @@ private:
     bool mAtGlobalScope;
 };
 
-class TInterfaceBlock : public TFieldListCollection {
-public:
+class TInterfaceBlock : public TFieldListCollection
+{
+  public:
     POOL_ALLOCATOR_NEW_DELETE();
-    TInterfaceBlock(const TString* name, TFieldList* fields, const TString* instanceName,
-        int arraySize, const TLayoutQualifier& layoutQualifier)
-        : TFieldListCollection(name, fields)
-        , mInstanceName(instanceName)
-        , mArraySize(arraySize)
-        , mBlockStorage(layoutQualifier.blockStorage)
-        , mMatrixPacking(layoutQualifier.matrixPacking)
+    TInterfaceBlock(const TString *name, TFieldList *fields, const TString *instanceName,
+                    int arraySize, const TLayoutQualifier &layoutQualifier)
+        : TFieldListCollection(name, fields),
+          mInstanceName(instanceName),
+          mArraySize(arraySize),
+          mBlockStorage(layoutQualifier.blockStorage),
+          mMatrixPacking(layoutQualifier.matrixPacking)
     {
     }
 
-    const TString& instanceName() const
+    const TString &instanceName() const
     {
         return *mInstanceName;
     }
@@ -202,15 +206,15 @@ public:
     {
         return mMatrixPacking;
     }
-    const TString& mangledName() const
+    const TString &mangledName() const
     {
         if (mMangledName.empty())
             mMangledName = buildMangledName("iblock-");
         return mMangledName;
     }
 
-private:
-    const TString* mInstanceName; // for interface block instance names
+  private:
+    const TString *mInstanceName; // for interface block instance names
     int mArraySize; // 0 if not an array
     TLayoutBlockStorage mBlockStorage;
     TLayoutMatrixPacking mMatrixPacking;
@@ -219,85 +223,51 @@ private:
 //
 // Base class for things that have a type.
 //
-class TType {
-public:
+class TType
+{
+  public:
     POOL_ALLOCATOR_NEW_DELETE();
     TType()
-        : type(EbtVoid)
-        , precision(EbpUndefined)
-        , qualifier(EvqGlobal)
-        , invariant(false)
-        , layoutQualifier(TLayoutQualifier::create())
-        , primarySize(0)
-        , secondarySize(0)
-        , array(false)
-        , arraySize(0)
-        , interfaceBlock(nullptr)
-        , structure(nullptr)
+        : type(EbtVoid), precision(EbpUndefined), qualifier(EvqGlobal), invariant(false),
+          layoutQualifier(TLayoutQualifier::create()),
+          primarySize(0), secondarySize(0), array(false), arraySize(0),
+          interfaceBlock(nullptr), structure(nullptr)
     {
     }
     TType(TBasicType t, unsigned char ps = 1, unsigned char ss = 1)
-        : type(t)
-        , precision(EbpUndefined)
-        , qualifier(EvqGlobal)
-        , invariant(false)
-        , layoutQualifier(TLayoutQualifier::create())
-        , primarySize(ps)
-        , secondarySize(ss)
-        , array(false)
-        , arraySize(0)
-        , interfaceBlock(0)
-        , structure(0)
+        : type(t), precision(EbpUndefined), qualifier(EvqGlobal), invariant(false),
+          layoutQualifier(TLayoutQualifier::create()),
+          primarySize(ps), secondarySize(ss), array(false), arraySize(0),
+          interfaceBlock(0), structure(0)
     {
     }
     TType(TBasicType t, TPrecision p, TQualifier q = EvqTemporary,
-        unsigned char ps = 1, unsigned char ss = 1, bool a = false)
-        : type(t)
-        , precision(p)
-        , qualifier(q)
-        , invariant(false)
-        , layoutQualifier(TLayoutQualifier::create())
-        , primarySize(ps)
-        , secondarySize(ss)
-        , array(a)
-        , arraySize(0)
-        , interfaceBlock(0)
-        , structure(0)
+          unsigned char ps = 1, unsigned char ss = 1, bool a = false)
+        : type(t), precision(p), qualifier(q), invariant(false),
+          layoutQualifier(TLayoutQualifier::create()),
+          primarySize(ps), secondarySize(ss), array(a), arraySize(0),
+          interfaceBlock(0), structure(0)
     {
     }
-    explicit TType(const TPublicType& p);
-    TType(TStructure* userDef, TPrecision p = EbpUndefined)
-        : type(EbtStruct)
-        , precision(p)
-        , qualifier(EvqTemporary)
-        , invariant(false)
-        , layoutQualifier(TLayoutQualifier::create())
-        , primarySize(1)
-        , secondarySize(1)
-        , array(false)
-        , arraySize(0)
-        , interfaceBlock(0)
-        , structure(userDef)
+    explicit TType(const TPublicType &p);
+    TType(TStructure *userDef, TPrecision p = EbpUndefined)
+        : type(EbtStruct), precision(p), qualifier(EvqTemporary), invariant(false),
+          layoutQualifier(TLayoutQualifier::create()),
+          primarySize(1), secondarySize(1), array(false), arraySize(0),
+          interfaceBlock(0), structure(userDef)
     {
     }
-    TType(TInterfaceBlock* interfaceBlockIn, TQualifier qualifierIn,
-        TLayoutQualifier layoutQualifierIn, int arraySizeIn)
-        : type(EbtInterfaceBlock)
-        , precision(EbpUndefined)
-        , qualifier(qualifierIn)
-        , invariant(false)
-        , layoutQualifier(layoutQualifierIn)
-        , primarySize(1)
-        , secondarySize(1)
-        , array(arraySizeIn > 0)
-        , arraySize(arraySizeIn)
-        , interfaceBlock(interfaceBlockIn)
-        , structure(0)
+    TType(TInterfaceBlock *interfaceBlockIn, TQualifier qualifierIn,
+          TLayoutQualifier layoutQualifierIn, int arraySizeIn)
+        : type(EbtInterfaceBlock), precision(EbpUndefined), qualifier(qualifierIn),
+          invariant(false), layoutQualifier(layoutQualifierIn),
+          primarySize(1), secondarySize(1), array(arraySizeIn > 0), arraySize(arraySizeIn),
+          interfaceBlock(interfaceBlockIn), structure(0)
     {
     }
 
-    TType(const TType&) = default;
-    TType& operator=(const TType&) = default;
+    TType(const TType &) = default;
+    TType &operator=(const TType &) = default;
 
     TBasicType getBasicType() const
     {
@@ -305,7 +275,8 @@ public:
     }
     void setBasicType(TBasicType t)
     {
-        if (type != t) {
+        if (type != t)
+        {
             type = t;
             invalidateMangledName();
         }
@@ -363,14 +334,16 @@ public:
     }
     void setPrimarySize(unsigned char ps)
     {
-        if (primarySize != ps) {
+        if (primarySize != ps)
+        {
             primarySize = ps;
             invalidateMangledName();
         }
     }
     void setSecondarySize(unsigned char ss)
     {
-        if (secondarySize != ss) {
+        if (secondarySize != ss)
+        {
             secondarySize = ss;
             invalidateMangledName();
         }
@@ -401,28 +374,31 @@ public:
     }
     void setArraySize(int s)
     {
-        if (!array || arraySize != s) {
-            array = true;
+        if (!array || arraySize != s)
+        {
+            array     = true;
             arraySize = s;
             invalidateMangledName();
         }
     }
     void clearArrayness()
     {
-        if (array) {
-            array = false;
+        if (array)
+        {
+            array     = false;
             arraySize = 0;
             invalidateMangledName();
         }
     }
 
-    TInterfaceBlock* getInterfaceBlock() const
+    TInterfaceBlock *getInterfaceBlock() const
     {
         return interfaceBlock;
     }
-    void setInterfaceBlock(TInterfaceBlock* interfaceBlockIn)
+    void setInterfaceBlock(TInterfaceBlock *interfaceBlockIn)
     {
-        if (interfaceBlock != interfaceBlockIn) {
+        if (interfaceBlock != interfaceBlockIn)
+        {
             interfaceBlock = interfaceBlockIn;
             invalidateMangledName();
         }
@@ -445,21 +421,23 @@ public:
         return isScalar() && (type == EbtInt || type == EbtUInt);
     }
 
-    TStructure* getStruct() const
+    TStructure *getStruct() const
     {
         return structure;
     }
-    void setStruct(TStructure* s)
+    void setStruct(TStructure *s)
     {
-        if (structure != s) {
+        if (structure != s)
+        {
             structure = s;
             invalidateMangledName();
         }
     }
 
-    const TString& getMangledName() const
+    const TString &getMangledName() const
     {
-        if (mangled.empty()) {
+        if (mangled.empty())
+        {
             mangled = buildMangledName();
             mangled += ';';
         }
@@ -467,20 +445,27 @@ public:
         return mangled;
     }
 
-    bool sameElementType(const TType& right) const
+    bool sameElementType(const TType &right) const
     {
-        return type == right.type && primarySize == right.primarySize && secondarySize == right.secondarySize && structure == right.structure;
+        return type == right.type &&
+            primarySize == right.primarySize &&
+            secondarySize == right.secondarySize &&
+            structure == right.structure;
     }
-    bool operator==(const TType& right) const
+    bool operator==(const TType &right) const
     {
-        return type == right.type && primarySize == right.primarySize && secondarySize == right.secondarySize && array == right.array && (!array || arraySize == right.arraySize) && structure == right.structure;
+        return type == right.type &&
+            primarySize == right.primarySize &&
+            secondarySize == right.secondarySize &&
+            array == right.array && (!array || arraySize == right.arraySize) &&
+            structure == right.structure;
         // don't check the qualifier, it's not ever what's being sought after
     }
-    bool operator!=(const TType& right) const
+    bool operator!=(const TType &right) const
     {
         return !operator==(right);
     }
-    bool operator<(const TType& right) const
+    bool operator<(const TType &right) const
     {
         if (type != right.type)
             return type < right.type;
@@ -498,15 +483,15 @@ public:
         return false;
     }
 
-    const char* getBasicString() const
+    const char *getBasicString() const
     {
         return ::getBasicString(type);
     }
-    const char* getPrecisionString() const
+    const char *getPrecisionString() const
     {
         return ::getPrecisionString(precision);
     }
-    const char* getQualifierString() const
+    const char *getQualifierString() const
     {
         return ::getQualifierString(qualifier);
     }
@@ -550,7 +535,7 @@ public:
         getMangledName();
     }
 
-private:
+  private:
     void invalidateMangledName() { mangled = ""; }
     TString buildMangledName() const;
     size_t getStructSize() const;
@@ -566,10 +551,10 @@ private:
     int arraySize;
 
     // 0 unless this is an interface block, or interface block member variable
-    TInterfaceBlock* interfaceBlock;
+    TInterfaceBlock *interfaceBlock;
 
     // 0 unless this is a struct
-    TStructure* structure;
+    TStructure *structure;
 
     mutable TString mangled;
 };
@@ -583,23 +568,21 @@ private:
 // Not as bad as it looks, there is no actual assumption that the fields
 // match up or are name the same or anything like that.
 //
-struct TPublicType {
+struct TPublicType
+{
     TBasicType type;
     TLayoutQualifier layoutQualifier;
     TQualifier qualifier;
     bool invariant;
     TPrecision precision;
-    unsigned char primarySize; // size of vector or cols of matrix
-    unsigned char secondarySize; // rows of matrix
+    unsigned char primarySize;          // size of vector or cols of matrix
+    unsigned char secondarySize;        // rows of matrix
     bool array;
     int arraySize;
-    TType* userDef;
+    TType *userDef;
     TSourceLoc line;
 
-    // true if the type was defined by a struct specifier rather than a reference to a type name.
-    bool isStructSpecifier;
-
-    void setBasic(TBasicType bt, TQualifier q, const TSourceLoc& ln)
+    void setBasic(TBasicType bt, TQualifier q, const TSourceLoc &ln)
     {
         type = bt;
         layoutQualifier = TLayoutQualifier::create();
@@ -612,7 +595,6 @@ struct TPublicType {
         arraySize = 0;
         userDef = 0;
         line = ln;
-        isStructSpecifier = false;
     }
 
     void setAggregate(unsigned char size)
@@ -644,7 +626,8 @@ struct TPublicType {
 
     bool isStructureContainingArrays() const
     {
-        if (!userDef) {
+        if (!userDef)
+        {
             return false;
         }
 
@@ -653,7 +636,8 @@ struct TPublicType {
 
     bool isStructureContainingType(TBasicType t) const
     {
-        if (!userDef) {
+        if (!userDef)
+        {
             return false;
         }
 

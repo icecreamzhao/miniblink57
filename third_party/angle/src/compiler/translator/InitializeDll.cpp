@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/InitializeDll.h"
 #include "compiler/translator/Cache.h"
+#include "compiler/translator/InitializeDll.h"
 #include "compiler/translator/InitializeGlobals.h"
 #include "compiler/translator/InitializeParseContext.h"
 

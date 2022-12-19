@@ -11,14 +11,14 @@
 #include <assert.h>
 
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
+#include <vector>
+#include <set>
 #include <map>
 #include <mutex>
-#include <set>
-#include <vector>
 
-#include <Windows.System.Threading.h>
-#include <wrl/async.h>
 #include <wrl/client.h>
+#include <wrl/async.h>
+#include <Windows.System.Threading.h>
 
 using namespace std;
 using namespace Windows::Foundation;
@@ -40,11 +40,14 @@ TLSIndex CreateTLSIndex()
 
 #ifdef ANGLE_PLATFORM_WINDOWS
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
-    if (!freeTlsIndices.empty()) {
+    if (!freeTlsIndices.empty())
+    {
         DWORD result = freeTlsIndices.back();
         freeTlsIndices.pop_back();
         index = result;
-    } else {
+    }
+    else
+    {
         index = nextTlsIndex++;
     }
 #else
@@ -53,7 +56,8 @@ TLSIndex CreateTLSIndex()
 
 #elif defined(ANGLE_PLATFORM_POSIX)
     // Create global pool key
-    if ((pthread_key_create(&index, NULL)) != 0) {
+    if ((pthread_key_create(&index, NULL)) != 0)
+    {
         index = TLS_INVALID_INDEX;
     }
 #endif
@@ -65,7 +69,8 @@ TLSIndex CreateTLSIndex()
 bool DestroyTLSIndex(TLSIndex index)
 {
     assert(index != TLS_INVALID_INDEX && "DestroyTLSIndex(): Invalid TLS Index");
-    if (index == TLS_INVALID_INDEX) {
+    if (index == TLS_INVALID_INDEX)
+    {
         return false;
     }
 
@@ -75,8 +80,10 @@ bool DestroyTLSIndex(TLSIndex index)
     assert(find(freeTlsIndices.begin(), freeTlsIndices.end(), index) == freeTlsIndices.end());
 
     freeTlsIndices.push_back(index);
-    for (auto threadData : allThreadData) {
-        if (threadData->size() > index) {
+    for (auto threadData : allThreadData)
+    {
+        if (threadData->size() > index)
+        {
             threadData->at(index) = nullptr;
         }
     }
@@ -89,21 +96,25 @@ bool DestroyTLSIndex(TLSIndex index)
 #endif
 }
 
-bool SetTLSValue(TLSIndex index, void* value)
+bool SetTLSValue(TLSIndex index, void *value)
 {
     assert(index != TLS_INVALID_INDEX && "SetTLSValue(): Invalid TLS Index");
-    if (index == TLS_INVALID_INDEX) {
+    if (index == TLS_INVALID_INDEX)
+    {
         return false;
     }
 
 #ifdef ANGLE_PLATFORM_WINDOWS
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
     ThreadLocalData* threadData = currentThreadData;
-    if (!threadData) {
+    if (!threadData)
+    {
         threadData = new ThreadLocalData(index + 1, nullptr);
         allThreadData.insert(threadData);
         currentThreadData = threadData;
-    } else if (threadData->size() <= index) {
+    }
+    else if (threadData->size() <= index)
+    {
         threadData->resize(index + 1, nullptr);
     }
 
@@ -117,19 +128,23 @@ bool SetTLSValue(TLSIndex index, void* value)
 #endif
 }
 
-void* GetTLSValue(TLSIndex index)
+void *GetTLSValue(TLSIndex index)
 {
     assert(index != TLS_INVALID_INDEX && "GetTLSValue(): Invalid TLS Index");
-    if (index == TLS_INVALID_INDEX) {
+    if (index == TLS_INVALID_INDEX)
+    {
         return NULL;
     }
 
 #ifdef ANGLE_PLATFORM_WINDOWS
 #ifdef ANGLE_ENABLE_WINDOWS_STORE
     ThreadLocalData* threadData = currentThreadData;
-    if (threadData && threadData->size() > index) {
+    if (threadData && threadData->size() > index)
+    {
         return threadData->at(index);
-    } else {
+    }
+    else
+    {
         return nullptr;
     }
 #else

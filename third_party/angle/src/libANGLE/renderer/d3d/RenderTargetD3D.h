@@ -11,13 +11,15 @@
 #define LIBANGLE_RENDERER_D3D_RENDERTARGETD3D_H_
 
 #include "common/angleutils.h"
-#include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/FramebufferAttachment.h"
 
-namespace rx {
+namespace rx
+{
 
-class RenderTargetD3D : public FramebufferAttachmentRenderTarget {
-public:
+class RenderTargetD3D : public FramebufferAttachmentRenderTarget
+{
+  public:
     RenderTargetD3D();
     virtual ~RenderTargetD3D();
 
@@ -31,7 +33,7 @@ public:
     virtual unsigned int getSerial() const;
     static unsigned int issueSerials(unsigned int count);
 
-private:
+  private:
     const unsigned int mSerial;
     static unsigned int mCurrentSerial;
 };

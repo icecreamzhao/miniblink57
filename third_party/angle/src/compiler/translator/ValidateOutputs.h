@@ -14,19 +14,20 @@
 
 class TInfoSinkBase;
 
-class ValidateOutputs : public TIntermTraverser {
-public:
-    ValidateOutputs(const TExtensionBehavior& extBehavior, int maxDrawBuffers);
+class ValidateOutputs : public TIntermTraverser
+{
+  public:
+    ValidateOutputs(const TExtensionBehavior &extBehavior, int maxDrawBuffers);
 
-    int validateAndCountErrors(TInfoSinkBase& sink) const;
+    int validateAndCountErrors(TInfoSinkBase &sink) const;
 
-    void visitSymbol(TIntermSymbol*) override;
+    void visitSymbol(TIntermSymbol *) override;
 
-private:
+  private:
     int mMaxDrawBuffers;
     bool mAllowUnspecifiedOutputLocationResolution;
 
-    typedef std::vector<TIntermSymbol*> OutputVector;
+    typedef std::vector<TIntermSymbol *> OutputVector;
     OutputVector mOutputs;
     OutputVector mUnspecifiedLocationOutputs;
     std::set<TString> mVisitedSymbols;

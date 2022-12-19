@@ -20,126 +20,71 @@ public:
         type = EbtVoid;
     }
 
-    bool cast(TBasicType newType, const TConstantUnion& constant)
+    bool cast(TBasicType newType, const TConstantUnion &constant)
     {
-        switch (newType) {
-        case EbtFloat:
-            switch (constant.type) {
-            case EbtInt:
-                setFConst(static_cast<float>(constant.getIConst()));
-                break;
-            case EbtUInt:
-                setFConst(static_cast<float>(constant.getUConst()));
-                break;
-            case EbtBool:
-                setFConst(static_cast<float>(constant.getBConst()));
-                break;
-            case EbtFloat:
-                setFConst(static_cast<float>(constant.getFConst()));
-                break;
-            default:
-                return false;
+        switch (newType)
+        {
+          case EbtFloat:
+            switch (constant.type)
+            {
+              case EbtInt:   setFConst(static_cast<float>(constant.getIConst())); break;
+              case EbtUInt:  setFConst(static_cast<float>(constant.getUConst())); break;
+              case EbtBool:  setFConst(static_cast<float>(constant.getBConst())); break;
+              case EbtFloat: setFConst(static_cast<float>(constant.getFConst())); break;
+              default:       return false;
             }
             break;
-        case EbtInt:
-            switch (constant.type) {
-            case EbtInt:
-                setIConst(static_cast<int>(constant.getIConst()));
-                break;
-            case EbtUInt:
-                setIConst(static_cast<int>(constant.getUConst()));
-                break;
-            case EbtBool:
-                setIConst(static_cast<int>(constant.getBConst()));
-                break;
-            case EbtFloat:
-                setIConst(static_cast<int>(constant.getFConst()));
-                break;
-            default:
-                return false;
+          case EbtInt:
+            switch (constant.type)
+            {
+              case EbtInt:   setIConst(static_cast<int>(constant.getIConst())); break;
+              case EbtUInt:  setIConst(static_cast<int>(constant.getUConst())); break;
+              case EbtBool:  setIConst(static_cast<int>(constant.getBConst())); break;
+              case EbtFloat: setIConst(static_cast<int>(constant.getFConst())); break;
+              default:       return false;
             }
             break;
-        case EbtUInt:
-            switch (constant.type) {
-            case EbtInt:
-                setUConst(static_cast<unsigned int>(constant.getIConst()));
-                break;
-            case EbtUInt:
-                setUConst(static_cast<unsigned int>(constant.getUConst()));
-                break;
-            case EbtBool:
-                setUConst(static_cast<unsigned int>(constant.getBConst()));
-                break;
-            case EbtFloat:
-                setUConst(static_cast<unsigned int>(constant.getFConst()));
-                break;
-            default:
-                return false;
+          case EbtUInt:
+            switch (constant.type)
+            {
+              case EbtInt:   setUConst(static_cast<unsigned int>(constant.getIConst())); break;
+              case EbtUInt:  setUConst(static_cast<unsigned int>(constant.getUConst())); break;
+              case EbtBool:  setUConst(static_cast<unsigned int>(constant.getBConst())); break;
+              case EbtFloat: setUConst(static_cast<unsigned int>(constant.getFConst())); break;
+              default:       return false;
             }
             break;
-        case EbtBool:
-            switch (constant.type) {
-            case EbtInt:
-                setBConst(constant.getIConst() != 0);
-                break;
-            case EbtUInt:
-                setBConst(constant.getUConst() != 0);
-                break;
-            case EbtBool:
-                setBConst(constant.getBConst());
-                break;
-            case EbtFloat:
-                setBConst(constant.getFConst() != 0.0f);
-                break;
-            default:
-                return false;
+          case EbtBool:
+            switch (constant.type)
+            {
+              case EbtInt:   setBConst(constant.getIConst() != 0);    break;
+              case EbtUInt:  setBConst(constant.getUConst() != 0);    break;
+              case EbtBool:  setBConst(constant.getBConst());         break;
+              case EbtFloat: setBConst(constant.getFConst() != 0.0f); break;
+              default:       return false;
             }
             break;
-        case EbtStruct: // Struct fields don't get cast
-            switch (constant.type) {
-            case EbtInt:
-                setIConst(constant.getIConst());
-                break;
-            case EbtUInt:
-                setUConst(constant.getUConst());
-                break;
-            case EbtBool:
-                setBConst(constant.getBConst());
-                break;
-            case EbtFloat:
-                setFConst(constant.getFConst());
-                break;
-            default:
-                return false;
+          case EbtStruct:    // Struct fields don't get cast
+            switch (constant.type)
+            {
+              case EbtInt:   setIConst(constant.getIConst()); break;
+              case EbtUInt:  setUConst(constant.getUConst()); break;
+              case EbtBool:  setBConst(constant.getBConst()); break;
+              case EbtFloat: setFConst(constant.getFConst()); break;
+              default:       return false;
             }
             break;
-        default:
+          default:
             return false;
         }
 
         return true;
     }
 
-    void setIConst(int i)
-    {
-        iConst = i;
-        type = EbtInt;
-    }
-    void setUConst(unsigned int u)
-    {
-        uConst = u;
-        type = EbtUInt;
-    }
-    void setFConst(float f)
-    {
-        fConst = f;
-        type = EbtFloat;
-    }
-    void setBConst(bool b)
-    {
-        bConst = b;
-        type = EbtBool;
-    }
+    void setIConst(int i) {iConst = i; type = EbtInt; }
+    void setUConst(unsigned int u) { uConst = u; type = EbtUInt; }
+    void setFConst(float f) {fConst = f; type = EbtFloat; }
+    void setBConst(bool b) {bConst = b; type = EbtBool; }
 
     int getIConst() const { return iConst; }
     unsigned int getUConst() const { return uConst; }
@@ -211,7 +156,7 @@ public:
     }
 
     bool operator>(const TConstantUnion& constant) const
-    {
+    { 
         assert(type == constant.type);
         switch (type) {
         case EbtInt:
@@ -221,12 +166,12 @@ public:
         case EbtFloat:
             return fConst > constant.fConst;
         default:
-            return false; // Invalid operation, handled at semantic analysis
+            return false;   // Invalid operation, handled at semantic analysis
         }
     }
 
     bool operator<(const TConstantUnion& constant) const
-    {
+    { 
         assert(type == constant.type);
         switch (type) {
         case EbtInt:
@@ -236,223 +181,166 @@ public:
         case EbtFloat:
             return fConst < constant.fConst;
         default:
-            return false; // Invalid operation, handled at semantic analysis
+            return false;   // Invalid operation, handled at semantic analysis
         }
     }
 
     TConstantUnion operator+(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst + constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst + constant.uConst);
-            break;
-        case EbtFloat:
-            returnValue.setFConst(fConst + constant.fConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt: returnValue.setIConst(iConst + constant.iConst); break;
+        case EbtUInt: returnValue.setUConst(uConst + constant.uConst); break;
+        case EbtFloat: returnValue.setFConst(fConst + constant.fConst); break;
+        default: assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator-(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst - constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst - constant.uConst);
-            break;
-        case EbtFloat:
-            returnValue.setFConst(fConst - constant.fConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt: returnValue.setIConst(iConst - constant.iConst); break;
+        case EbtUInt: returnValue.setUConst(uConst - constant.uConst); break;
+        case EbtFloat: returnValue.setFConst(fConst - constant.fConst); break;
+        default: assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator*(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst * constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst * constant.uConst);
-            break;
-        case EbtFloat:
-            returnValue.setFConst(fConst * constant.fConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt: returnValue.setIConst(iConst * constant.iConst); break;
+        case EbtUInt: returnValue.setUConst(uConst * constant.uConst); break;
+        case EbtFloat: returnValue.setFConst(fConst * constant.fConst); break; 
+        default: assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator%(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst % constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst % constant.uConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt: returnValue.setIConst(iConst % constant.iConst); break;
+        case EbtUInt: returnValue.setUConst(uConst % constant.uConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator>>(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst >> constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst >> constant.uConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt: returnValue.setIConst(iConst >> constant.iConst); break;
+        case EbtUInt: returnValue.setUConst(uConst >> constant.uConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator<<(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         // The signedness of the second parameter might be different, but we
         // don't care, since the result is undefined if the second parameter is
         // negative, and aliasing should not be a problem with unions.
         assert(constant.type == EbtInt || constant.type == EbtUInt);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst << constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst << constant.uConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt: returnValue.setIConst(iConst << constant.iConst); break;
+        case EbtUInt: returnValue.setUConst(uConst << constant.uConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator&(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(constant.type == EbtInt || constant.type == EbtUInt);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst & constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst & constant.uConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt:  returnValue.setIConst(iConst & constant.iConst); break;
+        case EbtUInt:  returnValue.setUConst(uConst & constant.uConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator|(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst | constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst | constant.uConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt:  returnValue.setIConst(iConst | constant.iConst); break;
+        case EbtUInt:  returnValue.setUConst(uConst | constant.uConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator^(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtInt:
-            returnValue.setIConst(iConst ^ constant.iConst);
-            break;
-        case EbtUInt:
-            returnValue.setUConst(uConst ^ constant.uConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtInt:  returnValue.setIConst(iConst ^ constant.iConst); break;
+        case EbtUInt:  returnValue.setUConst(uConst ^ constant.uConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator&&(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtBool:
-            returnValue.setBConst(bConst && constant.bConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtBool: returnValue.setBConst(bConst && constant.bConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TConstantUnion operator||(const TConstantUnion& constant) const
-    {
+    { 
         TConstantUnion returnValue;
         assert(type == constant.type);
         switch (type) {
-        case EbtBool:
-            returnValue.setBConst(bConst || constant.bConst);
-            break;
-        default:
-            assert(false && "Default missing");
+        case EbtBool: returnValue.setBConst(bConst || constant.bConst); break;
+        default:     assert(false && "Default missing");
         }
 
         return returnValue;
     }
 
     TBasicType getType() const { return type; }
-
 private:
-    union {
-        int iConst; // used for ivec, scalar ints
+
+    union  {
+        int iConst;  // used for ivec, scalar ints
         unsigned int uConst; // used for uvec, scalar uints
         bool bConst; // used for bvec, scalar bools
-        float fConst; // used for vec, mat, scalar floats
-    };
+        float fConst;   // used for vec, mat, scalar floats
+    } ;
 
     TBasicType type;
 };

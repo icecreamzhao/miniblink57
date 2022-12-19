@@ -16,10 +16,12 @@
 
 #include <stack>
 
-namespace gl {
+namespace gl
+{
 
-class HandleAllocator final : angle::NonCopyable {
-public:
+class HandleAllocator final : angle::NonCopyable
+{
+  public:
     // Maximum handle = MAX_UINT-1
     HandleAllocator();
     // Specify maximum handle value
@@ -33,18 +35,15 @@ public:
     void release(GLuint handle);
     void reserve(GLuint handle);
 
-private:
+  private:
     GLuint mBaseValue;
     GLuint mNextValue;
     typedef std::vector<GLuint> HandleList;
     HandleList mFreeValues;
 
-    struct HandleRange {
-        HandleRange(GLuint beginIn, GLuint endIn)
-            : begin(beginIn)
-            , end(endIn)
-        {
-        }
+    struct HandleRange
+    {
+        HandleRange(GLuint beginIn, GLuint endIn) : begin(beginIn), end(endIn) {}
 
         GLuint begin;
         GLuint end;
@@ -59,6 +58,6 @@ private:
     std::vector<GLuint> mReleasedList;
 };
 
-} // namespace gl
+}
 
-#endif // LIBANGLE_HANDLEALLOCATOR_H_
+#endif   // LIBANGLE_HANDLEALLOCATOR_H_

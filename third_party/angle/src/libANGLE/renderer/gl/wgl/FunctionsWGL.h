@@ -12,10 +12,12 @@
 #include "common/angleutils.h"
 #include "libANGLE/renderer/gl/wgl/functionswgl_typedefs.h"
 
-namespace rx {
+namespace rx
+{
 
-class FunctionsWGL : angle::NonCopyable {
-public:
+class FunctionsWGL : angle::NonCopyable
+{
+  public:
     FunctionsWGL();
 
     // Loads all available wgl functions, may be called multiple times
@@ -23,7 +25,7 @@ public:
 
     // Extension information
     std::vector<std::string> extensions;
-    bool hasExtension(const std::string& ext) const;
+    bool hasExtension(const std::string &ext) const;
 
     // Base WGL functions
     PFNWGLCOPYCONTEXTPROC copyContext;
@@ -75,16 +77,6 @@ public:
     PFNWGLBINDTEXIMAGEARBPROC bindTexImageARB;
     PFNWGLRELEASETEXIMAGEARBPROC releaseTexImageARB;
     PFNWGLSETPBUFFERATTRIBARBPROC setPbufferAttribARB;
-
-    // WGL_NV_DX_interop
-    PFNWGLDXSETRESOURCESHAREHANDLENVPROC dxSetResourceShareHandleNV;
-    PFNWGLDXOPENDEVICENVPROC dxOpenDeviceNV;
-    PFNWGLDXCLOSEDEVICENVPROC dxCloseDeviceNV;
-    PFNWGLDXREGISTEROBJECTNVPROC dxRegisterObjectNV;
-    PFNWGLDXUNREGISTEROBJECTNVPROC dxUnregisterObjectNV;
-    PFNWGLDXOBJECTACCESSNVPROC dxObjectAccessNV;
-    PFNWGLDXLOCKOBJECTSNVPROC dxLockObjectsNV;
-    PFNWGLDXUNLOCKOBJECTSNVPROC dxUnlockObjectsNV;
 };
 
 }

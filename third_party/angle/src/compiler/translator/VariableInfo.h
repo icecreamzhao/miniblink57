@@ -13,37 +13,39 @@
 
 class TSymbolTable;
 
-namespace sh {
+namespace sh
+{
 
 // Traverses intermediate tree to collect all attributes, uniforms, varyings.
-class CollectVariables : public TIntermTraverser {
-public:
-    CollectVariables(std::vector<Attribute>* attribs,
-        std::vector<OutputVariable>* outputVariables,
-        std::vector<Uniform>* uniforms,
-        std::vector<Varying>* varyings,
-        std::vector<InterfaceBlock>* interfaceBlocks,
-        ShHashFunction64 hashFunction,
-        const TSymbolTable& symbolTable);
+class CollectVariables : public TIntermTraverser
+{
+  public:
+    CollectVariables(std::vector<Attribute> *attribs,
+                     std::vector<OutputVariable> *outputVariables,
+                     std::vector<Uniform> *uniforms,
+                     std::vector<Varying> *varyings,
+                     std::vector<InterfaceBlock> *interfaceBlocks,
+                     ShHashFunction64 hashFunction,
+                     const TSymbolTable &symbolTable);
 
-    void visitSymbol(TIntermSymbol* symbol) override;
-    bool visitAggregate(Visit, TIntermAggregate* node) override;
-    bool visitBinary(Visit visit, TIntermBinary* binaryNode) override;
+    void visitSymbol(TIntermSymbol *symbol) override;
+    bool visitAggregate(Visit, TIntermAggregate *node) override;
+    bool visitBinary(Visit visit, TIntermBinary *binaryNode) override;
 
-private:
+  private:
     template <typename VarT>
-    void visitVariable(const TIntermSymbol* variable, std::vector<VarT>* infoList) const;
+    void visitVariable(const TIntermSymbol *variable, std::vector<VarT> *infoList) const;
 
     template <typename VarT>
-    void visitInfoList(const TIntermSequence& sequence, std::vector<VarT>* infoList) const;
+    void visitInfoList(const TIntermSequence &sequence, std::vector<VarT> *infoList) const;
 
-    std::vector<Attribute>* mAttribs;
-    std::vector<OutputVariable>* mOutputVariables;
-    std::vector<Uniform>* mUniforms;
-    std::vector<Varying>* mVaryings;
-    std::vector<InterfaceBlock>* mInterfaceBlocks;
+    std::vector<Attribute> *mAttribs;
+    std::vector<OutputVariable> *mOutputVariables;
+    std::vector<Uniform> *mUniforms;
+    std::vector<Varying> *mVaryings;
+    std::vector<InterfaceBlock> *mInterfaceBlocks;
 
-    std::map<std::string, InterfaceBlockField*> mInterfaceBlockFields;
+    std::map<std::string, InterfaceBlockField *> mInterfaceBlockFields;
 
     bool mDepthRangeAdded;
     bool mPointCoordAdded;
@@ -63,13 +65,13 @@ private:
 
     ShHashFunction64 mHashFunction;
 
-    const TSymbolTable& mSymbolTable;
+    const TSymbolTable &mSymbolTable;
 };
 
 // Expand struct uniforms to flattened lists of split variables
-void ExpandUniforms(const std::vector<Uniform>& compact,
-    std::vector<ShaderVariable>* expanded);
+void ExpandUniforms(const std::vector<Uniform> &compact,
+                    std::vector<ShaderVariable> *expanded);
 
 }
 
-#endif // COMPILER_TRANSLATOR_VARIABLEINFO_H_
+#endif  // COMPILER_TRANSLATOR_VARIABLEINFO_H_

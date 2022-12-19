@@ -18,6 +18,6 @@
 
 class TIntermNode;
 
-void RecordConstantPrecision(TIntermNode* root, unsigned int* temporaryIndex);
+void RecordConstantPrecision(TIntermNode *root, unsigned int *temporaryIndex);
 
-#endif // COMPILER_TRANSLATOR_RECORDCONSTANTPRECISION_H_
+#endif   // COMPILER_TRANSLATOR_RECORDCONSTANTPRECISION_H_

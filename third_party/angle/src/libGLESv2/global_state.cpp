@@ -15,27 +15,30 @@
 #include "common/platform.h"
 #include "common/tls.h"
 
-namespace {
+namespace
+{
 
 static TLSIndex currentTLS = TLS_INVALID_INDEX;
 
-struct Current {
+struct Current
+{
     EGLint error;
     EGLenum API;
-    egl::Display* display;
-    egl::Surface* drawSurface;
-    egl::Surface* readSurface;
-    gl::Context* context;
+    egl::Display *display;
+    egl::Surface *drawSurface;
+    egl::Surface *readSurface;
+    gl::Context *context;
 };
 
-Current* AllocateCurrent()
+Current *AllocateCurrent()
 {
     ASSERT(currentTLS != TLS_INVALID_INDEX);
-    if (currentTLS == TLS_INVALID_INDEX) {
+    if (currentTLS == TLS_INVALID_INDEX)
+    {
         return NULL;
     }
 
-    Current* current = new Current();
+    Current *current = new Current();
     current->error = EGL_SUCCESS;
     current->API = EGL_OPENGL_ES_API;
     current->display = reinterpret_cast<egl::Display*>(EGL_NO_DISPLAY);
@@ -43,7 +46,8 @@ Current* AllocateCurrent()
     current->readSurface = reinterpret_cast<egl::Surface*>(EGL_NO_SURFACE);
     current->context = reinterpret_cast<gl::Context*>(EGL_NO_CONTEXT);
 
-    if (!SetTLSValue(currentTLS, current)) {
+    if (!SetTLSValue(currentTLS, current))
+    {
         ERR("Could not set thread local storage.");
         return NULL;
     }
@@ -51,14 +55,15 @@ Current* AllocateCurrent()
     return current;
 }
 
-Current* GetCurrentData()
+Current *GetCurrentData()
 {
     // Create a TLS index if one has not been created for this DLL
-    if (currentTLS == TLS_INVALID_INDEX) {
+    if (currentTLS == TLS_INVALID_INDEX)
+    {
         currentTLS = CreateTLSIndex();
     }
 
-    Current* current = reinterpret_cast<Current*>(GetTLSValue(currentTLS));
+    Current *current = reinterpret_cast<Current*>(GetTLSValue(currentTLS));
 
     // ANGLE issue 488: when the dll is loaded after thread initialization,
     // thread local storage (current) might not exist yet.
@@ -69,33 +74,36 @@ Current* GetCurrentData()
 
 void DeallocateCurrent()
 {
-    Current* current = reinterpret_cast<Current*>(GetTLSValue(currentTLS));
+    Current *current = reinterpret_cast<Current*>(GetTLSValue(currentTLS));
     SafeDelete(current);
     SetTLSValue(currentTLS, NULL);
 }
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE, DWORD reason, LPVOID)
 {
-    switch (reason) {
-    case DLL_PROCESS_ATTACH:
+    switch (reason)
+    {
+      case DLL_PROCESS_ATTACH:
         currentTLS = CreateTLSIndex();
-        if (currentTLS == TLS_INVALID_INDEX) {
+        if (currentTLS == TLS_INVALID_INDEX)
+        {
             return FALSE;
         }
         AllocateCurrent();
         break;
 
-    case DLL_THREAD_ATTACH:
+      case DLL_THREAD_ATTACH:
         AllocateCurrent();
         break;
 
-    case DLL_THREAD_DETACH:
+      case DLL_THREAD_DETACH:
         DeallocateCurrent();
         break;
 
-    case DLL_PROCESS_DETACH:
+      case DLL_PROCESS_DETACH:
         DeallocateCurrent();
-        if (currentTLS != TLS_INVALID_INDEX) {
+        if (currentTLS != TLS_INVALID_INDEX)
+        {
             DestroyTLSIndex(currentTLS);
             currentTLS = TLS_INVALID_INDEX;
         }
@@ -108,23 +116,28 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE, DWORD reason, LPVOID)
 
 }
 
-namespace gl {
-
-Context* GetGlobalContext()
+namespace gl
 {
-    Current* current = GetCurrentData();
+
+Context *GetGlobalContext()
+{
+    Current *current = GetCurrentData();
 
     return current->context;
 }
 
-Context* GetValidGlobalContext()
+Context *GetValidGlobalContext()
 {
-    gl::Context* context = GetGlobalContext();
-    if (context) {
-        if (context->isContextLost()) {
+    gl::Context *context = GetGlobalContext();
+    if (context)
+    {
+        if (context->isContextLost())
+        {
             context->recordError(gl::Error(GL_OUT_OF_MEMORY, "Context has been lost."));
             return nullptr;
-        } else {
+        }
+        else
+        {
             return context;
         }
     }
@@ -133,88 +146,89 @@ Context* GetValidGlobalContext()
 
 }
 
-namespace egl {
-
-void SetGlobalError(const Error& error)
+namespace egl
 {
-    Current* current = GetCurrentData();
+
+void SetGlobalError(const Error &error)
+{
+    Current *current = GetCurrentData();
 
     current->error = error.getCode();
 }
 
 EGLint GetGlobalError()
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     return current->error;
 }
 
 EGLenum GetGlobalAPI()
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     return current->API;
 }
 
 void SetGlobalAPI(EGLenum API)
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     current->API = API;
 }
 
-void SetGlobalDisplay(Display* dpy)
+void SetGlobalDisplay(Display *dpy)
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     current->display = dpy;
 }
 
-Display* GetGlobalDisplay()
+Display *GetGlobalDisplay()
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     return current->display;
 }
 
-void SetGlobalDrawSurface(Surface* surface)
+void SetGlobalDrawSurface(Surface *surface)
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     current->drawSurface = surface;
 }
 
-Surface* GetGlobalDrawSurface()
+Surface *GetGlobalDrawSurface()
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     return current->drawSurface;
 }
 
-void SetGlobalReadSurface(Surface* surface)
+void SetGlobalReadSurface(Surface *surface)
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     current->readSurface = surface;
 }
 
-Surface* GetGlobalReadSurface()
+Surface *GetGlobalReadSurface()
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     return current->readSurface;
 }
 
-void SetGlobalContext(gl::Context* context)
+void SetGlobalContext(gl::Context *context)
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     current->context = context;
 }
 
-gl::Context* GetGlobalContext()
+gl::Context *GetGlobalContext()
 {
-    Current* current = GetCurrentData();
+    Current *current = GetCurrentData();
 
     return current->context;
 }

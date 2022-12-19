@@ -10,17 +10,17 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/renderer/TransformFeedbackImpl.h"
 
-namespace gl {
+namespace gl
+{
 
-TransformFeedback::TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id, const Caps& caps)
-    : RefCountObject(id)
-    , mImplementation(impl)
-    , mLabel()
-    , mActive(false)
-    , mPrimitiveMode(GL_NONE)
-    , mPaused(false)
-    , mGenericBuffer()
-    , mIndexedBuffers(caps.maxTransformFeedbackSeparateAttributes)
+TransformFeedback::TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id, const Caps &caps)
+    : RefCountObject(id),
+      mImplementation(impl),
+      mActive(false),
+      mPrimitiveMode(GL_NONE),
+      mPaused(false),
+      mGenericBuffer(),
+      mIndexedBuffers(caps.maxTransformFeedbackSeparateAttributes)
 {
     ASSERT(impl != NULL);
 }
@@ -28,21 +28,12 @@ TransformFeedback::TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id,
 TransformFeedback::~TransformFeedback()
 {
     mGenericBuffer.set(nullptr);
-    for (size_t i = 0; i < mIndexedBuffers.size(); i++) {
+    for (size_t i = 0; i < mIndexedBuffers.size(); i++)
+    {
         mIndexedBuffers[i].set(nullptr);
     }
 
     SafeDelete(mImplementation);
-}
-
-void TransformFeedback::setLabel(const std::string& label)
-{
-    mLabel = label;
-}
-
-const std::string& TransformFeedback::getLabel() const
-{
-    return mLabel;
 }
 
 void TransformFeedback::begin(GLenum primitiveMode)
@@ -88,40 +79,25 @@ GLenum TransformFeedback::getPrimitiveMode() const
     return mPrimitiveMode;
 }
 
-void TransformFeedback::bindGenericBuffer(Buffer* buffer)
+void TransformFeedback::bindGenericBuffer(Buffer *buffer)
 {
     mGenericBuffer.set(buffer);
     mImplementation->bindGenericBuffer(mGenericBuffer);
 }
 
-void TransformFeedback::detachBuffer(GLuint bufferName)
-{
-    for (size_t index = 0; index < mIndexedBuffers.size(); index++) {
-        if (mIndexedBuffers[index].id() == bufferName) {
-            mIndexedBuffers[index].set(nullptr);
-            mImplementation->bindIndexedBuffer(index, mIndexedBuffers[index]);
-        }
-    }
-
-    if (mGenericBuffer.id() == bufferName) {
-        mGenericBuffer.set(nullptr);
-        mImplementation->bindGenericBuffer(mGenericBuffer);
-    }
-}
-
-const BindingPointer<Buffer>& TransformFeedback::getGenericBuffer() const
+const BindingPointer<Buffer> &TransformFeedback::getGenericBuffer() const
 {
     return mGenericBuffer;
 }
 
-void TransformFeedback::bindIndexedBuffer(size_t index, Buffer* buffer, size_t offset, size_t size)
+void TransformFeedback::bindIndexedBuffer(size_t index, Buffer *buffer, size_t offset, size_t size)
 {
     ASSERT(index < mIndexedBuffers.size());
     mIndexedBuffers[index].set(buffer, offset, size);
     mImplementation->bindIndexedBuffer(index, mIndexedBuffers[index]);
 }
 
-const OffsetBindingPointer<Buffer>& TransformFeedback::getIndexedBuffer(size_t index) const
+const OffsetBindingPointer<Buffer> &TransformFeedback::getIndexedBuffer(size_t index) const
 {
     ASSERT(index < mIndexedBuffers.size());
     return mIndexedBuffers[index];
@@ -132,12 +108,12 @@ size_t TransformFeedback::getIndexedBufferCount() const
     return mIndexedBuffers.size();
 }
 
-rx::TransformFeedbackImpl* TransformFeedback::getImplementation()
+rx::TransformFeedbackImpl *TransformFeedback::getImplementation()
 {
     return mImplementation;
 }
 
-const rx::TransformFeedbackImpl* TransformFeedback::getImplementation() const
+const rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
 {
     return mImplementation;
 }

@@ -13,17 +13,19 @@
 
 #include "angle_gl.h"
 
-namespace gl {
+namespace gl
+{
 
 class ImageIndexIterator;
 
-struct ImageIndex {
+struct ImageIndex
+{
     GLenum type;
     GLint mipIndex;
     GLint layerIndex;
 
-    ImageIndex(const ImageIndex& other);
-    ImageIndex& operator=(const ImageIndex& other);
+    ImageIndex(const ImageIndex &other);
+    ImageIndex &operator=(const ImageIndex &other);
 
     bool hasLayer() const { return layerIndex != ENTIRE_LEVEL; }
 
@@ -37,35 +39,37 @@ struct ImageIndex {
 
     static const GLint ENTIRE_LEVEL = static_cast<GLint>(-1);
 
-    bool operator<(const ImageIndex& other) const;
+    bool operator<(const ImageIndex &other) const;
 
-private:
+  private:
     friend class ImageIndexIterator;
 
     ImageIndex(GLenum typeIn, GLint mipIndexIn, GLint layerIndexIn);
 };
 
-class ImageIndexIterator {
-public:
+class ImageIndexIterator
+{
+  public:
     static ImageIndexIterator Make2D(GLint minMip, GLint maxMip);
     static ImageIndexIterator MakeCube(GLint minMip, GLint maxMip);
     static ImageIndexIterator Make3D(GLint minMip, GLint maxMip, GLint minLayer, GLint maxLayer);
-    static ImageIndexIterator Make2DArray(GLint minMip, GLint maxMip, const GLsizei* layerCounts);
+    static ImageIndexIterator Make2DArray(GLint minMip, GLint maxMip, const GLsizei *layerCounts);
 
     ImageIndex next();
     ImageIndex current() const;
     bool hasNext() const;
 
-private:
-    ImageIndexIterator(GLenum type, const Range<GLint>& mipRange,
-        const Range<GLint>& layerRange, const GLsizei* layerCounts);
+  private:
+
+    ImageIndexIterator(GLenum type, const Range<GLint> &mipRange,
+                       const Range<GLint> &layerRange, const GLsizei *layerCounts);
 
     GLint maxLayer() const;
 
     GLenum mType;
     Range<GLint> mMipRange;
     Range<GLint> mLayerRange;
-    const GLsizei* mLayerCounts;
+    const GLsizei *mLayerCounts;
     GLint mCurrentMip;
     GLint mCurrentLayer;
 };

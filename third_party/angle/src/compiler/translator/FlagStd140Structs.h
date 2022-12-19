@@ -9,31 +9,34 @@
 
 #include "compiler/translator/IntermNode.h"
 
-namespace sh {
+namespace sh
+{
 
 // This class finds references to nested structs of std140 blocks that access
 // the nested struct "by value", where the padding added in the translator
 // conflicts with the "natural" unpadded type.
-class FlagStd140Structs : public TIntermTraverser {
-public:
+class FlagStd140Structs : public TIntermTraverser
+{
+  public:
+
     FlagStd140Structs()
         : TIntermTraverser(true, false, false)
     {
     }
 
-    const std::vector<TIntermTyped*> getFlaggedNodes() const { return mFlaggedNodes; }
+    const std::vector<TIntermTyped *> getFlaggedNodes() const { return mFlaggedNodes; }
 
-protected:
-    bool visitBinary(Visit visit, TIntermBinary* binaryNode) override;
-    void visitSymbol(TIntermSymbol* symbol) override;
+  protected:
+    bool visitBinary(Visit visit, TIntermBinary *binaryNode) override;
+    void visitSymbol(TIntermSymbol *symbol) override;
 
-private:
-    bool isInStd140InterfaceBlock(TIntermTyped* node) const;
+  private:
+    bool isInStd140InterfaceBlock(TIntermTyped *node) const;
 
-    std::vector<TIntermTyped*> mFlaggedNodes;
+    std::vector<TIntermTyped *> mFlaggedNodes;
 };
 
-std::vector<TIntermTyped*> FlagStd140ValueStructs(TIntermNode* node);
+std::vector<TIntermTyped *> FlagStd140ValueStructs(TIntermNode *node);
 
 }
 

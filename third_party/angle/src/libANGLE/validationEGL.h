@@ -13,55 +13,48 @@
 
 #include <EGL/egl.h>
 
-namespace gl {
+namespace gl
+{
 class Context;
 }
 
-namespace egl {
+namespace egl
+{
 
 class AttributeMap;
 struct Config;
-class Device;
 class Display;
 class Image;
 class Surface;
 
 // Object validation
-Error ValidateDisplay(const Display* display);
-Error ValidateSurface(const Display* display, Surface* surface);
-Error ValidateConfig(const Display* display, const Config* config);
-Error ValidateContext(const Display* display, gl::Context* context);
-Error ValidateImage(const Display* display, const Image* image);
+Error ValidateDisplay(const Display *display);
+Error ValidateSurface(const Display *display, Surface *surface);
+Error ValidateConfig(const Display *display, const Config *config);
+Error ValidateContext(const Display *display, gl::Context *context);
+Error ValidateImage(const Display *display, const Image *image);
 
 // Entry point validation
-Error ValidateCreateContext(Display* display, Config* configuration, gl::Context* shareContext,
-    const AttributeMap& attributes);
+Error ValidateCreateContext(Display *display, Config *configuration, gl::Context *shareContext,
+                            const AttributeMap& attributes);
 
-Error ValidateCreateWindowSurface(Display* display, Config* config, EGLNativeWindowType window,
-    const AttributeMap& attributes);
+Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWindowType window,
+                                  const AttributeMap& attributes);
 
-Error ValidateCreatePbufferSurface(Display* display, Config* config, const AttributeMap& attributes);
-Error ValidateCreatePbufferFromClientBuffer(Display* display, EGLenum buftype, EGLClientBuffer buffer,
-    Config* config, const AttributeMap& attributes);
+Error ValidateCreatePbufferSurface(Display *display, Config *config, const AttributeMap& attributes);
+Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, EGLClientBuffer buffer,
+                                            Config *config, const AttributeMap& attributes);
 
-Error ValidateCreateImageKHR(const Display* display,
-    gl::Context* context,
-    EGLenum target,
-    EGLClientBuffer buffer,
-    const AttributeMap& attributes);
-Error ValidateDestroyImageKHR(const Display* display, const Image* image);
-
-Error ValidateCreateDeviceANGLE(EGLint device_type,
-    void* native_device,
-    const EGLAttrib* attrib_list);
-Error ValidateReleaseDeviceANGLE(Device* device);
+Error ValidateCreateImageKHR(const Display *display,
+                             gl::Context *context,
+                             EGLenum target,
+                             EGLClientBuffer buffer,
+                             const AttributeMap &attributes);
+Error ValidateDestroyImageKHR(const Display *display, const Image *image);
 
 // Other validation
-Error ValidateCompatibleConfigs(const Display* display,
-    const Config* config1,
-    const Surface* surface,
-    const Config* config2,
-    EGLint surfaceType);
+Error ValidateCompatibleConfigs(const Config *config1, const Config *config2, EGLint surfaceType);
+
 }
 
 #endif // LIBANGLE_VALIDATIONEGL_H_

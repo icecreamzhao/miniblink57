@@ -117,10 +117,14 @@ class Span : private internal::SpanBase<const T> {
   template <size_t N>
   /*constexpr*/ Span(T (&array)[N]) : Span(array, N) {}
 
-  template <typename C, typename = typename EnableIfContainer<C>::type, typename = typename std::enable_if<std::is_const<T>::value, C>::type>
+  template <
+      typename C, typename = typename EnableIfContainer<C>::type,
+      typename = typename std::enable_if<std::is_const<T>::value, C>::type>
   Span(const C &container) : data_(container.data()), size_(container.size()) {}
 
-  template <typename C/*, typename = typename Enable......IfContainer<C>::type, typename = typename std::enable_if<!std::is_const<T>::value, C>::type*/>
+  template <
+      typename C, typename = typename Enable......IfContainer<C>::type,
+      typename = typename std::enable_if<!std::is_const<T>::value, C>::type>
   explicit Span(C &container)
       : data_(container.data()), size_(container.size()) {}
 

@@ -7,17 +7,19 @@
 #ifndef COMPILER_PREPROCESSOR_LEXER_H_
 #define COMPILER_PREPROCESSOR_LEXER_H_
 
-namespace pp {
+namespace pp
+{
 
 struct Token;
 
-class Lexer {
-public:
+class Lexer
+{
+  public:
     virtual ~Lexer();
 
-    virtual void lex(Token* token) = 0;
+    virtual void lex(Token *token) = 0;
 };
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_LEXER_H_
+#endif  // COMPILER_PREPROCESSOR_LEXER_H_

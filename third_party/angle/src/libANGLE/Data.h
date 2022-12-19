@@ -12,56 +12,56 @@
 #include "common/angleutils.h"
 #include "libANGLE/State.h"
 
-namespace gl {
+namespace gl
+{
 
-struct Data final : public angle::NonCopyable {
-public:
+struct Data final : public angle::NonCopyable
+{
+  public:
     Data(uintptr_t context,
-        GLint clientVersion,
-        const State& state,
-        const Caps& caps,
-        const TextureCapsMap& textureCaps,
-        const Extensions& extensions,
-        const ResourceManager* resourceManager,
-        const Limitations& limitations);
+         GLint clientVersion,
+         const State &state,
+         const Caps &caps,
+         const TextureCapsMap &textureCaps,
+         const Extensions &extensions,
+         const ResourceManager *resourceManager,
+         const Limitations &limitations);
     ~Data();
 
     uintptr_t context;
     GLint clientVersion;
-    const State* state;
-    const Caps* caps;
-    const TextureCapsMap* textureCaps;
-    const Extensions* extensions;
-    const ResourceManager* resourceManager;
-    const Limitations* limitations;
+    const State *state;
+    const Caps *caps;
+    const TextureCapsMap *textureCaps;
+    const Extensions *extensions;
+    const ResourceManager *resourceManager;
+    const Limitations *limitations;
 };
 
-class ValidationContext : angle::NonCopyable {
-public:
+class ValidationContext : angle::NonCopyable
+{
+  public:
     ValidationContext(GLint clientVersion,
-        const State& state,
-        const Caps& caps,
-        const TextureCapsMap& textureCaps,
-        const Extensions& extensions,
-        const ResourceManager* resourceManager,
-        const Limitations& limitations,
-        bool skipValidation);
-    virtual ~ValidationContext() { }
+                      const State &state,
+                      const Caps &caps,
+                      const TextureCapsMap &textureCaps,
+                      const Extensions &extensions,
+                      const ResourceManager *resourceManager,
+                      const Limitations &limitations);
+    virtual ~ValidationContext() {}
 
-    virtual void recordError(const Error& error) = 0;
+    virtual void recordError(const Error &error) = 0;
 
-    const Data& getData() const { return mData; }
+    const Data &getData() const { return mData; }
     int getClientVersion() const { return mData.clientVersion; }
-    const State& getState() const { return *mData.state; }
-    const Caps& getCaps() const { return *mData.caps; }
-    const TextureCapsMap& getTextureCaps() const { return *mData.textureCaps; }
-    const Extensions& getExtensions() const { return *mData.extensions; }
-    const Limitations& getLimitations() const { return *mData.limitations; }
-    bool skipValidation() const { return mSkipValidation; }
+    const State &getState() const { return *mData.state; }
+    const Caps &getCaps() const { return *mData.caps; }
+    const TextureCapsMap &getTextureCaps() const { return *mData.textureCaps; }
+    const Extensions &getExtensions() const { return *mData.extensions; }
+    const Limitations &getLimitations() const { return *mData.limitations; }
 
-protected:
+  protected:
     Data mData;
-    bool mSkipValidation;
 };
 
 }

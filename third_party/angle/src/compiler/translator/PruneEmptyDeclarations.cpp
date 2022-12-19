@@ -9,18 +9,19 @@
 
 #include "compiler/translator/IntermNode.h"
 
-namespace {
+namespace
+{
 
-class PruneEmptyDeclarationsTraverser : private TIntermTraverser {
-public:
-    static void apply(TIntermNode* root);
-
-private:
+class PruneEmptyDeclarationsTraverser : private TIntermTraverser
+{
+  public:
+    static void apply(TIntermNode *root);
+  private:
     PruneEmptyDeclarationsTraverser();
-    bool visitAggregate(Visit, TIntermAggregate* node) override;
+    bool visitAggregate(Visit, TIntermAggregate *node) override;
 };
 
-void PruneEmptyDeclarationsTraverser::apply(TIntermNode* root)
+void PruneEmptyDeclarationsTraverser::apply(TIntermNode *root)
 {
     PruneEmptyDeclarationsTraverser prune;
     root->traverse(&prune);
@@ -32,15 +33,19 @@ PruneEmptyDeclarationsTraverser::PruneEmptyDeclarationsTraverser()
 {
 }
 
-bool PruneEmptyDeclarationsTraverser::visitAggregate(Visit, TIntermAggregate* node)
+bool PruneEmptyDeclarationsTraverser::visitAggregate(Visit, TIntermAggregate *node)
 {
-    if (node->getOp() == EOpDeclaration) {
-        TIntermSequence* sequence = node->getSequence();
-        if (sequence->size() >= 1) {
-            TIntermSymbol* sym = sequence->front()->getAsSymbolNode();
+    if (node->getOp() == EOpDeclaration)
+    {
+        TIntermSequence *sequence = node->getSequence();
+        if (sequence->size() >= 1)
+        {
+            TIntermSymbol *sym = sequence->front()->getAsSymbolNode();
             // Prune declarations without a variable name, unless it's an interface block declaration.
-            if (sym != nullptr && sym->getSymbol() == "" && !sym->isInterfaceBlock()) {
-                if (sequence->size() > 1) {
+            if (sym != nullptr && sym->getSymbol() == "" && !sym->isInterfaceBlock())
+            {
+                if (sequence->size() > 1)
+                {
                     // Generate a replacement that will remove the empty declarator in the beginning of a declarator
                     // list. Example of a declaration that will be changed:
                     // float, a;
@@ -49,13 +54,15 @@ bool PruneEmptyDeclarationsTraverser::visitAggregate(Visit, TIntermAggregate* no
                     // This applies also to struct declarations.
                     TIntermSequence emptyReplacement;
                     mMultiReplacements.push_back(NodeReplaceWithMultipleEntry(node, sym, emptyReplacement));
-                } else if (sym->getBasicType() != EbtStruct) {
+                }
+                else if (sym->getBasicType() != EbtStruct)
+                {
                     // Single struct declarations may just declare the struct type and no variables, so they should
                     // not be pruned. All other single empty declarations can be pruned entirely. Example of an empty
                     // declaration that will be pruned:
                     // float;
                     TIntermSequence emptyReplacement;
-                    TIntermAggregate* parentAgg = getParentNode()->getAsAggregate();
+                    TIntermAggregate *parentAgg = getParentNode()->getAsAggregate();
                     ASSERT(parentAgg != nullptr);
                     mMultiReplacements.push_back(NodeReplaceWithMultipleEntry(parentAgg, node, emptyReplacement));
                 }
@@ -68,7 +75,7 @@ bool PruneEmptyDeclarationsTraverser::visitAggregate(Visit, TIntermAggregate* no
 
 } // namespace
 
-void PruneEmptyDeclarations(TIntermNode* root)
+void PruneEmptyDeclarations(TIntermNode *root)
 {
     PruneEmptyDeclarationsTraverser::apply(root);
 }

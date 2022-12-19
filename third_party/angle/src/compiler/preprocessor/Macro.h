@@ -11,12 +11,15 @@
 #include <string>
 #include <vector>
 
-namespace pp {
+namespace pp
+{
 
 struct Token;
 
-struct Macro {
-    enum Type {
+struct Macro
+{
+    enum Type
+    {
         kTypeObj,
         kTypeFunc
     };
@@ -24,12 +27,12 @@ struct Macro {
     typedef std::vector<Token> Replacements;
 
     Macro()
-        : predefined(false)
-        , disabled(false)
-        , type(kTypeObj)
+        : predefined(false),
+          disabled(false),
+          type(kTypeObj)
     {
     }
-    bool equals(const Macro& other) const;
+    bool equals(const Macro &other) const;
 
     bool predefined;
     mutable bool disabled;
@@ -42,8 +45,8 @@ struct Macro {
 
 typedef std::map<std::string, Macro> MacroSet;
 
-void PredefineMacro(MacroSet* macroSet, const char* name, int value);
+void PredefineMacro(MacroSet *macroSet, const char *name, int value);
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_MACRO_H_
+#endif  // COMPILER_PREPROCESSOR_MACRO_H_

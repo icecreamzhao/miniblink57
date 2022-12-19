@@ -11,23 +11,25 @@
 
 #include "common/debug.h"
 
-namespace rx {
+namespace rx
+{
 
-class DebugAnnotator11 : public gl::DebugAnnotator {
-public:
+class DebugAnnotator11 : public gl::DebugAnnotator
+{
+  public:
     DebugAnnotator11();
     ~DebugAnnotator11() override;
-    void beginEvent(const wchar_t* eventName) override;
+    void beginEvent(const wchar_t *eventName) override;
     void endEvent() override;
-    void setMarker(const wchar_t* markerName) override;
+    void setMarker(const wchar_t *markerName) override;
     bool getStatus() override;
 
-private:
+  private:
     void initializeDevice();
 
     bool mInitialized;
     HMODULE mD3d11Module;
-    ID3DUserDefinedAnnotation* mUserDefinedAnnotation;
+    ID3DUserDefinedAnnotation *mUserDefinedAnnotation;
 };
 
 }

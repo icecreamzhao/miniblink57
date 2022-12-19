@@ -11,28 +11,30 @@
 
 #include "libANGLE/renderer/ShaderImpl.h"
 
-namespace rx {
+namespace rx
+{
 class FunctionsGL;
 struct WorkaroundsGL;
 
-class ShaderGL : public ShaderImpl {
-public:
-    ShaderGL(const gl::Shader::Data& data,
-        const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds);
+class ShaderGL : public ShaderImpl
+{
+  public:
+    ShaderGL(const gl::Shader::Data &data,
+             const FunctionsGL *functions,
+             const WorkaroundsGL &workarounds);
     ~ShaderGL() override;
 
     // ShaderImpl implementation
-    int prepareSourceAndReturnOptions(std::stringstream* sourceStream,
-        std::string* sourcePath) override;
-    bool postTranslateCompile(gl::Compiler* compiler, std::string* infoLog) override;
+    int prepareSourceAndReturnOptions(std::stringstream *sourceStream,
+                                      std::string *sourcePath) override;
+    bool postTranslateCompile(gl::Compiler *compiler, std::string *infoLog) override;
     std::string getDebugInfo() const override;
 
     GLuint getShaderID() const;
 
-private:
-    const FunctionsGL* mFunctions;
-    const WorkaroundsGL& mWorkarounds;
+  private:
+    const FunctionsGL *mFunctions;
+    const WorkaroundsGL &mWorkarounds;
 
     GLuint mShaderID;
 };

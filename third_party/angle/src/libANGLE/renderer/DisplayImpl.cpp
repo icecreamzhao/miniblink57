@@ -10,28 +10,33 @@
 
 #include "libANGLE/Surface.h"
 
-namespace rx {
+namespace rx
+{
 
 DisplayImpl::DisplayImpl()
-    : mExtensionsInitialized(false)
-    , mCapsInitialized(false)
+    : mExtensionsInitialized(false),
+      mCapsInitialized(false)
 {
 }
 
 DisplayImpl::~DisplayImpl()
 {
-    ASSERT(mSurfaceSet.empty());
+    while (!mSurfaceSet.empty())
+    {
+        destroySurface(*mSurfaceSet.begin());
+    }
 }
 
-void DisplayImpl::destroySurface(egl::Surface* surface)
+void DisplayImpl::destroySurface(egl::Surface *surface)
 {
     mSurfaceSet.erase(surface);
     surface->onDestroy();
 }
 
-const egl::DisplayExtensions& DisplayImpl::getExtensions() const
+const egl::DisplayExtensions &DisplayImpl::getExtensions() const
 {
-    if (!mExtensionsInitialized) {
+    if (!mExtensionsInitialized)
+    {
         generateExtensions(&mExtensions);
         mExtensionsInitialized = true;
     }
@@ -39,9 +44,10 @@ const egl::DisplayExtensions& DisplayImpl::getExtensions() const
     return mExtensions;
 }
 
-const egl::Caps& DisplayImpl::getCaps() const
+const egl::Caps &DisplayImpl::getCaps() const
 {
-    if (!mCapsInitialized) {
+    if (!mCapsInitialized)
+    {
         generateCaps(&mCaps);
         mCapsInitialized = true;
     }

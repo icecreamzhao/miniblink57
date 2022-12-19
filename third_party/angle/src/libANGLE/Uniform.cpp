@@ -10,53 +10,48 @@
 
 #include <cstring>
 
-namespace gl {
+namespace gl
+{
 
 LinkedUniform::LinkedUniform()
-    : blockIndex(-1)
-    , blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
+    : blockIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
 {
 }
 
 LinkedUniform::LinkedUniform(GLenum typeIn,
-    GLenum precisionIn,
-    const std::string& nameIn,
-    unsigned int arraySizeIn,
-    const int blockIndexIn,
-    const sh::BlockMemberInfo& blockInfoIn)
-    : blockIndex(blockIndexIn)
-    , blockInfo(blockInfoIn)
+                             GLenum precisionIn,
+                             const std::string &nameIn,
+                             unsigned int arraySizeIn,
+                             const int blockIndexIn,
+                             const sh::BlockMemberInfo &blockInfoIn)
+    : blockIndex(blockIndexIn), blockInfo(blockInfoIn)
 {
-    type = typeIn;
+    type      = typeIn;
     precision = precisionIn;
-    name = nameIn;
+    name      = nameIn;
     arraySize = arraySizeIn;
 }
 
-LinkedUniform::LinkedUniform(const sh::Uniform& uniform)
-    : sh::Uniform(uniform)
-    , blockIndex(-1)
-    , blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
+LinkedUniform::LinkedUniform(const sh::Uniform &uniform)
+    : sh::Uniform(uniform), blockIndex(-1), blockInfo(sh::BlockMemberInfo::getDefaultBlockInfo())
 {
 }
 
-LinkedUniform::LinkedUniform(const LinkedUniform& uniform)
-    : sh::Uniform(uniform)
-    , blockIndex(uniform.blockIndex)
-    , blockInfo(uniform.blockInfo)
+LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
+    : sh::Uniform(uniform), blockIndex(uniform.blockIndex), blockInfo(uniform.blockInfo)
 {
     // This function is not intended to be called during runtime.
     ASSERT(uniform.mLazyData.empty());
 }
 
-LinkedUniform& LinkedUniform::operator=(const LinkedUniform& uniform)
+LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {
     // This function is not intended to be called during runtime.
     ASSERT(uniform.mLazyData.empty());
 
     sh::Uniform::operator=(uniform);
-    blockIndex = uniform.blockIndex;
-    blockInfo = uniform.blockInfo;
+    blockIndex           = uniform.blockIndex;
+    blockInfo            = uniform.blockInfo;
 
     return *this;
 }
@@ -73,7 +68,8 @@ bool LinkedUniform::isInDefaultBlock() const
 size_t LinkedUniform::dataSize() const
 {
     ASSERT(type != GL_STRUCT_ANGLEX);
-    if (mLazyData.empty()) {
+    if (mLazyData.empty())
+    {
         mLazyData.resize(VariableExternalSize(type) * elementCount());
         ASSERT(!mLazyData.empty());
     }
@@ -81,9 +77,10 @@ size_t LinkedUniform::dataSize() const
     return mLazyData.size();
 }
 
-uint8_t* LinkedUniform::data()
+uint8_t *LinkedUniform::data()
 {
-    if (mLazyData.empty()) {
+    if (mLazyData.empty())
+    {
         // dataSize() will init the data store.
         size_t size = dataSize();
         memset(mLazyData.data(), 0, size);
@@ -92,9 +89,9 @@ uint8_t* LinkedUniform::data()
     return mLazyData.data();
 }
 
-const uint8_t* LinkedUniform::data() const
+const uint8_t *LinkedUniform::data() const
 {
-    return const_cast<LinkedUniform*>(this)->data();
+    return const_cast<LinkedUniform *>(this)->data();
 }
 
 bool LinkedUniform::isSampler() const
@@ -112,33 +109,29 @@ size_t LinkedUniform::getElementSize() const
     return VariableExternalSize(type);
 }
 
-uint8_t* LinkedUniform::getDataPtrToElement(size_t elementIndex)
+uint8_t *LinkedUniform::getDataPtrToElement(size_t elementIndex)
 {
     ASSERT((!isArray() && elementIndex == 0) || (isArray() && elementIndex < arraySize));
     return data() + getElementSize() * elementIndex;
 }
 
-const uint8_t* LinkedUniform::getDataPtrToElement(size_t elementIndex) const
+const uint8_t *LinkedUniform::getDataPtrToElement(size_t elementIndex) const
 {
-    return const_cast<LinkedUniform*>(this)->getDataPtrToElement(elementIndex);
+    return const_cast<LinkedUniform *>(this)->getDataPtrToElement(elementIndex);
 }
 
 UniformBlock::UniformBlock()
-    : isArray(false)
-    , arrayElement(0)
-    , dataSize(0)
-    , vertexStaticUse(false)
-    , fragmentStaticUse(false)
+    : isArray(false), arrayElement(0), dataSize(0), vertexStaticUse(false), fragmentStaticUse(false)
 {
 }
 
-UniformBlock::UniformBlock(const std::string& nameIn, bool isArrayIn, unsigned int arrayElementIn)
-    : name(nameIn)
-    , isArray(isArrayIn)
-    , arrayElement(arrayElementIn)
-    , dataSize(0)
-    , vertexStaticUse(false)
-    , fragmentStaticUse(false)
+UniformBlock::UniformBlock(const std::string &nameIn, bool isArrayIn, unsigned int arrayElementIn)
+    : name(nameIn),
+      isArray(isArrayIn),
+      arrayElement(arrayElementIn),
+      dataSize(0),
+      vertexStaticUse(false),
+      fragmentStaticUse(false)
 {
 }
 
@@ -146,7 +139,8 @@ std::string UniformBlock::nameWithArrayIndex() const
 {
     std::stringstream fullNameStr;
     fullNameStr << name;
-    if (isArray) {
+    if (isArray)
+    {
         fullNameStr << "[" << arrayElement << "]";
     }
 

@@ -13,6 +13,6 @@
 
 class TIntermNode;
 
-void RemovePow(TIntermNode* root);
+void RemovePow(TIntermNode *root);
 
-#endif // COMPILER_TRANSLATOR_REMOVEPOW_H_
+#endif   // COMPILER_TRANSLATOR_REMOVEPOW_H_

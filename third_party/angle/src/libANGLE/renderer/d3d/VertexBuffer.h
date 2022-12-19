@@ -19,31 +19,33 @@
 #include <cstdint>
 #include <vector>
 
-namespace gl {
+namespace gl
+{
 struct VertexAttribute;
 struct VertexAttribCurrentValueData;
 }
 
-namespace rx {
+namespace rx
+{
 class BufferFactoryD3D;
 
-class VertexBuffer : angle::NonCopyable {
-public:
+class VertexBuffer : angle::NonCopyable
+{
+  public:
     VertexBuffer();
     virtual ~VertexBuffer();
 
     virtual gl::Error initialize(unsigned int size, bool dynamicUsage) = 0;
 
-    virtual gl::Error storeVertexAttributes(const gl::VertexAttribute& attrib,
-        GLenum currentValueType,
-        GLint start,
-        GLsizei count,
-        GLsizei instances,
-        unsigned int offset,
-        const uint8_t* sourceData)
-        = 0;
-    virtual gl::Error getSpaceRequired(const gl::VertexAttribute& attrib, GLsizei count, GLsizei instances,
-        unsigned int* outSpaceRequired) const = 0;
+    virtual gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
+                                            GLenum currentValueType,
+                                            GLint start,
+                                            GLsizei count,
+                                            GLsizei instances,
+                                            unsigned int offset,
+                                            const unsigned char *sourceData) = 0;
+    virtual gl::Error getSpaceRequired(const gl::VertexAttribute &attrib, GLsizei count, GLsizei instances,
+                                       unsigned int *outSpaceRequired) const = 0;
 
     virtual unsigned int getBufferSize() const = 0;
     virtual gl::Error setBufferSize(unsigned int size) = 0;
@@ -52,41 +54,42 @@ public:
     unsigned int getSerial() const;
 
     // This may be overridden (e.g. by VertexBuffer11) if necessary.
-    virtual void hintUnmapResource() {};
+    virtual void hintUnmapResource() { };
 
-protected:
+  protected:
     void updateSerial();
 
-private:
+  private:
     unsigned int mSerial;
     static unsigned int mNextSerial;
 };
 
-class VertexBufferInterface : angle::NonCopyable {
-public:
-    VertexBufferInterface(BufferFactoryD3D* factory, bool dynamic);
+class VertexBufferInterface : angle::NonCopyable
+{
+  public:
+    VertexBufferInterface(BufferFactoryD3D *factory, bool dynamic);
     virtual ~VertexBufferInterface();
 
-    gl::Error reserveVertexSpace(const gl::VertexAttribute& attribute, GLsizei count, GLsizei instances);
+    gl::Error reserveVertexSpace(const gl::VertexAttribute &attribute, GLsizei count, GLsizei instances);
 
     unsigned int getBufferSize() const;
 
     unsigned int getSerial() const;
 
-    virtual gl::Error storeVertexAttributes(const gl::VertexAttribute& attrib,
-        GLenum currentValueType,
-        GLint start,
-        GLsizei count,
-        GLsizei instances,
-        unsigned int* outStreamOffset,
-        const uint8_t* sourceData);
+    virtual gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
+                                            GLenum currentValueType,
+                                            GLint start,
+                                            GLsizei count,
+                                            GLsizei instances,
+                                            unsigned int *outStreamOffset,
+                                            const unsigned char *sourceData);
 
-    bool directStoragePossible(const gl::VertexAttribute& attrib,
-        GLenum currentValueType) const;
+    bool directStoragePossible(const gl::VertexAttribute &attrib,
+                               GLenum currentValueType) const;
 
     VertexBuffer* getVertexBuffer() const;
 
-protected:
+  protected:
     virtual gl::Error reserveSpace(unsigned int size) = 0;
 
     unsigned int getWritePosition() const;
@@ -96,8 +99,8 @@ protected:
 
     gl::Error setBufferSize(unsigned int size);
 
-private:
-    BufferFactoryD3D* const mFactory;
+  private:
+    BufferFactoryD3D *const mFactory;
 
     VertexBuffer* mVertexBuffer;
 
@@ -106,40 +109,38 @@ private:
     bool mDynamic;
 };
 
-class StreamingVertexBufferInterface : public VertexBufferInterface {
-public:
-    StreamingVertexBufferInterface(BufferFactoryD3D* factory, std::size_t initialSize);
+class StreamingVertexBufferInterface : public VertexBufferInterface
+{
+  public:
+    StreamingVertexBufferInterface(BufferFactoryD3D *factory, size_t initialSize);
     ~StreamingVertexBufferInterface();
 
-protected:
+  protected:
     gl::Error reserveSpace(unsigned int size);
 };
 
-class StaticVertexBufferInterface : public VertexBufferInterface {
-public:
-    explicit StaticVertexBufferInterface(BufferFactoryD3D* factory);
+class StaticVertexBufferInterface : public VertexBufferInterface
+{
+  public:
+    explicit StaticVertexBufferInterface(BufferFactoryD3D *factory);
     ~StaticVertexBufferInterface();
 
-    gl::Error storeVertexAttributes(const gl::VertexAttribute& attrib,
-        GLenum currentValueType,
-        GLint start,
-        GLsizei count,
-        GLsizei instances,
-        unsigned int* outStreamOffset,
-        const uint8_t* sourceData) override;
+    gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
+                                    GLenum currentValueType,
+                                    GLint start,
+                                    GLsizei count,
+                                    GLsizei instances,
+                                    unsigned int *outStreamOffset,
+                                    const unsigned char *sourceData) override;
 
-    bool lookupAttribute(const gl::VertexAttribute& attribute, unsigned int* outStreamFffset);
+    bool lookupAttribute(const gl::VertexAttribute &attribute, unsigned int* outStreamFffset);
 
-    // If a static vertex buffer is committed then no more attribute data can be added to it
-    // A new static vertex buffer should be created instead
-    void commit();
-    bool isCommitted() { return mIsCommitted; }
-
-protected:
+  protected:
     gl::Error reserveSpace(unsigned int size);
 
-private:
-    struct VertexElement {
+  private:
+    struct VertexElement
+    {
         GLenum type;
         GLuint size;
         GLuint stride;
@@ -150,7 +151,6 @@ private:
         unsigned int streamOffset;
     };
 
-    bool mIsCommitted;
     std::vector<VertexElement> mCache;
 };
 

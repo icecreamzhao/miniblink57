@@ -9,10 +9,10 @@
 #include "libANGLE/renderer/d3d/d3d9/IndexBuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
-namespace rx {
+namespace rx
+{
 
-IndexBuffer9::IndexBuffer9(Renderer9* const renderer)
-    : mRenderer(renderer)
+IndexBuffer9::IndexBuffer9(Renderer9 *const renderer) : mRenderer(renderer)
 {
     mIndexBuffer = NULL;
     mBufferSize = 0;
@@ -31,23 +31,29 @@ gl::Error IndexBuffer9::initialize(unsigned int bufferSize, GLenum indexType, bo
 
     updateSerial();
 
-    if (bufferSize > 0) {
+    if (bufferSize > 0)
+    {
         D3DFORMAT format = D3DFMT_UNKNOWN;
-        if (indexType == GL_UNSIGNED_SHORT || indexType == GL_UNSIGNED_BYTE) {
+        if (indexType == GL_UNSIGNED_SHORT || indexType == GL_UNSIGNED_BYTE)
+        {
             format = D3DFMT_INDEX16;
-        } else if (indexType == GL_UNSIGNED_INT) {
+        }
+        else if (indexType == GL_UNSIGNED_INT)
+        {
             ASSERT(mRenderer->getRendererExtensions().elementIndexUint);
             format = D3DFMT_INDEX32;
-        } else
-            UNREACHABLE();
+        }
+        else UNREACHABLE();
 
         DWORD usageFlags = D3DUSAGE_WRITEONLY;
-        if (dynamic) {
+        if (dynamic)
+        {
             usageFlags |= D3DUSAGE_DYNAMIC;
         }
 
         HRESULT result = mRenderer->createIndexBuffer(bufferSize, usageFlags, format, &mIndexBuffer);
-        if (FAILED(result)) {
+        if (FAILED(result))
+        {
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal index buffer of size, %lu.", bufferSize);
         }
     }
@@ -61,15 +67,17 @@ gl::Error IndexBuffer9::initialize(unsigned int bufferSize, GLenum indexType, bo
 
 gl::Error IndexBuffer9::mapBuffer(unsigned int offset, unsigned int size, void** outMappedMemory)
 {
-    if (!mIndexBuffer) {
+    if (!mIndexBuffer)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal index buffer is not initialized.");
     }
 
     DWORD lockFlags = mDynamic ? D3DLOCK_NOOVERWRITE : 0;
 
-    void* mapPtr = NULL;
+    void *mapPtr = NULL;
     HRESULT result = mIndexBuffer->Lock(offset, size, &mapPtr, lockFlags);
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to lock internal index buffer, HRESULT: 0x%08x.", result);
     }
 
@@ -79,12 +87,14 @@ gl::Error IndexBuffer9::mapBuffer(unsigned int offset, unsigned int size, void**
 
 gl::Error IndexBuffer9::unmapBuffer()
 {
-    if (!mIndexBuffer) {
+    if (!mIndexBuffer)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal index buffer is not initialized.");
     }
 
     HRESULT result = mIndexBuffer->Unlock();
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to unlock internal index buffer, HRESULT: 0x%08x.", result);
     }
 
@@ -103,29 +113,35 @@ unsigned int IndexBuffer9::getBufferSize() const
 
 gl::Error IndexBuffer9::setSize(unsigned int bufferSize, GLenum indexType)
 {
-    if (bufferSize > mBufferSize || indexType != mIndexType) {
+    if (bufferSize > mBufferSize || indexType != mIndexType)
+    {
         return initialize(bufferSize, indexType, mDynamic);
-    } else {
+    }
+    else
+    {
         return gl::Error(GL_NO_ERROR);
     }
 }
 
 gl::Error IndexBuffer9::discard()
 {
-    if (!mIndexBuffer) {
+    if (!mIndexBuffer)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal index buffer is not initialized.");
     }
 
-    void* dummy;
+    void *dummy;
     HRESULT result;
 
     result = mIndexBuffer->Lock(0, 1, &dummy, D3DLOCK_DISCARD);
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to lock internal index buffer, HRESULT: 0x%08x.", result);
     }
 
     result = mIndexBuffer->Unlock();
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to unlock internal index buffer, HRESULT: 0x%08x.", result);
     }
 
@@ -134,20 +150,16 @@ gl::Error IndexBuffer9::discard()
 
 D3DFORMAT IndexBuffer9::getIndexFormat() const
 {
-    switch (mIndexType) {
-    case GL_UNSIGNED_BYTE:
-        return D3DFMT_INDEX16;
-    case GL_UNSIGNED_SHORT:
-        return D3DFMT_INDEX16;
-    case GL_UNSIGNED_INT:
-        return D3DFMT_INDEX32;
-    default:
-        UNREACHABLE();
-        return D3DFMT_UNKNOWN;
+    switch (mIndexType)
+    {
+      case GL_UNSIGNED_BYTE:    return D3DFMT_INDEX16;
+      case GL_UNSIGNED_SHORT:   return D3DFMT_INDEX16;
+      case GL_UNSIGNED_INT:     return D3DFMT_INDEX32;
+      default: UNREACHABLE();   return D3DFMT_UNKNOWN;
     }
 }
 
-IDirect3DIndexBuffer9* IndexBuffer9::getBuffer() const
+IDirect3DIndexBuffer9 * IndexBuffer9::getBuffer() const
 {
     return mIndexBuffer;
 }

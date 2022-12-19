@@ -13,23 +13,19 @@
 #include "libANGLE/renderer/DeviceImpl.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 
-namespace rx {
-class DeviceD3D : public DeviceImpl {
-public:
-    DeviceD3D();
-    ~DeviceD3D() override;
+namespace rx
+{
+class DeviceD3D : public DeviceImpl
+{
+  public:
+    DeviceD3D(RendererD3D *renderer);
 
-    egl::Error initialize(void* device, EGLint deviceType, EGLBoolean external);
-    egl::Error getDevice(void** outValue) override;
+    egl::Error getDevice(EGLAttrib *value) override;
     EGLint getType() override;
-    void generateExtensions(egl::DeviceExtensions* outExtensions) const override;
-    bool deviceExternallySourced() override { return mDeviceExternallySourced; }
+    void generateExtensions(egl::DeviceExtensions *outExtensions) const override;
 
-private:
-    void* mDevice;
-    EGLint mDeviceType;
-    bool mDeviceExternallySourced;
-    bool mIsInitialized;
+  private:
+    RendererD3D *mRenderer;
 };
 
 }

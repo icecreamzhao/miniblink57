@@ -13,12 +13,12 @@
 // independent of ANGLE's renderer. Workarounds should also be accessible
 // outside of the Renderer.
 
-namespace rx {
-struct D3DCompilerWorkarounds {
+namespace rx
+{
+struct D3DCompilerWorkarounds
+{
     D3DCompilerWorkarounds()
-        : skipOptimization(false)
-        , useMaxOptimization(false)
-        , enableIEEEStrictness(false)
+        : skipOptimization(false), useMaxOptimization(false), enableIEEEStrictness(false)
     {
     }
 
@@ -29,12 +29,13 @@ struct D3DCompilerWorkarounds {
     bool enableIEEEStrictness;
 };
 
-struct WorkaroundsD3D {
+struct WorkaroundsD3D
+{
     WorkaroundsD3D()
-        : mrtPerfWorkaround(false)
-        , setDataFasterThanImageUpload(false)
-        , zeroMaxLodWorkaround(false)
-        , useInstancedPointSpriteEmulation(false)
+        : mrtPerfWorkaround(false),
+          setDataFasterThanImageUpload(false),
+          zeroMaxLodWorkaround(false),
+          useInstancedPointSpriteEmulation(false)
     {
     }
 
@@ -62,4 +63,4 @@ struct WorkaroundsD3D {
 };
 }
 
-#endif // LIBANGLE_RENDERER_D3D_WORKAROUNDSD3D_H_
+#endif  // LIBANGLE_RENDERER_D3D_WORKAROUNDSD3D_H_

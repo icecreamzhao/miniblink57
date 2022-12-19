@@ -11,41 +11,43 @@
 
 #include "compiler/translator/IntermNode.h"
 
-namespace sh {
+namespace sh
+{
 
 template <class Parent>
-class NodeSearchTraverser : public TIntermTraverser {
-public:
+class NodeSearchTraverser : public TIntermTraverser
+{
+  public:
     NodeSearchTraverser()
-        : TIntermTraverser(true, false, false)
-        , mFound(false)
-    {
-    }
+        : TIntermTraverser(true, false, false),
+          mFound(false)
+    {}
 
     bool found() const { return mFound; }
 
-    static bool search(TIntermNode* node)
+    static bool search(TIntermNode *node)
     {
         Parent searchTraverser;
         node->traverse(&searchTraverser);
         return searchTraverser.found();
     }
 
-protected:
+  protected:
     bool mFound;
 };
 
-class FindDiscard : public NodeSearchTraverser<FindDiscard> {
-public:
-    virtual bool visitBranch(Visit visit, TIntermBranch* node)
+class FindDiscard : public NodeSearchTraverser<FindDiscard>
+{
+  public:
+    virtual bool visitBranch(Visit visit, TIntermBranch *node)
     {
-        switch (node->getFlowOp()) {
-        case EOpKill:
+        switch (node->getFlowOp())
+        {
+          case EOpKill:
             mFound = true;
             break;
 
-        default:
-            break;
+          default: break;
         }
 
         return !mFound;

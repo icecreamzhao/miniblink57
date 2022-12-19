@@ -11,12 +11,14 @@
 
 #include "libANGLE/renderer/d3d/IndexBuffer.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer11;
 
-class IndexBuffer11 : public IndexBuffer {
-public:
-    explicit IndexBuffer11(Renderer11* const renderer);
+class IndexBuffer11 : public IndexBuffer
+{
+  public:
+    explicit IndexBuffer11(Renderer11 *const renderer);
     virtual ~IndexBuffer11();
 
     virtual gl::Error initialize(unsigned int bufferSize, GLenum indexType, bool dynamic);
@@ -31,12 +33,12 @@ public:
     virtual gl::Error discard();
 
     DXGI_FORMAT getIndexFormat() const;
-    ID3D11Buffer* getBuffer() const;
+    ID3D11Buffer *getBuffer() const;
 
-private:
-    Renderer11* const mRenderer;
+  private:
+    Renderer11 *const mRenderer;
 
-    ID3D11Buffer* mBuffer;
+    ID3D11Buffer *mBuffer;
     unsigned int mBufferSize;
     GLenum mIndexType;
     bool mDynamicUsage;

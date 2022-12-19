@@ -13,11 +13,13 @@
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
 
-namespace rx {
+namespace rx
+{
 class BufferFactoryD3D;
 
-class IndexBuffer : angle::NonCopyable {
-public:
+class IndexBuffer : angle::NonCopyable
+{
+  public:
     IndexBuffer();
     virtual ~IndexBuffer();
 
@@ -34,17 +36,18 @@ public:
 
     unsigned int getSerial() const;
 
-protected:
+  protected:
     void updateSerial();
 
-private:
+  private:
     unsigned int mSerial;
     static unsigned int mNextSerial;
 };
 
-class IndexBufferInterface : angle::NonCopyable {
-public:
-    IndexBufferInterface(BufferFactoryD3D* factory, bool dynamic);
+class IndexBufferInterface : angle::NonCopyable
+{
+  public:
+    IndexBufferInterface(BufferFactoryD3D *factory, bool dynamic);
     virtual ~IndexBufferInterface();
 
     virtual gl::Error reserveBufferSpace(unsigned int size, GLenum indexType) = 0;
@@ -54,12 +57,12 @@ public:
 
     unsigned int getSerial() const;
 
-    gl::Error mapBuffer(unsigned int size, void** outMappedMemory, unsigned int* streamOffset);
+    gl::Error mapBuffer(unsigned int size, void** outMappedMemory, unsigned int *streamOffset);
     gl::Error unmapBuffer();
 
-    IndexBuffer* getIndexBuffer() const;
+    IndexBuffer *getIndexBuffer() const;
 
-protected:
+  protected:
     unsigned int getWritePosition() const;
     void setWritePosition(unsigned int writePosition);
 
@@ -67,24 +70,26 @@ protected:
 
     gl::Error setBufferSize(unsigned int bufferSize, GLenum indexType);
 
-private:
-    IndexBuffer* mIndexBuffer;
+  private:
+    IndexBuffer *mIndexBuffer;
 
     unsigned int mWritePosition;
     bool mDynamic;
 };
 
-class StreamingIndexBufferInterface : public IndexBufferInterface {
-public:
-    explicit StreamingIndexBufferInterface(BufferFactoryD3D* factory);
+class StreamingIndexBufferInterface : public IndexBufferInterface
+{
+  public:
+    explicit StreamingIndexBufferInterface(BufferFactoryD3D *factory);
     ~StreamingIndexBufferInterface();
 
     gl::Error reserveBufferSpace(unsigned int size, GLenum indexType) override;
 };
 
-class StaticIndexBufferInterface : public IndexBufferInterface {
-public:
-    explicit StaticIndexBufferInterface(BufferFactoryD3D* factory);
+class StaticIndexBufferInterface : public IndexBufferInterface
+{
+  public:
+    explicit StaticIndexBufferInterface(BufferFactoryD3D *factory);
     ~StaticIndexBufferInterface();
 
     gl::Error reserveBufferSpace(unsigned int size, GLenum indexType) override;

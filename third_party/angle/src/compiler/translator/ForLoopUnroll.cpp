@@ -6,10 +6,7 @@
 
 #include "compiler/translator/ForLoopUnroll.h"
 
-#include "angle_gl.h"
-#include "compiler/translator/ValidateLimitations.h"
-
-bool ForLoopUnrollMarker::visitBinary(Visit, TIntermBinary* node)
+bool ForLoopUnrollMarker::visitBinary(Visit, TIntermBinary *node)
 {
     if (mUnrollCondition != kSamplerArrayIndex)
         return true;
@@ -17,11 +14,14 @@ bool ForLoopUnrollMarker::visitBinary(Visit, TIntermBinary* node)
     // If a sampler array index is also the loop index,
     //   1) if the index type is integer, mark the loop for unrolling;
     //   2) if the index type if float, set a flag to later fail compile.
-    switch (node->getOp()) {
-    case EOpIndexIndirect:
-        if (node->getLeft() != NULL && node->getRight() != NULL && node->getLeft()->getAsSymbolNode()) {
-            TIntermSymbol* symbol = node->getLeft()->getAsSymbolNode();
-            if (IsSampler(symbol->getBasicType()) && symbol->isArray() && !mLoopStack.empty()) {
+    switch (node->getOp())
+    {
+      case EOpIndexIndirect:
+        if (node->getLeft() != NULL && node->getRight() != NULL && node->getLeft()->getAsSymbolNode())
+        {
+            TIntermSymbol *symbol = node->getLeft()->getAsSymbolNode();
+            if (IsSampler(symbol->getBasicType()) && symbol->isArray() && !mLoopStack.empty())
+            {
                 mVisitSamplerArrayIndexNodeInsideLoop = true;
                 node->getRight()->traverse(this);
                 mVisitSamplerArrayIndexNodeInsideLoop = false;
@@ -30,37 +30,31 @@ bool ForLoopUnrollMarker::visitBinary(Visit, TIntermBinary* node)
             }
         }
         break;
-    default:
+      default:
         break;
     }
     return true;
 }
 
-bool ForLoopUnrollMarker::visitLoop(Visit, TIntermLoop* node)
+bool ForLoopUnrollMarker::visitLoop(Visit, TIntermLoop *node)
 {
-    bool canBeUnrolled = mHasRunLoopValidation;
-    if (!mHasRunLoopValidation) {
-        canBeUnrolled = ValidateLimitations::IsLimitedForLoop(node);
-    }
-    if (mUnrollCondition == kIntegerIndex && canBeUnrolled) {
+    if (mUnrollCondition == kIntegerIndex)
+    {
         // Check if loop index type is integer.
-        // This is called after ValidateLimitations pass, so the loop has the limited form specified
-        // in ESSL 1.00 appendix A.
-        TIntermSequence* declSeq = node->getInit()->getAsAggregate()->getSequence();
-        TIntermSymbol* symbol = (*declSeq)[0]->getAsBinaryNode()->getLeft()->getAsSymbolNode();
+        // This is called after ValidateLimitations pass, so all the calls
+        // should be valid. See ValidateLimitations::validateForLoopInit().
+        TIntermSequence *declSeq = node->getInit()->getAsAggregate()->getSequence();
+        TIntermSymbol *symbol = (*declSeq)[0]->getAsBinaryNode()->getLeft()->getAsSymbolNode();
         if (symbol->getBasicType() == EbtInt)
             node->setUnrollFlag(true);
     }
 
-    TIntermNode* body = node->getBody();
-    if (body != nullptr) {
-        if (canBeUnrolled) {
-            mLoopStack.push(node);
-            body->traverse(this);
-            mLoopStack.pop();
-        } else {
-            body->traverse(this);
-        }
+    TIntermNode *body = node->getBody();
+    if (body != NULL)
+    {
+        mLoopStack.push(node);
+        body->traverse(this);
+        mLoopStack.pop();
     }
     // The loop is fully processed - no need to visit children.
     return false;
@@ -70,16 +64,18 @@ void ForLoopUnrollMarker::visitSymbol(TIntermSymbol* symbol)
 {
     if (!mVisitSamplerArrayIndexNodeInsideLoop)
         return;
-    TIntermLoop* loop = mLoopStack.findLoop(symbol);
-    if (loop) {
-        switch (symbol->getBasicType()) {
-        case EbtFloat:
+    TIntermLoop *loop = mLoopStack.findLoop(symbol);
+    if (loop)
+    {
+        switch (symbol->getBasicType())
+        {
+          case EbtFloat:
             mSamplerArrayIndexIsFloatLoopIndex = true;
             break;
-        case EbtInt:
+          case EbtInt:
             loop->setUnrollFlag(true);
             break;
-        default:
+          default:
             UNREACHABLE();
         }
     }

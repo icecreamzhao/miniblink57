@@ -11,41 +11,43 @@
 
 #include "libANGLE/renderer/d3d/VertexBuffer.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer9;
 
-class VertexBuffer9 : public VertexBuffer {
-public:
-    explicit VertexBuffer9(Renderer9* renderer);
+class VertexBuffer9 : public VertexBuffer
+{
+  public:
+    explicit VertexBuffer9(Renderer9 *renderer);
     virtual ~VertexBuffer9();
 
     virtual gl::Error initialize(unsigned int size, bool dynamicUsage);
 
-    gl::Error storeVertexAttributes(const gl::VertexAttribute& attrib,
-        GLenum currentValueType,
-        GLint start,
-        GLsizei count,
-        GLsizei instances,
-        unsigned int offset,
-        const uint8_t* sourceData) override;
+    gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
+                                    GLenum currentValueType,
+                                    GLint start,
+                                    GLsizei count,
+                                    GLsizei instances,
+                                    unsigned int offset,
+                                    const unsigned char *sourceData) override;
 
-    virtual gl::Error getSpaceRequired(const gl::VertexAttribute& attrib, GLsizei count, GLsizei instances, unsigned int* outSpaceRequired) const;
+    virtual gl::Error getSpaceRequired(const gl::VertexAttribute &attrib, GLsizei count, GLsizei instances, unsigned int *outSpaceRequired) const;
 
     virtual unsigned int getBufferSize() const;
     virtual gl::Error setBufferSize(unsigned int size);
     virtual gl::Error discard();
 
-    IDirect3DVertexBuffer9* getBuffer() const;
+    IDirect3DVertexBuffer9 *getBuffer() const;
 
-private:
-    Renderer9* mRenderer;
+  private:
+    Renderer9 *mRenderer;
 
-    IDirect3DVertexBuffer9* mVertexBuffer;
+    IDirect3DVertexBuffer9 *mVertexBuffer;
     unsigned int mBufferSize;
     bool mDynamicUsage;
 
-    gl::Error spaceRequired(const gl::VertexAttribute& attrib, std::size_t count, GLsizei instances,
-        unsigned int* outSpaceRequired) const;
+    gl::Error spaceRequired(const gl::VertexAttribute &attrib, size_t count, GLsizei instances,
+                            unsigned int *outSpaceRequired) const;
 };
 
 }

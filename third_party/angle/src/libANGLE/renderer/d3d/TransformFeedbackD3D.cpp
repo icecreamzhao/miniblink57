@@ -8,7 +8,8 @@
 
 #include "libANGLE/renderer/d3d/TransformFeedbackD3D.h"
 
-namespace rx {
+namespace rx
+{
 
 TransformFeedbackD3D::TransformFeedbackD3D()
 {
@@ -34,11 +35,11 @@ void TransformFeedbackD3D::resume()
 {
 }
 
-void TransformFeedbackD3D::bindGenericBuffer(const BindingPointer<gl::Buffer>& binding)
+void TransformFeedbackD3D::bindGenericBuffer(const BindingPointer<gl::Buffer> &binding)
 {
 }
 
-void TransformFeedbackD3D::bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer>& binding)
+void TransformFeedbackD3D::bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding)
 {
 }
 

@@ -22,11 +22,11 @@ namespace scheduler {
         const double kBackgroundBudgetAsCPUFraction = .01;
         // Given that we already align timers to 1Hz, do not report throttling if
         // it is under 3s.
-        constexpr base::TimeDelta kMinimalBackgroundThrottlingDurationToReport = base::TimeDelta::FromSeconds(3);
-        constexpr base::TimeDelta kDefaultMaxBackgroundBudgetLevel = base::TimeDelta::FromSeconds(3);
-        constexpr base::TimeDelta kDefaultMaxBackgroundThrottlingDelay = base::TimeDelta::FromMinutes(1);
-        constexpr base::TimeDelta kDefaultInitialBackgroundBudget = base::TimeDelta::FromSeconds(1);
-        constexpr base::TimeDelta kBackgroundThrottlingGracePeriod = base::TimeDelta::FromSeconds(10);
+        base::TimeDelta kMinimalBackgroundThrottlingDurationToReport = base::TimeDelta::FromSeconds(3);
+        base::TimeDelta kDefaultMaxBackgroundBudgetLevel = base::TimeDelta::FromSeconds(3);
+        base::TimeDelta kDefaultMaxBackgroundThrottlingDelay = base::TimeDelta::FromMinutes(1);
+        base::TimeDelta kDefaultInitialBackgroundBudget = base::TimeDelta::FromSeconds(1);
+        base::TimeDelta kBackgroundThrottlingGracePeriod = base::TimeDelta::FromSeconds(10);
 
         // Values coming from WebViewSchedulerSettings are interpreted as follows:
         //   -1 is "not set". Scheduler should use a reasonable default.

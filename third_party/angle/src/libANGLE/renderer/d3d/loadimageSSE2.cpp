@@ -16,28 +16,33 @@
 #include <emmintrin.h>
 #endif
 
-namespace rx {
+namespace rx
+{
 
 void LoadA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
-    const uint8_t* input, size_t inputRowPitch, size_t inputDepthPitch,
-    uint8_t* output, size_t outputRowPitch, size_t outputDepthPitch)
+                        const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
+                        uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
 {
 #if defined(ANGLE_USE_SSE)
     __m128i zeroWide = _mm_setzero_si128();
 
-    for (size_t z = 0; z < depth; z++) {
-        for (size_t y = 0; y < height; y++) {
-            const uint8_t* source = OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
-            uint32_t* dest = OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch);
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint8_t *source = OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint32_t *dest = OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch);
 
             size_t x = 0;
 
             // Make output writes aligned
-            for (; ((reinterpret_cast<intptr_t>(&dest[x]) & 0xF) != 0 && x < width); x++) {
+            for (; ((reinterpret_cast<intptr_t>(&dest[x]) & 0xF) != 0 && x < width); x++)
+            {
                 dest[x] = static_cast<uint32_t>(source[x]) << 24;
             }
 
-            for (; x + 7 < width; x += 8) {
+            for (; x + 7 < width; x += 8)
+            {
                 __m128i sourceData = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(&source[x]));
                 // Interleave each byte to 16bit, make the lower byte to zero
                 sourceData = _mm_unpacklo_epi8(zeroWide, sourceData);
@@ -50,7 +55,8 @@ void LoadA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
             }
 
             // Handle the remainder
-            for (; x < width; x++) {
+            for (; x < width; x++)
+            {
                 dest[x] = static_cast<uint32_t>(source[x]) << 24;
             }
         }
@@ -64,26 +70,30 @@ void LoadA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
 }
 
 void LoadRGBA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
-    const uint8_t* input, size_t inputRowPitch, size_t inputDepthPitch,
-    uint8_t* output, size_t outputRowPitch, size_t outputDepthPitch)
+                           const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
+                           uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
 {
 #if defined(ANGLE_USE_SSE)
     __m128i brMask = _mm_set1_epi32(0x00ff00ff);
 
-    for (size_t z = 0; z < depth; z++) {
-        for (size_t y = 0; y < height; y++) {
-            const uint32_t* source = OffsetDataPointer<uint32_t>(input, y, z, inputRowPitch, inputDepthPitch);
-            uint32_t* dest = OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch);
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint32_t *source = OffsetDataPointer<uint32_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint32_t *dest = OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch);
 
             size_t x = 0;
 
             // Make output writes aligned
-            for (; ((reinterpret_cast<intptr_t>(&dest[x]) & 15) != 0) && x < width; x++) {
+            for (; ((reinterpret_cast<intptr_t>(&dest[x]) & 15) != 0) && x < width; x++)
+            {
                 uint32_t rgba = source[x];
                 dest[x] = (ANGLE_ROTL(rgba, 16) & 0x00ff00ff) | (rgba & 0xff00ff00);
             }
 
-            for (; x + 3 < width; x += 4) {
+            for (; x + 3 < width; x += 4)
+            {
                 __m128i sourceData = _mm_loadu_si128(reinterpret_cast<const __m128i*>(&source[x]));
                 // Mask out g and a, which don't change
                 __m128i gaComponents = _mm_andnot_si128(brMask, sourceData);
@@ -96,7 +106,8 @@ void LoadRGBA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
             }
 
             // Perform leftover writes
-            for (; x < width; x++) {
+            for (; x < width; x++)
+            {
                 uint32_t rgba = source[x];
                 dest[x] = (ANGLE_ROTL(rgba, 16) & 0x00ff00ff) | (rgba & 0xff00ff00);
             }
@@ -111,3 +122,4 @@ void LoadRGBA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
 }
 
 }
+

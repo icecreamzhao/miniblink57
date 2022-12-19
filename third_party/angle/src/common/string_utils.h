@@ -13,33 +13,19 @@
 #include <string>
 #include <vector>
 
-namespace angle {
+namespace angle
+{
 
-extern const char kWhitespaceASCII[];
+void SplitString(const std::string &input,
+                 char delimiter,
+                 std::vector<std::string> *tokensOut);
 
-enum WhitespaceHandling {
-    KEEP_WHITESPACE,
-    TRIM_WHITESPACE,
-};
+void SplitStringAlongWhitespace(const std::string &input,
+                                std::vector<std::string> *tokensOut);
 
-enum SplitResult {
-    SPLIT_WANT_ALL,
-    SPLIT_WANT_NONEMPTY,
-};
+bool HexStringToUInt(const std::string &input, unsigned int *uintOut);
 
-std::vector<std::string> SplitString(const std::string& input,
-    const std::string& delimiters,
-    WhitespaceHandling whitespace,
-    SplitResult resultType);
-
-void SplitStringAlongWhitespace(const std::string& input,
-    std::vector<std::string>* tokensOut);
-
-std::string TrimString(const std::string& input, const std::string& trimChars);
-
-bool HexStringToUInt(const std::string& input, unsigned int* uintOut);
-
-bool ReadFileToString(const std::string& path, std::string* stringOut);
+bool ReadFileToString(const std::string &path, std::string *stringOut);
 
 }
 

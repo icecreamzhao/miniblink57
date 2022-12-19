@@ -8,80 +8,85 @@
 
 #include "libANGLE/angletypes.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/VertexAttribute.h"
 #include "libANGLE/State.h"
 #include "libANGLE/VertexArray.h"
-#include "libANGLE/VertexAttribute.h"
 
-namespace gl {
+namespace gl
+{
 
 PrimitiveType GetPrimitiveType(GLenum drawMode)
 {
-    switch (drawMode) {
-    case GL_POINTS:
-        return PRIMITIVE_POINTS;
-    case GL_LINES:
-        return PRIMITIVE_LINES;
-    case GL_LINE_STRIP:
-        return PRIMITIVE_LINE_STRIP;
-    case GL_LINE_LOOP:
-        return PRIMITIVE_LINE_LOOP;
-    case GL_TRIANGLES:
-        return PRIMITIVE_TRIANGLES;
-    case GL_TRIANGLE_STRIP:
-        return PRIMITIVE_TRIANGLE_STRIP;
-    case GL_TRIANGLE_FAN:
-        return PRIMITIVE_TRIANGLE_FAN;
-    default:
-        UNREACHABLE();
-        return PRIMITIVE_TYPE_MAX;
+    switch (drawMode)
+    {
+        case GL_POINTS:
+            return PRIMITIVE_POINTS;
+        case GL_LINES:
+            return PRIMITIVE_LINES;
+        case GL_LINE_STRIP:
+            return PRIMITIVE_LINE_STRIP;
+        case GL_LINE_LOOP:
+            return PRIMITIVE_LINE_LOOP;
+        case GL_TRIANGLES:
+            return PRIMITIVE_TRIANGLES;
+        case GL_TRIANGLE_STRIP:
+            return PRIMITIVE_TRIANGLE_STRIP;
+        case GL_TRIANGLE_FAN:
+            return PRIMITIVE_TRIANGLE_FAN;
+        default:
+            UNREACHABLE();
+            return PRIMITIVE_TYPE_MAX;
     }
 }
 
 SamplerState::SamplerState()
-    : minFilter(GL_NEAREST_MIPMAP_LINEAR)
-    , magFilter(GL_LINEAR)
-    , wrapS(GL_REPEAT)
-    , wrapT(GL_REPEAT)
-    , wrapR(GL_REPEAT)
-    , maxAnisotropy(1.0f)
-    , minLod(-1000.0f)
-    , maxLod(1000.0f)
-    , compareMode(GL_NONE)
-    , compareFunc(GL_LEQUAL)
+    : minFilter(GL_NEAREST_MIPMAP_LINEAR),
+      magFilter(GL_LINEAR),
+      wrapS(GL_REPEAT),
+      wrapT(GL_REPEAT),
+      wrapR(GL_REPEAT),
+      maxAnisotropy(1.0f),
+      minLod(-1000.0f),
+      maxLod(1000.0f),
+      compareMode(GL_NONE),
+      compareFunc(GL_LEQUAL)
 {
 }
 
 TextureState::TextureState()
-    : swizzleRed(GL_RED)
-    , swizzleGreen(GL_GREEN)
-    , swizzleBlue(GL_BLUE)
-    , swizzleAlpha(GL_ALPHA)
-    , samplerState()
-    , baseLevel(0)
-    , maxLevel(1000)
-    , immutableFormat(false)
-    , immutableLevels(0)
-    , usage(GL_NONE)
+    : swizzleRed(GL_RED),
+      swizzleGreen(GL_GREEN),
+      swizzleBlue(GL_BLUE),
+      swizzleAlpha(GL_ALPHA),
+      samplerState(),
+      baseLevel(0),
+      maxLevel(1000),
+      immutableFormat(false),
+      immutableLevels(0)
 {
 }
 
 bool TextureState::swizzleRequired() const
 {
-    return swizzleRed != GL_RED || swizzleGreen != GL_GREEN || swizzleBlue != GL_BLUE || swizzleAlpha != GL_ALPHA;
+    return swizzleRed != GL_RED || swizzleGreen != GL_GREEN ||
+           swizzleBlue != GL_BLUE || swizzleAlpha != GL_ALPHA;
 }
 
-static void MinMax(int a, int b, int* minimum, int* maximum)
+static void MinMax(int a, int b, int *minimum, int *maximum)
 {
-    if (a < b) {
+    if (a < b)
+    {
         *minimum = a;
         *maximum = b;
-    } else {
+    }
+    else
+    {
         *minimum = b;
         *maximum = a;
     }
 }
 
-bool ClipRectangle(const Rectangle& source, const Rectangle& clip, Rectangle* intersection)
+bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection)
 {
     int minSourceX, maxSourceX, minSourceY, maxSourceY;
     MinMax(source.x, source.x + source.width, &minSourceX, &maxSourceX);
@@ -91,8 +96,10 @@ bool ClipRectangle(const Rectangle& source, const Rectangle& clip, Rectangle* in
     MinMax(clip.x, clip.x + clip.width, &minClipX, &maxClipX);
     MinMax(clip.y, clip.y + clip.height, &minClipY, &maxClipY);
 
-    if (minSourceX >= maxClipX || maxSourceX <= minClipX || minSourceY >= maxClipY || maxSourceY <= minClipY) {
-        if (intersection) {
+    if (minSourceX >= maxClipX || maxSourceX <= minClipX || minSourceY >= maxClipY || maxSourceY <= minClipY)
+    {
+        if (intersection)
+        {
             intersection->x = minSourceX;
             intersection->y = maxSourceY;
             intersection->width = maxSourceX - minSourceX;
@@ -100,11 +107,14 @@ bool ClipRectangle(const Rectangle& source, const Rectangle& clip, Rectangle* in
         }
 
         return false;
-    } else {
-        if (intersection) {
+    }
+    else
+    {
+        if (intersection)
+        {
             intersection->x = std::max(minSourceX, minClipX);
             intersection->y = std::max(minSourceY, minClipY);
-            intersection->width = std::min(maxSourceX, maxClipX) - std::max(minSourceX, minClipX);
+            intersection->width  = std::min(maxSourceX, maxClipX) - std::max(minSourceX, minClipX);
             intersection->height = std::min(maxSourceY, maxClipY) - std::max(minSourceY, minClipY);
         }
 
@@ -112,23 +122,15 @@ bool ClipRectangle(const Rectangle& source, const Rectangle& clip, Rectangle* in
     }
 }
 
-bool Box::operator==(const Box& other) const
+bool Box::operator==(const Box &other) const
 {
-    return (x == other.x && y == other.y && z == other.z && width == other.width && height == other.height && depth == other.depth);
+    return (x == other.x && y == other.y && z == other.z &&
+            width == other.width && height == other.height && depth == other.depth);
 }
 
-bool Box::operator!=(const Box& other) const
+bool Box::operator!=(const Box &other) const
 {
     return !(*this == other);
 }
 
-bool operator==(const Extents& lhs, const Extents& rhs)
-{
-    return lhs.width == rhs.width && lhs.height == rhs.height && lhs.depth == rhs.depth;
-}
-
-bool operator!=(const Extents& lhs, const Extents& rhs)
-{
-    return !(lhs == rhs);
-}
 }

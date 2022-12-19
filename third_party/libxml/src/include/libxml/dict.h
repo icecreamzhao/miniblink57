@@ -11,9 +11,8 @@
 #ifndef __XML_DICT_H__
 #define __XML_DICT_H__
 
-//#include <libxml/tree.h>
-#include <libxml/xmlstring.h>
 #include <libxml/xmlversion.h>
+#include <libxml/tree.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,46 +22,46 @@ extern "C" {
  * The dictionnary.
  */
 typedef struct _xmlDict xmlDict;
-typedef xmlDict* xmlDictPtr;
+typedef xmlDict *xmlDictPtr;
 
 /*
  * Constructor and destructor.
  */
 XMLPUBFUN xmlDictPtr XMLCALL
-xmlDictCreate(void);
+			xmlDictCreate	(void);
 XMLPUBFUN xmlDictPtr XMLCALL
-xmlDictCreateSub(xmlDictPtr sub);
+			xmlDictCreateSub(xmlDictPtr sub);
 XMLPUBFUN int XMLCALL
-xmlDictReference(xmlDictPtr dict);
-XMLPUBFUN void XMLCALL
-xmlDictFree(xmlDictPtr dict);
+			xmlDictReference(xmlDictPtr dict);
+XMLPUBFUN void XMLCALL			
+			xmlDictFree	(xmlDictPtr dict);
 
 /*
  * Lookup of entry in the dictionnary.
  */
-XMLPUBFUN const xmlChar* XMLCALL
-xmlDictLookup(xmlDictPtr dict,
-    const xmlChar* name,
-    int len);
-XMLPUBFUN const xmlChar* XMLCALL
-xmlDictExists(xmlDictPtr dict,
-    const xmlChar* name,
-    int len);
-XMLPUBFUN const xmlChar* XMLCALL
-xmlDictQLookup(xmlDictPtr dict,
-    const xmlChar* prefix,
-    const xmlChar* name);
+XMLPUBFUN const xmlChar * XMLCALL		
+			xmlDictLookup	(xmlDictPtr dict,
+		                         const xmlChar *name,
+		                         int len);
+XMLPUBFUN const xmlChar * XMLCALL		
+			xmlDictExists	(xmlDictPtr dict,
+		                         const xmlChar *name,
+		                         int len);
+XMLPUBFUN const xmlChar * XMLCALL		
+			xmlDictQLookup	(xmlDictPtr dict,
+		                         const xmlChar *prefix,
+		                         const xmlChar *name);
 XMLPUBFUN int XMLCALL
-xmlDictOwns(xmlDictPtr dict,
-    const xmlChar* str);
-XMLPUBFUN int XMLCALL
-xmlDictSize(xmlDictPtr dict);
+			xmlDictOwns	(xmlDictPtr dict,
+					 const xmlChar *str);
+XMLPUBFUN int XMLCALL			
+			xmlDictSize	(xmlDictPtr dict);
 
 /*
  * Cleanup function
  */
 XMLPUBFUN void XMLCALL
-xmlDictCleanup(void);
+                        xmlDictCleanup  (void);
 
 #ifdef __cplusplus
 }

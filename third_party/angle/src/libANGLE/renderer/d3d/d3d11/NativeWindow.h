@@ -15,8 +15,9 @@
 #include "common/debug.h"
 #include "common/platform.h"
 
-#include "libANGLE/Config.h"
 #include <EGL/eglplatform.h>
+//#include <dxgi.h>
+#include "libANGLE/Config.h"
 
 // DXGISwapChain and DXGIFactory are typedef'd to specific required
 // types. The HWND NativeWindow implementation requires IDXGISwapChain
@@ -26,12 +27,13 @@
 typedef IDXGISwapChain1 DXGISwapChain;
 typedef IDXGIFactory2 DXGIFactory;
 
-#include <memory>
-#include <windows.applicationmodel.core.h>
 #include <wrl.h>
 #include <wrl/wrappers/corewrappers.h>
+#include <windows.applicationmodel.core.h>
+#include <memory>
 
-namespace rx {
+namespace rx
+{
 class InspectableNativeWindow;
 }
 
@@ -39,47 +41,42 @@ using namespace Microsoft::WRL;
 using namespace Microsoft::WRL::Wrappers;
 
 #else
+
+struct IDXGISwapChain;
+struct IDXGIFactory;
+struct ID3D11Device;
+
 typedef IDXGISwapChain DXGISwapChain;
 typedef IDXGIFactory DXGIFactory;
 #endif
 
-typedef interface IDCompositionDevice IDCompositionDevice;
-typedef interface IDCompositionTarget IDCompositionTarget;
-typedef interface IDCompositionVisual IDCompositionVisual;
+namespace rx
+{
 
-namespace rx {
+class NativeWindow
+{
+  public:
+    explicit NativeWindow(EGLNativeWindowType window, const egl::Config *config);
 
-class NativeWindow {
-public:
-    explicit NativeWindow(EGLNativeWindowType window,
-        const egl::Config* config,
-        bool directComposition);
-
-    ~NativeWindow();
     bool initialize();
     bool getClientRect(LPRECT rect);
     bool isIconic();
     static bool isValidNativeWindow(EGLNativeWindowType window);
 
     HRESULT createSwapChain(ID3D11Device* device, DXGIFactory* factory,
-        DXGI_FORMAT format, UINT width, UINT height,
-        DXGISwapChain** swapChain);
+                            /*DXGI_FORMAT*/int format, UINT width, UINT height,
+                            DXGISwapChain** swapChain);
 
     inline EGLNativeWindowType getNativeWindow() const { return mWindow; }
 
-    void commitChange();
-
-private:
+  private:
     EGLNativeWindowType mWindow;
 
-    bool mDirectComposition;
-    IDCompositionDevice* mDevice;
-    IDCompositionTarget* mCompositionTarget;
-    IDCompositionVisual* mVisual;
-    const egl::Config* mConfig;
 #if defined(ANGLE_ENABLE_WINDOWS_STORE)
+    const egl::Config *mConfig;
     std::shared_ptr<InspectableNativeWindow> mImpl;
 #endif
+
 };
 
 }

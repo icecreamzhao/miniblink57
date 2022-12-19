@@ -11,13 +11,15 @@
 
 #include "libANGLE/renderer/SamplerImpl.h"
 
-namespace rx {
+namespace rx
+{
 
-class SamplerD3D : public SamplerImpl {
-public:
-    SamplerD3D() { }
-    ~SamplerD3D() override { }
+class SamplerD3D : public SamplerImpl
+{
+  public:
+    SamplerD3D() {}
+    ~SamplerD3D() override {}
 };
 }
 
-#endif // LIBANGLE_RENDERER_D3D_SAMPLERD3D_H_
+#endif  // LIBANGLE_RENDERER_D3D_SAMPLERD3D_H_

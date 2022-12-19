@@ -10,22 +10,24 @@
 
 #include "compiler/translator/InfoSink.h"
 
-namespace sh {
-SearchSymbol::SearchSymbol(const TString& symbol)
-    : TIntermTraverser(true, false, false)
-    , mSymbol(symbol)
+namespace sh
+{
+SearchSymbol::SearchSymbol(const TString &symbol)
+    : TIntermTraverser(true, false, false),
+      mSymbol(symbol)
 {
     match = false;
 }
 
-void SearchSymbol::traverse(TIntermNode* node)
+void SearchSymbol::traverse(TIntermNode *node)
 {
     node->traverse(this);
 }
 
-void SearchSymbol::visitSymbol(TIntermSymbol* symbolNode)
+void SearchSymbol::visitSymbol(TIntermSymbol *symbolNode)
 {
-    if (symbolNode->getSymbol() == mSymbol) {
+    if (symbolNode->getSymbol() == mSymbol)
+    {
         match = true;
     }
 }

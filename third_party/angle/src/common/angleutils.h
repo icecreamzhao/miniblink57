@@ -14,29 +14,29 @@
 #include <climits>
 #include <cstdarg>
 #include <cstddef>
+#include <string>
 #include <set>
 #include <sstream>
-#include <string>
 #include <vector>
 
 // A helper class to disallow copy and assignment operators
-namespace angle {
+namespace angle
+{
 
-class NonCopyable {
-public:
+class NonCopyable
+{
+  public:
     NonCopyable() = default;
     ~NonCopyable() = default;
-
-protected:
+  protected:
     NonCopyable(const NonCopyable&) = delete;
     void operator=(const NonCopyable&) = delete;
 };
 
-extern const uintptr_t DirtyPointer;
 }
 
 template <typename T, size_t N>
-inline size_t ArraySize(T (&)[N])
+inline size_t ArraySize(T(&)[N])
 {
     return N;
 }
@@ -44,7 +44,8 @@ inline size_t ArraySize(T (&)[N])
 template <typename T, unsigned int N>
 void SafeRelease(T (&resourceBlock)[N])
 {
-    for (unsigned int i = 0; i < N; i++) {
+    for (unsigned int i = 0; i < N; i++)
+    {
         SafeRelease(resourceBlock[i]);
     }
 }
@@ -52,7 +53,8 @@ void SafeRelease(T (&resourceBlock)[N])
 template <typename T>
 void SafeRelease(T& resource)
 {
-    if (resource) {
+    if (resource)
+    {
         resource->Release();
         resource = NULL;
     }
@@ -68,7 +70,8 @@ void SafeDelete(T*& resource)
 template <typename T>
 void SafeDeleteContainer(T& resource)
 {
-    for (auto& element : resource) {
+    for (auto &element : resource)
+    {
         SafeDelete(element);
     }
     resource.clear();
@@ -84,7 +87,7 @@ void SafeDeleteArray(T*& resource)
 // Provide a less-than function for comparing structs
 // Note: struct memory must be initialized to zero, because of packing gaps
 template <typename T>
-inline bool StructLessThan(const T& a, const T& b)
+inline bool StructLessThan(const T &a, const T &b)
 {
     return (memcmp(&a, &b, sizeof(T)) < 0);
 }
@@ -92,13 +95,13 @@ inline bool StructLessThan(const T& a, const T& b)
 // Provide a less-than function for comparing structs
 // Note: struct memory must be initialized to zero, because of packing gaps
 template <typename T>
-inline bool StructEquals(const T& a, const T& b)
+inline bool StructEquals(const T &a, const T &b)
 {
     return (memcmp(&a, &b, sizeof(T)) == 0);
 }
 
 template <typename T>
-inline void StructZero(T* obj)
+inline void StructZero(T *obj)
 {
     memset(obj, 0, sizeof(T));
 }
@@ -110,11 +113,12 @@ inline bool IsMaskFlagSet(T mask, T flag)
     return (mask & flag) == flag;
 }
 
-inline const char* MakeStaticString(const std::string& str)
+inline const char* MakeStaticString(const std::string &str)
 {
     static std::set<std::string> strings;
     std::set<std::string>::iterator it = strings.find(str);
-    if (it != strings.end()) {
+    if (it != strings.end())
+    {
         return it->c_str();
     }
 
@@ -125,7 +129,8 @@ inline std::string ArrayString(unsigned int i)
 {
     // We assume UINT_MAX and GL_INVALID_INDEX are equal
     // See DynamicHLSL.cpp
-    if (i == UINT_MAX) {
+    if (i == UINT_MAX)
+    {
         return "";
     }
 
@@ -145,10 +150,10 @@ inline std::string Str(int i)
     return strstr.str();
 }
 
-size_t FormatStringIntoVector(const char* fmt, va_list vararg, std::vector<char>& buffer);
+size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& buffer);
 
-std::string FormatString(const char* fmt, va_list vararg);
-std::string FormatString(const char* fmt, ...);
+std::string FormatString(const char *fmt, va_list vararg);
+std::string FormatString(const char *fmt, ...);
 
 // snprintf is not defined with MSVC prior to to msvc14
 #if defined(_MSC_VER) && _MSC_VER < 1900

@@ -9,20 +9,21 @@
 
 #include "libANGLE/Fence.h"
 
-#include "common/utilities.h"
 #include "libANGLE/renderer/FenceNVImpl.h"
 #include "libANGLE/renderer/FenceSyncImpl.h"
 #include "libANGLE/renderer/Renderer.h"
+#include "common/utilities.h"
 
 #include "angle_gl.h"
 
-namespace gl {
+namespace gl
+{
 
-FenceNV::FenceNV(rx::FenceNVImpl* impl)
-    : mFence(impl)
-    , mIsSet(false)
-    , mStatus(GL_FALSE)
-    , mCondition(GL_NONE)
+FenceNV::FenceNV(rx::FenceNVImpl *impl)
+    : mFence(impl),
+      mIsSet(false),
+      mStatus(GL_FALSE),
+      mCondition(GL_NONE)
 {
 }
 
@@ -34,7 +35,8 @@ FenceNV::~FenceNV()
 Error FenceNV::set(GLenum condition)
 {
     Error error = mFence->set(condition);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -45,11 +47,12 @@ Error FenceNV::set(GLenum condition)
     return Error(GL_NO_ERROR);
 }
 
-Error FenceNV::test(GLboolean* outResult)
+Error FenceNV::test(GLboolean *outResult)
 {
     // Flush the command buffer by default
     Error error = mFence->test(&mStatus);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -62,7 +65,8 @@ Error FenceNV::finish()
     ASSERT(mIsSet);
 
     gl::Error error = mFence->finish();
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -71,12 +75,11 @@ Error FenceNV::finish()
     return Error(GL_NO_ERROR);
 }
 
-FenceSync::FenceSync(rx::FenceSyncImpl* impl, GLuint id)
-    : RefCountObject(id)
-    , mFence(impl)
-    , mLabel()
-    , mCondition(GL_NONE)
-    , mFlags(0)
+FenceSync::FenceSync(rx::FenceSyncImpl *impl, GLuint id)
+    : RefCountObject(id),
+      mFence(impl),
+      mCondition(GL_NONE),
+      mFlags(0)
 {
 }
 
@@ -85,20 +88,11 @@ FenceSync::~FenceSync()
     SafeDelete(mFence);
 }
 
-void FenceSync::setLabel(const std::string& label)
-{
-    mLabel = label;
-}
-
-const std::string& FenceSync::getLabel() const
-{
-    return mLabel;
-}
-
 Error FenceSync::set(GLenum condition, GLbitfield flags)
 {
     Error error = mFence->set(condition, flags);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -107,7 +101,7 @@ Error FenceSync::set(GLenum condition, GLbitfield flags)
     return Error(GL_NO_ERROR);
 }
 
-Error FenceSync::clientWait(GLbitfield flags, GLuint64 timeout, GLenum* outResult)
+Error FenceSync::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult)
 {
     ASSERT(mCondition != GL_NONE);
     return mFence->clientWait(flags, timeout, outResult);
@@ -118,7 +112,7 @@ Error FenceSync::serverWait(GLbitfield flags, GLuint64 timeout)
     return mFence->serverWait(flags, timeout);
 }
 
-Error FenceSync::getStatus(GLint* outResult) const
+Error FenceSync::getStatus(GLint *outResult) const
 {
     return mFence->getStatus(outResult);
 }

@@ -9,15 +9,17 @@
 #ifndef LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_
 #define LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_
 
-namespace rx {
+namespace rx
+{
 
-struct WorkaroundsGL {
+struct WorkaroundsGL
+{
     WorkaroundsGL()
-        : avoid1BitAlphaTextureFormats(false)
-        , rgba4IsNotSupportedForColorRendering(false)
-        , doesSRGBClearsOnLinearFramebufferAttachments(false)
-        , doWhileGLSLCausesGPUHang(false)
-        , finishDoesNotCauseQueriesToBeAvailable(false)
+        : avoid1BitAlphaTextureFormats(false),
+          rgba4IsNotSupportedForColorRendering(false),
+          doesSRGBClearsOnLinearFramebufferAttachments(false),
+          doWhileGLSLCausesGPUHang(false),
+          finishDoesNotCauseQueriesToBeAvailable(false)
     {
     }
 
@@ -57,4 +59,4 @@ struct WorkaroundsGL {
 };
 }
 
-#endif // LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_
+#endif  // LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_

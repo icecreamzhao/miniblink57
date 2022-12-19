@@ -10,31 +10,34 @@
 
 #include "common/platform.h"
 
-namespace rx {
+namespace rx
+{
 
-namespace d3d11 {
+namespace d3d11
+{
 
-    struct DXGISupport {
-        DXGISupport()
-            : alwaysSupportedFlags(0)
-            , neverSupportedFlags(0)
-            , optionallySupportedFlags(0)
-        {
-        }
+struct DXGISupport
+{
+    DXGISupport()
+        : alwaysSupportedFlags(0),
+          neverSupportedFlags(0),
+          optionallySupportedFlags(0)
+    {
+    }
 
-        DXGISupport(UINT alwaysSupportedIn, UINT neverSupportedIn, UINT optionallySupportedIn)
-            : alwaysSupportedFlags(alwaysSupportedIn)
-            , neverSupportedFlags(neverSupportedIn)
-            , optionallySupportedFlags(optionallySupportedIn)
-        {
-        }
+    DXGISupport(UINT alwaysSupportedIn, UINT neverSupportedIn, UINT optionallySupportedIn)
+        : alwaysSupportedFlags(alwaysSupportedIn),
+          neverSupportedFlags(neverSupportedIn),
+          optionallySupportedFlags(optionallySupportedIn)
+    {
+    }
 
-        UINT alwaysSupportedFlags;
-        UINT neverSupportedFlags;
-        UINT optionallySupportedFlags;
-    };
+    UINT alwaysSupportedFlags;
+    UINT neverSupportedFlags;
+    UINT optionallySupportedFlags;
+};
 
-    const DXGISupport& GetDXGISupport(DXGI_FORMAT dxgiFormat, D3D_FEATURE_LEVEL featureLevel);
+const DXGISupport &GetDXGISupport(DXGI_FORMAT dxgiFormat, D3D_FEATURE_LEVEL featureLevel);
 
 } // namespace d3d11
 

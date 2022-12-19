@@ -7,19 +7,19 @@
 #include "compiler/translator/OutputGLSL.h"
 
 TOutputGLSL::TOutputGLSL(TInfoSinkBase& objSink,
-    ShArrayIndexClampingStrategy clampingStrategy,
-    ShHashFunction64 hashFunction,
-    NameMap& nameMap,
-    TSymbolTable& symbolTable,
-    int shaderVersion,
-    ShShaderOutput output)
+                         ShArrayIndexClampingStrategy clampingStrategy,
+                         ShHashFunction64 hashFunction,
+                         NameMap& nameMap,
+                         TSymbolTable& symbolTable,
+                         int shaderVersion,
+                         ShShaderOutput output)
     : TOutputGLSLBase(objSink,
-        clampingStrategy,
-        hashFunction,
-        nameMap,
-        symbolTable,
-        shaderVersion,
-        output)
+                      clampingStrategy,
+                      hashFunction,
+                      nameMap,
+                      symbolTable,
+                      shaderVersion,
+                      output)
 {
 }
 
@@ -28,29 +28,40 @@ bool TOutputGLSL::writeVariablePrecision(TPrecision)
     return false;
 }
 
-void TOutputGLSL::visitSymbol(TIntermSymbol* node)
+void TOutputGLSL::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase& out = objSink();
 
-    const TString& symbol = node->getSymbol();
-    if (symbol == "gl_FragDepthEXT") {
+    const TString &symbol = node->getSymbol();
+    if (symbol == "gl_FragDepthEXT")
+    {
         out << "gl_FragDepth";
-    } else if (symbol == "gl_FragColor" && IsGLSL130OrNewer(getShaderOutput())) {
+    }
+    else if (symbol == "gl_FragColor" && IsGLSL130OrNewer(getShaderOutput()))
+    {
         out << "webgl_FragColor";
-    } else if (symbol == "gl_FragData" && IsGLSL130OrNewer(getShaderOutput())) {
+    }
+    else if (symbol == "gl_FragData" && IsGLSL130OrNewer(getShaderOutput()))
+    {
         out << "webgl_FragData";
-    } else if (symbol == "gl_SecondaryFragColorEXT") {
+    }
+    else if (symbol == "gl_SecondaryFragColorEXT")
+    {
         out << "angle_SecondaryFragColor";
-    } else if (symbol == "gl_SecondaryFragDataEXT") {
+    }
+    else if (symbol == "gl_SecondaryFragDataEXT")
+    {
         out << "angle_SecondaryFragData";
-    } else {
+    }
+    else
+    {
         TOutputGLSLBase::visitSymbol(node);
     }
 }
 
-TString TOutputGLSL::translateTextureFunction(TString& name)
+TString TOutputGLSL::translateTextureFunction(TString &name)
 {
-    static const char* simpleRename[] = {
+    static const char *simpleRename[] = {
         "texture2DLodEXT", "texture2DLod",
         "texture2DProjLodEXT", "texture2DProjLod",
         "textureCubeLodEXT", "textureCubeLod",
@@ -59,7 +70,7 @@ TString TOutputGLSL::translateTextureFunction(TString& name)
         "textureCubeGradEXT", "textureCubeGradARB",
         NULL, NULL
     };
-    static const char* legacyToCoreRename[] = {
+    static const char *legacyToCoreRename[] = {
         "texture2D", "texture",
         "texture2DProj", "textureProj",
         "texture2DLod", "textureLod",
@@ -76,11 +87,14 @@ TString TOutputGLSL::translateTextureFunction(TString& name)
         "textureCubeGradEXT", "textureGrad",
         NULL, NULL
     };
-    const char** mapping = (IsGLSL130OrNewer(getShaderOutput())) ? legacyToCoreRename : simpleRename;
+    const char **mapping = (IsGLSL130OrNewer(getShaderOutput())) ?
+        legacyToCoreRename : simpleRename;
 
-    for (int i = 0; mapping[i] != NULL; i += 2) {
-        if (name == mapping[i]) {
-            return mapping[i + 1];
+    for (int i = 0; mapping[i] != NULL; i += 2)
+    {
+        if (name == mapping[i])
+        {
+            return mapping[i+1];
         }
     }
 

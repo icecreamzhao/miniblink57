@@ -12,16 +12,18 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
-#include "libANGLE/HandleAllocator.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/HandleAllocator.h"
 
 #include <map>
 
-namespace rx {
+namespace rx
+{
 class ImplFactory;
 }
 
-namespace gl {
+namespace gl
+{
 class Buffer;
 struct Data;
 class FenceSync;
@@ -32,16 +34,17 @@ class Sampler;
 class Shader;
 class Texture;
 
-class ResourceManager : angle::NonCopyable {
-public:
-    explicit ResourceManager(rx::ImplFactory* factory);
+class ResourceManager : angle::NonCopyable
+{
+  public:
+    explicit ResourceManager(rx::ImplFactory *factory);
     ~ResourceManager();
 
     void addRef();
     void release();
 
     GLuint createBuffer();
-    GLuint createShader(const gl::Limitations& rendererLimitations, GLenum type);
+    GLuint createShader(const gl::Limitations &rendererLimitations, GLenum type);
     GLuint createProgram();
     GLuint createTexture();
     GLuint createRenderbuffer();
@@ -56,15 +59,15 @@ public:
     void deleteSampler(GLuint sampler);
     void deleteFenceSync(GLuint fenceSync);
 
-    Buffer* getBuffer(GLuint handle);
-    Shader* getShader(GLuint handle);
-    Program* getProgram(GLuint handle) const;
-    Texture* getTexture(GLuint handle);
-    Renderbuffer* getRenderbuffer(GLuint handle);
-    Sampler* getSampler(GLuint handle);
-    FenceSync* getFenceSync(GLuint handle);
+    Buffer *getBuffer(GLuint handle);
+    Shader *getShader(GLuint handle);
+    Program *getProgram(GLuint handle) const;
+    Texture *getTexture(GLuint handle);
+    Renderbuffer *getRenderbuffer(GLuint handle);
+    Sampler *getSampler(GLuint handle);
+    FenceSync *getFenceSync(GLuint handle);
 
-    void setRenderbuffer(GLuint handle, Renderbuffer* renderbuffer);
+    void setRenderbuffer(GLuint handle, Renderbuffer *renderbuffer);
 
     void checkBufferAllocation(GLuint handle);
     void checkTextureAllocation(GLuint handle, GLenum type);
@@ -73,11 +76,11 @@ public:
 
     bool isSampler(GLuint sampler);
 
-private:
+  private:
     void createTextureInternal(GLuint handle);
 
-    rx::ImplFactory* mFactory;
-    std::size_t mRefCount;
+    rx::ImplFactory *mFactory;
+    size_t mRefCount;
 
     typedef std::map<GLuint, Buffer*> BufferMap;
     BufferMap mBufferMap;

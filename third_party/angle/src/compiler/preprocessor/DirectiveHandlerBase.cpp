@@ -6,10 +6,11 @@
 
 #include "DirectiveHandlerBase.h"
 
-namespace pp {
+namespace pp
+{
 
 DirectiveHandler::~DirectiveHandler()
 {
 }
 
-} // namespace pp
+}  // namespace pp

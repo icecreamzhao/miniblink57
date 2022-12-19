@@ -13,26 +13,28 @@
 
 #include "libANGLE/renderer/d3d/VertexBuffer.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer11;
 
-class VertexBuffer11 : public VertexBuffer {
-public:
-    explicit VertexBuffer11(Renderer11* const renderer);
+class VertexBuffer11 : public VertexBuffer
+{
+  public:
+    explicit VertexBuffer11(Renderer11 *const renderer);
     virtual ~VertexBuffer11();
 
     virtual gl::Error initialize(unsigned int size, bool dynamicUsage);
 
-    gl::Error storeVertexAttributes(const gl::VertexAttribute& attrib,
-        GLenum currentValueType,
-        GLint start,
-        GLsizei count,
-        GLsizei instances,
-        unsigned int offset,
-        const uint8_t* sourceData) override;
+    gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
+                                    GLenum currentValueType,
+                                    GLint start,
+                                    GLsizei count,
+                                    GLsizei instances,
+                                    unsigned int offset,
+                                    const uint8_t *sourceData) override;
 
-    virtual gl::Error getSpaceRequired(const gl::VertexAttribute& attrib, GLsizei count, GLsizei instances,
-        unsigned int* outSpaceRequired) const;
+    virtual gl::Error getSpaceRequired(const gl::VertexAttribute &attrib, GLsizei count, GLsizei instances,
+                                       unsigned int *outSpaceRequired) const;
 
     virtual unsigned int getBufferSize() const;
     virtual gl::Error setBufferSize(unsigned int size);
@@ -40,18 +42,18 @@ public:
 
     virtual void hintUnmapResource();
 
-    ID3D11Buffer* getBuffer() const;
+    ID3D11Buffer *getBuffer() const;
 
-private:
+  private:
     gl::Error mapResource();
 
-    Renderer11* const mRenderer;
+    Renderer11 *const mRenderer;
 
-    ID3D11Buffer* mBuffer;
+    ID3D11Buffer *mBuffer;
     unsigned int mBufferSize;
     bool mDynamicUsage;
 
-    uint8_t* mMappedResourceData;
+    uint8_t *mMappedResourceData;
 };
 
 }

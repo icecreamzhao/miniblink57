@@ -19,29 +19,32 @@
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/renderer/SurfaceImpl.h"
 
-namespace gl {
+namespace gl
+{
 class Framebuffer;
 class Texture;
 }
 
-namespace egl {
+namespace egl
+{
 class AttributeMap;
 class Display;
 struct Config;
 
-class Surface final : public gl::FramebufferAttachmentObject {
-public:
-    Surface(rx::SurfaceImpl* impl, EGLint surfaceType, const egl::Config* config, const AttributeMap& attributes);
+class Surface final : public gl::FramebufferAttachmentObject
+{
+  public:
+    Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes);
 
-    rx::SurfaceImpl* getImplementation() { return mImplementation; }
-    const rx::SurfaceImpl* getImplementation() const { return mImplementation; }
+    rx::SurfaceImpl *getImplementation() { return mImplementation; }
+    const rx::SurfaceImpl *getImplementation() const { return mImplementation; }
 
     EGLint getType() const;
 
     Error swap();
     Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height);
-    Error querySurfacePointerANGLE(EGLint attribute, void** value);
-    Error bindTexImage(gl::Texture* texture, EGLint buffer);
+    Error querySurfacePointerANGLE(EGLint attribute, void **value);
+    Error bindTexImage(gl::Texture *texture, EGLint buffer);
     Error releaseTexImage(EGLint buffer);
 
     EGLint isPostSubBufferSupported() const;
@@ -50,7 +53,7 @@ public:
     void setIsCurrent(bool isCurrent);
     void onDestroy();
 
-    const Config* getConfig() const;
+    const Config *getConfig() const;
 
     // width and height can change with client window resizing
     EGLint getWidth() const;
@@ -61,68 +64,56 @@ public:
     EGLenum getTextureFormat() const;
     EGLenum getTextureTarget() const;
 
-    gl::Texture* getBoundTexture() const { return mTexture.get(); }
-    gl::Framebuffer* getDefaultFramebuffer() { return mDefaultFramebuffer; }
+    gl::Texture *getBoundTexture() const { return mTexture.get(); }
+    gl::Framebuffer *getDefaultFramebuffer() { return mDefaultFramebuffer; }
 
     EGLint isFixedSize() const;
 
     // FramebufferAttachmentObject implementation
-    gl::Extents getAttachmentSize(const gl::FramebufferAttachment::Target& target) const override;
-    GLenum getAttachmentInternalFormat(const gl::FramebufferAttachment::Target& target) const override;
-    GLsizei getAttachmentSamples(const gl::FramebufferAttachment::Target& target) const override;
+    GLsizei getAttachmentWidth(const gl::FramebufferAttachment::Target &/*target*/) const override { return getWidth(); }
+    GLsizei getAttachmentHeight(const gl::FramebufferAttachment::Target &/*target*/) const override { return getHeight(); }
+    GLenum getAttachmentInternalFormat(const gl::FramebufferAttachment::Target &target) const override;
+    GLsizei getAttachmentSamples(const gl::FramebufferAttachment::Target &target) const override;
 
-    void onAttach() override { }
-    void onDetach() override { }
+    void onAttach() override {}
+    void onDetach() override {}
     GLuint getId() const override;
 
-    bool flexibleSurfaceCompatibilityRequested() const
-    {
-        return mFlexibleSurfaceCompatibilityRequested;
-    }
-    EGLint getOrientation() const { return mOrientation; }
-
-    bool directComposition() const { return mDirectComposition; }
-
-private:
+  private:
     virtual ~Surface();
-    rx::FramebufferAttachmentObjectImpl* getAttachmentImpl() const override { return mImplementation; }
+    rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override { return mImplementation; }
 
-    gl::Framebuffer* createDefaultFramebuffer();
+    gl::Framebuffer *createDefaultFramebuffer();
 
     // ANGLE-only method, used internally
     friend class gl::Texture;
     void releaseTexImageFromTexture();
 
-    rx::SurfaceImpl* mImplementation;
-    gl::Framebuffer* mDefaultFramebuffer;
+    rx::SurfaceImpl *mImplementation;
+    gl::Framebuffer *mDefaultFramebuffer;
     int mCurrentCount;
     bool mDestroyed;
 
     EGLint mType;
 
-    const egl::Config* mConfig;
+    const egl::Config *mConfig;
 
     bool mPostSubBufferRequested;
-    bool mFlexibleSurfaceCompatibilityRequested;
 
     bool mFixedSize;
     size_t mFixedWidth;
     size_t mFixedHeight;
 
-    bool mDirectComposition;
-
     EGLenum mTextureFormat;
     EGLenum mTextureTarget;
 
-    EGLint mPixelAspectRatio; // Display aspect ratio
-    EGLenum mRenderBuffer; // Render buffer
-    EGLenum mSwapBehavior; // Buffer swap behavior
-
-    EGLint mOrientation;
+    EGLint mPixelAspectRatio;      // Display aspect ratio
+    EGLenum mRenderBuffer;         // Render buffer
+    EGLenum mSwapBehavior;         // Buffer swap behavior
 
     BindingPointer<gl::Texture> mTexture;
 };
 
 }
 
-#endif // LIBANGLE_SURFACE_H_
+#endif   // LIBANGLE_SURFACE_H_

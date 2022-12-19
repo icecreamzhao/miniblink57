@@ -12,10 +12,12 @@
 #include "common/angleutils.h"
 #include "libANGLE/TransformFeedback.h"
 
-namespace rx {
+namespace rx
+{
 
-class TransformFeedbackImpl : angle::NonCopyable {
-public:
+class TransformFeedbackImpl : angle::NonCopyable
+{
+  public:
     virtual ~TransformFeedbackImpl() { }
 
     virtual void begin(GLenum primitiveMode) = 0;
@@ -23,8 +25,8 @@ public:
     virtual void pause() = 0;
     virtual void resume() = 0;
 
-    virtual void bindGenericBuffer(const BindingPointer<gl::Buffer>& binding) = 0;
-    virtual void bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer>& binding) = 0;
+    virtual void bindGenericBuffer(const BindingPointer<gl::Buffer> &binding) = 0;
+    virtual void bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding) = 0;
 };
 
 }

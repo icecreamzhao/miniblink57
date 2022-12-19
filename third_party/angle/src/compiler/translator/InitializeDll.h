@@ -10,3 +10,4 @@ bool InitProcess();
 void DetachProcess();
 
 #endif // COMPILER_TRANSLATOR_INITIALIZEDLL_H_
+

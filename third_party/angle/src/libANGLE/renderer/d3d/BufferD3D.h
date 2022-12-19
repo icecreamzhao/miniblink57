@@ -13,31 +13,23 @@
 #include "libANGLE/renderer/BufferImpl.h"
 
 #include <stdint.h>
-#include <vector>
 
-namespace rx {
+namespace rx
+{
 class BufferFactoryD3D;
 class StaticIndexBufferInterface;
 class StaticVertexBufferInterface;
 
-enum D3DBufferUsage {
+enum D3DBufferUsage
+{
     D3D_BUFFER_USAGE_STATIC,
     D3D_BUFFER_USAGE_DYNAMIC,
 };
 
-enum D3DBufferInvalidationType {
-    D3D_BUFFER_INVALIDATE_WHOLE_CACHE,
-    D3D_BUFFER_INVALIDATE_DEFAULT_BUFFER_ONLY,
-};
-
-enum D3DStaticBufferCreationType {
-    D3D_BUFFER_CREATE_IF_NECESSARY,
-    D3D_BUFFER_DO_NOT_CREATE,
-};
-
-class BufferD3D : public BufferImpl {
-public:
-    BufferD3D(BufferFactoryD3D* factory);
+class BufferD3D : public BufferImpl
+{
+  public:
+    BufferD3D(BufferFactoryD3D *factory);
     virtual ~BufferD3D();
 
     unsigned int getSerial() const { return mSerial; }
@@ -45,38 +37,31 @@ public:
     virtual size_t getSize() const = 0;
     virtual bool supportsDirectBinding() const = 0;
     virtual void markTransformFeedbackUsage() = 0;
-    virtual gl::Error getData(const uint8_t** outData) = 0;
+    virtual gl::Error getData(const uint8_t **outData) = 0;
 
-    StaticVertexBufferInterface* getStaticVertexBuffer(const gl::VertexAttribute& attribute,
-        D3DStaticBufferCreationType creationType);
-    StaticIndexBufferInterface* getStaticIndexBuffer();
+    StaticVertexBufferInterface *getStaticVertexBuffer() { return mStaticVertexBuffer; }
+    StaticIndexBufferInterface *getStaticIndexBuffer() { return mStaticIndexBuffer; }
 
     void initializeStaticData();
-    void invalidateStaticData(D3DBufferInvalidationType invalidationType);
-    void reinitOutOfDateStaticData();
-
+    void invalidateStaticData();
     void promoteStaticUsage(int dataSize);
 
     gl::Error getIndexRange(GLenum type,
-        size_t offset,
-        size_t count,
-        bool primitiveRestartEnabled,
-        gl::IndexRange* outRange) override;
+                            size_t offset,
+                            size_t count,
+                            bool primitiveRestartEnabled,
+                            gl::IndexRange *outRange) override;
 
-protected:
+  protected:
     void updateSerial();
     void updateD3DBufferUsage(GLenum usage);
-    void emptyStaticBufferCache();
 
-    BufferFactoryD3D* mFactory;
+    BufferFactoryD3D *mFactory;
     unsigned int mSerial;
     static unsigned int mNextSerial;
 
-    StaticVertexBufferInterface* mStaticVertexBuffer;
-    StaticIndexBufferInterface* mStaticIndexBuffer;
-    std::vector<StaticVertexBufferInterface*>* mStaticBufferCache;
-    unsigned int mStaticBufferCacheTotalSize;
-    unsigned int mStaticVertexBufferOutOfDate;
+    StaticVertexBufferInterface *mStaticVertexBuffer;
+    StaticIndexBufferInterface *mStaticIndexBuffer;
     unsigned int mUnmodifiedDataUse;
     D3DBufferUsage mUsage;
 };

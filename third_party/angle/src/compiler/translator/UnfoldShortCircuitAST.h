@@ -17,14 +17,15 @@
 // be replaced, and creates the corresponding replacement nodes. However,
 // the actual replacements happen after the traverse through updateTree().
 
-class UnfoldShortCircuitAST : public TIntermTraverser {
-public:
+class UnfoldShortCircuitAST : public TIntermTraverser
+{
+  public:
     UnfoldShortCircuitAST()
         : TIntermTraverser(true, false, false)
     {
     }
 
-    bool visitBinary(Visit visit, TIntermBinary*) override;
+    bool visitBinary(Visit visit, TIntermBinary *) override;
 };
 
-#endif // COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUITAST_H_
+#endif  // COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUITAST_H_

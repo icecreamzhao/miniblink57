@@ -12,23 +12,22 @@
 
 #include <set>
 
-class RegenerateStructNames : public TIntermTraverser {
-public:
-    RegenerateStructNames(const TSymbolTable& symbolTable,
-        int shaderVersion)
-        : TIntermTraverser(true, false, false)
-        , mSymbolTable(symbolTable)
-        , mShaderVersion(shaderVersion)
-        , mScopeDepth(0)
-    {
-    }
+class RegenerateStructNames : public TIntermTraverser
+{
+  public:
+    RegenerateStructNames(const TSymbolTable &symbolTable,
+                          int shaderVersion)
+        : TIntermTraverser(true, false, false),
+          mSymbolTable(symbolTable),
+          mShaderVersion(shaderVersion),
+          mScopeDepth(0) {}
 
-protected:
-    void visitSymbol(TIntermSymbol*) override;
-    bool visitAggregate(Visit, TIntermAggregate*) override;
+  protected:
+    void visitSymbol(TIntermSymbol *) override;
+    bool visitAggregate(Visit, TIntermAggregate *) override;
 
-private:
-    const TSymbolTable& mSymbolTable;
+  private:
+    const TSymbolTable &mSymbolTable;
     int mShaderVersion;
 
     // Indicating the depth of the current scope.
@@ -39,4 +38,4 @@ private:
     std::set<int> mDeclaredGlobalStructs;
 };
 
-#endif // COMPILER_TRANSLATOR_REGENERATESTRUCTNAMES_H_
+#endif  // COMPILER_TRANSLATOR_REGENERATESTRUCTNAMES_H_

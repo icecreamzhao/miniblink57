@@ -8,53 +8,60 @@
 
 #include "common/debug.h"
 
-namespace {
+namespace
+{
 
-TIntermConstantUnion* constructFloatConstUnionNode(const TType& type)
+TIntermConstantUnion *constructFloatConstUnionNode(const TType &type)
 {
     TType myType = type;
     unsigned char size = static_cast<unsigned char>(myType.getNominalSize());
     if (myType.isMatrix())
         size *= size;
-    TConstantUnion* u = new TConstantUnion[size];
+    TConstantUnion *u = new TConstantUnion[size];
     for (int ii = 0; ii < size; ++ii)
         u[ii].setFConst(0.0f);
 
     myType.clearArrayness();
     myType.setQualifier(EvqConst);
-    TIntermConstantUnion* node = new TIntermConstantUnion(u, myType);
+    TIntermConstantUnion *node = new TIntermConstantUnion(u, myType);
     return node;
 }
 
-TIntermConstantUnion* constructIndexNode(int index)
+TIntermConstantUnion *constructIndexNode(int index)
 {
-    TConstantUnion* u = new TConstantUnion[1];
+    TConstantUnion *u = new TConstantUnion[1];
     u[0].setIConst(index);
 
     TType type(EbtInt, EbpUndefined, EvqConst, 1);
-    TIntermConstantUnion* node = new TIntermConstantUnion(u, type);
+    TIntermConstantUnion *node = new TIntermConstantUnion(u, type);
     return node;
 }
 
-} // namespace anonymous
+}  // namespace anonymous
 
-bool InitializeVariables::visitAggregate(Visit visit, TIntermAggregate* node)
+bool InitializeVariables::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     bool visitChildren = !mCodeInserted;
-    switch (node->getOp()) {
-    case EOpSequence:
+    switch (node->getOp())
+    {
+      case EOpSequence:
         break;
-    case EOpFunction: {
+      case EOpFunction:
+      {
         // Function definition.
         ASSERT(visit == PreVisit);
-        if (node->getName() == "main(") {
-            TIntermSequence* sequence = node->getSequence();
+        if (node->getName() == "main(")
+        {
+            TIntermSequence *sequence = node->getSequence();
             ASSERT((sequence->size() == 1) || (sequence->size() == 2));
-            TIntermAggregate* body = NULL;
-            if (sequence->size() == 1) {
+            TIntermAggregate *body = NULL;
+            if (sequence->size() == 1)
+            {
                 body = new TIntermAggregate(EOpSequence);
                 sequence->push_back(body);
-            } else {
+            }
+            else
+            {
                 body = (*sequence)[1]->getAsAggregate();
             }
             ASSERT(body);
@@ -62,42 +69,49 @@ bool InitializeVariables::visitAggregate(Visit visit, TIntermAggregate* node)
             mCodeInserted = true;
         }
         break;
-    }
-    default:
+      }
+      default:
         visitChildren = false;
         break;
     }
     return visitChildren;
 }
 
-void InitializeVariables::insertInitCode(TIntermSequence* sequence)
+void InitializeVariables::insertInitCode(TIntermSequence *sequence)
 {
-    for (size_t ii = 0; ii < mVariables.size(); ++ii) {
-        const InitVariableInfo& varInfo = mVariables[ii];
+    for (size_t ii = 0; ii < mVariables.size(); ++ii)
+    {
+        const InitVariableInfo &varInfo = mVariables[ii];
 
-        if (varInfo.type.isArray()) {
-            for (int index = varInfo.type.getArraySize() - 1; index >= 0; --index) {
-                TIntermBinary* assign = new TIntermBinary(EOpAssign);
+        if (varInfo.type.isArray())
+        {
+            for (int index = varInfo.type.getArraySize() - 1; index >= 0; --index)
+            {
+                TIntermBinary *assign = new TIntermBinary(EOpAssign);
                 sequence->insert(sequence->begin(), assign);
 
-                TIntermBinary* indexDirect = new TIntermBinary(EOpIndexDirect);
-                TIntermSymbol* symbol = new TIntermSymbol(0, varInfo.name, varInfo.type);
+                TIntermBinary *indexDirect = new TIntermBinary(EOpIndexDirect);
+                TIntermSymbol *symbol = new TIntermSymbol(0, varInfo.name, varInfo.type);
                 indexDirect->setLeft(symbol);
-                TIntermConstantUnion* indexNode = constructIndexNode(index);
+                TIntermConstantUnion *indexNode = constructIndexNode(index);
                 indexDirect->setRight(indexNode);
 
                 assign->setLeft(indexDirect);
 
-                TIntermConstantUnion* zeroConst = constructFloatConstUnionNode(varInfo.type);
+                TIntermConstantUnion *zeroConst = constructFloatConstUnionNode(varInfo.type);
                 assign->setRight(zeroConst);
             }
-        } else {
-            TIntermBinary* assign = new TIntermBinary(EOpAssign);
+        }
+        else
+        {
+            TIntermBinary *assign = new TIntermBinary(EOpAssign);
             sequence->insert(sequence->begin(), assign);
-            TIntermSymbol* symbol = new TIntermSymbol(0, varInfo.name, varInfo.type);
+            TIntermSymbol *symbol = new TIntermSymbol(0, varInfo.name, varInfo.type);
             assign->setLeft(symbol);
-            TIntermConstantUnion* zeroConst = constructFloatConstUnionNode(varInfo.type);
+            TIntermConstantUnion *zeroConst = constructFloatConstUnionNode(varInfo.type);
             assign->setRight(zeroConst);
         }
+
     }
 }
+

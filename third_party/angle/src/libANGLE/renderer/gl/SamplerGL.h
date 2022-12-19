@@ -12,27 +12,29 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/SamplerImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsGL;
 class StateManagerGL;
 
-class SamplerGL : public SamplerImpl {
-public:
-    SamplerGL(const FunctionsGL* functions, StateManagerGL* stateManager);
+class SamplerGL : public SamplerImpl
+{
+  public:
+    SamplerGL(const FunctionsGL *functions, StateManagerGL *stateManager);
     ~SamplerGL() override;
 
-    void syncState(const gl::SamplerState& samplerState) const;
+    void syncState(const gl::SamplerState &samplerState) const;
 
     GLuint getSamplerID() const;
 
-private:
-    const FunctionsGL* mFunctions;
-    StateManagerGL* mStateManager;
+  private:
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
 
     mutable gl::SamplerState mAppliedSamplerState;
     GLuint mSamplerID;
 };
 }
 
-#endif // LIBANGLE_RENDERER_GL_SAMPLERGL_H_
+#endif  // LIBANGLE_RENDERER_GL_SAMPLERGL_H_

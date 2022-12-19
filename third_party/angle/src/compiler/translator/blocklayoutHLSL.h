@@ -17,15 +17,18 @@
 #include "blocklayout.h"
 #include <GLSLANG/ShaderLang.h>
 
-namespace sh {
+namespace sh
+{
 // Block layout packed according to the D3D9 or default D3D10+ register packing rules
 // See http://msdn.microsoft.com/en-us/library/windows/desktop/bb509632(v=vs.85).aspx
 // The strategy should be ENCODE_LOOSE for D3D9 constant blocks, and ENCODE_PACKED
 // for everything else (D3D10+ constant blocks and all attributes/varyings).
 
-class COMPILER_EXPORT HLSLBlockEncoder : public BlockLayoutEncoder {
-public:
-    enum HLSLBlockEncoderStrategy {
+class COMPILER_EXPORT HLSLBlockEncoder : public BlockLayoutEncoder
+{
+  public:
+    enum HLSLBlockEncoderStrategy
+    {
         ENCODE_PACKED,
         ENCODE_LOOSE
     };
@@ -41,8 +44,8 @@ public:
 
     static HLSLBlockEncoderStrategy GetStrategyFor(ShShaderOutput outputType);
 
-protected:
-    virtual void getBlockLayoutInfo(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int* arrayStrideOut, int* matrixStrideOut);
+  protected:
+    virtual void getBlockLayoutInfo(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int *arrayStrideOut, int *matrixStrideOut);
     virtual void advanceOffset(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int arrayStride, int matrixStride);
 
     HLSLBlockEncoderStrategy mEncoderStrategy;
@@ -51,8 +54,8 @@ protected:
 
 // This method returns the number of used registers for a ShaderVariable. It is dependent on the HLSLBlockEncoder
 // class to count the number of used registers in a struct (which are individually packed according to the same rules).
-COMPILER_EXPORT unsigned int HLSLVariableRegisterCount(const Varying& variable, bool transposeMatrices);
-COMPILER_EXPORT unsigned int HLSLVariableRegisterCount(const Uniform& variable, ShShaderOutput outputType);
+COMPILER_EXPORT unsigned int HLSLVariableRegisterCount(const Varying &variable, bool transposeMatrices);
+COMPILER_EXPORT unsigned int HLSLVariableRegisterCount(const Uniform &variable, ShShaderOutput outputType);
 
 }
 

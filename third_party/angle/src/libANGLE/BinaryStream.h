@@ -13,9 +13,9 @@
 #include "common/mathutil.h"
 
 #include <cstddef>
-#include <stdint.h>
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 template <typename T>
 void StaticAssertIsFundamental()
@@ -24,18 +24,18 @@ void StaticAssertIsFundamental()
 #if !defined(ANGLE_PLATFORM_APPLE) && !defined(ANGLE_PLATFORM_ANDROID)
     static_assert(std::is_fundamental<T>::value, "T must be a fundamental type.");
 #else
-    union {
-        T dummy;
-    } dummy;
+    union { T dummy; } dummy;
     static_cast<void>(dummy);
 #endif
 }
 
-namespace gl {
+namespace gl
+{
 
-class BinaryInputStream : angle::NonCopyable {
-public:
-    BinaryInputStream(const void* data, size_t length)
+class BinaryInputStream : angle::NonCopyable
+{
+  public:
+    BinaryInputStream(const void *data, size_t length)
     {
         mError = false;
         mOffset = 0;
@@ -53,7 +53,7 @@ public:
     }
 
     template <class IntT>
-    void readInt(IntT* outValue)
+    void readInt(IntT *outValue)
     {
         *outValue = readInt<IntT>();
     }
@@ -65,7 +65,7 @@ public:
         return (value > 0);
     }
 
-    void readBool(bool* outValue)
+    void readBool(bool *outValue)
     {
         *outValue = readBool();
     }
@@ -82,27 +82,30 @@ public:
         return outString;
     }
 
-    void readString(std::string* v)
+    void readString(std::string *v)
     {
         size_t length;
         readInt(&length);
 
-        if (mError) {
+        if (mError)
+        {
             return;
         }
 
-        if (!rx::IsUnsignedAdditionSafe(mOffset, length) || mOffset + length > mLength) {
+        if (mOffset + length > mLength)
+        {
             mError = true;
             return;
         }
 
-        v->assign(reinterpret_cast<const char*>(mData) + mOffset, length);
+        v->assign(reinterpret_cast<const char *>(mData) + mOffset, length);
         mOffset += length;
     }
 
     void skip(size_t length)
     {
-        if (!rx::IsUnsignedAdditionSafe(mOffset, length) || mOffset + length > mLength) {
+        if (mOffset + length > mLength)
+        {
             mError = true;
             return;
         }
@@ -125,30 +128,26 @@ public:
         return mOffset == mLength;
     }
 
-    const uint8_t* data()
+    const uint8_t *data()
     {
         return mData;
     }
 
-private:
+  private:
     bool mError;
     size_t mOffset;
-    const uint8_t* mData;
+    const uint8_t *mData;
     size_t mLength;
 
     template <typename T>
-    void read(T* v, size_t num)
+    void read(T *v, size_t num)
     {
         StaticAssertIsFundamental<T>();
 
-        if (!rx::IsUnsignedMultiplicationSafe(num, sizeof(T))) {
-            mError = true;
-            return;
-        }
-
         size_t length = num * sizeof(T);
 
-        if (!rx::IsUnsignedAdditionSafe(mOffset, length) || mOffset + length > mLength) {
+        if (mOffset + length > mLength)
+        {
             mError = true;
             return;
         }
@@ -158,14 +157,16 @@ private:
     }
 
     template <typename T>
-    void read(T* v)
+    void read(T *v)
     {
         read(v, 1);
     }
+
 };
 
-class BinaryOutputStream : angle::NonCopyable {
-public:
+class BinaryOutputStream : angle::NonCopyable
+{
+  public:
     BinaryOutputStream()
     {
     }
@@ -179,13 +180,13 @@ public:
         write(&intValue, 1);
     }
 
-    void writeString(const std::string& v)
+    void writeString(const std::string &v)
     {
         writeInt(v.length());
         write(v.c_str(), v.length());
     }
 
-    void writeBytes(const unsigned char* bytes, size_t count)
+    void writeBytes(const unsigned char *bytes, size_t count)
     {
         write(bytes, count);
     }
@@ -200,17 +201,18 @@ public:
         return mData.size() ? &mData[0] : NULL;
     }
 
-private:
+  private:
     std::vector<char> mData;
 
     template <typename T>
-    void write(const T* v, size_t num)
+    void write(const T *v, size_t num)
     {
         StaticAssertIsFundamental<T>();
-        const char* asBytes = reinterpret_cast<const char*>(v);
+        const char *asBytes = reinterpret_cast<const char*>(v);
         mData.insert(mData.end(), asBytes, asBytes + num * sizeof(T));
     }
+
 };
 }
 
-#endif // LIBANGLE_BINARYSTREAM_H_
+#endif  // LIBANGLE_BINARYSTREAM_H_

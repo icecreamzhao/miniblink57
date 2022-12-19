@@ -12,14 +12,16 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/TextureImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 class BlitGL;
 class FunctionsGL;
 class StateManagerGL;
 struct WorkaroundsGL;
 
-struct LUMAWorkaroundGL {
+struct LUMAWorkaroundGL
+{
     bool enabled;
     GLenum workaroundFormat;
 
@@ -29,7 +31,8 @@ struct LUMAWorkaroundGL {
 
 // Structure containing information about format and workarounds for each mip level of the
 // TextureGL.
-struct LevelInfoGL {
+struct LevelInfoGL
+{
     // Format of the data used in this mip level.
     GLenum sourceFormat;
 
@@ -41,61 +44,62 @@ struct LevelInfoGL {
 
     LevelInfoGL();
     LevelInfoGL(GLenum sourceFormat,
-        bool depthStencilWorkaround,
-        const LUMAWorkaroundGL& lumaWorkaround);
+                bool depthStencilWorkaround,
+                const LUMAWorkaroundGL &lumaWorkaround);
 };
 
-class TextureGL : public TextureImpl {
-public:
+class TextureGL : public TextureImpl
+{
+  public:
     TextureGL(GLenum type,
-        const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        StateManagerGL* stateManager,
-        BlitGL* blitter);
+              const FunctionsGL *functions,
+              const WorkaroundsGL &workarounds,
+              StateManagerGL *stateManager,
+              BlitGL *blitter);
     ~TextureGL() override;
 
     void setUsage(GLenum usage) override;
 
-    gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents& size, GLenum format, GLenum type,
-        const gl::PixelUnpackState& unpack, const uint8_t* pixels) override;
-    gl::Error setSubImage(GLenum target, size_t level, const gl::Box& area, GLenum format, GLenum type,
-        const gl::PixelUnpackState& unpack, const uint8_t* pixels) override;
+    gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
+                       const gl::PixelUnpackState &unpack, const uint8_t *pixels) override;
+    gl::Error setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
+                          const gl::PixelUnpackState &unpack, const uint8_t *pixels) override;
 
-    gl::Error setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents& size,
-        const gl::PixelUnpackState& unpack, size_t imageSize, const uint8_t* pixels) override;
-    gl::Error setCompressedSubImage(GLenum target, size_t level, const gl::Box& area, GLenum format,
-        const gl::PixelUnpackState& unpack, size_t imageSize, const uint8_t* pixels) override;
+    gl::Error setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size,
+                                 const gl::PixelUnpackState &unpack, size_t imageSize, const uint8_t *pixels) override;
+    gl::Error setCompressedSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format,
+                                    const gl::PixelUnpackState &unpack, size_t imageSize, const uint8_t *pixels) override;
 
-    gl::Error copyImage(GLenum target, size_t level, const gl::Rectangle& sourceArea, GLenum internalFormat,
-        const gl::Framebuffer* source) override;
-    gl::Error copySubImage(GLenum target, size_t level, const gl::Offset& destOffset, const gl::Rectangle& sourceArea,
-        const gl::Framebuffer* source) override;
+    gl::Error copyImage(GLenum target, size_t level, const gl::Rectangle &sourceArea, GLenum internalFormat,
+                        const gl::Framebuffer *source) override;
+    gl::Error copySubImage(GLenum target, size_t level, const gl::Offset &destOffset, const gl::Rectangle &sourceArea,
+                           const gl::Framebuffer *source) override;
 
-    gl::Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents& size) override;
+    gl::Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size) override;
 
-    gl::Error generateMipmaps(const gl::TextureState& textureState) override;
+    gl::Error generateMipmaps(const gl::TextureState &textureState) override;
 
-    void bindTexImage(egl::Surface* surface) override;
+    void bindTexImage(egl::Surface *surface) override;
     void releaseTexImage() override;
 
-    gl::Error setEGLImageTarget(GLenum target, egl::Image* image) override;
+    gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
 
-    void syncState(size_t textureUnit, const gl::TextureState& textureState) const;
+    void syncState(size_t textureUnit, const gl::TextureState &textureState) const;
     GLuint getTextureID() const;
 
-    gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target& target,
-        FramebufferAttachmentRenderTarget** rtOut) override
+    gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
+                                        FramebufferAttachmentRenderTarget **rtOut) override
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Not supported on OpenGL");
     }
 
-private:
+  private:
     GLenum mTextureType;
 
-    const FunctionsGL* mFunctions;
-    const WorkaroundsGL& mWorkarounds;
-    StateManagerGL* mStateManager;
-    BlitGL* mBlitter;
+    const FunctionsGL *mFunctions;
+    const WorkaroundsGL &mWorkarounds;
+    StateManagerGL *mStateManager;
+    BlitGL *mBlitter;
 
     std::vector<LevelInfoGL> mLevelInfo;
 

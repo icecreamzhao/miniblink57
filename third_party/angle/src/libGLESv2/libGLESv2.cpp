@@ -12,7 +12,8 @@
 
 #include "common/event_tracer.h"
 
-extern "C" {
+extern "C"
+{
 
 void GL_APIENTRY glActiveTexture(GLenum texture)
 {
@@ -959,7 +960,7 @@ void GL_APIENTRY glGetUniformuiv(GLuint program, GLint location, GLuint* params)
     return gl::GetUniformuiv(program, location, params);
 }
 
-GLint GL_APIENTRY glGetFragDataLocation(GLuint program, const GLchar* name)
+GLint GL_APIENTRY glGetFragDataLocation(GLuint program, const GLchar *name)
 {
     return gl::GetFragDataLocation(program, name);
 }
@@ -1254,7 +1255,7 @@ void GL_APIENTRY glRenderbufferStorageMultisampleANGLE(GLenum target, GLsizei sa
     return gl::RenderbufferStorageMultisampleANGLE(target, samples, internalformat, width, height);
 }
 
-void GL_APIENTRY glDiscardFramebufferEXT(GLenum target, GLsizei numAttachments, const GLenum* attachments)
+void GL_APIENTRY glDiscardFramebufferEXT(GLenum target, GLsizei numAttachments, const GLenum *attachments)
 {
     return gl::DiscardFramebufferEXT(target, numAttachments, attachments);
 }
@@ -1279,7 +1280,7 @@ GLboolean GL_APIENTRY glTestFenceNV(GLuint fence)
     return gl::TestFenceNV(fence);
 }
 
-void GL_APIENTRY glGetFenceivNV(GLuint fence, GLenum pname, GLint* params)
+void GL_APIENTRY glGetFenceivNV(GLuint fence, GLenum pname, GLint *params)
 {
     return gl::GetFenceivNV(fence, pname, params);
 }
@@ -1294,7 +1295,7 @@ void GL_APIENTRY glSetFenceNV(GLuint fence, GLenum condition)
     return gl::SetFenceNV(fence, condition);
 }
 
-void GL_APIENTRY glGetTranslatedShaderSourceANGLE(GLuint shader, GLsizei bufsize, GLsizei* length, GLchar* source)
+void GL_APIENTRY glGetTranslatedShaderSourceANGLE(GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *source)
 {
     return gl::GetTranslatedShaderSourceANGLE(shader, bufsize, length, source);
 }
@@ -1309,27 +1310,27 @@ GLenum GL_APIENTRY glGetGraphicsResetStatusEXT(void)
     return gl::GetGraphicsResetStatusEXT();
 }
 
-void GL_APIENTRY glReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void* data)
+void GL_APIENTRY glReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void *data)
 {
     return gl::ReadnPixelsEXT(x, y, width, height, format, type, bufSize, data);
 }
 
-void GL_APIENTRY glGetnUniformfvEXT(GLuint program, GLint location, GLsizei bufSize, float* params)
+void GL_APIENTRY glGetnUniformfvEXT(GLuint program, GLint location, GLsizei bufSize, float *params)
 {
     return gl::GetnUniformfvEXT(program, location, bufSize, params);
 }
 
-void GL_APIENTRY glGetnUniformivEXT(GLuint program, GLint location, GLsizei bufSize, GLint* params)
+void GL_APIENTRY glGetnUniformivEXT(GLuint program, GLint location, GLsizei bufSize, GLint *params)
 {
     return gl::GetnUniformivEXT(program, location, bufSize, params);
 }
 
-void GL_APIENTRY glGenQueriesEXT(GLsizei n, GLuint* ids)
+void GL_APIENTRY glGenQueriesEXT(GLsizei n, GLuint *ids)
 {
     return gl::GenQueriesEXT(n, ids);
 }
 
-void GL_APIENTRY glDeleteQueriesEXT(GLsizei n, const GLuint* ids)
+void GL_APIENTRY glDeleteQueriesEXT(GLsizei n, const GLuint *ids)
 {
     return gl::DeleteQueriesEXT(n, ids);
 }
@@ -1349,37 +1350,17 @@ void GL_APIENTRY glEndQueryEXT(GLenum target)
     return gl::EndQueryEXT(target);
 }
 
-void GL_APIENTRY glQueryCounterEXT(GLuint id, GLenum target)
-{
-    return gl::QueryCounterEXT(id, target);
-}
-
-void GL_APIENTRY glGetQueryivEXT(GLenum target, GLenum pname, GLint* params)
+void GL_APIENTRY glGetQueryivEXT(GLenum target, GLenum pname, GLint *params)
 {
     return gl::GetQueryivEXT(target, pname, params);
 }
 
-void GL_APIENTRY glGetQueryObjectivEXT(GLuint id, GLenum pname, GLint* params)
-{
-    return gl::GetQueryObjectivEXT(id, pname, params);
-}
-
-void GL_APIENTRY glGetQueryObjectuivEXT(GLuint id, GLenum pname, GLuint* params)
+void GL_APIENTRY glGetQueryObjectuivEXT(GLuint id, GLenum pname, GLuint *params)
 {
     return gl::GetQueryObjectuivEXT(id, pname, params);
 }
 
-void GL_APIENTRY glGetQueryObjecti64vEXT(GLuint id, GLenum pname, GLint64* params)
-{
-    return gl::GetQueryObjecti64vEXT(id, pname, params);
-}
-
-void GL_APIENTRY glGetQueryObjectui64vEXT(GLuint id, GLenum pname, GLuint64* params)
-{
-    return gl::GetQueryObjectui64vEXT(id, pname, params);
-}
-
-void GL_APIENTRY glDrawBuffersEXT(GLsizei n, const GLenum* bufs)
+void GL_APIENTRY glDrawBuffersEXT(GLsizei n, const GLenum *bufs)
 {
     return gl::DrawBuffersEXT(n, bufs);
 }
@@ -1389,7 +1370,7 @@ void GL_APIENTRY glDrawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei co
     return gl::DrawArraysInstancedANGLE(mode, first, count, primcount);
 }
 
-void GL_APIENTRY glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, const void* indices, GLsizei primcount)
+void GL_APIENTRY glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount)
 {
     return gl::DrawElementsInstancedANGLE(mode, count, type, indices, primcount);
 }
@@ -1399,12 +1380,12 @@ void GL_APIENTRY glVertexAttribDivisorANGLE(GLuint index, GLuint divisor)
     return gl::VertexAttribDivisorANGLE(index, divisor);
 }
 
-void GL_APIENTRY glGetProgramBinaryOES(GLuint program, GLsizei bufSize, GLsizei* length, GLenum* binaryFormat, GLvoid* binary)
+void GL_APIENTRY glGetProgramBinaryOES(GLuint program, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, GLvoid *binary)
 {
     return gl::GetProgramBinaryOES(program, bufSize, length, binaryFormat, binary);
 }
 
-void GL_APIENTRY glProgramBinaryOES(GLuint program, GLenum binaryFormat, const GLvoid* binary, GLint length)
+void GL_APIENTRY glProgramBinaryOES(GLuint program, GLenum binaryFormat, const GLvoid *binary, GLint length)
 {
     return gl::ProgramBinaryOES(program, binaryFormat, binary, length);
 }
@@ -1419,7 +1400,7 @@ GLboolean GL_APIENTRY glUnmapBufferOES(GLenum target)
     return gl::UnmapBufferOES(target);
 }
 
-void GL_APIENTRY glGetBufferPointervOES(GLenum target, GLenum pname, GLvoid** params)
+void GL_APIENTRY glGetBufferPointervOES(GLenum target, GLenum pname, GLvoid **params)
 {
     return gl::GetBufferPointervOES(target, pname, params);
 }
@@ -1434,12 +1415,12 @@ void GL_APIENTRY glFlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLs
     return gl::FlushMappedBufferRangeEXT(target, offset, length);
 }
 
-void GL_APIENTRY glInsertEventMarkerEXT(GLsizei length, const char* marker)
+void GL_APIENTRY glInsertEventMarkerEXT(GLsizei length, const char *marker)
 {
     return gl::InsertEventMarkerEXT(length, marker);
 }
 
-void GL_APIENTRY glPushGroupMarkerEXT(GLsizei length, const char* marker)
+void GL_APIENTRY glPushGroupMarkerEXT(GLsizei length, const char *marker)
 {
     return gl::PushGroupMarkerEXT(length, marker);
 }
@@ -1464,12 +1445,12 @@ void GL_APIENTRY glBindVertexArrayOES(GLuint array)
     return gl::BindVertexArrayOES(array);
 }
 
-void GL_APIENTRY glDeleteVertexArraysOES(GLsizei n, const GLuint* arrays)
+void GL_APIENTRY glDeleteVertexArraysOES(GLsizei n, const GLuint *arrays)
 {
     return gl::DeleteVertexArraysOES(n, arrays);
 }
 
-void GL_APIENTRY glGenVertexArraysOES(GLsizei n, GLuint* arrays)
+void GL_APIENTRY glGenVertexArraysOES(GLsizei n, GLuint *arrays)
 {
     return gl::GenVertexArraysOES(n, arrays);
 }
@@ -1477,88 +1458,5 @@ void GL_APIENTRY glGenVertexArraysOES(GLsizei n, GLuint* arrays)
 GLboolean GL_APIENTRY glIsVertexArrayOES(GLuint array)
 {
     return gl::IsVertexArrayOES(array);
-}
-
-void GL_APIENTRY glDebugMessageControlKHR(GLenum source,
-    GLenum type,
-    GLenum severity,
-    GLsizei count,
-    const GLuint* ids,
-    GLboolean enabled)
-{
-    return gl::DebugMessageControlKHR(source, type, severity, count, ids, enabled);
-}
-
-void GL_APIENTRY glDebugMessageInsertKHR(GLenum source,
-    GLenum type,
-    GLuint id,
-    GLenum severity,
-    GLsizei length,
-    const GLchar* buf)
-{
-    return gl::DebugMessageInsertKHR(source, type, id, severity, length, buf);
-}
-
-void GL_APIENTRY glDebugMessageCallbackKHR(GLDEBUGPROCKHR callback, const void* userParam)
-{
-    return gl::DebugMessageCallbackKHR(callback, userParam);
-}
-
-GLuint GL_APIENTRY glGetDebugMessageLogKHR(GLuint count,
-    GLsizei bufSize,
-    GLenum* sources,
-    GLenum* types,
-    GLuint* ids,
-    GLenum* severities,
-    GLsizei* lengths,
-    GLchar* messageLog)
-{
-    return gl::GetDebugMessageLogKHR(count, bufSize, sources, types, ids, severities, lengths,
-        messageLog);
-}
-
-void GL_APIENTRY glPushDebugGroupKHR(GLenum source,
-    GLuint id,
-    GLsizei length,
-    const GLchar* message)
-{
-    return gl::PushDebugGroupKHR(source, id, length, message);
-}
-
-void GL_APIENTRY glPopDebugGroupKHR(void)
-{
-    return gl::PopDebugGroupKHR();
-}
-
-void GL_APIENTRY glObjectLabelKHR(GLenum identifier,
-    GLuint name,
-    GLsizei length,
-    const GLchar* label)
-{
-    return gl::ObjectLabelKHR(identifier, name, length, label);
-}
-
-void GL_APIENTRY
-glGetObjectLabelKHR(GLenum identifier, GLuint name, GLsizei bufSize, GLsizei* length, GLchar* label)
-{
-    return gl::GetObjectLabelKHR(identifier, name, bufSize, length, label);
-}
-
-void GL_APIENTRY glObjectPtrLabelKHR(const void* ptr, GLsizei length, const GLchar* label)
-{
-    return gl::ObjectPtrLabelKHR(ptr, length, label);
-}
-
-void GL_APIENTRY glGetObjectPtrLabelKHR(const void* ptr,
-    GLsizei bufSize,
-    GLsizei* length,
-    GLchar* label)
-{
-    return gl::GetObjectPtrLabelKHR(ptr, bufSize, length, label);
-}
-
-void GL_APIENTRY glGetPointervKHR(GLenum pname, void** params)
-{
-    return gl::GetPointervKHR(pname, params);
 }
 }

@@ -7,21 +7,23 @@
 #ifndef COMPILER_PREPROCESSOR_SOURCELOCATION_H_
 #define COMPILER_PREPROCESSOR_SOURCELOCATION_H_
 
-namespace pp {
+namespace pp
+{
 
-struct SourceLocation {
+struct SourceLocation
+{
     SourceLocation()
-        : file(0)
-        , line(0)
+        : file(0),
+          line(0)
     {
     }
     SourceLocation(int f, int l)
-        : file(f)
-        , line(l)
+        : file(f),
+          line(l)
     {
     }
 
-    bool equals(const SourceLocation& other) const
+    bool equals(const SourceLocation &other) const
     {
         return (file == other.file) && (line == other.line);
     }
@@ -30,16 +32,16 @@ struct SourceLocation {
     int line;
 };
 
-inline bool operator==(const SourceLocation& lhs, const SourceLocation& rhs)
+inline bool operator==(const SourceLocation &lhs, const SourceLocation &rhs)
 {
     return lhs.equals(rhs);
 }
 
-inline bool operator!=(const SourceLocation& lhs, const SourceLocation& rhs)
+inline bool operator!=(const SourceLocation &lhs, const SourceLocation &rhs)
 {
     return !lhs.equals(rhs);
 }
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_SOURCELOCATION_H_
+#endif  // COMPILER_PREPROCESSOR_SOURCELOCATION_H_

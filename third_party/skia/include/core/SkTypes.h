@@ -18,10 +18,6 @@
 
 #include <string.h>
 
-#ifndef MINIBLINK_NOT_IMPLEMENTED
-#define constexpr
-#endif
-
 /**
  *  sk_careful_memcpy() is just like memcpy(), but guards against undefined behavior.
  *

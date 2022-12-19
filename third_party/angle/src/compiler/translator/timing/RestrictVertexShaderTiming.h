@@ -7,8 +7,8 @@
 #ifndef COMPILER_TRANSLATOR_TIMING_RESTRICTVERTEXSHADERTIMING_H_
 #define COMPILER_TRANSLATOR_TIMING_RESTRICTVERTEXSHADERTIMING_H_
 
-#include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
+#include "compiler/translator/InfoSink.h"
 
 class TInfoSinkBase;
 
@@ -17,18 +17,16 @@ public:
     RestrictVertexShaderTiming(TInfoSinkBase& sink)
         : TIntermTraverser(true, false, false)
         , mSink(sink)
-        , mNumErrors(0)
-    {
-    }
+        , mNumErrors(0) {}
 
     void enforceRestrictions(TIntermNode* root) { root->traverse(this); }
     int numErrors() { return mNumErrors; }
 
-    void visitSymbol(TIntermSymbol*) override;
+    void visitSymbol(TIntermSymbol *) override;
 
 private:
     TInfoSinkBase& mSink;
     int mNumErrors;
 };
 
-#endif // COMPILER_TRANSLATOR_TIMING_RESTRICTVERTEXSHADERTIMING_H_
+#endif  // COMPILER_TRANSLATOR_TIMING_RESTRICTVERTEXSHADERTIMING_H_

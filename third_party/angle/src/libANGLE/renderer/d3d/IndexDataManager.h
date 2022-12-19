@@ -17,15 +17,18 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 
-namespace {
-enum { INITIAL_INDEX_BUFFER_SIZE = 4096 * sizeof(GLuint) };
+namespace
+{
+    enum { INITIAL_INDEX_BUFFER_SIZE = 4096 * sizeof(GLuint) };
 }
 
-namespace gl {
+namespace gl
+{
 class Buffer;
 }
 
-namespace rx {
+namespace rx
+{
 class IndexBufferInterface;
 class StaticIndexBufferInterface;
 class StreamingIndexBufferInterface;
@@ -33,55 +36,57 @@ class IndexBuffer;
 class BufferD3D;
 class RendererD3D;
 
-struct SourceIndexData {
-    BufferD3D* srcBuffer;
-    const GLvoid* srcIndices;
+struct TranslatedIndexData
+{
+    gl::IndexRange indexRange;
+    unsigned int startIndex;
+    unsigned int startOffset;   // In bytes
+
+    IndexBuffer *indexBuffer;
+    BufferD3D *storage;
+    GLenum indexType;
+    unsigned int serial;
+};
+
+struct SourceIndexData
+{
+    BufferD3D *srcBuffer;
+    const GLvoid *srcIndices;
     unsigned int srcCount;
     GLenum srcIndexType;
     bool srcIndicesChanged;
 };
 
-struct TranslatedIndexData {
-    gl::IndexRange indexRange;
-    unsigned int startIndex;
-    unsigned int startOffset; // In bytes
-
-    IndexBuffer* indexBuffer;
-    BufferD3D* storage;
-    GLenum indexType;
-    unsigned int serial;
-
-    SourceIndexData srcIndexData;
-};
-
-class IndexDataManager : angle::NonCopyable {
-public:
-    explicit IndexDataManager(BufferFactoryD3D* factory, RendererClass rendererClass);
+class IndexDataManager : angle::NonCopyable
+{
+  public:
+    explicit IndexDataManager(BufferFactoryD3D *factory, RendererClass rendererClass);
     virtual ~IndexDataManager();
 
     gl::Error prepareIndexData(GLenum srcType,
-        GLsizei count,
-        gl::Buffer* glBuffer,
-        const GLvoid* indices,
-        TranslatedIndexData* translated,
-        bool primitiveRestartFixedIndexEnabled);
+                               GLsizei count,
+                               gl::Buffer *glBuffer,
+                               const GLvoid *indices,
+                               TranslatedIndexData *translated,
+                               SourceIndexData *sourceData,
+                               bool primitiveRestartFixedIndexEnabled);
 
-private:
-    gl::Error streamIndexData(const GLvoid* data,
-        unsigned int count,
-        GLenum srcType,
-        GLenum dstType,
-        bool usePrimitiveRestartFixedIndex,
-        TranslatedIndexData* translated);
+  private:
+    gl::Error streamIndexData(const GLvoid *data,
+                              unsigned int count,
+                              GLenum srcType,
+                              GLenum dstType,
+                              bool usePrimitiveRestartFixedIndex,
+                              TranslatedIndexData *translated);
     gl::Error getStreamingIndexBuffer(GLenum destinationIndexType,
-        IndexBufferInterface** outBuffer);
+                                      IndexBufferInterface **outBuffer);
 
-    BufferFactoryD3D* const mFactory;
+    BufferFactoryD3D *const mFactory;
     RendererClass mRendererClass;
-    StreamingIndexBufferInterface* mStreamingBufferShort;
-    StreamingIndexBufferInterface* mStreamingBufferInt;
+    StreamingIndexBufferInterface *mStreamingBufferShort;
+    StreamingIndexBufferInterface *mStreamingBufferInt;
 };
 
 }
 
-#endif // LIBANGLE_INDEXDATAMANAGER_H_
+#endif   // LIBANGLE_INDEXDATAMANAGER_H_

@@ -25,7 +25,8 @@
 #define _STAT_VER		_STAT_VER_LINUX
 
 void* __libc_stack_end;
-HMODULE g_hModule = NULL;
+
+extern HMODULE g_hModule;
 
 namespace base {
 namespace win {

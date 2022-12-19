@@ -17,21 +17,24 @@
 #include <GLES2/gl2.h>
 #include <stdint.h>
 
-namespace gl {
+namespace gl
+{
 struct ImageIndex;
 struct Box;
 struct PixelUnpackState;
 }
 
-namespace rx {
+namespace rx
+{
 class SwapChainD3D;
 class RenderTargetD3D;
 class ImageD3D;
 
-class TextureStorage : angle::NonCopyable {
-public:
-    TextureStorage() { }
-    virtual ~TextureStorage() { }
+class TextureStorage : angle::NonCopyable
+{
+  public:
+    TextureStorage() {}
+    virtual ~TextureStorage() {}
 
     virtual int getTopLevel() const = 0;
     virtual bool isRenderTarget() const = 0;
@@ -39,13 +42,12 @@ public:
     virtual bool supportsNativeMipmapFunction() const = 0;
     virtual int getLevelCount() const = 0;
 
-    virtual gl::Error getRenderTarget(const gl::ImageIndex& index, RenderTargetD3D** outRT) = 0;
-    virtual gl::Error generateMipmap(const gl::ImageIndex& sourceIndex, const gl::ImageIndex& destIndex) = 0;
+    virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT) = 0;
+    virtual gl::Error generateMipmap(const gl::ImageIndex &sourceIndex, const gl::ImageIndex &destIndex) = 0;
 
-    virtual gl::Error copyToStorage(TextureStorage* destStorage) = 0;
-    virtual gl::Error setData(const gl::ImageIndex& index, ImageD3D* image, const gl::Box* destBox, GLenum type,
-        const gl::PixelUnpackState& unpack, const uint8_t* pixelData)
-        = 0;
+    virtual gl::Error copyToStorage(TextureStorage *destStorage) = 0;
+    virtual gl::Error setData(const gl::ImageIndex &index, ImageD3D *image, const gl::Box *destBox, GLenum type,
+                              const gl::PixelUnpackState &unpack, const uint8_t *pixelData) = 0;
 
     // This is a no-op for most implementations of TextureStorage. Some (e.g. TextureStorage11_2D) might override it.
     virtual gl::Error useLevelZeroWorkaroundTexture(bool useLevelZeroTexture) { return gl::Error(GL_NO_ERROR); }

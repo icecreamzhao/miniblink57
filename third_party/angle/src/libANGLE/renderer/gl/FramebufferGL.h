@@ -11,74 +11,69 @@
 
 #include "libANGLE/renderer/FramebufferImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsGL;
 class StateManagerGL;
 struct WorkaroundsGL;
 
-class FramebufferGL : public FramebufferImpl {
-public:
-    FramebufferGL(const gl::Framebuffer::Data& data,
-        const FunctionsGL* functions,
-        StateManagerGL* stateManager,
-        const WorkaroundsGL& workarounds,
-        bool isDefault);
+class FramebufferGL : public FramebufferImpl
+{
+  public:
+    FramebufferGL(const gl::Framebuffer::Data &data,
+                  const FunctionsGL *functions,
+                  StateManagerGL *stateManager,
+                  const WorkaroundsGL &workarounds,
+                  bool isDefault);
     // Constructor called when we need to create a FramebufferGL from an
     // existing framebuffer name, for example for the default framebuffer
     // on the Mac EGL CGL backend.
     FramebufferGL(GLuint id,
-        const gl::Framebuffer::Data& data,
-        const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        StateManagerGL* stateManager);
+                  const gl::Framebuffer::Data &data,
+                  const FunctionsGL *functions,
+                  const WorkaroundsGL &workarounds,
+                  StateManagerGL *stateManager);
     ~FramebufferGL() override;
 
-    gl::Error discard(size_t count, const GLenum* attachments) override;
-    gl::Error invalidate(size_t count, const GLenum* attachments) override;
-    gl::Error invalidateSub(size_t count, const GLenum* attachments, const gl::Rectangle& area) override;
+    void onUpdateColorAttachment(size_t index) override;
+    void onUpdateDepthAttachment() override;
+    void onUpdateStencilAttachment() override;
+    void onUpdateDepthStencilAttachment() override;
 
-    gl::Error clear(const gl::Data& data, GLbitfield mask) override;
-    gl::Error clearBufferfv(const gl::Data& data,
-        GLenum buffer,
-        GLint drawbuffer,
-        const GLfloat* values) override;
-    gl::Error clearBufferuiv(const gl::Data& data,
-        GLenum buffer,
-        GLint drawbuffer,
-        const GLuint* values) override;
-    gl::Error clearBufferiv(const gl::Data& data,
-        GLenum buffer,
-        GLint drawbuffer,
-        const GLint* values) override;
-    gl::Error clearBufferfi(const gl::Data& data,
-        GLenum buffer,
-        GLint drawbuffer,
-        GLfloat depth,
-        GLint stencil) override;
+    void setDrawBuffers(size_t count, const GLenum *buffers) override;
+    void setReadBuffer(GLenum buffer) override;
+
+    gl::Error discard(size_t count, const GLenum *attachments) override;
+    gl::Error invalidate(size_t count, const GLenum *attachments) override;
+    gl::Error invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area) override;
+
+    gl::Error clear(const gl::Data &data, GLbitfield mask) override;
+    gl::Error clearBufferfv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values) override;
+    gl::Error clearBufferuiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLuint *values) override;
+    gl::Error clearBufferiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLint *values) override;
+    gl::Error clearBufferfi(const gl::State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) override;
 
     GLenum getImplementationColorReadFormat() const override;
     GLenum getImplementationColorReadType() const override;
-    gl::Error readPixels(const gl::State& state, const gl::Rectangle& area, GLenum format, GLenum type, GLvoid* pixels) const override;
+    gl::Error readPixels(const gl::State &state, const gl::Rectangle &area, GLenum format, GLenum type, GLvoid *pixels) const override;
 
-    gl::Error blit(const gl::State& state, const gl::Rectangle& sourceArea, const gl::Rectangle& destArea,
-        GLbitfield mask, GLenum filter, const gl::Framebuffer* sourceFramebuffer) override;
+    gl::Error blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
+                   GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer) override;
 
-    bool checkStatus() const override;
-
-    void syncState(const gl::Framebuffer::DirtyBits& dirtyBits) override;
+    GLenum checkStatus() const override;
 
     void syncDrawState() const;
 
     GLuint getFramebufferID() const;
 
-private:
+  private:
     void syncClearState(GLbitfield mask);
     void syncClearBufferState(GLenum buffer, GLint drawBuffer);
 
-    const FunctionsGL* mFunctions;
-    StateManagerGL* mStateManager;
-    const WorkaroundsGL& mWorkarounds;
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
+    const WorkaroundsGL &mWorkarounds;
 
     GLuint mFramebufferID;
     bool mIsDefault;

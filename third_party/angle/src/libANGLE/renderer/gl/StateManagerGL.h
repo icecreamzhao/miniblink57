@@ -17,21 +17,24 @@
 
 #include <map>
 
-namespace gl {
+namespace gl
+{
 struct Caps;
 struct Data;
 class State;
 }
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsGL;
 class TransformFeedbackGL;
 class QueryGL;
 
-class StateManagerGL final : angle::NonCopyable {
-public:
-    StateManagerGL(const FunctionsGL* functions, const gl::Caps& rendererCaps);
+class StateManagerGL final : angle::NonCopyable
+{
+  public:
+    StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps);
 
     void deleteProgram(GLuint program);
     void deleteVertexArray(GLuint vao);
@@ -56,22 +59,21 @@ public:
     void bindTransformFeedback(GLenum type, GLuint transformFeedback);
     void beginQuery(GLenum type, GLuint query);
     void endQuery(GLenum type, GLuint query);
-    void onBeginQuery(QueryGL* query);
 
-    void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData& data);
+    void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
 
     void setScissorTestEnabled(bool enabled);
-    void setScissor(const gl::Rectangle& scissor);
+    void setScissor(const gl::Rectangle &scissor);
 
-    void setViewport(const gl::Rectangle& viewport);
+    void setViewport(const gl::Rectangle &viewport);
     void setDepthRange(float near, float far);
 
     void setBlendEnabled(bool enabled);
-    void setBlendColor(const gl::ColorF& blendColor);
+    void setBlendColor(const gl::ColorF &blendColor);
     void setBlendFuncs(GLenum sourceBlendRGB,
-        GLenum destBlendRGB,
-        GLenum sourceBlendAlpha,
-        GLenum destBlendAlpha);
+                       GLenum destBlendRGB,
+                       GLenum sourceBlendAlpha,
+                       GLenum destBlendAlpha);
     void setBlendEquations(GLenum blendEquationRGB, GLenum blendEquationAlpha);
     void setColorMask(bool red, bool green, bool blue, bool alpha);
     void setSampleAlphaToCoverageEnabled(bool enabled);
@@ -99,50 +101,48 @@ public:
 
     void setPrimitiveRestartEnabled(bool enabled);
 
-    void setClearColor(const gl::ColorF& clearColor);
+    void setClearColor(const gl::ColorF &clearColor);
     void setClearDepth(float clearDepth);
     void setClearStencil(GLint clearStencil);
 
-    void setPixelUnpackState(const gl::PixelUnpackState& unpack);
+    void setPixelUnpackState(const gl::PixelUnpackState &unpack);
     void setPixelUnpackState(GLint alignment,
-        GLint rowLength,
-        GLint skipRows,
-        GLint skipPixels,
-        GLint imageHeight,
-        GLint skipImages,
-        GLuint unpackBuffer);
-    void setPixelPackState(const gl::PixelPackState& pack);
+                             GLint rowLength,
+                             GLint skipRows,
+                             GLint skipPixels,
+                             GLint imageHeight,
+                             GLint skipImages,
+                             GLuint unpackBuffer);
+    void setPixelPackState(const gl::PixelPackState &pack);
     void setPixelPackState(GLint alignment,
-        GLint rowLength,
-        GLint skipRows,
-        GLint skipPixels,
-        GLuint packBuffer);
+                           GLint rowLength,
+                           GLint skipRows,
+                           GLint skipPixels,
+                           GLuint packBuffer);
 
     void setFramebufferSRGBEnabled(bool enabled);
 
-    void onDeleteQueryObject(QueryGL* query);
+    void onDeleteQueryObject(QueryGL *query);
 
-    gl::Error setDrawArraysState(const gl::Data& data,
-        GLint first,
-        GLsizei count,
-        GLsizei instanceCount);
-    gl::Error setDrawElementsState(const gl::Data& data,
-        GLsizei count,
-        GLenum type,
-        const GLvoid* indices,
-        GLsizei instanceCount,
-        const GLvoid** outIndices);
+    gl::Error setDrawArraysState(const gl::Data &data,
+                                 GLint first,
+                                 GLsizei count,
+                                 GLsizei instanceCount);
+    gl::Error setDrawElementsState(const gl::Data &data,
+                                   GLsizei count,
+                                   GLenum type,
+                                   const GLvoid *indices,
+                                   GLsizei instanceCount,
+                                   const GLvoid **outIndices);
 
-    gl::Error onMakeCurrent(const gl::Data& data);
+    void syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits);
 
-    void syncState(const gl::State& state, const gl::State::DirtyBits& glDirtyBits);
-
-private:
-    gl::Error setGenericDrawState(const gl::Data& data);
+  private:
+    gl::Error setGenericDrawState(const gl::Data &data);
 
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
-    const FunctionsGL* mFunctions;
+    const FunctionsGL *mFunctions;
 
     GLuint mProgram;
 
@@ -151,7 +151,8 @@ private:
 
     std::map<GLenum, GLuint> mBuffers;
 
-    struct IndexedBufferBinding {
+    struct IndexedBufferBinding
+    {
         IndexedBufferBinding();
 
         size_t offset;
@@ -168,8 +169,8 @@ private:
 
     std::map<GLenum, GLuint> mQueries;
 
-    TransformFeedbackGL* mPrevDrawTransformFeedback;
-    std::set<QueryGL*> mCurrentQueries;
+    TransformFeedbackGL *mPrevDrawTransformFeedback;
+    std::set<QueryGL *> mPrevDrawQueries;
     uintptr_t mPrevDrawContext;
 
     GLint mUnpackAlignment;

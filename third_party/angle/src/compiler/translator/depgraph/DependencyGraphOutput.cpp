@@ -22,7 +22,7 @@ void TDependencyGraphOutput::visitArgument(TGraphArgument* parameter)
 void TDependencyGraphOutput::visitFunctionCall(TGraphFunctionCall* functionCall)
 {
     outputIndentation();
-    mSink << "function call " << functionCall->getIntermFunctionCall()->getName() << "\n";
+    mSink << "function call " <<  functionCall->getIntermFunctionCall()->getName() << "\n";
 }
 
 void TDependencyGraphOutput::visitSymbol(TGraphSymbol* symbol)
@@ -54,7 +54,9 @@ void TDependencyGraphOutput::outputAllSpanningTrees(TDependencyGraph& graph)
 {
     mSink << "\n";
 
-    for (auto symbol : graph.allNodes()) {
+    for (TGraphNodeVector::const_iterator iter = graph.begin(); iter != graph.end(); ++iter)
+    {
+        TGraphNode* symbol = *iter;
         mSink << "--- Dependency graph spanning tree ---\n";
         clearVisited();
         symbol->traverse(this);

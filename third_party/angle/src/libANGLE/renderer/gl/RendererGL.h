@@ -13,82 +13,84 @@
 #include "libANGLE/renderer/Renderer.h"
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
-namespace rx {
+namespace rx
+{
 class BlitGL;
 class FunctionsGL;
 class StateManagerGL;
 
-class RendererGL : public Renderer {
-public:
-    RendererGL(const FunctionsGL* functions, const egl::AttributeMap& attribMap);
+class RendererGL : public Renderer
+{
+  public:
+    RendererGL(const FunctionsGL *functions, const egl::AttributeMap &attribMap);
     ~RendererGL() override;
 
     gl::Error flush() override;
     gl::Error finish() override;
 
-    gl::Error drawArrays(const gl::Data& data, GLenum mode, GLint first, GLsizei count) override;
-    gl::Error drawArraysInstanced(const gl::Data& data,
-        GLenum mode,
-        GLint first,
-        GLsizei count,
-        GLsizei instanceCount) override;
+    gl::Error drawArrays(const gl::Data &data, GLenum mode, GLint first, GLsizei count) override;
+    gl::Error drawArraysInstanced(const gl::Data &data,
+                                  GLenum mode,
+                                  GLint first,
+                                  GLsizei count,
+                                  GLsizei instanceCount) override;
 
-    gl::Error drawElements(const gl::Data& data,
-        GLenum mode,
-        GLsizei count,
-        GLenum type,
-        const GLvoid* indices,
-        const gl::IndexRange& indexRange) override;
-    gl::Error drawElementsInstanced(const gl::Data& data,
-        GLenum mode,
-        GLsizei count,
-        GLenum type,
-        const GLvoid* indices,
-        GLsizei instances,
-        const gl::IndexRange& indexRange) override;
-    gl::Error drawRangeElements(const gl::Data& data,
-        GLenum mode,
-        GLuint start,
-        GLuint end,
-        GLsizei count,
-        GLenum type,
-        const GLvoid* indices,
-        const gl::IndexRange& indexRange) override;
+    gl::Error drawElements(const gl::Data &data,
+                           GLenum mode,
+                           GLsizei count,
+                           GLenum type,
+                           const GLvoid *indices,
+                           const gl::IndexRange &indexRange) override;
+    gl::Error drawElementsInstanced(const gl::Data &data,
+                                    GLenum mode,
+                                    GLsizei count,
+                                    GLenum type,
+                                    const GLvoid *indices,
+                                    GLsizei instances,
+                                    const gl::IndexRange &indexRange) override;
+    gl::Error drawRangeElements(const gl::Data &data,
+                                GLenum mode,
+                                GLuint start,
+                                GLuint end,
+                                GLsizei count,
+                                GLenum type,
+                                const GLvoid *indices,
+                                const gl::IndexRange &indexRange) override;
 
     // Shader creation
-    CompilerImpl* createCompiler() override;
-    ShaderImpl* createShader(const gl::Shader::Data& data) override;
-    ProgramImpl* createProgram(const gl::Program::Data& data) override;
+    CompilerImpl *createCompiler() override;
+    ShaderImpl *createShader(const gl::Shader::Data &data) override;
+    ProgramImpl *createProgram(const gl::Program::Data &data) override;
 
     // Framebuffer creation
-    FramebufferImpl* createFramebuffer(const gl::Framebuffer::Data& data) override;
+    FramebufferImpl *createFramebuffer(const gl::Framebuffer::Data &data) override;
 
     // Texture creation
-    TextureImpl* createTexture(GLenum target) override;
+    TextureImpl *createTexture(GLenum target) override;
 
     // Renderbuffer creation
-    RenderbufferImpl* createRenderbuffer() override;
+    RenderbufferImpl *createRenderbuffer() override;
 
     // Buffer creation
-    BufferImpl* createBuffer() override;
+    BufferImpl *createBuffer() override;
 
     // Vertex Array creation
-    VertexArrayImpl* createVertexArray(const gl::VertexArray::Data& data) override;
+    VertexArrayImpl *createVertexArray(const gl::VertexArray::Data &data) override;
 
     // Query and Fence creation
-    QueryImpl* createQuery(GLenum type) override;
-    FenceNVImpl* createFenceNV() override;
-    FenceSyncImpl* createFenceSync() override;
+    QueryImpl *createQuery(GLenum type) override;
+    FenceNVImpl *createFenceNV() override;
+    FenceSyncImpl *createFenceSync() override;
 
     // Transform Feedback creation
-    TransformFeedbackImpl* createTransformFeedback() override;
+    TransformFeedbackImpl *createTransformFeedback() override;
 
     // Sampler object creation
-    SamplerImpl* createSampler() override;
+    SamplerImpl *createSampler() override;
 
     // EXT_debug_marker
-    void insertEventMarker(GLsizei length, const char* marker) override;
-    void pushGroupMarker(GLsizei length, const char* marker) override;
+    void insertEventMarker(GLsizei length, const char *marker) override;
+    void pushGroupMarker(GLsizei length, const char *marker) override;
     void popGroupMarker() override;
 
     // lost device
@@ -97,32 +99,28 @@ public:
     bool testDeviceLost() override;
     bool testDeviceResettable() override;
 
+    VendorID getVendorId() const override;
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
 
-    void syncState(const gl::State& state, const gl::State::DirtyBits& dirtyBits) override;
+    void syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits) override;
 
-    GLint getGPUDisjoint() override;
-    GLint64 getTimestamp() override;
+    const gl::Version &getMaxSupportedESVersion() const;
+    const FunctionsGL *getFunctions() const { return mFunctions; }
+    StateManagerGL *getStateManager() const { return mStateManager; }
+    const WorkaroundsGL &getWorkarounds() const { return mWorkarounds; }
 
-    void onMakeCurrent(const gl::Data& data) override;
-
-    const gl::Version& getMaxSupportedESVersion() const;
-    const FunctionsGL* getFunctions() const { return mFunctions; }
-    StateManagerGL* getStateManager() const { return mStateManager; }
-    const WorkaroundsGL& getWorkarounds() const { return mWorkarounds; }
-
-private:
-    void generateCaps(gl::Caps* outCaps, gl::TextureCapsMap* outTextureCaps,
-        gl::Extensions* outExtensions,
-        gl::Limitations* outLimitations) const override;
+  private:
+    void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap* outTextureCaps,
+                      gl::Extensions *outExtensions,
+                      gl::Limitations *outLimitations) const override;
 
     mutable gl::Version mMaxSupportedESVersion;
 
-    const FunctionsGL* mFunctions;
-    StateManagerGL* mStateManager;
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
 
-    BlitGL* mBlitter;
+    BlitGL *mBlitter;
 
     WorkaroundsGL mWorkarounds;
 

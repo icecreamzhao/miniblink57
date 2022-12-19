@@ -13,29 +13,31 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/d3d/BufferD3D.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer9;
 
-class Buffer9 : public BufferD3D {
-public:
-    Buffer9(Renderer9* renderer);
+class Buffer9 : public BufferD3D
+{
+  public:
+    Buffer9(Renderer9 *renderer);
     virtual ~Buffer9();
 
     // BufferD3D implementation
     virtual size_t getSize() const { return mSize; }
     virtual bool supportsDirectBinding() const { return false; }
-    gl::Error getData(const uint8_t** outData) override;
+    gl::Error getData(const uint8_t **outData) override;
 
     // BufferImpl implementation
     virtual gl::Error setData(const void* data, size_t size, GLenum usage);
     virtual gl::Error setSubData(const void* data, size_t size, size_t offset);
     virtual gl::Error copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size);
-    virtual gl::Error map(GLenum access, GLvoid** mapPtr);
-    virtual gl::Error mapRange(size_t offset, size_t length, GLbitfield access, GLvoid** mapPtr);
-    virtual gl::Error unmap(GLboolean* result);
+    virtual gl::Error map(GLenum access, GLvoid **mapPtr);
+    virtual gl::Error mapRange(size_t offset, size_t length, GLbitfield access, GLvoid **mapPtr);
+    virtual gl::Error unmap(GLboolean *result);
     virtual void markTransformFeedbackUsage();
 
-private:
+  private:
     MemoryBuffer mMemory;
     size_t mSize;
 };

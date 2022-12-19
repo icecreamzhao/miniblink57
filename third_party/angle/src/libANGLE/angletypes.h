@@ -16,14 +16,16 @@
 
 #include <bitset>
 
-namespace gl {
+namespace gl
+{
 class Buffer;
 class State;
 class Program;
 struct VertexAttribute;
 struct VertexAttribCurrentValueData;
 
-enum PrimitiveType {
+enum PrimitiveType
+{
     PRIMITIVE_POINTS,
     PRIMITIVE_LINES,
     PRIMITIVE_LINE_STRIP,
@@ -36,120 +38,74 @@ enum PrimitiveType {
 
 PrimitiveType GetPrimitiveType(GLenum drawMode);
 
-enum SamplerType {
+enum SamplerType
+{
     SAMPLER_PIXEL,
     SAMPLER_VERTEX
 };
 
 template <typename T>
-struct Color {
+struct Color
+{
     T red;
     T green;
     T blue;
     T alpha;
 
-    Color()
-        : red(0)
-        , green(0)
-        , blue(0)
-        , alpha(0)
-    {
-    }
-    Color(T r, T g, T b, T a)
-        : red(r)
-        , green(g)
-        , blue(b)
-        , alpha(a)
-    {
-    }
+    Color() : red(0), green(0), blue(0), alpha(0) { }
+    Color(T r, T g, T b, T a) : red(r), green(g), blue(b), alpha(a) { }
 };
 
 template <typename T>
-bool operator==(const Color<T>& a, const Color<T>& b);
+bool operator==(const Color<T> &a, const Color<T> &b);
 
 template <typename T>
-bool operator!=(const Color<T>& a, const Color<T>& b);
+bool operator!=(const Color<T> &a, const Color<T> &b);
 
 typedef Color<float> ColorF;
 typedef Color<int> ColorI;
 typedef Color<unsigned int> ColorUI;
 
-struct Rectangle {
-    Rectangle()
-        : x(0)
-        , y(0)
-        , width(0)
-        , height(0)
-    {
-    }
-    Rectangle(int x_in, int y_in, int width_in, int height_in)
-        : x(x_in)
-        , y(y_in)
-        , width(width_in)
-        , height(height_in)
-    {
-    }
-
-    int x0() const { return x; }
-    int y0() const { return y; }
-    int x1() const { return x + width; }
-    int y1() const { return y + height; }
-
+struct Rectangle
+{
     int x;
     int y;
     int width;
     int height;
+
+    Rectangle() : x(0), y(0), width(0), height(0) { }
+    Rectangle(int x_in, int y_in, int width_in, int height_in) : x(x_in), y(y_in), width(width_in), height(height_in) { }
 };
 
-bool operator==(const Rectangle& a, const Rectangle& b);
-bool operator!=(const Rectangle& a, const Rectangle& b);
+bool operator==(const Rectangle &a, const Rectangle &b);
+bool operator!=(const Rectangle &a, const Rectangle &b);
 
-bool ClipRectangle(const Rectangle& source, const Rectangle& clip, Rectangle* intersection);
+bool ClipRectangle(const Rectangle &source, const Rectangle &clip, Rectangle *intersection);
 
-struct Offset {
+struct Offset
+{
     int x;
     int y;
     int z;
 
-    Offset()
-        : x(0)
-        , y(0)
-        , z(0)
-    {
-    }
-    Offset(int x_in, int y_in, int z_in)
-        : x(x_in)
-        , y(y_in)
-        , z(z_in)
-    {
-    }
+    Offset() : x(0), y(0), z(0) { }
+    Offset(int x_in, int y_in, int z_in) : x(x_in), y(y_in), z(z_in) { }
 };
 
-struct Extents {
+struct Extents
+{
     int width;
     int height;
     int depth;
 
-    Extents()
-        : width(0)
-        , height(0)
-        , depth(0)
-    {
-    }
-    Extents(int width_, int height_, int depth_)
-        : width(width_)
-        , height(height_)
-        , depth(depth_)
-    {
-    }
+    Extents() : width(0), height(0), depth(0) { }
+    Extents(int width_, int height_, int depth_) : width(width_), height(height_), depth(depth_) { }
 
     bool empty() const { return (width * height * depth) == 0; }
 };
 
-bool operator==(const Extents& lhs, const Extents& rhs);
-bool operator!=(const Extents& lhs, const Extents& rhs);
-
-struct Box {
+struct Box
+{
     int x;
     int y;
     int z;
@@ -157,38 +113,16 @@ struct Box {
     int height;
     int depth;
 
-    Box()
-        : x(0)
-        , y(0)
-        , z(0)
-        , width(0)
-        , height(0)
-        , depth(0)
-    {
-    }
-    Box(int x_in, int y_in, int z_in, int width_in, int height_in, int depth_in)
-        : x(x_in)
-        , y(y_in)
-        , z(z_in)
-        , width(width_in)
-        , height(height_in)
-        , depth(depth_in)
-    {
-    }
-    Box(const Offset& offset, const Extents& size)
-        : x(offset.x)
-        , y(offset.y)
-        , z(offset.z)
-        , width(size.width)
-        , height(size.height)
-        , depth(size.depth)
-    {
-    }
-    bool operator==(const Box& other) const;
-    bool operator!=(const Box& other) const;
+    Box() : x(0), y(0), z(0), width(0), height(0), depth(0) { }
+    Box(int x_in, int y_in, int z_in, int width_in, int height_in, int depth_in) : x(x_in), y(y_in), z(z_in), width(width_in), height(height_in), depth(depth_in) { }
+    Box(const Offset &offset, const Extents &size) : x(offset.x), y(offset.y), z(offset.z), width(size.width), height(size.height), depth(size.depth) { }
+    bool operator==(const Box &other) const;
+    bool operator!=(const Box &other) const;
 };
 
-struct RasterizerState {
+
+struct RasterizerState
+{
     bool cullFace;
     GLenum cullMode;
     GLenum frontFace;
@@ -203,7 +137,8 @@ struct RasterizerState {
     bool rasterizerDiscard;
 };
 
-struct BlendState {
+struct BlendState
+{
     bool blend;
     GLenum sourceBlendRGB;
     GLenum destBlendRGB;
@@ -222,7 +157,8 @@ struct BlendState {
     bool dither;
 };
 
-struct DepthStencilState {
+struct DepthStencilState
+{
     bool depthTest;
     GLenum depthFunc;
     bool depthMask;
@@ -243,7 +179,8 @@ struct DepthStencilState {
 };
 
 // State from Table 6.10 (state per sampler object)
-struct SamplerState {
+struct SamplerState
+{
     SamplerState();
 
     GLenum minFilter;
@@ -263,11 +200,12 @@ struct SamplerState {
     GLenum compareFunc;
 };
 
-bool operator==(const SamplerState& a, const SamplerState& b);
-bool operator!=(const SamplerState& a, const SamplerState& b);
+bool operator==(const SamplerState &a, const SamplerState &b);
+bool operator!=(const SamplerState &a, const SamplerState &b);
 
 // State from Table 6.9 (state per texture object) in the OpenGL ES 3.0.2 spec.
-struct TextureState {
+struct TextureState
+{
     TextureState();
 
     GLenum swizzleRed;
@@ -289,10 +227,11 @@ struct TextureState {
     bool swizzleRequired() const;
 };
 
-bool operator==(const TextureState& a, const TextureState& b);
-bool operator!=(const TextureState& a, const TextureState& b);
+bool operator==(const TextureState &a, const TextureState &b);
+bool operator!=(const TextureState &a, const TextureState &b);
 
-struct PixelUnpackState {
+struct PixelUnpackState
+{
     BindingPointer<Buffer> pixelBuffer;
     GLint alignment;
     GLint rowLength;
@@ -302,27 +241,26 @@ struct PixelUnpackState {
     GLint skipImages;
 
     PixelUnpackState()
-        : alignment(4)
-        , rowLength(0)
-        , skipRows(0)
-        , skipPixels(0)
-        , imageHeight(0)
-        , skipImages(0)
-    {
-    }
+        : alignment(4),
+          rowLength(0),
+          skipRows(0),
+          skipPixels(0),
+          imageHeight(0),
+          skipImages(0)
+    {}
 
     PixelUnpackState(GLint alignmentIn, GLint rowLengthIn)
-        : alignment(alignmentIn)
-        , rowLength(rowLengthIn)
-        , skipRows(0)
-        , skipPixels(0)
-        , imageHeight(0)
-        , skipImages(0)
-    {
-    }
+        : alignment(alignmentIn),
+          rowLength(rowLengthIn),
+          skipRows(0),
+          skipPixels(0),
+          imageHeight(0),
+          skipImages(0)
+    {}
 };
 
-struct PixelPackState {
+struct PixelPackState
+{
     BindingPointer<Buffer> pixelBuffer;
     GLint alignment;
     bool reverseRowOrder;
@@ -331,22 +269,20 @@ struct PixelPackState {
     GLint skipPixels;
 
     PixelPackState()
-        : alignment(4)
-        , reverseRowOrder(false)
-        , rowLength(0)
-        , skipRows(0)
-        , skipPixels(0)
-    {
-    }
+        : alignment(4),
+          reverseRowOrder(false),
+          rowLength(0),
+          skipRows(0),
+          skipPixels(0)
+    {}
 
     explicit PixelPackState(GLint alignmentIn, bool reverseRowOrderIn)
-        : alignment(alignmentIn)
-        , reverseRowOrder(reverseRowOrderIn)
-        , rowLength(0)
-        , skipRows(0)
-        , skipPixels(0)
-    {
-    }
+        : alignment(alignmentIn),
+          reverseRowOrder(reverseRowOrderIn),
+          rowLength(0),
+          skipRows(0),
+          skipPixels(0)
+    {}
 };
 
 // Used in Program and VertexArray.
@@ -356,12 +292,14 @@ typedef std::bitset<MAX_VERTEX_ATTRIBS> AttributesMask;
 typedef std::bitset<IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS> UniformBlockBindingMask;
 }
 
-namespace rx {
-enum VendorID : uint32_t {
+namespace rx
+{
+enum VendorID : uint32_t
+{
     VENDOR_ID_UNKNOWN = 0x0,
-    VENDOR_ID_AMD = 0x1002,
-    VENDOR_ID_INTEL = 0x8086,
-    VENDOR_ID_NVIDIA = 0x10DE,
+    VENDOR_ID_AMD     = 0x1002,
+    VENDOR_ID_INTEL   = 0x8086,
+    VENDOR_ID_NVIDIA  = 0x10DE,
 };
 
 // A macro that determines whether an object has a given runtime type.
@@ -374,7 +312,7 @@ enum VendorID : uint32_t {
 #endif
 
 #ifdef ANGLE_HAS_DYNAMIC_CAST
-#define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (dynamic_cast<type>(obj) != nullptr)
+#define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (dynamic_cast<type >(obj) != nullptr)
 #undef ANGLE_HAS_DYNAMIC_CAST
 #else
 #define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (obj != nullptr)
@@ -382,14 +320,14 @@ enum VendorID : uint32_t {
 
 // Downcast a base implementation object (EG TextureImpl to TextureD3D)
 template <typename DestT, typename SrcT>
-inline DestT* GetAs(SrcT* src)
+inline DestT *GetAs(SrcT *src)
 {
     ASSERT(ANGLE_HAS_DYNAMIC_TYPE(DestT*, src));
     return static_cast<DestT*>(src);
 }
 
 template <typename DestT, typename SrcT>
-inline const DestT* GetAs(const SrcT* src)
+inline const DestT *GetAs(const SrcT *src)
 {
     ASSERT(ANGLE_HAS_DYNAMIC_TYPE(const DestT*, src));
     return static_cast<const DestT*>(src);
@@ -399,13 +337,13 @@ inline const DestT* GetAs(const SrcT* src)
 
 // Downcast a GL object to an Impl (EG gl::Texture to rx::TextureD3D)
 template <typename DestT, typename SrcT>
-inline DestT* GetImplAs(SrcT* src)
+inline DestT *GetImplAs(SrcT *src)
 {
     return GetAs<DestT>(src->getImplementation());
 }
 
 template <typename DestT, typename SrcT>
-inline const DestT* GetImplAs(const SrcT* src)
+inline const DestT *GetImplAs(const SrcT *src)
 {
     return GetAs<const DestT>(src->getImplementation());
 }
@@ -414,9 +352,11 @@ inline const DestT* GetImplAs(const SrcT* src)
 
 #include "angletypes.inl"
 
-namespace angle {
+namespace angle
+{
 // Zero-based for better array indexing
-enum FramebufferBinding {
+enum FramebufferBinding
+{
     FramebufferBindingRead = 0,
     FramebufferBindingDraw,
     FramebufferBindingSingletonMax,
@@ -427,31 +367,33 @@ enum FramebufferBinding {
 
 inline FramebufferBinding EnumToFramebufferBinding(GLenum enumValue)
 {
-    switch (enumValue) {
-    case GL_READ_FRAMEBUFFER:
-        return FramebufferBindingRead;
-    case GL_DRAW_FRAMEBUFFER:
-        return FramebufferBindingDraw;
-    case GL_FRAMEBUFFER:
-        return FramebufferBindingBoth;
-    default:
-        UNREACHABLE();
-        return FramebufferBindingUnknown;
+    switch (enumValue)
+    {
+        case GL_READ_FRAMEBUFFER:
+            return FramebufferBindingRead;
+        case GL_DRAW_FRAMEBUFFER:
+            return FramebufferBindingDraw;
+        case GL_FRAMEBUFFER:
+            return FramebufferBindingBoth;
+        default:
+            UNREACHABLE();
+            return FramebufferBindingUnknown;
     }
 }
 
 inline GLenum FramebufferBindingToEnum(FramebufferBinding binding)
 {
-    switch (binding) {
-    case FramebufferBindingRead:
-        return GL_READ_FRAMEBUFFER;
-    case FramebufferBindingDraw:
-        return GL_DRAW_FRAMEBUFFER;
-    case FramebufferBindingBoth:
-        return GL_FRAMEBUFFER;
-    default:
-        UNREACHABLE();
-        return GL_NONE;
+    switch (binding)
+    {
+        case FramebufferBindingRead:
+            return GL_READ_FRAMEBUFFER;
+        case FramebufferBindingDraw:
+            return GL_DRAW_FRAMEBUFFER;
+        case FramebufferBindingBoth:
+            return GL_FRAMEBUFFER;
+        default:
+            UNREACHABLE();
+            return GL_NONE;
     }
 }
 }

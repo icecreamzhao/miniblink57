@@ -15,33 +15,37 @@
 
 #include "common/platform.h"
 
-namespace rx {
+namespace rx
+{
 
-namespace d3d11 {
+namespace d3d11
+{
 
-    struct SwizzleSizeType {
-        size_t maxComponentSize;
-        GLenum componentType;
+struct SwizzleSizeType
+{
+    size_t maxComponentSize;
+    GLenum componentType;
 
-        SwizzleSizeType();
-        SwizzleSizeType(size_t maxComponentSize, GLenum componentType);
+    SwizzleSizeType();
+    SwizzleSizeType(size_t maxComponentSize, GLenum componentType);
 
-        bool operator<(const SwizzleSizeType& other) const;
-    };
+    bool operator<(const SwizzleSizeType &other) const;
+};
 
-    struct SwizzleFormatInfo {
-        DXGI_FORMAT mTexFormat;
-        DXGI_FORMAT mSRVFormat;
-        DXGI_FORMAT mRTVFormat;
+struct SwizzleFormatInfo
+{
+    DXGI_FORMAT mTexFormat;
+    DXGI_FORMAT mSRVFormat;
+    DXGI_FORMAT mRTVFormat;
 
-        SwizzleFormatInfo();
-        SwizzleFormatInfo(DXGI_FORMAT texFormat, DXGI_FORMAT srvFormat, DXGI_FORMAT rtvFormat);
-    };
+    SwizzleFormatInfo();
+    SwizzleFormatInfo(DXGI_FORMAT texFormat, DXGI_FORMAT srvFormat, DXGI_FORMAT rtvFormat);
+};
 
-    const SwizzleFormatInfo& GetSwizzleFormatInfo(GLuint maxBits, GLenum componentType);
+const SwizzleFormatInfo &GetSwizzleFormatInfo(GLuint maxBits, GLenum componentType);
 
-} // namespace d3d11
+}  // namespace d3d11
 
-} // namespace rx
+}  // namespace rx
 
-#endif // LIBANGLE_RENDERER_D3D_D3D11_SWIZZLEFORMATINFO_H_
+#endif  // LIBANGLE_RENDERER_D3D_D3D11_SWIZZLEFORMATINFO_H_

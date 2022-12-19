@@ -6,31 +6,31 @@
 
 //
 // Create symbols that declare built-in definitions, add built-ins that
-// cannot be expressed in the files, and establish mappings between
+// cannot be expressed in the files, and establish mappings between 
 // built-in functions and operators.
 //
 
 #include "compiler/translator/Initialize.h"
 #include "compiler/translator/Cache.h"
 
-#include "angle_gl.h"
 #include "compiler/translator/IntermNode.h"
+#include "angle_gl.h"
 
-void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInResources& resources, TSymbolTable& symbolTable)
+void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &symbolTable)
 {
-    const TType* float1 = TCache::getType(EbtFloat);
-    const TType* float2 = TCache::getType(EbtFloat, 2);
-    const TType* float3 = TCache::getType(EbtFloat, 3);
-    const TType* float4 = TCache::getType(EbtFloat, 4);
-    const TType* int1 = TCache::getType(EbtInt);
-    const TType* int2 = TCache::getType(EbtInt, 2);
-    const TType* int3 = TCache::getType(EbtInt, 3);
-    const TType* uint1 = TCache::getType(EbtUInt);
-    const TType* bool1 = TCache::getType(EbtBool);
-    const TType* genType = TCache::getType(EbtGenType);
-    const TType* genIType = TCache::getType(EbtGenIType);
-    const TType* genUType = TCache::getType(EbtGenUType);
-    const TType* genBType = TCache::getType(EbtGenBType);
+    const TType *float1 = TCache::getType(EbtFloat);
+    const TType *float2 = TCache::getType(EbtFloat, 2);
+    const TType *float3 = TCache::getType(EbtFloat, 3);
+    const TType *float4 = TCache::getType(EbtFloat, 4);
+    const TType *int1 = TCache::getType(EbtInt);
+    const TType *int2 = TCache::getType(EbtInt, 2);
+    const TType *int3 = TCache::getType(EbtInt, 3);
+    const TType *uint1 = TCache::getType(EbtUInt);
+    const TType *bool1 = TCache::getType(EbtBool);
+    const TType *genType = TCache::getType(EbtGenType);
+    const TType *genIType = TCache::getType(EbtGenIType);
+    const TType *genUType = TCache::getType(EbtGenUType);
+    const TType *genBType = TCache::getType(EbtGenBType);
 
     //
     // Angle and Trigonometric Functions.
@@ -103,10 +103,10 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(COMMON_BUILTINS, EOpSmoothStep, genType, "smoothstep", genType, genType, genType);
     symbolTable.insertBuiltIn(COMMON_BUILTINS, EOpSmoothStep, genType, "smoothstep", float1, float1, genType);
 
-    const TType* outFloat1 = TCache::getType(EbtFloat, EvqOut);
-    const TType* outFloat2 = TCache::getType(EbtFloat, EvqOut, 2);
-    const TType* outFloat3 = TCache::getType(EbtFloat, EvqOut, 3);
-    const TType* outFloat4 = TCache::getType(EbtFloat, EvqOut, 4);
+    const TType *outFloat1 = TCache::getType(EbtFloat, EvqOut);
+    const TType *outFloat2 = TCache::getType(EbtFloat, EvqOut, 2);
+    const TType *outFloat3 = TCache::getType(EbtFloat, EvqOut, 3);
+    const TType *outFloat4 = TCache::getType(EbtFloat, EvqOut, 4);
 
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, EOpModf, float1, "modf", float1, outFloat1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, EOpModf, float2, "modf", float2, outFloat2);
@@ -139,15 +139,15 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(COMMON_BUILTINS, EOpReflect, genType, "reflect", genType, genType);
     symbolTable.insertBuiltIn(COMMON_BUILTINS, EOpRefract, genType, "refract", genType, genType, float1);
 
-    const TType* mat2 = TCache::getType(EbtFloat, 2, 2);
-    const TType* mat3 = TCache::getType(EbtFloat, 3, 3);
-    const TType* mat4 = TCache::getType(EbtFloat, 4, 4);
-    const TType* mat2x3 = TCache::getType(EbtFloat, 2, 3);
-    const TType* mat3x2 = TCache::getType(EbtFloat, 3, 2);
-    const TType* mat2x4 = TCache::getType(EbtFloat, 2, 4);
-    const TType* mat4x2 = TCache::getType(EbtFloat, 4, 2);
-    const TType* mat3x4 = TCache::getType(EbtFloat, 3, 4);
-    const TType* mat4x3 = TCache::getType(EbtFloat, 4, 3);
+    const TType *mat2 = TCache::getType(EbtFloat, 2, 2);
+    const TType *mat3 = TCache::getType(EbtFloat, 3, 3);
+    const TType *mat4 = TCache::getType(EbtFloat, 4, 4);
+    const TType *mat2x3 = TCache::getType(EbtFloat, 2, 3);
+    const TType *mat3x2 = TCache::getType(EbtFloat, 3, 2);
+    const TType *mat2x4 = TCache::getType(EbtFloat, 2, 4);
+    const TType *mat4x2 = TCache::getType(EbtFloat, 4, 2);
+    const TType *mat3x4 = TCache::getType(EbtFloat, 3, 4);
+    const TType *mat4x3 = TCache::getType(EbtFloat, 4, 3);
 
     //
     // Matrix Functions.
@@ -190,10 +190,10 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, EOpInverse, mat3, "inverse", mat3);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, EOpInverse, mat4, "inverse", mat4);
 
-    const TType* vec = TCache::getType(EbtVec);
-    const TType* ivec = TCache::getType(EbtIVec);
-    const TType* uvec = TCache::getType(EbtUVec);
-    const TType* bvec = TCache::getType(EbtBVec);
+    const TType *vec = TCache::getType(EbtVec);
+    const TType *ivec = TCache::getType(EbtIVec);
+    const TType *uvec = TCache::getType(EbtUVec);
+    const TType *bvec = TCache::getType(EbtBVec);
 
     //
     // Vector relational functions.
@@ -222,8 +222,8 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(COMMON_BUILTINS, EOpAll, bool1, "all", bvec);
     symbolTable.insertBuiltIn(COMMON_BUILTINS, EOpVectorLogicalNot, bvec, "not", bvec);
 
-    const TType* sampler2D = TCache::getType(EbtSampler2D);
-    const TType* samplerCube = TCache::getType(EbtSamplerCube);
+    const TType *sampler2D = TCache::getType(EbtSampler2D);
+    const TType *samplerCube = TCache::getType(EbtSamplerCube);
 
     //
     // Texture Functions for GLSL ES 1.0
@@ -233,23 +233,26 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProj", sampler2D, float4);
     symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "textureCube", samplerCube, float3);
 
-    if (resources.OES_EGL_image_external) {
-        const TType* samplerExternalOES = TCache::getType(EbtSamplerExternalOES);
+    if (resources.OES_EGL_image_external)
+    {
+        const TType *samplerExternalOES = TCache::getType(EbtSamplerExternalOES);
 
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2D", samplerExternalOES, float2);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProj", samplerExternalOES, float3);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProj", samplerExternalOES, float4);
     }
 
-    if (resources.ARB_texture_rectangle) {
-        const TType* sampler2DRect = TCache::getType(EbtSampler2DRect);
+    if (resources.ARB_texture_rectangle)
+    {
+        const TType *sampler2DRect = TCache::getType(EbtSampler2DRect);
 
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DRect", sampler2DRect, float2);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DRectProj", sampler2DRect, float3);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DRectProj", sampler2DRect, float4);
     }
 
-    if (resources.EXT_shader_texture_lod) {
+    if (resources.EXT_shader_texture_lod)
+    {
         /* The *Grad* variants are new to both vertex and fragment shaders; the fragment
          * shader specific pieces are added separately below.
          */
@@ -259,19 +262,22 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, "GL_EXT_shader_texture_lod", float4, "textureCubeGradEXT", samplerCube, float3, float3, float3);
     }
 
-    if (type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER)
+    {
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2D", sampler2D, float2, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProj", sampler2D, float3, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProj", sampler2D, float4, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "textureCube", samplerCube, float3, float1);
 
-        if (resources.OES_standard_derivatives) {
+        if (resources.OES_standard_derivatives)
+        {
             symbolTable.insertBuiltIn(ESSL1_BUILTINS, EOpDFdx, "GL_OES_standard_derivatives", genType, "dFdx", genType);
             symbolTable.insertBuiltIn(ESSL1_BUILTINS, EOpDFdy, "GL_OES_standard_derivatives", genType, "dFdy", genType);
             symbolTable.insertBuiltIn(ESSL1_BUILTINS, EOpFwidth, "GL_OES_standard_derivatives", genType, "fwidth", genType);
         }
 
-        if (resources.EXT_shader_texture_lod) {
+        if (resources.EXT_shader_texture_lod)
+        {
             symbolTable.insertBuiltIn(ESSL1_BUILTINS, "GL_EXT_shader_texture_lod", float4, "texture2DLodEXT", sampler2D, float2, float1);
             symbolTable.insertBuiltIn(ESSL1_BUILTINS, "GL_EXT_shader_texture_lod", float4, "texture2DProjLodEXT", sampler2D, float3, float1);
             symbolTable.insertBuiltIn(ESSL1_BUILTINS, "GL_EXT_shader_texture_lod", float4, "texture2DProjLodEXT", sampler2D, float4, float1);
@@ -279,19 +285,20 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
         }
     }
 
-    if (type == GL_VERTEX_SHADER) {
+    if (type == GL_VERTEX_SHADER)
+    {
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DLod", sampler2D, float2, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProjLod", sampler2D, float3, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProjLod", sampler2D, float4, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "textureCubeLod", samplerCube, float3, float1);
     }
 
-    const TType* gvec4 = TCache::getType(EbtGVec4);
+    const TType *gvec4 = TCache::getType(EbtGVec4);
 
-    const TType* gsampler2D = TCache::getType(EbtGSampler2D);
-    const TType* gsamplerCube = TCache::getType(EbtGSamplerCube);
-    const TType* gsampler3D = TCache::getType(EbtGSampler3D);
-    const TType* gsampler2DArray = TCache::getType(EbtGSampler2DArray);
+    const TType *gsampler2D = TCache::getType(EbtGSampler2D);
+    const TType *gsamplerCube = TCache::getType(EbtGSamplerCube);
+    const TType *gsampler3D = TCache::getType(EbtGSampler3D);
+    const TType *gsampler2DArray = TCache::getType(EbtGSampler2DArray);
 
     //
     // Texture Functions for GLSL ES 3.0
@@ -308,7 +315,8 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureLod", gsamplerCube, float3, float1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureLod", gsampler2DArray, float3, float1);
 
-    if (type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER)
+    {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsampler2D, float2, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsampler3D, float3, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsamplerCube, float3, float1);
@@ -318,9 +326,9 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProj", gsampler3D, float4, float1);
     }
 
-    const TType* sampler2DShadow = TCache::getType(EbtSampler2DShadow);
-    const TType* samplerCubeShadow = TCache::getType(EbtSamplerCubeShadow);
-    const TType* sampler2DArrayShadow = TCache::getType(EbtSampler2DArrayShadow);
+    const TType *sampler2DShadow = TCache::getType(EbtSampler2DShadow);
+    const TType *samplerCubeShadow = TCache::getType(EbtSamplerCubeShadow);
+    const TType *sampler2DArrayShadow = TCache::getType(EbtSampler2DArrayShadow);
 
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", sampler2DShadow, float3);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", samplerCubeShadow, float4);
@@ -328,7 +336,8 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureProj", sampler2DShadow, float4);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureLod", sampler2DShadow, float3, float1);
 
-    if (type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER)
+    {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", sampler2DShadow, float3, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", samplerCubeShadow, float4, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureProj", sampler2DShadow, float4, float1);
@@ -342,7 +351,8 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "textureSize", samplerCubeShadow, int1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int3, "textureSize", sampler2DArrayShadow, int1);
 
-    if (type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER)
+    {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, EOpDFdx, genType, "dFdx", genType);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, EOpDFdy, genType, "dFdy", genType);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, EOpFwidth, genType, "fwidth", genType);
@@ -353,7 +363,8 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureOffset", sampler2DShadow, float3, int2);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureOffset", gsampler2DArray, float3, int2);
 
-    if (type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER)
+    {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureOffset", gsampler2D, float2, int2, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureOffset", gsampler3D, float3, int3, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureOffset", sampler2DShadow, float3, int2, float1);
@@ -365,7 +376,8 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProjOffset", gsampler3D, float4, int3);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureProjOffset", sampler2DShadow, float4, int2);
 
-    if (type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER)
+    {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProjOffset", gsampler2D, float3, int2, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProjOffset", gsampler2D, float4, int2, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProjOffset", gsampler3D, float4, int3, float1);
@@ -422,18 +434,18 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     //
     // Depth range in window coordinates
     //
-    TFieldList* fields = NewPoolTFieldList();
-    TSourceLoc zeroSourceLoc = { 0, 0, 0, 0 };
-    TField* near = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("near"), zeroSourceLoc);
-    TField* far = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("far"), zeroSourceLoc);
-    TField* diff = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("diff"), zeroSourceLoc);
+    TFieldList *fields = NewPoolTFieldList();
+    TSourceLoc zeroSourceLoc = {0, 0, 0, 0};
+    TField *near = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("near"), zeroSourceLoc);
+    TField *far = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("far"), zeroSourceLoc);
+    TField *diff = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("diff"), zeroSourceLoc);
     fields->push_back(near);
     fields->push_back(far);
     fields->push_back(diff);
-    TStructure* depthRangeStruct = new TStructure(NewPoolTString("gl_DepthRangeParameters"), fields);
-    TVariable* depthRangeParameters = new TVariable(&depthRangeStruct->name(), depthRangeStruct, true);
+    TStructure *depthRangeStruct = new TStructure(NewPoolTString("gl_DepthRangeParameters"), fields);
+    TVariable *depthRangeParameters = new TVariable(&depthRangeStruct->name(), depthRangeStruct, true);
     symbolTable.insert(COMMON_BUILTINS, depthRangeParameters);
-    TVariable* depthRange = new TVariable(NewPoolTString("gl_DepthRange"), TType(depthRangeStruct));
+    TVariable *depthRange = new TVariable(NewPoolTString("gl_DepthRange"), TType(depthRangeStruct));
     depthRange->setQualifier(EvqUniform);
     symbolTable.insert(COMMON_BUILTINS, depthRange);
 
@@ -449,12 +461,14 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
 
     symbolTable.insertConstInt(ESSL1_BUILTINS, "gl_MaxVaryingVectors", resources.MaxVaryingVectors);
 
-    if (spec != SH_CSS_SHADERS_SPEC) {
+    if (spec != SH_CSS_SHADERS_SPEC)
+    {
         symbolTable.insertConstInt(COMMON_BUILTINS, "gl_MaxDrawBuffers", resources.MaxDrawBuffers);
-        if (resources.EXT_blend_func_extended) {
+        if (resources.EXT_blend_func_extended)
+        {
             symbolTable.insertConstIntExt(COMMON_BUILTINS, "GL_EXT_blend_func_extended",
-                "gl_MaxDualSourceDrawBuffersEXT",
-                resources.MaxDualSourceDrawBuffers);
+                                          "gl_MaxDualSourceDrawBuffersEXT",
+                                          resources.MaxDualSourceDrawBuffers);
         }
     }
 
@@ -465,34 +479,41 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
 }
 
 void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
-    const ShBuiltInResources& resources,
-    TSymbolTable& symbolTable)
+                      const ShBuiltInResources &resources,
+                      TSymbolTable &symbolTable)
 {
     //
     // Insert some special built-in variables that are not in
     // the built-in header files.
     //
-    switch (type) {
-    case GL_FRAGMENT_SHADER:
-        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FragCoord"), TType(EbtFloat, EbpMedium, EvqFragCoord, 4)));
-        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FrontFacing"), TType(EbtBool, EbpUndefined, EvqFrontFacing, 1)));
-        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_PointCoord"), TType(EbtFloat, EbpMedium, EvqPointCoord, 2)));
+    switch (type)
+    {
+      case GL_FRAGMENT_SHADER:
+        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FragCoord"),
+            TType(EbtFloat, EbpMedium, EvqFragCoord, 4)));
+        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FrontFacing"),
+            TType(EbtBool,  EbpUndefined, EvqFrontFacing, 1)));
+        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_PointCoord"),
+            TType(EbtFloat, EbpMedium, EvqPointCoord, 2)));
 
         //
         // In CSS Shaders, gl_FragColor, gl_FragData, and gl_MaxDrawBuffers are not available.
         // Instead, css_MixColor and css_ColorMatrix are available.
         //
-        if (spec != SH_CSS_SHADERS_SPEC) {
-            symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("gl_FragColor"), TType(EbtFloat, EbpMedium, EvqFragColor, 4)));
+        if (spec != SH_CSS_SHADERS_SPEC)
+        {
+            symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("gl_FragColor"),
+                TType(EbtFloat, EbpMedium, EvqFragColor, 4)));
             TType fragData(EbtFloat, EbpMedium, EvqFragData, 4, 1, true);
             fragData.setArraySize(resources.MaxDrawBuffers);
             symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("gl_FragData"), fragData));
 
-            if (resources.EXT_blend_func_extended) {
+            if (resources.EXT_blend_func_extended)
+            {
                 symbolTable.insert(
                     ESSL1_BUILTINS, "GL_EXT_blend_func_extended",
                     new TVariable(NewPoolTString("gl_SecondaryFragColorEXT"),
-                        TType(EbtFloat, EbpMedium, EvqSecondaryFragColorEXT, 4)));
+                                  TType(EbtFloat, EbpMedium, EvqSecondaryFragColorEXT, 4)));
                 TType secondaryFragData(EbtFloat, EbpMedium, EvqSecondaryFragDataEXT, 4, 1, true);
                 secondaryFragData.setArraySize(resources.MaxDualSourceDrawBuffers);
                 symbolTable.insert(
@@ -500,58 +521,72 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
                     new TVariable(NewPoolTString("gl_SecondaryFragDataEXT"), secondaryFragData));
             }
 
-            if (resources.EXT_frag_depth) {
+            if (resources.EXT_frag_depth)
+            {
                 symbolTable.insert(
                     ESSL1_BUILTINS, "GL_EXT_frag_depth",
                     new TVariable(
                         NewPoolTString("gl_FragDepthEXT"),
                         TType(EbtFloat, resources.FragmentPrecisionHigh ? EbpHigh : EbpMedium,
-                            EvqFragDepthEXT, 1)));
+                              EvqFragDepthEXT, 1)));
             }
 
             symbolTable.insert(ESSL3_BUILTINS,
-                new TVariable(NewPoolTString("gl_FragDepth"),
-                    TType(EbtFloat, EbpHigh, EvqFragDepth, 1)));
+                               new TVariable(NewPoolTString("gl_FragDepth"),
+                                             TType(EbtFloat, EbpHigh, EvqFragDepth, 1)));
 
-            if (resources.EXT_shader_framebuffer_fetch || resources.NV_shader_framebuffer_fetch) {
+            if (resources.EXT_shader_framebuffer_fetch || resources.NV_shader_framebuffer_fetch)
+            {
                 TType lastFragData(EbtFloat, EbpMedium, EvqLastFragData, 4, 1, true);
                 lastFragData.setArraySize(resources.MaxDrawBuffers);
 
-                if (resources.EXT_shader_framebuffer_fetch) {
+                if (resources.EXT_shader_framebuffer_fetch)
+                {
                     symbolTable.insert(ESSL1_BUILTINS, "GL_EXT_shader_framebuffer_fetch",
                         new TVariable(NewPoolTString("gl_LastFragData"), lastFragData));
-                } else if (resources.NV_shader_framebuffer_fetch) {
+                }
+                else if (resources.NV_shader_framebuffer_fetch)
+                {
                     symbolTable.insert(ESSL1_BUILTINS, "GL_NV_shader_framebuffer_fetch",
                         new TVariable(NewPoolTString("gl_LastFragColor"),
-                            TType(EbtFloat, EbpMedium, EvqLastFragColor, 4)));
+                        TType(EbtFloat, EbpMedium, EvqLastFragColor, 4)));
                     symbolTable.insert(ESSL1_BUILTINS, "GL_NV_shader_framebuffer_fetch",
                         new TVariable(NewPoolTString("gl_LastFragData"), lastFragData));
                 }
-            } else if (resources.ARM_shader_framebuffer_fetch) {
+            }
+            else if (resources.ARM_shader_framebuffer_fetch)
+            {
                 symbolTable.insert(ESSL1_BUILTINS, "GL_ARM_shader_framebuffer_fetch",
                     new TVariable(NewPoolTString("gl_LastFragColorARM"),
-                        TType(EbtFloat, EbpMedium, EvqLastFragColor, 4)));
+                    TType(EbtFloat, EbpMedium, EvqLastFragColor, 4)));
             }
-        } else {
-            symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("css_MixColor"), TType(EbtFloat, EbpMedium, EvqGlobal, 4)));
-            symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("css_ColorMatrix"), TType(EbtFloat, EbpMedium, EvqGlobal, 4, 4)));
+        }
+        else
+        {
+            symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("css_MixColor"),
+                TType(EbtFloat, EbpMedium, EvqGlobal, 4)));
+            symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("css_ColorMatrix"),
+                TType(EbtFloat, EbpMedium, EvqGlobal, 4, 4)));
         }
 
         break;
 
-    case GL_VERTEX_SHADER:
-        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_Position"), TType(EbtFloat, EbpHigh, EvqPosition, 4)));
-        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_PointSize"), TType(EbtFloat, EbpMedium, EvqPointSize, 1)));
-        symbolTable.insert(ESSL3_BUILTINS, new TVariable(NewPoolTString("gl_InstanceID"), TType(EbtInt, EbpHigh, EvqInstanceID, 1)));
+      case GL_VERTEX_SHADER:
+        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_Position"),
+            TType(EbtFloat, EbpHigh, EvqPosition, 4)));
+        symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_PointSize"),
+            TType(EbtFloat, EbpMedium, EvqPointSize, 1)));
+        symbolTable.insert(ESSL3_BUILTINS, new TVariable(NewPoolTString("gl_InstanceID"),
+            TType(EbtInt, EbpHigh, EvqInstanceID, 1)));
         break;
 
-    default:
+      default:
         assert(false && "Language not supported");
     }
 }
 
 void InitExtensionBehavior(const ShBuiltInResources& resources,
-    TExtensionBehavior& extBehavior)
+                           TExtensionBehavior& extBehavior)
 {
     if (resources.OES_standard_derivatives)
         extBehavior["GL_OES_standard_derivatives"] = EBhUndefined;
@@ -575,11 +610,12 @@ void InitExtensionBehavior(const ShBuiltInResources& resources,
         extBehavior["GL_ARM_shader_framebuffer_fetch"] = EBhUndefined;
 }
 
-void ResetExtensionBehavior(TExtensionBehavior& extBehavior)
+void ResetExtensionBehavior(TExtensionBehavior &extBehavior)
 {
     for (auto ext_iter = extBehavior.begin();
          ext_iter != extBehavior.end();
-         ++ext_iter) {
+         ++ext_iter)
+    {
         ext_iter->second = EBhUndefined;
     }
 }

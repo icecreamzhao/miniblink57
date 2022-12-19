@@ -14,216 +14,224 @@
 
 #include "common/mathutil.h"
 
-namespace rx {
+namespace rx
+{
 
 // Several structures share functionality for reading, writing or mipmapping but the layout
 // must match the texture format which the structure represents. If collapsing or typedefing
 // structs in this header, make sure the functionality and memory layout is exactly the same.
 
-struct L8 {
+struct L8
+{
     unsigned char L;
 
-    static void readColor(gl::ColorF* dst, const L8* src)
+    static void readColor(gl::ColorF *dst, const L8 *src)
     {
         const float lum = gl::normalizedToFloat(src->L);
-        dst->red = lum;
+        dst->red   = lum;
         dst->green = lum;
-        dst->blue = lum;
+        dst->blue  = lum;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(L8* dst, const gl::ColorF* src)
+    static void writeColor(L8 *dst, const gl::ColorF *src)
     {
         dst->L = gl::floatToNormalized<unsigned char>((src->red + src->green + src->blue) / 3.0f);
     }
 
-    static void average(L8* dst, const L8* src1, const L8* src2)
+    static void average(L8 *dst, const L8 *src1, const L8 *src2)
     {
         dst->L = gl::average(src1->L, src2->L);
     }
 };
 
-struct R8 {
+struct R8
+{
     unsigned char R;
 
-    static void readColor(gl::ColorF* dst, const R8* src)
+    static void readColor(gl::ColorF *dst, const R8 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R8* src)
+    static void readColor(gl::ColorUI *dst, const R8 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = 0;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R8* dst, const gl::ColorF* src)
+    static void writeColor(R8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
     }
 
-    static void writeColor(R8* dst, const gl::ColorUI* src)
+    static void writeColor(R8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
     }
 
-    static void average(R8* dst, const R8* src1, const R8* src2)
+    static void average(R8 *dst, const R8 *src1, const R8 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
     }
 };
 
-struct A8 {
+struct A8
+{
     unsigned char A;
 
-    static void readColor(gl::ColorF* dst, const A8* src)
+    static void readColor(gl::ColorF *dst, const A8 *src)
     {
-        dst->red = 0.0f;
+        dst->red   = 0.0f;
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void writeColor(A8* dst, const gl::ColorF* src)
+    static void writeColor(A8 *dst, const gl::ColorF *src)
     {
         dst->A = gl::floatToNormalized<unsigned char>(src->alpha);
     }
 
-    static void average(A8* dst, const A8* src1, const A8* src2)
+    static void average(A8 *dst, const A8 *src1, const A8 *src2)
     {
         dst->A = gl::average(src1->A, src2->A);
     }
 };
 
-struct L8A8 {
+struct L8A8
+{
     unsigned char L;
     unsigned char A;
 
-    static void readColor(gl::ColorF* dst, const L8A8* src)
+    static void readColor(gl::ColorF *dst, const L8A8 *src)
     {
         const float lum = gl::normalizedToFloat(src->L);
-        dst->red = lum;
+        dst->red   = lum;
         dst->green = lum;
-        dst->blue = lum;
+        dst->blue  = lum;
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void writeColor(L8A8* dst, const gl::ColorF* src)
+    static void writeColor(L8A8 *dst, const gl::ColorF *src)
     {
         dst->L = gl::floatToNormalized<unsigned char>((src->red + src->green + src->blue) / 3.0f);
         dst->A = gl::floatToNormalized<unsigned char>(src->alpha);
     }
 
-    static void average(L8A8* dst, const L8A8* src1, const L8A8* src2)
+    static void average(L8A8 *dst, const L8A8 *src1, const L8A8 *src2)
     {
         *(unsigned short*)dst = (((*(unsigned short*)src1 ^ *(unsigned short*)src2) & 0xFEFE) >> 1) + (*(unsigned short*)src1 & *(unsigned short*)src2);
     }
 };
 
-struct A8L8 {
+struct A8L8
+{
     unsigned char A;
     unsigned char L;
 
-    static void readColor(gl::ColorF* dst, const A8L8* src)
+    static void readColor(gl::ColorF *dst, const A8L8 *src)
     {
         const float lum = gl::normalizedToFloat(src->L);
-        dst->red = lum;
+        dst->red   = lum;
         dst->green = lum;
-        dst->blue = lum;
+        dst->blue  = lum;
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void writeColor(A8L8* dst, const gl::ColorF* src)
+    static void writeColor(A8L8 *dst, const gl::ColorF *src)
     {
         dst->L = gl::floatToNormalized<unsigned char>((src->red + src->green + src->blue) / 3.0f);
         dst->A = gl::floatToNormalized<unsigned char>(src->alpha);
     }
 
-    static void average(A8L8* dst, const A8L8* src1, const A8L8* src2)
+    static void average(A8L8 *dst, const A8L8 *src1, const A8L8 *src2)
     {
         *(unsigned short*)dst = (((*(unsigned short*)src1 ^ *(unsigned short*)src2) & 0xFEFE) >> 1) + (*(unsigned short*)src1 & *(unsigned short*)src2);
     }
 };
 
-struct R8G8 {
+struct R8G8
+{
     unsigned char R;
     unsigned char G;
 
-    static void readColor(gl::ColorF* dst, const R8G8* src)
+    static void readColor(gl::ColorF *dst, const R8G8 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R8G8* src)
+    static void readColor(gl::ColorUI *dst, const R8G8 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R8G8* dst, const gl::ColorF* src)
+    static void writeColor(R8G8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
         dst->G = gl::floatToNormalized<unsigned char>(src->green);
     }
 
-    static void writeColor(R8G8* dst, const gl::ColorUI* src)
+    static void writeColor(R8G8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
         dst->G = static_cast<unsigned char>(src->green);
     }
 
-    static void average(R8G8* dst, const R8G8* src1, const R8G8* src2)
+    static void average(R8G8 *dst, const R8G8 *src1, const R8G8 *src2)
     {
         *(unsigned short*)dst = (((*(unsigned short*)src1 ^ *(unsigned short*)src2) & 0xFEFE) >> 1) + (*(unsigned short*)src1 & *(unsigned short*)src2);
     }
 };
 
-struct R8G8B8 {
+struct R8G8B8
+{
     unsigned char R;
     unsigned char G;
     unsigned char B;
 
-    static void readColor(gl::ColorF* dst, const R8G8B8* src)
+    static void readColor(gl::ColorF *dst, const R8G8B8 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R8G8B8* src)
+    static void readColor(gl::ColorUI *dst, const R8G8B8 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->G;
+        dst->blue  = src->G;
         dst->alpha = 1;
     }
 
-    static void writeColor(R8G8B8* dst, const gl::ColorF* src)
+    static void writeColor(R8G8B8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
         dst->G = gl::floatToNormalized<unsigned char>(src->green);
         dst->B = gl::floatToNormalized<unsigned char>(src->blue);
     }
 
-    static void writeColor(R8G8B8* dst, const gl::ColorUI* src)
+    static void writeColor(R8G8B8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
         dst->G = static_cast<unsigned char>(src->green);
         dst->B = static_cast<unsigned char>(src->blue);
     }
 
-    static void average(R8G8B8* dst, const R8G8B8* src1, const R8G8B8* src2)
+    static void average(R8G8B8 *dst, const R8G8B8 *src1, const R8G8B8 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -231,42 +239,43 @@ struct R8G8B8 {
     }
 };
 
-struct B8G8R8 {
+struct B8G8R8
+{
     unsigned char B;
     unsigned char G;
     unsigned char R;
 
-    static void readColor(gl::ColorF* dst, const B8G8R8* src)
+    static void readColor(gl::ColorF *dst, const B8G8R8 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const B8G8R8* src)
+    static void readColor(gl::ColorUI *dst, const B8G8R8 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->G;
+        dst->blue  = src->G;
         dst->alpha = 1;
     }
 
-    static void writeColor(B8G8R8* dst, const gl::ColorF* src)
+    static void writeColor(B8G8R8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
         dst->G = gl::floatToNormalized<unsigned char>(src->green);
         dst->B = gl::floatToNormalized<unsigned char>(src->blue);
     }
 
-    static void writeColor(B8G8R8* dst, const gl::ColorUI* src)
+    static void writeColor(B8G8R8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
         dst->G = static_cast<unsigned char>(src->green);
         dst->B = static_cast<unsigned char>(src->blue);
     }
 
-    static void average(B8G8R8* dst, const B8G8R8* src1, const B8G8R8* src2)
+    static void average(B8G8R8 *dst, const B8G8R8 *src1, const B8G8R8 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -274,53 +283,59 @@ struct B8G8R8 {
     }
 };
 
-struct R5G6B5 {
+struct R5G6B5
+{
     // OpenGL ES 2.0.25 spec Section 3.6.2: "Components are packed with the first component in the most significant
     // bits of the bitfield, and successive component occupying progressively less significant locations"
     unsigned short RGB;
 
-    static void readColor(gl::ColorF* dst, const R5G6B5* src)
+    static void readColor(gl::ColorF *dst, const R5G6B5 *src)
     {
-        dst->red = gl::normalizedToFloat<5>(gl::getShiftedData<5, 11>(src->RGB));
-        dst->green = gl::normalizedToFloat<6>(gl::getShiftedData<6, 5>(src->RGB));
-        dst->blue = gl::normalizedToFloat<5>(gl::getShiftedData<5, 0>(src->RGB));
+        dst->red   = gl::normalizedToFloat<5>(gl::getShiftedData<5, 11>(src->RGB));
+        dst->green = gl::normalizedToFloat<6>(gl::getShiftedData<6,  5>(src->RGB));
+        dst->blue  = gl::normalizedToFloat<5>(gl::getShiftedData<5,  0>(src->RGB));
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R5G6B5* dst, const gl::ColorF* src)
+    static void writeColor(R5G6B5 *dst, const gl::ColorF *src)
     {
-        dst->RGB = gl::shiftData<5, 11>(gl::floatToNormalized<5, unsigned short>(src->red)) | gl::shiftData<6, 5>(gl::floatToNormalized<6, unsigned short>(src->green)) | gl::shiftData<5, 0>(gl::floatToNormalized<5, unsigned short>(src->blue));
+        dst->RGB = gl::shiftData<5, 11>(gl::floatToNormalized<5, unsigned short>(src->red))   |
+                   gl::shiftData<6,  5>(gl::floatToNormalized<6, unsigned short>(src->green)) |
+                   gl::shiftData<5,  0>(gl::floatToNormalized<5, unsigned short>(src->blue));
     }
 
-    static void average(R5G6B5* dst, const R5G6B5* src1, const R5G6B5* src2)
+    static void average(R5G6B5 *dst, const R5G6B5 *src1, const R5G6B5 *src2)
     {
-        dst->RGB = gl::shiftData<5, 11>(gl::average(gl::getShiftedData<5, 11>(src1->RGB), gl::getShiftedData<5, 11>(src2->RGB))) | gl::shiftData<6, 5>(gl::average(gl::getShiftedData<6, 5>(src1->RGB), gl::getShiftedData<6, 5>(src2->RGB))) | gl::shiftData<5, 0>(gl::average(gl::getShiftedData<5, 0>(src1->RGB), gl::getShiftedData<5, 0>(src2->RGB)));
+        dst->RGB = gl::shiftData<5, 11>(gl::average(gl::getShiftedData<5, 11>(src1->RGB), gl::getShiftedData<5, 11>(src2->RGB))) |
+                   gl::shiftData<6,  5>(gl::average(gl::getShiftedData<6,  5>(src1->RGB), gl::getShiftedData<6,  5>(src2->RGB))) |
+                   gl::shiftData<5,  0>(gl::average(gl::getShiftedData<5,  0>(src1->RGB), gl::getShiftedData<5,  0>(src2->RGB)));
     }
 };
 
-struct A8R8G8B8 {
+struct A8R8G8B8
+{
     unsigned char A;
     unsigned char R;
     unsigned char G;
     unsigned char B;
 
-    static void readColor(gl::ColorF* dst, const A8R8G8B8* src)
+    static void readColor(gl::ColorF *dst, const A8R8G8B8 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorUI* dst, const A8R8G8B8* src)
+    static void readColor(gl::ColorUI *dst, const A8R8G8B8 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(A8R8G8B8* dst, const gl::ColorF* src)
+    static void writeColor(A8R8G8B8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
         dst->G = gl::floatToNormalized<unsigned char>(src->green);
@@ -328,7 +343,7 @@ struct A8R8G8B8 {
         dst->A = gl::floatToNormalized<unsigned char>(src->alpha);
     }
 
-    static void writeColor(A8R8G8B8* dst, const gl::ColorUI* src)
+    static void writeColor(A8R8G8B8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
         dst->G = static_cast<unsigned char>(src->green);
@@ -336,35 +351,36 @@ struct A8R8G8B8 {
         dst->A = static_cast<unsigned char>(src->alpha);
     }
 
-    static void average(A8R8G8B8* dst, const A8R8G8B8* src1, const A8R8G8B8* src2)
+    static void average(A8R8G8B8 *dst, const A8R8G8B8 *src1, const A8R8G8B8 *src2)
     {
         *(unsigned int*)dst = (((*(unsigned int*)src1 ^ *(unsigned int*)src2) & 0xFEFEFEFE) >> 1) + (*(unsigned int*)src1 & *(unsigned int*)src2);
     }
 };
 
-struct R8G8B8A8 {
+struct R8G8B8A8
+{
     unsigned char R;
     unsigned char G;
     unsigned char B;
     unsigned char A;
 
-    static void readColor(gl::ColorF* dst, const R8G8B8A8* src)
+    static void readColor(gl::ColorF *dst, const R8G8B8A8 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorUI* dst, const R8G8B8A8* src)
+    static void readColor(gl::ColorUI *dst, const R8G8B8A8 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R8G8B8A8* dst, const gl::ColorF* src)
+    static void writeColor(R8G8B8A8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
         dst->G = gl::floatToNormalized<unsigned char>(src->green);
@@ -372,7 +388,7 @@ struct R8G8B8A8 {
         dst->A = gl::floatToNormalized<unsigned char>(src->alpha);
     }
 
-    static void writeColor(R8G8B8A8* dst, const gl::ColorUI* src)
+    static void writeColor(R8G8B8A8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
         dst->G = static_cast<unsigned char>(src->green);
@@ -380,35 +396,36 @@ struct R8G8B8A8 {
         dst->A = static_cast<unsigned char>(src->alpha);
     }
 
-    static void average(R8G8B8A8* dst, const R8G8B8A8* src1, const R8G8B8A8* src2)
+    static void average(R8G8B8A8 *dst, const R8G8B8A8 *src1, const R8G8B8A8 *src2)
     {
         *(unsigned int*)dst = (((*(unsigned int*)src1 ^ *(unsigned int*)src2) & 0xFEFEFEFE) >> 1) + (*(unsigned int*)src1 & *(unsigned int*)src2);
     }
 };
 
-struct B8G8R8A8 {
+struct B8G8R8A8
+{
     unsigned char B;
     unsigned char G;
     unsigned char R;
     unsigned char A;
 
-    static void readColor(gl::ColorF* dst, const B8G8R8A8* src)
+    static void readColor(gl::ColorF *dst, const B8G8R8A8 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorUI* dst, const B8G8R8A8* src)
+    static void readColor(gl::ColorUI *dst, const B8G8R8A8 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(B8G8R8A8* dst, const gl::ColorF* src)
+    static void writeColor(B8G8R8A8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
         dst->G = gl::floatToNormalized<unsigned char>(src->green);
@@ -416,7 +433,7 @@ struct B8G8R8A8 {
         dst->A = gl::floatToNormalized<unsigned char>(src->alpha);
     }
 
-    static void writeColor(B8G8R8A8* dst, const gl::ColorUI* src)
+    static void writeColor(B8G8R8A8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
         dst->G = static_cast<unsigned char>(src->green);
@@ -424,19 +441,20 @@ struct B8G8R8A8 {
         dst->A = static_cast<unsigned char>(src->alpha);
     }
 
-    static void average(B8G8R8A8* dst, const B8G8R8A8* src1, const B8G8R8A8* src2)
+    static void average(B8G8R8A8 *dst, const B8G8R8A8 *src1, const B8G8R8A8 *src2)
     {
         *(unsigned int*)dst = (((*(unsigned int*)src1 ^ *(unsigned int*)src2) & 0xFEFEFEFE) >> 1) + (*(unsigned int*)src1 & *(unsigned int*)src2);
     }
 };
 
-struct B8G8R8X8 {
+struct B8G8R8X8
+{
     unsigned char B;
     unsigned char G;
     unsigned char R;
     unsigned char X;
 
-    static void readColor(gl::ColorF* dst, const B8G8R8X8* src)
+    static void readColor(gl::ColorF *dst, const B8G8R8X8 *src)
     {
         dst->red = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
@@ -444,7 +462,7 @@ struct B8G8R8X8 {
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const B8G8R8X8* src)
+    static void readColor(gl::ColorUI *dst, const B8G8R8X8 *src)
     {
         dst->red = src->R;
         dst->green = src->G;
@@ -452,7 +470,7 @@ struct B8G8R8X8 {
         dst->alpha = 1;
     }
 
-    static void writeColor(B8G8R8X8* dst, const gl::ColorF* src)
+    static void writeColor(B8G8R8X8 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned char>(src->red);
         dst->G = gl::floatToNormalized<unsigned char>(src->green);
@@ -460,7 +478,7 @@ struct B8G8R8X8 {
         dst->X = 255;
     }
 
-    static void writeColor(B8G8R8X8* dst, const gl::ColorUI* src)
+    static void writeColor(B8G8R8X8 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned char>(src->red);
         dst->G = static_cast<unsigned char>(src->green);
@@ -468,215 +486,246 @@ struct B8G8R8X8 {
         dst->X = 255;
     }
 
-    static void average(B8G8R8X8* dst, const B8G8R8X8* src1, const B8G8R8X8* src2)
+    static void average(B8G8R8X8 *dst, const B8G8R8X8 *src1, const B8G8R8X8 *src2)
     {
         *(unsigned int*)dst = (((*(unsigned int*)src1 ^ *(unsigned int*)src2) & 0xFEFEFEFE) >> 1) + (*(unsigned int*)src1 & *(unsigned int*)src2);
         dst->X = 255;
     }
 };
 
-struct A1R5G5B5 {
+struct A1R5G5B5
+{
     unsigned short ARGB;
 
-    static void readColor(gl::ColorF* dst, const A1R5G5B5* src)
+    static void readColor(gl::ColorF *dst, const A1R5G5B5 *src)
     {
         dst->alpha = gl::normalizedToFloat<1>(gl::getShiftedData<1, 15>(src->ARGB));
-        dst->red = gl::normalizedToFloat<5>(gl::getShiftedData<5, 10>(src->ARGB));
-        dst->green = gl::normalizedToFloat<5>(gl::getShiftedData<5, 5>(src->ARGB));
-        dst->blue = gl::normalizedToFloat<5>(gl::getShiftedData<5, 0>(src->ARGB));
+        dst->red   = gl::normalizedToFloat<5>(gl::getShiftedData<5, 10>(src->ARGB));
+        dst->green = gl::normalizedToFloat<5>(gl::getShiftedData<5,  5>(src->ARGB));
+        dst->blue  = gl::normalizedToFloat<5>(gl::getShiftedData<5,  0>(src->ARGB));
     }
 
-    static void writeColor(A1R5G5B5* dst, const gl::ColorF* src)
+    static void writeColor(A1R5G5B5 *dst, const gl::ColorF *src)
     {
-        dst->ARGB = gl::shiftData<1, 15>(gl::floatToNormalized<1, unsigned short>(src->alpha)) | gl::shiftData<5, 10>(gl::floatToNormalized<5, unsigned short>(src->red)) | gl::shiftData<5, 5>(gl::floatToNormalized<5, unsigned short>(src->green)) | gl::shiftData<5, 0>(gl::floatToNormalized<5, unsigned short>(src->blue));
+        dst->ARGB = gl::shiftData<1, 15>(gl::floatToNormalized<1, unsigned short>(src->alpha)) |
+                    gl::shiftData<5, 10>(gl::floatToNormalized<5, unsigned short>(src->red))   |
+                    gl::shiftData<5,  5>(gl::floatToNormalized<5, unsigned short>(src->green)) |
+                    gl::shiftData<5,  0>(gl::floatToNormalized<5, unsigned short>(src->blue));
     }
 
-    static void average(A1R5G5B5* dst, const A1R5G5B5* src1, const A1R5G5B5* src2)
+    static void average(A1R5G5B5 *dst, const A1R5G5B5 *src1, const A1R5G5B5 *src2)
     {
-        dst->ARGB = gl::shiftData<1, 15>(gl::average(gl::getShiftedData<1, 15>(src1->ARGB), gl::getShiftedData<1, 15>(src2->ARGB))) | gl::shiftData<5, 10>(gl::average(gl::getShiftedData<5, 10>(src1->ARGB), gl::getShiftedData<5, 10>(src2->ARGB))) | gl::shiftData<5, 5>(gl::average(gl::getShiftedData<5, 5>(src1->ARGB), gl::getShiftedData<5, 5>(src2->ARGB))) | gl::shiftData<5, 0>(gl::average(gl::getShiftedData<5, 0>(src1->ARGB), gl::getShiftedData<5, 0>(src2->ARGB)));
+        dst->ARGB = gl::shiftData<1, 15>(gl::average(gl::getShiftedData<1, 15>(src1->ARGB), gl::getShiftedData<1, 15>(src2->ARGB))) |
+                    gl::shiftData<5, 10>(gl::average(gl::getShiftedData<5, 10>(src1->ARGB), gl::getShiftedData<5, 10>(src2->ARGB))) |
+                    gl::shiftData<5,  5>(gl::average(gl::getShiftedData<5,  5>(src1->ARGB), gl::getShiftedData<5,  5>(src2->ARGB))) |
+                    gl::shiftData<5,  0>(gl::average(gl::getShiftedData<5,  0>(src1->ARGB), gl::getShiftedData<5,  0>(src2->ARGB)));
     }
 };
 
-struct R5G5B5A1 {
+struct R5G5B5A1
+{
     // OpenGL ES 2.0.25 spec Section 3.6.2: "Components are packed with the first component in the most significant
     // bits of the bitfield, and successive component occupying progressively less significant locations"
     unsigned short RGBA;
 
-    static void readColor(gl::ColorF* dst, const R5G5B5A1* src)
+    static void readColor(gl::ColorF *dst, const R5G5B5A1 *src)
     {
-        dst->red = gl::normalizedToFloat<5>(gl::getShiftedData<5, 11>(src->RGBA));
-        dst->green = gl::normalizedToFloat<5>(gl::getShiftedData<5, 6>(src->RGBA));
-        dst->blue = gl::normalizedToFloat<5>(gl::getShiftedData<5, 1>(src->RGBA));
-        dst->alpha = gl::normalizedToFloat<1>(gl::getShiftedData<1, 0>(src->RGBA));
+        dst->red   = gl::normalizedToFloat<5>(gl::getShiftedData<5, 11>(src->RGBA));
+        dst->green = gl::normalizedToFloat<5>(gl::getShiftedData<5,  6>(src->RGBA));
+        dst->blue  = gl::normalizedToFloat<5>(gl::getShiftedData<5,  1>(src->RGBA));
+        dst->alpha = gl::normalizedToFloat<1>(gl::getShiftedData<1,  0>(src->RGBA));
     }
 
-    static void writeColor(R5G5B5A1* dst, const gl::ColorF* src)
+    static void writeColor(R5G5B5A1 *dst, const gl::ColorF *src)
     {
-        dst->RGBA = gl::shiftData<5, 11>(gl::floatToNormalized<5, unsigned short>(src->red)) | gl::shiftData<5, 6>(gl::floatToNormalized<5, unsigned short>(src->green)) | gl::shiftData<5, 1>(gl::floatToNormalized<5, unsigned short>(src->blue)) | gl::shiftData<1, 0>(gl::floatToNormalized<1, unsigned short>(src->alpha));
+        dst->RGBA = gl::shiftData<5, 11>(gl::floatToNormalized<5, unsigned short>(src->red))   |
+                    gl::shiftData<5,  6>(gl::floatToNormalized<5, unsigned short>(src->green)) |
+                    gl::shiftData<5,  1>(gl::floatToNormalized<5, unsigned short>(src->blue))  |
+                    gl::shiftData<1,  0>(gl::floatToNormalized<1, unsigned short>(src->alpha));
     }
 
-    static void average(R5G5B5A1* dst, const R5G5B5A1* src1, const R5G5B5A1* src2)
+    static void average(R5G5B5A1 *dst, const R5G5B5A1 *src1, const R5G5B5A1 *src2)
     {
-        dst->RGBA = gl::shiftData<5, 11>(gl::average(gl::getShiftedData<5, 11>(src1->RGBA), gl::getShiftedData<5, 11>(src2->RGBA))) | gl::shiftData<5, 6>(gl::average(gl::getShiftedData<5, 6>(src1->RGBA), gl::getShiftedData<5, 6>(src2->RGBA))) | gl::shiftData<5, 1>(gl::average(gl::getShiftedData<5, 1>(src1->RGBA), gl::getShiftedData<5, 1>(src2->RGBA))) | gl::shiftData<1, 0>(gl::average(gl::getShiftedData<1, 0>(src1->RGBA), gl::getShiftedData<1, 0>(src2->RGBA)));
+        dst->RGBA = gl::shiftData<5, 11>(gl::average(gl::getShiftedData<5, 11>(src1->RGBA), gl::getShiftedData<5, 11>(src2->RGBA))) |
+                    gl::shiftData<5,  6>(gl::average(gl::getShiftedData<5,  6>(src1->RGBA), gl::getShiftedData<5,  6>(src2->RGBA))) |
+                    gl::shiftData<5,  1>(gl::average(gl::getShiftedData<5,  1>(src1->RGBA), gl::getShiftedData<5,  1>(src2->RGBA))) |
+                    gl::shiftData<1,  0>(gl::average(gl::getShiftedData<1,  0>(src1->RGBA), gl::getShiftedData<1,  0>(src2->RGBA)));
     }
 };
 
-struct R4G4B4A4 {
+struct R4G4B4A4
+{
     // OpenGL ES 2.0.25 spec Section 3.6.2: "Components are packed with the first component in the most significant
     // bits of the bitfield, and successive component occupying progressively less significant locations"
     unsigned short RGBA;
 
-    static void readColor(gl::ColorF* dst, const R4G4B4A4* src)
+    static void readColor(gl::ColorF *dst, const R4G4B4A4 *src)
     {
-        dst->red = gl::normalizedToFloat<4>(gl::getShiftedData<4, 12>(src->RGBA));
-        dst->green = gl::normalizedToFloat<4>(gl::getShiftedData<4, 8>(src->RGBA));
-        dst->blue = gl::normalizedToFloat<4>(gl::getShiftedData<4, 4>(src->RGBA));
-        dst->alpha = gl::normalizedToFloat<4>(gl::getShiftedData<4, 0>(src->RGBA));
+        dst->red   = gl::normalizedToFloat<4>(gl::getShiftedData<4, 12>(src->RGBA));
+        dst->green = gl::normalizedToFloat<4>(gl::getShiftedData<4,  8>(src->RGBA));
+        dst->blue  = gl::normalizedToFloat<4>(gl::getShiftedData<4,  4>(src->RGBA));
+        dst->alpha = gl::normalizedToFloat<4>(gl::getShiftedData<4,  0>(src->RGBA));
     }
 
-    static void writeColor(R4G4B4A4* dst, const gl::ColorF* src)
+    static void writeColor(R4G4B4A4 *dst, const gl::ColorF *src)
     {
-        dst->RGBA = gl::shiftData<4, 12>(gl::floatToNormalized<4, unsigned short>(src->red)) | gl::shiftData<4, 8>(gl::floatToNormalized<4, unsigned short>(src->green)) | gl::shiftData<4, 4>(gl::floatToNormalized<4, unsigned short>(src->blue)) | gl::shiftData<4, 0>(gl::floatToNormalized<4, unsigned short>(src->alpha));
+        dst->RGBA = gl::shiftData<4, 12>(gl::floatToNormalized<4, unsigned short>(src->red))  |
+                    gl::shiftData<4,  8>(gl::floatToNormalized<4, unsigned short>(src->green)) |
+                    gl::shiftData<4,  4>(gl::floatToNormalized<4, unsigned short>(src->blue))   |
+                    gl::shiftData<4,  0>(gl::floatToNormalized<4, unsigned short>(src->alpha));
     }
 
-    static void average(R4G4B4A4* dst, const R4G4B4A4* src1, const R4G4B4A4* src2)
+    static void average(R4G4B4A4 *dst, const R4G4B4A4 *src1, const R4G4B4A4 *src2)
     {
-        dst->RGBA = gl::shiftData<4, 12>(gl::average(gl::getShiftedData<4, 12>(src1->RGBA), gl::getShiftedData<4, 12>(src2->RGBA))) | gl::shiftData<4, 8>(gl::average(gl::getShiftedData<4, 8>(src1->RGBA), gl::getShiftedData<4, 8>(src2->RGBA))) | gl::shiftData<4, 4>(gl::average(gl::getShiftedData<4, 4>(src1->RGBA), gl::getShiftedData<4, 4>(src2->RGBA))) | gl::shiftData<4, 0>(gl::average(gl::getShiftedData<4, 0>(src1->RGBA), gl::getShiftedData<4, 0>(src2->RGBA)));
+        dst->RGBA = gl::shiftData<4, 12>(gl::average(gl::getShiftedData<4, 12>(src1->RGBA), gl::getShiftedData<4, 12>(src2->RGBA))) |
+                    gl::shiftData<4,  8>(gl::average(gl::getShiftedData<4,  8>(src1->RGBA), gl::getShiftedData<4,  8>(src2->RGBA))) |
+                    gl::shiftData<4,  4>(gl::average(gl::getShiftedData<4,  4>(src1->RGBA), gl::getShiftedData<4,  4>(src2->RGBA))) |
+                    gl::shiftData<4,  0>(gl::average(gl::getShiftedData<4,  0>(src1->RGBA), gl::getShiftedData<4,  0>(src2->RGBA)));
     }
 };
 
-struct A4R4G4B4 {
+struct A4R4G4B4
+{
     unsigned short ARGB;
 
-    static void readColor(gl::ColorF* dst, const A4R4G4B4* src)
+    static void readColor(gl::ColorF *dst, const A4R4G4B4 *src)
     {
         dst->alpha = gl::normalizedToFloat<4>(gl::getShiftedData<4, 12>(src->ARGB));
-        dst->red = gl::normalizedToFloat<4>(gl::getShiftedData<4, 8>(src->ARGB));
-        dst->green = gl::normalizedToFloat<4>(gl::getShiftedData<4, 4>(src->ARGB));
-        dst->blue = gl::normalizedToFloat<4>(gl::getShiftedData<4, 0>(src->ARGB));
+        dst->red   = gl::normalizedToFloat<4>(gl::getShiftedData<4,  8>(src->ARGB));
+        dst->green = gl::normalizedToFloat<4>(gl::getShiftedData<4,  4>(src->ARGB));
+        dst->blue  = gl::normalizedToFloat<4>(gl::getShiftedData<4,  0>(src->ARGB));
     }
 
-    static void writeColor(A4R4G4B4* dst, const gl::ColorF* src)
+    static void writeColor(A4R4G4B4 *dst, const gl::ColorF *src)
     {
-        dst->ARGB = gl::shiftData<4, 12>(gl::floatToNormalized<4, unsigned short>(src->alpha)) | gl::shiftData<4, 8>(gl::floatToNormalized<4, unsigned short>(src->red)) | gl::shiftData<4, 4>(gl::floatToNormalized<4, unsigned short>(src->green)) | gl::shiftData<4, 0>(gl::floatToNormalized<4, unsigned short>(src->blue));
+        dst->ARGB = gl::shiftData<4, 12>(gl::floatToNormalized<4, unsigned short>(src->alpha))  |
+                    gl::shiftData<4,  8>(gl::floatToNormalized<4, unsigned short>(src->red)) |
+                    gl::shiftData<4,  4>(gl::floatToNormalized<4, unsigned short>(src->green))   |
+                    gl::shiftData<4,  0>(gl::floatToNormalized<4, unsigned short>(src->blue));
     }
 
-    static void average(A4R4G4B4* dst, const A4R4G4B4* src1, const A4R4G4B4* src2)
+    static void average(A4R4G4B4 *dst, const A4R4G4B4 *src1, const A4R4G4B4 *src2)
     {
-        dst->ARGB = gl::shiftData<4, 12>(gl::average(gl::getShiftedData<4, 12>(src1->ARGB), gl::getShiftedData<4, 12>(src2->ARGB))) | gl::shiftData<4, 8>(gl::average(gl::getShiftedData<4, 8>(src1->ARGB), gl::getShiftedData<4, 8>(src2->ARGB))) | gl::shiftData<4, 4>(gl::average(gl::getShiftedData<4, 4>(src1->ARGB), gl::getShiftedData<4, 4>(src2->ARGB))) | gl::shiftData<4, 0>(gl::average(gl::getShiftedData<4, 0>(src1->ARGB), gl::getShiftedData<4, 0>(src2->ARGB)));
+        dst->ARGB = gl::shiftData<4, 12>(gl::average(gl::getShiftedData<4, 12>(src1->ARGB), gl::getShiftedData<4, 12>(src2->ARGB))) |
+                    gl::shiftData<4,  8>(gl::average(gl::getShiftedData<4,  8>(src1->ARGB), gl::getShiftedData<4,  8>(src2->ARGB))) |
+                    gl::shiftData<4,  4>(gl::average(gl::getShiftedData<4,  4>(src1->ARGB), gl::getShiftedData<4,  4>(src2->ARGB))) |
+                    gl::shiftData<4,  0>(gl::average(gl::getShiftedData<4,  0>(src1->ARGB), gl::getShiftedData<4,  0>(src2->ARGB)));
     }
 };
 
-struct R16 {
+struct R16
+{
     unsigned short R;
 
-    static void readColor(gl::ColorF* dst, const R16* src)
+    static void readColor(gl::ColorF *dst, const R16 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R16* src)
+    static void readColor(gl::ColorUI *dst, const R16 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = 0;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R16* dst, const gl::ColorF* src)
+    static void writeColor(R16 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned short>(src->red);
     }
 
-    static void writeColor(R16* dst, const gl::ColorUI* src)
+    static void writeColor(R16 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned short>(src->red);
     }
 
-    static void average(R16* dst, const R16* src1, const R16* src2)
+    static void average(R16 *dst, const R16 *src1, const R16 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
     }
 };
 
-struct R16G16 {
+struct R16G16
+{
     unsigned short R;
     unsigned short G;
 
-    static void readColor(gl::ColorF* dst, const R16G16* src)
+    static void readColor(gl::ColorF *dst, const R16G16 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R16G16* src)
+    static void readColor(gl::ColorUI *dst, const R16G16 *src)
     {
         dst->red = src->R;
         dst->green = src->G;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R16G16* dst, const gl::ColorF* src)
+    static void writeColor(R16G16 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned short>(src->red);
         dst->G = gl::floatToNormalized<unsigned short>(src->green);
     }
 
-    static void writeColor(R16G16* dst, const gl::ColorUI* src)
+    static void writeColor(R16G16 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned short>(src->red);
         dst->G = static_cast<unsigned short>(src->green);
     }
 
-    static void average(R16G16* dst, const R16G16* src1, const R16G16* src2)
+    static void average(R16G16 *dst, const R16G16 *src1, const R16G16 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
     }
 };
 
-struct R16G16B16 {
+struct R16G16B16
+{
     unsigned short R;
     unsigned short G;
     unsigned short B;
 
-    static void readColor(gl::ColorF* dst, const R16G16B16* src)
+    static void readColor(gl::ColorF *dst, const R16G16B16 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R16G16B16* src)
+    static void readColor(gl::ColorUI *dst, const R16G16B16 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = 1;
     }
 
-    static void writeColor(R16G16B16* dst, const gl::ColorF* src)
+    static void writeColor(R16G16B16 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned short>(src->red);
         dst->G = gl::floatToNormalized<unsigned short>(src->green);
         dst->B = gl::floatToNormalized<unsigned short>(src->blue);
     }
 
-    static void writeColor(R16G16B16* dst, const gl::ColorUI* src)
+    static void writeColor(R16G16B16 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned short>(src->red);
         dst->G = static_cast<unsigned short>(src->green);
         dst->B = static_cast<unsigned short>(src->blue);
     }
 
-    static void average(R16G16B16* dst, const R16G16B16* src1, const R16G16B16* src2)
+    static void average(R16G16B16 *dst, const R16G16B16 *src1, const R16G16B16 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -684,29 +733,30 @@ struct R16G16B16 {
     }
 };
 
-struct R16G16B16A16 {
+struct R16G16B16A16
+{
     unsigned short R;
     unsigned short G;
     unsigned short B;
     unsigned short A;
 
-    static void readColor(gl::ColorF* dst, const R16G16B16A16* src)
+    static void readColor(gl::ColorF *dst, const R16G16B16A16 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorUI* dst, const R16G16B16A16* src)
+    static void readColor(gl::ColorUI *dst, const R16G16B16A16 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R16G16B16A16* dst, const gl::ColorF* src)
+    static void writeColor(R16G16B16A16 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned short>(src->red);
         dst->G = gl::floatToNormalized<unsigned short>(src->green);
@@ -714,7 +764,7 @@ struct R16G16B16A16 {
         dst->A = gl::floatToNormalized<unsigned short>(src->alpha);
     }
 
-    static void writeColor(R16G16B16A16* dst, const gl::ColorUI* src)
+    static void writeColor(R16G16B16A16 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned short>(src->red);
         dst->G = static_cast<unsigned short>(src->green);
@@ -722,7 +772,7 @@ struct R16G16B16A16 {
         dst->A = static_cast<unsigned short>(src->alpha);
     }
 
-    static void average(R16G16B16A16* dst, const R16G16B16A16* src1, const R16G16B16A16* src2)
+    static void average(R16G16B16A16 *dst, const R16G16B16A16 *src1, const R16G16B16A16 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -731,116 +781,119 @@ struct R16G16B16A16 {
     }
 };
 
-struct R32 {
+struct R32
+{
     unsigned int R;
 
-    static void readColor(gl::ColorF* dst, const R32* src)
+    static void readColor(gl::ColorF *dst, const R32 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R32* src)
+    static void readColor(gl::ColorUI *dst, const R32 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = 0;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R32* dst, const gl::ColorF* src)
+    static void writeColor(R32 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned int>(src->red);
     }
 
-    static void writeColor(R32* dst, const gl::ColorUI* src)
+    static void writeColor(R32 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned int>(src->red);
     }
 
-    static void average(R32* dst, const R32* src1, const R32* src2)
+    static void average(R32 *dst, const R32 *src1, const R32 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
     }
 };
 
-struct R32G32 {
+struct R32G32
+{
     unsigned int R;
     unsigned int G;
 
-    static void readColor(gl::ColorF* dst, const R32G32* src)
+    static void readColor(gl::ColorF *dst, const R32G32 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R32G32* src)
+    static void readColor(gl::ColorUI *dst, const R32G32 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R32G32* dst, const gl::ColorF* src)
+    static void writeColor(R32G32 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned int>(src->red);
         dst->G = gl::floatToNormalized<unsigned int>(src->green);
     }
 
-    static void writeColor(R32G32* dst, const gl::ColorUI* src)
+    static void writeColor(R32G32 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned int>(src->red);
         dst->G = static_cast<unsigned int>(src->green);
     }
 
-    static void average(R32G32* dst, const R32G32* src1, const R32G32* src2)
+    static void average(R32G32 *dst, const R32G32 *src1, const R32G32 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
     }
 };
 
-struct R32G32B32 {
+struct R32G32B32
+{
     unsigned int R;
     unsigned int G;
     unsigned int B;
 
-    static void readColor(gl::ColorF* dst, const R32G32B32* src)
+    static void readColor(gl::ColorF *dst, const R32G32B32 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorUI* dst, const R32G32B32* src)
+    static void readColor(gl::ColorUI *dst, const R32G32B32 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = 1;
     }
 
-    static void writeColor(R32G32B32* dst, const gl::ColorF* src)
+    static void writeColor(R32G32B32 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned int>(src->red);
         dst->G = gl::floatToNormalized<unsigned int>(src->green);
         dst->B = gl::floatToNormalized<unsigned int>(src->blue);
     }
 
-    static void writeColor(R32G32B32* dst, const gl::ColorUI* src)
+    static void writeColor(R32G32B32 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned int>(src->red);
         dst->G = static_cast<unsigned int>(src->green);
         dst->B = static_cast<unsigned int>(src->blue);
     }
 
-    static void average(R32G32B32* dst, const R32G32B32* src1, const R32G32B32* src2)
+    static void average(R32G32B32 *dst, const R32G32B32 *src1, const R32G32B32 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -848,29 +901,30 @@ struct R32G32B32 {
     }
 };
 
-struct R32G32B32A32 {
+struct R32G32B32A32
+{
     unsigned int R;
     unsigned int G;
     unsigned int B;
     unsigned int A;
 
-    static void readColor(gl::ColorF* dst, const R32G32B32A32* src)
+    static void readColor(gl::ColorF *dst, const R32G32B32A32 *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorUI* dst, const R32G32B32A32* src)
+    static void readColor(gl::ColorUI *dst, const R32G32B32A32 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R32G32B32A32* dst, const gl::ColorF* src)
+    static void writeColor(R32G32B32A32 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<unsigned int>(src->red);
         dst->G = gl::floatToNormalized<unsigned int>(src->green);
@@ -878,7 +932,7 @@ struct R32G32B32A32 {
         dst->A = gl::floatToNormalized<unsigned int>(src->alpha);
     }
 
-    static void writeColor(R32G32B32A32* dst, const gl::ColorUI* src)
+    static void writeColor(R32G32B32A32 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned int>(src->red);
         dst->G = static_cast<unsigned int>(src->green);
@@ -886,7 +940,7 @@ struct R32G32B32A32 {
         dst->A = static_cast<unsigned int>(src->alpha);
     }
 
-    static void average(R32G32B32A32* dst, const R32G32B32A32* src1, const R32G32B32A32* src2)
+    static void average(R32G32B32A32 *dst, const R32G32B32A32 *src1, const R32G32B32A32 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -895,116 +949,119 @@ struct R32G32B32A32 {
     }
 };
 
-struct R8S {
+struct R8S
+{
     char R;
 
-    static void readColor(gl::ColorF* dst, const R8S* src)
+    static void readColor(gl::ColorF *dst, const R8S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R8S* src)
+    static void readColor(gl::ColorI *dst, const R8S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = 0;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R8S* dst, const gl::ColorF* src)
+    static void writeColor(R8S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<char>(src->red);
     }
 
-    static void writeColor(R8S* dst, const gl::ColorI* src)
+    static void writeColor(R8S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<char>(src->red);
     }
 
-    static void average(R8S* dst, const R8S* src1, const R8S* src2)
+    static void average(R8S *dst, const R8S *src1, const R8S *src2)
     {
         dst->R = static_cast<char>(gl::average(src1->R, src2->R));
     }
 };
 
-struct R8G8S {
+struct R8G8S
+{
     char R;
     char G;
 
-    static void readColor(gl::ColorF* dst, const R8G8S* src)
+    static void readColor(gl::ColorF *dst, const R8G8S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R8G8S* src)
+    static void readColor(gl::ColorI *dst, const R8G8S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R8G8S* dst, const gl::ColorF* src)
+    static void writeColor(R8G8S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<char>(src->red);
         dst->G = gl::floatToNormalized<char>(src->green);
     }
 
-    static void writeColor(R8G8S* dst, const gl::ColorI* src)
+    static void writeColor(R8G8S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<char>(src->red);
         dst->G = static_cast<char>(src->green);
     }
 
-    static void average(R8G8S* dst, const R8G8S* src1, const R8G8S* src2)
+    static void average(R8G8S *dst, const R8G8S *src1, const R8G8S *src2)
     {
         dst->R = static_cast<char>(gl::average(src1->R, src2->R));
         dst->G = static_cast<char>(gl::average(src1->G, src2->G));
     }
 };
 
-struct R8G8B8S {
+struct R8G8B8S
+{
     char R;
     char G;
     char B;
 
-    static void readColor(gl::ColorF* dst, const R8G8B8S* src)
+    static void readColor(gl::ColorF *dst, const R8G8B8S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R8G8B8S* src)
+    static void readColor(gl::ColorI *dst, const R8G8B8S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = 1;
     }
 
-    static void writeColor(R8G8B8S* dst, const gl::ColorF* src)
+    static void writeColor(R8G8B8S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<char>(src->red);
         dst->G = gl::floatToNormalized<char>(src->green);
         dst->B = gl::floatToNormalized<char>(src->blue);
     }
 
-    static void writeColor(R8G8B8S* dst, const gl::ColorI* src)
+    static void writeColor(R8G8B8S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<char>(src->red);
         dst->G = static_cast<char>(src->green);
         dst->B = static_cast<char>(src->blue);
     }
 
-    static void average(R8G8B8S* dst, const R8G8B8S* src1, const R8G8B8S* src2)
+    static void average(R8G8B8S *dst, const R8G8B8S *src1, const R8G8B8S *src2)
     {
         dst->R = static_cast<char>(gl::average(src1->R, src2->R));
         dst->G = static_cast<char>(gl::average(src1->G, src2->G));
@@ -1012,29 +1069,30 @@ struct R8G8B8S {
     }
 };
 
-struct R8G8B8A8S {
+struct R8G8B8A8S
+{
     char R;
     char G;
     char B;
     char A;
 
-    static void readColor(gl::ColorF* dst, const R8G8B8A8S* src)
+    static void readColor(gl::ColorF *dst, const R8G8B8A8S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorI* dst, const R8G8B8A8S* src)
+    static void readColor(gl::ColorI *dst, const R8G8B8A8S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R8G8B8A8S* dst, const gl::ColorF* src)
+    static void writeColor(R8G8B8A8S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<char>(src->red);
         dst->G = gl::floatToNormalized<char>(src->green);
@@ -1042,7 +1100,7 @@ struct R8G8B8A8S {
         dst->A = gl::floatToNormalized<char>(src->alpha);
     }
 
-    static void writeColor(R8G8B8A8S* dst, const gl::ColorI* src)
+    static void writeColor(R8G8B8A8S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<char>(src->red);
         dst->G = static_cast<char>(src->green);
@@ -1050,7 +1108,7 @@ struct R8G8B8A8S {
         dst->A = static_cast<char>(src->alpha);
     }
 
-    static void average(R8G8B8A8S* dst, const R8G8B8A8S* src1, const R8G8B8A8S* src2)
+    static void average(R8G8B8A8S *dst, const R8G8B8A8S *src1, const R8G8B8A8S *src2)
     {
         dst->R = static_cast<char>(gl::average(src1->R, src2->R));
         dst->G = static_cast<char>(gl::average(src1->G, src2->G));
@@ -1059,116 +1117,119 @@ struct R8G8B8A8S {
     }
 };
 
-struct R16S {
+struct R16S
+{
     short R;
 
-    static void readColor(gl::ColorF* dst, const R16S* src)
+    static void readColor(gl::ColorF *dst, const R16S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R16S* src)
+    static void readColor(gl::ColorI *dst, const R16S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = 0;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R16S* dst, const gl::ColorF* src)
+    static void writeColor(R16S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<short>(src->red);
     }
 
-    static void writeColor(R16S* dst, const gl::ColorI* src)
+    static void writeColor(R16S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<short>(src->red);
     }
 
-    static void average(R16S* dst, const R16S* src1, const R16S* src2)
+    static void average(R16S *dst, const R16S *src1, const R16S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
     }
 };
 
-struct R16G16S {
+struct R16G16S
+{
     short R;
     short G;
 
-    static void readColor(gl::ColorF* dst, const R16G16S* src)
+    static void readColor(gl::ColorF *dst, const R16G16S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R16G16S* src)
+    static void readColor(gl::ColorI *dst, const R16G16S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R16G16S* dst, const gl::ColorF* src)
+    static void writeColor(R16G16S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<short>(src->red);
         dst->G = gl::floatToNormalized<short>(src->green);
     }
 
-    static void writeColor(R16G16S* dst, const gl::ColorI* src)
+    static void writeColor(R16G16S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<short>(src->red);
         dst->G = static_cast<short>(src->green);
     }
 
-    static void average(R16G16S* dst, const R16G16S* src1, const R16G16S* src2)
+    static void average(R16G16S *dst, const R16G16S *src1, const R16G16S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
     }
 };
 
-struct R16G16B16S {
+struct R16G16B16S
+{
     short R;
     short G;
     short B;
 
-    static void readColor(gl::ColorF* dst, const R16G16B16S* src)
+    static void readColor(gl::ColorF *dst, const R16G16B16S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R16G16B16S* src)
+    static void readColor(gl::ColorI *dst, const R16G16B16S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = 1;
     }
 
-    static void writeColor(R16G16B16S* dst, const gl::ColorF* src)
+    static void writeColor(R16G16B16S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<short>(src->red);
         dst->G = gl::floatToNormalized<short>(src->green);
         dst->B = gl::floatToNormalized<short>(src->blue);
     }
 
-    static void writeColor(R16G16B16S* dst, const gl::ColorI* src)
+    static void writeColor(R16G16B16S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<short>(src->red);
         dst->G = static_cast<short>(src->green);
         dst->B = static_cast<short>(src->blue);
     }
 
-    static void average(R16G16B16S* dst, const R16G16B16S* src1, const R16G16B16S* src2)
+    static void average(R16G16B16S *dst, const R16G16B16S *src1, const R16G16B16S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1176,29 +1237,30 @@ struct R16G16B16S {
     }
 };
 
-struct R16G16B16A16S {
+struct R16G16B16A16S
+{
     short R;
     short G;
     short B;
     short A;
 
-    static void readColor(gl::ColorF* dst, const R16G16B16A16S* src)
+    static void readColor(gl::ColorF *dst, const R16G16B16A16S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorI* dst, const R16G16B16A16S* src)
+    static void readColor(gl::ColorI *dst, const R16G16B16A16S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R16G16B16A16S* dst, const gl::ColorF* src)
+    static void writeColor(R16G16B16A16S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<short>(src->red);
         dst->G = gl::floatToNormalized<short>(src->green);
@@ -1206,7 +1268,7 @@ struct R16G16B16A16S {
         dst->A = gl::floatToNormalized<short>(src->alpha);
     }
 
-    static void writeColor(R16G16B16A16S* dst, const gl::ColorI* src)
+    static void writeColor(R16G16B16A16S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<short>(src->red);
         dst->G = static_cast<short>(src->green);
@@ -1214,7 +1276,7 @@ struct R16G16B16A16S {
         dst->A = static_cast<short>(src->alpha);
     }
 
-    static void average(R16G16B16A16S* dst, const R16G16B16A16S* src1, const R16G16B16A16S* src2)
+    static void average(R16G16B16A16S *dst, const R16G16B16A16S *src1, const R16G16B16A16S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1223,116 +1285,119 @@ struct R16G16B16A16S {
     }
 };
 
-struct R32S {
+struct R32S
+{
     int R;
 
-    static void readColor(gl::ColorF* dst, const R32S* src)
+    static void readColor(gl::ColorF *dst, const R32S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R32S* src)
+    static void readColor(gl::ColorI *dst, const R32S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = 0;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R32S* dst, const gl::ColorF* src)
+    static void writeColor(R32S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<int>(src->red);
     }
 
-    static void writeColor(R32S* dst, const gl::ColorI* src)
+    static void writeColor(R32S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<int>(src->red);
     }
 
-    static void average(R32S* dst, const R32S* src1, const R32S* src2)
+    static void average(R32S *dst, const R32S *src1, const R32S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
     }
 };
 
-struct R32G32S {
+struct R32G32S
+{
     int R;
     int G;
 
-    static void readColor(gl::ColorF* dst, const R32G32S* src)
+    static void readColor(gl::ColorF *dst, const R32G32S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R32G32S* src)
+    static void readColor(gl::ColorI *dst, const R32G32S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = 0;
+        dst->blue  = 0;
         dst->alpha = 1;
     }
 
-    static void writeColor(R32G32S* dst, const gl::ColorF* src)
+    static void writeColor(R32G32S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<int>(src->red);
         dst->G = gl::floatToNormalized<int>(src->green);
     }
 
-    static void writeColor(R32G32S* dst, const gl::ColorI* src)
+    static void writeColor(R32G32S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<int>(src->red);
         dst->G = static_cast<int>(src->green);
     }
 
-    static void average(R32G32S* dst, const R32G32S* src1, const R32G32S* src2)
+    static void average(R32G32S *dst, const R32G32S *src1, const R32G32S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
     }
 };
 
-struct R32G32B32S {
+struct R32G32B32S
+{
     int R;
     int G;
     int B;
 
-    static void readColor(gl::ColorF* dst, const R32G32B32S* src)
+    static void readColor(gl::ColorF *dst, const R32G32B32S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void readColor(gl::ColorI* dst, const R32G32B32S* src)
+    static void readColor(gl::ColorI *dst, const R32G32B32S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = 1;
     }
 
-    static void writeColor(R32G32B32S* dst, const gl::ColorF* src)
+    static void writeColor(R32G32B32S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<int>(src->red);
         dst->G = gl::floatToNormalized<int>(src->green);
         dst->B = gl::floatToNormalized<int>(src->blue);
     }
 
-    static void writeColor(R32G32B32S* dst, const gl::ColorI* src)
+    static void writeColor(R32G32B32S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<int>(src->red);
         dst->G = static_cast<int>(src->green);
         dst->B = static_cast<int>(src->blue);
     }
 
-    static void average(R32G32B32S* dst, const R32G32B32S* src1, const R32G32B32S* src2)
+    static void average(R32G32B32S *dst, const R32G32B32S *src1, const R32G32B32S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1340,29 +1405,30 @@ struct R32G32B32S {
     }
 };
 
-struct R32G32B32A32S {
+struct R32G32B32A32S
+{
     int R;
     int G;
     int B;
     int A;
 
-    static void readColor(gl::ColorF* dst, const R32G32B32A32S* src)
+    static void readColor(gl::ColorF *dst, const R32G32B32A32S *src)
     {
-        dst->red = gl::normalizedToFloat(src->R);
+        dst->red   = gl::normalizedToFloat(src->R);
         dst->green = gl::normalizedToFloat(src->G);
-        dst->blue = gl::normalizedToFloat(src->B);
+        dst->blue  = gl::normalizedToFloat(src->B);
         dst->alpha = gl::normalizedToFloat(src->A);
     }
 
-    static void readColor(gl::ColorI* dst, const R32G32B32A32S* src)
+    static void readColor(gl::ColorI *dst, const R32G32B32A32S *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R32G32B32A32S* dst, const gl::ColorF* src)
+    static void writeColor(R32G32B32A32S *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<int>(src->red);
         dst->G = gl::floatToNormalized<int>(src->green);
@@ -1370,7 +1436,7 @@ struct R32G32B32A32S {
         dst->A = gl::floatToNormalized<int>(src->alpha);
     }
 
-    static void writeColor(R32G32B32A32S* dst, const gl::ColorI* src)
+    static void writeColor(R32G32B32A32S *dst, const gl::ColorI *src)
     {
         dst->R = static_cast<int>(src->red);
         dst->G = static_cast<int>(src->green);
@@ -1378,7 +1444,7 @@ struct R32G32B32A32S {
         dst->A = static_cast<int>(src->alpha);
     }
 
-    static void average(R32G32B32A32S* dst, const R32G32B32A32S* src1, const R32G32B32A32S* src2)
+    static void average(R32G32B32A32S *dst, const R32G32B32A32S *src1, const R32G32B32A32S *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1387,21 +1453,22 @@ struct R32G32B32A32S {
     }
 };
 
-struct A16B16G16R16F {
+struct A16B16G16R16F
+{
     unsigned short A;
     unsigned short R;
     unsigned short G;
     unsigned short B;
 
-    static void readColor(gl::ColorF* dst, const A16B16G16R16F* src)
+    static void readColor(gl::ColorF *dst, const A16B16G16R16F *src)
     {
-        dst->red = gl::float16ToFloat32(src->R);
+        dst->red   = gl::float16ToFloat32(src->R);
         dst->green = gl::float16ToFloat32(src->G);
-        dst->blue = gl::float16ToFloat32(src->B);
+        dst->blue  = gl::float16ToFloat32(src->B);
         dst->alpha = gl::float16ToFloat32(src->A);
     }
 
-    static void writeColor(A16B16G16R16F* dst, const gl::ColorF* src)
+    static void writeColor(A16B16G16R16F *dst, const gl::ColorF *src)
     {
         dst->R = gl::float32ToFloat16(src->red);
         dst->G = gl::float32ToFloat16(src->green);
@@ -1409,7 +1476,7 @@ struct A16B16G16R16F {
         dst->A = gl::float32ToFloat16(src->alpha);
     }
 
-    static void average(A16B16G16R16F* dst, const A16B16G16R16F* src1, const A16B16G16R16F* src2)
+    static void average(A16B16G16R16F *dst, const A16B16G16R16F *src1, const A16B16G16R16F *src2)
     {
         dst->R = gl::averageHalfFloat(src1->R, src2->R);
         dst->G = gl::averageHalfFloat(src1->G, src2->G);
@@ -1418,21 +1485,22 @@ struct A16B16G16R16F {
     }
 };
 
-struct R16G16B16A16F {
+struct R16G16B16A16F
+{
     unsigned short R;
     unsigned short G;
     unsigned short B;
     unsigned short A;
 
-    static void readColor(gl::ColorF* dst, const R16G16B16A16F* src)
+    static void readColor(gl::ColorF *dst, const R16G16B16A16F *src)
     {
-        dst->red = gl::float16ToFloat32(src->R);
+        dst->red   = gl::float16ToFloat32(src->R);
         dst->green = gl::float16ToFloat32(src->G);
-        dst->blue = gl::float16ToFloat32(src->B);
+        dst->blue  = gl::float16ToFloat32(src->B);
         dst->alpha = gl::float16ToFloat32(src->A);
     }
 
-    static void writeColor(R16G16B16A16F* dst, const gl::ColorF* src)
+    static void writeColor(R16G16B16A16F *dst, const gl::ColorF *src)
     {
         dst->R = gl::float32ToFloat16(src->red);
         dst->G = gl::float32ToFloat16(src->green);
@@ -1440,7 +1508,7 @@ struct R16G16B16A16F {
         dst->A = gl::float32ToFloat16(src->alpha);
     }
 
-    static void average(R16G16B16A16F* dst, const R16G16B16A16F* src1, const R16G16B16A16F* src2)
+    static void average(R16G16B16A16F *dst, const R16G16B16A16F *src1, const R16G16B16A16F *src2)
     {
         dst->R = gl::averageHalfFloat(src1->R, src2->R);
         dst->G = gl::averageHalfFloat(src1->G, src2->G);
@@ -1449,145 +1517,151 @@ struct R16G16B16A16F {
     }
 };
 
-struct R16F {
+struct R16F
+{
     unsigned short R;
 
-    static void readColor(gl::ColorF* dst, const R16F* src)
+    static void readColor(gl::ColorF *dst, const R16F *src)
     {
-        dst->red = gl::float16ToFloat32(src->R);
+        dst->red   = gl::float16ToFloat32(src->R);
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R16F* dst, const gl::ColorF* src)
+    static void writeColor(R16F *dst, const gl::ColorF *src)
     {
         dst->R = gl::float32ToFloat16(src->red);
     }
-
-    static void average(R16F* dst, const R16F* src1, const R16F* src2)
+    
+    static void average(R16F *dst, const R16F *src1, const R16F *src2)
     {
         dst->R = gl::averageHalfFloat(src1->R, src2->R);
     }
 };
 
-struct A16F {
+struct A16F
+{
     unsigned short A;
 
-    static void readColor(gl::ColorF* dst, const A16F* src)
+    static void readColor(gl::ColorF *dst, const A16F *src)
     {
-        dst->red = 0.0f;
+        dst->red   = 0.0f;
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = gl::float16ToFloat32(src->A);
     }
 
-    static void writeColor(A16F* dst, const gl::ColorF* src)
+    static void writeColor(A16F *dst, const gl::ColorF *src)
     {
         dst->A = gl::float32ToFloat16(src->alpha);
     }
 
-    static void average(A16F* dst, const A16F* src1, const A16F* src2)
+    static void average(A16F *dst, const A16F *src1, const A16F *src2)
     {
         dst->A = gl::averageHalfFloat(src1->A, src2->A);
     }
 };
 
-struct L16F {
+struct L16F
+{
     unsigned short L;
 
-    static void readColor(gl::ColorF* dst, const L16F* src)
+    static void readColor(gl::ColorF *dst, const L16F *src)
     {
         float lum = gl::float16ToFloat32(src->L);
-        dst->red = lum;
+        dst->red   = lum;
         dst->green = lum;
-        dst->blue = lum;
+        dst->blue  = lum;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(L16F* dst, const gl::ColorF* src)
+    static void writeColor(L16F *dst, const gl::ColorF *src)
     {
         dst->L = gl::float32ToFloat16((src->red + src->green + src->blue) / 3.0f);
     }
 
-    static void average(L16F* dst, const L16F* src1, const L16F* src2)
+    static void average(L16F *dst, const L16F *src1, const L16F *src2)
     {
         dst->L = gl::averageHalfFloat(src1->L, src2->L);
     }
 };
 
-struct L16A16F {
+struct L16A16F
+{
     unsigned short L;
     unsigned short A;
 
-    static void readColor(gl::ColorF* dst, const L16A16F* src)
+    static void readColor(gl::ColorF *dst, const L16A16F *src)
     {
         float lum = gl::float16ToFloat32(src->L);
-        dst->red = lum;
+        dst->red   = lum;
         dst->green = lum;
-        dst->blue = lum;
+        dst->blue  = lum;
         dst->alpha = gl::float16ToFloat32(src->A);
     }
 
-    static void writeColor(L16A16F* dst, const gl::ColorF* src)
+    static void writeColor(L16A16F *dst, const gl::ColorF *src)
     {
         dst->L = gl::float32ToFloat16((src->red + src->green + src->blue) / 3.0f);
         dst->A = gl::float32ToFloat16(src->alpha);
     }
 
-    static void average(L16A16F* dst, const L16A16F* src1, const L16A16F* src2)
+    static void average(L16A16F *dst, const L16A16F *src1, const L16A16F *src2)
     {
         dst->L = gl::averageHalfFloat(src1->L, src2->L);
         dst->A = gl::averageHalfFloat(src1->A, src2->A);
     }
 };
 
-struct R16G16F {
+struct R16G16F
+{
     unsigned short R;
     unsigned short G;
 
-    static void readColor(gl::ColorF* dst, const R16G16F* src)
+    static void readColor(gl::ColorF *dst, const R16G16F *src)
     {
-        dst->red = gl::float16ToFloat32(src->R);
+        dst->red   = gl::float16ToFloat32(src->R);
         dst->green = gl::float16ToFloat32(src->G);
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R16G16F* dst, const gl::ColorF* src)
+    static void writeColor(R16G16F *dst, const gl::ColorF *src)
     {
         dst->R = gl::float32ToFloat16(src->red);
         dst->G = gl::float32ToFloat16(src->green);
     }
 
-    static void average(R16G16F* dst, const R16G16F* src1, const R16G16F* src2)
+    static void average(R16G16F *dst, const R16G16F *src1, const R16G16F *src2)
     {
         dst->R = gl::averageHalfFloat(src1->R, src2->R);
         dst->G = gl::averageHalfFloat(src1->G, src2->G);
     }
 };
 
-struct R16G16B16F {
+struct R16G16B16F
+{
     unsigned short R;
     unsigned short G;
     unsigned short B;
 
-    static void readColor(gl::ColorF* dst, const R16G16B16F* src)
+    static void readColor(gl::ColorF *dst, const R16G16B16F *src)
     {
-        dst->red = gl::float16ToFloat32(src->R);
+        dst->red   = gl::float16ToFloat32(src->R);
         dst->green = gl::float16ToFloat32(src->G);
-        dst->blue = gl::float16ToFloat32(src->B);
+        dst->blue  = gl::float16ToFloat32(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R16G16B16F* dst, const gl::ColorF* src)
+    static void writeColor(R16G16B16F *dst, const gl::ColorF *src)
     {
         dst->R = gl::float32ToFloat16(src->red);
         dst->G = gl::float32ToFloat16(src->green);
         dst->B = gl::float32ToFloat16(src->blue);
     }
 
-    static void average(R16G16B16F* dst, const R16G16B16F* src1, const R16G16B16F* src2)
+    static void average(R16G16B16F *dst, const R16G16B16F *src1, const R16G16B16F *src2)
     {
         dst->R = gl::averageHalfFloat(src1->R, src2->R);
         dst->G = gl::averageHalfFloat(src1->G, src2->G);
@@ -1595,21 +1669,22 @@ struct R16G16B16F {
     }
 };
 
-struct A32B32G32R32F {
+struct A32B32G32R32F
+{
     float A;
     float R;
     float G;
     float B;
 
-    static void readColor(gl::ColorF* dst, const A32B32G32R32F* src)
+    static void readColor(gl::ColorF *dst, const A32B32G32R32F *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(A32B32G32R32F* dst, const gl::ColorF* src)
+    static void writeColor(A32B32G32R32F *dst, const gl::ColorF *src)
     {
         dst->R = src->red;
         dst->G = src->green;
@@ -1617,7 +1692,7 @@ struct A32B32G32R32F {
         dst->A = src->alpha;
     }
 
-    static void average(A32B32G32R32F* dst, const A32B32G32R32F* src1, const A32B32G32R32F* src2)
+    static void average(A32B32G32R32F *dst, const A32B32G32R32F *src1, const A32B32G32R32F *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1626,21 +1701,22 @@ struct A32B32G32R32F {
     }
 };
 
-struct R32G32B32A32F {
+struct R32G32B32A32F
+{
     float R;
     float G;
     float B;
     float A;
 
-    static void readColor(gl::ColorF* dst, const R32G32B32A32F* src)
+    static void readColor(gl::ColorF *dst, const R32G32B32A32F *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R32G32B32A32F* dst, const gl::ColorF* src)
+    static void writeColor(R32G32B32A32F *dst, const gl::ColorF *src)
     {
         dst->R = src->red;
         dst->G = src->green;
@@ -1648,7 +1724,7 @@ struct R32G32B32A32F {
         dst->A = src->alpha;
     }
 
-    static void average(R32G32B32A32F* dst, const R32G32B32A32F* src1, const R32G32B32A32F* src2)
+    static void average(R32G32B32A32F *dst, const R32G32B32A32F *src1, const R32G32B32A32F *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1657,143 +1733,149 @@ struct R32G32B32A32F {
     }
 };
 
-struct R32F {
+struct R32F
+{
     float R;
 
-    static void readColor(gl::ColorF* dst, const R32F* src)
+    static void readColor(gl::ColorF *dst, const R32F *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R32F* dst, const gl::ColorF* src)
+    static void writeColor(R32F *dst, const gl::ColorF *src)
     {
         dst->R = src->red;
     }
 
-    static void average(R32F* dst, const R32F* src1, const R32F* src2)
+    static void average(R32F *dst, const R32F *src1, const R32F *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
     }
 };
 
-struct A32F {
+struct A32F
+{
     float A;
 
-    static void readColor(gl::ColorF* dst, const A32F* src)
+    static void readColor(gl::ColorF *dst, const A32F *src)
     {
-        dst->red = 0.0f;
+        dst->red   = 0.0f;
         dst->green = 0.0f;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = src->A;
     }
 
-    static void writeColor(A32F* dst, const gl::ColorF* src)
+    static void writeColor(A32F *dst, const gl::ColorF *src)
     {
         dst->A = src->alpha;
     }
 
-    static void average(A32F* dst, const A32F* src1, const A32F* src2)
+    static void average(A32F *dst, const A32F *src1, const A32F *src2)
     {
         dst->A = gl::average(src1->A, src2->A);
     }
 };
 
-struct L32F {
+struct L32F
+{
     float L;
 
-    static void readColor(gl::ColorF* dst, const L32F* src)
+    static void readColor(gl::ColorF *dst, const L32F *src)
     {
-        dst->red = src->L;
+        dst->red   = src->L;
         dst->green = src->L;
-        dst->blue = src->L;
+        dst->blue  = src->L;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(L32F* dst, const gl::ColorF* src)
+    static void writeColor(L32F *dst, const gl::ColorF *src)
     {
         dst->L = (src->red + src->green + src->blue) / 3.0f;
     }
 
-    static void average(L32F* dst, const L32F* src1, const L32F* src2)
+    static void average(L32F *dst, const L32F *src1, const L32F *src2)
     {
         dst->L = gl::average(src1->L, src2->L);
     }
 };
 
-struct L32A32F {
+struct L32A32F
+{
     float L;
     float A;
 
-    static void readColor(gl::ColorF* dst, const L32A32F* src)
+    static void readColor(gl::ColorF *dst, const L32A32F *src)
     {
-        dst->red = src->L;
+        dst->red   = src->L;
         dst->green = src->L;
-        dst->blue = src->L;
+        dst->blue  = src->L;
         dst->alpha = src->A;
     }
 
-    static void writeColor(L32A32F* dst, const gl::ColorF* src)
+    static void writeColor(L32A32F *dst, const gl::ColorF *src)
     {
         dst->L = (src->red + src->green + src->blue) / 3.0f;
         dst->A = src->alpha;
     }
 
-    static void average(L32A32F* dst, const L32A32F* src1, const L32A32F* src2)
+    static void average(L32A32F *dst, const L32A32F *src1, const L32A32F *src2)
     {
         dst->L = gl::average(src1->L, src2->L);
         dst->A = gl::average(src1->A, src2->A);
     }
 };
 
-struct R32G32F {
+struct R32G32F
+{
     float R;
     float G;
 
-    static void readColor(gl::ColorF* dst, const R32G32F* src)
+    static void readColor(gl::ColorF *dst, const R32G32F *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = 0.0f;
+        dst->blue  = 0.0f;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R32G32F* dst, const gl::ColorF* src)
+    static void writeColor(R32G32F *dst, const gl::ColorF *src)
     {
         dst->R = src->red;
         dst->G = src->green;
     }
 
-    static void average(R32G32F* dst, const R32G32F* src1, const R32G32F* src2)
+    static void average(R32G32F *dst, const R32G32F *src1, const R32G32F *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
     }
 };
 
-struct R32G32B32F {
+struct R32G32B32F
+{
     float R;
     float G;
     float B;
 
-    static void readColor(gl::ColorF* dst, const R32G32B32F* src)
+    static void readColor(gl::ColorF *dst, const R32G32B32F *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R32G32B32F* dst, const gl::ColorF* src)
+    static void writeColor(R32G32B32F *dst, const gl::ColorF *src)
     {
         dst->R = src->red;
         dst->G = src->green;
         dst->B = src->blue;
     }
 
-    static void average(R32G32B32F* dst, const R32G32B32F* src1, const R32G32B32F* src2)
+    static void average(R32G32B32F *dst, const R32G32B32F *src1, const R32G32B32F *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1801,37 +1883,38 @@ struct R32G32B32F {
     }
 };
 
-struct R10G10B10A2 {
+struct R10G10B10A2
+{
     unsigned int R : 10;
     unsigned int G : 10;
     unsigned int B : 10;
     unsigned int A : 2;
 
-    static void readColor(gl::ColorF* dst, const R10G10B10A2* src)
+    static void readColor(gl::ColorF *dst, const R10G10B10A2 *src)
     {
-        dst->red = gl::normalizedToFloat<10>(src->R);
+        dst->red   = gl::normalizedToFloat<10>(src->R);
         dst->green = gl::normalizedToFloat<10>(src->G);
-        dst->blue = gl::normalizedToFloat<10>(src->B);
-        dst->alpha = gl::normalizedToFloat<2>(src->A);
+        dst->blue  = gl::normalizedToFloat<10>(src->B);
+        dst->alpha = gl::normalizedToFloat< 2>(src->A);
     }
 
-    static void readColor(gl::ColorUI* dst, const R10G10B10A2* src)
+    static void readColor(gl::ColorUI *dst, const R10G10B10A2 *src)
     {
-        dst->red = src->R;
+        dst->red   = src->R;
         dst->green = src->G;
-        dst->blue = src->B;
+        dst->blue  = src->B;
         dst->alpha = src->A;
     }
 
-    static void writeColor(R10G10B10A2* dst, const gl::ColorF* src)
+    static void writeColor(R10G10B10A2 *dst, const gl::ColorF *src)
     {
         dst->R = gl::floatToNormalized<10, unsigned int>(src->red);
         dst->G = gl::floatToNormalized<10, unsigned int>(src->green);
         dst->B = gl::floatToNormalized<10, unsigned int>(src->blue);
-        dst->A = gl::floatToNormalized<2, unsigned int>(src->alpha);
+        dst->A = gl::floatToNormalized< 2, unsigned int>(src->alpha);
     }
 
-    static void writeColor(R10G10B10A2* dst, const gl::ColorUI* src)
+    static void writeColor(R10G10B10A2 *dst, const gl::ColorUI *src)
     {
         dst->R = static_cast<unsigned int>(src->red);
         dst->G = static_cast<unsigned int>(src->green);
@@ -1839,7 +1922,7 @@ struct R10G10B10A2 {
         dst->A = static_cast<unsigned int>(src->alpha);
     }
 
-    static void average(R10G10B10A2* dst, const R10G10B10A2* src1, const R10G10B10A2* src2)
+    static void average(R10G10B10A2 *dst, const R10G10B10A2 *src1, const R10G10B10A2 *src2)
     {
         dst->R = gl::average(src1->R, src2->R);
         dst->G = gl::average(src1->G, src2->G);
@@ -1848,26 +1931,27 @@ struct R10G10B10A2 {
     }
 };
 
-struct R9G9B9E5 {
+struct R9G9B9E5
+{
     unsigned int R : 9;
     unsigned int G : 9;
     unsigned int B : 9;
     unsigned int E : 5;
 
-    static void readColor(gl::ColorF* dst, const R9G9B9E5* src)
+    static void readColor(gl::ColorF *dst, const R9G9B9E5 *src)
     {
         gl::convert999E5toRGBFloats(gl::bitCast<unsigned int>(*src), &dst->red, &dst->green, &dst->blue);
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R9G9B9E5* dst, const gl::ColorF* src)
+    static void writeColor(R9G9B9E5 *dst, const gl::ColorF *src)
     {
         *reinterpret_cast<unsigned int*>(dst) = gl::convertRGBFloatsTo999E5(src->red,
-            src->green,
-            src->blue);
+                                                                            src->green,
+                                                                            src->blue);
     }
 
-    static void average(R9G9B9E5* dst, const R9G9B9E5* src1, const R9G9B9E5* src2)
+    static void average(R9G9B9E5 *dst, const R9G9B9E5 *src1, const R9G9B9E5 *src2)
     {
         float r1, g1, b1;
         gl::convert999E5toRGBFloats(*reinterpret_cast<const unsigned int*>(src1), &r1, &g1, &b1);
@@ -1876,32 +1960,33 @@ struct R9G9B9E5 {
         gl::convert999E5toRGBFloats(*reinterpret_cast<const unsigned int*>(src2), &r2, &g2, &b2);
 
         *reinterpret_cast<unsigned int*>(dst) = gl::convertRGBFloatsTo999E5(gl::average(r1, r2),
-            gl::average(g1, g2),
-            gl::average(b1, b2));
+                                                                            gl::average(g1, g2),
+                                                                            gl::average(b1, b2));
     }
 };
 
-struct R11G11B10F {
+struct R11G11B10F
+{
     unsigned int R : 11;
     unsigned int G : 11;
     unsigned int B : 10;
 
-    static void readColor(gl::ColorF* dst, const R11G11B10F* src)
+    static void readColor(gl::ColorF *dst, const R11G11B10F *src)
     {
-        dst->red = gl::float11ToFloat32(src->R);
+        dst->red   = gl::float11ToFloat32(src->R);
         dst->green = gl::float11ToFloat32(src->G);
-        dst->blue = gl::float10ToFloat32(src->B);
+        dst->blue  = gl::float10ToFloat32(src->B);
         dst->alpha = 1.0f;
     }
 
-    static void writeColor(R11G11B10F* dst, const gl::ColorF* src)
+    static void writeColor(R11G11B10F *dst, const gl::ColorF *src)
     {
         dst->R = gl::float32ToFloat11(src->red);
         dst->G = gl::float32ToFloat11(src->green);
         dst->B = gl::float32ToFloat10(src->blue);
     }
 
-    static void average(R11G11B10F* dst, const R11G11B10F* src1, const R11G11B10F* src2)
+    static void average(R11G11B10F *dst, const R11G11B10F *src1, const R11G11B10F *src2)
     {
         dst->R = gl::averageFloat11(src1->R, src2->R);
         dst->G = gl::averageFloat11(src1->G, src2->G);

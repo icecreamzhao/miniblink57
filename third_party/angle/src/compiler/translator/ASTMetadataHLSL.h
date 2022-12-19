@@ -17,19 +17,20 @@ class TIntermNode;
 class TIntermSelection;
 class TIntermLoop;
 
-struct ASTMetadataHLSL {
+struct ASTMetadataHLSL
+{
     ASTMetadataHLSL()
-        : mUsesGradient(false)
-        , mCalledInDiscontinuousLoop(false)
-        , mHasGradientLoopInCallGraph(false)
-        , mNeedsLod0(false)
+        : mUsesGradient(false),
+          mCalledInDiscontinuousLoop(false),
+          mHasGradientLoopInCallGraph(false),
+          mNeedsLod0(false)
     {
     }
 
     // Here "something uses a gradient" means here that it either contains a
     // gradient operation, or a call to a function that uses a gradient.
-    bool hasGradientInCallGraph(TIntermLoop* node);
-    bool hasGradientLoop(TIntermSelection* node);
+    bool hasGradientInCallGraph(TIntermLoop *node);
+    bool hasGradientLoop(TIntermSelection *node);
 
     // Does the function use a gradient.
     bool mUsesGradient;
@@ -43,7 +44,7 @@ struct ASTMetadataHLSL {
     bool mCalledInDiscontinuousLoop;
     bool mHasGradientLoopInCallGraph;
     std::set<TIntermLoop*> mDiscontinuousLoops;
-    std::set<TIntermSelection*> mIfsContainingGradientLoop;
+    std::set<TIntermSelection *> mIfsContainingGradientLoop;
 
     // Will we need to generate a Lod0 version of the function.
     bool mNeedsLod0;
@@ -52,6 +53,6 @@ struct ASTMetadataHLSL {
 typedef std::vector<ASTMetadataHLSL> MetadataList;
 
 // Return the AST analysis result, in the order defined by the call DAG
-MetadataList CreateASTMetadataHLSL(TIntermNode* root, const CallDAG& callDag);
+MetadataList CreateASTMetadataHLSL(TIntermNode *root, const CallDAG &callDag);
 
 #endif // COMPILER_TRANSLATOR_ASTMETADATAHLSL_H_

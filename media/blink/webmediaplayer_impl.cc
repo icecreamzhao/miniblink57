@@ -182,7 +182,7 @@ namespace {
 
     // How much time must have elapsed since loading last progressed before we
     // assume that the decoder will have had time to complete preroll.
-    constexpr base::TimeDelta kPrerollAttemptTimeout = base::TimeDelta::FromSeconds(3);
+    base::TimeDelta kPrerollAttemptTimeout = base::TimeDelta::FromSeconds(3);
 
 } // namespace
 

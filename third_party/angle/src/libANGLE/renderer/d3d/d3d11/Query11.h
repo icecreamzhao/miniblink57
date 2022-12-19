@@ -9,58 +9,32 @@
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_QUERY11_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_QUERY11_H_
 
-#include <deque>
-
 #include "libANGLE/renderer/QueryImpl.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer11;
 
-class Query11 : public QueryImpl {
-public:
-    Query11(Renderer11* renderer, GLenum type);
-    ~Query11() override;
+class Query11 : public QueryImpl
+{
+  public:
+    Query11(Renderer11 *renderer, GLenum type);
+    virtual ~Query11();
 
-    gl::Error begin() override;
-    gl::Error end() override;
-    gl::Error queryCounter() override;
-    gl::Error getResult(GLint* params) override;
-    gl::Error getResult(GLuint* params) override;
-    gl::Error getResult(GLint64* params) override;
-    gl::Error getResult(GLuint64* params) override;
-    gl::Error isResultAvailable(bool* available) override;
+    virtual gl::Error begin();
+    virtual gl::Error end();
+    virtual gl::Error getResult(GLuint *params);
+    virtual gl::Error isResultAvailable(GLuint *available);
 
-    gl::Error pause();
-    gl::Error resume();
+  private:
+    gl::Error testQuery();
 
-private:
-    struct QueryState {
-        QueryState()
-            : query(nullptr)
-            , beginTimestamp(nullptr)
-            , endTimestamp(nullptr)
-            , finished(false)
-        {
-        }
-        ID3D11Query* query;
-        ID3D11Query* beginTimestamp;
-        ID3D11Query* endTimestamp;
-        bool finished;
-    };
+    GLuint mResult;
 
-    gl::Error flush(bool force);
-    gl::Error testQuery(QueryState* queryState);
+    bool mQueryFinished;
 
-    template <typename T>
-    gl::Error getResultBase(T* params);
-
-    GLuint64 mResult;
-    GLuint64 mResultSum;
-
-    Renderer11* mRenderer;
-
-    QueryState mActiveQuery;
-    std::deque<QueryState> mPendingQueries;
+    Renderer11 *mRenderer;
+    ID3D11Query *mQuery;
 };
 
 }

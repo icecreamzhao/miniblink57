@@ -11,6 +11,6 @@ class TIntermTyped;
 class TParseContext;
 
 // Returns true if the initializer is valid.
-bool ValidateGlobalInitializer(TIntermTyped* initializer, const TParseContext* context, bool* warning);
+bool ValidateGlobalInitializer(TIntermTyped *initializer, const TParseContext *context, bool *warning);
 
 #endif // COMPILER_TRANSLATOR_VALIDATEGLOBALINITIALIZER_H_

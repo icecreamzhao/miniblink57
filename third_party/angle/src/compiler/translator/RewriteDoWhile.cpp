@@ -11,7 +11,8 @@
 
 #include "compiler/translator/IntermNode.h"
 
-namespace {
+namespace
+{
 
 // An AST traverser that rewrites loops of the form
 //   do {
@@ -37,53 +38,54 @@ namespace {
 // TODO(cwallez) when UnfoldShortCircuitIntoIf handles loops correctly, revisit this as we might
 // be able to use while (temp || CONDITION) with temp initially set to true then run
 // UnfoldShortCircuitIntoIf
-class DoWhileRewriter : public TIntermTraverser {
-public:
-    DoWhileRewriter()
-        : TIntermTraverser(true, false, false)
-    {
-    }
+class DoWhileRewriter : public TIntermTraverser
+{
+  public:
+    DoWhileRewriter() : TIntermTraverser(true, false, false) {}
 
-    bool visitAggregate(Visit, TIntermAggregate* node) override
+    bool visitAggregate(Visit, TIntermAggregate *node) override
     {
         // A well-formed AST can only have do-while in EOpSequence which represent lists of
         // statements. By doing a prefix traversal we are able to replace the do-while in the
         // sequence directly as the content of the do-while will be traversed later.
-        if (node->getOp() != EOpSequence) {
+        if (node->getOp() != EOpSequence)
+        {
             return true;
         }
 
-        TIntermSequence* statements = node->getSequence();
+        TIntermSequence *statements = node->getSequence();
 
         // The statements vector will have new statements inserted when we encounter a do-while,
         // which prevents us from using a range-based for loop. Using the usual i++ works, as
         // the (two) new statements inserted replace the statement at the current position.
-        for (size_t i = 0; i < statements->size(); i++) {
-            TIntermNode* statement = (*statements)[i];
-            TIntermLoop* loop = statement->getAsLoopNode();
+        for (size_t i = 0; i < statements->size(); i++)
+        {
+            TIntermNode *statement = (*statements)[i];
+            TIntermLoop *loop      = statement->getAsLoopNode();
 
-            if (loop == nullptr || loop->getType() != ELoopDoWhile) {
+            if (loop == nullptr || loop->getType() != ELoopDoWhile)
+            {
                 continue;
             }
 
             TType boolType = TType(EbtBool);
 
             // bool temp = false;
-            TIntermAggregate* tempDeclaration = nullptr;
+            TIntermAggregate *tempDeclaration = nullptr;
             {
-                TConstantUnion* falseConstant = new TConstantUnion();
+                TConstantUnion *falseConstant = new TConstantUnion();
                 falseConstant->setBConst(false);
-                TIntermTyped* falseValue = new TIntermConstantUnion(falseConstant, boolType);
+                TIntermTyped *falseValue = new TIntermConstantUnion(falseConstant, boolType);
 
                 tempDeclaration = createTempInitDeclaration(falseValue);
             }
 
             // temp = true;
-            TIntermBinary* assignTrue = nullptr;
+            TIntermBinary *assignTrue = nullptr;
             {
-                TConstantUnion* trueConstant = new TConstantUnion();
+                TConstantUnion *trueConstant = new TConstantUnion();
                 trueConstant->setBConst(true);
-                TIntermTyped* trueValue = new TIntermConstantUnion(trueConstant, boolType);
+                TIntermTyped *trueValue = new TIntermConstantUnion(trueConstant, boolType);
 
                 assignTrue = createTempAssignment(trueValue);
             }
@@ -93,19 +95,20 @@ public:
             //     break;
             //   }
             // }
-            TIntermSelection* breakIf = nullptr;
+            TIntermSelection *breakIf = nullptr;
             {
-                TIntermBranch* breakStatement = new TIntermBranch(EOpBreak, nullptr);
+                TIntermBranch *breakStatement = new TIntermBranch(EOpBreak, nullptr);
 
-                TIntermAggregate* breakBlock = new TIntermAggregate(EOpSequence);
+                TIntermAggregate *breakBlock = new TIntermAggregate(EOpSequence);
                 breakBlock->getSequence()->push_back(breakStatement);
 
-                TIntermUnary* negatedCondition = new TIntermUnary(EOpLogicalNot);
+                TIntermUnary *negatedCondition = new TIntermUnary(EOpLogicalNot);
                 negatedCondition->setOperand(loop->getCondition());
 
-                TIntermSelection* innerIf = new TIntermSelection(negatedCondition, breakBlock, nullptr);
+                TIntermSelection *innerIf =
+                    new TIntermSelection(negatedCondition, breakBlock, nullptr);
 
-                TIntermAggregate* innerIfBlock = new TIntermAggregate(EOpSequence);
+                TIntermAggregate *innerIfBlock = new TIntermAggregate(EOpSequence);
                 innerIfBlock->getSequence()->push_back(innerIf);
 
                 breakIf = new TIntermSelection(createTempSymbol(boolType), innerIfBlock, nullptr);
@@ -113,16 +116,19 @@ public:
 
             // Assemble the replacement loops, reusing the do-while loop's body and inserting our
             // statements at the front.
-            TIntermLoop* newLoop = nullptr;
+            TIntermLoop *newLoop = nullptr;
             {
-                TConstantUnion* trueConstant = new TConstantUnion();
+                TConstantUnion *trueConstant = new TConstantUnion();
                 trueConstant->setBConst(true);
-                TIntermTyped* trueValue = new TIntermConstantUnion(trueConstant, boolType);
+                TIntermTyped *trueValue = new TIntermConstantUnion(trueConstant, boolType);
 
-                TIntermAggregate* body = nullptr;
-                if (loop->getBody() != nullptr) {
+                TIntermAggregate *body = nullptr;
+                if (loop->getBody() != nullptr)
+                {
                     body = loop->getBody()->getAsAggregate();
-                } else {
+                }
+                else
+                {
                     body = new TIntermAggregate(EOpSequence);
                 }
                 auto sequence = body->getSequence();
@@ -144,9 +150,9 @@ public:
     }
 };
 
-} // anonymous namespace
+}  // anonymous namespace
 
-void RewriteDoWhile(TIntermNode* root, unsigned int* temporaryIndex)
+void RewriteDoWhile(TIntermNode *root, unsigned int *temporaryIndex)
 {
     ASSERT(temporaryIndex != 0);
 

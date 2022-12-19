@@ -9,40 +9,37 @@
 #ifndef LIBANGLE_TEXTURE_H_
 #define LIBANGLE_TEXTURE_H_
 
-#include <map>
 #include <vector>
+#include <map>
 
 #include "angle_gl.h"
 #include "common/debug.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Constants.h"
-#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Image.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/TextureImpl.h"
 
-namespace egl {
+namespace egl
+{
 class Surface;
 }
 
-namespace gl {
+namespace gl
+{
 class Context;
 class Framebuffer;
 struct Data;
 
-bool IsMipmapFiltered(const SamplerState& samplerState);
+bool IsMipmapFiltered(const gl::SamplerState &samplerState);
 
-class Texture final : public egl::ImageSibling,
-                      public FramebufferAttachmentObject,
-                      public LabeledObject {
-public:
-    Texture(rx::TextureImpl* impl, GLuint id, GLenum target);
+class Texture final : public egl::ImageSibling, public gl::FramebufferAttachmentObject
+{
+  public:
+    Texture(rx::TextureImpl *impl, GLuint id, GLenum target);
     ~Texture() override;
-
-    void setLabel(const std::string& label) override;
-    const std::string& getLabel() const override;
 
     GLenum getTarget() const;
 
@@ -88,7 +85,7 @@ public:
     void setCompareFunc(GLenum compareFunc);
     GLenum getCompareFunc() const;
 
-    const SamplerState& getSamplerState() const;
+    const SamplerState &getSamplerState() const;
 
     void setBaseLevel(GLuint baseLevel);
     GLuint getBaseLevel() const;
@@ -103,112 +100,112 @@ public:
     void setUsage(GLenum usage);
     GLenum getUsage() const;
 
-    const TextureState& getTextureState() const;
+    const TextureState &getTextureState() const;
 
     size_t getWidth(GLenum target, size_t level) const;
     size_t getHeight(GLenum target, size_t level) const;
     size_t getDepth(GLenum target, size_t level) const;
     GLenum getInternalFormat(GLenum target, size_t level) const;
 
-    bool isSamplerComplete(const SamplerState& samplerState, const Data& data) const;
+    bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const;
     bool isMipmapComplete() const;
     bool isCubeComplete() const;
     size_t getMipCompleteLevels() const;
 
-    Error setImage(Context* context,
-        GLenum target,
-        size_t level,
-        GLenum internalFormat,
-        const Extents& size,
-        GLenum format,
-        GLenum type,
-        const uint8_t* pixels);
-    Error setSubImage(Context* context,
-        GLenum target,
-        size_t level,
-        const Box& area,
-        GLenum format,
-        GLenum type,
-        const uint8_t* pixels);
+    Error setImage(Context *context,
+                   GLenum target,
+                   size_t level,
+                   GLenum internalFormat,
+                   const Extents &size,
+                   GLenum format,
+                   GLenum type,
+                   const uint8_t *pixels);
+    Error setSubImage(Context *context,
+                      GLenum target,
+                      size_t level,
+                      const Box &area,
+                      GLenum format,
+                      GLenum type,
+                      const uint8_t *pixels);
 
-    Error setCompressedImage(Context* context,
-        GLenum target,
-        size_t level,
-        GLenum internalFormat,
-        const Extents& size,
-        size_t imageSize,
-        const uint8_t* pixels);
-    Error setCompressedSubImage(Context* context,
-        GLenum target,
-        size_t level,
-        const Box& area,
-        GLenum format,
-        size_t imageSize,
-        const uint8_t* pixels);
+    Error setCompressedImage(Context *context,
+                             GLenum target,
+                             size_t level,
+                             GLenum internalFormat,
+                             const Extents &size,
+                             size_t imageSize,
+                             const uint8_t *pixels);
+    Error setCompressedSubImage(Context *context,
+                                GLenum target,
+                                size_t level,
+                                const Box &area,
+                                GLenum format,
+                                size_t imageSize,
+                                const uint8_t *pixels);
 
     Error copyImage(GLenum target,
-        size_t level,
-        const Rectangle& sourceArea,
-        GLenum internalFormat,
-        const Framebuffer* source);
+                    size_t level,
+                    const Rectangle &sourceArea,
+                    GLenum internalFormat,
+                    const Framebuffer *source);
     Error copySubImage(GLenum target,
-        size_t level,
-        const Offset& destOffset,
-        const Rectangle& sourceArea,
-        const Framebuffer* source);
+                       size_t level,
+                       const Offset &destOffset,
+                       const Rectangle &sourceArea,
+                       const Framebuffer *source);
 
-    Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents& size);
+    Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size);
 
-    Error setEGLImageTarget(GLenum target, egl::Image* imageTarget);
+    Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 
     Error generateMipmaps();
 
-    egl::Surface* getBoundSurface() const;
+    egl::Surface *getBoundSurface() const;
 
-    rx::TextureImpl* getImplementation() { return mTexture; }
-    const rx::TextureImpl* getImplementation() const { return mTexture; }
+    rx::TextureImpl *getImplementation() { return mTexture; }
+    const rx::TextureImpl *getImplementation() const { return mTexture; }
 
     // FramebufferAttachmentObject implementation
-    Extents getAttachmentSize(const FramebufferAttachment::Target& target) const override;
-    GLenum getAttachmentInternalFormat(const FramebufferAttachment::Target& target) const override;
-    GLsizei getAttachmentSamples(const FramebufferAttachment::Target& target) const override;
+    GLsizei getAttachmentWidth(const FramebufferAttachment::Target &target) const override;
+    GLsizei getAttachmentHeight(const FramebufferAttachment::Target &target) const override;
+    GLenum getAttachmentInternalFormat(const FramebufferAttachment::Target &target) const override;
+    GLsizei getAttachmentSamples(const FramebufferAttachment::Target &target) const override;
 
     void onAttach() override;
     void onDetach() override;
     GLuint getId() const override;
 
-private:
-    rx::FramebufferAttachmentObjectImpl* getAttachmentImpl() const override { return mTexture; }
+  private:
+    rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override { return mTexture; }
 
     // ANGLE-only method, used internally
     friend class egl::Surface;
-    void bindTexImageFromSurface(egl::Surface* surface);
+    void bindTexImageFromSurface(egl::Surface *surface);
     void releaseTexImageFromSurface();
 
-    rx::TextureImpl* mTexture;
-
-    std::string mLabel;
+    rx::TextureImpl *mTexture;
 
     TextureState mTextureState;
 
     GLenum mTarget;
 
-    struct ImageDesc {
+    struct ImageDesc
+    {
         Extents size;
         GLenum internalFormat;
 
         ImageDesc();
-        ImageDesc(const Extents& size, GLenum internalFormat);
+        ImageDesc(const Extents &size, GLenum internalFormat);
     };
 
     GLenum getBaseImageTarget() const;
 
-    bool computeSamplerCompleteness(const SamplerState& samplerState, const Data& data) const;
+    bool computeSamplerCompleteness(const SamplerState &samplerState, const Data &data) const;
     bool computeMipmapCompleteness() const;
     bool computeLevelCompleteness(GLenum target, size_t level) const;
 
-    const ImageDesc& getImageDesc(GLenum target, size_t level) const;
-    void setImageDesc(GLenum target, size_t level, const ImageDesc& desc);
+    const ImageDesc &getImageDesc(GLenum target, size_t level) const;
+    void setImageDesc(GLenum target, size_t level, const ImageDesc &desc);
     void setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat);
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
@@ -216,7 +213,8 @@ private:
 
     std::vector<ImageDesc> mImageDescs;
 
-    struct SamplerCompletenessCache {
+    struct SamplerCompletenessCache
+    {
         SamplerCompletenessCache();
 
         bool cacheValid;
@@ -233,9 +231,9 @@ private:
     };
     mutable SamplerCompletenessCache mCompletenessCache;
 
-    egl::Surface* mBoundSurface;
+    egl::Surface *mBoundSurface;
 };
 
 }
 
-#endif // LIBANGLE_TEXTURE_H_
+#endif   // LIBANGLE_TEXTURE_H_

@@ -11,18 +11,20 @@
 
 #include "libANGLE/renderer/CompilerImpl.h"
 
-namespace rx {
+namespace rx
+{
 class FunctionsGL;
 
-class CompilerGL : public CompilerImpl {
-public:
-    CompilerGL(const FunctionsGL* functions);
-    ~CompilerGL() override { }
+class CompilerGL : public CompilerImpl
+{
+  public:
+    CompilerGL(const FunctionsGL *functions);
+    ~CompilerGL() override {}
 
     gl::Error release() override { return gl::Error(GL_NO_ERROR); }
     ShShaderOutput getTranslatorOutputType() const override { return mTranslatorOutputType; }
 
-private:
+  private:
     ShShaderOutput mTranslatorOutputType;
 };
 

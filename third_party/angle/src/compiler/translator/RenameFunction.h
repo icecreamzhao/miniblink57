@@ -12,16 +12,15 @@
 //
 // Renames a function, including its declaration and any calls to it.
 //
-class RenameFunction : public TIntermTraverser {
+class RenameFunction : public TIntermTraverser
+{
 public:
     RenameFunction(const TString& oldFunctionName, const TString& newFunctionName)
-        : TIntermTraverser(true, false, false)
-        , mOldFunctionName(oldFunctionName)
-        , mNewFunctionName(newFunctionName)
-    {
-    }
+    : TIntermTraverser(true, false, false)
+    , mOldFunctionName(oldFunctionName)
+    , mNewFunctionName(newFunctionName) {}
 
-    bool visitAggregate(Visit visit, TIntermAggregate* node) override
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override
     {
         TOperator op = node->getOp();
         if ((op == EOpFunction || op == EOpFunctionCall) && node->getName() == mOldFunctionName)
@@ -34,4 +33,4 @@ private:
     const TString mNewFunctionName;
 };
 
-#endif // COMPILER_TRANSLATOR_RENAMEFUNCTION_H_
+#endif  // COMPILER_TRANSLATOR_RENAMEFUNCTION_H_

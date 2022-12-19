@@ -91,7 +91,8 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  * Whether the thread support is configured in
  */
 #if 1
-#if defined(_REENTRANT) || defined(__MT__) || (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE - 0 >= 199506L))
+#if defined(_REENTRANT) || defined(__MT__) || \
+    (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE - 0 >= 199506L))
 #define LIBXML_THREAD_ENABLED
 #endif
 #endif
@@ -101,7 +102,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether the DOM like tree manipulation API support is configured in
  */
-#if 0
+#if 1
 #define LIBXML_TREE_ENABLED
 #endif
 
@@ -110,7 +111,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether the serialization/saving support is configured in
  */
-#if 0
+#if 1
 #define LIBXML_OUTPUT_ENABLED
 #endif
 
@@ -155,7 +156,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether the older SAX1 interface is configured in
  */
-#if 0
+#if 1
 #define LIBXML_SAX1_ENABLED
 #endif
 
@@ -191,7 +192,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether the HTML support is configured in
  */
-#if 0
+#if 1
 #define LIBXML_HTML_ENABLED
 #endif
 
@@ -236,7 +237,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether XPath is configured in
  */
-#if 0
+#if 1
 #define LIBXML_XPATH_ENABLED
 #endif
 
@@ -378,7 +379,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * the string suffix used by dynamic modules (usually shared libraries)
  */
-#define LIBXML_MODULE_EXTENSION ".dll"
+#define LIBXML_MODULE_EXTENSION ".dll" 
 #endif
 
 /**
@@ -412,13 +413,13 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  */
 
 #ifndef LIBXML_ATTR_ALLOC_SIZE
-#if ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)))
-#define LIBXML_ATTR_ALLOC_SIZE(x) __attribute__((alloc_size(x)))
+# if ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)))
+#  define LIBXML_ATTR_ALLOC_SIZE(x) __attribute__((alloc_size(x)))
+# else
+#  define LIBXML_ATTR_ALLOC_SIZE(x)
+# endif
 #else
-#define LIBXML_ATTR_ALLOC_SIZE(x)
-#endif
-#else
-#define LIBXML_ATTR_ALLOC_SIZE(x)
+# define LIBXML_ATTR_ALLOC_SIZE(x)
 #endif
 
 /**
@@ -428,13 +429,13 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  */
 
 #ifndef LIBXML_ATTR_FORMAT
-#if ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)))
-#define LIBXML_ATTR_FORMAT(fmt, args) __attribute__((__format__(__printf__, fmt, args)))
+# if ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)))
+#  define LIBXML_ATTR_FORMAT(fmt,args) __attribute__((__format__(__printf__,fmt,args)))
+# else
+#  define LIBXML_ATTR_FORMAT(fmt,args)
+# endif
 #else
-#define LIBXML_ATTR_FORMAT(fmt, args)
-#endif
-#else
-#define LIBXML_ATTR_FORMAT(fmt, args)
+# define LIBXML_ATTR_FORMAT(fmt,args)
 #endif
 
 #else /* ! __GNUC__ */
@@ -455,10 +456,12 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Macro used to indicate to GCC the parameter are printf like
  */
-#define LIBXML_ATTR_FORMAT(fmt, args)
+#define LIBXML_ATTR_FORMAT(fmt,args)
 #endif /* __GNUC__ */
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 #endif
+
+

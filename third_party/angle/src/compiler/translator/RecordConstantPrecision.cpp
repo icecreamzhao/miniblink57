@@ -18,62 +18,69 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
 
-namespace {
+namespace
+{
 
-class RecordConstantPrecisionTraverser : public TIntermTraverser {
-public:
+class RecordConstantPrecisionTraverser : public TIntermTraverser
+{
+  public:
     RecordConstantPrecisionTraverser();
 
-    void visitConstantUnion(TIntermConstantUnion* node) override;
+    void visitConstantUnion(TIntermConstantUnion *node) override;
 
     void nextIteration();
 
     bool foundHigherPrecisionConstant() const { return mFoundHigherPrecisionConstant; }
-
-protected:
-    bool operandAffectsParentOperationPrecision(TIntermTyped* operand);
+  protected:
+    bool operandAffectsParentOperationPrecision(TIntermTyped *operand);
 
     bool mFoundHigherPrecisionConstant;
 };
 
 RecordConstantPrecisionTraverser::RecordConstantPrecisionTraverser()
-    : TIntermTraverser(true, false, true)
-    , mFoundHigherPrecisionConstant(false)
+    : TIntermTraverser(true, false, true),
+      mFoundHigherPrecisionConstant(false)
 {
 }
 
-bool RecordConstantPrecisionTraverser::operandAffectsParentOperationPrecision(TIntermTyped* operand)
+bool RecordConstantPrecisionTraverser::operandAffectsParentOperationPrecision(TIntermTyped *operand)
 {
-    const TIntermBinary* parentAsBinary = getParentNode()->getAsBinaryNode();
-    if (parentAsBinary != nullptr) {
+    const TIntermBinary *parentAsBinary = getParentNode()->getAsBinaryNode();
+    if (parentAsBinary != nullptr)
+    {
         // If the constant is assigned or is used to initialize a variable, or if it's an index,
         // its precision has no effect.
-        switch (parentAsBinary->getOp()) {
-        case EOpInitialize:
-        case EOpAssign:
-        case EOpIndexDirect:
-        case EOpIndexDirectStruct:
-        case EOpIndexDirectInterfaceBlock:
-        case EOpIndexIndirect:
+        switch (parentAsBinary->getOp())
+        {
+          case EOpInitialize:
+          case EOpAssign:
+          case EOpIndexDirect:
+          case EOpIndexDirectStruct:
+          case EOpIndexDirectInterfaceBlock:
+          case EOpIndexIndirect:
             return false;
-        default:
+          default:
             break;
         }
 
-        TIntermTyped* otherOperand = parentAsBinary->getRight();
-        if (otherOperand == operand) {
+        TIntermTyped *otherOperand = parentAsBinary->getRight();
+        if (otherOperand == operand)
+        {
             otherOperand = parentAsBinary->getLeft();
         }
         // If the precision of the other child is at least as high as the precision of the constant, the precision of
         // the constant has no effect.
-        if (otherOperand->getAsConstantUnion() == nullptr && otherOperand->getPrecision() >= operand->getPrecision()) {
+        if (otherOperand->getAsConstantUnion() == nullptr && otherOperand->getPrecision() >= operand->getPrecision())
+        {
             return false;
         }
     }
 
-    TIntermAggregate* parentAsAggregate = getParentNode()->getAsAggregate();
-    if (parentAsAggregate != nullptr) {
-        if (!parentAsAggregate->gotPrecisionFromChildren()) {
+    TIntermAggregate *parentAsAggregate = getParentNode()->getAsAggregate();
+    if (parentAsAggregate != nullptr)
+    {
+        if (!parentAsAggregate->gotPrecisionFromChildren())
+        {
             // This can be either:
             // * a call to an user-defined function
             // * a call to a texture function
@@ -81,16 +88,20 @@ bool RecordConstantPrecisionTraverser::operandAffectsParentOperationPrecision(TI
             // In any of these cases the constant precision has no effect.
             return false;
         }
-        if (parentAsAggregate->isConstructor() && parentAsAggregate->getBasicType() == EbtBool) {
+        if (parentAsAggregate->isConstructor() && parentAsAggregate->getBasicType() == EbtBool)
+        {
             return false;
         }
         // If the precision of operands does affect the result, but the precision of any of the other children
         // has a precision that's at least as high as the precision of the constant, the precision of the constant
         // has no effect.
-        TIntermSequence* parameters = parentAsAggregate->getSequence();
-        for (TIntermNode* parameter : *parameters) {
-            const TIntermTyped* typedParameter = parameter->getAsTyped();
-            if (parameter != operand && typedParameter != nullptr && parameter->getAsConstantUnion() == nullptr && typedParameter->getPrecision() >= operand->getPrecision()) {
+        TIntermSequence *parameters = parentAsAggregate->getSequence();
+        for (TIntermNode *parameter : *parameters)
+        {
+            const TIntermTyped *typedParameter = parameter->getAsTyped();
+            if (parameter != operand && typedParameter != nullptr && parameter->getAsConstantUnion() == nullptr &&
+                typedParameter->getPrecision() >= operand->getPrecision())
+            {
                 return false;
             }
         }
@@ -98,7 +109,7 @@ bool RecordConstantPrecisionTraverser::operandAffectsParentOperationPrecision(TI
     return true;
 }
 
-void RecordConstantPrecisionTraverser::visitConstantUnion(TIntermConstantUnion* node)
+void RecordConstantPrecisionTraverser::visitConstantUnion(TIntermConstantUnion *node)
 {
     if (mFoundHigherPrecisionConstant)
         return;
@@ -129,16 +140,18 @@ void RecordConstantPrecisionTraverser::nextIteration()
 
 } // namespace
 
-void RecordConstantPrecision(TIntermNode* root, unsigned int* temporaryIndex)
+void RecordConstantPrecision(TIntermNode *root, unsigned int *temporaryIndex)
 {
     RecordConstantPrecisionTraverser traverser;
     ASSERT(temporaryIndex != nullptr);
     traverser.useTemporaryIndex(temporaryIndex);
     // Iterate as necessary, and reset the traverser between iterations.
-    do {
+    do
+    {
         traverser.nextIteration();
         root->traverse(&traverser);
         if (traverser.foundHigherPrecisionConstant())
             traverser.updateTree();
-    } while (traverser.foundHigherPrecisionConstant());
+    }
+    while (traverser.foundHigherPrecisionConstant());
 }

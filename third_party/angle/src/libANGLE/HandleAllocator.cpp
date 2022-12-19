@@ -10,28 +10,27 @@
 #include "libANGLE/HandleAllocator.h"
 
 #include <algorithm>
+#include <limits>
 
 #include "common/debug.h"
 
-namespace gl {
+namespace gl
+{
 
-struct HandleAllocator::HandleRangeComparator {
-    bool operator()(const HandleRange& range, GLuint handle) const
+struct HandleAllocator::HandleRangeComparator
+{
+    bool operator()(const HandleRange &range, GLuint handle) const
     {
         return (range.end < handle);
     }
 };
 
-HandleAllocator::HandleAllocator()
-    : mBaseValue(1)
-    , mNextValue(1)
+HandleAllocator::HandleAllocator() : mBaseValue(1), mNextValue(1)
 {
     mUnallocatedList.push_back(HandleRange(1, std::numeric_limits<GLuint>::max()));
 }
 
-HandleAllocator::HandleAllocator(GLuint maximumHandleValue)
-    : mBaseValue(1)
-    , mNextValue(1)
+HandleAllocator::HandleAllocator(GLuint maximumHandleValue) : mBaseValue(1), mNextValue(1)
 {
     mUnallocatedList.push_back(HandleRange(1, maximumHandleValue));
 }
@@ -52,7 +51,8 @@ GLuint HandleAllocator::allocate()
     ASSERT(!mUnallocatedList.empty() || !mReleasedList.empty());
 
     // Allocate from released list, constant time.
-    if (!mReleasedList.empty()) {
+    if (!mReleasedList.empty())
+    {
         GLuint reusedHandle = mReleasedList.back();
         mReleasedList.pop_back();
         return reusedHandle;
@@ -65,7 +65,8 @@ GLuint HandleAllocator::allocate()
     ASSERT(freeListHandle > 0);
 
     listIt->begin++;
-    if (listIt->begin == listIt->end) {
+    if (listIt->begin == listIt->end)
+    {
         mUnallocatedList.erase(listIt);
     }
 
@@ -81,9 +82,11 @@ void HandleAllocator::release(GLuint handle)
 void HandleAllocator::reserve(GLuint handle)
 {
     // Clear from released list -- might be a slow operation.
-    if (!mReleasedList.empty()) {
+    if (!mReleasedList.empty())
+    {
         auto releasedIt = std::find(mReleasedList.begin(), mReleasedList.end(), handle);
-        if (releasedIt != mReleasedList.end()) {
+        if (releasedIt != mReleasedList.end())
+        {
             mReleasedList.erase(releasedIt);
             return;
         }
@@ -97,12 +100,18 @@ void HandleAllocator::reserve(GLuint handle)
     GLuint begin = boundIt->begin;
     GLuint end = boundIt->end;
 
-    if (handle == begin || handle == end) {
-        if (begin + 1 == end) {
+    if (handle == begin || handle == end)
+    {
+        if (begin + 1 == end)
+        {
             mUnallocatedList.erase(boundIt);
-        } else if (handle == begin) {
+        }
+        else if (handle == begin)
+        {
             boundIt->begin++;
-        } else {
+        }
+        else
+        {
             ASSERT(handle == end);
             boundIt->end--;
         }
@@ -112,13 +121,14 @@ void HandleAllocator::reserve(GLuint handle)
     // need to split the range
     auto placementIt = mUnallocatedList.erase(boundIt);
 
-    if (handle + 1 != end) {
+    if (handle + 1 != end)
+    {
         placementIt = mUnallocatedList.insert(placementIt, HandleRange(handle + 1, end));
     }
-    if (begin != handle) {
-        ASSERT(begin < handle);
+    if (begin != handle)
+    {
         mUnallocatedList.insert(placementIt, HandleRange(begin, handle));
     }
 }
 
-} // namespace gl
+}

@@ -15,17 +15,18 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
-#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
+#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "third_party/murmurhash/MurmurHash3.h"
 
-namespace rx {
-using namespace gl_d3d11;
+namespace rx
+{
 
 template <typename mapType>
-static void ClearStateMap(mapType& map)
+static void ClearStateMap(mapType &map)
 {
-    for (typename mapType::iterator i = map.begin(); i != map.end(); i++) {
+    for (typename mapType::iterator i = map.begin(); i != map.end(); i++)
+    {
         SafeRelease(i->second.first);
     }
     map.clear();
@@ -39,14 +40,14 @@ const unsigned int RenderStateCache::kMaxRasterizerStates = 4096;
 const unsigned int RenderStateCache::kMaxDepthStencilStates = 4096;
 const unsigned int RenderStateCache::kMaxSamplerStates = 4096;
 
-RenderStateCache::RenderStateCache(Renderer11* renderer)
-    : mRenderer(renderer)
-    , mCounter(0)
-    , mBlendStateCache(kMaxBlendStates, hashBlendState, compareBlendStates)
-    , mRasterizerStateCache(kMaxRasterizerStates, hashRasterizerState, compareRasterizerStates)
-    , mDepthStencilStateCache(kMaxDepthStencilStates, hashDepthStencilState, compareDepthStencilStates)
-    , mSamplerStateCache(kMaxSamplerStates, hashSamplerState, compareSamplerStates)
-    , mDevice(NULL)
+RenderStateCache::RenderStateCache(Renderer11 *renderer)
+    : mRenderer(renderer),
+      mCounter(0),
+      mBlendStateCache(kMaxBlendStates, hashBlendState, compareBlendStates),
+      mRasterizerStateCache(kMaxRasterizerStates, hashRasterizerState, compareRasterizerStates),
+      mDepthStencilStateCache(kMaxDepthStencilStates, hashDepthStencilState, compareDepthStencilStates),
+      mSamplerStateCache(kMaxSamplerStates, hashSamplerState, compareSamplerStates),
+      mDevice(NULL)
 {
 }
 
@@ -55,7 +56,7 @@ RenderStateCache::~RenderStateCache()
     clear();
 }
 
-void RenderStateCache::initialize(ID3D11Device* device)
+void RenderStateCache::initialize(ID3D11Device *device)
 {
     clear();
     mDevice = device;
@@ -69,7 +70,7 @@ void RenderStateCache::clear()
     ClearStateMap(mSamplerStateCache);
 }
 
-std::size_t RenderStateCache::hashBlendState(const BlendStateKey& blendState)
+std::size_t RenderStateCache::hashBlendState(const BlendStateKey &blendState)
 {
     static const unsigned int seed = 0xABCDEF98;
 
@@ -78,57 +79,66 @@ std::size_t RenderStateCache::hashBlendState(const BlendStateKey& blendState)
     return hash;
 }
 
-bool RenderStateCache::compareBlendStates(const BlendStateKey& a, const BlendStateKey& b)
+bool RenderStateCache::compareBlendStates(const BlendStateKey &a, const BlendStateKey &b)
 {
     return memcmp(&a, &b, sizeof(BlendStateKey)) == 0;
 }
 
-gl::Error RenderStateCache::getBlendState(const gl::Framebuffer* framebuffer, const gl::BlendState& blendState,
-    ID3D11BlendState** outBlendState)
+gl::Error RenderStateCache::getBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState,
+                                          ID3D11BlendState **outBlendState)
 {
-    if (!mDevice) {
+    if (!mDevice)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal error, RenderStateCache is not initialized.");
     }
 
     bool mrt = false;
 
-    const FramebufferD3D* framebufferD3D = GetImplAs<FramebufferD3D>(framebuffer);
-    const gl::AttachmentList& colorbuffers = framebufferD3D->getColorAttachmentsForRender();
+    const FramebufferD3D *framebufferD3D = GetImplAs<FramebufferD3D>(framebuffer);
+    const gl::AttachmentList &colorbuffers = framebufferD3D->getColorAttachmentsForRender(mRenderer->getWorkarounds());
 
     BlendStateKey key = {};
     key.blendState = blendState;
-    for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment) {
-        const gl::FramebufferAttachment* attachment = colorbuffers[colorAttachment];
+    for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
+    {
+        const gl::FramebufferAttachment *attachment = colorbuffers[colorAttachment];
 
         auto rtChannels = key.rtChannels[colorAttachment];
 
-        if (attachment) {
-            if (colorAttachment > 0) {
+        if (attachment)
+        {
+            if (colorAttachment > 0)
+            {
                 mrt = true;
             }
 
-            rtChannels[0] = attachment->getRedSize() > 0;
+            rtChannels[0] = attachment->getRedSize()   > 0;
             rtChannels[1] = attachment->getGreenSize() > 0;
-            rtChannels[2] = attachment->getBlueSize() > 0;
+            rtChannels[2] = attachment->getBlueSize()  > 0;
             rtChannels[3] = attachment->getAlphaSize() > 0;
         }
     }
 
     BlendStateMap::iterator keyIter = mBlendStateCache.find(key);
-    if (keyIter != mBlendStateCache.end()) {
-        BlendStateCounterPair& state = keyIter->second;
+    if (keyIter != mBlendStateCache.end())
+    {
+        BlendStateCounterPair &state = keyIter->second;
         state.second = mCounter++;
         *outBlendState = state.first;
         return gl::Error(GL_NO_ERROR);
-    } else {
-        if (mBlendStateCache.size() >= kMaxBlendStates) {
+    }
+    else
+    {
+        if (mBlendStateCache.size() >= kMaxBlendStates)
+        {
             TRACE("Overflowed the limit of %u blend states, removing the least recently used "
-                  "to make room.",
-                kMaxBlendStates);
+                  "to make room.", kMaxBlendStates);
 
             BlendStateMap::iterator leastRecentlyUsed = mBlendStateCache.begin();
-            for (BlendStateMap::iterator i = mBlendStateCache.begin(); i != mBlendStateCache.end(); i++) {
-                if (i->second.second < leastRecentlyUsed->second.second) {
+            for (BlendStateMap::iterator i = mBlendStateCache.begin(); i != mBlendStateCache.end(); i++)
+            {
+                if (i->second.second < leastRecentlyUsed->second.second)
+                {
                     leastRecentlyUsed = i;
                 }
             }
@@ -141,11 +151,13 @@ gl::Error RenderStateCache::getBlendState(const gl::Framebuffer* framebuffer, co
         blendDesc.AlphaToCoverageEnable = blendState.sampleAlphaToCoverage;
         blendDesc.IndependentBlendEnable = mrt ? TRUE : FALSE;
 
-        for (unsigned int i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++) {
-            D3D11_RENDER_TARGET_BLEND_DESC& rtBlend = blendDesc.RenderTarget[i];
+        for (unsigned int i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
+        {
+            D3D11_RENDER_TARGET_BLEND_DESC &rtBlend = blendDesc.RenderTarget[i];
 
             rtBlend.BlendEnable = blendState.blend;
-            if (blendState.blend) {
+            if (blendState.blend)
+            {
                 rtBlend.SrcBlend = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendRGB, false);
                 rtBlend.DestBlend = gl_d3d11::ConvertBlendFunc(blendState.destBlendRGB, false);
                 rtBlend.BlendOp = gl_d3d11::ConvertBlendOp(blendState.blendEquationRGB);
@@ -156,14 +168,15 @@ gl::Error RenderStateCache::getBlendState(const gl::Framebuffer* framebuffer, co
             }
 
             rtBlend.RenderTargetWriteMask = gl_d3d11::ConvertColorMask(key.rtChannels[i][0] && blendState.colorMaskRed,
-                key.rtChannels[i][1] && blendState.colorMaskGreen,
-                key.rtChannels[i][2] && blendState.colorMaskBlue,
-                key.rtChannels[i][3] && blendState.colorMaskAlpha);
+                                                                       key.rtChannels[i][1] && blendState.colorMaskGreen,
+                                                                       key.rtChannels[i][2] && blendState.colorMaskBlue,
+                                                                       key.rtChannels[i][3] && blendState.colorMaskAlpha);
         }
 
-        ID3D11BlendState* dx11BlendState = NULL;
+        ID3D11BlendState *dx11BlendState = NULL;
         HRESULT result = mDevice->CreateBlendState(&blendDesc, &dx11BlendState);
-        if (FAILED(result) || !dx11BlendState) {
+        if (FAILED(result) || !dx11BlendState)
+        {
             return gl::Error(GL_OUT_OF_MEMORY, "Unable to create a ID3D11BlendState, HRESULT: 0x%X.", result);
         }
 
@@ -174,7 +187,7 @@ gl::Error RenderStateCache::getBlendState(const gl::Framebuffer* framebuffer, co
     }
 }
 
-std::size_t RenderStateCache::hashRasterizerState(const RasterizerStateKey& rasterState)
+std::size_t RenderStateCache::hashRasterizerState(const RasterizerStateKey &rasterState)
 {
     static const unsigned int seed = 0xABCDEF98;
 
@@ -183,15 +196,16 @@ std::size_t RenderStateCache::hashRasterizerState(const RasterizerStateKey& rast
     return hash;
 }
 
-bool RenderStateCache::compareRasterizerStates(const RasterizerStateKey& a, const RasterizerStateKey& b)
+bool RenderStateCache::compareRasterizerStates(const RasterizerStateKey &a, const RasterizerStateKey &b)
 {
     return memcmp(&a, &b, sizeof(RasterizerStateKey)) == 0;
 }
 
-gl::Error RenderStateCache::getRasterizerState(const gl::RasterizerState& rasterState, bool scissorEnabled,
-    ID3D11RasterizerState** outRasterizerState)
+gl::Error RenderStateCache::getRasterizerState(const gl::RasterizerState &rasterState, bool scissorEnabled,
+                                               ID3D11RasterizerState **outRasterizerState)
 {
-    if (!mDevice) {
+    if (!mDevice)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal error, RenderStateCache is not initialized.");
     }
 
@@ -200,20 +214,25 @@ gl::Error RenderStateCache::getRasterizerState(const gl::RasterizerState& raster
     key.scissorEnabled = scissorEnabled;
 
     RasterizerStateMap::iterator keyIter = mRasterizerStateCache.find(key);
-    if (keyIter != mRasterizerStateCache.end()) {
-        RasterizerStateCounterPair& state = keyIter->second;
+    if (keyIter != mRasterizerStateCache.end())
+    {
+        RasterizerStateCounterPair &state = keyIter->second;
         state.second = mCounter++;
         *outRasterizerState = state.first;
         return gl::Error(GL_NO_ERROR);
-    } else {
-        if (mRasterizerStateCache.size() >= kMaxRasterizerStates) {
+    }
+    else
+    {
+        if (mRasterizerStateCache.size() >= kMaxRasterizerStates)
+        {
             TRACE("Overflowed the limit of %u rasterizer states, removing the least recently used "
-                  "to make room.",
-                kMaxRasterizerStates);
+                  "to make room.", kMaxRasterizerStates);
 
             RasterizerStateMap::iterator leastRecentlyUsed = mRasterizerStateCache.begin();
-            for (RasterizerStateMap::iterator i = mRasterizerStateCache.begin(); i != mRasterizerStateCache.end(); i++) {
-                if (i->second.second < leastRecentlyUsed->second.second) {
+            for (RasterizerStateMap::iterator i = mRasterizerStateCache.begin(); i != mRasterizerStateCache.end(); i++)
+            {
+                if (i->second.second < leastRecentlyUsed->second.second)
+                {
                     leastRecentlyUsed = i;
                 }
             }
@@ -224,31 +243,36 @@ gl::Error RenderStateCache::getRasterizerState(const gl::RasterizerState& raster
         D3D11_CULL_MODE cullMode = gl_d3d11::ConvertCullMode(rasterState.cullFace, rasterState.cullMode);
 
         // Disable culling if drawing points
-        if (rasterState.pointDrawMode) {
+        if (rasterState.pointDrawMode)
+        {
             cullMode = D3D11_CULL_NONE;
         }
 
         D3D11_RASTERIZER_DESC rasterDesc;
         rasterDesc.FillMode = D3D11_FILL_SOLID;
         rasterDesc.CullMode = cullMode;
-        rasterDesc.FrontCounterClockwise = (rasterState.frontFace == GL_CCW) ? FALSE : TRUE;
+        rasterDesc.FrontCounterClockwise = (rasterState.frontFace == GL_CCW) ? FALSE: TRUE;
         rasterDesc.DepthBiasClamp = 0.0f; // MSDN documentation of DepthBiasClamp implies a value of zero will preform no clamping, must be tested though.
         rasterDesc.DepthClipEnable = TRUE;
         rasterDesc.ScissorEnable = scissorEnabled ? TRUE : FALSE;
         rasterDesc.MultisampleEnable = rasterState.multiSample;
         rasterDesc.AntialiasedLineEnable = FALSE;
 
-        if (rasterState.polygonOffsetFill) {
+        if (rasterState.polygonOffsetFill)
+        {
             rasterDesc.SlopeScaledDepthBias = rasterState.polygonOffsetFactor;
             rasterDesc.DepthBias = (INT)rasterState.polygonOffsetUnits;
-        } else {
+        }
+        else
+        {
             rasterDesc.SlopeScaledDepthBias = 0.0f;
             rasterDesc.DepthBias = 0;
         }
 
-        ID3D11RasterizerState* dx11RasterizerState = NULL;
+        ID3D11RasterizerState *dx11RasterizerState = NULL;
         HRESULT result = mDevice->CreateRasterizerState(&rasterDesc, &dx11RasterizerState);
-        if (FAILED(result) || !dx11RasterizerState) {
+        if (FAILED(result) || !dx11RasterizerState)
+        {
             return gl::Error(GL_OUT_OF_MEMORY, "Unable to create a ID3D11RasterizerState, HRESULT: 0x%X.", result);
         }
 
@@ -259,7 +283,7 @@ gl::Error RenderStateCache::getRasterizerState(const gl::RasterizerState& raster
     }
 }
 
-std::size_t RenderStateCache::hashDepthStencilState(const gl::DepthStencilState& dsState)
+std::size_t RenderStateCache::hashDepthStencilState(const gl::DepthStencilState &dsState)
 {
     static const unsigned int seed = 0xABCDEF98;
 
@@ -268,87 +292,76 @@ std::size_t RenderStateCache::hashDepthStencilState(const gl::DepthStencilState&
     return hash;
 }
 
-bool RenderStateCache::compareDepthStencilStates(const gl::DepthStencilState& a, const gl::DepthStencilState& b)
+bool RenderStateCache::compareDepthStencilStates(const gl::DepthStencilState &a, const gl::DepthStencilState &b)
 {
     return memcmp(&a, &b, sizeof(gl::DepthStencilState)) == 0;
 }
 
-gl::Error RenderStateCache::getDepthStencilState(const gl::DepthStencilState& originalState,
-    bool disableDepth,
-    bool disableStencil,
-    ID3D11DepthStencilState** outDSState)
+gl::Error RenderStateCache::getDepthStencilState(const gl::DepthStencilState &dsState, ID3D11DepthStencilState **outDSState)
 {
-    if (!mDevice) {
+    if (!mDevice)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal error, RenderStateCache is not initialized.");
     }
 
-    gl::DepthStencilState glState = originalState;
-    if (disableDepth) {
-        glState.depthTest = false;
-        glState.depthMask = false;
-    }
-
-    if (disableStencil) {
-        glState.stencilWritemask = 0;
-        glState.stencilBackWritemask = 0;
-        glState.stencilTest = false;
-    }
-
-    auto keyIter = mDepthStencilStateCache.find(glState);
-    if (keyIter != mDepthStencilStateCache.end()) {
-        DepthStencilStateCounterPair& state = keyIter->second;
+    DepthStencilStateMap::iterator keyIter = mDepthStencilStateCache.find(dsState);
+    if (keyIter != mDepthStencilStateCache.end())
+    {
+        DepthStencilStateCounterPair &state = keyIter->second;
         state.second = mCounter++;
         *outDSState = state.first;
         return gl::Error(GL_NO_ERROR);
     }
+    else
+    {
+        if (mDepthStencilStateCache.size() >= kMaxDepthStencilStates)
+        {
+            TRACE("Overflowed the limit of %u depth stencil states, removing the least recently used "
+                  "to make room.", kMaxDepthStencilStates);
 
-    if (mDepthStencilStateCache.size() >= kMaxDepthStencilStates) {
-        TRACE(
-            "Overflowed the limit of %u depth stencil states, removing the least recently used "
-            "to make room.",
-            kMaxDepthStencilStates);
-
-        auto leastRecentlyUsed = mDepthStencilStateCache.begin();
-        for (auto i = mDepthStencilStateCache.begin(); i != mDepthStencilStateCache.end(); i++) {
-            if (i->second.second < leastRecentlyUsed->second.second) {
-                leastRecentlyUsed = i;
+            DepthStencilStateMap::iterator leastRecentlyUsed = mDepthStencilStateCache.begin();
+            for (DepthStencilStateMap::iterator i = mDepthStencilStateCache.begin(); i != mDepthStencilStateCache.end(); i++)
+            {
+                if (i->second.second < leastRecentlyUsed->second.second)
+                {
+                    leastRecentlyUsed = i;
+                }
             }
+            SafeRelease(leastRecentlyUsed->second.first);
+            mDepthStencilStateCache.erase(leastRecentlyUsed);
         }
-        SafeRelease(leastRecentlyUsed->second.first);
-        mDepthStencilStateCache.erase(leastRecentlyUsed);
+
+        D3D11_DEPTH_STENCIL_DESC dsDesc = { 0 };
+        dsDesc.DepthEnable = dsState.depthTest ? TRUE : FALSE;
+        dsDesc.DepthWriteMask = gl_d3d11::ConvertDepthMask(dsState.depthMask);
+        dsDesc.DepthFunc = gl_d3d11::ConvertComparison(dsState.depthFunc);
+        dsDesc.StencilEnable = dsState.stencilTest ? TRUE : FALSE;
+        dsDesc.StencilReadMask = gl_d3d11::ConvertStencilMask(dsState.stencilMask);
+        dsDesc.StencilWriteMask = gl_d3d11::ConvertStencilMask(dsState.stencilWritemask);
+        dsDesc.FrontFace.StencilFailOp = gl_d3d11::ConvertStencilOp(dsState.stencilFail);
+        dsDesc.FrontFace.StencilDepthFailOp = gl_d3d11::ConvertStencilOp(dsState.stencilPassDepthFail);
+        dsDesc.FrontFace.StencilPassOp = gl_d3d11::ConvertStencilOp(dsState.stencilPassDepthPass);
+        dsDesc.FrontFace.StencilFunc = gl_d3d11::ConvertComparison(dsState.stencilFunc);
+        dsDesc.BackFace.StencilFailOp = gl_d3d11::ConvertStencilOp(dsState.stencilBackFail);
+        dsDesc.BackFace.StencilDepthFailOp = gl_d3d11::ConvertStencilOp(dsState.stencilBackPassDepthFail);
+        dsDesc.BackFace.StencilPassOp = gl_d3d11::ConvertStencilOp(dsState.stencilBackPassDepthPass);
+        dsDesc.BackFace.StencilFunc = gl_d3d11::ConvertComparison(dsState.stencilBackFunc);
+
+        ID3D11DepthStencilState *dx11DepthStencilState = NULL;
+        HRESULT result = mDevice->CreateDepthStencilState(&dsDesc, &dx11DepthStencilState);
+        if (FAILED(result) || !dx11DepthStencilState)
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Unable to create a ID3D11DepthStencilState, HRESULT: 0x%X.", result);
+        }
+
+        mDepthStencilStateCache.insert(std::make_pair(dsState, std::make_pair(dx11DepthStencilState, mCounter++)));
+
+        *outDSState = dx11DepthStencilState;
+        return gl::Error(GL_NO_ERROR);
     }
-
-    D3D11_DEPTH_STENCIL_DESC dsDesc = { 0 };
-    dsDesc.DepthEnable = glState.depthTest ? TRUE : FALSE;
-    dsDesc.DepthWriteMask = ConvertDepthMask(glState.depthMask);
-    dsDesc.DepthFunc = ConvertComparison(glState.depthFunc);
-    dsDesc.StencilEnable = glState.stencilTest ? TRUE : FALSE;
-    dsDesc.StencilReadMask = ConvertStencilMask(glState.stencilMask);
-    dsDesc.StencilWriteMask = ConvertStencilMask(glState.stencilWritemask);
-    dsDesc.FrontFace.StencilFailOp = ConvertStencilOp(glState.stencilFail);
-    dsDesc.FrontFace.StencilDepthFailOp = ConvertStencilOp(glState.stencilPassDepthFail);
-    dsDesc.FrontFace.StencilPassOp = ConvertStencilOp(glState.stencilPassDepthPass);
-    dsDesc.FrontFace.StencilFunc = ConvertComparison(glState.stencilFunc);
-    dsDesc.BackFace.StencilFailOp = ConvertStencilOp(glState.stencilBackFail);
-    dsDesc.BackFace.StencilDepthFailOp = ConvertStencilOp(glState.stencilBackPassDepthFail);
-    dsDesc.BackFace.StencilPassOp = ConvertStencilOp(glState.stencilBackPassDepthPass);
-    dsDesc.BackFace.StencilFunc = ConvertComparison(glState.stencilBackFunc);
-
-    ID3D11DepthStencilState* dx11DepthStencilState = NULL;
-    HRESULT result = mDevice->CreateDepthStencilState(&dsDesc, &dx11DepthStencilState);
-    if (FAILED(result) || !dx11DepthStencilState) {
-        return gl::Error(GL_OUT_OF_MEMORY,
-            "Unable to create a ID3D11DepthStencilState, HRESULT: 0x%X.", result);
-    }
-
-    mDepthStencilStateCache.insert(
-        std::make_pair(glState, std::make_pair(dx11DepthStencilState, mCounter++)));
-
-    *outDSState = dx11DepthStencilState;
-    return gl::Error(GL_NO_ERROR);
 }
 
-std::size_t RenderStateCache::hashSamplerState(const gl::SamplerState& samplerState)
+std::size_t RenderStateCache::hashSamplerState(const gl::SamplerState &samplerState)
 {
     static const unsigned int seed = 0xABCDEF98;
 
@@ -357,32 +370,38 @@ std::size_t RenderStateCache::hashSamplerState(const gl::SamplerState& samplerSt
     return hash;
 }
 
-bool RenderStateCache::compareSamplerStates(const gl::SamplerState& a, const gl::SamplerState& b)
+bool RenderStateCache::compareSamplerStates(const gl::SamplerState &a, const gl::SamplerState &b)
 {
     return memcmp(&a, &b, sizeof(gl::SamplerState)) == 0;
 }
 
-gl::Error RenderStateCache::getSamplerState(const gl::SamplerState& samplerState, ID3D11SamplerState** outSamplerState)
+gl::Error RenderStateCache::getSamplerState(const gl::SamplerState &samplerState, ID3D11SamplerState **outSamplerState)
 {
-    if (!mDevice) {
+    if (!mDevice)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal error, RenderStateCache is not initialized.");
     }
 
     SamplerStateMap::iterator keyIter = mSamplerStateCache.find(samplerState);
-    if (keyIter != mSamplerStateCache.end()) {
-        SamplerStateCounterPair& state = keyIter->second;
+    if (keyIter != mSamplerStateCache.end())
+    {
+        SamplerStateCounterPair &state = keyIter->second;
         state.second = mCounter++;
         *outSamplerState = state.first;
         return gl::Error(GL_NO_ERROR);
-    } else {
-        if (mSamplerStateCache.size() >= kMaxSamplerStates) {
+    }
+    else
+    {
+        if (mSamplerStateCache.size() >= kMaxSamplerStates)
+        {
             TRACE("Overflowed the limit of %u sampler states, removing the least recently used "
-                  "to make room.",
-                kMaxSamplerStates);
+                  "to make room.", kMaxSamplerStates);
 
             SamplerStateMap::iterator leastRecentlyUsed = mSamplerStateCache.begin();
-            for (SamplerStateMap::iterator i = mSamplerStateCache.begin(); i != mSamplerStateCache.end(); i++) {
-                if (i->second.second < leastRecentlyUsed->second.second) {
+            for (SamplerStateMap::iterator i = mSamplerStateCache.begin(); i != mSamplerStateCache.end(); i++)
+            {
+                if (i->second.second < leastRecentlyUsed->second.second)
+                {
                     leastRecentlyUsed = i;
                 }
             }
@@ -392,7 +411,7 @@ gl::Error RenderStateCache::getSamplerState(const gl::SamplerState& samplerState
 
         D3D11_SAMPLER_DESC samplerDesc;
         samplerDesc.Filter = gl_d3d11::ConvertFilter(samplerState.minFilter, samplerState.magFilter,
-            samplerState.maxAnisotropy, samplerState.compareMode);
+                                                     samplerState.maxAnisotropy, samplerState.compareMode);
         samplerDesc.AddressU = gl_d3d11::ConvertTextureWrap(samplerState.wrapS);
         samplerDesc.AddressV = gl_d3d11::ConvertTextureWrap(samplerState.wrapT);
         samplerDesc.AddressW = gl_d3d11::ConvertTextureWrap(samplerState.wrapR);
@@ -406,7 +425,8 @@ gl::Error RenderStateCache::getSamplerState(const gl::SamplerState& samplerState
         samplerDesc.MinLOD = samplerState.minLod;
         samplerDesc.MaxLOD = samplerState.maxLod;
 
-        if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3) {
+        if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
+        {
             // Check that maxLOD is nearly FLT_MAX (1000.0f is the default), since 9_3 doesn't support anything other than FLT_MAX.
             // Note that Feature Level 9_* only supports GL ES 2.0, so the consumer of ANGLE can't modify the Max LOD themselves.
             ASSERT(samplerState.maxLod >= 999.9f);
@@ -415,9 +435,10 @@ gl::Error RenderStateCache::getSamplerState(const gl::SamplerState& samplerState
             samplerDesc.MaxLOD = FLT_MAX;
         }
 
-        ID3D11SamplerState* dx11SamplerState = NULL;
+        ID3D11SamplerState *dx11SamplerState = NULL;
         HRESULT result = mDevice->CreateSamplerState(&samplerDesc, &dx11SamplerState);
-        if (FAILED(result) || !dx11SamplerState) {
+        if (FAILED(result) || !dx11SamplerState)
+        {
             return gl::Error(GL_OUT_OF_MEMORY, "Unable to create a ID3D11SamplerState, HRESULT: 0x%X.", result);
         }
 

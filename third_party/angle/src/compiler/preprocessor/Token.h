@@ -12,11 +12,14 @@
 
 #include "SourceLocation.h"
 
-namespace pp {
+namespace pp
+{
 
-struct Token {
-    enum Type {
-        LAST = 0, // EOF.
+struct Token
+{
+    enum Type
+    {
+        LAST = 0,  // EOF.
 
         IDENTIFIER = 258,
 
@@ -52,20 +55,21 @@ struct Token {
         PP_NUMBER,
         PP_OTHER
     };
-    enum Flags {
-        AT_START_OF_LINE = 1 << 0,
-        HAS_LEADING_SPACE = 1 << 1,
+    enum Flags
+    {
+        AT_START_OF_LINE   = 1 << 0,
+        HAS_LEADING_SPACE  = 1 << 1,
         EXPANSION_DISABLED = 1 << 2
     };
 
     Token()
-        : type(0)
-        , flags(0)
+        : type(0),
+          flags(0)
     {
     }
 
     void reset();
-    bool equals(const Token& other) const;
+    bool equals(const Token &other) const;
 
     // Returns true if this is the first token on line.
     // It disregards any leading whitespace.
@@ -89,9 +93,9 @@ struct Token {
 
     // Converts text into numeric value for CONST_INT and CONST_FLOAT token.
     // Returns false if the parsed value cannot fit into an int or float.
-    bool iValue(int* value) const;
-    bool uValue(unsigned int* value) const;
-    bool fValue(float* value) const;
+    bool iValue(int *value) const;
+    bool uValue(unsigned int *value) const;
+    bool fValue(float *value) const;
 
     int type;
     unsigned int flags;
@@ -99,18 +103,18 @@ struct Token {
     std::string text;
 };
 
-inline bool operator==(const Token& lhs, const Token& rhs)
+inline bool operator==(const Token &lhs, const Token &rhs)
 {
     return lhs.equals(rhs);
 }
 
-inline bool operator!=(const Token& lhs, const Token& rhs)
+inline bool operator!=(const Token &lhs, const Token &rhs)
 {
     return !lhs.equals(rhs);
 }
 
-extern std::ostream& operator<<(std::ostream& out, const Token& token);
+extern std::ostream &operator<<(std::ostream &out, const Token &token);
 
-} // namepsace pp
+}  // namepsace pp
 
-#endif // COMPILER_PREPROCESSOR_TOKEN_H_
+#endif  // COMPILER_PREPROCESSOR_TOKEN_H_

@@ -11,50 +11,53 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
-#include "libANGLE/Error.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/Error.h"
 
-namespace gl {
+namespace gl
+{
 class Framebuffer;
 }
 
-namespace rx {
+namespace rx
+{
 
 class FramebufferGL;
 class FunctionsGL;
 class StateManagerGL;
 struct WorkaroundsGL;
 
-class BlitGL : public angle::NonCopyable {
-public:
-    BlitGL(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        StateManagerGL* stateManager);
+class BlitGL : public angle::NonCopyable
+{
+  public:
+    BlitGL(const FunctionsGL *functions,
+           const WorkaroundsGL &workarounds,
+           StateManagerGL *stateManager);
     ~BlitGL();
 
     gl::Error copyImageToLUMAWorkaroundTexture(GLuint texture,
-        GLenum textureType,
-        GLenum target,
-        GLenum lumaFormat,
-        size_t level,
-        const gl::Rectangle& sourceArea,
-        GLenum internalFormat,
-        const gl::Framebuffer* source);
+                                               GLenum textureType,
+                                               GLenum target,
+                                               GLenum lumaFormat,
+                                               size_t level,
+                                               const gl::Rectangle &sourceArea,
+                                               GLenum internalFormat,
+                                               const gl::Framebuffer *source);
     gl::Error copySubImageToLUMAWorkaroundTexture(GLuint texture,
-        GLenum textureType,
-        GLenum target,
-        GLenum lumaFormat,
-        size_t level,
-        const gl::Offset& destOffset,
-        const gl::Rectangle& sourceArea,
-        const gl::Framebuffer* source);
+                                                  GLenum textureType,
+                                                  GLenum target,
+                                                  GLenum lumaFormat,
+                                                  size_t level,
+                                                  const gl::Offset &destOffset,
+                                                  const gl::Rectangle &sourceArea,
+                                                  const gl::Framebuffer *source);
 
     gl::Error initializeResources();
 
-private:
-    const FunctionsGL* mFunctions;
-    const WorkaroundsGL& mWorkarounds;
-    StateManagerGL* mStateManager;
+  private:
+    const FunctionsGL *mFunctions;
+    const WorkaroundsGL &mWorkarounds;
+    StateManagerGL *mStateManager;
 
     GLuint mBlitProgram;
 
@@ -65,4 +68,4 @@ private:
 };
 }
 
-#endif // LIBANGLE_RENDERER_GL_BLITGL_H_
+#endif  // LIBANGLE_RENDERER_GL_BLITGL_H_

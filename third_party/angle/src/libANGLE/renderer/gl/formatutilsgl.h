@@ -19,88 +19,99 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
-namespace rx {
+namespace rx
+{
 
-namespace nativegl {
+namespace nativegl
+{
 
-    struct SupportRequirement {
-        SupportRequirement();
+struct SupportRequirement
+{
+    SupportRequirement();
 
-        // Version that this format became supported without extensions
-        gl::Version version;
+    // Version that this format became supported without extensions
+    gl::Version version;
 
-        // Extensions that are required if the minimum version is not met
-        std::vector<std::string> versionExtensions;
+    // Extensions that are required if the minimum version is not met
+    std::vector<std::string> versionExtensions;
 
-        // Extensions that are always required to support this format
-        std::vector<std::string> requiredExtensions;
-    };
+    // Extensions that are always required to support this format
+    std::vector<std::string> requiredExtensions;
+};
 
-    struct InternalFormat {
-        InternalFormat();
+struct InternalFormat
+{
+    InternalFormat();
 
-        SupportRequirement texture;
-        SupportRequirement filter;
-        SupportRequirement renderbuffer;
-        SupportRequirement framebufferAttachment;
-    };
-    const InternalFormat& GetInternalFormatInfo(GLenum internalFormat, StandardGL standard);
+    SupportRequirement texture;
+    SupportRequirement filter;
+    SupportRequirement renderbuffer;
+    SupportRequirement framebufferAttachment;
+};
+const InternalFormat &GetInternalFormatInfo(GLenum internalFormat, StandardGL standard);
 
-    struct TexImageFormat {
-        GLenum internalFormat;
-        GLenum format;
-        GLenum type;
-    };
-    TexImageFormat GetTexImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat,
-        GLenum format,
-        GLenum type);
+struct TexImageFormat
+{
+    GLenum internalFormat;
+    GLenum format;
+    GLenum type;
+};
+TexImageFormat GetTexImageFormat(const FunctionsGL *functions,
+                                 const WorkaroundsGL &workarounds,
+                                 GLenum internalFormat,
+                                 GLenum format,
+                                 GLenum type);
 
-    struct TexSubImageFormat {
-        GLenum format;
-        GLenum type;
-    };
-    TexSubImageFormat GetTexSubImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum format,
-        GLenum type);
+struct TexSubImageFormat
+{
+    GLenum format;
+    GLenum type;
+};
+TexSubImageFormat GetTexSubImageFormat(const FunctionsGL *functions,
+                                       const WorkaroundsGL &workarounds,
+                                       GLenum format,
+                                       GLenum type);
 
-    struct CompressedTexImageFormat {
-        GLenum internalFormat;
-    };
-    CompressedTexImageFormat GetCompressedTexImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat);
+struct CompressedTexImageFormat
+{
+    GLenum internalFormat;
+};
+CompressedTexImageFormat GetCompressedTexImageFormat(const FunctionsGL *functions,
+                                                     const WorkaroundsGL &workarounds,
+                                                     GLenum internalFormat);
 
-    struct CompressedTexSubImageFormat {
-        GLenum format;
-    };
-    CompressedTexSubImageFormat GetCompressedSubTexImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum format);
+struct CompressedTexSubImageFormat
+{
+    GLenum format;
+};
+CompressedTexSubImageFormat GetCompressedSubTexImageFormat(const FunctionsGL *functions,
+                                                           const WorkaroundsGL &workarounds,
+                                                           GLenum format);
 
-    struct CopyTexImageImageFormat {
-        GLenum internalFormat;
-    };
-    CopyTexImageImageFormat GetCopyTexImageImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat,
-        GLenum framebufferType);
+struct CopyTexImageImageFormat
+{
+    GLenum internalFormat;
+};
+CopyTexImageImageFormat GetCopyTexImageImageFormat(const FunctionsGL *functions,
+                                                   const WorkaroundsGL &workarounds,
+                                                   GLenum internalFormat,
+                                                   GLenum framebufferType);
 
-    struct TexStorageFormat {
-        GLenum internalFormat;
-    };
-    TexStorageFormat GetTexStorageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat);
+struct TexStorageFormat
+{
+    GLenum internalFormat;
+};
+TexStorageFormat GetTexStorageFormat(const FunctionsGL *functions,
+                                     const WorkaroundsGL &workarounds,
+                                     GLenum internalFormat);
 
-    struct RenderbufferFormat {
-        GLenum internalFormat;
-    };
-    RenderbufferFormat GetRenderbufferFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat);
+struct RenderbufferFormat
+{
+    GLenum internalFormat;
+};
+RenderbufferFormat GetRenderbufferFormat(const FunctionsGL *functions,
+                                         const WorkaroundsGL &workarounds,
+                                         GLenum internalFormat);
 }
 
 }

@@ -9,20 +9,21 @@
 
 #include "compiler/translator/OutputGLSLBase.h"
 
-class TOutputGLSL : public TOutputGLSLBase {
-public:
+class TOutputGLSL : public TOutputGLSLBase
+{
+  public:
     TOutputGLSL(TInfoSinkBase& objSink,
-        ShArrayIndexClampingStrategy clampingStrategy,
-        ShHashFunction64 hashFunction,
-        NameMap& nameMap,
-        TSymbolTable& symbolTable,
-        int shaderVersion,
-        ShShaderOutput output);
+                ShArrayIndexClampingStrategy clampingStrategy,
+                ShHashFunction64 hashFunction,
+                NameMap& nameMap,
+                TSymbolTable& symbolTable,
+                int shaderVersion,
+                ShShaderOutput output);
 
-protected:
+  protected:
     bool writeVariablePrecision(TPrecision) override;
-    void visitSymbol(TIntermSymbol* node) override;
-    TString translateTextureFunction(TString& name) override;
+    void visitSymbol(TIntermSymbol *node) override;
+    TString translateTextureFunction(TString &name) override;
 };
 
-#endif // COMPILER_TRANSLATOR_OUTPUTGLSL_H_
+#endif  // COMPILER_TRANSLATOR_OUTPUTGLSL_H_

@@ -11,13 +11,15 @@
 
 #include "common/angleutils.h"
 
-namespace rx {
+namespace rx
+{
 
-class SamplerImpl : public angle::NonCopyable {
-public:
-    SamplerImpl() { }
-    virtual ~SamplerImpl() { }
+class SamplerImpl : public angle::NonCopyable
+{
+  public:
+    SamplerImpl() {}
+    virtual ~SamplerImpl() {}
 };
 }
 
-#endif // LIBANGLE_RENDERER_SAMPLERIMPL_H_
+#endif  // LIBANGLE_RENDERER_SAMPLERIMPL_H_

@@ -10,28 +10,27 @@
 //     type[n] a;
 //     a = initializer;
 //
-// Note that if the array is declared as const, the initialization may still be split, making the
-// AST technically invalid. Because of that this transformation should only be used when subsequent
-// stages don't care about const qualifiers. However, the initialization will not be split if the
-// initializer can be written as a HLSL literal.
+// Note that if the array is declared as const, the initialization is still split, making the AST
+// technically invalid. Because of that this transformation should only be used when subsequent
+// stages don't care about const qualifiers.
 
 #include "compiler/translator/SeparateArrayInitialization.h"
 
 #include "compiler/translator/IntermNode.h"
-#include "compiler/translator/OutputHLSL.h"
 
-namespace {
+namespace
+{
 
-class SeparateArrayInitTraverser : private TIntermTraverser {
-public:
-    static void apply(TIntermNode* root);
-
-private:
+class SeparateArrayInitTraverser : private TIntermTraverser
+{
+  public:
+    static void apply(TIntermNode *root);
+  private:
     SeparateArrayInitTraverser();
-    bool visitAggregate(Visit, TIntermAggregate* node) override;
+    bool visitAggregate(Visit, TIntermAggregate *node) override;
 };
 
-void SeparateArrayInitTraverser::apply(TIntermNode* root)
+void SeparateArrayInitTraverser::apply(TIntermNode *root)
 {
     SeparateArrayInitTraverser separateInit;
     root->traverse(&separateInit);
@@ -43,29 +42,32 @@ SeparateArrayInitTraverser::SeparateArrayInitTraverser()
 {
 }
 
-bool SeparateArrayInitTraverser::visitAggregate(Visit, TIntermAggregate* node)
+bool SeparateArrayInitTraverser::visitAggregate(Visit, TIntermAggregate *node)
 {
-    if (node->getOp() == EOpDeclaration) {
-        TIntermSequence* sequence = node->getSequence();
-        TIntermBinary* initNode = sequence->back()->getAsBinaryNode();
-        if (initNode != nullptr && initNode->getOp() == EOpInitialize) {
-            TIntermTyped* initializer = initNode->getRight();
-            if (initializer->isArray() && !sh::OutputHLSL::canWriteAsHLSLLiteral(initializer)) {
+    if (node->getOp() == EOpDeclaration)
+    {
+        TIntermSequence *sequence = node->getSequence();
+        TIntermBinary *initNode = sequence->back()->getAsBinaryNode();
+        if (initNode != nullptr && initNode->getOp() == EOpInitialize)
+        {
+            TIntermTyped *initializer = initNode->getRight();
+            if (initializer->isArray())
+            {
                 // We rely on that array declarations have been isolated to single declarations.
                 ASSERT(sequence->size() == 1);
-                TIntermTyped* symbol = initNode->getLeft();
-                TIntermAggregate* parentAgg = getParentNode()->getAsAggregate();
+                TIntermTyped *symbol = initNode->getLeft();
+                TIntermAggregate *parentAgg = getParentNode()->getAsAggregate();
                 ASSERT(parentAgg != nullptr);
 
                 TIntermSequence replacements;
 
-                TIntermAggregate* replacementDeclaration = new TIntermAggregate;
+                TIntermAggregate *replacementDeclaration = new TIntermAggregate;
                 replacementDeclaration->setOp(EOpDeclaration);
                 replacementDeclaration->getSequence()->push_back(symbol);
                 replacementDeclaration->setLine(symbol->getLine());
                 replacements.push_back(replacementDeclaration);
 
-                TIntermBinary* replacementAssignment = new TIntermBinary(EOpAssign);
+                TIntermBinary *replacementAssignment = new TIntermBinary(EOpAssign);
                 replacementAssignment->setLeft(symbol);
                 replacementAssignment->setRight(initializer);
                 replacementAssignment->setType(initializer->getType());
@@ -82,7 +84,7 @@ bool SeparateArrayInitTraverser::visitAggregate(Visit, TIntermAggregate* node)
 
 } // namespace
 
-void SeparateArrayInitialization(TIntermNode* root)
+void SeparateArrayInitialization(TIntermNode *root)
 {
     SeparateArrayInitTraverser::apply(root);
 }

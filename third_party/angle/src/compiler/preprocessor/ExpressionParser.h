@@ -10,33 +10,36 @@
 #include "DiagnosticsBase.h"
 #include "pp_utils.h"
 
-namespace pp {
+namespace pp
+{
 
 class Lexer;
 struct Token;
 
-class ExpressionParser {
-public:
-    struct ErrorSettings {
+class ExpressionParser
+{
+  public:
+    struct ErrorSettings
+    {
         Diagnostics::ID unexpectedIdentifier;
         bool integerLiteralsMustFit32BitSignedRange;
     };
 
-    ExpressionParser(Lexer* lexer, Diagnostics* diagnostics);
+    ExpressionParser(Lexer *lexer, Diagnostics *diagnostics);
 
-    bool parse(Token* token,
-        int* result,
-        bool parsePresetToken,
-        const ErrorSettings& errorSettings,
-        bool* valid);
+    bool parse(Token *token,
+               int *result,
+               bool parsePresetToken,
+               const ErrorSettings &errorSettings,
+               bool *valid);
 
-private:
+  private:
     PP_DISALLOW_COPY_AND_ASSIGN(ExpressionParser);
 
-    Lexer* mLexer;
-    Diagnostics* mDiagnostics;
+    Lexer *mLexer;
+    Diagnostics *mDiagnostics;
 };
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_EXPRESSIONPARSER_H_
+#endif  // COMPILER_PREPROCESSOR_EXPRESSIONPARSER_H_

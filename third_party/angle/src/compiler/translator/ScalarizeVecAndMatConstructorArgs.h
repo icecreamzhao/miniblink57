@@ -9,23 +9,22 @@
 
 #include "compiler/translator/IntermNode.h"
 
-class ScalarizeVecAndMatConstructorArgs : public TIntermTraverser {
-public:
+class ScalarizeVecAndMatConstructorArgs : public TIntermTraverser
+{
+  public:
     ScalarizeVecAndMatConstructorArgs(sh::GLenum shaderType,
-        bool fragmentPrecisionHigh)
-        : TIntermTraverser(true, false, false)
-        , mTempVarCount(0)
-        , mShaderType(shaderType)
-        , mFragmentPrecisionHigh(fragmentPrecisionHigh)
-    {
-    }
+                                      bool fragmentPrecisionHigh)
+        : TIntermTraverser(true, false, false),
+          mTempVarCount(0),
+          mShaderType(shaderType),
+          mFragmentPrecisionHigh(fragmentPrecisionHigh) {}
 
-protected:
-    bool visitAggregate(Visit visit, TIntermAggregate* node) override;
+  protected:
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
 
-private:
-    void scalarizeArgs(TIntermAggregate* aggregate,
-        bool scalarizeVector, bool scalarizeMatrix);
+  private:
+    void scalarizeArgs(TIntermAggregate *aggregate,
+                       bool scalarizeVector, bool scalarizeMatrix);
 
     // If we have the following code:
     //   mat4 m(0);
@@ -37,7 +36,7 @@ private:
     // This function is to create nodes for "mat4 _webgl_tmp_mat_0 = m;" and insert it to
     // the code sequence.
     // Return the temporary variable name.
-    TString createTempVariable(TIntermTyped* original);
+    TString createTempVariable(TIntermTyped *original);
 
     std::vector<TIntermSequence> mSequenceStack;
     int mTempVarCount;
@@ -46,4 +45,4 @@ private:
     bool mFragmentPrecisionHigh;
 };
 
-#endif // COMPILER_TRANSLATOR_SCALARIZEVECANDMATCONSTRUCTORARGS_H_
+#endif  // COMPILER_TRANSLATOR_SCALARIZEVECANDMATCONSTRUCTORARGS_H_

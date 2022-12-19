@@ -19,7 +19,8 @@
 
 #include <map>
 
-namespace gl {
+namespace gl
+{
 
 class Buffer;
 struct Box;
@@ -28,13 +29,15 @@ struct PixelUnpackState;
 
 }
 
-namespace rx {
+namespace rx
+{
 class Renderer11;
 class RenderTargetD3D;
 
-class PixelTransfer11 {
-public:
-    explicit PixelTransfer11(Renderer11* renderer);
+class PixelTransfer11
+{
+  public:
+    explicit PixelTransfer11(Renderer11 *renderer);
     ~PixelTransfer11();
 
     // unpack: the source buffer is stored in the unpack state, and buffer strides
@@ -42,11 +45,13 @@ public:
     // destRenderTarget: individual slice/layer of a target texture
     // destinationFormat/sourcePixelsType: determines shaders + shader parameters
     // destArea: the sub-section of destRenderTarget to copy to
-    gl::Error copyBufferToTexture(const gl::PixelUnpackState& unpack, unsigned int offset, RenderTargetD3D* destRenderTarget,
-        GLenum destinationFormat, GLenum sourcePixelsType, const gl::Box& destArea);
+    gl::Error copyBufferToTexture(const gl::PixelUnpackState &unpack, unsigned int offset, RenderTargetD3D *destRenderTarget,
+                                  GLenum destinationFormat, GLenum sourcePixelsType, const gl::Box &destArea);
 
-private:
-    struct CopyShaderParams {
+  private:
+
+    struct CopyShaderParams
+    {
         unsigned int FirstPixelOffset;
         unsigned int PixelsPerRow;
         unsigned int RowStride;
@@ -58,24 +63,25 @@ private:
         unsigned int FirstSlice;
     };
 
-    static void setBufferToTextureCopyParams(const gl::Box& destArea, const gl::Extents& destSize, GLenum internalFormat,
-        const gl::PixelUnpackState& unpack, unsigned int offset, CopyShaderParams* parametersOut);
+    static void setBufferToTextureCopyParams(const gl::Box &destArea, const gl::Extents &destSize, GLenum internalFormat,
+                                             const gl::PixelUnpackState &unpack, unsigned int offset, CopyShaderParams *parametersOut);
 
     gl::Error loadResources();
     gl::Error buildShaderMap();
-    ID3D11PixelShader* findBufferToTexturePS(GLenum internalFormat) const;
+    ID3D11PixelShader *findBufferToTexturePS(GLenum internalFormat) const;
 
-    Renderer11* mRenderer;
+    Renderer11 *mRenderer;
 
     bool mResourcesLoaded;
-    std::map<GLenum, ID3D11PixelShader*> mBufferToTexturePSMap;
-    ID3D11VertexShader* mBufferToTextureVS;
-    ID3D11GeometryShader* mBufferToTextureGS;
-    ID3D11Buffer* mParamsConstantBuffer;
+    std::map<GLenum, ID3D11PixelShader *> mBufferToTexturePSMap;
+    ID3D11VertexShader *mBufferToTextureVS;
+    ID3D11GeometryShader *mBufferToTextureGS;
+    ID3D11Buffer *mParamsConstantBuffer;
     CopyShaderParams mParamsData;
 
-    ID3D11RasterizerState* mCopyRasterizerState;
-    ID3D11DepthStencilState* mCopyDepthStencilState;
+    ID3D11RasterizerState *mCopyRasterizerState;
+    ID3D11DepthStencilState *mCopyDepthStencilState;
+
 };
 
 }

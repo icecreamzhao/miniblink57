@@ -6,16 +6,19 @@
 
 #include "libANGLE/AttributeMap.h"
 
-namespace egl {
+namespace egl
+{
 
 AttributeMap::AttributeMap()
 {
 }
 
-AttributeMap::AttributeMap(const EGLint* attributes)
+AttributeMap::AttributeMap(const EGLint *attributes)
 {
-    if (attributes) {
-        for (const EGLint* curAttrib = attributes; curAttrib[0] != EGL_NONE; curAttrib += 2) {
+    if (attributes)
+    {
+        for (const EGLint *curAttrib = attributes; curAttrib[0] != EGL_NONE; curAttrib += 2)
+        {
             insert(curAttrib[0], curAttrib[1]);
         }
     }

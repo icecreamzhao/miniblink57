@@ -16,3 +16,16 @@ bin-release/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+/build/angle/*.user
+/build/blink/*.user
+/build/chromium/chromium.vcxproj.user
+/build/chromium/*.user
+/build/libjpeg/*.user
+/build/libcurl/*.user
+/build/harfbuzz/*.user
+/build/libpng/*.user
+/build/libxml/*.user
+/build/node/*.user
+/build/skia/*.user
+/build/wolfssl/*.user
+/build/zlib/*.user

@@ -10,10 +10,10 @@ namespace media {
 
 // The minimum amount of media playback which can elapse before we'll report
 // watch time metrics for a playback.
-constexpr base::TimeDelta kMinimumElapsedWatchTime = base::TimeDelta::FromSeconds(7);
+base::TimeDelta kMinimumElapsedWatchTime = base::TimeDelta::FromSeconds(7);
 
 // The minimum width and height of videos to report watch time metrics for.
-constexpr gfx::Size kMinimumVideoSize = gfx::Size(200, 200);
+gfx::Size kMinimumVideoSize = gfx::Size(200, 200);
 
 static bool IsOnBatteryPower()
 {

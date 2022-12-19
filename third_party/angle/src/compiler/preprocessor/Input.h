@@ -10,19 +10,21 @@
 #include <stddef.h>
 #include <vector>
 
-namespace pp {
+namespace pp
+{
 
 // Holds and reads input for Lexer.
-class Input {
-public:
+class Input
+{
+  public:
     Input();
-    Input(size_t count, const char* const string[], const int length[]);
+    Input(size_t count, const char *const string[], const int length[]);
 
     size_t count() const
     {
         return mCount;
     }
-    const char* string(size_t index) const
+    const char *string(size_t index) const
     {
         return mString[index];
     }
@@ -31,33 +33,34 @@ public:
         return mLength[index];
     }
 
-    size_t read(char* buf, size_t maxSize, int* lineNo);
+    size_t read(char *buf, size_t maxSize, int *lineNo);
 
-    struct Location {
-        size_t sIndex; // String index;
-        size_t cIndex; // Char index.
+    struct Location
+    {
+        size_t sIndex;  // String index;
+        size_t cIndex;  // Char index.
 
         Location()
-            : sIndex(0)
-            , cIndex(0)
+            : sIndex(0),
+              cIndex(0)
         {
         }
     };
-    const Location& readLoc() const { return mReadLoc; }
+    const Location &readLoc() const { return mReadLoc; }
 
-private:
+  private:
     // Skip a character and return the next character after the one that was skipped.
     // Return nullptr if data runs out.
-    const char* skipChar();
+    const char *skipChar();
 
     // Input.
     size_t mCount;
-    const char* const* mString;
+    const char * const *mString;
     std::vector<size_t> mLength;
 
     Location mReadLoc;
 };
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_INPUT_H_
+#endif  // COMPILER_PREPROCESSOR_INPUT_H_

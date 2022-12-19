@@ -13,29 +13,31 @@
 
 #include <map>
 
-namespace rx {
+namespace rx
+{
 class DynamicHLSL;
 class RendererD3D;
 struct D3DCompilerWorkarounds;
 
-class ShaderD3D : public ShaderImpl {
-public:
-    ShaderD3D(const gl::Shader::Data& data);
+class ShaderD3D : public ShaderImpl
+{
+  public:
+    ShaderD3D(const gl::Shader::Data &data);
     virtual ~ShaderD3D();
 
     // ShaderImpl implementation
-    int prepareSourceAndReturnOptions(std::stringstream* sourceStream,
-        std::string* sourcePath) override;
-    bool postTranslateCompile(gl::Compiler* compiler, std::string* infoLog) override;
+    int prepareSourceAndReturnOptions(std::stringstream *sourceStream,
+                                      std::string *sourcePath) override;
+    bool postTranslateCompile(gl::Compiler *compiler, std::string *infoLog) override;
     std::string getDebugInfo() const override;
 
     // D3D-specific methods
     void uncompile();
-    unsigned int getUniformRegister(const std::string& uniformName) const;
-    unsigned int getInterfaceBlockRegister(const std::string& blockName) const;
-    void appendDebugInfo(const std::string& info) const { mDebugInfo += info; }
+    unsigned int getUniformRegister(const std::string &uniformName) const;
+    unsigned int getInterfaceBlockRegister(const std::string &blockName) const;
+    void appendDebugInfo(const std::string &info) const { mDebugInfo += info; }
 
-    void generateWorkarounds(D3DCompilerWorkarounds* workarounds) const;
+    void generateWorkarounds(D3DCompilerWorkarounds *workarounds) const;
 
     bool usesMultipleRenderTargets() const { return mUsesMultipleRenderTargets; }
     bool usesFragColor() const { return mUsesFragColor; }
@@ -50,7 +52,7 @@ public:
 
     ShShaderOutput getCompilerOutputType() const;
 
-private:
+  private:
     bool mUsesMultipleRenderTargets;
     bool mUsesFragColor;
     bool mUsesFragData;
@@ -72,4 +74,4 @@ private:
 };
 }
 
-#endif // LIBANGLE_RENDERER_D3D_SHADERD3D_H_
+#endif  // LIBANGLE_RENDERER_D3D_SHADERD3D_H_

@@ -1,5 +1,6 @@
 
 #include "mbvip/common/StringUtil.h"
+#include "mbvip/common/Util.h"
 
 #include <string>
 #include <string.h>

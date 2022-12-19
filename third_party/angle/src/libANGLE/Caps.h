@@ -15,11 +15,13 @@
 #include <string>
 #include <vector>
 
-namespace gl {
+namespace gl
+{
 
 typedef std::set<GLuint> SupportedSampleSet;
 
-struct TextureCaps {
+struct TextureCaps
+{
     TextureCaps();
 
     // Supports for basic texturing: glTexImage, glTexSubImage, etc
@@ -42,26 +44,28 @@ struct TextureCaps {
     GLuint getNearestSamples(GLuint requestedSamples) const;
 };
 
-class TextureCapsMap {
-public:
+class TextureCapsMap
+{
+  public:
     typedef std::map<GLenum, TextureCaps>::const_iterator const_iterator;
 
-    void insert(GLenum internalFormat, const TextureCaps& caps);
+    void insert(GLenum internalFormat, const TextureCaps &caps);
     void remove(GLenum internalFormat);
 
-    const TextureCaps& get(GLenum internalFormat) const;
+    const TextureCaps &get(GLenum internalFormat) const;
 
     const_iterator begin() const;
     const_iterator end() const;
 
     size_t size() const;
 
-private:
+  private:
     typedef std::map<GLenum, TextureCaps> InternalFormatToCapsMap;
     InternalFormatToCapsMap mCapsMap;
 };
 
-struct Extensions {
+struct Extensions
+{
     Extensions();
 
     // Generate a vector of supported extension strings
@@ -72,18 +76,16 @@ struct Extensions {
     // GL_OES_packed_depth_stencil
     // GL_OES_rgb8_rgba8
     // GL_EXT_texture_format_BGRA8888
-    // GL_EXT_color_buffer_half_float,
     // GL_OES_texture_half_float, GL_OES_texture_half_float_linear
     // GL_OES_texture_float, GL_OES_texture_float_linear
     // GL_EXT_texture_rg
-    // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3,
-    // GL_ANGLE_texture_compression_dxt5
+    // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3, GL_ANGLE_texture_compression_dxt5
     // GL_KHR_texture_compression_astc_hdr, GL_KHR_texture_compression_astc_ldr
     // GL_OES_compressed_ETC1_RGB8_texture
     // GL_EXT_sRGB
-    // GL_ANGLE_depth_texture, GL_OES_depth32
+    // GL_ANGLE_depth_texture
     // GL_EXT_color_buffer_float
-    void setTextureExtensionSupport(const TextureCapsMap& textureCaps);
+    void setTextureExtensionSupport(const TextureCapsMap &textureCaps);
 
     // ES2 Extension support
 
@@ -113,11 +115,6 @@ struct Extensions {
     // GL_OES_mapbuffer and GL_EXT_map_buffer_range
     bool mapBuffer;
     bool mapBufferRange;
-
-    // GL_EXT_color_buffer_half_float
-    // Together with GL_OES_texture_half_float in a GLES 2.0 context, implies that half-float
-    // textures are renderable.
-    bool colorBufferHalfFloat;
 
     // GL_OES_texture_half_float and GL_OES_texture_half_float_linear
     // Implies that TextureCaps for GL_RGB16F, GL_RGBA16F, GL_ALPHA32F_EXT, GL_LUMINANCE32F_EXT and
@@ -161,10 +158,6 @@ struct Extensions {
     // GL_ANGLE_depth_texture
     bool depthTextures;
 
-    // GL_OES_depth32
-    // Allows DEPTH_COMPONENT32_OES as a valid Renderbuffer format.
-    bool depth32;
-
     // GL_EXT_texture_storage
     bool textureStorage;
 
@@ -186,11 +179,6 @@ struct Extensions {
 
     // GL_ANGLE_timer_query
     bool timerQuery;
-
-    // GL_EXT_disjoint_timer_query
-    bool disjointTimerQuery;
-    GLuint queryCounterBitsTimeElapsed;
-    GLuint queryCounterBitsTimestamp;
 
     // GL_EXT_robustness
     bool robustness;
@@ -261,26 +249,14 @@ struct Extensions {
     // GL_OES_vertex_array_object
     bool vertexArrayObject;
 
-    // GL_KHR_debug
-    bool debug;
-    GLuint maxDebugMessageLength;
-    GLuint maxDebugLoggedMessages;
-    GLuint maxDebugGroupStackDepth;
-    GLuint maxLabelLength;
-
-    // KHR_no_error
-    bool noError;
-
-    // GL_ANGLE_lossy_etc_decode
-    bool lossyETCDecode;
-
     // ES3 Extension support
 
     // GL_EXT_color_buffer_float
     bool colorBufferFloat;
 };
 
-struct Limitations {
+struct Limitations
+{
     Limitations();
 
     // Renderer doesn't support gl_FrontFacing in fragment shaders
@@ -303,20 +279,22 @@ struct Limitations {
     bool noSimultaneousConstantColorAndAlphaBlendFunc;
 };
 
-struct TypePrecision {
+struct TypePrecision
+{
     TypePrecision();
 
     void setIEEEFloat();
     void setTwosComplementInt(unsigned int bits);
     void setSimulatedInt(unsigned int range);
 
-    void get(GLint* returnRange, GLint* returnPrecision) const;
+    void get(GLint *returnRange, GLint *returnPrecision) const;
 
     GLint range[2];
     GLint precision;
 };
 
-struct Caps {
+struct Caps
+{
     Caps();
 
     // Table 6.28, implementation dependent values
@@ -395,16 +373,19 @@ struct Caps {
 
 }
 
-namespace egl {
+namespace egl
+{
 
-struct Caps {
+struct Caps
+{
     Caps();
 
     // Support for NPOT surfaces
     bool textureNPOT;
 };
 
-struct DisplayExtensions {
+struct DisplayExtensions
+{
     DisplayExtensions();
 
     // Generate a vector of supported extension strings
@@ -427,9 +408,6 @@ struct DisplayExtensions {
 
     // EGL_ANGLE_keyed_mutex
     bool keyedMutex;
-
-    // EGL_ANGLE_surface_orientation
-    bool surfaceOrientation;
 
     // EGL_NV_post_sub_buffer
     bool postSubBuffer;
@@ -463,18 +441,10 @@ struct DisplayExtensions {
 
     // EGL_KHR_get_all_proc_addresses
     bool getAllProcAddresses;
-
-    // EGL_ANGLE_flexible_surface_compatibility
-    bool flexibleSurfaceCompatibility;
-
-    // EGL_ANGLE_direct_composition
-    bool directComposition;
-
-    // KHR_create_context_no_error
-    bool createContextNoError;
 };
 
-struct DeviceExtensions {
+struct DeviceExtensions
+{
     DeviceExtensions();
 
     // Generate a vector of supported extension strings
@@ -484,7 +454,8 @@ struct DeviceExtensions {
     bool deviceD3D;
 };
 
-struct ClientExtensions {
+struct ClientExtensions
+{
     ClientExtensions();
 
     // Generate a vector of supported extension strings
@@ -496,9 +467,6 @@ struct ClientExtensions {
     // EGL_EXT_platform_base
     bool platformBase;
 
-    // EGL_EXT_platform_device
-    bool platformDevice;
-
     // EGL_ANGLE_platform_angle
     bool platformANGLE;
 
@@ -507,18 +475,6 @@ struct ClientExtensions {
 
     // EGL_ANGLE_platform_angle_opengl
     bool platformANGLEOpenGL;
-
-    // EGL_ANGLE_device_creation
-    bool deviceCreation;
-
-    // EGL_ANGLE_device_creation_d3d11
-    bool deviceCreationD3D11;
-
-    // EGL_ANGLE_x11_visual
-    bool x11Visual;
-
-    // EGL_ANGLE_experimental_present_path
-    bool experimentalPresentPath;
 
     // EGL_KHR_client_get_all_proc_addresses
     bool clientGetAllProcAddresses;

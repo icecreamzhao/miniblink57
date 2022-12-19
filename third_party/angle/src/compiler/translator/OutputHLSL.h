@@ -8,8 +8,8 @@
 #define COMPILER_TRANSLATOR_OUTPUTHLSL_H_
 
 #include <list>
-#include <map>
 #include <set>
+#include <map>
 #include <stack>
 
 #include "angle_gl.h"
@@ -19,40 +19,36 @@
 
 class BuiltInFunctionEmulator;
 
-namespace sh {
+namespace sh
+{
 class UnfoldShortCircuit;
 class StructureHLSL;
 class UniformHLSL;
 
 typedef std::map<TString, TIntermSymbol*> ReferencedSymbols;
 
-class OutputHLSL : public TIntermTraverser {
-public:
+class OutputHLSL : public TIntermTraverser
+{
+  public:
     OutputHLSL(sh::GLenum shaderType, int shaderVersion,
-        const TExtensionBehavior& extensionBehavior,
-        const char* sourcePath, ShShaderOutput outputType,
-        int numRenderTargets, const std::vector<Uniform>& uniforms,
+        const TExtensionBehavior &extensionBehavior,
+        const char *sourcePath, ShShaderOutput outputType,
+        int numRenderTargets, const std::vector<Uniform> &uniforms,
         int compileOptions);
 
     ~OutputHLSL();
 
-    void output(TIntermNode* treeRoot, TInfoSinkBase& objSink);
+    void output(TIntermNode *treeRoot, TInfoSinkBase &objSink);
 
-    const std::map<std::string, unsigned int>& getInterfaceBlockRegisterMap() const;
-    const std::map<std::string, unsigned int>& getUniformRegisterMap() const;
+    const std::map<std::string, unsigned int> &getInterfaceBlockRegisterMap() const;
+    const std::map<std::string, unsigned int> &getUniformRegisterMap() const;
 
-    static TString initializer(const TType& type);
+    static TString initializer(const TType &type);
 
-    TInfoSinkBase& getInfoSink()
-    {
-        ASSERT(!mInfoSinkStack.empty());
-        return *mInfoSinkStack.top();
-    }
+    TInfoSinkBase &getInfoSink() { ASSERT(!mInfoSinkStack.empty()); return *mInfoSinkStack.top(); }
 
-    static bool canWriteAsHLSLLiteral(TIntermTyped* expression);
-
-protected:
-    void header(TInfoSinkBase& out, const BuiltInFunctionEmulator* builtInFunctionEmulator);
+  protected:
+    void header(const BuiltInFunctionEmulator *builtInFunctionEmulator);
 
     // Visit AST nodes and output their code to the body stream
     void visitSymbol(TIntermSymbol*);
@@ -61,63 +57,49 @@ protected:
     bool visitBinary(Visit visit, TIntermBinary*);
     bool visitUnary(Visit visit, TIntermUnary*);
     bool visitSelection(Visit visit, TIntermSelection*);
-    bool visitSwitch(Visit visit, TIntermSwitch*);
-    bool visitCase(Visit visit, TIntermCase*);
+    bool visitSwitch(Visit visit, TIntermSwitch *);
+    bool visitCase(Visit visit, TIntermCase *);
     bool visitAggregate(Visit visit, TIntermAggregate*);
     bool visitLoop(Visit visit, TIntermLoop*);
     bool visitBranch(Visit visit, TIntermBranch*);
 
-    bool isSingleStatement(TIntermNode* node);
-    bool handleExcessiveLoop(TInfoSinkBase& out, TIntermLoop* node);
+    bool isSingleStatement(TIntermNode *node);
+    bool handleExcessiveLoop(TIntermLoop *node);
 
     // Emit one of three strings depending on traverse phase. Called with literal strings so using const char* instead of TString.
-    void outputTriplet(TInfoSinkBase& out,
-        Visit visit,
-        const char* preString,
-        const char* inString,
-        const char* postString);
-    void outputLineDirective(TInfoSinkBase& out, int line);
-    TString argumentString(const TIntermSymbol* symbol);
-    int vectorSize(const TType& type) const;
+    void outputTriplet(Visit visit, const char *preString, const char *inString, const char *postString, TInfoSinkBase &out);
+    void outputTriplet(Visit visit, const char *preString, const char *inString, const char *postString);
+    void outputLineDirective(int line);
+    TString argumentString(const TIntermSymbol *symbol);
+    int vectorSize(const TType &type) const;
 
     // Emit constructor. Called with literal names so using const char* instead of TString.
-    void outputConstructor(TInfoSinkBase& out,
-        Visit visit,
-        const TType& type,
-        const char* name,
-        const TIntermSequence* parameters);
-    const TConstantUnion* writeConstantUnion(TInfoSinkBase& out,
-        const TType& type,
-        const TConstantUnion* constUnion);
+    void outputConstructor(Visit visit, const TType &type, const char *name, const TIntermSequence *parameters);
+    const TConstantUnion *writeConstantUnion(const TType &type, const TConstantUnion *constUnion);
 
-    void outputEqual(Visit visit, const TType& type, TOperator op, TInfoSinkBase& out);
+    void outputEqual(Visit visit, const TType &type, TOperator op, TInfoSinkBase &out);
 
-    void writeEmulatedFunctionTriplet(TInfoSinkBase& out, Visit visit, const char* preStr);
-    void makeFlaggedStructMaps(const std::vector<TIntermTyped*>& flaggedStructs);
+    void writeEmulatedFunctionTriplet(Visit visit, const char *preStr);
+    void makeFlaggedStructMaps(const std::vector<TIntermTyped *> &flaggedStructs);
 
     // Returns true if it found a 'same symbol' initializer (initializer that references the variable it's initting)
-    bool writeSameSymbolInitializer(TInfoSinkBase& out, TIntermSymbol* symbolNode, TIntermTyped* expression);
-    // Returns true if variable initializer could be written using literal {} notation.
-    bool writeConstantInitialization(TInfoSinkBase& out,
-        TIntermSymbol* symbolNode,
-        TIntermTyped* expression);
-
-    void writeDeferredGlobalInitializers(TInfoSinkBase& out);
-    void writeSelection(TInfoSinkBase& out, TIntermSelection* node);
+    bool writeSameSymbolInitializer(TInfoSinkBase &out, TIntermSymbol *symbolNode, TIntermTyped *expression);
+    void writeDeferredGlobalInitializers(TInfoSinkBase &out);
+    void writeSelection(TIntermSelection *node);
 
     // Returns the function name
-    TString addStructEqualityFunction(const TStructure& structure);
-    TString addArrayEqualityFunction(const TType& type);
-    TString addArrayAssignmentFunction(const TType& type);
-    TString addArrayConstructIntoFunction(const TType& type);
+    TString addStructEqualityFunction(const TStructure &structure);
+    TString addArrayEqualityFunction(const TType &type);
+    TString addArrayAssignmentFunction(const TType &type);
+    TString addArrayConstructIntoFunction(const TType &type);
 
     // Ensures if the type is a struct, the struct is defined
-    void ensureStructDefined(const TType& type);
+    void ensureStructDefined(const TType &type);
 
     sh::GLenum mShaderType;
     int mShaderVersion;
-    const TExtensionBehavior& mExtensionBehavior;
-    const char* mSourcePath;
+    const TExtensionBehavior &mExtensionBehavior;
+    const char *mSourcePath;
     const ShShaderOutput mOutputType;
     int mCompileOptions;
 
@@ -131,7 +113,7 @@ protected:
     // A stack is useful when we want to traverse in the header, or in helper functions, but not always
     // write to the body. Instead use an InfoSink stack to keep our current state intact.
     // TODO (jmadill): Just passing an InfoSink in function parameters would be simpler.
-    std::stack<TInfoSinkBase*> mInfoSinkStack;
+    std::stack<TInfoSinkBase *> mInfoSinkStack;
 
     ReferencedSymbols mReferencedUniforms;
     ReferencedSymbols mReferencedInterfaceBlocks;
@@ -139,17 +121,19 @@ protected:
     ReferencedSymbols mReferencedVaryings;
     ReferencedSymbols mReferencedOutputVariables;
 
-    StructureHLSL* mStructureHLSL;
-    UniformHLSL* mUniformHLSL;
+    StructureHLSL *mStructureHLSL;
+    UniformHLSL *mUniformHLSL;
 
-    struct TextureFunction {
-        enum Method {
-            IMPLICIT, // Mipmap LOD determined implicitly (standard lookup)
+    struct TextureFunction
+    {
+        enum Method
+        {
+            IMPLICIT,   // Mipmap LOD determined implicitly (standard lookup)
             BIAS,
             LOD,
             LOD0,
             LOD0BIAS,
-            SIZE, // textureSize()
+            SIZE,   // textureSize()
             FETCH,
             GRAD
         };
@@ -162,7 +146,7 @@ protected:
 
         TString name() const;
 
-        bool operator<(const TextureFunction& rhs) const;
+        bool operator<(const TextureFunction &rhs) const;
     };
 
     typedef std::set<TextureFunction> TextureFunctionSet;
@@ -183,20 +167,21 @@ protected:
     bool mUsesNestedBreak;
     bool mRequiresIEEEStrictCompiling;
 
+
     int mNumRenderTargets;
 
-    int mUniqueIndex; // For creating unique names
+    int mUniqueIndex;   // For creating unique names
 
     CallDAG mCallDag;
     MetadataList mASTMetadataList;
-    ASTMetadataHLSL* mCurrentFunctionMetadata;
+    ASTMetadataHLSL *mCurrentFunctionMetadata;
     bool mOutputLod0Function;
     bool mInsideDiscontinuousLoop;
     int mNestedLoopDepth;
 
-    TIntermSymbol* mExcessiveLoopIndex;
+    TIntermSymbol *mExcessiveLoopIndex;
 
-    TString structInitializerString(int indent, const TStructure& structure, const TString& rhsStructName);
+    TString structInitializerString(int indent, const TStructure &structure, const TString &rhsStructName);
 
     std::map<TIntermTyped*, TString> mFlaggedStructMappedNames;
     std::map<TIntermTyped*, TString> mFlaggedStructOriginalNames;
@@ -206,11 +191,12 @@ protected:
     // This also enables initialization of globals with uniforms.
     TIntermSequence mDeferredGlobalInitializers;
 
-    struct HelperFunction {
+    struct HelperFunction
+    {
         TString functionName;
         TString functionDefinition;
 
-        virtual ~HelperFunction() { }
+        virtual ~HelperFunction() {}
     };
 
     // A list of all equality comparison functions. It's important to preserve the order at
@@ -219,12 +205,14 @@ protected:
     // The ownership of the pointers is maintained by the type-specific arrays.
     std::vector<HelperFunction*> mEqualityFunctions;
 
-    struct StructEqualityFunction : public HelperFunction {
-        const TStructure* structure;
+    struct StructEqualityFunction : public HelperFunction
+    {
+        const TStructure *structure;
     };
     std::vector<StructEqualityFunction*> mStructEqualityFunctions;
 
-    struct ArrayHelperFunction : public HelperFunction {
+    struct ArrayHelperFunction : public HelperFunction
+    {
         TType type;
     };
     std::vector<ArrayHelperFunction*> mArrayEqualityFunctions;
@@ -239,4 +227,4 @@ protected:
 
 }
 
-#endif // COMPILER_TRANSLATOR_OUTPUTHLSL_H_
+#endif   // COMPILER_TRANSLATOR_OUTPUTHLSL_H_

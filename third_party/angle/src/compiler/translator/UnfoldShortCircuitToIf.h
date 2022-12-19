@@ -13,6 +13,6 @@
 
 class TIntermNode;
 
-void UnfoldShortCircuitToIf(TIntermNode* root, unsigned int* temporaryIndex);
+void UnfoldShortCircuitToIf(TIntermNode *root, unsigned int *temporaryIndex);
 
-#endif // COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUIT_H_
+#endif   // COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUIT_H_

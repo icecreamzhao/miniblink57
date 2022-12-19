@@ -22,7 +22,8 @@ void TGraphParentNode::traverse(TDependencyGraphTraverser* graphTraverser)
     // Visit the parent node's children.
     for (TGraphNodeSet::const_iterator iter = mDependentNodes.begin();
          iter != mDependentNodes.end();
-         ++iter) {
+         ++iter)
+    {
         TGraphNode* node = *iter;
         if (!graphTraverser->isVisited(node))
             node->traverse(graphTraverser);

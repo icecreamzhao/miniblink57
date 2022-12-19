@@ -5,10 +5,6 @@
 {
     # Everything below this is duplicated in the GN build. If you change
     # anything also change angle/BUILD.gn
-    'variables':
-    {
-        'angle_standalone%': 0,
-    },
     'targets':
     [
         {
@@ -18,6 +14,7 @@
             [
                 'libANGLE',
                 'libGLESv2',
+                '../../../blpwtk2/blpwtk2.gyp:blpwtk2_generate_sources',
             ],
             'includes':
             [
@@ -34,9 +31,22 @@
             ],
             'conditions':
             [
+                ['bb_version!=""', {
+                  'product_name': 'blpcr_egl.<(bb_version)',
+                }, {
+                  'product_name': 'blpcr_egl',
+                }],
                 ['angle_build_winrt==1',
                 {
                     'msvs_requires_importlibrary' : 'true',
+                    'msvs_settings':
+                    {
+                        'VCLinkerTool':
+                        {
+                            'EnableCOMDATFolding': '1',
+                            'OptimizeReferences': '1',
+                        }
+                    },
                 }],
             ],
         },

@@ -14,26 +14,29 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 
-namespace egl {
+namespace egl
+{
 class Display;
 struct Config;
 }
 
-namespace rx {
+namespace rx
+{
 
 class FramebufferImpl;
 
-class SurfaceImpl : public FramebufferAttachmentObjectImpl {
-public:
+class SurfaceImpl : public FramebufferAttachmentObjectImpl
+{
+  public:
     SurfaceImpl();
     virtual ~SurfaceImpl();
 
     virtual egl::Error initialize() = 0;
-    virtual FramebufferImpl* createDefaultFramebuffer(const gl::Framebuffer::Data& data) = 0;
+    virtual FramebufferImpl *createDefaultFramebuffer(const gl::Framebuffer::Data &data) = 0;
     virtual egl::Error swap() = 0;
     virtual egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) = 0;
-    virtual egl::Error querySurfacePointerANGLE(EGLint attribute, void** value) = 0;
-    virtual egl::Error bindTexImage(gl::Texture* texture, EGLint buffer) = 0;
+    virtual egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) = 0;
+    virtual egl::Error bindTexImage(EGLint buffer) = 0;
     virtual egl::Error releaseTexImage(EGLint buffer) = 0;
     virtual void setSwapInterval(EGLint interval) = 0;
 
@@ -48,3 +51,4 @@ public:
 }
 
 #endif // LIBANGLE_RENDERER_SURFACEIMPL_H_
+

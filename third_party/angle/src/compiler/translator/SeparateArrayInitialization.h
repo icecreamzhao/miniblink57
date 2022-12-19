@@ -10,16 +10,15 @@
 //     type[n] a;
 //     a = initializer;
 //
-// Note that if the array is declared as const, the initialization may still be split, making the
-// AST technically invalid. Because of that this transformation should only be used when subsequent
-// stages don't care about const qualifiers. However, the initialization will not be split if the
-// initializer can be written as a HLSL literal.
+// Note that if the array is declared as const, the initialization is still split, making the AST
+// technically invalid. Because of that this transformation should only be used when subsequent
+// stages don't care about const qualifiers.
 
 #ifndef COMPILER_TRANSLATOR_SEPARATEARRAYINITIALIZATION_H_
 #define COMPILER_TRANSLATOR_SEPARATEARRAYINITIALIZATION_H_
 
 class TIntermNode;
 
-void SeparateArrayInitialization(TIntermNode* root);
+void SeparateArrayInitialization(TIntermNode *root);
 
-#endif // COMPILER_TRANSLATOR_SEPARATEARRAYINITIALIZATION_H_
+#endif  // COMPILER_TRANSLATOR_SEPARATEARRAYINITIALIZATION_H_

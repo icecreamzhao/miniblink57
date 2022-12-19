@@ -16,6 +16,7 @@
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/VariableInfo.h"
 
+
 // The translator needs to analyze the the graph of the function calls
 // to run checks and analyses; since in GLSL recursion is not allowed
 // that graph is a DAG.
@@ -31,18 +32,21 @@
 // called by a function G will have index index(F) < index(G), that way
 // depth-first analysis becomes analysis in the order of indices.
 
-class CallDAG : angle::NonCopyable {
-public:
+class CallDAG : angle::NonCopyable
+{
+  public:
     CallDAG();
     ~CallDAG();
 
-    struct Record {
+    struct Record
+    {
         std::string name;
-        TIntermAggregate* node;
+        TIntermAggregate *node;
         std::vector<int> callees;
     };
 
-    enum InitResult {
+    enum InitResult
+    {
         INITDAG_SUCCESS,
         INITDAG_RECURSION,
         INITDAG_UNDEFINED,
@@ -50,23 +54,22 @@ public:
 
     // Returns INITDAG_SUCCESS if it was able to create the DAG, otherwise prints
     // the initialization error in info, if present.
-    InitResult init(TIntermNode* root, TInfoSinkBase* info);
+    InitResult init(TIntermNode *root, TInfoSinkBase *info);
 
     // Returns InvalidIndex if the function wasn't found
-    size_t findIndex(const TIntermAggregate* function) const;
+    size_t findIndex(const TIntermAggregate *function) const;
 
-    const Record& getRecordFromIndex(size_t index) const;
-    const Record& getRecord(const TIntermAggregate* function) const;
+    const Record &getRecordFromIndex(size_t index) const;
+    const Record &getRecord(const TIntermAggregate *function) const;
     size_t size() const;
     void clear();
 
     const static size_t InvalidIndex;
-
-private:
+  private:
     std::vector<Record> mRecords;
     std::map<int, int> mFunctionIdToIndex;
 
     class CallDAGCreator;
 };
 
-#endif // COMPILER_TRANSLATOR_CALLDAG_H_
+#endif  // COMPILER_TRANSLATOR_CALLDAG_H_

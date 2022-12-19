@@ -25,11 +25,11 @@ extern "C" {
 #endif
 
 enum {
-    TRIO_FP_INFINITE,
-    TRIO_FP_NAN,
-    TRIO_FP_NORMAL,
-    TRIO_FP_SUBNORMAL,
-    TRIO_FP_ZERO
+  TRIO_FP_INFINITE,
+  TRIO_FP_NAN,
+  TRIO_FP_NORMAL,
+  TRIO_FP_SUBNORMAL,
+  TRIO_FP_ZERO
 };
 
 /*
@@ -46,7 +46,7 @@ TRIO_PUBLIC double trio_pinf TRIO_PROTO((void));
  * Return negative infinity.
  */
 TRIO_PUBLIC double trio_ninf TRIO_PROTO((void));
-
+  
 /*
  * Return negative zero.
  */
@@ -75,7 +75,7 @@ TRIO_PUBLIC int trio_fpclassify TRIO_PROTO((double number));
 
 TRIO_PUBLIC int trio_signbit TRIO_PROTO((double number));
 
-TRIO_PUBLIC int trio_fpclassify_and_signbit TRIO_PROTO((double number, int* is_negative));
+TRIO_PUBLIC int trio_fpclassify_and_signbit TRIO_PROTO((double number, int *is_negative));
 
 #ifdef __cplusplus
 }

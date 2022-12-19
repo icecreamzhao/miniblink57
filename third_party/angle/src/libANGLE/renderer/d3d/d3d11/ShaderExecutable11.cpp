@@ -10,9 +10,10 @@
 #include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 
-namespace rx {
+namespace rx
+{
 
-ShaderExecutable11::ShaderExecutable11(const void* function, size_t length, ID3D11PixelShader* executable)
+ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D11PixelShader *executable)
     : ShaderExecutableD3D(function, length)
 {
     mPixelExecutable = executable;
@@ -21,7 +22,7 @@ ShaderExecutable11::ShaderExecutable11(const void* function, size_t length, ID3D
     mStreamOutExecutable = NULL;
 }
 
-ShaderExecutable11::ShaderExecutable11(const void* function, size_t length, ID3D11VertexShader* executable, ID3D11GeometryShader* streamOut)
+ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D11VertexShader *executable, ID3D11GeometryShader *streamOut)
     : ShaderExecutableD3D(function, length)
 {
     mVertexExecutable = executable;
@@ -30,7 +31,7 @@ ShaderExecutable11::ShaderExecutable11(const void* function, size_t length, ID3D
     mStreamOutExecutable = streamOut;
 }
 
-ShaderExecutable11::ShaderExecutable11(const void* function, size_t length, ID3D11GeometryShader* executable)
+ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D11GeometryShader *executable)
     : ShaderExecutableD3D(function, length)
 {
     mGeometryExecutable = executable;
@@ -47,35 +48,36 @@ ShaderExecutable11::~ShaderExecutable11()
     SafeRelease(mStreamOutExecutable);
 }
 
-ID3D11VertexShader* ShaderExecutable11::getVertexShader() const
+ID3D11VertexShader *ShaderExecutable11::getVertexShader() const
 {
     return mVertexExecutable;
 }
 
-ID3D11PixelShader* ShaderExecutable11::getPixelShader() const
+ID3D11PixelShader *ShaderExecutable11::getPixelShader() const
 {
     return mPixelExecutable;
 }
 
-ID3D11GeometryShader* ShaderExecutable11::getGeometryShader() const
+ID3D11GeometryShader *ShaderExecutable11::getGeometryShader() const
 {
     return mGeometryExecutable;
 }
 
-ID3D11GeometryShader* ShaderExecutable11::getStreamOutShader() const
+ID3D11GeometryShader *ShaderExecutable11::getStreamOutShader() const
 {
     return mStreamOutExecutable;
 }
 
-UniformStorage11::UniformStorage11(Renderer11* renderer, size_t initialSize)
-    : UniformStorageD3D(initialSize)
-    , mConstantBuffer(NULL)
+UniformStorage11::UniformStorage11(Renderer11 *renderer, size_t initialSize)
+    : UniformStorageD3D(initialSize),
+      mConstantBuffer(NULL)
 {
-    ID3D11Device* d3d11Device = renderer->getDevice();
+    ID3D11Device *d3d11Device = renderer->getDevice();
 
-    if (initialSize > 0) {
-        D3D11_BUFFER_DESC constantBufferDescription = { 0 };
-        constantBufferDescription.ByteWidth = static_cast<unsigned int>(initialSize);
+    if (initialSize > 0)
+    {
+        D3D11_BUFFER_DESC constantBufferDescription = {0};
+        constantBufferDescription.ByteWidth           = static_cast<unsigned int>(initialSize);
         constantBufferDescription.Usage = D3D11_USAGE_DYNAMIC;
         constantBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
         constantBufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;

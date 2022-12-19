@@ -10,6 +10,6 @@
 
 class TIntermNode;
 
-void PruneEmptyDeclarations(TIntermNode* root);
+void PruneEmptyDeclarations(TIntermNode *root);
 
-#endif // COMPILER_TRANSLATOR_PRUNEEMPTYDECLARATIONS_H_
+#endif  // COMPILER_TRANSLATOR_PRUNEEMPTYDECLARATIONS_H_

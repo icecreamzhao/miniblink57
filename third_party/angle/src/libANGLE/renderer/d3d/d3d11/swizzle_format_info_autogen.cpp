@@ -13,48 +13,45 @@
 
 #include <GLES3/gl3.h>
 
-namespace rx {
+namespace rx
+{
 
-namespace d3d11 {
+namespace d3d11
+{
 
-    SwizzleSizeType::SwizzleSizeType()
-        : maxComponentSize(0)
-        , componentType(GL_NONE)
-    {
-    }
+SwizzleSizeType::SwizzleSizeType() : maxComponentSize(0), componentType(GL_NONE)
+{
+}
 
-    SwizzleSizeType::SwizzleSizeType(size_t maxComponentSize, GLenum componentType)
-        : maxComponentSize(maxComponentSize)
-        , componentType(componentType)
-    {
-    }
+SwizzleSizeType::SwizzleSizeType(size_t maxComponentSize, GLenum componentType)
+    : maxComponentSize(maxComponentSize), componentType(componentType)
+{
+}
 
-    bool SwizzleSizeType::operator<(const SwizzleSizeType& other) const
-    {
-        return (maxComponentSize != other.maxComponentSize)
-            ? (maxComponentSize < other.maxComponentSize)
-            : (componentType < other.componentType);
-    }
+bool SwizzleSizeType::operator<(const SwizzleSizeType &other) const
+{
+    return (maxComponentSize != other.maxComponentSize)
+               ? (maxComponentSize < other.maxComponentSize)
+               : (componentType < other.componentType);
+}
 
-    SwizzleFormatInfo::SwizzleFormatInfo()
-        : mTexFormat(DXGI_FORMAT_UNKNOWN)
-        , mSRVFormat(DXGI_FORMAT_UNKNOWN)
-        , mRTVFormat(DXGI_FORMAT_UNKNOWN)
-    {
-    }
+SwizzleFormatInfo::SwizzleFormatInfo()
+    : mTexFormat(DXGI_FORMAT_UNKNOWN),
+      mSRVFormat(DXGI_FORMAT_UNKNOWN),
+      mRTVFormat(DXGI_FORMAT_UNKNOWN)
+{
+}
 
-    SwizzleFormatInfo::SwizzleFormatInfo(DXGI_FORMAT texFormat,
-        DXGI_FORMAT srvFormat,
-        DXGI_FORMAT rtvFormat)
-        : mTexFormat(texFormat)
-        , mSRVFormat(srvFormat)
-        , mRTVFormat(rtvFormat)
-    {
-    }
+SwizzleFormatInfo::SwizzleFormatInfo(DXGI_FORMAT texFormat,
+                                     DXGI_FORMAT srvFormat,
+                                     DXGI_FORMAT rtvFormat)
+    : mTexFormat(texFormat), mSRVFormat(srvFormat), mRTVFormat(rtvFormat)
+{
+}
 
-    const SwizzleFormatInfo& GetSwizzleFormatInfo(GLuint maxBits, GLenum componentType)
-    {
-        // clang-format off
+const SwizzleFormatInfo &GetSwizzleFormatInfo(GLuint maxBits, GLenum componentType)
+{
+    // clang-format off
     switch (componentType)
     {
         case GL_FLOAT:
@@ -197,10 +194,10 @@ namespace d3d11 {
             return defaultInfo;
         }
     }
-        // clang-format on
+    // clang-format on
 
-    } // GetSwizzleFormatInfo
+}  // GetSwizzleFormatInfo
 
-} // namespace d3d11
+}  // namespace d3d11
 
-} // namespace rx
+}  // namespace rx

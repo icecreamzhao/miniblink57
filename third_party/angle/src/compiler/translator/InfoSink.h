@@ -7,15 +7,14 @@
 #ifndef COMPILER_TRANSLATOR_INFOSINK_H_
 #define COMPILER_TRANSLATOR_INFOSINK_H_
 
-#include "compiler/translator/Common.h"
 #include <math.h>
 #include <stdlib.h>
+#include "compiler/translator/Common.h"
 
 // Returns the fractional part of the given floating-point number.
-inline float fractionalPart(float f)
-{
-    float intPart = 0.0f;
-    return modff(f, &intPart);
+inline float fractionalPart(float f) {
+  float intPart = 0.0f;
+  return modff(f, &intPart);
 }
 
 //
@@ -39,11 +38,10 @@ enum TPrefixType {
 //
 class TInfoSinkBase {
 public:
-    TInfoSinkBase() { }
+    TInfoSinkBase() {}
 
     template <typename T>
-    TInfoSinkBase& operator<<(const T& t)
-    {
+    TInfoSinkBase& operator<<(const T& t) {
         TPersistStringStream stream;
         stream << t;
         sink.append(stream.str());
@@ -51,29 +49,24 @@ public:
     }
     // Override << operator for specific types. It is faster to append strings
     // and characters directly to the sink.
-    TInfoSinkBase& operator<<(char c)
-    {
+    TInfoSinkBase& operator<<(char c) {
         sink.append(1, c);
         return *this;
     }
-    TInfoSinkBase& operator<<(const char* str)
-    {
+    TInfoSinkBase& operator<<(const char* str) {
         sink.append(str);
         return *this;
     }
-    TInfoSinkBase& operator<<(const TPersistString& str)
-    {
+    TInfoSinkBase& operator<<(const TPersistString& str) {
         sink.append(str);
         return *this;
     }
-    TInfoSinkBase& operator<<(const TString& str)
-    {
+    TInfoSinkBase& operator<<(const TString& str) {
         sink.append(str.c_str());
         return *this;
     }
     // Make sure floats are written with correct precision.
-    TInfoSinkBase& operator<<(float f)
-    {
+    TInfoSinkBase& operator<<(float f) {
         // Make sure that at least one decimal point is written. If a number
         // does not have a fractional part, the default precision format does
         // not write the decimal portion which gets interpreted as integer by
@@ -92,14 +85,16 @@ public:
         return *this;
     }
     // Write boolean values as their names instead of integral value.
-    TInfoSinkBase& operator<<(bool b)
-    {
+    TInfoSinkBase& operator<<(bool b) {
         const char* str = b ? "true" : "false";
         sink.append(str);
         return *this;
     }
 
-    void erase() { sink.clear(); }
+    void erase() { 
+        //sink.clear(); 
+        sink = "";
+    }
     int size() { return static_cast<int>(sink.size()); }
 
     const TPersistString& str() const { return sink; }

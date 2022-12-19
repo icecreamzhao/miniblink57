@@ -11,34 +11,29 @@
 
 #include "libANGLE/renderer/QueryImpl.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer9;
 
-class Query9 : public QueryImpl {
-public:
-    Query9(Renderer9* renderer, GLenum type);
+class Query9 : public QueryImpl
+{
+  public:
+    Query9(Renderer9 *renderer, GLenum type);
     virtual ~Query9();
 
     virtual gl::Error begin();
     virtual gl::Error end();
-    virtual gl::Error queryCounter();
-    virtual gl::Error getResult(GLint* params);
-    virtual gl::Error getResult(GLuint* params);
-    virtual gl::Error getResult(GLint64* params);
-    virtual gl::Error getResult(GLuint64* params);
-    virtual gl::Error isResultAvailable(bool* available);
+    virtual gl::Error getResult(GLuint *params);
+    virtual gl::Error isResultAvailable(GLuint *available);
 
-private:
+  private:
     gl::Error testQuery();
 
-    template <typename T>
-    gl::Error getResultBase(T* params);
-
-    GLuint64 mResult;
+    GLuint mResult;
     bool mQueryFinished;
 
-    Renderer9* mRenderer;
-    IDirect3DQuery9* mQuery;
+    Renderer9 *mRenderer;
+    IDirect3DQuery9 *mQuery;
 };
 
 }

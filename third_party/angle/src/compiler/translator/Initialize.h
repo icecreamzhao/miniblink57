@@ -11,19 +11,19 @@
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/SymbolTable.h"
 
-void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInResources& resources, TSymbolTable& table);
+void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &table);
 
 void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
-    const ShBuiltInResources& resources,
-    TSymbolTable& symbolTable);
+                      const ShBuiltInResources& resources,
+                      TSymbolTable& symbolTable);
 
 void InitExtensionBehavior(const ShBuiltInResources& resources,
-    TExtensionBehavior& extensionBehavior);
+                           TExtensionBehavior& extensionBehavior);
 
 // Resets the behavior of the extensions listed in |extensionBehavior| to the
 // undefined state. These extensions will only be those initially supported in
 // the ShBuiltInResources object for this compiler instance. All other
 // extensions will remain unsupported.
-void ResetExtensionBehavior(TExtensionBehavior& extensionBehavior);
+void ResetExtensionBehavior(TExtensionBehavior &extensionBehavior);
 
 #endif // COMPILER_TRANSLATOR_INITIALIZE_H_

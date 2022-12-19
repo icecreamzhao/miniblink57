@@ -33,13 +33,9 @@ typedef std::vector<TGraphFunctionCall*> TFunctionCallVector;
 //
 class TGraphNode {
 public:
-    TGraphNode(TIntermNode* node)
-        : intermNode(node)
-    {
-    }
-    virtual ~TGraphNode() { }
+    TGraphNode(TIntermNode* node) : intermNode(node) {}
+    virtual ~TGraphNode() {}
     virtual void traverse(TDependencyGraphTraverser* graphTraverser);
-
 protected:
     TIntermNode* intermNode;
 };
@@ -49,17 +45,10 @@ protected:
 //
 class TGraphParentNode : public TGraphNode {
 public:
-    TGraphParentNode(TIntermNode* node)
-        : TGraphNode(node)
-    {
-    }
-    ~TGraphParentNode() override { }
-    void addDependentNode(TGraphNode* node)
-    {
-        if (node != this)
-            mDependentNodes.insert(node);
-    }
-    void traverse(TDependencyGraphTraverser* graphTraverser) override;
+    TGraphParentNode(TIntermNode* node) : TGraphNode(node) {}
+    ~TGraphParentNode() override {}
+    void addDependentNode(TGraphNode* node) { if (node != this) mDependentNodes.insert(node); }
+    void traverse(TDependencyGraphTraverser *graphTraverser) override;
 
 private:
     TGraphNodeSet mDependentNodes;
@@ -72,13 +61,11 @@ class TGraphArgument : public TGraphParentNode {
 public:
     TGraphArgument(TIntermAggregate* intermFunctionCall, int argumentNumber)
         : TGraphParentNode(intermFunctionCall)
-        , mArgumentNumber(argumentNumber)
-    {
-    }
-    ~TGraphArgument() override { }
+        , mArgumentNumber(argumentNumber) {}
+    ~TGraphArgument() override {}
     const TIntermAggregate* getIntermFunctionCall() const { return intermNode->getAsAggregate(); }
     int getArgumentNumber() const { return mArgumentNumber; }
-    void traverse(TDependencyGraphTraverser* graphTraverser) override;
+    void traverse(TDependencyGraphTraverser *graphTraverser) override;
 
 private:
     int mArgumentNumber;
@@ -90,12 +77,10 @@ private:
 class TGraphFunctionCall : public TGraphParentNode {
 public:
     TGraphFunctionCall(TIntermAggregate* intermFunctionCall)
-        : TGraphParentNode(intermFunctionCall)
-    {
-    }
-    ~TGraphFunctionCall() override { }
+        : TGraphParentNode(intermFunctionCall) {}
+    ~TGraphFunctionCall() override {}
     const TIntermAggregate* getIntermFunctionCall() const { return intermNode->getAsAggregate(); }
-    void traverse(TDependencyGraphTraverser* graphTraverser) override;
+    void traverse(TDependencyGraphTraverser *graphTraverser) override;
 };
 
 //
@@ -103,13 +88,10 @@ public:
 //
 class TGraphSymbol : public TGraphParentNode {
 public:
-    TGraphSymbol(TIntermSymbol* intermSymbol)
-        : TGraphParentNode(intermSymbol)
-    {
-    }
-    ~TGraphSymbol() override { }
+    TGraphSymbol(TIntermSymbol* intermSymbol) : TGraphParentNode(intermSymbol) {}
+    ~TGraphSymbol() override {}
     const TIntermSymbol* getIntermSymbol() const { return intermNode->getAsSymbolNode(); }
-    void traverse(TDependencyGraphTraverser* graphTraverser) override;
+    void traverse(TDependencyGraphTraverser *graphTraverser) override;
 };
 
 //
@@ -117,13 +99,10 @@ public:
 //
 class TGraphSelection : public TGraphNode {
 public:
-    TGraphSelection(TIntermSelection* intermSelection)
-        : TGraphNode(intermSelection)
-    {
-    }
-    ~TGraphSelection() override { }
+    TGraphSelection(TIntermSelection* intermSelection) : TGraphNode(intermSelection) {}
+    ~TGraphSelection() override {}
     const TIntermSelection* getIntermSelection() const { return intermNode->getAsSelectionNode(); }
-    void traverse(TDependencyGraphTraverser* graphTraverser) override;
+    void traverse(TDependencyGraphTraverser *graphTraverser) override;
 };
 
 //
@@ -131,13 +110,10 @@ public:
 //
 class TGraphLoop : public TGraphNode {
 public:
-    TGraphLoop(TIntermLoop* intermLoop)
-        : TGraphNode(intermLoop)
-    {
-    }
-    ~TGraphLoop() override { }
+    TGraphLoop(TIntermLoop* intermLoop) : TGraphNode(intermLoop) {}
+    ~TGraphLoop() override {}
     const TIntermLoop* getIntermLoop() const { return intermNode->getAsLoopNode(); }
-    void traverse(TDependencyGraphTraverser* graphTraverser) override;
+    void traverse(TDependencyGraphTraverser *graphTraverser) override;
 };
 
 //
@@ -145,14 +121,11 @@ public:
 //
 class TGraphLogicalOp : public TGraphNode {
 public:
-    TGraphLogicalOp(TIntermBinary* intermLogicalOp)
-        : TGraphNode(intermLogicalOp)
-    {
-    }
-    ~TGraphLogicalOp() override { }
+    TGraphLogicalOp(TIntermBinary* intermLogicalOp) : TGraphNode(intermLogicalOp) {}
+    ~TGraphLogicalOp() override {}
     const TIntermBinary* getIntermLogicalOp() const { return intermNode->getAsBinaryNode(); }
     const char* getOpString() const;
-    void traverse(TDependencyGraphTraverser* graphTraverser) override;
+    void traverse(TDependencyGraphTraverser *graphTraverser) override;
 };
 
 //
@@ -169,11 +142,27 @@ class TDependencyGraph {
 public:
     TDependencyGraph(TIntermNode* intermNode);
     ~TDependencyGraph();
-    const TGraphNodeVector& allNodes() const { return mAllNodes; }
-    const TGraphSymbolVector& samplerSymbols() const { return mSamplerSymbols; }
-    const TFunctionCallVector& userDefinedFunctionCalls() const
+    TGraphNodeVector::const_iterator begin() const { return mAllNodes.begin(); }
+    TGraphNodeVector::const_iterator end() const { return mAllNodes.end(); }
+
+    TGraphSymbolVector::const_iterator beginSamplerSymbols() const
     {
-        return mUserDefinedFunctionCalls;
+        return mSamplerSymbols.begin();
+    }
+
+    TGraphSymbolVector::const_iterator endSamplerSymbols() const
+    {
+        return mSamplerSymbols.end();
+    }
+
+    TFunctionCallVector::const_iterator beginUserDefinedFunctionCalls() const
+    {
+        return mUserDefinedFunctionCalls.begin();
+    }
+
+    TFunctionCallVector::const_iterator endUserDefinedFunctionCalls() const
+    {
+        return mUserDefinedFunctionCalls.end();
     }
 
     TGraphArgument* createArgument(TIntermAggregate* intermFunctionCall, int argumentNumber);
@@ -182,7 +171,6 @@ public:
     TGraphSelection* createSelection(TIntermSelection* intermSelection);
     TGraphLoop* createLoop(TIntermLoop* intermLoop);
     TGraphLogicalOp* createLogicalOp(TIntermBinary* intermLogicalOp);
-
 private:
     typedef TMap<int, TGraphSymbol*> TSymbolIdMap;
     typedef std::pair<int, TGraphSymbol*> TSymbolIdPair;
@@ -202,11 +190,8 @@ private:
 //
 class TDependencyGraphTraverser : angle::NonCopyable {
 public:
-    TDependencyGraphTraverser()
-        : mDepth(0)
-    {
-    }
-    virtual ~TDependencyGraphTraverser() { }
+    TDependencyGraphTraverser() : mDepth(0) {}
+    virtual ~TDependencyGraphTraverser() {}
 
     virtual void visitSymbol(TGraphSymbol* symbol) {};
     virtual void visitArgument(TGraphArgument* selection) {};
@@ -222,7 +207,6 @@ public:
     void clearVisited() { mVisited.clear(); }
     void markVisited(TGraphNode* node) { mVisited.insert(node); }
     bool isVisited(TGraphNode* node) const { return mVisited.find(node) != mVisited.end(); }
-
 private:
     int mDepth;
     TGraphNodeSet mVisited;

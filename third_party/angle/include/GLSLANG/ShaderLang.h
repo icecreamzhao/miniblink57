@@ -13,13 +13,13 @@
 #define COMPILER_EXPORT __declspec(dllexport)
 #else
 #define COMPILER_EXPORT __declspec(dllimport)
-#endif // defined(ANGLE_TRANSLATOR_IMPLEMENTATION)
+#endif  // defined(ANGLE_TRANSLATOR_IMPLEMENTATION)
 
-#else // defined(_WIN32) || defined(_WIN64)
+#else  // defined(_WIN32) || defined(_WIN64)
 #define COMPILER_EXPORT __attribute__((visibility("default")))
 #endif
 
-#else // defined(COMPONENT_BUILD) && !defined(ANGLE_TRANSLATOR_STATIC)
+#else  // defined(COMPONENT_BUILD) && !defined(ANGLE_TRANSLATOR_STATIC)
 #define COMPILER_EXPORT
 #endif
 
@@ -36,7 +36,8 @@
 // and the shading language compiler.
 //
 
-namespace sh {
+namespace sh
+{
 // GLenum alias
 typedef unsigned int GLenum;
 }
@@ -47,174 +48,170 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 143
+#define ANGLE_SH_VERSION 140
 
 typedef enum {
-    SH_GLES2_SPEC = 0x8B40,
-    SH_WEBGL_SPEC = 0x8B41,
+  SH_GLES2_SPEC = 0x8B40,
+  SH_WEBGL_SPEC = 0x8B41,
 
-    SH_GLES3_SPEC = 0x8B86,
-    SH_WEBGL2_SPEC = 0x8B87,
+  SH_GLES3_SPEC = 0x8B86,
+  SH_WEBGL2_SPEC = 0x8B87,
 
-    // The CSS Shaders spec is a subset of the WebGL spec.
-    //
-    // In both CSS vertex and fragment shaders, ANGLE:
-    // (1) Reserves the "css_" prefix.
-    // (2) Renames the main function to css_main.
-    // (3) Disables the gl_MaxDrawBuffers built-in.
-    //
-    // In CSS fragment shaders, ANGLE:
-    // (1) Disables the gl_FragColor built-in.
-    // (2) Disables the gl_FragData built-in.
-    // (3) Enables the css_MixColor built-in.
-    // (4) Enables the css_ColorMatrix built-in.
-    //
-    // After passing a CSS shader through ANGLE, the browser is expected to append
-    // a new main function to it.
-    // This new main function will call the css_main function.
-    // It may also perform additional operations like varying assignment, texture
-    // access, and gl_FragColor assignment in order to implement the CSS Shaders
-    // blend modes.
-    //
-    SH_CSS_SHADERS_SPEC = 0x8B42
+  // The CSS Shaders spec is a subset of the WebGL spec.
+  //
+  // In both CSS vertex and fragment shaders, ANGLE:
+  // (1) Reserves the "css_" prefix.
+  // (2) Renames the main function to css_main.
+  // (3) Disables the gl_MaxDrawBuffers built-in.
+  //
+  // In CSS fragment shaders, ANGLE:
+  // (1) Disables the gl_FragColor built-in.
+  // (2) Disables the gl_FragData built-in.
+  // (3) Enables the css_MixColor built-in.
+  // (4) Enables the css_ColorMatrix built-in.
+  //
+  // After passing a CSS shader through ANGLE, the browser is expected to append
+  // a new main function to it.
+  // This new main function will call the css_main function.
+  // It may also perform additional operations like varying assignment, texture
+  // access, and gl_FragColor assignment in order to implement the CSS Shaders
+  // blend modes.
+  //
+  SH_CSS_SHADERS_SPEC = 0x8B42
 } ShShaderSpec;
 
 typedef enum {
-    // ESSL output only supported in some configurations.
-    SH_ESSL_OUTPUT = 0x8B45,
+  SH_ESSL_OUTPUT               = 0x8B45,
+  // SH_GLSL_OUTPUT is deprecated. This is to not break the build.
+  SH_GLSL_OUTPUT               = 0x8B46,
+  SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,
+  // SH_GLSL_CORE_OUTPUT is deprecated.
+  SH_GLSL_CORE_OUTPUT          = 0x8B47,
+  //Note: GL introduced core profiles in 1.5. However, for compatiblity with Chromium, we treat SH_GLSL_CORE_OUTPUT as GLSL_130_OUTPUT.
+  //TODO: Remove SH_GLSL_CORE_OUTPUT
+  SH_GLSL_130_OUTPUT           = 0x8B47,
+  SH_GLSL_140_OUTPUT           = 0x8B80,
+  SH_GLSL_150_CORE_OUTPUT      = 0x8B81,
+  SH_GLSL_330_CORE_OUTPUT      = 0x8B82,
+  SH_GLSL_400_CORE_OUTPUT      = 0x8B83,
+  SH_GLSL_410_CORE_OUTPUT      = 0x8B84,
+  SH_GLSL_420_CORE_OUTPUT      = 0x8B85,
+  SH_GLSL_430_CORE_OUTPUT      = 0x8B86,
+  SH_GLSL_440_CORE_OUTPUT      = 0x8B87,
+  SH_GLSL_450_CORE_OUTPUT      = 0x8B88,
 
-    // GLSL output only supported in some configurations.
-    SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,
-    // Note: GL introduced core profiles in 1.5.
-    SH_GLSL_130_OUTPUT = 0x8B47,
-    SH_GLSL_140_OUTPUT = 0x8B80,
-    SH_GLSL_150_CORE_OUTPUT = 0x8B81,
-    SH_GLSL_330_CORE_OUTPUT = 0x8B82,
-    SH_GLSL_400_CORE_OUTPUT = 0x8B83,
-    SH_GLSL_410_CORE_OUTPUT = 0x8B84,
-    SH_GLSL_420_CORE_OUTPUT = 0x8B85,
-    SH_GLSL_430_CORE_OUTPUT = 0x8B86,
-    SH_GLSL_440_CORE_OUTPUT = 0x8B87,
-    SH_GLSL_450_CORE_OUTPUT = 0x8B88,
-
-    // HLSL output only supported in some configurations.
-    // Deprecated:
-    SH_HLSL_OUTPUT = 0x8B48,
-    SH_HLSL9_OUTPUT = 0x8B48,
-    SH_HLSL11_OUTPUT = 0x8B49,
-
-    // Prefer using these to specify HLSL output type:
-    SH_HLSL_3_0_OUTPUT = 0x8B48, // D3D 9
-    SH_HLSL_4_1_OUTPUT = 0x8B49, // D3D 11
-    SH_HLSL_4_0_FL9_3_OUTPUT = 0x8B4A // D3D 11 feature level 9_3
+  // HLSL output only supported in some configurations.
+  SH_HLSL_OUTPUT   = 0x8B48,
+  SH_HLSL9_OUTPUT  = 0x8B48,
+  SH_HLSL11_OUTPUT = 0x8B49
 } ShShaderOutput;
 
 // Compile options.
 typedef enum {
-    SH_VALIDATE = 0,
-    SH_VALIDATE_LOOP_INDEXING = 0x0001,
-    SH_INTERMEDIATE_TREE = 0x0002,
-    SH_OBJECT_CODE = 0x0004,
-    SH_VARIABLES = 0x0008,
-    SH_LINE_DIRECTIVES = 0x0010,
-    SH_SOURCE_PATH = 0x0020,
-    SH_UNROLL_FOR_LOOP_WITH_INTEGER_INDEX = 0x0040,
-    // If a sampler array index happens to be a loop index,
-    //   1) if its type is integer, unroll the loop.
-    //   2) if its type is float, fail the shader compile.
-    // This is to work around a mac driver bug.
-    SH_UNROLL_FOR_LOOP_WITH_SAMPLER_ARRAY_INDEX = 0x0080,
+  SH_VALIDATE                = 0,
+  SH_VALIDATE_LOOP_INDEXING  = 0x0001,
+  SH_INTERMEDIATE_TREE       = 0x0002,
+  SH_OBJECT_CODE             = 0x0004,
+  SH_VARIABLES               = 0x0008,
+  SH_LINE_DIRECTIVES         = 0x0010,
+  SH_SOURCE_PATH             = 0x0020,
+  SH_UNROLL_FOR_LOOP_WITH_INTEGER_INDEX = 0x0040,
+  // If a sampler array index happens to be a loop index,
+  //   1) if its type is integer, unroll the loop.
+  //   2) if its type is float, fail the shader compile.
+  // This is to work around a mac driver bug.
+  SH_UNROLL_FOR_LOOP_WITH_SAMPLER_ARRAY_INDEX = 0x0080,
 
-    // This is needed only as a workaround for certain OpenGL driver bugs.
-    SH_EMULATE_BUILT_IN_FUNCTIONS = 0x0100,
+  // This is needed only as a workaround for certain OpenGL driver bugs.
+  SH_EMULATE_BUILT_IN_FUNCTIONS = 0x0100,
 
-    // This is an experimental flag to enforce restrictions that aim to prevent
-    // timing attacks.
-    // It generates compilation errors for shaders that could expose sensitive
-    // texture information via the timing channel.
-    // To use this flag, you must compile the shader under the WebGL spec
-    // (using the SH_WEBGL_SPEC flag).
-    SH_TIMING_RESTRICTIONS = 0x0200,
+  // This is an experimental flag to enforce restrictions that aim to prevent
+  // timing attacks.
+  // It generates compilation errors for shaders that could expose sensitive
+  // texture information via the timing channel.
+  // To use this flag, you must compile the shader under the WebGL spec
+  // (using the SH_WEBGL_SPEC flag).
+  SH_TIMING_RESTRICTIONS = 0x0200,
 
-    // This flag prints the dependency graph that is used to enforce timing
-    // restrictions on fragment shaders.
-    // This flag only has an effect if all of the following are true:
-    // - The shader spec is SH_WEBGL_SPEC.
-    // - The compile options contain the SH_TIMING_RESTRICTIONS flag.
-    // - The shader type is GL_FRAGMENT_SHADER.
-    SH_DEPENDENCY_GRAPH = 0x0400,
+  // This flag prints the dependency graph that is used to enforce timing
+  // restrictions on fragment shaders.
+  // This flag only has an effect if all of the following are true:
+  // - The shader spec is SH_WEBGL_SPEC.
+  // - The compile options contain the SH_TIMING_RESTRICTIONS flag.
+  // - The shader type is GL_FRAGMENT_SHADER.
+  SH_DEPENDENCY_GRAPH = 0x0400,
 
-    // Enforce the GLSL 1.017 Appendix A section 7 packing restrictions.
-    // This flag only enforces (and can only enforce) the packing
-    // restrictions for uniform variables in both vertex and fragment
-    // shaders. ShCheckVariablesWithinPackingLimits() lets embedders
-    // enforce the packing restrictions for varying variables during
-    // program link time.
-    SH_ENFORCE_PACKING_RESTRICTIONS = 0x0800,
+  // Enforce the GLSL 1.017 Appendix A section 7 packing restrictions.
+  // This flag only enforces (and can only enforce) the packing
+  // restrictions for uniform variables in both vertex and fragment
+  // shaders. ShCheckVariablesWithinPackingLimits() lets embedders
+  // enforce the packing restrictions for varying variables during
+  // program link time.
+  SH_ENFORCE_PACKING_RESTRICTIONS = 0x0800,
 
-    // This flag ensures all indirect (expression-based) array indexing
-    // is clamped to the bounds of the array. This ensures, for example,
-    // that you cannot read off the end of a uniform, whether an array
-    // vec234, or mat234 type. The ShArrayIndexClampingStrategy enum,
-    // specified in the ShBuiltInResources when constructing the
-    // compiler, selects the strategy for the clamping implementation.
-    SH_CLAMP_INDIRECT_ARRAY_BOUNDS = 0x1000,
+  // This flag ensures all indirect (expression-based) array indexing
+  // is clamped to the bounds of the array. This ensures, for example,
+  // that you cannot read off the end of a uniform, whether an array
+  // vec234, or mat234 type. The ShArrayIndexClampingStrategy enum,
+  // specified in the ShBuiltInResources when constructing the
+  // compiler, selects the strategy for the clamping implementation.
+  SH_CLAMP_INDIRECT_ARRAY_BOUNDS = 0x1000,
 
-    // This flag limits the complexity of an expression.
-    SH_LIMIT_EXPRESSION_COMPLEXITY = 0x2000,
+  // This flag limits the complexity of an expression.
+  SH_LIMIT_EXPRESSION_COMPLEXITY = 0x2000,
 
-    // This flag limits the depth of the call stack.
-    SH_LIMIT_CALL_STACK_DEPTH = 0x4000,
+  // This flag limits the depth of the call stack.
+  SH_LIMIT_CALL_STACK_DEPTH = 0x4000,
 
-    // This flag initializes gl_Position to vec4(0,0,0,0) at the
-    // beginning of the vertex shader's main(), and has no effect in the
-    // fragment shader. It is intended as a workaround for drivers which
-    // incorrectly fail to link programs if gl_Position is not written.
-    SH_INIT_GL_POSITION = 0x8000,
+  // This flag initializes gl_Position to vec4(0,0,0,0) at the
+  // beginning of the vertex shader's main(), and has no effect in the
+  // fragment shader. It is intended as a workaround for drivers which
+  // incorrectly fail to link programs if gl_Position is not written.
+  SH_INIT_GL_POSITION = 0x8000,
 
-    // This flag replaces
-    //   "a && b" with "a ? b : false",
-    //   "a || b" with "a ? true : b".
-    // This is to work around a MacOSX driver bug that |b| is executed
-    // independent of |a|'s value.
-    SH_UNFOLD_SHORT_CIRCUIT = 0x10000,
+  // This flag replaces
+  //   "a && b" with "a ? b : false",
+  //   "a || b" with "a ? true : b".
+  // This is to work around a MacOSX driver bug that |b| is executed
+  // independent of |a|'s value.
+  SH_UNFOLD_SHORT_CIRCUIT = 0x10000,
 
-    // This flag initializes varyings without static use in vertex shader
-    // at the beginning of main(), and has no effects in the fragment shader.
-    // It is intended as a workaround for drivers which incorrectly optimize
-    // out such varyings and cause a link failure.
-    SH_INIT_VARYINGS_WITHOUT_STATIC_USE = 0x20000,
+  // This flag initializes varyings without static use in vertex shader
+  // at the beginning of main(), and has no effects in the fragment shader.
+  // It is intended as a workaround for drivers which incorrectly optimize
+  // out such varyings and cause a link failure.
+  SH_INIT_VARYINGS_WITHOUT_STATIC_USE = 0x20000,
 
-    // This flag scalarizes vec/ivec/bvec/mat constructor args.
-    // It is intended as a workaround for Linux/Mac driver bugs.
-    SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS = 0x40000,
+  // This flag scalarizes vec/ivec/bvec/mat constructor args.
+  // It is intended as a workaround for Linux/Mac driver bugs.
+  SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS = 0x40000,
 
-    // This flag overwrites a struct name with a unique prefix.
-    // It is intended as a workaround for drivers that do not handle
-    // struct scopes correctly, including all Mac drivers and Linux AMD.
-    SH_REGENERATE_STRUCT_NAMES = 0x80000,
+  // This flag overwrites a struct name with a unique prefix.
+  // It is intended as a workaround for drivers that do not handle
+  // struct scopes correctly, including all Mac drivers and Linux AMD.
+  SH_REGENERATE_STRUCT_NAMES = 0x80000,
 
-    // This flag makes the compiler not prune unused function early in the
-    // compilation process. Pruning coupled with SH_LIMIT_CALL_STACK_DEPTH
-    // helps avoid bad shaders causing stack overflows.
-    SH_DONT_PRUNE_UNUSED_FUNCTIONS = 0x100000,
+  // This flag makes the compiler not prune unused function early in the
+  // compilation process. Pruning coupled with SH_LIMIT_CALL_STACK_DEPTH
+  // helps avoid bad shaders causing stack overflows.
+  SH_DONT_PRUNE_UNUSED_FUNCTIONS = 0x100000,
 
-    // This flag works around a bug in NVIDIA 331 series drivers related
-    // to pow(x, y) where y is a constant vector.
-    SH_REMOVE_POW_WITH_CONSTANT_EXPONENT = 0x200000,
+  // This flag works around a bug in NVIDIA 331 series drivers related
+  // to pow(x, y) where y is a constant vector.
+  SH_REMOVE_POW_WITH_CONSTANT_EXPONENT = 0x200000,
 
-    // This flag works around bugs in Mac drivers related to do-while by
-    // transforming them into an other construct.
-    SH_REWRITE_DO_WHILE_LOOPS = 0x400000,
+  // This flag works around bugs in Mac drivers related to do-while by
+  // transforming them into an other construct.
+  SH_REWRITE_DO_WHILE_LOOPS = 0x400000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
 typedef enum {
-    // Use the clamp intrinsic for array index clamping.
-    SH_CLAMP_WITH_CLAMP_INTRINSIC = 1,
+  // Use the clamp intrinsic for array index clamping.
+  SH_CLAMP_WITH_CLAMP_INTRINSIC = 1,
 
-    // Use a user-defined function for array index clamping.
-    SH_CLAMP_WITH_USER_DEFINED_INT_CLAMP_FUNCTION
+  // Use a user-defined function for array index clamping.
+  SH_CLAMP_WITH_USER_DEFINED_INT_CLAMP_FUNCTION
 } ShArrayIndexClampingStrategy;
 
 //
@@ -309,7 +306,7 @@ typedef struct
 // Parameters:
 // resources: The object to initialize. Will be comparable with memcmp.
 //
-COMPILER_EXPORT void ShInitBuiltInResources(ShBuiltInResources* resources);
+COMPILER_EXPORT void ShInitBuiltInResources(ShBuiltInResources *resources);
 
 //
 // ShHandle held by but opaque to the driver.  It is allocated,
@@ -318,7 +315,7 @@ COMPILER_EXPORT void ShInitBuiltInResources(ShBuiltInResources* resources);
 //
 // If handle creation fails, 0 will be returned.
 //
-typedef void* ShHandle;
+typedef void *ShHandle;
 
 //
 // Returns the a concatenated list of the items in ShBuiltInResources as a
@@ -326,7 +323,7 @@ typedef void* ShHandle;
 // This function must be updated whenever ShBuiltInResources is changed.
 // Parameters:
 // handle: Specifies the handle of the compiler to be used.
-COMPILER_EXPORT const std::string& ShGetBuiltInResourcesString(const ShHandle handle);
+COMPILER_EXPORT const std::string &ShGetBuiltInResourcesString(const ShHandle handle);
 
 //
 // Driver calls these to create and destroy compiler objects.
@@ -337,15 +334,15 @@ COMPILER_EXPORT const std::string& ShGetBuiltInResourcesString(const ShHandle ha
 // type: Specifies the type of shader - GL_FRAGMENT_SHADER or GL_VERTEX_SHADER.
 // spec: Specifies the language spec the compiler must conform to -
 //       SH_GLES2_SPEC or SH_WEBGL_SPEC.
-// output: Specifies the output code type - for example SH_ESSL_OUTPUT, SH_GLSL_OUTPUT,
-//         SH_HLSL_3_0_OUTPUT or SH_HLSL_4_1_OUTPUT. Note: Each output type may only
-//         be supported in some configurations.
+// output: Specifies the output code type - SH_ESSL_OUTPUT, SH_GLSL_OUTPUT,
+//         SH_HLSL9_OUTPUT or SH_HLSL11_OUTPUT. Note: HLSL output is only
+//         supported in some configurations.
 // resources: Specifies the built-in resources.
 COMPILER_EXPORT ShHandle ShConstructCompiler(
     sh::GLenum type,
     ShShaderSpec spec,
     ShShaderOutput output,
-    const ShBuiltInResources* resources);
+    const ShBuiltInResources *resources);
 COMPILER_EXPORT void ShDestruct(ShHandle handle);
 
 //
@@ -374,7 +371,7 @@ COMPILER_EXPORT void ShDestruct(ShHandle handle);
 //
 COMPILER_EXPORT bool ShCompile(
     const ShHandle handle,
-    const char* const shaderStrings[],
+    const char * const shaderStrings[],
     size_t numStrings,
     int compileOptions);
 
@@ -391,19 +388,19 @@ COMPILER_EXPORT ShShaderOutput ShGetShaderOutputType(
 // Returns null-terminated information log for a compiled shader.
 // Parameters:
 // handle: Specifies the compiler
-COMPILER_EXPORT const std::string& ShGetInfoLog(const ShHandle handle);
+COMPILER_EXPORT const std::string &ShGetInfoLog(const ShHandle handle);
 
 // Returns null-terminated object code for a compiled shader.
 // Parameters:
 // handle: Specifies the compiler
-COMPILER_EXPORT const std::string& ShGetObjectCode(const ShHandle handle);
+COMPILER_EXPORT const std::string &ShGetObjectCode(const ShHandle handle);
 
 // Returns a (original_name, hash) map containing all the user defined
 // names in the shader, including variable names, function names, struct
 // names, and struct field names.
 // Parameters:
 // handle: Specifies the compiler
-COMPILER_EXPORT const std::map<std::string, std::string>* ShGetNameHashingMap(
+COMPILER_EXPORT const std::map<std::string, std::string> *ShGetNameHashingMap(
     const ShHandle handle);
 
 // Shader variable inspection.
@@ -412,11 +409,11 @@ COMPILER_EXPORT const std::map<std::string, std::string>* ShGetNameHashingMap(
 // Returns NULL on failure.
 // Parameters:
 // handle: Specifies the compiler
-COMPILER_EXPORT const std::vector<sh::Uniform>* ShGetUniforms(const ShHandle handle);
-COMPILER_EXPORT const std::vector<sh::Varying>* ShGetVaryings(const ShHandle handle);
-COMPILER_EXPORT const std::vector<sh::Attribute>* ShGetAttributes(const ShHandle handle);
-COMPILER_EXPORT const std::vector<sh::OutputVariable>* ShGetOutputVariables(const ShHandle handle);
-COMPILER_EXPORT const std::vector<sh::InterfaceBlock>* ShGetInterfaceBlocks(const ShHandle handle);
+COMPILER_EXPORT const std::vector<sh::Uniform> *ShGetUniforms(const ShHandle handle);
+COMPILER_EXPORT const std::vector<sh::Varying> *ShGetVaryings(const ShHandle handle);
+COMPILER_EXPORT const std::vector<sh::Attribute> *ShGetAttributes(const ShHandle handle);
+COMPILER_EXPORT const std::vector<sh::OutputVariable> *ShGetOutputVariables(const ShHandle handle);
+COMPILER_EXPORT const std::vector<sh::InterfaceBlock> *ShGetInterfaceBlocks(const ShHandle handle);
 
 typedef struct
 {
@@ -434,7 +431,7 @@ typedef struct
 // varInfoArraySize: the size of the variable array.
 COMPILER_EXPORT bool ShCheckVariablesWithinPackingLimits(
     int maxVectors,
-    ShVariableInfo* varInfoArray,
+    ShVariableInfo *varInfoArray,
     size_t varInfoArraySize);
 
 // Gives the compiler-assigned register for an interface block.
@@ -445,8 +442,8 @@ COMPILER_EXPORT bool ShCheckVariablesWithinPackingLimits(
 // interfaceBlockName: Specifies the interface block
 // indexOut: output variable that stores the assigned register
 COMPILER_EXPORT bool ShGetInterfaceBlockRegister(const ShHandle handle,
-    const std::string& interfaceBlockName,
-    unsigned int* indexOut);
+                                                 const std::string &interfaceBlockName,
+                                                 unsigned int *indexOut);
 
 // Gives the compiler-assigned register for uniforms in the default
 // interface block.
@@ -457,7 +454,7 @@ COMPILER_EXPORT bool ShGetInterfaceBlockRegister(const ShHandle handle,
 // interfaceBlockName: Specifies the uniform
 // indexOut: output variable that stores the assigned register
 COMPILER_EXPORT bool ShGetUniformRegister(const ShHandle handle,
-    const std::string& uniformName,
-    unsigned int* indexOut);
+                                          const std::string &uniformName,
+                                          unsigned int *indexOut);
 
 #endif // GLSLANG_SHADERLANG_H_

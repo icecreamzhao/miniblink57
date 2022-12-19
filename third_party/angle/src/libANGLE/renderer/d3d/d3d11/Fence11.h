@@ -12,46 +12,45 @@
 #include "libANGLE/renderer/FenceNVImpl.h"
 #include "libANGLE/renderer/FenceSyncImpl.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer11;
 
-class FenceNV11 : public FenceNVImpl {
-public:
-    explicit FenceNV11(Renderer11* renderer);
+class FenceNV11 : public FenceNVImpl
+{
+  public:
+    explicit FenceNV11(Renderer11 *renderer);
     ~FenceNV11() override;
 
     gl::Error set(GLenum condition) override;
-    gl::Error test(GLboolean* outFinished) override;
+    gl::Error test(GLboolean *outFinished) override;
     gl::Error finish() override;
 
-private:
-    template <class T>
-    friend gl::Error FenceSetHelper(T* fence);
-    template <class T>
-    friend gl::Error FenceTestHelper(T* fence, bool flushCommandBuffer, GLboolean* outFinished);
+  private:
+    template<class T> friend gl::Error FenceSetHelper(T *fence);
+    template<class T> friend gl::Error FenceTestHelper(T *fence, bool flushCommandBuffer, GLboolean *outFinished);
 
-    Renderer11* mRenderer;
-    ID3D11Query* mQuery;
+    Renderer11 *mRenderer;
+    ID3D11Query *mQuery;
 };
 
-class FenceSync11 : public FenceSyncImpl {
-public:
-    explicit FenceSync11(Renderer11* renderer);
+class FenceSync11 : public FenceSyncImpl
+{
+  public:
+    explicit FenceSync11(Renderer11 *renderer);
     ~FenceSync11() override;
 
     gl::Error set(GLenum condition, GLbitfield flags) override;
-    gl::Error clientWait(GLbitfield flags, GLuint64 timeout, GLenum* outResult) override;
+    gl::Error clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult) override;
     gl::Error serverWait(GLbitfield flags, GLuint64 timeout) override;
-    gl::Error getStatus(GLint* outResult) override;
+    gl::Error getStatus(GLint *outResult) override;
 
-private:
-    template <class T>
-    friend gl::Error FenceSetHelper(T* fence);
-    template <class T>
-    friend gl::Error FenceTestHelper(T* fence, bool flushCommandBuffer, GLboolean* outFinished);
+  private:
+    template<class T> friend gl::Error FenceSetHelper(T *fence);
+    template<class T> friend gl::Error FenceTestHelper(T *fence, bool flushCommandBuffer, GLboolean *outFinished);
 
-    Renderer11* mRenderer;
-    ID3D11Query* mQuery;
+    Renderer11 *mRenderer;
+    ID3D11Query *mQuery;
     LONGLONG mCounterFrequency;
 };
 

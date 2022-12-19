@@ -19,7 +19,8 @@
 #include "Tokenizer.h"
 
 namespace {
-enum DirectiveType {
+enum DirectiveType
+{
     DIRECTIVE_NONE,
     DIRECTIVE_DEFINE,
     DIRECTIVE_UNDEF,
@@ -36,7 +37,7 @@ enum DirectiveType {
     DIRECTIVE_LINE
 };
 
-DirectiveType getDirective(const pp::Token* token)
+DirectiveType getDirective(const pp::Token *token)
 {
     const char kDirectiveDefine[] = "define";
     const char kDirectiveUndef[] = "undef";
@@ -87,100 +88,111 @@ DirectiveType getDirective(const pp::Token* token)
 
 bool isConditionalDirective(DirectiveType directive)
 {
-    switch (directive) {
-    case DIRECTIVE_IF:
-    case DIRECTIVE_IFDEF:
-    case DIRECTIVE_IFNDEF:
-    case DIRECTIVE_ELSE:
-    case DIRECTIVE_ELIF:
-    case DIRECTIVE_ENDIF:
+    switch (directive)
+    {
+      case DIRECTIVE_IF:
+      case DIRECTIVE_IFDEF:
+      case DIRECTIVE_IFNDEF:
+      case DIRECTIVE_ELSE:
+      case DIRECTIVE_ELIF:
+      case DIRECTIVE_ENDIF:
         return true;
-    default:
+      default:
         return false;
     }
 }
 
 // Returns true if the token represents End Of Directive.
-bool isEOD(const pp::Token* token)
+bool isEOD(const pp::Token *token)
 {
     return (token->type == '\n') || (token->type == pp::Token::LAST);
 }
 
-void skipUntilEOD(pp::Lexer* lexer, pp::Token* token)
+void skipUntilEOD(pp::Lexer *lexer, pp::Token *token)
 {
-    while (!isEOD(token)) {
+    while(!isEOD(token))
+    {
         lexer->lex(token);
     }
 }
 
-bool isMacroNameReserved(const std::string& name)
+bool isMacroNameReserved(const std::string &name)
 {
     // Names prefixed with "GL_" are reserved.
     return (name.substr(0, 3) == "GL_");
 }
 
-bool hasDoubleUnderscores(const std::string& name)
+bool hasDoubleUnderscores(const std::string &name)
 {
     return (name.find("__") != std::string::npos);
 }
 
-bool isMacroPredefined(const std::string& name,
-    const pp::MacroSet& macroSet)
+bool isMacroPredefined(const std::string &name,
+                       const pp::MacroSet &macroSet)
 {
     pp::MacroSet::const_iterator iter = macroSet.find(name);
     return iter != macroSet.end() ? iter->second.predefined : false;
 }
 
-} // namespace anonymous
+}  // namespace anonymous
 
-namespace pp {
+namespace pp
+{
 
-DirectiveParser::DirectiveParser(Tokenizer* tokenizer,
-    MacroSet* macroSet,
-    Diagnostics* diagnostics,
-    DirectiveHandler* directiveHandler)
-    : mPastFirstStatement(false)
-    , mSeenNonPreprocessorToken(false)
-    , mTokenizer(tokenizer)
-    , mMacroSet(macroSet)
-    , mDiagnostics(diagnostics)
-    , mDirectiveHandler(directiveHandler)
-    , mShaderVersion(100)
+DirectiveParser::DirectiveParser(Tokenizer *tokenizer,
+                                 MacroSet *macroSet,
+                                 Diagnostics *diagnostics,
+                                 DirectiveHandler *directiveHandler)
+    : mPastFirstStatement(false),
+      mSeenNonPreprocessorToken(false),
+      mTokenizer(tokenizer),
+      mMacroSet(macroSet),
+      mDiagnostics(diagnostics),
+      mDirectiveHandler(directiveHandler),
+      mShaderVersion(100)
 {
 }
 
-void DirectiveParser::lex(Token* token)
+void DirectiveParser::lex(Token *token)
 {
-    do {
+    do
+    {
         mTokenizer->lex(token);
 
-        if (token->type == Token::PP_HASH) {
+        if (token->type == Token::PP_HASH)
+        {
             parseDirective(token);
             mPastFirstStatement = true;
-        } else if (!isEOD(token)) {
+        }
+        else if (!isEOD(token))
+        {
             mSeenNonPreprocessorToken = true;
         }
 
-        if (token->type == Token::LAST) {
-            if (!mConditionalStack.empty()) {
-                const ConditionalBlock& block = mConditionalStack.back();
+        if (token->type == Token::LAST)
+        {
+            if (!mConditionalStack.empty())
+            {
+                const ConditionalBlock &block = mConditionalStack.back();
                 mDiagnostics->report(Diagnostics::PP_CONDITIONAL_UNTERMINATED,
-                    block.location, block.type);
+                                     block.location, block.type);
             }
             break;
         }
 
-    } while (skipping() || (token->type == '\n'));
+    }
+    while (skipping() || (token->type == '\n'));
 
     mPastFirstStatement = true;
 }
 
-void DirectiveParser::parseDirective(Token* token)
+void DirectiveParser::parseDirective(Token *token)
 {
     assert(token->type == Token::PP_HASH);
 
     mTokenizer->lex(token);
-    if (isEOD(token)) {
+    if (isEOD(token))
+    {
         // Empty Directive.
         return;
     }
@@ -189,86 +201,92 @@ void DirectiveParser::parseDirective(Token* token)
 
     // While in an excluded conditional block/group,
     // we only parse conditional directives.
-    if (skipping() && !isConditionalDirective(directive)) {
+    if (skipping() && !isConditionalDirective(directive))
+    {
         skipUntilEOD(mTokenizer, token);
         return;
     }
 
-    switch (directive) {
-    case DIRECTIVE_NONE:
+    switch(directive)
+    {
+      case DIRECTIVE_NONE:
         mDiagnostics->report(Diagnostics::PP_DIRECTIVE_INVALID_NAME,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         break;
-    case DIRECTIVE_DEFINE:
+      case DIRECTIVE_DEFINE:
         parseDefine(token);
         break;
-    case DIRECTIVE_UNDEF:
+      case DIRECTIVE_UNDEF:
         parseUndef(token);
         break;
-    case DIRECTIVE_IF:
+      case DIRECTIVE_IF:
         parseIf(token);
         break;
-    case DIRECTIVE_IFDEF:
+      case DIRECTIVE_IFDEF:
         parseIfdef(token);
         break;
-    case DIRECTIVE_IFNDEF:
+      case DIRECTIVE_IFNDEF:
         parseIfndef(token);
         break;
-    case DIRECTIVE_ELSE:
+      case DIRECTIVE_ELSE:
         parseElse(token);
         break;
-    case DIRECTIVE_ELIF:
+      case DIRECTIVE_ELIF:
         parseElif(token);
         break;
-    case DIRECTIVE_ENDIF:
+      case DIRECTIVE_ENDIF:
         parseEndif(token);
         break;
-    case DIRECTIVE_ERROR:
+      case DIRECTIVE_ERROR:
         parseError(token);
         break;
-    case DIRECTIVE_PRAGMA:
+      case DIRECTIVE_PRAGMA:
         parsePragma(token);
         break;
-    case DIRECTIVE_EXTENSION:
+      case DIRECTIVE_EXTENSION:
         parseExtension(token);
         break;
-    case DIRECTIVE_VERSION:
+      case DIRECTIVE_VERSION:
         parseVersion(token);
         break;
-    case DIRECTIVE_LINE:
+      case DIRECTIVE_LINE:
         parseLine(token);
         break;
-    default:
+      default:
         assert(false);
         break;
     }
 
     skipUntilEOD(mTokenizer, token);
-    if (token->type == Token::LAST) {
+    if (token->type == Token::LAST)
+    {
         mDiagnostics->report(Diagnostics::PP_EOF_IN_DIRECTIVE,
-            token->location, token->text);
+                             token->location, token->text);
     }
 }
 
-void DirectiveParser::parseDefine(Token* token)
+void DirectiveParser::parseDefine(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_DEFINE);
 
     mTokenizer->lex(token);
-    if (token->type != Token::IDENTIFIER) {
+    if (token->type != Token::IDENTIFIER)
+    {
         mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         return;
     }
-    if (isMacroPredefined(token->text, *mMacroSet)) {
+    if (isMacroPredefined(token->text, *mMacroSet))
+    {
         mDiagnostics->report(Diagnostics::PP_MACRO_PREDEFINED_REDEFINED,
-            token->location, token->text);
+                             token->location, token->text);
         return;
     }
-    if (isMacroNameReserved(token->text)) {
+    if (isMacroNameReserved(token->text))
+    {
         mDiagnostics->report(Diagnostics::PP_MACRO_NAME_RESERVED,
-            token->location, token->text);
+                             token->location, token->text);
         return;
     }
     // Using double underscores is allowed, but may result in unintended
@@ -276,9 +294,10 @@ void DirectiveParser::parseDefine(Token* token)
     // specified in ESSL 3.10, but the intent judging from Khronos
     // discussions and dEQP tests was that double underscores should be
     // allowed in earlier ESSL versions too.
-    if (hasDoubleUnderscores(token->text)) {
+    if (hasDoubleUnderscores(token->text))
+    {
         mDiagnostics->report(Diagnostics::PP_WARNING_MACRO_NAME_RESERVED, token->location,
-            token->text);
+                             token->text);
     }
 
     Macro macro;
@@ -286,35 +305,41 @@ void DirectiveParser::parseDefine(Token* token)
     macro.name = token->text;
 
     mTokenizer->lex(token);
-    if (token->type == '(' && !token->hasLeadingSpace()) {
+    if (token->type == '(' && !token->hasLeadingSpace())
+    {
         // Function-like macro. Collect arguments.
         macro.type = Macro::kTypeFunc;
-        do {
+        do
+        {
             mTokenizer->lex(token);
             if (token->type != Token::IDENTIFIER)
                 break;
 
-            if (std::find(macro.parameters.begin(), macro.parameters.end(), token->text) != macro.parameters.end()) {
+            if (std::find(macro.parameters.begin(), macro.parameters.end(), token->text) != macro.parameters.end())
+            {
                 mDiagnostics->report(Diagnostics::PP_MACRO_DUPLICATE_PARAMETER_NAMES,
-                    token->location, token->text);
+                                     token->location, token->text);
                 return;
             }
 
             macro.parameters.push_back(token->text);
 
-            mTokenizer->lex(token); // Get ','.
-        } while (token->type == ',');
+            mTokenizer->lex(token);  // Get ','.
+        }
+        while (token->type == ',');
 
-        if (token->type != ')') {
+        if (token->type != ')')
+        {
             mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-                token->location,
-                token->text);
+                                 token->location,
+                                 token->text);
             return;
         }
-        mTokenizer->lex(token); // Get ')'.
+        mTokenizer->lex(token);  // Get ')'.
     }
 
-    while ((token->type != '\n') && (token->type != Token::LAST)) {
+    while ((token->type != '\n') && (token->type != Token::LAST))
+    {
         // Reset the token location because it is unnecessary in replacement
         // list. Resetting it also allows us to reuse Token::equals() to
         // compare macros.
@@ -322,7 +347,8 @@ void DirectiveParser::parseDefine(Token* token)
         macro.replacements.push_back(*token);
         mTokenizer->lex(token);
     }
-    if (!macro.replacements.empty()) {
+    if (!macro.replacements.empty())
+    {
         // Whitespace preceding the replacement list is not considered part of
         // the replacement list for either form of macro.
         macro.replacements.front().setHasLeadingSpace(false);
@@ -330,82 +356,92 @@ void DirectiveParser::parseDefine(Token* token)
 
     // Check for macro redefinition.
     MacroSet::const_iterator iter = mMacroSet->find(macro.name);
-    if (iter != mMacroSet->end() && !macro.equals(iter->second)) {
+    if (iter != mMacroSet->end() && !macro.equals(iter->second))
+    {
         mDiagnostics->report(Diagnostics::PP_MACRO_REDEFINED,
-            token->location,
-            macro.name);
+                             token->location,
+                             macro.name);
         return;
     }
     mMacroSet->insert(std::make_pair(macro.name, macro));
 }
 
-void DirectiveParser::parseUndef(Token* token)
+void DirectiveParser::parseUndef(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_UNDEF);
 
     mTokenizer->lex(token);
-    if (token->type != Token::IDENTIFIER) {
+    if (token->type != Token::IDENTIFIER)
+    {
         mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         return;
     }
 
     MacroSet::iterator iter = mMacroSet->find(token->text);
-    if (iter != mMacroSet->end()) {
-        if (iter->second.predefined) {
+    if (iter != mMacroSet->end())
+    {
+        if (iter->second.predefined)
+        {
             mDiagnostics->report(Diagnostics::PP_MACRO_PREDEFINED_UNDEFINED,
-                token->location, token->text);
-        } else {
+                                 token->location, token->text);
+        }
+        else
+        {
             mMacroSet->erase(iter);
         }
     }
 
     mTokenizer->lex(token);
-    if (!isEOD(token)) {
+    if (!isEOD(token))
+    {
         mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
     }
 }
 
-void DirectiveParser::parseIf(Token* token)
+void DirectiveParser::parseIf(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_IF);
     parseConditionalIf(token);
 }
 
-void DirectiveParser::parseIfdef(Token* token)
+void DirectiveParser::parseIfdef(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_IFDEF);
     parseConditionalIf(token);
 }
 
-void DirectiveParser::parseIfndef(Token* token)
+void DirectiveParser::parseIfndef(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_IFNDEF);
     parseConditionalIf(token);
 }
 
-void DirectiveParser::parseElse(Token* token)
+void DirectiveParser::parseElse(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_ELSE);
 
-    if (mConditionalStack.empty()) {
+    if (mConditionalStack.empty())
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_ELSE_WITHOUT_IF,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         return;
     }
 
-    ConditionalBlock& block = mConditionalStack.back();
-    if (block.skipBlock) {
+    ConditionalBlock &block = mConditionalStack.back();
+    if (block.skipBlock)
+    {
         // No diagnostics. Just skip the whole line.
         skipUntilEOD(mTokenizer, token);
         return;
     }
-    if (block.foundElseGroup) {
+    if (block.foundElseGroup)
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_ELSE_AFTER_ELSE,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         return;
     }
@@ -416,37 +452,42 @@ void DirectiveParser::parseElse(Token* token)
 
     // Check if there are extra tokens after #else.
     mTokenizer->lex(token);
-    if (!isEOD(token)) {
+    if (!isEOD(token))
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
     }
 }
 
-void DirectiveParser::parseElif(Token* token)
+void DirectiveParser::parseElif(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_ELIF);
 
-    if (mConditionalStack.empty()) {
+    if (mConditionalStack.empty())
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_ELIF_WITHOUT_IF,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         return;
     }
 
-    ConditionalBlock& block = mConditionalStack.back();
-    if (block.skipBlock) {
+    ConditionalBlock &block = mConditionalStack.back();
+    if (block.skipBlock)
+    {
         // No diagnostics. Just skip the whole line.
         skipUntilEOD(mTokenizer, token);
         return;
     }
-    if (block.foundElseGroup) {
+    if (block.foundElseGroup)
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_ELIF_AFTER_ELSE,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         return;
     }
-    if (block.foundValidGroup) {
+    if (block.foundValidGroup)
+    {
         // Do not parse the expression.
         // Also be careful not to emit a diagnostic.
         block.skipGroup = true;
@@ -459,13 +500,14 @@ void DirectiveParser::parseElif(Token* token)
     block.foundValidGroup = expression != 0;
 }
 
-void DirectiveParser::parseEndif(Token* token)
+void DirectiveParser::parseEndif(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_ENDIF);
 
-    if (mConditionalStack.empty()) {
+    if (mConditionalStack.empty())
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_ENDIF_WITHOUT_IF,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         return;
     }
@@ -474,20 +516,22 @@ void DirectiveParser::parseEndif(Token* token)
 
     // Check if there are tokens after #endif.
     mTokenizer->lex(token);
-    if (!isEOD(token)) {
+    if (!isEOD(token))
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
     }
 }
 
-void DirectiveParser::parseError(Token* token)
+void DirectiveParser::parseError(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_ERROR);
 
     std::ostringstream stream;
     mTokenizer->lex(token);
-    while ((token->type != '\n') && (token->type != Token::LAST)) {
+    while ((token->type != '\n') && (token->type != Token::LAST))
+    {
         stream << *token;
         mTokenizer->lex(token);
     }
@@ -495,11 +539,12 @@ void DirectiveParser::parseError(Token* token)
 }
 
 // Parses pragma of form: #pragma name[(value)].
-void DirectiveParser::parsePragma(Token* token)
+void DirectiveParser::parsePragma(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_PRAGMA);
 
-    enum State {
+    enum State
+    {
         PRAGMA_NAME,
         LEFT_PAREN,
         PRAGMA_VALUE,
@@ -512,49 +557,55 @@ void DirectiveParser::parsePragma(Token* token)
 
     mTokenizer->lex(token);
     bool stdgl = token->text == "STDGL";
-    if (stdgl) {
+    if (stdgl)
+    {
         mTokenizer->lex(token);
     }
-    while ((token->type != '\n') && (token->type != Token::LAST)) {
-        switch (state++) {
-        case PRAGMA_NAME:
+    while ((token->type != '\n') && (token->type != Token::LAST))
+    {
+        switch(state++)
+        {
+          case PRAGMA_NAME:
             name = token->text;
             valid = valid && (token->type == Token::IDENTIFIER);
             break;
-        case LEFT_PAREN:
+          case LEFT_PAREN:
             valid = valid && (token->type == '(');
             break;
-        case PRAGMA_VALUE:
+          case PRAGMA_VALUE:
             value = token->text;
             valid = valid && (token->type == Token::IDENTIFIER);
             break;
-        case RIGHT_PAREN:
+          case RIGHT_PAREN:
             valid = valid && (token->type == ')');
             break;
-        default:
+          default:
             valid = false;
             break;
         }
         mTokenizer->lex(token);
     }
 
-    valid = valid && ((state == PRAGMA_NAME) || // Empty pragma.
-                (state == LEFT_PAREN) || // Without value.
-                (state == RIGHT_PAREN + 1)); // With value.
-    if (!valid) {
+    valid = valid && ((state == PRAGMA_NAME) ||     // Empty pragma.
+                      (state == LEFT_PAREN) ||      // Without value.
+                      (state == RIGHT_PAREN + 1));  // With value.
+    if (!valid)
+    {
         mDiagnostics->report(Diagnostics::PP_UNRECOGNIZED_PRAGMA,
-            token->location, name);
-    } else if (state > PRAGMA_NAME) // Do not notify for empty pragma.
+                             token->location, name);
+    }
+    else if (state > PRAGMA_NAME)  // Do not notify for empty pragma.
     {
         mDirectiveHandler->handlePragma(token->location, name, value, stdgl);
     }
 }
 
-void DirectiveParser::parseExtension(Token* token)
+void DirectiveParser::parseExtension(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_EXTENSION);
 
-    enum State {
+    enum State
+    {
         EXT_NAME,
         COLON,
         EXT_BEHAVIOR
@@ -565,74 +616,85 @@ void DirectiveParser::parseExtension(Token* token)
     int state = EXT_NAME;
 
     mTokenizer->lex(token);
-    while ((token->type != '\n') && (token->type != Token::LAST)) {
-        switch (state++) {
-        case EXT_NAME:
-            if (valid && (token->type != Token::IDENTIFIER)) {
+    while ((token->type != '\n') && (token->type != Token::LAST))
+    {
+        switch (state++)
+        {
+          case EXT_NAME:
+            if (valid && (token->type != Token::IDENTIFIER))
+            {
                 mDiagnostics->report(Diagnostics::PP_INVALID_EXTENSION_NAME,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
-            if (valid)
-                name = token->text;
+            if (valid) name = token->text;
             break;
-        case COLON:
-            if (valid && (token->type != ':')) {
+          case COLON:
+            if (valid && (token->type != ':'))
+            {
                 mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
             break;
-        case EXT_BEHAVIOR:
-            if (valid && (token->type != Token::IDENTIFIER)) {
+          case EXT_BEHAVIOR:
+            if (valid && (token->type != Token::IDENTIFIER))
+            {
                 mDiagnostics->report(Diagnostics::PP_INVALID_EXTENSION_BEHAVIOR,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
-            if (valid)
-                behavior = token->text;
+            if (valid) behavior = token->text;
             break;
-        default:
-            if (valid) {
+          default:
+            if (valid)
+            {
                 mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
             break;
         }
         mTokenizer->lex(token);
     }
-    if (valid && (state != EXT_BEHAVIOR + 1)) {
+    if (valid && (state != EXT_BEHAVIOR + 1))
+    {
         mDiagnostics->report(Diagnostics::PP_INVALID_EXTENSION_DIRECTIVE,
-            token->location, token->text);
+                             token->location, token->text);
         valid = false;
     }
-    if (valid && mSeenNonPreprocessorToken) {
-        if (mShaderVersion >= 300) {
+    if (valid && mSeenNonPreprocessorToken)
+    {
+        if (mShaderVersion >= 300)
+        {
             mDiagnostics->report(Diagnostics::PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL3,
-                token->location, token->text);
+                                 token->location, token->text);
             valid = false;
-        } else {
+        }
+        else
+        {
             mDiagnostics->report(Diagnostics::PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL1,
-                token->location, token->text);
+                                 token->location, token->text);
         }
     }
     if (valid)
         mDirectiveHandler->handleExtension(token->location, name, behavior);
 }
 
-void DirectiveParser::parseVersion(Token* token)
+void DirectiveParser::parseVersion(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_VERSION);
 
-    if (mPastFirstStatement) {
+    if (mPastFirstStatement)
+    {
         mDiagnostics->report(Diagnostics::PP_VERSION_NOT_FIRST_STATEMENT,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         return;
     }
 
-    enum State {
+    enum State
+    {
         VERSION_NUMBER,
         VERSION_PROFILE,
         VERSION_ENDLINE
@@ -643,34 +705,40 @@ void DirectiveParser::parseVersion(Token* token)
     int state = VERSION_NUMBER;
 
     mTokenizer->lex(token);
-    while (valid && (token->type != '\n') && (token->type != Token::LAST)) {
-        switch (state) {
-        case VERSION_NUMBER:
-            if (token->type != Token::CONST_INT) {
+    while (valid && (token->type != '\n') && (token->type != Token::LAST))
+    {
+        switch (state)
+        {
+          case VERSION_NUMBER:
+            if (token->type != Token::CONST_INT)
+            {
                 mDiagnostics->report(Diagnostics::PP_INVALID_VERSION_NUMBER,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
-            if (valid && !token->iValue(&version)) {
+            if (valid && !token->iValue(&version))
+            {
                 mDiagnostics->report(Diagnostics::PP_INTEGER_OVERFLOW,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
-            if (valid) {
+            if (valid)
+            {
                 state = (version < 300) ? VERSION_ENDLINE : VERSION_PROFILE;
             }
             break;
-        case VERSION_PROFILE:
-            if (token->type != Token::IDENTIFIER || token->text != "es") {
+          case VERSION_PROFILE:
+            if (token->type != Token::IDENTIFIER || token->text != "es")
+            {
                 mDiagnostics->report(Diagnostics::PP_INVALID_VERSION_DIRECTIVE,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
             state = VERSION_ENDLINE;
             break;
-        default:
+          default:
             mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-                token->location, token->text);
+                                 token->location, token->text);
             valid = false;
             break;
         }
@@ -678,26 +746,29 @@ void DirectiveParser::parseVersion(Token* token)
         mTokenizer->lex(token);
     }
 
-    if (valid && (state != VERSION_ENDLINE)) {
+    if (valid && (state != VERSION_ENDLINE))
+    {
         mDiagnostics->report(Diagnostics::PP_INVALID_VERSION_DIRECTIVE,
-            token->location, token->text);
+                             token->location, token->text);
         valid = false;
     }
 
-    if (valid && version >= 300 && token->location.line > 1) {
+    if (valid && version >= 300 && token->location.line > 1)
+    {
         mDiagnostics->report(Diagnostics::PP_VERSION_NOT_FIRST_LINE_ESSL3,
-            token->location, token->text);
+                             token->location, token->text);
         valid = false;
     }
 
-    if (valid) {
+    if (valid)
+    {
         mDirectiveHandler->handleVersion(token->location, version);
         mShaderVersion = version;
         PredefineMacro(mMacroSet, "__VERSION__", version);
     }
 }
 
-void DirectiveParser::parseLine(Token* token)
+void DirectiveParser::parseLine(Token *token)
 {
     assert(getDirective(token) == DIRECTIVE_LINE);
 
@@ -710,10 +781,13 @@ void DirectiveParser::parseLine(Token* token)
     // Lex the first token after "#line" so we can check it for EOD.
     macroExpander.lex(token);
 
-    if (isEOD(token)) {
+    if (isEOD(token))
+    {
         mDiagnostics->report(Diagnostics::PP_INVALID_LINE_DIRECTIVE, token->location, token->text);
         valid = false;
-    } else {
+    }
+    else
+    {
         ExpressionParser expressionParser(&macroExpander, mDiagnostics);
         ExpressionParser::ErrorSettings errorSettings;
 
@@ -725,7 +799,8 @@ void DirectiveParser::parseLine(Token* token)
         // the token in parsing for a second time by setting the
         // parsePresetToken flag to true.
         expressionParser.parse(token, &line, true, errorSettings, &valid);
-        if (!isEOD(token) && valid) {
+        if (!isEOD(token) && valid)
+        {
             errorSettings.unexpectedIdentifier = Diagnostics::PP_INVALID_FILE_NUMBER;
             // After parsing the line expression expressionParser has also
             // advanced to the first token of the file expression - this is the
@@ -735,17 +810,20 @@ void DirectiveParser::parseLine(Token* token)
             expressionParser.parse(token, &file, true, errorSettings, &valid);
             parsedFileNumber = true;
         }
-        if (!isEOD(token)) {
-            if (valid) {
+        if (!isEOD(token))
+        {
+            if (valid)
+            {
                 mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-                    token->location, token->text);
+                                     token->location, token->text);
                 valid = false;
             }
             skipUntilEOD(mTokenizer, token);
         }
     }
 
-    if (valid) {
+    if (valid)
+    {
         mTokenizer->setLineNumber(line);
         if (parsedFileNumber)
             mTokenizer->setFileNumber(file);
@@ -761,34 +839,38 @@ bool DirectiveParser::skipping() const
     return block.skipBlock || block.skipGroup;
 }
 
-void DirectiveParser::parseConditionalIf(Token* token)
+void DirectiveParser::parseConditionalIf(Token *token)
 {
     ConditionalBlock block;
     block.type = token->text;
     block.location = token->location;
 
-    if (skipping()) {
+    if (skipping())
+    {
         // This conditional block is inside another conditional group
         // which is skipped. As a consequence this whole block is skipped.
         // Be careful not to parse the conditional expression that might
         // emit a diagnostic.
         skipUntilEOD(mTokenizer, token);
         block.skipBlock = true;
-    } else {
+    }
+    else
+    {
         DirectiveType directive = getDirective(token);
 
         int expression = 0;
-        switch (directive) {
-        case DIRECTIVE_IF:
+        switch (directive)
+        {
+          case DIRECTIVE_IF:
             expression = parseExpressionIf(token);
             break;
-        case DIRECTIVE_IFDEF:
+          case DIRECTIVE_IFDEF:
             expression = parseExpressionIfdef(token);
             break;
-        case DIRECTIVE_IFNDEF:
+          case DIRECTIVE_IFNDEF:
             expression = parseExpressionIfdef(token) == 0 ? 1 : 0;
             break;
-        default:
+          default:
             assert(false);
             break;
         }
@@ -798,9 +880,10 @@ void DirectiveParser::parseConditionalIf(Token* token)
     mConditionalStack.push_back(block);
 }
 
-int DirectiveParser::parseExpressionIf(Token* token)
+int DirectiveParser::parseExpressionIf(Token *token)
 {
-    assert((getDirective(token) == DIRECTIVE_IF) || (getDirective(token) == DIRECTIVE_ELIF));
+    assert((getDirective(token) == DIRECTIVE_IF) ||
+           (getDirective(token) == DIRECTIVE_ELIF));
 
     MacroExpander macroExpander(mTokenizer, mMacroSet, mDiagnostics, true);
     ExpressionParser expressionParser(&macroExpander, mDiagnostics);
@@ -808,29 +891,32 @@ int DirectiveParser::parseExpressionIf(Token* token)
     int expression = 0;
     ExpressionParser::ErrorSettings errorSettings;
     errorSettings.integerLiteralsMustFit32BitSignedRange = false;
-    errorSettings.unexpectedIdentifier = Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN;
+    errorSettings.unexpectedIdentifier                   = Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN;
 
     bool valid = true;
     expressionParser.parse(token, &expression, false, errorSettings, &valid);
 
     // Check if there are tokens after #if expression.
-    if (!isEOD(token)) {
+    if (!isEOD(token))
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
     }
 
     return expression;
 }
 
-int DirectiveParser::parseExpressionIfdef(Token* token)
+int DirectiveParser::parseExpressionIfdef(Token *token)
 {
-    assert((getDirective(token) == DIRECTIVE_IFDEF) || (getDirective(token) == DIRECTIVE_IFNDEF));
+    assert((getDirective(token) == DIRECTIVE_IFDEF) ||
+           (getDirective(token) == DIRECTIVE_IFNDEF));
 
     mTokenizer->lex(token);
-    if (token->type != Token::IDENTIFIER) {
+    if (token->type != Token::IDENTIFIER)
+    {
         mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
         return 0;
     }
@@ -840,12 +926,13 @@ int DirectiveParser::parseExpressionIfdef(Token* token)
 
     // Check if there are tokens after #ifdef expression.
     mTokenizer->lex(token);
-    if (!isEOD(token)) {
+    if (!isEOD(token))
+    {
         mDiagnostics->report(Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-            token->location, token->text);
+                             token->location, token->text);
         skipUntilEOD(mTokenizer, token);
     }
     return expression;
 }
 
-} // namespace pp
+}  // namespace pp

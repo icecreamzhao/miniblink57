@@ -16,41 +16,45 @@
 
 #include <set>
 
-namespace rx {
+namespace rx
+{
 class ImageImpl;
 }
 
-namespace egl {
+namespace egl
+{
 class Image;
 
-class ImageSibling : public RefCountObject {
-public:
+class ImageSibling : public RefCountObject
+{
+  public:
     ImageSibling(GLuint id);
     virtual ~ImageSibling();
 
-protected:
+  protected:
     // Set the image target of this sibling
-    void setTargetImage(egl::Image* imageTarget);
+    void setTargetImage(egl::Image *imageTarget);
 
     // Orphan all EGL image sources and targets
     gl::Error orphanImages();
 
-private:
+  private:
     friend class Image;
 
     // Called from Image only to add a new source image
-    void addImageSource(egl::Image* imageSource);
+    void addImageSource(egl::Image *imageSource);
 
     // Called from Image only to remove a source image when the Image is being deleted
-    void removeImageSource(egl::Image* imageSource);
+    void removeImageSource(egl::Image *imageSource);
 
-    std::set<Image*> mSourcesOf;
+    std::set<Image *> mSourcesOf;
     BindingPointer<Image> mTargetOf;
 };
 
-class Image final : public RefCountObject {
-public:
-    Image(rx::ImageImpl* impl, EGLenum target, ImageSibling* buffer, const AttributeMap& attribs);
+class Image final : public RefCountObject
+{
+  public:
+    Image(rx::ImageImpl *impl, EGLenum target, ImageSibling *buffer, const AttributeMap &attribs);
     ~Image();
 
     GLenum getInternalFormat() const;
@@ -58,21 +62,21 @@ public:
     size_t getHeight() const;
     size_t getSamples() const;
 
-    rx::ImageImpl* getImplementation();
-    const rx::ImageImpl* getImplementation() const;
+    rx::ImageImpl *getImplementation();
+    const rx::ImageImpl *getImplementation() const;
 
-private:
+  private:
     friend class ImageSibling;
 
     // Called from ImageSibling only notify the image that a new target sibling exists for state
     // tracking.
-    void addTargetSibling(ImageSibling* sibling);
+    void addTargetSibling(ImageSibling *sibling);
 
     // Called from ImageSibling only to notify the image that a sibling (source or target) has
     // been respecified and state tracking should be updated.
-    gl::Error orphanSibling(ImageSibling* sibling);
+    gl::Error orphanSibling(ImageSibling *sibling);
 
-    rx::ImageImpl* mImplementation;
+    rx::ImageImpl *mImplementation;
 
     GLenum mInternalFormat;
     size_t mWidth;
@@ -80,8 +84,8 @@ private:
     size_t mSamples;
 
     BindingPointer<ImageSibling> mSource;
-    std::set<ImageSibling*> mTargets;
+    std::set<ImageSibling *> mTargets;
 };
 }
 
-#endif // LIBANGLE_IMAGE_H_
+#endif  // LIBANGLE_IMAGE_H_

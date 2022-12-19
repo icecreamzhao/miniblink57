@@ -4,19 +4,20 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/RegenerateStructNames.h"
 #include "common/debug.h"
+#include "compiler/translator/RegenerateStructNames.h"
 
-void RegenerateStructNames::visitSymbol(TIntermSymbol* symbol)
+void RegenerateStructNames::visitSymbol(TIntermSymbol *symbol)
 {
     ASSERT(symbol);
-    TType* type = symbol->getTypePointer();
+    TType *type = symbol->getTypePointer();
     ASSERT(type);
-    TStructure* userType = type->getStruct();
+    TStructure *userType = type->getStruct();
     if (!userType)
         return;
 
-    if (mSymbolTable.findBuiltIn(userType->name(), mShaderVersion)) {
+    if (mSymbolTable.findBuiltIn(userType->name(), mShaderVersion))
+    {
         // Built-in struct, do not touch it.
         return;
     }
@@ -24,7 +25,8 @@ void RegenerateStructNames::visitSymbol(TIntermSymbol* symbol)
     int uniqueId = userType->uniqueId();
 
     ASSERT(mScopeDepth > 0);
-    if (mScopeDepth == 1) {
+    if (mScopeDepth == 1)
+    {
         // If a struct is defined at global scope, we don't map its name.
         // This is because at global level, the struct might be used to
         // declare a uniform, so the same name needs to stay the same for
@@ -45,7 +47,8 @@ void RegenerateStructNames::visitSymbol(TIntermSymbol* symbol)
         return;
     // Map {name} to _webgl_struct_{uniqueId}_{name}.
     const char kPrefix[] = "_webgl_struct_";
-    if (userType->name().find(kPrefix) == 0) {
+    if (userType->name().find(kPrefix) == 0)
+    {
         // The name has already been regenerated.
         return;
     }
@@ -55,23 +58,25 @@ void RegenerateStructNames::visitSymbol(TIntermSymbol* symbol)
     userType->setName(tmp);
 }
 
-bool RegenerateStructNames::visitAggregate(Visit, TIntermAggregate* aggregate)
+bool RegenerateStructNames::visitAggregate(Visit, TIntermAggregate *aggregate)
 {
     ASSERT(aggregate);
-    switch (aggregate->getOp()) {
-    case EOpSequence:
+    switch (aggregate->getOp())
+    {
+      case EOpSequence:
         ++mScopeDepth;
         {
-            TIntermSequence& sequence = *(aggregate->getSequence());
-            for (size_t ii = 0; ii < sequence.size(); ++ii) {
-                TIntermNode* node = sequence[ii];
+            TIntermSequence &sequence = *(aggregate->getSequence());
+            for (size_t ii = 0; ii < sequence.size(); ++ii)
+            {
+                TIntermNode *node = sequence[ii];
                 ASSERT(node != NULL);
                 node->traverse(this);
             }
         }
         --mScopeDepth;
         return false;
-    default:
+      default:
         return true;
     }
 }

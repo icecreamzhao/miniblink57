@@ -7,16 +7,19 @@
 #ifndef LIBANGLE_ATTRIBUTEMAP_H_
 #define LIBANGLE_ATTRIBUTEMAP_H_
 
+
 #include <EGL/egl.h>
 
 #include <map>
 
-namespace egl {
+namespace egl
+{
 
-class AttributeMap final {
-public:
+class AttributeMap final
+{
+  public:
     AttributeMap();
-    explicit AttributeMap(const EGLint* attributes);
+    explicit AttributeMap(const EGLint *attributes);
 
     void insert(EGLint key, EGLint value);
     bool contains(EGLint key) const;
@@ -27,10 +30,10 @@ public:
     const_iterator begin() const;
     const_iterator end() const;
 
-private:
+  private:
     std::map<EGLint, EGLint> mAttributes;
 };
 
 }
 
-#endif // LIBANGLE_ATTRIBUTEMAP_H_
+#endif   // LIBANGLE_ATTRIBUTEMAP_H_

@@ -11,36 +11,38 @@
 
 #include "libANGLE/renderer/BufferImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsGL;
 class StateManagerGL;
 
-class BufferGL : public BufferImpl {
-public:
-    BufferGL(const FunctionsGL* functions, StateManagerGL* stateManager);
+class BufferGL : public BufferImpl
+{
+  public:
+    BufferGL(const FunctionsGL *functions, StateManagerGL *stateManager);
     ~BufferGL() override;
 
     gl::Error setData(const void* data, size_t size, GLenum usage) override;
     gl::Error setSubData(const void* data, size_t size, size_t offset) override;
     gl::Error copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size) override;
-    gl::Error map(GLenum access, GLvoid** mapPtr) override;
-    gl::Error mapRange(size_t offset, size_t length, GLbitfield access, GLvoid** mapPtr) override;
-    gl::Error unmap(GLboolean* result) override;
+    gl::Error map(GLenum access, GLvoid **mapPtr) override;
+    gl::Error mapRange(size_t offset, size_t length, GLbitfield access, GLvoid **mapPtr) override;
+    gl::Error unmap(GLboolean *result) override;
 
     gl::Error getIndexRange(GLenum type,
-        size_t offset,
-        size_t count,
-        bool primitiveRestartEnabled,
-        gl::IndexRange* outRange) override;
+                            size_t offset,
+                            size_t count,
+                            bool primitiveRestartEnabled,
+                            gl::IndexRange *outRange) override;
 
     GLuint getBufferID() const;
 
-private:
+  private:
     bool mIsMapped;
 
-    const FunctionsGL* mFunctions;
-    StateManagerGL* mStateManager;
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
 
     GLuint mBufferID;
 };

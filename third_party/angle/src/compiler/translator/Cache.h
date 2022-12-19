@@ -9,56 +9,59 @@
 #ifndef COMPILER_TRANSLATOR_CACHE_H_
 #define COMPILER_TRANSLATOR_CACHE_H_
 
-#include <map>
 #include <stdint.h>
 #include <string.h>
+#include <map>
 
-#include "compiler/translator/PoolAlloc.h"
 #include "compiler/translator/Types.h"
+#include "compiler/translator/PoolAlloc.h"
 
-class TCache {
-public:
+class TCache
+{
+  public:
+
     static void initialize();
     static void destroy();
 
-    static const TType* getType(TBasicType basicType,
-        TPrecision precision)
+    static const TType *getType(TBasicType basicType,
+                                TPrecision precision)
     {
         return getType(basicType, precision, EvqTemporary,
-            1, 1);
+                       1, 1);
     }
-    static const TType* getType(TBasicType basicType,
-        unsigned char primarySize = 1,
-        unsigned char secondarySize = 1)
+    static const TType *getType(TBasicType basicType,
+                                unsigned char primarySize = 1,
+                                unsigned char secondarySize = 1)
     {
         return getType(basicType, EbpUndefined, EvqGlobal,
-            primarySize, secondarySize);
+                       primarySize, secondarySize);
     }
-    static const TType* getType(TBasicType basicType,
-        TQualifier qualifier,
-        unsigned char primarySize = 1,
-        unsigned char secondarySize = 1)
+    static const TType *getType(TBasicType basicType,
+                                TQualifier qualifier,
+                                unsigned char primarySize = 1,
+                                unsigned char secondarySize = 1)
     {
         return getType(basicType, EbpUndefined, qualifier,
-            primarySize, secondarySize);
+                       primarySize, secondarySize);
     }
-    static const TType* getType(TBasicType basicType,
-        TPrecision precision,
-        TQualifier qualifier,
-        unsigned char primarySize,
-        unsigned char secondarySize);
+    static const TType *getType(TBasicType basicType,
+                                TPrecision precision,
+                                TQualifier qualifier,
+                                unsigned char primarySize,
+                                unsigned char secondarySize);
 
-private:
+  private:
     TCache()
     {
     }
 
-    union TypeKey {
+    union TypeKey
+    {
         TypeKey(TBasicType basicType,
-            TPrecision precision,
-            TQualifier qualifier,
-            unsigned char primarySize,
-            unsigned char secondarySize);
+                TPrecision precision,
+                TQualifier qualifier,
+                unsigned char primarySize,
+                unsigned char secondarySize);
 
         typedef uint8_t EnumComponentType;
         struct
@@ -71,7 +74,7 @@ private:
         } components;
         uint64_t value;
 
-        bool operator<(const TypeKey& other) const
+        bool operator < (const TypeKey &other) const
         {
             return value < other.value;
         }
@@ -81,7 +84,7 @@ private:
     TypeMap mTypes;
     TPoolAllocator mAllocator;
 
-    static TCache* sCache;
+    static TCache *sCache;
 };
 
-#endif // COMPILER_TRANSLATOR_CACHE_H_
+#endif  // COMPILER_TRANSLATOR_CACHE_H_

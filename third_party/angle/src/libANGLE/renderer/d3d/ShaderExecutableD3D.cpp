@@ -11,9 +11,10 @@
 
 #include "common/angleutils.h"
 
-namespace rx {
+namespace rx
+{
 
-ShaderExecutableD3D::ShaderExecutableD3D(const void* function, size_t length)
+ShaderExecutableD3D::ShaderExecutableD3D(const void *function, size_t length)
     : mFunctionBuffer(length)
 {
     memcpy(mFunctionBuffer.data(), function, length);
@@ -23,7 +24,7 @@ ShaderExecutableD3D::~ShaderExecutableD3D()
 {
 }
 
-const uint8_t* ShaderExecutableD3D::getFunction() const
+const unsigned char *ShaderExecutableD3D::getFunction() const
 {
     return mFunctionBuffer.data();
 }
@@ -33,18 +34,18 @@ size_t ShaderExecutableD3D::getLength() const
     return mFunctionBuffer.size();
 }
 
-const std::string& ShaderExecutableD3D::getDebugInfo() const
+const std::string &ShaderExecutableD3D::getDebugInfo() const
 {
     return mDebugInfo;
 }
 
-void ShaderExecutableD3D::appendDebugInfo(const std::string& info)
+void ShaderExecutableD3D::appendDebugInfo(const std::string &info)
 {
     mDebugInfo += info;
 }
 
-UniformStorageD3D::UniformStorageD3D(size_t initialSize)
-    : mSize(initialSize)
+
+UniformStorageD3D::UniformStorageD3D(size_t initialSize) : mSize(initialSize)
 {
 }
 

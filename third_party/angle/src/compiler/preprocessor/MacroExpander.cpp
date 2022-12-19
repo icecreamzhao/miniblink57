@@ -12,56 +12,60 @@
 #include "DiagnosticsBase.h"
 #include "Token.h"
 
-namespace pp {
+namespace pp
+{
 
-class TokenLexer : public Lexer {
-public:
+class TokenLexer : public Lexer
+{
+ public:
     typedef std::vector<Token> TokenVector;
 
-    TokenLexer(TokenVector* tokens)
+    TokenLexer(TokenVector *tokens)
     {
         tokens->swap(mTokens);
         mIter = mTokens.begin();
     }
 
-    void lex(Token* token) override
+    void lex(Token *token) override
     {
-        if (mIter == mTokens.end()) {
+        if (mIter == mTokens.end())
+        {
             token->reset();
             token->type = Token::LAST;
-        } else {
+        }
+        else
+        {
             *token = *mIter++;
         }
     }
 
-private:
+ private:
     PP_DISALLOW_COPY_AND_ASSIGN(TokenLexer);
 
     TokenVector mTokens;
     TokenVector::const_iterator mIter;
 };
 
-MacroExpander::MacroExpander(Lexer* lexer,
-    MacroSet* macroSet,
-    Diagnostics* diagnostics,
-    bool parseDefined)
-    : mLexer(lexer)
-    , mMacroSet(macroSet)
-    , mDiagnostics(diagnostics)
-    , mParseDefined(parseDefined)
+MacroExpander::MacroExpander(Lexer *lexer,
+                             MacroSet *macroSet,
+                             Diagnostics *diagnostics,
+                             bool parseDefined)
+    : mLexer(lexer), mMacroSet(macroSet), mDiagnostics(diagnostics), mParseDefined(parseDefined), mReserveToken(nullptr)
 {
 }
 
 MacroExpander::~MacroExpander()
 {
-    for (std::size_t i = 0; i < mContextStack.size(); ++i) {
+    for (size_t i = 0; i < mContextStack.size(); ++i)
+    {
         delete mContextStack[i];
     }
 }
 
-void MacroExpander::lex(Token* token)
+void MacroExpander::lex(Token *token)
 {
-    while (true) {
+    while (true)
+    {
         const char kDefined[] = "defined";
 
         getToken(token);
@@ -74,26 +78,31 @@ void MacroExpander::lex(Token* token)
         // spec, which the GLSL spec references (see C++14 draft spec section 16.1.4), but this
         // behavior is needed for passing dEQP tests, which enforce stricter compatibility between
         // implementations.
-        if (mParseDefined && token->text == kDefined) {
+        if (mParseDefined && token->text == kDefined)
+        {
             bool paren = false;
             getToken(token);
-            if (token->type == '(') {
+            if (token->type == '(')
+            {
                 paren = true;
                 getToken(token);
             }
-            if (token->type != Token::IDENTIFIER) {
+            if (token->type != Token::IDENTIFIER)
+            {
                 mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN, token->location,
-                    token->text);
+                                     token->text);
                 break;
             }
-            auto iter = mMacroSet->find(token->text);
+            auto iter              = mMacroSet->find(token->text);
             std::string expression = iter != mMacroSet->end() ? "1" : "0";
 
-            if (paren) {
+            if (paren)
+            {
                 getToken(token);
-                if (token->type != ')') {
+                if (token->type != ')')
+                {
                     mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN, token->location,
-                        token->text);
+                                         token->text);
                     break;
                 }
             }
@@ -113,12 +122,14 @@ void MacroExpander::lex(Token* token)
             break;
 
         const Macro& macro = iter->second;
-        if (macro.disabled) {
+        if (macro.disabled)
+        {
             // If a particular token is not expanded, it is never expanded.
             token->setExpansionDisabled(true);
             break;
         }
-        if ((macro.type == Macro::kTypeFunc) && !isNextTokenLeftParen()) {
+        if ((macro.type == Macro::kTypeFunc) && !isNextTokenLeftParen())
+        {
             // If the token immediately after the macro name is not a '(',
             // this macro should not be expanded.
             break;
@@ -128,35 +139,47 @@ void MacroExpander::lex(Token* token)
     }
 }
 
-void MacroExpander::getToken(Token* token)
+void MacroExpander::getToken(Token *token)
 {
-    if (mReserveToken.get()) {
+    if (mReserveToken)
+    {
         *token = *mReserveToken;
-        mReserveToken.reset();
+        //mReserveToken.reset();
+        delete mReserveToken;
+        mReserveToken = nullptr;
         return;
     }
 
     // First pop all empty macro contexts.
-    while (!mContextStack.empty() && mContextStack.back()->empty()) {
+    while (!mContextStack.empty() && mContextStack.back()->empty())
+    {
         popMacro();
     }
 
-    if (!mContextStack.empty()) {
+    if (!mContextStack.empty())
+    {
         *token = mContextStack.back()->get();
-    } else {
+    }
+    else
+    {
         mLexer->lex(token);
     }
 }
 
-void MacroExpander::ungetToken(const Token& token)
+void MacroExpander::ungetToken(const Token &token)
 {
-    if (!mContextStack.empty()) {
-        MacroContext* context = mContextStack.back();
+    if (!mContextStack.empty())
+    {
+        MacroContext *context = mContextStack.back();
         context->unget();
         assert(context->replacements[context->index] == token);
-    } else {
-        assert(!mReserveToken.get());
-        mReserveToken.reset(new Token(token));
+    }
+    else
+    {
+        assert(!mReserveToken);
+        if (mReserveToken)
+            delete mReserveToken;
+        mReserveToken = (new Token(token));
     }
 }
 
@@ -171,7 +194,7 @@ bool MacroExpander::isNextTokenLeftParen()
     return lparen;
 }
 
-bool MacroExpander::pushMacro(const Macro& macro, const Token& identifier)
+bool MacroExpander::pushMacro(const Macro &macro, const Token &identifier)
 {
     assert(!macro.disabled);
     assert(!identifier.expansionDisabled());
@@ -185,7 +208,7 @@ bool MacroExpander::pushMacro(const Macro& macro, const Token& identifier)
     // Macro is disabled for expansion until it is popped off the stack.
     macro.disabled = true;
 
-    MacroContext* context = new MacroContext;
+    MacroContext *context = new MacroContext;
     context->macro = &macro;
     context->replacements.swap(replacements);
     mContextStack.push_back(context);
@@ -196,7 +219,7 @@ void MacroExpander::popMacro()
 {
     assert(!mContextStack.empty());
 
-    MacroContext* context = mContextStack.back();
+    MacroContext *context = mContextStack.back();
     mContextStack.pop_back();
 
     assert(context->empty());
@@ -205,9 +228,9 @@ void MacroExpander::popMacro()
     delete context;
 }
 
-bool MacroExpander::expandMacro(const Macro& macro,
-    const Token& identifier,
-    std::vector<Token>* replacements)
+bool MacroExpander::expandMacro(const Macro &macro,
+                                const Token &identifier,
+                                std::vector<Token> *replacements)
 {
     replacements->clear();
 
@@ -216,27 +239,34 @@ bool MacroExpander::expandMacro(const Macro& macro,
     // list gets its location from the closing parenthesis of the macro invocation.
     // This is tested by dEQP-GLES3.functional.shaders.preprocessor.predefined_macros.*
     SourceLocation replacementLocation = identifier.location;
-    if (macro.type == Macro::kTypeObj) {
+    if (macro.type == Macro::kTypeObj)
+    {
         replacements->assign(macro.replacements.begin(),
-            macro.replacements.end());
+                             macro.replacements.end());
 
-        if (macro.predefined) {
+        if (macro.predefined)
+        {
             const char kLine[] = "__LINE__";
             const char kFile[] = "__FILE__";
 
             assert(replacements->size() == 1);
             Token& repl = replacements->front();
-            if (macro.name == kLine) {
+            if (macro.name == kLine)
+            {
                 std::ostringstream stream;
                 stream << identifier.location.line;
                 repl.text = stream.str();
-            } else if (macro.name == kFile) {
+            }
+            else if (macro.name == kFile)
+            {
                 std::ostringstream stream;
                 stream << identifier.location.file;
                 repl.text = stream.str();
             }
         }
-    } else {
+    }
+    else
+    {
         assert(macro.type == Macro::kTypeFunc);
         std::vector<MacroArg> args;
         args.reserve(macro.parameters.size());
@@ -246,9 +276,11 @@ bool MacroExpander::expandMacro(const Macro& macro,
         replaceMacroParams(macro, args, replacements);
     }
 
-    for (std::size_t i = 0; i < replacements->size(); ++i) {
+    for (size_t i = 0; i < replacements->size(); ++i)
+    {
         Token& repl = replacements->at(i);
-        if (i == 0) {
+        if (i == 0)
+        {
             // The first token in the replacement list inherits the padding
             // properties of the identifier token.
             repl.setAtStartOfLine(identifier.atStartOfLine());
@@ -259,39 +291,42 @@ bool MacroExpander::expandMacro(const Macro& macro,
     return true;
 }
 
-bool MacroExpander::collectMacroArgs(const Macro& macro,
-    const Token& identifier,
-    std::vector<MacroArg>* args,
-    SourceLocation* closingParenthesisLocation)
+bool MacroExpander::collectMacroArgs(const Macro &macro,
+                                     const Token &identifier,
+                                     std::vector<MacroArg> *args,
+                                     SourceLocation *closingParenthesisLocation)
 {
     Token token;
     getToken(&token);
     assert(token.type == '(');
 
     args->push_back(MacroArg());
-    for (int openParens = 1; openParens != 0;) {
+    for (int openParens = 1; openParens != 0; )
+    {
         getToken(&token);
 
-        if (token.type == Token::LAST) {
+        if (token.type == Token::LAST)
+        {
             mDiagnostics->report(Diagnostics::PP_MACRO_UNTERMINATED_INVOCATION,
-                identifier.location, identifier.text);
+                                 identifier.location, identifier.text);
             // Do not lose EOF token.
             ungetToken(token);
             return false;
         }
 
         bool isArg = false; // True if token is part of the current argument.
-        switch (token.type) {
-        case '(':
+        switch (token.type)
+        {
+          case '(':
             ++openParens;
             isArg = true;
             break;
-        case ')':
+          case ')':
             --openParens;
             isArg = openParens != 0;
             *closingParenthesisLocation = token.location;
             break;
-        case ',':
+          case ',':
             // The individual arguments are separated by comma tokens, but
             // the comma tokens between matching inner parentheses do not
             // seperate arguments.
@@ -299,12 +334,13 @@ bool MacroExpander::collectMacroArgs(const Macro& macro,
                 args->push_back(MacroArg());
             isArg = openParens != 1;
             break;
-        default:
+          default:
             isArg = true;
             break;
         }
-        if (isArg) {
-            MacroArg& arg = args->back();
+        if (isArg)
+        {
+            MacroArg &arg = args->back();
             // Initial whitespace is not part of the argument.
             if (arg.empty())
                 token.setHasLeadingSpace(false);
@@ -312,14 +348,18 @@ bool MacroExpander::collectMacroArgs(const Macro& macro,
         }
     }
 
-    const Macro::Parameters& params = macro.parameters;
+    const Macro::Parameters &params = macro.parameters;
     // If there is only one empty argument, it is equivalent to no argument.
-    if (params.empty() && (args->size() == 1) && args->front().empty()) {
+    if (params.empty() && (args->size() == 1) && args->front().empty())
+    {
         args->clear();
     }
     // Validate the number of arguments.
-    if (args->size() != params.size()) {
-        Diagnostics::ID id = args->size() < macro.parameters.size() ? Diagnostics::PP_MACRO_TOO_FEW_ARGS : Diagnostics::PP_MACRO_TOO_MANY_ARGS;
+    if (args->size() != params.size())
+    {
+        Diagnostics::ID id = args->size() < macro.parameters.size() ?
+            Diagnostics::PP_MACRO_TOO_FEW_ARGS :
+            Diagnostics::PP_MACRO_TOO_MANY_ARGS;
         mDiagnostics->report(id, identifier.location, identifier.text);
         return false;
     }
@@ -327,14 +367,16 @@ bool MacroExpander::collectMacroArgs(const Macro& macro,
     // Pre-expand each argument before substitution.
     // This step expands each argument individually before they are
     // inserted into the macro body.
-    for (std::size_t i = 0; i < args->size(); ++i) {
-        MacroArg& arg = args->at(i);
+    for (size_t i = 0; i < args->size(); ++i)
+    {
+        MacroArg &arg = args->at(i);
         TokenLexer lexer(&arg);
         MacroExpander expander(&lexer, mMacroSet, mDiagnostics, mParseDefined);
 
         arg.clear();
         expander.lex(&token);
-        while (token.type != Token::LAST) {
+        while (token.type != Token::LAST)
+        {
             arg.push_back(token);
             expander.lex(&token);
         }
@@ -342,13 +384,15 @@ bool MacroExpander::collectMacroArgs(const Macro& macro,
     return true;
 }
 
-void MacroExpander::replaceMacroParams(const Macro& macro,
-    const std::vector<MacroArg>& args,
-    std::vector<Token>* replacements)
+void MacroExpander::replaceMacroParams(const Macro &macro,
+                                       const std::vector<MacroArg> &args,
+                                       std::vector<Token> *replacements)
 {
-    for (std::size_t i = 0; i < macro.replacements.size(); ++i) {
-        const Token& repl = macro.replacements[i];
-        if (repl.type != Token::IDENTIFIER) {
+    for (size_t i = 0; i < macro.replacements.size(); ++i)
+    {
+        const Token &repl = macro.replacements[i];
+        if (repl.type != Token::IDENTIFIER)
+        {
             replacements->push_back(repl);
             continue;
         }
@@ -358,17 +402,19 @@ void MacroExpander::replaceMacroParams(const Macro& macro,
         // The param index can be cached with the replacement token.
         Macro::Parameters::const_iterator iter = std::find(
             macro.parameters.begin(), macro.parameters.end(), repl.text);
-        if (iter == macro.parameters.end()) {
+        if (iter == macro.parameters.end())
+        {
             replacements->push_back(repl);
             continue;
         }
 
-        std::size_t iArg = std::distance(macro.parameters.begin(), iter);
-        const MacroArg& arg = args[iArg];
-        if (arg.empty()) {
+        size_t iArg = std::distance(macro.parameters.begin(), iter);
+        const MacroArg &arg = args[iArg];
+        if (arg.empty())
+        {
             continue;
         }
-        std::size_t iRepl = replacements->size();
+        size_t iRepl = replacements->size();
         replacements->insert(replacements->end(), arg.begin(), arg.end());
         // The replacement token inherits padding properties from
         // macro replacement token.
@@ -376,4 +422,5 @@ void MacroExpander::replaceMacroParams(const Macro& macro,
     }
 }
 
-} // namespace pp
+}  // namespace pp
+

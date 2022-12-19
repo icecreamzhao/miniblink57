@@ -13,16 +13,18 @@
 
 #include "common/platform.h"
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsWGL;
 
-namespace wgl {
+namespace wgl
+{
 
-    PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor();
-    std::vector<int> GetDefaultPixelFormatAttributes(bool preservedSwap);
+PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor();
+std::vector<int> GetDefaultPixelFormatAttributes(bool preservedSwap);
 
-    int QueryWGLFormatAttrib(HDC dc, int format, int attribName, const FunctionsWGL* functions);
+int QueryWGLFormatAttrib(HDC dc, int format, int attribName, const FunctionsWGL *functions);
 }
 
 }

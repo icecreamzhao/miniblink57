@@ -13,18 +13,19 @@
 
 #include <GL/wglext.h>
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsWGL;
 
-class WindowSurfaceWGL : public SurfaceGL {
-public:
-    WindowSurfaceWGL(RendererGL* renderer,
-        EGLNativeWindowType window,
-        int pixelFormat,
-        HGLRC wglContext,
-        const FunctionsWGL* functions,
-        EGLint orientation);
+class WindowSurfaceWGL : public SurfaceGL
+{
+  public:
+    WindowSurfaceWGL(RendererGL *renderer,
+                     EGLNativeWindowType window,
+                     int pixelFormat,
+                     HGLRC wglContext,
+                     const FunctionsWGL *functions);
     ~WindowSurfaceWGL() override;
 
     egl::Error initialize() override;
@@ -32,8 +33,8 @@ public:
 
     egl::Error swap() override;
     egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) override;
-    egl::Error querySurfacePointerANGLE(EGLint attribute, void** value) override;
-    egl::Error bindTexImage(gl::Texture* texture, EGLint buffer) override;
+    egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) override;
+    egl::Error bindTexImage(EGLint buffer) override;
     egl::Error releaseTexImage(EGLint buffer) override;
     void setSwapInterval(EGLint interval) override;
 
@@ -43,7 +44,7 @@ public:
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
-private:
+  private:
     int mPixelFormat;
 
     HGLRC mWGLContext;
@@ -51,7 +52,7 @@ private:
     HWND mWindow;
     HDC mDeviceContext;
 
-    const FunctionsWGL* mFunctionsWGL;
+    const FunctionsWGL *mFunctionsWGL;
 
     EGLint mSwapBehavior;
 };

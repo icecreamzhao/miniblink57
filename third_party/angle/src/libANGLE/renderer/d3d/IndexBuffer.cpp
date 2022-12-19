@@ -10,7 +10,8 @@
 #include "libANGLE/renderer/d3d/IndexBuffer.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 
-namespace rx {
+namespace rx
+{
 
 unsigned int IndexBuffer::mNextSerial = 1;
 
@@ -33,7 +34,8 @@ void IndexBuffer::updateSerial()
     mSerial = mNextSerial++;
 }
 
-IndexBufferInterface::IndexBufferInterface(BufferFactoryD3D* factory, bool dynamic)
+
+IndexBufferInterface::IndexBufferInterface(BufferFactoryD3D *factory, bool dynamic)
 {
     mIndexBuffer = factory->createIndexBuffer();
 
@@ -43,7 +45,8 @@ IndexBufferInterface::IndexBufferInterface(BufferFactoryD3D* factory, bool dynam
 
 IndexBufferInterface::~IndexBufferInterface()
 {
-    if (mIndexBuffer) {
+    if (mIndexBuffer)
+    {
         delete mIndexBuffer;
     }
 }
@@ -63,22 +66,26 @@ unsigned int IndexBufferInterface::getSerial() const
     return mIndexBuffer->getSerial();
 }
 
-gl::Error IndexBufferInterface::mapBuffer(unsigned int size, void** outMappedMemory, unsigned int* streamOffset)
+gl::Error IndexBufferInterface::mapBuffer(unsigned int size, void **outMappedMemory, unsigned int *streamOffset)
 {
     // Protect against integer overflow
-    if (mWritePosition + size < mWritePosition) {
+    if (mWritePosition + size < mWritePosition)
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Mapping of internal index buffer would cause an integer overflow.");
     }
 
     gl::Error error = mIndexBuffer->mapBuffer(mWritePosition, size, outMappedMemory);
-    if (error.isError()) {
-        if (outMappedMemory) {
+    if (error.isError())
+    {
+        if (outMappedMemory)
+        {
             *outMappedMemory = NULL;
         }
         return error;
     }
 
-    if (streamOffset) {
+    if (streamOffset)
+    {
         *streamOffset = mWritePosition;
     }
 
@@ -91,7 +98,7 @@ gl::Error IndexBufferInterface::unmapBuffer()
     return mIndexBuffer->unmapBuffer();
 }
 
-IndexBuffer* IndexBufferInterface::getIndexBuffer() const
+IndexBuffer * IndexBufferInterface::getIndexBuffer() const
 {
     return mIndexBuffer;
 }
@@ -113,14 +120,17 @@ gl::Error IndexBufferInterface::discard()
 
 gl::Error IndexBufferInterface::setBufferSize(unsigned int bufferSize, GLenum indexType)
 {
-    if (mIndexBuffer->getBufferSize() == 0) {
+    if (mIndexBuffer->getBufferSize() == 0)
+    {
         return mIndexBuffer->initialize(bufferSize, indexType, mDynamic);
-    } else {
+    }
+    else
+    {
         return mIndexBuffer->setSize(bufferSize, indexType);
     }
 }
 
-StreamingIndexBufferInterface::StreamingIndexBufferInterface(BufferFactoryD3D* factory)
+StreamingIndexBufferInterface::StreamingIndexBufferInterface(BufferFactoryD3D *factory)
     : IndexBufferInterface(factory, true)
 {
 }
@@ -133,15 +143,20 @@ gl::Error StreamingIndexBufferInterface::reserveBufferSpace(unsigned int size, G
 {
     unsigned int curBufferSize = getBufferSize();
     unsigned int writePos = getWritePosition();
-    if (size > curBufferSize) {
+    if (size > curBufferSize)
+    {
         gl::Error error = setBufferSize(std::max(size, 2 * curBufferSize), indexType);
-        if (error.isError()) {
+        if (error.isError())
+        {
             return error;
         }
         setWritePosition(0);
-    } else if (writePos + size > curBufferSize || writePos + size < writePos) {
+    }
+    else if (writePos + size > curBufferSize || writePos + size < writePos)
+    {
         gl::Error error = discard();
-        if (error.isError()) {
+        if (error.isError())
+        {
             return error;
         }
         setWritePosition(0);
@@ -150,7 +165,8 @@ gl::Error StreamingIndexBufferInterface::reserveBufferSpace(unsigned int size, G
     return gl::Error(GL_NO_ERROR);
 }
 
-StaticIndexBufferInterface::StaticIndexBufferInterface(BufferFactoryD3D* factory)
+
+StaticIndexBufferInterface::StaticIndexBufferInterface(BufferFactoryD3D *factory)
     : IndexBufferInterface(factory, false)
 {
 }
@@ -162,11 +178,16 @@ StaticIndexBufferInterface::~StaticIndexBufferInterface()
 gl::Error StaticIndexBufferInterface::reserveBufferSpace(unsigned int size, GLenum indexType)
 {
     unsigned int curSize = getBufferSize();
-    if (curSize == 0) {
+    if (curSize == 0)
+    {
         return setBufferSize(size, indexType);
-    } else if (curSize >= size && indexType == getIndexType()) {
+    }
+    else if (curSize >= size && indexType == getIndexType())
+    {
         return gl::Error(GL_NO_ERROR);
-    } else {
+    }
+    else
+    {
         UNREACHABLE();
         return gl::Error(GL_INVALID_OPERATION, "Internal static index buffers can't be resized");
     }

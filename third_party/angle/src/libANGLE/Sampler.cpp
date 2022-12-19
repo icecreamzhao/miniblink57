@@ -12,29 +12,17 @@
 #include "libANGLE/renderer/ImplFactory.h"
 #include "libANGLE/renderer/SamplerImpl.h"
 
-namespace gl {
+namespace gl
+{
 
-Sampler::Sampler(rx::ImplFactory* factory, GLuint id)
-    : RefCountObject(id)
-    , mImpl(factory->createSampler())
-    , mLabel()
-    , mSamplerState()
+Sampler::Sampler(rx::ImplFactory *factory, GLuint id)
+    : RefCountObject(id), mImpl(factory->createSampler()), mSamplerState()
 {
 }
 
 Sampler::~Sampler()
 {
     SafeDelete(mImpl);
-}
-
-void Sampler::setLabel(const std::string& label)
-{
-    mLabel = label;
-}
-
-const std::string& Sampler::getLabel() const
-{
-    return mLabel;
 }
 
 void Sampler::setMinFilter(GLenum minFilter)
@@ -137,17 +125,17 @@ GLenum Sampler::getCompareFunc() const
     return mSamplerState.compareFunc;
 }
 
-const SamplerState& Sampler::getSamplerState() const
+const SamplerState &Sampler::getSamplerState() const
 {
     return mSamplerState;
 }
 
-const rx::SamplerImpl* Sampler::getImplementation() const
+const rx::SamplerImpl *Sampler::getImplementation() const
 {
     return mImpl;
 }
 
-rx::SamplerImpl* Sampler::getImplementation()
+rx::SamplerImpl *Sampler::getImplementation()
 {
     return mImpl;
 }

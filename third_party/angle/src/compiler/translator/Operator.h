@@ -10,12 +10,13 @@
 //
 // Operators used by the high-level (parse tree) representation.
 //
-enum TOperator {
-    EOpNull, // if in a node, should only mean a node is still being built
-    EOpSequence, // denotes a list of statements, or parameters, etc.
+enum TOperator
+{
+    EOpNull,            // if in a node, should only mean a node is still being built
+    EOpSequence,        // denotes a list of statements, or parameters, etc.
     EOpFunctionCall,
-    EOpFunction, // For function definition
-    EOpParameters, // an aggregate listing the parameters to a function
+    EOpFunction,        // For function definition
+    EOpParameters,      // an aggregate listing the parameters to a function
 
     EOpDeclaration,
     EOpInvariantDeclaration, // Specialized declarations for attributing invariance
@@ -146,9 +147,9 @@ enum TOperator {
     EOpReflect,
     EOpRefract,
 
-    EOpDFdx, // Fragment only, OES_standard_derivatives extension
-    EOpDFdy, // Fragment only, OES_standard_derivatives extension
-    EOpFwidth, // Fragment only, OES_standard_derivatives extension
+    EOpDFdx,            // Fragment only, OES_standard_derivatives extension
+    EOpDFdy,            // Fragment only, OES_standard_derivatives extension
+    EOpFwidth,          // Fragment only, OES_standard_derivatives extension
 
     EOpMatrixTimesMatrix,
 
@@ -164,7 +165,7 @@ enum TOperator {
     // Branch
     //
 
-    EOpKill, // Fragment only
+    EOpKill,            // Fragment only
     EOpReturn,
     EOpBreak,
     EOpContinue,
@@ -227,4 +228,4 @@ enum TOperator {
 // Returns the string corresponding to the operator in GLSL
 const char* GetOperatorString(TOperator op);
 
-#endif // COMPILER_TRANSLATOR_OPERATOR_H_
+#endif  // COMPILER_TRANSLATOR_OPERATOR_H_

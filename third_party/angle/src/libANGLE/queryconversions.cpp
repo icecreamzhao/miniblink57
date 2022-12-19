@@ -10,58 +10,66 @@
 
 #include <vector>
 
-#include "common/utilities.h"
 #include "libANGLE/Context.h"
+#include "common/utilities.h"
 
-namespace gl {
+namespace gl
+{
 
-namespace {
+namespace
+{
 
-    GLint64 ExpandFloatToInteger(GLfloat value)
+GLint64 ExpandFloatToInteger(GLfloat value)
+{
+    return static_cast<GLint64>((static_cast<double>(0xFFFFFFFFULL) * value - 1.0) / 2.0);
+}
+
+template <typename QueryT>
+QueryT ClampToQueryRange(GLint64 value)
+{
+    const GLint64 min = static_cast<GLint64>(std::numeric_limits<QueryT>::min());
+    const GLint64 max = static_cast<GLint64>(std::numeric_limits<QueryT>::max());
+    return static_cast<QueryT>(clamp(value, min, max));
+}
+
+template <typename QueryT, typename NativeT>
+QueryT CastStateValueToInt(GLenum pname, NativeT value)
+{
+    GLenum queryType  = GLTypeToGLenum<QueryT>::value;
+    GLenum nativeType = GLTypeToGLenum<NativeT>::value;
+
+    if (nativeType == GL_FLOAT)
     {
-        return static_cast<GLint64>((static_cast<double>(0xFFFFFFFFULL) * value - 1.0) / 2.0);
-    }
-
-    template <typename QueryT>
-    QueryT ClampToQueryRange(GLint64 value)
-    {
-        const GLint64 min = static_cast<GLint64>(std::numeric_limits<QueryT>::min());
-        const GLint64 max = static_cast<GLint64>(std::numeric_limits<QueryT>::max());
-        return static_cast<QueryT>(clamp(value, min, max));
-    }
-
-    template <typename QueryT, typename NativeT>
-    QueryT CastStateValueToInt(GLenum pname, NativeT value)
-    {
-        GLenum queryType = GLTypeToGLenum<QueryT>::value;
-        GLenum nativeType = GLTypeToGLenum<NativeT>::value;
-
-        if (nativeType == GL_FLOAT) {
-            // RGBA color values and DepthRangeF values are converted to integer using Equation 2.4 from Table 4.5
-            if (pname == GL_DEPTH_RANGE || pname == GL_COLOR_CLEAR_VALUE || pname == GL_DEPTH_CLEAR_VALUE || pname == GL_BLEND_COLOR) {
-                return ClampToQueryRange<QueryT>(ExpandFloatToInteger(static_cast<GLfloat>(value)));
-            } else {
-                return gl::iround<QueryT>(static_cast<GLfloat>(value));
-            }
+        // RGBA color values and DepthRangeF values are converted to integer using Equation 2.4 from Table 4.5
+        if (pname == GL_DEPTH_RANGE || pname == GL_COLOR_CLEAR_VALUE || pname == GL_DEPTH_CLEAR_VALUE || pname == GL_BLEND_COLOR)
+        {
+            return ClampToQueryRange<QueryT>(ExpandFloatToInteger(static_cast<GLfloat>(value)));
         }
-
-        // Clamp 64-bit int values when casting to int
-        if (nativeType == GL_INT_64_ANGLEX && queryType == GL_INT) {
-            GLint64 minIntValue = static_cast<GLint64>(std::numeric_limits<GLint>::min());
-            GLint64 maxIntValue = static_cast<GLint64>(std::numeric_limits<GLint>::max());
-            GLint64 clampedValue = std::max(std::min(static_cast<GLint64>(value), maxIntValue), minIntValue);
-            return static_cast<QueryT>(clampedValue);
+        else
+        {
+            return gl::iround<QueryT>(static_cast<GLfloat>(value));
         }
-
-        return static_cast<QueryT>(value);
     }
 
-    template <typename QueryT, typename NativeT>
-    QueryT CastStateValue(GLenum pname, NativeT value)
+    // Clamp 64-bit int values when casting to int
+    if (nativeType == GL_INT_64_ANGLEX && queryType == GL_INT)
     {
-        GLenum queryType = GLTypeToGLenum<QueryT>::value;
+        GLint64 minIntValue = static_cast<GLint64>(std::numeric_limits<GLint>::min());
+        GLint64 maxIntValue = static_cast<GLint64>(std::numeric_limits<GLint>::max());
+        GLint64 clampedValue = std::max(std::min(static_cast<GLint64>(value), maxIntValue), minIntValue);
+        return static_cast<QueryT>(clampedValue);
+    }
 
-        switch (queryType) {
+    return static_cast<QueryT>(value);
+}
+
+template <typename QueryT, typename NativeT>
+QueryT CastStateValue(GLenum pname, NativeT value)
+{
+    GLenum queryType = GLTypeToGLenum<QueryT>::value;
+
+    switch (queryType)
+    {
         case GL_INT:
             return CastStateValueToInt<QueryT, NativeT>(pname, value);
         case GL_INT_64_ANGLEX:
@@ -73,10 +81,10 @@ namespace {
         default:
             UNREACHABLE();
             return 0;
-        }
     }
+}
 
-} // anonymous namespace
+}  // anonymous namespace
 
 template <>
 GLenum GLTypeToGLenum<GLint>::value = GL_INT;
@@ -90,49 +98,60 @@ template <>
 GLenum GLTypeToGLenum<GLfloat>::value = GL_FLOAT;
 
 template <typename QueryT>
-void CastStateValues(Context* context, GLenum nativeType, GLenum pname,
-    unsigned int numParams, QueryT* outParams)
+void CastStateValues(Context *context, GLenum nativeType, GLenum pname,
+                     unsigned int numParams, QueryT *outParams)
 {
-    if (nativeType == GL_INT) {
+    if (nativeType == GL_INT)
+    {
         std::vector<GLint> intParams(numParams, 0);
         context->getIntegerv(pname, intParams.data());
 
-        for (unsigned int i = 0; i < numParams; ++i) {
+        for (unsigned int i = 0; i < numParams; ++i)
+        {
             outParams[i] = CastStateValue<QueryT>(pname, intParams[i]);
         }
-    } else if (nativeType == GL_BOOL) {
+    }
+    else if (nativeType == GL_BOOL)
+    {
         std::vector<GLboolean> boolParams(numParams, GL_FALSE);
         context->getBooleanv(pname, boolParams.data());
 
-        for (unsigned int i = 0; i < numParams; ++i) {
+        for (unsigned int i = 0; i < numParams; ++i)
+        {
             outParams[i] = (boolParams[i] == GL_FALSE ? static_cast<QueryT>(0) : static_cast<QueryT>(1));
         }
-    } else if (nativeType == GL_FLOAT) {
+    }
+    else if (nativeType == GL_FLOAT)
+    {
         std::vector<GLfloat> floatParams(numParams, 0.0f);
         context->getFloatv(pname, floatParams.data());
 
-        for (unsigned int i = 0; i < numParams; ++i) {
+        for (unsigned int i = 0; i < numParams; ++i)
+        {
             outParams[i] = CastStateValue<QueryT>(pname, floatParams[i]);
         }
-    } else if (nativeType == GL_INT_64_ANGLEX) {
+    }
+    else if (nativeType == GL_INT_64_ANGLEX)
+    {
         std::vector<GLint64> int64Params(numParams, 0);
         context->getInteger64v(pname, int64Params.data());
 
-        for (unsigned int i = 0; i < numParams; ++i) {
+        for (unsigned int i = 0; i < numParams; ++i)
+        {
             outParams[i] = CastStateValue<QueryT>(pname, int64Params[i]);
         }
-    } else
-        UNREACHABLE();
+    }
+    else UNREACHABLE();
 }
 
 // Explicit template instantiation (how we export template functions in different files)
 // The calls below will make CastStateValues successfully link with the GL state query types
 // The GL state query API types are: bool, int, uint, float, int64
 
-template void CastStateValues<GLboolean>(Context*, GLenum, GLenum, unsigned int, GLboolean*);
-template void CastStateValues<GLint>(Context*, GLenum, GLenum, unsigned int, GLint*);
-template void CastStateValues<GLuint>(Context*, GLenum, GLenum, unsigned int, GLuint*);
-template void CastStateValues<GLfloat>(Context*, GLenum, GLenum, unsigned int, GLfloat*);
-template void CastStateValues<GLint64>(Context*, GLenum, GLenum, unsigned int, GLint64*);
+template void CastStateValues<GLboolean>(Context *, GLenum, GLenum, unsigned int, GLboolean *);
+template void CastStateValues<GLint>(Context *, GLenum, GLenum, unsigned int, GLint *);
+template void CastStateValues<GLuint>(Context *, GLenum, GLenum, unsigned int, GLuint *);
+template void CastStateValues<GLfloat>(Context *, GLenum, GLenum, unsigned int, GLfloat *);
+template void CastStateValues<GLint64>(Context *, GLenum, GLenum, unsigned int, GLint64 *);
 
 }

@@ -17,32 +17,34 @@
 
 #include "common/debug.h"
 
-namespace angle {
+namespace angle
+{
 
-template <typename T>
-class Matrix {
-public:
-    Matrix(const std::vector<T>& elements, const unsigned int& numRows, const unsigned int& numCols)
-        : mElements(elements)
-        , mRows(numRows)
-        , mCols(numCols)
+template<typename T>
+class Matrix
+{
+  public:
+    Matrix(const std::vector<T> &elements, const unsigned int &numRows, const unsigned int &numCols)
+        : mElements(elements),
+          mRows(numRows),
+          mCols(numCols)
     {
         ASSERT(rows() >= 1 && rows() <= 4);
         ASSERT(columns() >= 1 && columns() <= 4);
     }
 
-    Matrix(const std::vector<T>& elements, const unsigned int& size)
-        : mElements(elements)
-        , mRows(size)
-        , mCols(size)
+    Matrix(const std::vector<T> &elements, const unsigned int &size)
+        : mElements(elements),
+          mRows(size),
+          mCols(size)
     {
         ASSERT(rows() >= 1 && rows() <= 4);
         ASSERT(columns() >= 1 && columns() <= 4);
     }
 
-    Matrix(const T* elements, const unsigned int& size)
-        : mRows(size)
-        , mCols(size)
+    Matrix(const T *elements, const unsigned int &size)
+        : mRows(size),
+          mCols(size)
     {
         ASSERT(rows() >= 1 && rows() <= 4);
         ASSERT(columns() >= 1 && columns() <= 4);
@@ -50,30 +52,32 @@ public:
             mElements.push_back(elements[i]);
     }
 
-    const T& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex) const
+    const T &operator()(const unsigned int &rowIndex, const unsigned int &columnIndex) const
     {
         return mElements[rowIndex * columns() + columnIndex];
     }
 
-    T& operator()(const unsigned int& rowIndex, const unsigned int& columnIndex)
+    T &operator()(const unsigned int &rowIndex, const unsigned int &columnIndex)
     {
         return mElements[rowIndex * columns() + columnIndex];
     }
 
-    const T& at(const unsigned int& rowIndex, const unsigned int& columnIndex) const
+    const T &at(const unsigned int &rowIndex, const unsigned int &columnIndex) const
     {
         return operator()(rowIndex, columnIndex);
     }
 
-    Matrix<T> operator*(const Matrix<T>& m)
+    Matrix<T> operator*(const Matrix<T> &m)
     {
         ASSERT(columns() == m.rows());
 
         unsigned int resultRows = rows();
         unsigned int resultCols = m.columns();
         Matrix<T> result(std::vector<T>(resultRows * resultCols), resultRows, resultCols);
-        for (unsigned int i = 0; i < resultRows; i++) {
-            for (unsigned int j = 0; j < resultCols; j++) {
+        for (unsigned int i = 0; i < resultRows; i++)
+        {
+            for (unsigned int j = 0; j < resultCols; j++)
+            {
                 T tmp = 0.0f;
                 for (unsigned int k = 0; k < columns(); k++)
                     tmp += at(i, k) * m(k, j);
@@ -96,7 +100,7 @@ public:
 
     std::vector<T> elements() const { return mElements; }
 
-    Matrix<T> compMult(const Matrix<T>& mat1) const
+    Matrix<T> compMult(const Matrix<T> &mat1) const
     {
         Matrix result(std::vector<T>(mElements.size()), size());
         for (unsigned int i = 0; i < columns(); i++)
@@ -106,7 +110,7 @@ public:
         return result;
     }
 
-    Matrix<T> outerProduct(const Matrix<T>& mat1) const
+    Matrix<T> outerProduct(const Matrix<T> &mat1) const
     {
         unsigned int cols = mat1.columns();
         Matrix result(std::vector<T>(rows() * cols), rows(), cols);
@@ -131,64 +135,51 @@ public:
     {
         ASSERT(rows() == columns());
 
-        switch (size()) {
-        case 2:
+        switch (size())
+        {
+          case 2:
             return at(0, 0) * at(1, 1) - at(0, 1) * at(1, 0);
 
-        case 3:
-            return at(0, 0) * at(1, 1) * at(2, 2) + at(0, 1) * at(1, 2) * at(2, 0) + at(0, 2) * at(1, 0) * at(2, 1) - at(0, 2) * at(1, 1) * at(2, 0) - at(0, 1) * at(1, 0) * at(2, 2) - at(0, 0) * at(1, 2) * at(2, 1);
+          case 3:
+            return at(0, 0) * at(1, 1) * at(2, 2) +
+                at(0, 1) * at(1, 2) * at(2, 0) +
+                at(0, 2) * at(1, 0) * at(2, 1) -
+                at(0, 2) * at(1, 1) * at(2, 0) -
+                at(0, 1) * at(1, 0) * at(2, 2) -
+                at(0, 0) * at(1, 2) * at(2, 1);
 
-        case 4: {
-            const float minorMatrices[4][3 * 3] = {
+          case 4:
+            {
+                const float minorMatrices[4][3 * 3] =
                 {
-                    at(1, 1),
-                    at(2, 1),
-                    at(3, 1),
-                    at(1, 2),
-                    at(2, 2),
-                    at(3, 2),
-                    at(1, 3),
-                    at(2, 3),
-                    at(3, 3),
-                },
-                {
-                    at(1, 0),
-                    at(2, 0),
-                    at(3, 0),
-                    at(1, 2),
-                    at(2, 2),
-                    at(3, 2),
-                    at(1, 3),
-                    at(2, 3),
-                    at(3, 3),
-                },
-                {
-                    at(1, 0),
-                    at(2, 0),
-                    at(3, 0),
-                    at(1, 1),
-                    at(2, 1),
-                    at(3, 1),
-                    at(1, 3),
-                    at(2, 3),
-                    at(3, 3),
-                },
-                {
-                    at(1, 0),
-                    at(2, 0),
-                    at(3, 0),
-                    at(1, 1),
-                    at(2, 1),
-                    at(3, 1),
-                    at(1, 2),
-                    at(2, 2),
-                    at(3, 2),
-                }
-            };
-            return at(0, 0) * Matrix<T>(minorMatrices[0], 3).determinant() - at(0, 1) * Matrix<T>(minorMatrices[1], 3).determinant() + at(0, 2) * Matrix<T>(minorMatrices[2], 3).determinant() - at(0, 3) * Matrix<T>(minorMatrices[3], 3).determinant();
-        }
+                    {
+                        at(1, 1), at(2, 1), at(3, 1),
+                        at(1, 2), at(2, 2), at(3, 2),
+                        at(1, 3), at(2, 3), at(3, 3),
+                    },
+                    {
+                        at(1, 0), at(2, 0), at(3, 0),
+                        at(1, 2), at(2, 2), at(3, 2),
+                        at(1, 3), at(2, 3), at(3, 3),
+                    },
+                    {
+                        at(1, 0), at(2, 0), at(3, 0),
+                        at(1, 1), at(2, 1), at(3, 1),
+                        at(1, 3), at(2, 3), at(3, 3),
+                    },
+                    {
+                        at(1, 0), at(2, 0), at(3, 0),
+                        at(1, 1), at(2, 1), at(3, 1),
+                        at(1, 2), at(2, 2), at(3, 2),
+                    }
+              };
+              return at(0, 0) * Matrix<T>(minorMatrices[0], 3).determinant() -
+                  at(0, 1) * Matrix<T>(minorMatrices[1], 3).determinant() +
+                  at(0, 2) * Matrix<T>(minorMatrices[2], 3).determinant() -
+                  at(0, 3) * Matrix<T>(minorMatrices[3], 3).determinant();
+            }
 
-        default:
+          default:
             UNREACHABLE();
             break;
         }
@@ -201,46 +192,136 @@ public:
         ASSERT(rows() == columns());
 
         Matrix<T> cof(std::vector<T>(mElements.size()), rows(), columns());
-        switch (size()) {
-        case 2:
+        switch (size())
+        {
+          case 2:
             cof(0, 0) = at(1, 1);
             cof(0, 1) = -at(1, 0);
             cof(1, 0) = -at(0, 1);
             cof(1, 1) = at(0, 0);
             break;
 
-        case 3:
-            cof(0, 0) = at(1, 1) * at(2, 2) - at(2, 1) * at(1, 2);
-            cof(0, 1) = -(at(1, 0) * at(2, 2) - at(2, 0) * at(1, 2));
-            cof(0, 2) = at(1, 0) * at(2, 1) - at(2, 0) * at(1, 1);
-            cof(1, 0) = -(at(0, 1) * at(2, 2) - at(2, 1) * at(0, 2));
-            cof(1, 1) = at(0, 0) * at(2, 2) - at(2, 0) * at(0, 2);
-            cof(1, 2) = -(at(0, 0) * at(2, 1) - at(2, 0) * at(0, 1));
-            cof(2, 0) = at(0, 1) * at(1, 2) - at(1, 1) * at(0, 2);
-            cof(2, 1) = -(at(0, 0) * at(1, 2) - at(1, 0) * at(0, 2));
-            cof(2, 2) = at(0, 0) * at(1, 1) - at(1, 0) * at(0, 1);
+          case 3:
+            cof(0, 0) = at(1, 1) * at(2, 2) -
+                at(2, 1) * at(1, 2);
+            cof(0, 1) = -(at(1, 0) * at(2, 2) -
+                at(2, 0) * at(1, 2));
+            cof(0, 2) = at(1, 0) * at(2, 1) -
+                at(2, 0) * at(1, 1);
+            cof(1, 0) = -(at(0, 1) * at(2, 2) -
+                at(2, 1) * at(0, 2));
+            cof(1, 1) = at(0, 0) * at(2, 2) -
+                at(2, 0) * at(0, 2);
+            cof(1, 2) = -(at(0, 0) * at(2, 1) -
+                at(2, 0) * at(0, 1));
+            cof(2, 0) = at(0, 1) * at(1, 2) -
+                at(1, 1) * at(0, 2);
+            cof(2, 1) = -(at(0, 0) * at(1, 2) -
+                at(1, 0) * at(0, 2));
+            cof(2, 2) = at(0, 0) * at(1, 1) -
+                at(1, 0) * at(0, 1);
             break;
 
-        case 4:
-            cof(0, 0) = at(1, 1) * at(2, 2) * at(3, 3) + at(2, 1) * at(3, 2) * at(1, 3) + at(3, 1) * at(1, 2) * at(2, 3) - at(1, 1) * at(3, 2) * at(2, 3) - at(2, 1) * at(1, 2) * at(3, 3) - at(3, 1) * at(2, 2) * at(1, 3);
-            cof(0, 1) = -(at(1, 0) * at(2, 2) * at(3, 3) + at(2, 0) * at(3, 2) * at(1, 3) + at(3, 0) * at(1, 2) * at(2, 3) - at(1, 0) * at(3, 2) * at(2, 3) - at(2, 0) * at(1, 2) * at(3, 3) - at(3, 0) * at(2, 2) * at(1, 3));
-            cof(0, 2) = at(1, 0) * at(2, 1) * at(3, 3) + at(2, 0) * at(3, 1) * at(1, 3) + at(3, 0) * at(1, 1) * at(2, 3) - at(1, 0) * at(3, 1) * at(2, 3) - at(2, 0) * at(1, 1) * at(3, 3) - at(3, 0) * at(2, 1) * at(1, 3);
-            cof(0, 3) = -(at(1, 0) * at(2, 1) * at(3, 2) + at(2, 0) * at(3, 1) * at(1, 2) + at(3, 0) * at(1, 1) * at(2, 2) - at(1, 0) * at(3, 1) * at(2, 2) - at(2, 0) * at(1, 1) * at(3, 2) - at(3, 0) * at(2, 1) * at(1, 2));
-            cof(1, 0) = -(at(0, 1) * at(2, 2) * at(3, 3) + at(2, 1) * at(3, 2) * at(0, 3) + at(3, 1) * at(0, 2) * at(2, 3) - at(0, 1) * at(3, 2) * at(2, 3) - at(2, 1) * at(0, 2) * at(3, 3) - at(3, 1) * at(2, 2) * at(0, 3));
-            cof(1, 1) = at(0, 0) * at(2, 2) * at(3, 3) + at(2, 0) * at(3, 2) * at(0, 3) + at(3, 0) * at(0, 2) * at(2, 3) - at(0, 0) * at(3, 2) * at(2, 3) - at(2, 0) * at(0, 2) * at(3, 3) - at(3, 0) * at(2, 2) * at(0, 3);
-            cof(1, 2) = -(at(0, 0) * at(2, 1) * at(3, 3) + at(2, 0) * at(3, 1) * at(0, 3) + at(3, 0) * at(0, 1) * at(2, 3) - at(0, 0) * at(3, 1) * at(2, 3) - at(2, 0) * at(0, 1) * at(3, 3) - at(3, 0) * at(2, 1) * at(0, 3));
-            cof(1, 3) = at(0, 0) * at(2, 1) * at(3, 2) + at(2, 0) * at(3, 1) * at(0, 2) + at(3, 0) * at(0, 1) * at(2, 2) - at(0, 0) * at(3, 1) * at(2, 2) - at(2, 0) * at(0, 1) * at(3, 2) - at(3, 0) * at(2, 1) * at(0, 2);
-            cof(2, 0) = at(0, 1) * at(1, 2) * at(3, 3) + at(1, 1) * at(3, 2) * at(0, 3) + at(3, 1) * at(0, 2) * at(1, 3) - at(0, 1) * at(3, 2) * at(1, 3) - at(1, 1) * at(0, 2) * at(3, 3) - at(3, 1) * at(1, 2) * at(0, 3);
-            cof(2, 1) = -(at(0, 0) * at(1, 2) * at(3, 3) + at(1, 0) * at(3, 2) * at(0, 3) + at(3, 0) * at(0, 2) * at(1, 3) - at(0, 0) * at(3, 2) * at(1, 3) - at(1, 0) * at(0, 2) * at(3, 3) - at(3, 0) * at(1, 2) * at(0, 3));
-            cof(2, 2) = at(0, 0) * at(1, 1) * at(3, 3) + at(1, 0) * at(3, 1) * at(0, 3) + at(3, 0) * at(0, 1) * at(1, 3) - at(0, 0) * at(3, 1) * at(1, 3) - at(1, 0) * at(0, 1) * at(3, 3) - at(3, 0) * at(1, 1) * at(0, 3);
-            cof(2, 3) = -(at(0, 0) * at(1, 1) * at(3, 2) + at(1, 0) * at(3, 1) * at(0, 2) + at(3, 0) * at(0, 1) * at(1, 2) - at(0, 0) * at(3, 1) * at(1, 2) - at(1, 0) * at(0, 1) * at(3, 2) - at(3, 0) * at(1, 1) * at(0, 2));
-            cof(3, 0) = -(at(0, 1) * at(1, 2) * at(2, 3) + at(1, 1) * at(2, 2) * at(0, 3) + at(2, 1) * at(0, 2) * at(1, 3) - at(0, 1) * at(2, 2) * at(1, 3) - at(1, 1) * at(0, 2) * at(2, 3) - at(2, 1) * at(1, 2) * at(0, 3));
-            cof(3, 1) = at(0, 0) * at(1, 2) * at(2, 3) + at(1, 0) * at(2, 2) * at(0, 3) + at(2, 0) * at(0, 2) * at(1, 3) - at(0, 0) * at(2, 2) * at(1, 3) - at(1, 0) * at(0, 2) * at(2, 3) - at(2, 0) * at(1, 2) * at(0, 3);
-            cof(3, 2) = -(at(0, 0) * at(1, 1) * at(2, 3) + at(1, 0) * at(2, 1) * at(0, 3) + at(2, 0) * at(0, 1) * at(1, 3) - at(0, 0) * at(2, 1) * at(1, 3) - at(1, 0) * at(0, 1) * at(2, 3) - at(2, 0) * at(1, 1) * at(0, 3));
-            cof(3, 3) = at(0, 0) * at(1, 1) * at(2, 2) + at(1, 0) * at(2, 1) * at(0, 2) + at(2, 0) * at(0, 1) * at(1, 2) - at(0, 0) * at(2, 1) * at(1, 2) - at(1, 0) * at(0, 1) * at(2, 2) - at(2, 0) * at(1, 1) * at(0, 2);
+          case 4:
+            cof(0, 0) = at(1, 1) * at(2, 2) * at(3, 3) +
+                at(2, 1) * at(3, 2) * at(1, 3) +
+                at(3, 1) * at(1, 2) * at(2, 3) -
+                at(1, 1) * at(3, 2) * at(2, 3) -
+                at(2, 1) * at(1, 2) * at(3, 3) -
+                at(3, 1) * at(2, 2) * at(1, 3);
+            cof(0, 1) = -(at(1, 0) * at(2, 2) * at(3, 3) +
+                at(2, 0) * at(3, 2) * at(1, 3) +
+                at(3, 0) * at(1, 2) * at(2, 3) -
+                at(1, 0) * at(3, 2) * at(2, 3) -
+                at(2, 0) * at(1, 2) * at(3, 3) -
+                at(3, 0) * at(2, 2) * at(1, 3));
+            cof(0, 2) = at(1, 0) * at(2, 1) * at(3, 3) +
+                at(2, 0) * at(3, 1) * at(1, 3) +
+                at(3, 0) * at(1, 1) * at(2, 3) -
+                at(1, 0) * at(3, 1) * at(2, 3) -
+                at(2, 0) * at(1, 1) * at(3, 3) -
+                at(3, 0) * at(2, 1) * at(1, 3);
+            cof(0, 3) = -(at(1, 0) * at(2, 1) * at(3, 2) +
+                at(2, 0) * at(3, 1) * at(1, 2) +
+                at(3, 0) * at(1, 1) * at(2, 2) -
+                at(1, 0) * at(3, 1) * at(2, 2) -
+                at(2, 0) * at(1, 1) * at(3, 2) -
+                at(3, 0) * at(2, 1) * at(1, 2));
+            cof(1, 0) = -(at(0, 1) * at(2, 2) * at(3, 3) +
+                at(2, 1) * at(3, 2) * at(0, 3) +
+                at(3, 1) * at(0, 2) * at(2, 3) -
+                at(0, 1) * at(3, 2) * at(2, 3) -
+                at(2, 1) * at(0, 2) * at(3, 3) -
+                at(3, 1) * at(2, 2) * at(0, 3));
+            cof(1, 1) = at(0, 0) * at(2, 2) * at(3, 3) +
+                at(2, 0) * at(3, 2) * at(0, 3) +
+                at(3, 0) * at(0, 2) * at(2, 3) -
+                at(0, 0) * at(3, 2) * at(2, 3) -
+                at(2, 0) * at(0, 2) * at(3, 3) -
+                at(3, 0) * at(2, 2) * at(0, 3);
+            cof(1, 2) = -(at(0, 0) * at(2, 1) * at(3, 3) +
+                at(2, 0) * at(3, 1) * at(0, 3) +
+                at(3, 0) * at(0, 1) * at(2, 3) -
+                at(0, 0) * at(3, 1) * at(2, 3) -
+                at(2, 0) * at(0, 1) * at(3, 3) -
+                at(3, 0) * at(2, 1) * at(0, 3));
+            cof(1, 3) = at(0, 0) * at(2, 1) * at(3, 2) +
+                at(2, 0) * at(3, 1) * at(0, 2) +
+                at(3, 0) * at(0, 1) * at(2, 2) -
+                at(0, 0) * at(3, 1) * at(2, 2) -
+                at(2, 0) * at(0, 1) * at(3, 2) -
+                at(3, 0) * at(2, 1) * at(0, 2);
+            cof(2, 0) = at(0, 1) * at(1, 2) * at(3, 3) +
+                at(1, 1) * at(3, 2) * at(0, 3) +
+                at(3, 1) * at(0, 2) * at(1, 3) -
+                at(0, 1) * at(3, 2) * at(1, 3) -
+                at(1, 1) * at(0, 2) * at(3, 3) -
+                at(3, 1) * at(1, 2) * at(0, 3);
+            cof(2, 1) = -(at(0, 0) * at(1, 2) * at(3, 3) +
+                at(1, 0) * at(3, 2) * at(0, 3) +
+                at(3, 0) * at(0, 2) * at(1, 3) -
+                at(0, 0) * at(3, 2) * at(1, 3) -
+                at(1, 0) * at(0, 2) * at(3, 3) -
+                at(3, 0) * at(1, 2) * at(0, 3));
+            cof(2, 2) = at(0, 0) * at(1, 1) * at(3, 3) +
+                at(1, 0) * at(3, 1) * at(0, 3) +
+                at(3, 0) * at(0, 1) * at(1, 3) -
+                at(0, 0) * at(3, 1) * at(1, 3) -
+                at(1, 0) * at(0, 1) * at(3, 3) -
+                at(3, 0) * at(1, 1) * at(0, 3);
+            cof(2, 3) = -(at(0, 0) * at(1, 1) * at(3, 2) +
+                at(1, 0) * at(3, 1) * at(0, 2) +
+                at(3, 0) * at(0, 1) * at(1, 2) -
+                at(0, 0) * at(3, 1) * at(1, 2) -
+                at(1, 0) * at(0, 1) * at(3, 2) -
+                at(3, 0) * at(1, 1) * at(0, 2));
+            cof(3, 0) = -(at(0, 1) * at(1, 2) * at(2, 3) +
+                at(1, 1) * at(2, 2) * at(0, 3) +
+                at(2, 1) * at(0, 2) * at(1, 3) -
+                at(0, 1) * at(2, 2) * at(1, 3) -
+                at(1, 1) * at(0, 2) * at(2, 3) -
+                at(2, 1) * at(1, 2) * at(0, 3));
+            cof(3, 1) = at(0, 0) * at(1, 2) * at(2, 3) +
+                at(1, 0) * at(2, 2) * at(0, 3) +
+                at(2, 0) * at(0, 2) * at(1, 3) -
+                at(0, 0) * at(2, 2) * at(1, 3) -
+                at(1, 0) * at(0, 2) * at(2, 3) -
+                at(2, 0) * at(1, 2) * at(0, 3);
+            cof(3, 2) = -(at(0, 0) * at(1, 1) * at(2, 3) +
+                at(1, 0) * at(2, 1) * at(0, 3) +
+                at(2, 0) * at(0, 1) * at(1, 3) -
+                at(0, 0) * at(2, 1) * at(1, 3) -
+                at(1, 0) * at(0, 1) * at(2, 3) -
+                at(2, 0) * at(1, 1) * at(0, 3));
+            cof(3, 3) = at(0, 0) * at(1, 1) * at(2, 2) +
+                at(1, 0) * at(2, 1) * at(0, 2) +
+                at(2, 0) * at(0, 1) * at(1, 2) -
+                at(0, 0) * at(2, 1) * at(1, 2) -
+                at(1, 0) * at(0, 1) * at(2, 2) -
+                at(2, 0) * at(1, 1) * at(0, 2);
             break;
 
-        default:
+          default:
             UNREACHABLE();
             break;
         }
@@ -256,7 +337,7 @@ public:
         return result;
     }
 
-private:
+  private:
     std::vector<T> mElements;
     unsigned int mRows;
     unsigned int mCols;
@@ -264,4 +345,5 @@ private:
 
 } // namespace angle
 
-#endif // COMMON_MATRIX_UTILS_H_
+#endif   // COMMON_MATRIX_UTILS_H_
+

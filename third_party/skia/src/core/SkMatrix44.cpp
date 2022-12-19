@@ -198,7 +198,7 @@ void SkMatrix44::setRowMajord(const double src[])
 
 const SkMatrix44& SkMatrix44::I()
 {
-    static constexpr SkMatrix44 gIdentity44(kIdentity_Constructor);
+    static SkMatrix44 gIdentity44(kIdentity_Constructor);
     return gIdentity44;
 }
 

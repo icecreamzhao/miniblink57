@@ -1256,16 +1256,7 @@ EXTERN_C HFONT CreateFontW(int cHeight, int cWidth, int cEscapement, int cOrient
 
 EXTERN_C BOOL CloseHandle(HANDLE hObject);
 EXTERN_C BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags);
-
-EXTERN_C HANDLE CreateThread(
-    void* lpThreadAttributes,
-    SIZE_T dwStackSize,
-    LPTHREAD_START_ROUTINE lpStartAddress,
-    LPVOID lpParameter,
-    DWORD dwCreationFlags,
-    LPDWORD lpThreadId
-);
-
+EXTERN_C HANDLE CreateThread(void* lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
 EXTERN_C BOOL PathRemoveFileSpecW(LPWSTR pszPath);
 EXTERN_C DWORD GetModuleFileNameW(HMODULE hModule, LPWSTR lpFilename, DWORD nSize);
 EXTERN_C HMODULE LoadLibraryW(LPCWSTR lpLibFileName);

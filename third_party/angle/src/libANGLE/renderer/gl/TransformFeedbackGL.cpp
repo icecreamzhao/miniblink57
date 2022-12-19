@@ -14,18 +14,19 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
-namespace rx {
+namespace rx
+{
 
-TransformFeedbackGL::TransformFeedbackGL(const FunctionsGL* functions,
-    StateManagerGL* stateManager,
-    size_t maxTransformFeedbackBufferBindings)
-    : TransformFeedbackImpl()
-    , mFunctions(functions)
-    , mStateManager(stateManager)
-    , mTransformFeedbackID(0)
-    , mIsActive(false)
-    , mIsPaused(false)
-    , mCurrentIndexedBuffers(maxTransformFeedbackBufferBindings)
+TransformFeedbackGL::TransformFeedbackGL(const FunctionsGL *functions,
+                                         StateManagerGL *stateManager,
+                                         size_t maxTransformFeedbackBufferBindings)
+    : TransformFeedbackImpl(),
+      mFunctions(functions),
+      mStateManager(stateManager),
+      mTransformFeedbackID(0),
+      mIsActive(false),
+      mIsPaused(false),
+      mCurrentIndexedBuffers(maxTransformFeedbackBufferBindings)
 {
     mFunctions->genTransformFeedbacks(1, &mTransformFeedbackID);
 }
@@ -35,7 +36,8 @@ TransformFeedbackGL::~TransformFeedbackGL()
     mStateManager->deleteTransformFeedback(mTransformFeedbackID);
     mTransformFeedbackID = 0;
 
-    for (auto& bufferBinding : mCurrentIndexedBuffers) {
+    for (auto &bufferBinding : mCurrentIndexedBuffers)
+    {
         bufferBinding.set(nullptr);
     }
 }
@@ -60,27 +62,34 @@ void TransformFeedbackGL::resume()
     // Do not resume directly, StateManagerGL will handle beginning and resuming transform feedback.
 }
 
-void TransformFeedbackGL::bindGenericBuffer(const BindingPointer<gl::Buffer>& binding)
+void TransformFeedbackGL::bindGenericBuffer(const BindingPointer<gl::Buffer> &binding)
 {
 }
 
-void TransformFeedbackGL::bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer>& binding)
+void TransformFeedbackGL::bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding)
 {
     // Directly bind buffer (not through the StateManager methods) because the buffer bindings are
     // tracked per transform feedback object
-    if (binding != mCurrentIndexedBuffers[index]) {
+    if (binding != mCurrentIndexedBuffers[index])
+    {
         mStateManager->bindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedbackID);
-        if (binding.get() != nullptr) {
-            const BufferGL* bufferGL = GetImplAs<BufferGL>(binding.get());
-            if (binding.getSize() != 0) {
+        if (binding.get() != nullptr)
+        {
+            const BufferGL *bufferGL = GetImplAs<BufferGL>(binding.get());
+            if (binding.getSize() != 0)
+            {
                 mFunctions->bindBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER,
-                    static_cast<GLuint>(index), bufferGL->getBufferID(),
-                    binding.getOffset(), binding.getSize());
-            } else {
-                mFunctions->bindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, static_cast<GLuint>(index),
-                    bufferGL->getBufferID());
+                                            static_cast<GLuint>(index), bufferGL->getBufferID(),
+                                            binding.getOffset(), binding.getSize());
             }
-        } else {
+            else
+            {
+                mFunctions->bindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, static_cast<GLuint>(index),
+                                           bufferGL->getBufferID());
+            }
+        }
+        else
+        {
             mFunctions->bindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, static_cast<GLuint>(index), 0);
         }
 
@@ -95,14 +104,18 @@ GLuint TransformFeedbackGL::getTransformFeedbackID() const
 
 void TransformFeedbackGL::syncActiveState(bool active, GLenum primitiveMode) const
 {
-    if (mIsActive != active) {
+    if (mIsActive != active)
+    {
         mIsActive = active;
         mIsPaused = false;
 
         mStateManager->bindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedbackID);
-        if (mIsActive) {
+        if (mIsActive)
+        {
             mFunctions->beginTransformFeedback(primitiveMode);
-        } else {
+        }
+        else
+        {
             mFunctions->endTransformFeedback();
         }
     }
@@ -110,13 +123,17 @@ void TransformFeedbackGL::syncActiveState(bool active, GLenum primitiveMode) con
 
 void TransformFeedbackGL::syncPausedState(bool paused) const
 {
-    if (mIsActive && mIsPaused != paused) {
+    if (mIsActive && mIsPaused != paused)
+    {
         mIsPaused = paused;
 
         mStateManager->bindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedbackID);
-        if (mIsPaused) {
+        if (mIsPaused)
+        {
             mFunctions->pauseTransformFeedback();
-        } else {
+        }
+        else
+        {
             mFunctions->resumeTransformFeedback();
         }
     }

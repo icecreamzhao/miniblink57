@@ -11,36 +11,38 @@
 
 #include <EGL/egl.h>
 
-namespace gl {
+namespace gl
+{
 class Context;
 
-Context* GetGlobalContext();
-Context* GetValidGlobalContext();
+Context *GetGlobalContext();
+Context *GetValidGlobalContext();
 
 }
 
-namespace egl {
+namespace egl
+{
 class Error;
 class Display;
 class Surface;
 
-void SetGlobalError(const Error& error);
+void SetGlobalError(const Error &error);
 EGLint GetGlobalError();
 
 void SetGlobalAPI(EGLenum API);
 EGLenum GetGlobalAPI();
 
-void SetGlobalDisplay(Display* dpy);
-Display* GetGlobalDisplay();
+void SetGlobalDisplay(Display *dpy);
+Display *GetGlobalDisplay();
 
-void SetGlobalDrawSurface(Surface* surface);
-Surface* GetGlobalDrawSurface();
+void SetGlobalDrawSurface(Surface *surface);
+Surface *GetGlobalDrawSurface();
 
-void SetGlobalReadSurface(Surface* surface);
-Surface* GetGlobalReadSurface();
+void SetGlobalReadSurface(Surface *surface);
+Surface *GetGlobalReadSurface();
 
-void SetGlobalContext(gl::Context* context);
-gl::Context* GetGlobalContext();
+void SetGlobalContext(gl::Context *context);
+gl::Context *GetGlobalContext();
 
 }
 

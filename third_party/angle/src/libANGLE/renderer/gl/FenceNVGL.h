@@ -11,22 +11,24 @@
 
 #include "libANGLE/renderer/FenceNVImpl.h"
 
-namespace rx {
+namespace rx
+{
 class FunctionsGL;
 
-class FenceNVGL : public FenceNVImpl {
-public:
-    explicit FenceNVGL(const FunctionsGL* functions);
+class FenceNVGL : public FenceNVImpl
+{
+  public:
+    explicit FenceNVGL(const FunctionsGL *functions);
     ~FenceNVGL() override;
 
     gl::Error set(GLenum condition) override;
-    gl::Error test(GLboolean* outFinished) override;
+    gl::Error test(GLboolean *outFinished) override;
     gl::Error finish() override;
 
-private:
+  private:
     GLuint mFence;
 
-    const FunctionsGL* mFunctions;
+    const FunctionsGL *mFunctions;
 };
 
 }

@@ -39,3 +39,4 @@ TParseContext* GetGlobalParseContext()
     assert(GlobalParseContextIndex != TLS_INVALID_INDEX);
     return static_cast<TParseContext*>(GetTLSValue(GlobalParseContextIndex));
 }
+

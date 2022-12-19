@@ -14,17 +14,19 @@
 #include "libANGLE/renderer/d3d/d3d9/VertexBuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/formatutils9.h"
 
-namespace rx {
-
-VertexDeclarationCache::VertexDeclarationCache()
-    : mMaxLru(0)
+namespace rx
 {
-    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++) {
+
+VertexDeclarationCache::VertexDeclarationCache() : mMaxLru(0)
+{
+    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++)
+    {
         mVertexDeclCache[i].vertexDeclaration = NULL;
         mVertexDeclCache[i].lruCount = 0;
     }
 
-    for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++) {
+    for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
+    {
         mAppliedVBs[i].serial = 0;
     }
 
@@ -34,16 +36,17 @@ VertexDeclarationCache::VertexDeclarationCache()
 
 VertexDeclarationCache::~VertexDeclarationCache()
 {
-    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++) {
+    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++)
+    {
         SafeRelease(mVertexDeclCache[i].vertexDeclaration);
     }
 }
 
-gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
-    const std::vector<TranslatedAttribute>& attributes,
-    gl::Program* program,
-    GLsizei instances,
-    GLsizei* repeatDraw)
+gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device,
+                                                   const std::vector<TranslatedAttribute> &attributes,
+                                                   gl::Program *program,
+                                                   GLsizei instances,
+                                                   GLsizei *repeatDraw)
 {
     ASSERT(gl::MAX_VERTEX_ATTRIBS >= attributes.size());
 
@@ -53,9 +56,12 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
     size_t indexedAttribute = invalidAttribIndex;
     size_t instancedAttribute = invalidAttribIndex;
 
-    if (instances == 0) {
-        for (size_t i = 0; i < attributes.size(); ++i) {
-            if (attributes[i].divisor != 0) {
+    if (instances == 0)
+    {
+        for (size_t i = 0; i < attributes.size(); ++i)
+        {
+            if (attributes[i].divisor != 0)
+            {
                 // If a divisor is set, it still applies even if an instanced draw was not used, so treat
                 // as a single-instance draw.
                 instances = 1;
@@ -64,17 +70,23 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
         }
     }
 
-    if (instances > 0) {
+    if (instances > 0)
+    {
         // Find an indexed attribute to be mapped to D3D stream 0
-        for (size_t i = 0; i < attributes.size(); i++) {
-            if (attributes[i].active) {
-                if (indexedAttribute == invalidAttribIndex && attributes[i].divisor == 0) {
+        for (size_t i = 0; i < attributes.size(); i++)
+        {
+            if (attributes[i].active)
+            {
+                if (indexedAttribute == invalidAttribIndex && attributes[i].divisor == 0)
+                {
                     indexedAttribute = i;
-                } else if (instancedAttribute == invalidAttribIndex && attributes[i].divisor != 0) {
+                }
+                else if (instancedAttribute == invalidAttribIndex && attributes[i].divisor != 0)
+                {
                     instancedAttribute = i;
                 }
                 if (indexedAttribute != invalidAttribIndex && instancedAttribute != invalidAttribIndex)
-                    break; // Found both an indexed and instanced attribute
+                    break;   // Found both an indexed and instanced attribute
             }
         }
 
@@ -87,45 +99,60 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
     device->GetDeviceCaps(&caps);
 
     D3DVERTEXELEMENT9 elements[gl::MAX_VERTEX_ATTRIBS + 1];
-    D3DVERTEXELEMENT9* element = &elements[0];
+    D3DVERTEXELEMENT9 *element = &elements[0];
 
-    ProgramD3D* programD3D = GetImplAs<ProgramD3D>(program);
-    const auto& semanticIndexes = programD3D->getSemanticIndexes();
+    ProgramD3D *programD3D      = GetImplAs<ProgramD3D>(program);
+    const auto &semanticIndexes = programD3D->getSemanticIndexes();
 
-    for (size_t i = 0; i < attributes.size(); i++) {
-        if (attributes[i].active) {
+    for (size_t i = 0; i < attributes.size(); i++)
+    {
+        if (attributes[i].active)
+        {
             // Directly binding the storage buffer is not supported for d3d9
             ASSERT(attributes[i].storage == NULL);
 
             int stream = static_cast<int>(i);
 
-            if (instances > 0) {
+            if (instances > 0)
+            {
                 // Due to a bug on ATI cards we can't enable instancing when none of the attributes are instanced.
-                if (instancedAttribute == invalidAttribIndex) {
+                if (instancedAttribute == invalidAttribIndex)
+                {
                     *repeatDraw = instances;
-                } else {
-                    if (i == indexedAttribute) {
+                }
+                else
+                {
+                    if (i == indexedAttribute)
+                    {
                         stream = 0;
-                    } else if (i == 0) {
+                    }
+                    else if (i == 0)
+                    {
                         stream = static_cast<int>(indexedAttribute);
                     }
 
                     UINT frequency = 1;
-
-                    if (attributes[i].divisor == 0) {
+                    
+                    if (attributes[i].divisor == 0)
+                    {
                         frequency = D3DSTREAMSOURCE_INDEXEDDATA | instances;
-                    } else {
+                    }
+                    else
+                    {
                         frequency = D3DSTREAMSOURCE_INSTANCEDATA | attributes[i].divisor;
                     }
-
+                    
                     device->SetStreamSourceFreq(stream, frequency);
                     mInstancingEnabled = true;
                 }
             }
 
-            VertexBuffer9* vertexBuffer = GetAs<VertexBuffer9>(attributes[i].vertexBuffer);
+            VertexBuffer9 *vertexBuffer = GetAs<VertexBuffer9>(attributes[i].vertexBuffer);
 
-            if (mAppliedVBs[stream].serial != attributes[i].serial || mAppliedVBs[stream].stride != attributes[i].stride || mAppliedVBs[stream].offset != attributes[i].offset) {
+            if (mAppliedVBs[stream].serial != attributes[i].serial ||
+                mAppliedVBs[stream].stride != attributes[i].stride ||
+                mAppliedVBs[stream].offset != attributes[i].offset)
+            {
                 device->SetStreamSource(stream, vertexBuffer->getBuffer(), attributes[i].offset, attributes[i].stride);
                 mAppliedVBs[stream].serial = attributes[i].serial;
                 mAppliedVBs[stream].stride = attributes[i].stride;
@@ -133,7 +160,7 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
             }
 
             gl::VertexFormatType vertexformatType = gl::GetVertexFormatType(*attributes[i].attribute, GL_FLOAT);
-            const d3d9::VertexFormat& d3d9VertexInfo = d3d9::GetVertexFormatInfo(caps.DeclTypes, vertexformatType);
+            const d3d9::VertexFormat &d3d9VertexInfo = d3d9::GetVertexFormatInfo(caps.DeclTypes, vertexformatType);
 
             element->Stream = static_cast<WORD>(stream);
             element->Offset = 0;
@@ -145,9 +172,12 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
         }
     }
 
-    if (instances == 0 || instancedAttribute == invalidAttribIndex) {
-        if (mInstancingEnabled) {
-            for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++) {
+    if (instances == 0 || instancedAttribute == invalidAttribIndex)
+    {
+        if (mInstancingEnabled)
+        {
+            for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
+            {
                 device->SetStreamSourceFreq(i, 1);
             }
 
@@ -158,11 +188,14 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
     static const D3DVERTEXELEMENT9 end = D3DDECL_END();
     *(element++) = end;
 
-    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++) {
-        VertexDeclCacheEntry* entry = &mVertexDeclCache[i];
-        if (memcmp(entry->cachedElements, elements, (element - elements) * sizeof(D3DVERTEXELEMENT9)) == 0 && entry->vertexDeclaration) {
+    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++)
+    {
+        VertexDeclCacheEntry *entry = &mVertexDeclCache[i];
+        if (memcmp(entry->cachedElements, elements, (element - elements) * sizeof(D3DVERTEXELEMENT9)) == 0 && entry->vertexDeclaration)
+        {
             entry->lruCount = ++mMaxLru;
-            if (entry->vertexDeclaration != mLastSetVDecl) {
+            if(entry->vertexDeclaration != mLastSetVDecl)
+            {
                 device->SetVertexDeclaration(entry->vertexDeclaration);
                 mLastSetVDecl = entry->vertexDeclaration;
             }
@@ -171,15 +204,18 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
         }
     }
 
-    VertexDeclCacheEntry* lastCache = mVertexDeclCache;
+    VertexDeclCacheEntry *lastCache = mVertexDeclCache;
 
-    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++) {
-        if (mVertexDeclCache[i].lruCount < lastCache->lruCount) {
+    for (int i = 0; i < NUM_VERTEX_DECL_CACHE_ENTRIES; i++)
+    {
+        if (mVertexDeclCache[i].lruCount < lastCache->lruCount)
+        {
             lastCache = &mVertexDeclCache[i];
         }
     }
 
-    if (lastCache->vertexDeclaration != NULL) {
+    if (lastCache->vertexDeclaration != NULL)
+    {
         SafeRelease(lastCache->vertexDeclaration);
         // mLastSetVDecl is set to the replacement, so we don't have to worry
         // about it.
@@ -187,7 +223,8 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
 
     memcpy(lastCache->cachedElements, elements, (element - elements) * sizeof(D3DVERTEXELEMENT9));
     HRESULT result = device->CreateVertexDeclaration(elements, &lastCache->vertexDeclaration);
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal vertex declaration, result: 0x%X.", result);
     }
 
@@ -200,12 +237,13 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9* device,
 
 void VertexDeclarationCache::markStateDirty()
 {
-    for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++) {
+    for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
+    {
         mAppliedVBs[i].serial = 0;
     }
 
     mLastSetVDecl = NULL;
-    mInstancingEnabled = true; // Forces it to be disabled when not used
+    mInstancingEnabled = true;   // Forces it to be disabled when not used
 }
 
 }

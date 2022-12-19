@@ -14,14 +14,15 @@ TDependencyGraph::TDependencyGraph(TIntermNode* intermNode)
 
 TDependencyGraph::~TDependencyGraph()
 {
-    for (TGraphNodeVector::const_iterator iter = mAllNodes.begin(); iter != mAllNodes.end(); ++iter) {
+    for (TGraphNodeVector::const_iterator iter = mAllNodes.begin(); iter != mAllNodes.end(); ++iter)
+    {
         TGraphNode* node = *iter;
         delete node;
     }
 }
 
 TGraphArgument* TDependencyGraph::createArgument(TIntermAggregate* intermFunctionCall,
-    int argumentNumber)
+                                                 int argumentNumber)
 {
     TGraphArgument* argument = new TGraphArgument(intermFunctionCall, argumentNumber);
     mAllNodes.push_back(argument);
@@ -86,15 +87,9 @@ const char* TGraphLogicalOp::getOpString() const
 {
     const char* opString = NULL;
     switch (getIntermLogicalOp()->getOp()) {
-    case EOpLogicalAnd:
-        opString = "and";
-        break;
-    case EOpLogicalOr:
-        opString = "or";
-        break;
-    default:
-        opString = "unknown";
-        break;
+        case EOpLogicalAnd: opString = "and"; break;
+        case EOpLogicalOr: opString = "or"; break;
+        default: opString = "unknown"; break;
     }
     return opString;
 }

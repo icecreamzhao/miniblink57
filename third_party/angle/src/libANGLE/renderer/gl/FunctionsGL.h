@@ -14,15 +14,18 @@
 #include "libANGLE/renderer/gl/functionsgl_enums.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
 
-namespace rx {
+namespace rx
+{
 
-enum StandardGL {
+enum StandardGL
+{
     STANDARD_GL_DESKTOP,
     STANDARD_GL_ES,
 };
 
-class FunctionsGL {
-public:
+class FunctionsGL
+{
+  public:
     FunctionsGL();
     virtual ~FunctionsGL();
 
@@ -32,14 +35,14 @@ public:
     gl::Version version;
     StandardGL standard;
     GLint profile;
-    bool isAtLeastGL(const gl::Version& glVersion) const;
-    bool isAtLeastGLES(const gl::Version& glesVersion) const;
+    bool isAtLeastGL(const gl::Version &glVersion) const;
+    bool isAtLeastGLES(const gl::Version &glesVersion) const;
 
     // Extensions
     std::vector<std::string> extensions;
-    bool hasExtension(const std::string& ext) const;
-    bool hasGLExtension(const std::string& ext) const;
-    bool hasGLESExtension(const std::string& ext) const;
+    bool hasExtension(const std::string &ext) const;
+    bool hasGLExtension(const std::string &ext) const;
+    bool hasGLESExtension(const std::string &ext) const;
 
     // Entry Points
     // 1.0
@@ -740,19 +743,8 @@ public:
     PFNGLVERTEXARRAYVERTEXBUFFERPROC vertexArrayVertexBuffer;
     PFNGLVERTEXARRAYVERTEXBUFFERSPROC vertexArrayVertexBuffers;
 
-    // ES 3.2
-    PFNGLBLENDBARRIERPROC blendBarrier;
-    PFNGLPRIMITIVEBOUNDINGBOXPROC primitiveBoundingBox;
-
-    // ES extensions
-    PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC eglImageTargetRenderbufferStorageOES;
-    PFNGLEGLIMAGETARGETTEXTURE2DOESPROC eglImageTargetTexture2DOES;
-
-private:
-    void initializeProcsDesktopGL();
-    void initializeProcsGLES();
-
-    virtual void* loadProcAddress(const std::string& function) = 0;
+  private:
+    virtual void *loadProcAddress(const std::string &function) = 0;
 };
 
 }

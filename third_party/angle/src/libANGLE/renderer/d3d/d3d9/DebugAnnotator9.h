@@ -11,14 +11,16 @@
 
 #include "common/debug.h"
 
-namespace rx {
+namespace rx
+{
 
-class DebugAnnotator9 : public gl::DebugAnnotator {
-public:
-    DebugAnnotator9() { }
-    void beginEvent(const wchar_t* eventName) override;
+class DebugAnnotator9 : public gl::DebugAnnotator
+{
+  public:
+    DebugAnnotator9() {}
+    void beginEvent(const wchar_t *eventName) override;
     void endEvent() override;
-    void setMarker(const wchar_t* markerName) override;
+    void setMarker(const wchar_t *markerName) override;
     bool getStatus() override;
 };
 

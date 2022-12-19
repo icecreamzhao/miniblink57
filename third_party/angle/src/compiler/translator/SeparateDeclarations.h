@@ -18,6 +18,6 @@
 
 class TIntermNode;
 
-void SeparateDeclarations(TIntermNode* root);
+void SeparateDeclarations(TIntermNode *root);
 
-#endif // COMPILER_TRANSLATOR_SEPARATEDECLARATIONS_H_
+#endif  // COMPILER_TRANSLATOR_SEPARATEDECLARATIONS_H_

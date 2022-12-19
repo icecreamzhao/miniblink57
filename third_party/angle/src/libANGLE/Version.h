@@ -11,9 +11,11 @@
 
 #include <angle_gl.h>
 
-namespace gl {
+namespace gl
+{
 
-struct Version {
+struct Version
+{
     Version();
     Version(GLuint major, GLuint minor);
 
@@ -21,8 +23,8 @@ struct Version {
     GLuint minor;
 };
 
-bool operator>=(const Version& a, const Version& b);
-bool operator<(const Version& a, const Version& b);
+bool operator>=(const Version &a, const Version &b);
+bool operator<(const Version &a, const Version &b);
 
 }
 

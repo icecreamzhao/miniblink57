@@ -12,42 +12,39 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
-namespace {
-
-GLuint64 MergeQueryResults(GLenum type, GLuint64 currentResult, GLuint64 newResult)
+namespace
 {
-    switch (type) {
-    case GL_ANY_SAMPLES_PASSED:
-    case GL_ANY_SAMPLES_PASSED_CONSERVATIVE:
-        return (currentResult == GL_TRUE || newResult == GL_TRUE) ? GL_TRUE : GL_FALSE;
 
-    case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
-        return currentResult + newResult;
+GLuint MergeQueryResults(GLenum type, GLuint currentResult, GLuint newResult)
+{
+    switch (type)
+    {
+        case GL_ANY_SAMPLES_PASSED:
+        case GL_ANY_SAMPLES_PASSED_CONSERVATIVE:
+            return (currentResult == GL_TRUE || newResult == GL_TRUE) ? GL_TRUE : GL_FALSE;
 
-    case GL_TIME_ELAPSED:
-        return currentResult + newResult;
+        case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
+            return currentResult + newResult;
 
-    case GL_TIMESTAMP:
-        return newResult;
-
-    default:
-        UNREACHABLE();
-        return 0;
+        default:
+            UNREACHABLE();
+            return 0;
     }
 }
 
-} // anonymous namespace
+}  // anonymous namespace
 
-namespace rx {
+namespace rx
+{
 
-QueryGL::QueryGL(GLenum type, const FunctionsGL* functions, StateManagerGL* stateManager)
-    : QueryImpl(type)
-    , mType(type)
-    , mFunctions(functions)
-    , mStateManager(stateManager)
-    , mActiveQuery(0)
-    , mPendingQueries()
-    , mResultSum(0)
+QueryGL::QueryGL(GLenum type, const FunctionsGL *functions, StateManagerGL *stateManager)
+    : QueryImpl(type),
+      mType(type),
+      mFunctions(functions),
+      mStateManager(stateManager),
+      mActiveQuery(0),
+      mPendingQueries(),
+      mResultSum(0)
 {
 }
 
@@ -55,7 +52,8 @@ QueryGL::~QueryGL()
 {
     mStateManager->deleteQuery(mActiveQuery);
     mStateManager->onDeleteQueryObject(this);
-    while (!mPendingQueries.empty()) {
+    while (!mPendingQueries.empty())
+    {
         mStateManager->deleteQuery(mPendingQueries.front());
         mPendingQueries.pop_front();
     }
@@ -64,8 +62,7 @@ QueryGL::~QueryGL()
 gl::Error QueryGL::begin()
 {
     mResultSum = 0;
-    mStateManager->onBeginQuery(this);
-    return resume();
+    return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error QueryGL::end()
@@ -73,72 +70,40 @@ gl::Error QueryGL::end()
     return pause();
 }
 
-gl::Error QueryGL::queryCounter()
-{
-    ASSERT(mType == GL_TIMESTAMP);
-
-    // Directly create a query for the timestamp and add it to the pending query queue, as timestamp
-    // queries do not have the traditional begin/end block and never need to be paused/resumed
-    GLuint query;
-    mFunctions->genQueries(1, &query);
-    mFunctions->queryCounter(query, GL_TIMESTAMP);
-    mPendingQueries.push_back(query);
-
-    return gl::Error(GL_NO_ERROR);
-}
-
-template <typename T>
-gl::Error QueryGL::getResultBase(T* params)
+gl::Error QueryGL::getResult(GLuint *params)
 {
     ASSERT(mActiveQuery == 0);
 
     gl::Error error = flush(true);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
     ASSERT(mPendingQueries.empty());
-    *params = static_cast<T>(mResultSum);
+    *params = mResultSum;
 
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error QueryGL::getResult(GLint* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error QueryGL::getResult(GLuint* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error QueryGL::getResult(GLint64* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error QueryGL::getResult(GLuint64* params)
-{
-    return getResultBase(params);
-}
-
-gl::Error QueryGL::isResultAvailable(bool* available)
+gl::Error QueryGL::isResultAvailable(GLuint *available)
 {
     ASSERT(mActiveQuery == 0);
 
     gl::Error error = flush(false);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
-    *available = mPendingQueries.empty();
+    *available = mPendingQueries.empty() ? GL_TRUE : GL_FALSE;
     return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error QueryGL::pause()
 {
-    if (mActiveQuery != 0) {
+    if (mActiveQuery != 0)
+    {
         mStateManager->endQuery(mType, mActiveQuery);
 
         mPendingQueries.push_back(mActiveQuery);
@@ -147,7 +112,8 @@ gl::Error QueryGL::pause()
 
     // Flush to make sure the pending queries don't add up too much.
     gl::Error error = flush(false);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -156,10 +122,12 @@ gl::Error QueryGL::pause()
 
 gl::Error QueryGL::resume()
 {
-    if (mActiveQuery == 0) {
+    if (mActiveQuery == 0)
+    {
         // Flush to make sure the pending queries don't add up too much.
         gl::Error error = flush(false);
-        if (error.isError()) {
+        if (error.isError())
+        {
             return error;
         }
 
@@ -172,28 +140,22 @@ gl::Error QueryGL::resume()
 
 gl::Error QueryGL::flush(bool force)
 {
-    while (!mPendingQueries.empty()) {
+    while (!mPendingQueries.empty())
+    {
         GLuint id = mPendingQueries.front();
-        if (!force) {
+        if (!force)
+        {
             GLuint resultAvailable = 0;
             mFunctions->getQueryObjectuiv(id, GL_QUERY_RESULT_AVAILABLE, &resultAvailable);
-            if (resultAvailable == GL_FALSE) {
+            if (resultAvailable == GL_FALSE)
+            {
                 return gl::Error(GL_NO_ERROR);
             }
         }
 
-        // Even though getQueryObjectui64v was introduced for timer queries, there is nothing in the
-        // standard that says that it doesn't work for any other queries. It also passes on all the
-        // trybots, so we use it if it is available
-        if (mFunctions->getQueryObjectui64v != nullptr) {
-            GLuint64 result = 0;
-            mFunctions->getQueryObjectui64v(id, GL_QUERY_RESULT, &result);
-            mResultSum = MergeQueryResults(mType, mResultSum, result);
-        } else {
-            GLuint result = 0;
-            mFunctions->getQueryObjectuiv(id, GL_QUERY_RESULT, &result);
-            mResultSum = MergeQueryResults(mType, mResultSum, static_cast<GLuint64>(result));
-        }
+        GLuint result = 0;
+        mFunctions->getQueryObjectuiv(id, GL_QUERY_RESULT, &result);
+        mResultSum = MergeQueryResults(mType, mResultSum, result);
 
         mStateManager->deleteQuery(id);
 

@@ -18,53 +18,41 @@
 
 #include <cstddef>
 
-class RefCountObject : angle::NonCopyable {
-public:
-    explicit RefCountObject(GLuint id)
-        : mId(id)
-        , mRefCount(0)
-    {
-    }
+class RefCountObject : angle::NonCopyable
+{
+  public:
+    explicit RefCountObject(GLuint id);
+    virtual ~RefCountObject();
 
-    void addRef() const { ++mRefCount; }
-
-    void release() const
-    {
-        ASSERT(mRefCount > 0);
-
-        if (--mRefCount == 0) {
-            delete this;
-        }
-    }
+    virtual void addRef() const;
+    virtual void release() const;
 
     GLuint id() const { return mId; }
 
     size_t getRefCount() const { return mRefCount; }
 
-protected:
-    virtual ~RefCountObject() { ASSERT(mRefCount == 0); }
-
-private:
+  private:
     GLuint mId;
 
-    mutable std::size_t mRefCount;
+    mutable size_t mRefCount;
 };
 
 template <class ObjectType>
-class BindingPointer {
-public:
+class BindingPointer
+{
+  public:
     BindingPointer()
         : mObject(nullptr)
     {
     }
 
-    BindingPointer(const BindingPointer<ObjectType>& other)
+    BindingPointer(const BindingPointer<ObjectType> &other)
         : mObject(nullptr)
     {
         set(other.mObject);
     }
 
-    void operator=(const BindingPointer<ObjectType>& other)
+    void operator=(const BindingPointer<ObjectType> &other)
     {
         set(other.mObject);
     }
@@ -75,49 +63,44 @@ public:
         ASSERT(mObject == nullptr);
     }
 
-    virtual void set(ObjectType* newObject)
+    virtual void set(ObjectType *newObject)
     {
         // addRef first in case newObject == mObject and this is the last reference to it.
-        if (newObject != nullptr)
-            reinterpret_cast<const RefCountObject*>(newObject)->addRef();
-        if (mObject != nullptr)
-            reinterpret_cast<const RefCountObject*>(mObject)->release();
+        if (newObject != nullptr) reinterpret_cast<const RefCountObject*>(newObject)->addRef();
+        if (mObject != nullptr) reinterpret_cast<const RefCountObject*>(mObject)->release();
         mObject = newObject;
     }
 
-    ObjectType* get() const { return mObject; }
-    ObjectType* operator->() const { return mObject; }
+    ObjectType *get() const { return mObject; }
+    ObjectType *operator->() const { return mObject; }
 
     GLuint id() const { return (mObject != nullptr) ? mObject->id() : 0; }
 
-    bool operator==(const BindingPointer<ObjectType>& other) const
+    bool operator==(const BindingPointer<ObjectType> &other) const
     {
         return mObject == other.mObject;
     }
 
-    bool operator!=(const BindingPointer<ObjectType>& other) const { return !(*this == other); }
+    bool operator!=(const BindingPointer<ObjectType> &other) const { return !(*this == other); }
 
-private:
-    ObjectType* mObject;
+  private:
+    ObjectType *mObject;
 };
 
 template <class ObjectType>
-class OffsetBindingPointer : public BindingPointer<ObjectType> {
-public:
-    OffsetBindingPointer()
-        : mOffset(0)
-        , mSize(0)
-    {
-    }
+class OffsetBindingPointer : public BindingPointer<ObjectType>
+{
+  public:
+    OffsetBindingPointer() : mOffset(0), mSize(0) { }
 
-    void set(ObjectType* newObject) override
+    void set(ObjectType *newObject) override
     {
         BindingPointer<ObjectType>::set(newObject);
         mOffset = 0;
         mSize = 0;
     }
 
-    void set(ObjectType* newObject, GLintptr offset, GLsizeiptr size)
+    void set(ObjectType *newObject, GLintptr offset, GLsizeiptr size)
     {
         BindingPointer<ObjectType>::set(newObject);
         mOffset = offset;
@@ -127,19 +110,19 @@ public:
     GLintptr getOffset() const { return mOffset; }
     GLsizeiptr getSize() const { return mSize; }
 
-    bool operator==(const OffsetBindingPointer<ObjectType>& other) const
+    bool operator==(const OffsetBindingPointer<ObjectType> &other) const
     {
         return this->get() == other.get() && mOffset == other.mOffset && mSize == other.mSize;
     }
 
-    bool operator!=(const OffsetBindingPointer<ObjectType>& other) const
+    bool operator!=(const OffsetBindingPointer<ObjectType> &other) const
     {
         return !(*this == other);
     }
 
-private:
+  private:
     GLintptr mOffset;
     GLsizeiptr mSize;
 };
 
-#endif // LIBANGLE_REFCOUNTOBJECT_H_
+#endif   // LIBANGLE_REFCOUNTOBJECT_H_

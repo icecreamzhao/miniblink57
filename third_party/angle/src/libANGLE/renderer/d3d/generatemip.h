@@ -10,15 +10,16 @@
 #ifndef LIBANGLE_RENDERER_D3D_GENERATEMIP_H_
 #define LIBANGLE_RENDERER_D3D_GENERATEMIP_H_
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/d3d/imageformats.h"
+#include "libANGLE/angletypes.h"
 
-namespace rx {
+namespace rx
+{
 
 template <typename T>
 inline void GenerateMip(size_t sourceWidth, size_t sourceHeight, size_t sourceDepth,
-    const uint8_t* sourceData, size_t sourceRowPitch, size_t sourceDepthPitch,
-    uint8_t* destData, size_t destRowPitch, size_t destDepthPitch);
+                        const uint8_t *sourceData, size_t sourceRowPitch, size_t sourceDepthPitch,
+                        uint8_t *destData, size_t destRowPitch, size_t destDepthPitch);
 
 }
 

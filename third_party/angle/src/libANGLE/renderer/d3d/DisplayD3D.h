@@ -9,41 +9,42 @@
 #ifndef LIBANGLE_RENDERER_D3D_DISPLAYD3D_H_
 #define LIBANGLE_RENDERER_D3D_DISPLAYD3D_H_
 
-#include "libANGLE/Device.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/Device.h"
 
-namespace rx {
+namespace rx
+{
 class RendererD3D;
 
-class DisplayD3D : public DisplayImpl {
-public:
+class DisplayD3D : public DisplayImpl
+{
+  public:
     DisplayD3D();
 
-    egl::Error initialize(egl::Display* display) override;
+    egl::Error initialize(egl::Display *display) override;
     virtual void terminate() override;
 
     // Surface creation
-    SurfaceImpl* createWindowSurface(const egl::Config* configuration,
-        EGLNativeWindowType window,
-        const egl::AttributeMap& attribs) override;
-    SurfaceImpl* createPbufferSurface(const egl::Config* configuration,
-        const egl::AttributeMap& attribs) override;
-    SurfaceImpl* createPbufferFromClientBuffer(const egl::Config* configuration,
-        EGLClientBuffer shareHandle,
-        const egl::AttributeMap& attribs) override;
-    SurfaceImpl* createPixmapSurface(const egl::Config* configuration,
-        NativePixmapType nativePixmap,
-        const egl::AttributeMap& attribs) override;
+    SurfaceImpl *createWindowSurface(const egl::Config *configuration,
+                                     EGLNativeWindowType window,
+                                     const egl::AttributeMap &attribs) override;
+    SurfaceImpl *createPbufferSurface(const egl::Config *configuration,
+                                      const egl::AttributeMap &attribs) override;
+    SurfaceImpl *createPbufferFromClientBuffer(const egl::Config *configuration,
+                                               EGLClientBuffer shareHandle,
+                                               const egl::AttributeMap &attribs) override;
+    SurfaceImpl *createPixmapSurface(const egl::Config *configuration,
+                                     NativePixmapType nativePixmap,
+                                     const egl::AttributeMap &attribs) override;
 
-    ImageImpl* createImage(EGLenum target,
-        egl::ImageSibling* buffer,
-        const egl::AttributeMap& attribs) override;
+    ImageImpl *createImage(EGLenum target,
+                           egl::ImageSibling *buffer,
+                           const egl::AttributeMap &attribs) override;
 
-    gl::Context* createContext(const egl::Config* config,
-        const gl::Context* shareContext,
-        const egl::AttributeMap& attribs) override;
+    egl::Error createContext(const egl::Config *config, const gl::Context *shareContext, const egl::AttributeMap &attribs,
+                             gl::Context **outContext) override;
 
-    egl::Error makeCurrent(egl::Surface* drawSurface, egl::Surface* readSurface, gl::Context* context) override;
+    egl::Error makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context) override;
 
     egl::ConfigSet generateConfigs() const override;
 
@@ -53,22 +54,19 @@ public:
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 
-    egl::Error getDevice(DeviceImpl** device) override;
+    egl::Error getDevice(DeviceImpl **device) override;
 
     std::string getVendorString() const override;
 
-    egl::Error waitClient() const override;
-    egl::Error waitNative(EGLint engine,
-        egl::Surface* drawSurface,
-        egl::Surface* readSurface) const override;
+  private:
+    void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
+    void generateCaps(egl::Caps *outCaps) const override;
 
-private:
-    void generateExtensions(egl::DisplayExtensions* outExtensions) const override;
-    void generateCaps(egl::Caps* outCaps) const override;
+    egl::Display *mDisplay;
 
-    egl::Display* mDisplay;
+    rx::RendererD3D *mRenderer;
 
-    rx::RendererD3D* mRenderer;
+    DeviceImpl *mDevice;
 };
 
 }

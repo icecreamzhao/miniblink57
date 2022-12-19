@@ -13,17 +13,15 @@
 #include "libANGLE/renderer/d3d/SwapChainD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer11;
 
-class SwapChain11 : public SwapChainD3D {
-public:
-    SwapChain11(Renderer11* renderer,
-        NativeWindow nativeWindow,
-        HANDLE shareHandle,
-        GLenum backBufferFormat,
-        GLenum depthBufferFormat,
-        EGLint orientation);
+class SwapChain11 : public SwapChainD3D
+{
+  public:
+    SwapChain11(Renderer11 *renderer, NativeWindow nativeWindow, HANDLE shareHandle,
+                GLenum backBufferFormat, GLenum depthBufferFormat);
     virtual ~SwapChain11();
 
     EGLint resize(EGLint backbufferWidth, EGLint backbufferHeight);
@@ -31,68 +29,55 @@ public:
     virtual EGLint swapRect(EGLint x, EGLint y, EGLint width, EGLint height);
     virtual void recreate();
 
-    RenderTargetD3D* getColorRenderTarget() override { return &mColorRenderTarget; }
-    RenderTargetD3D* getDepthStencilRenderTarget() override { return &mDepthStencilRenderTarget; }
+    RenderTargetD3D *getColorRenderTarget() override { return &mColorRenderTarget; }
+    RenderTargetD3D *getDepthStencilRenderTarget() override { return &mDepthStencilRenderTarget; }
 
-    virtual ID3D11Texture2D* getOffscreenTexture();
-    virtual ID3D11RenderTargetView* getRenderTarget();
-    virtual ID3D11ShaderResourceView* getRenderTargetShaderResource();
+    virtual ID3D11Texture2D *getOffscreenTexture();
+    virtual ID3D11RenderTargetView *getRenderTarget();
+    virtual ID3D11ShaderResourceView *getRenderTargetShaderResource();
 
-    virtual ID3D11Texture2D* getDepthStencilTexture();
-    virtual ID3D11DepthStencilView* getDepthStencil();
-    virtual ID3D11ShaderResourceView* getDepthStencilShaderResource();
+    virtual ID3D11Texture2D *getDepthStencilTexture();
+    virtual ID3D11DepthStencilView *getDepthStencil();
+    virtual ID3D11ShaderResourceView *getDepthStencilShaderResource();
 
     EGLint getWidth() const { return mWidth; }
     EGLint getHeight() const { return mHeight; }
-    void* getKeyedMutex() override { return mKeyedMutex; }
+    void *getKeyedMutex() override { return mKeyedMutex; }
 
-private:
+  private:
     void release();
     void initPassThroughResources();
-
-    void releaseOffscreenColorBuffer();
-    void releaseOffscreenDepthBuffer();
-    EGLint resetOffscreenBuffers(int backbufferWidth, int backbufferHeight);
-    EGLint resetOffscreenColorBuffer(int backbufferWidth, int backbufferHeight);
-    EGLint resetOffscreenDepthBuffer(int backbufferWidth, int backbufferHeight);
-
+    void releaseOffscreenTexture();
+    EGLint resetOffscreenTexture(int backbufferWidth, int backbufferHeight);
     DXGI_FORMAT getSwapChainNativeFormat() const;
 
-    EGLint copyOffscreenToBackbuffer(EGLint x, EGLint y, EGLint width, EGLint height);
-    EGLint present(EGLint x, EGLint y, EGLint width, EGLint height);
-
-    Renderer11* mRenderer;
-    EGLint mWidth;
+    Renderer11 *mRenderer;
     EGLint mHeight;
-    const EGLint mOrientation;
+    EGLint mWidth;
     bool mAppCreatedShareHandle;
     unsigned int mSwapInterval;
     bool mPassThroughResourcesInit;
 
-    bool mFirstSwap;
-    DXGISwapChain* mSwapChain;
-    IDXGISwapChain1* mSwapChain1;
-    IDXGIKeyedMutex* mKeyedMutex;
+    DXGISwapChain *mSwapChain;
+    IDXGISwapChain1 *mSwapChain1;
+    IDXGIKeyedMutex *mKeyedMutex;
 
-    ID3D11Texture2D* mBackBufferTexture;
-    ID3D11RenderTargetView* mBackBufferRTView;
-    ID3D11ShaderResourceView* mBackBufferSRView;
+    ID3D11Texture2D *mBackBufferTexture;
+    ID3D11RenderTargetView *mBackBufferRTView;
 
-    const bool mNeedsOffscreenTexture;
-    ID3D11Texture2D* mOffscreenTexture;
-    ID3D11RenderTargetView* mOffscreenRTView;
-    ID3D11ShaderResourceView* mOffscreenSRView;
+    ID3D11Texture2D *mOffscreenTexture;
+    ID3D11RenderTargetView *mOffscreenRTView;
+    ID3D11ShaderResourceView *mOffscreenSRView;
 
-    ID3D11Texture2D* mDepthStencilTexture;
-    ID3D11DepthStencilView* mDepthStencilDSView;
-    ID3D11ShaderResourceView* mDepthStencilSRView;
+    ID3D11Texture2D *mDepthStencilTexture;
+    ID3D11DepthStencilView *mDepthStencilDSView;
+    ID3D11ShaderResourceView *mDepthStencilSRView;
 
-    ID3D11Buffer* mQuadVB;
-    ID3D11SamplerState* mPassThroughSampler;
-    ID3D11InputLayout* mPassThroughIL;
-    ID3D11VertexShader* mPassThroughVS;
-    ID3D11PixelShader* mPassThroughPS;
-    ID3D11RasterizerState* mPassThroughRS;
+    ID3D11Buffer *mQuadVB;
+    ID3D11SamplerState *mPassThroughSampler;
+    ID3D11InputLayout *mPassThroughIL;
+    ID3D11VertexShader *mPassThroughVS;
+    ID3D11PixelShader *mPassThroughPS;
 
     SurfaceRenderTarget11 mColorRenderTarget;
     SurfaceRenderTarget11 mDepthStencilRenderTarget;

@@ -4,17 +4,17 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
 #include "angle_gl.h"
 #include "compiler/translator/BuiltInFunctionEmulator.h"
+#include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
 #include "compiler/translator/SymbolTable.h"
 
-void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator* emu)
+void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
 {
-    TType* float1 = new TType(EbtFloat);
-    TType* float2 = new TType(EbtFloat, 2);
-    TType* float3 = new TType(EbtFloat, 3);
-    TType* float4 = new TType(EbtFloat, 4);
+    TType *float1 = new TType(EbtFloat);
+    TType *float2 = new TType(EbtFloat, 2);
+    TType *float3 = new TType(EbtFloat, 3);
+    TType *float4 = new TType(EbtFloat, 4);
 
     emu->addEmulatedFunction(EOpMod, float1, float1,
         "float webgl_mod_emu(float x, float y)\n"
@@ -115,7 +115,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator* emu)
     emu->addEmulatedFunction(EOpAtan, float1, float1,
         "float webgl_atan_emu(float y, float x)\n"
         "{\n"
-        "    if(x == 0 && y == 0) x = 1;\n" // Avoid producing a NaN
+        "    if(x == 0 && y == 0) x = 1;\n"   // Avoid producing a NaN
         "    return atan2(y, x);\n"
         "}\n");
     emu->addEmulatedFunction(EOpAtan, float2, float2,
@@ -250,7 +250,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator* emu)
         "    return (y << 16) | x;\n"
         "}\n");
 
-    TType* uint1 = new TType(EbtUInt);
+    TType *uint1 = new TType(EbtUInt);
 
     emu->addEmulatedFunction(EOpUnpackSnorm2x16, uint1,
         "float webgl_fromSnorm(in uint x) {\n"
@@ -327,9 +327,9 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator* emu)
         "    return mul(float4x1(r), float1x3(c));\n"
         "}\n");
 
-    TType* mat2 = new TType(EbtFloat, 2, 2);
-    TType* mat3 = new TType(EbtFloat, 3, 3);
-    TType* mat4 = new TType(EbtFloat, 4, 4);
+    TType *mat2 = new TType(EbtFloat, 2, 2);
+    TType *mat3 = new TType(EbtFloat, 3, 3);
+    TType *mat4 = new TType(EbtFloat, 4, 4);
 
     // Remember here that the parameter matrix is actually the transpose
     // of the matrix that we're trying to invert, and the resulting matrix
@@ -372,46 +372,46 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator* emu)
     emu->addEmulatedFunction(EOpInverse, mat4,
         "float4x4 webgl_inverse_emu(in float4x4 m) {\n"
         "    float cof00 = m[1][1] * m[2][2] * m[3][3] + m[2][1] * m[3][2] * m[1][3] + m[3][1] * m[1][2] * m[2][3]"
-        " - m[1][1] * m[3][2] * m[2][3] - m[2][1] * m[1][2] * m[3][3] - m[3][1] * m[2][2] * m[1][3];\n"
+                       " - m[1][1] * m[3][2] * m[2][3] - m[2][1] * m[1][2] * m[3][3] - m[3][1] * m[2][2] * m[1][3];\n"
         "    float cof01 = -(m[1][0] * m[2][2] * m[3][3] + m[2][0] * m[3][2] * m[1][3] + m[3][0] * m[1][2] * m[2][3]"
-        " - m[1][0] * m[3][2] * m[2][3] - m[2][0] * m[1][2] * m[3][3] - m[3][0] * m[2][2] * m[1][3]);\n"
+                       " - m[1][0] * m[3][2] * m[2][3] - m[2][0] * m[1][2] * m[3][3] - m[3][0] * m[2][2] * m[1][3]);\n"
         "    float cof02 = m[1][0] * m[2][1] * m[3][3] + m[2][0] * m[3][1] * m[1][3] + m[3][0] * m[1][1] * m[2][3]"
-        " - m[1][0] * m[3][1] * m[2][3] - m[2][0] * m[1][1] * m[3][3] - m[3][0] * m[2][1] * m[1][3];\n"
+                       " - m[1][0] * m[3][1] * m[2][3] - m[2][0] * m[1][1] * m[3][3] - m[3][0] * m[2][1] * m[1][3];\n"
         "    float cof03 = -(m[1][0] * m[2][1] * m[3][2] + m[2][0] * m[3][1] * m[1][2] + m[3][0] * m[1][1] * m[2][2]"
-        " - m[1][0] * m[3][1] * m[2][2] - m[2][0] * m[1][1] * m[3][2] - m[3][0] * m[2][1] * m[1][2]);\n"
+                       " - m[1][0] * m[3][1] * m[2][2] - m[2][0] * m[1][1] * m[3][2] - m[3][0] * m[2][1] * m[1][2]);\n"
         "    float cof10 = -(m[0][1] * m[2][2] * m[3][3] + m[2][1] * m[3][2] * m[0][3] + m[3][1] * m[0][2] * m[2][3]"
-        " - m[0][1] * m[3][2] * m[2][3] - m[2][1] * m[0][2] * m[3][3] - m[3][1] * m[2][2] * m[0][3]);\n"
+                       " - m[0][1] * m[3][2] * m[2][3] - m[2][1] * m[0][2] * m[3][3] - m[3][1] * m[2][2] * m[0][3]);\n"
         "    float cof11 = m[0][0] * m[2][2] * m[3][3] + m[2][0] * m[3][2] * m[0][3] + m[3][0] * m[0][2] * m[2][3]"
-        " - m[0][0] * m[3][2] * m[2][3] - m[2][0] * m[0][2] * m[3][3] - m[3][0] * m[2][2] * m[0][3];\n"
+                       " - m[0][0] * m[3][2] * m[2][3] - m[2][0] * m[0][2] * m[3][3] - m[3][0] * m[2][2] * m[0][3];\n"
         "    float cof12 = -(m[0][0] * m[2][1] * m[3][3] + m[2][0] * m[3][1] * m[0][3] + m[3][0] * m[0][1] * m[2][3]"
-        " - m[0][0] * m[3][1] * m[2][3] - m[2][0] * m[0][1] * m[3][3] - m[3][0] * m[2][1] * m[0][3]);\n"
+                       " - m[0][0] * m[3][1] * m[2][3] - m[2][0] * m[0][1] * m[3][3] - m[3][0] * m[2][1] * m[0][3]);\n"
         "    float cof13 = m[0][0] * m[2][1] * m[3][2] + m[2][0] * m[3][1] * m[0][2] + m[3][0] * m[0][1] * m[2][2]"
-        " - m[0][0] * m[3][1] * m[2][2] - m[2][0] * m[0][1] * m[3][2] - m[3][0] * m[2][1] * m[0][2];\n"
+                       " - m[0][0] * m[3][1] * m[2][2] - m[2][0] * m[0][1] * m[3][2] - m[3][0] * m[2][1] * m[0][2];\n"
         "    float cof20 = m[0][1] * m[1][2] * m[3][3] + m[1][1] * m[3][2] * m[0][3] + m[3][1] * m[0][2] * m[1][3]"
-        " - m[0][1] * m[3][2] * m[1][3] - m[1][1] * m[0][2] * m[3][3] - m[3][1] * m[1][2] * m[0][3];\n"
+                       " - m[0][1] * m[3][2] * m[1][3] - m[1][1] * m[0][2] * m[3][3] - m[3][1] * m[1][2] * m[0][3];\n"
         "    float cof21 = -(m[0][0] * m[1][2] * m[3][3] + m[1][0] * m[3][2] * m[0][3] + m[3][0] * m[0][2] * m[1][3]"
-        " - m[0][0] * m[3][2] * m[1][3] - m[1][0] * m[0][2] * m[3][3] - m[3][0] * m[1][2] * m[0][3]);\n"
+                       " - m[0][0] * m[3][2] * m[1][3] - m[1][0] * m[0][2] * m[3][3] - m[3][0] * m[1][2] * m[0][3]);\n"
         "    float cof22 = m[0][0] * m[1][1] * m[3][3] + m[1][0] * m[3][1] * m[0][3] + m[3][0] * m[0][1] * m[1][3]"
-        " - m[0][0] * m[3][1] * m[1][3] - m[1][0] * m[0][1] * m[3][3] - m[3][0] * m[1][1] * m[0][3];\n"
+                       " - m[0][0] * m[3][1] * m[1][3] - m[1][0] * m[0][1] * m[3][3] - m[3][0] * m[1][1] * m[0][3];\n"
         "    float cof23 = -(m[0][0] * m[1][1] * m[3][2] + m[1][0] * m[3][1] * m[0][2] + m[3][0] * m[0][1] * m[1][2]"
-        " - m[0][0] * m[3][1] * m[1][2] - m[1][0] * m[0][1] * m[3][2] - m[3][0] * m[1][1] * m[0][2]);\n"
+                       " - m[0][0] * m[3][1] * m[1][2] - m[1][0] * m[0][1] * m[3][2] - m[3][0] * m[1][1] * m[0][2]);\n"
         "    float cof30 = -(m[0][1] * m[1][2] * m[2][3] + m[1][1] * m[2][2] * m[0][3] + m[2][1] * m[0][2] * m[1][3]"
-        " - m[0][1] * m[2][2] * m[1][3] - m[1][1] * m[0][2] * m[2][3] - m[2][1] * m[1][2] * m[0][3]);\n"
+                       " - m[0][1] * m[2][2] * m[1][3] - m[1][1] * m[0][2] * m[2][3] - m[2][1] * m[1][2] * m[0][3]);\n"
         "    float cof31 = m[0][0] * m[1][2] * m[2][3] + m[1][0] * m[2][2] * m[0][3] + m[2][0] * m[0][2] * m[1][3]"
-        " - m[0][0] * m[2][2] * m[1][3] - m[1][0] * m[0][2] * m[2][3] - m[2][0] * m[1][2] * m[0][3];\n"
+                       " - m[0][0] * m[2][2] * m[1][3] - m[1][0] * m[0][2] * m[2][3] - m[2][0] * m[1][2] * m[0][3];\n"
         "    float cof32 = -(m[0][0] * m[1][1] * m[2][3] + m[1][0] * m[2][1] * m[0][3] + m[2][0] * m[0][1] * m[1][3]"
-        " - m[0][0] * m[2][1] * m[1][3] - m[1][0] * m[0][1] * m[2][3] - m[2][0] * m[1][1] * m[0][3]);\n"
+                       " - m[0][0] * m[2][1] * m[1][3] - m[1][0] * m[0][1] * m[2][3] - m[2][0] * m[1][1] * m[0][3]);\n"
         "    float cof33 = m[0][0] * m[1][1] * m[2][2] + m[1][0] * m[2][1] * m[0][2] + m[2][0] * m[0][1] * m[1][2]"
-        " - m[0][0] * m[2][1] * m[1][2] - m[1][0] * m[0][1] * m[2][2] - m[2][0] * m[1][1] * m[0][2];\n"
+                       " - m[0][0] * m[2][1] * m[1][2] - m[1][0] * m[0][1] * m[2][2] - m[2][0] * m[1][1] * m[0][2];\n"
         "    float4x4 cof = { cof00, cof10, cof20, cof30, cof01, cof11, cof21, cof31,"
-        " cof02, cof12, cof22, cof32, cof03, cof13, cof23, cof33 };\n"
+                            " cof02, cof12, cof22, cof32, cof03, cof13, cof23, cof33 };\n"
         "    return cof / determinant(transpose(m));\n"
         "}\n");
 
-    TType* bool1 = new TType(EbtBool);
-    TType* bool2 = new TType(EbtBool, 2);
-    TType* bool3 = new TType(EbtBool, 3);
-    TType* bool4 = new TType(EbtBool, 4);
+    TType *bool1 = new TType(EbtBool);
+    TType *bool2 = new TType(EbtBool, 2);
+    TType *bool3 = new TType(EbtBool, 3);
+    TType *bool4 = new TType(EbtBool, 4);
 
     // Emulate ESSL3 variant of mix that takes last argument as boolean vector.
     // genType mix (genType x, genType y, genBType a): Selects which vector each returned component comes from.
@@ -437,4 +437,5 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator* emu)
         "{\n"
         "    return a ? y : x;\n"
         "}\n");
+
 }

@@ -11,27 +11,28 @@
 #include "libANGLE/renderer/ImplFactory.h"
 #include "libANGLE/renderer/VertexArrayImpl.h"
 
-namespace gl {
+namespace gl
+{
 
 VertexArray::Data::Data(size_t maxAttribs)
-    : mLabel()
-    , mVertexAttributes(maxAttribs)
-    , mMaxEnabledAttribute(0)
+    : mVertexAttributes(maxAttribs),
+      mMaxEnabledAttribute(0)
 {
 }
 
 VertexArray::Data::~Data()
 {
-    for (size_t i = 0; i < getMaxAttribs(); i++) {
+    for (size_t i = 0; i < getMaxAttribs(); i++)
+    {
         mVertexAttributes[i].buffer.set(nullptr);
     }
     mElementArrayBuffer.set(nullptr);
 }
 
-VertexArray::VertexArray(rx::ImplFactory* factory, GLuint id, size_t maxAttribs)
-    : mId(id)
-    , mVertexArray(factory->createVertexArray(mData))
-    , mData(maxAttribs)
+VertexArray::VertexArray(rx::ImplFactory *factory, GLuint id, size_t maxAttribs)
+    : mId(id),
+      mVertexArray(factory->createVertexArray(mData)),
+      mData(maxAttribs)
 {
 }
 
@@ -45,30 +46,23 @@ GLuint VertexArray::id() const
     return mId;
 }
 
-void VertexArray::setLabel(const std::string& label)
-{
-    mData.mLabel = label;
-}
-
-const std::string& VertexArray::getLabel() const
-{
-    return mData.mLabel;
-}
-
 void VertexArray::detachBuffer(GLuint bufferName)
 {
-    for (size_t attribute = 0; attribute < getMaxAttribs(); attribute++) {
-        if (mData.mVertexAttributes[attribute].buffer.id() == bufferName) {
+    for (size_t attribute = 0; attribute < getMaxAttribs(); attribute++)
+    {
+        if (mData.mVertexAttributes[attribute].buffer.id() == bufferName)
+        {
             mData.mVertexAttributes[attribute].buffer.set(nullptr);
         }
     }
 
-    if (mData.mElementArrayBuffer.id() == bufferName) {
+    if (mData.mElementArrayBuffer.id() == bufferName)
+    {
         mData.mElementArrayBuffer.set(nullptr);
     }
 }
 
-const VertexAttribute& VertexArray::getVertexAttribute(size_t attributeIndex) const
+const VertexAttribute &VertexArray::getVertexAttribute(size_t attributeIndex) const
 {
     ASSERT(attributeIndex < getMaxAttribs());
     return mData.mVertexAttributes[attributeIndex];
@@ -88,21 +82,26 @@ void VertexArray::enableAttribute(size_t attributeIndex, bool enabledState)
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_ENABLED + attributeIndex);
 
     // Update state cache
-    if (enabledState) {
+    if (enabledState)
+    {
         mData.mMaxEnabledAttribute = std::max(attributeIndex + 1, mData.mMaxEnabledAttribute);
-    } else if (mData.mMaxEnabledAttribute == attributeIndex + 1) {
-        while (mData.mMaxEnabledAttribute > 0 && !mData.mVertexAttributes[mData.mMaxEnabledAttribute - 1].enabled) {
+    }
+    else if (mData.mMaxEnabledAttribute == attributeIndex + 1)
+    {
+        while (mData.mMaxEnabledAttribute > 0 &&
+               !mData.mVertexAttributes[mData.mMaxEnabledAttribute - 1].enabled)
+        {
             --mData.mMaxEnabledAttribute;
         }
     }
 }
 
-void VertexArray::setAttributeState(size_t attributeIndex, gl::Buffer* boundBuffer, GLint size, GLenum type,
-    bool normalized, bool pureInteger, GLsizei stride, const void* pointer)
+void VertexArray::setAttributeState(size_t attributeIndex, gl::Buffer *boundBuffer, GLint size, GLenum type,
+                                    bool normalized, bool pureInteger, GLsizei stride, const void *pointer)
 {
     ASSERT(attributeIndex < getMaxAttribs());
 
-    VertexAttribute* attrib = &mData.mVertexAttributes[attributeIndex];
+    VertexAttribute *attrib = &mData.mVertexAttributes[attributeIndex];
 
     attrib->buffer.set(boundBuffer);
     attrib->size = size;
@@ -114,7 +113,7 @@ void VertexArray::setAttributeState(size_t attributeIndex, gl::Buffer* boundBuff
     mDirtyBits.set(DIRTY_BIT_ATTRIB_0_POINTER + attributeIndex);
 }
 
-void VertexArray::setElementArrayBuffer(Buffer* buffer)
+void VertexArray::setElementArrayBuffer(Buffer *buffer)
 {
     mData.mElementArrayBuffer.set(buffer);
     mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
@@ -122,7 +121,8 @@ void VertexArray::setElementArrayBuffer(Buffer* buffer)
 
 void VertexArray::syncImplState()
 {
-    if (mDirtyBits.any()) {
+    if (mDirtyBits.any())
+    {
         mVertexArray->syncState(mDirtyBits);
         mDirtyBits.reset();
     }

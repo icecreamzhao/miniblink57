@@ -8,7 +8,8 @@
 
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
 
-namespace rx {
+namespace rx
+{
 unsigned int RenderTargetD3D::mCurrentSerial = 1;
 
 RenderTargetD3D::RenderTargetD3D()

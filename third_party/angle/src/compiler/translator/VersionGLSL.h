@@ -41,9 +41,10 @@ int ShaderOutputTypeToGLSLVersion(ShShaderOutput output);
 //   - array as "out" function parameters
 //
 // TODO: ES3 equivalent versions of GLSL
-class TVersionGLSL : public TIntermTraverser {
-public:
-    TVersionGLSL(sh::GLenum type, const TPragma& pragma, ShShaderOutput output);
+class TVersionGLSL : public TIntermTraverser
+{
+  public:
+    TVersionGLSL(sh::GLenum type, const TPragma &pragma, ShShaderOutput output);
 
     // If output is core profile, returns 150.
     // If output is legacy profile,
@@ -55,13 +56,13 @@ public:
     //   Else 110 is returned.
     int getVersion() const { return mVersion; }
 
-    void visitSymbol(TIntermSymbol*) override;
-    bool visitAggregate(Visit, TIntermAggregate*) override;
+    void visitSymbol(TIntermSymbol *) override;
+    bool visitAggregate(Visit, TIntermAggregate *) override;
 
-private:
+  private:
     void ensureVersionIsAtLeast(int version);
 
     int mVersion;
 };
 
-#endif // COMPILER_TRANSLATOR_VERSIONGLSL_H_
+#endif  // COMPILER_TRANSLATOR_VERSIONGLSL_H_

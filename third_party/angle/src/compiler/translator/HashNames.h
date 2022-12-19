@@ -15,4 +15,4 @@
 
 typedef std::map<TPersistString, TPersistString> NameMap;
 
-#endif // COMPILER_TRANSLATOR_HASHNAMES_H_
+#endif  // COMPILER_TRANSLATOR_HASHNAMES_H_

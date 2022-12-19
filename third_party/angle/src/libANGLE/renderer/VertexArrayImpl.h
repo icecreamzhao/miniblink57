@@ -13,19 +13,17 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/VertexArray.h"
 
-namespace rx {
+namespace rx
+{
 
-class VertexArrayImpl : angle::NonCopyable {
-public:
-    VertexArrayImpl(const gl::VertexArray::Data& data)
-        : mData(data)
-    {
-    }
+class VertexArrayImpl : angle::NonCopyable
+{
+  public:
+    VertexArrayImpl(const gl::VertexArray::Data &data) : mData(data) { }
     virtual ~VertexArrayImpl() { }
-    virtual void syncState(const gl::VertexArray::DirtyBits& dirtyBits) { }
-
-protected:
-    const gl::VertexArray::Data& mData;
+    virtual void syncState(const gl::VertexArray::DirtyBits &dirtyBits) {}
+  protected:
+    const gl::VertexArray::Data &mData;
 };
 
 }

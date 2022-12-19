@@ -8,31 +8,28 @@
 #include "common/debug.h"
 
 #include <stdio.h>
-
-#include <limits>
 #include <vector>
 
-namespace angle {
-const uintptr_t DirtyPointer = std::numeric_limits<uintptr_t>::max();
-}
-
-size_t FormatStringIntoVector(const char* fmt, va_list vararg, std::vector<char>& outBuffer)
+size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& outBuffer)
 {
-    // Attempt to just print to the current buffer
-    int len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, vararg);
-    if (len < 0 || static_cast<size_t>(len) >= outBuffer.size()) {
-        // Buffer was not large enough, calculate the required size and resize the buffer
-        len = vsnprintf(NULL, 0, fmt, vararg);
-        outBuffer.resize(len + 1);
-
-        // Print again
-        len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, vararg);
-    }
-    ASSERT(len >= 0);
-    return static_cast<size_t>(len);
+//     // Attempt to just print to the current buffer
+//     int len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, vararg);
+//     if (len < 0 || static_cast<size_t>(len) >= outBuffer.size())
+//     {
+//         // Buffer was not large enough, calculate the required size and resize the buffer
+//         len = vsnprintf(NULL, 0, fmt, vararg);
+//         outBuffer.resize(len + 1);
+// 
+//         // Print again
+//         len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, vararg);
+//     }
+//     ASSERT(len >= 0);
+//     return static_cast<size_t>(len);
+    *(int*)1 = 1;
+    return 0;
 }
 
-std::string FormatString(const char* fmt, va_list vararg)
+std::string FormatString(const char *fmt, va_list vararg)
 {
     static std::vector<char> buffer(512);
 
@@ -40,7 +37,7 @@ std::string FormatString(const char* fmt, va_list vararg)
     return std::string(&buffer[0], len);
 }
 
-std::string FormatString(const char* fmt, ...)
+std::string FormatString(const char *fmt, ...)
 {
     va_list vararg;
     va_start(vararg, fmt);

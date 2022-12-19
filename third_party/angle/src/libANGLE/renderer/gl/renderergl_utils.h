@@ -10,31 +10,31 @@
 #ifndef LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
 #define LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
 
 #include <string>
 #include <vector>
 
-namespace gl {
+namespace gl
+{
 struct Caps;
 class TextureCapsMap;
 struct Extensions;
 struct Version;
 }
 
-namespace rx {
+namespace rx
+{
 class FunctionsGL;
 struct WorkaroundsGL;
 
-VendorID GetVendorID(const FunctionsGL* functions);
+namespace nativegl_gl
+{
 
-namespace nativegl_gl {
+void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsMap *textureCapsMap,
+                  gl::Extensions *extensions, gl::Version *maxSupportedESVersion);
 
-    void GenerateCaps(const FunctionsGL* functions, gl::Caps* caps, gl::TextureCapsMap* textureCapsMap,
-        gl::Extensions* extensions, gl::Version* maxSupportedESVersion);
-
-    void GenerateWorkarounds(const FunctionsGL* functions, WorkaroundsGL* workarounds);
+void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds);
 }
 
 }

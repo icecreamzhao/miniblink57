@@ -10,7 +10,8 @@
 #include <map>
 #include <string>
 
-typedef enum {
+typedef enum
+{
     EBhRequire,
     EBhEnable,
     EBhWarn,
@@ -20,24 +21,20 @@ typedef enum {
 
 inline const char* getBehaviorString(TBehavior b)
 {
-    switch (b) {
-    case EBhRequire:
-        return "require";
-    case EBhEnable:
-        return "enable";
-    case EBhWarn:
-        return "warn";
-    case EBhDisable:
-        return "disable";
-    default:
-        return NULL;
+    switch(b)
+    {
+      case EBhRequire: return "require";
+      case EBhEnable: return "enable";
+      case EBhWarn: return "warn";
+      case EBhDisable: return "disable";
+      default: return NULL;
     }
 }
 
 // Mapping between extension name and behavior.
 typedef std::map<std::string, TBehavior> TExtensionBehavior;
 
-inline bool IsExtensionEnabled(const TExtensionBehavior& extBehavior, const char* extension)
+inline bool IsExtensionEnabled(const TExtensionBehavior &extBehavior, const char *extension)
 {
     auto iter = extBehavior.find(extension);
     return iter != extBehavior.end() && (iter->second == EBhEnable || iter->second == EBhRequire);

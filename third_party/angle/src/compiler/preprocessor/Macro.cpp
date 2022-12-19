@@ -10,14 +10,18 @@
 
 #include "Token.h"
 
-namespace pp {
-
-bool Macro::equals(const Macro& other) const
+namespace pp
 {
-    return (type == other.type) && (name == other.name) && (parameters == other.parameters) && (replacements == other.replacements);
+
+bool Macro::equals(const Macro &other) const
+{
+    return (type == other.type) &&
+           (name == other.name) &&
+           (parameters == other.parameters) &&
+           (replacements == other.replacements);
 }
 
-void PredefineMacro(MacroSet* macroSet, const char* name, int value)
+void PredefineMacro(MacroSet *macroSet, const char *name, int value)
 {
     std::ostringstream stream;
     stream << value;
@@ -28,11 +32,12 @@ void PredefineMacro(MacroSet* macroSet, const char* name, int value)
 
     Macro macro;
     macro.predefined = true;
-    macro.type = Macro::kTypeObj;
+    macro.type       = Macro::kTypeObj;
     macro.name = name;
     macro.replacements.push_back(token);
 
     (*macroSet)[name] = macro;
 }
 
-} // namespace pp
+}  // namespace pp
+

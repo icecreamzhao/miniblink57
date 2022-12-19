@@ -11,42 +11,33 @@
 #define COMMON_OPTIONAL_H_
 
 template <class T>
-struct Optional {
+struct Optional
+{
     Optional()
-        : mValid(false)
-        , mValue(T())
-    {
-    }
+        : mValid(false),
+          mValue(T())
+    {}
 
-    explicit Optional(const T& valueIn)
-        : mValid(true)
-        , mValue(valueIn)
-    {
-    }
+    explicit Optional(const T &valueIn)
+        : mValid(true),
+          mValue(valueIn)
+    {}
 
-    Optional(const Optional& other)
-        : mValid(other.mValid)
-        , mValue(other.mValue)
-    {
-    }
+    Optional(const Optional &other)
+        : mValid(other.mValid),
+          mValue(other.mValue)
+    {}
 
-    Optional& operator=(const Optional& other)
+    Optional &operator=(const Optional &other)
     {
         this->mValid = other.mValid;
         this->mValue = other.mValue;
         return *this;
     }
 
-    Optional& operator=(const T& value)
+    Optional &operator=(const T &value)
     {
         mValue = value;
-        mValid = true;
-        return *this;
-    }
-
-    Optional& operator=(T&& value)
-    {
-        mValue = std::move(value);
         mValid = true;
         return *this;
     }
@@ -59,19 +50,19 @@ struct Optional {
     static Optional Invalid() { return Optional(); }
 
     bool valid() const { return mValid; }
-    const T& value() const { return mValue; }
+    const T &value() const { return mValue; }
 
-    bool operator==(const Optional& other) const
+    bool operator==(const Optional &other) const
     {
         return ((mValid == other.mValid) && (!mValid || (mValue == other.mValue)));
     }
 
-    bool operator!=(const Optional& other) const
+    bool operator!=(const Optional &other) const
     {
         return !(*this == other);
     }
 
-private:
+  private:
     bool mValid;
     T mValue;
 };

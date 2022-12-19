@@ -41,12 +41,12 @@ namespace scheduler {
         // Amount of idle time left in a frame (as a ratio of the vsync interval) above
         // which main thread compositing can be considered fast.
         const double kFastCompositingIdleTimeThreshold = .2;
-        constexpr base::TimeDelta kThreadLoadTrackerReportingInterval = base::TimeDelta::FromMinutes(1);
-        constexpr base::TimeDelta kThreadLoadTrackerWaitingPeriodBeforeReporting = base::TimeDelta::FromMinutes(2);
+        base::TimeDelta kThreadLoadTrackerReportingInterval = base::TimeDelta::FromMinutes(1);
+        base::TimeDelta kThreadLoadTrackerWaitingPeriodBeforeReporting = base::TimeDelta::FromMinutes(2);
         // We do not throttle anything while audio is played and shortly after that.
-        constexpr base::TimeDelta kThrottlingDelayAfterAudioIsPlayed = base::TimeDelta::FromSeconds(5);
+        base::TimeDelta kThrottlingDelayAfterAudioIsPlayed = base::TimeDelta::FromSeconds(5);
         // Maximum task queueing time before the main thread is considered unresponsive.
-        constexpr base::TimeDelta kMainThreadResponsivenessThreshold = base::TimeDelta::FromMilliseconds(200);
+        base::TimeDelta kMainThreadResponsivenessThreshold = base::TimeDelta::FromMilliseconds(200);
 
         void ReportForegroundRendererTaskLoad(base::TimeTicks time, double load)
         {

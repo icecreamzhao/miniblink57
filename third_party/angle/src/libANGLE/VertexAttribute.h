@@ -11,9 +11,11 @@
 
 #include "libANGLE/Buffer.h"
 
-namespace gl {
+namespace gl
+{
 
-struct VertexAttribute {
+struct VertexAttribute
+{
     bool enabled; // From glEnable/DisableVertexAttribArray
 
     GLenum type;
@@ -22,8 +24,9 @@ struct VertexAttribute {
     bool pureInteger;
     GLuint stride; // 0 means natural stride
 
-    union {
-        const GLvoid* pointer;
+    union
+    {
+        const GLvoid *pointer;
         GLintptr offset;
     };
     BindingPointer<Buffer> buffer; // Captured when glVertexAttribPointer is called.
@@ -33,20 +36,22 @@ struct VertexAttribute {
     VertexAttribute();
 };
 
-bool operator==(const VertexAttribute& a, const VertexAttribute& b);
-bool operator!=(const VertexAttribute& a, const VertexAttribute& b);
+bool operator==(const VertexAttribute &a, const VertexAttribute &b);
+bool operator!=(const VertexAttribute &a, const VertexAttribute &b);
 
 template <typename T>
 T QuerySingleVertexAttributeParameter(const VertexAttribute& attrib, GLenum pname);
 
 size_t ComputeVertexAttributeTypeSize(const VertexAttribute& attrib);
 size_t ComputeVertexAttributeStride(const VertexAttribute& attrib);
-size_t ComputeVertexAttributeElementCount(const VertexAttribute& attrib,
-    size_t drawCount,
-    size_t instanceCount);
+size_t ComputeVertexAttributeElementCount(const VertexAttribute &attrib,
+                                          size_t drawCount,
+                                          size_t instanceCount);
 
-struct VertexAttribCurrentValueData {
-    union {
+struct VertexAttribCurrentValueData
+{
+    union
+    {
         GLfloat FloatValues[4];
         GLint IntValues[4];
         GLuint UnsignedIntValues[4];
@@ -60,8 +65,8 @@ struct VertexAttribCurrentValueData {
     void setUnsignedIntValues(const GLuint unsignedIntValues[4]);
 };
 
-bool operator==(const VertexAttribCurrentValueData& a, const VertexAttribCurrentValueData& b);
-bool operator!=(const VertexAttribCurrentValueData& a, const VertexAttribCurrentValueData& b);
+bool operator==(const VertexAttribCurrentValueData &a, const VertexAttribCurrentValueData &b);
+bool operator!=(const VertexAttribCurrentValueData &a, const VertexAttribCurrentValueData &b);
 
 }
 

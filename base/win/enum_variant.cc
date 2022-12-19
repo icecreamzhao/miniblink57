@@ -53,7 +53,7 @@ namespace win {
         VARIANT* out_elements,
         ULONG* out_elements_received)
     {
-        unsigned long count = std::min(requested_count, count_ - current_index_);
+        unsigned long count = (std::min)(requested_count, count_ - current_index_);
         for (unsigned long i = 0; i < count; ++i)
             out_elements[i] = items_[current_index_ + i];
         current_index_ += count;

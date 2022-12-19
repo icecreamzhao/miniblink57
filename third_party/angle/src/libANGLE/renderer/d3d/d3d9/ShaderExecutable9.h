@@ -12,20 +12,22 @@
 
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
 
-namespace rx {
+namespace rx
+{
 
-class ShaderExecutable9 : public ShaderExecutableD3D {
-public:
-    ShaderExecutable9(const void* function, size_t length, IDirect3DPixelShader9* executable);
-    ShaderExecutable9(const void* function, size_t length, IDirect3DVertexShader9* executable);
+class ShaderExecutable9 : public ShaderExecutableD3D
+{
+  public:
+    ShaderExecutable9(const void *function, size_t length, IDirect3DPixelShader9 *executable);
+    ShaderExecutable9(const void *function, size_t length, IDirect3DVertexShader9 *executable);
     virtual ~ShaderExecutable9();
 
-    IDirect3DPixelShader9* getPixelShader() const;
-    IDirect3DVertexShader9* getVertexShader() const;
+    IDirect3DPixelShader9 *getPixelShader() const;
+    IDirect3DVertexShader9 *getVertexShader() const;
 
-private:
-    IDirect3DPixelShader9* mPixelExecutable;
-    IDirect3DVertexShader9* mVertexExecutable;
+  private:
+    IDirect3DPixelShader9 *mPixelExecutable;
+    IDirect3DVertexShader9 *mVertexExecutable;
 };
 
 }

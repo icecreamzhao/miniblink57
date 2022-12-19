@@ -14,25 +14,28 @@
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
-#include "libANGLE/angletypes.h"
 
-namespace egl {
+namespace egl
+{
 class Surface;
 }
 
-namespace rx {
+namespace rx
+{
 // An implementation-specific object associated with an attachment.
 
-class FramebufferAttachmentRenderTarget : angle::NonCopyable {
-public:
-    FramebufferAttachmentRenderTarget() { }
-    virtual ~FramebufferAttachmentRenderTarget() { }
+class FramebufferAttachmentRenderTarget : angle::NonCopyable
+{
+  public:
+    FramebufferAttachmentRenderTarget() {}
+    virtual ~FramebufferAttachmentRenderTarget() {}
 };
 
 class FramebufferAttachmentObjectImpl;
 }
 
-namespace gl {
+namespace gl
+{
 class FramebufferAttachmentObject;
 class Renderbuffer;
 class Texture;
@@ -43,17 +46,18 @@ class Texture;
 // Note: Our old naming scheme used the term "Renderbuffer" for both GL renderbuffers and for
 // framebuffer attachments, which confused their usage.
 
-class FramebufferAttachment final {
-public:
+class FramebufferAttachment final
+{
+  public:
     FramebufferAttachment();
 
     FramebufferAttachment(GLenum type,
-        GLenum binding,
-        const ImageIndex& textureIndex,
-        FramebufferAttachmentObject* resource);
+                          GLenum binding,
+                          const ImageIndex &textureIndex,
+                          FramebufferAttachmentObject *resource);
 
-    FramebufferAttachment(const FramebufferAttachment& other);
-    FramebufferAttachment& operator=(const FramebufferAttachment& other);
+    FramebufferAttachment(const FramebufferAttachment &other);
+    FramebufferAttachment &operator=(const FramebufferAttachment &other);
 
     ~FramebufferAttachment();
 
@@ -63,26 +67,27 @@ public:
     //   - a Renderbuffer has a unique renderable target, and needs no target index
     //   - a Texture has targets for every image and uses an ImageIndex
     //   - a Surface has targets for Color and Depth/Stencil, and uses the attachment binding
-    class Target {
-    public:
+    class Target
+    {
+      public:
         Target();
-        Target(GLenum binding, const ImageIndex& imageIndex);
-        Target(const Target& other);
-        Target& operator=(const Target& other);
+        Target(GLenum binding, const ImageIndex &imageIndex);
+        Target(const Target &other);
+        Target &operator=(const Target &other);
 
         GLenum binding() const { return mBinding; }
-        const ImageIndex& textureIndex() const { return mTextureIndex; }
+        const ImageIndex &textureIndex() const { return mTextureIndex; }
 
-    private:
+      private:
         GLenum mBinding;
         ImageIndex mTextureIndex;
     };
 
     void detach();
     void attach(GLenum type,
-        GLenum binding,
-        const ImageIndex& textureIndex,
-        FramebufferAttachmentObject* resource);
+                GLenum binding,
+                const ImageIndex &textureIndex,
+                FramebufferAttachmentObject *resource);
 
     // Helper methods
     GLuint getRedSize() const;
@@ -101,67 +106,72 @@ public:
     GLuint id() const;
 
     // These methods are only legal to call on Texture attachments
-    const ImageIndex& getTextureImageIndex() const;
+    const ImageIndex &getTextureImageIndex() const;
     GLenum cubeMapFace() const;
     GLint mipLevel() const;
     GLint layer() const;
 
-    // The size of the underlying resource the attachment points to. The 'depth' value will
-    // correspond to a 3D texture depth or the layer count of a 2D array texture. For Surfaces and
-    // Renderbuffers, it will always be 1.
-    Extents getSize() const;
+    GLsizei getWidth() const;
+    GLsizei getHeight() const;
     GLenum getInternalFormat() const;
     GLsizei getSamples() const;
     GLenum type() const { return mType; }
     bool isAttached() const { return mType != GL_NONE; }
 
-    Renderbuffer* getRenderbuffer() const;
-    Texture* getTexture() const;
-    const egl::Surface* getSurface() const;
+    Renderbuffer *getRenderbuffer() const;
+    Texture *getTexture() const;
+    const egl::Surface *getSurface() const;
 
     // "T" must be static_castable from FramebufferAttachmentRenderTarget
     template <typename T>
-    gl::Error getRenderTarget(T** rtOut) const
+    gl::Error getRenderTarget(T **rtOut) const
     {
         // Cast through the pointer-to-pointer type
-        rx::FramebufferAttachmentRenderTarget* rtPtr = nullptr;
+        rx::FramebufferAttachmentRenderTarget *rtPtr = nullptr;
         gl::Error error = getRenderTarget(&rtPtr);
         *rtOut = static_cast<T*>(rtPtr);
         return error;
     }
 
-private:
-    gl::Error getRenderTarget(rx::FramebufferAttachmentRenderTarget** rtOut) const;
+  private:
+    gl::Error getRenderTarget(rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
     GLenum mType;
     Target mTarget;
-    FramebufferAttachmentObject* mResource;
+    FramebufferAttachmentObject *mResource;
 };
 
 // A base class for objects that FBO Attachments may point to.
-class FramebufferAttachmentObject {
-public:
-    FramebufferAttachmentObject() { }
-    virtual ~FramebufferAttachmentObject() { }
+class FramebufferAttachmentObject
+{
+  public:
+    FramebufferAttachmentObject() {}
+    virtual ~FramebufferAttachmentObject() {}
 
-    virtual Extents getAttachmentSize(const FramebufferAttachment::Target& target) const = 0;
-    virtual GLenum getAttachmentInternalFormat(const FramebufferAttachment::Target& target) const = 0;
-    virtual GLsizei getAttachmentSamples(const FramebufferAttachment::Target& target) const = 0;
+    virtual GLsizei getAttachmentWidth(const FramebufferAttachment::Target &target) const = 0;
+    virtual GLsizei getAttachmentHeight(const FramebufferAttachment::Target &target) const = 0;
+    virtual GLenum getAttachmentInternalFormat(const FramebufferAttachment::Target &target) const = 0;
+    virtual GLsizei getAttachmentSamples(const FramebufferAttachment::Target &target) const = 0;
 
     virtual void onAttach() = 0;
     virtual void onDetach() = 0;
     virtual GLuint getId() const = 0;
 
-    Error getAttachmentRenderTarget(const FramebufferAttachment::Target& target,
-        rx::FramebufferAttachmentRenderTarget** rtOut) const;
+    Error getAttachmentRenderTarget(const FramebufferAttachment::Target &target,
+                                    rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
-protected:
-    virtual rx::FramebufferAttachmentObjectImpl* getAttachmentImpl() const = 0;
+  protected:
+    virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;
 };
 
-inline Extents FramebufferAttachment::getSize() const
+inline GLsizei FramebufferAttachment::getWidth() const
 {
-    return mResource->getAttachmentSize(mTarget);
+    return mResource->getAttachmentWidth(mTarget);
+}
+
+inline GLsizei FramebufferAttachment::getHeight() const
+{
+    return mResource->getAttachmentHeight(mTarget);
 }
 
 inline GLenum FramebufferAttachment::getInternalFormat() const
@@ -174,32 +184,34 @@ inline GLsizei FramebufferAttachment::getSamples() const
     return mResource->getAttachmentSamples(mTarget);
 }
 
-inline gl::Error FramebufferAttachment::getRenderTarget(rx::FramebufferAttachmentRenderTarget** rtOut) const
+inline gl::Error FramebufferAttachment::getRenderTarget(rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
     return mResource->getAttachmentRenderTarget(mTarget, rtOut);
 }
 
 } // namespace gl
 
-namespace rx {
+namespace rx
+{
 
-class FramebufferAttachmentObjectImpl : angle::NonCopyable {
-public:
-    FramebufferAttachmentObjectImpl() { }
-    virtual ~FramebufferAttachmentObjectImpl() { }
+class FramebufferAttachmentObjectImpl : angle::NonCopyable
+{
+  public:
+    FramebufferAttachmentObjectImpl() {}
+    virtual ~FramebufferAttachmentObjectImpl() {}
 
-    virtual gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target& target,
-        FramebufferAttachmentRenderTarget** rtOut)
-        = 0;
+    virtual gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
+                                                FramebufferAttachmentRenderTarget **rtOut) = 0;
 };
 
 } // namespace rx
 
-namespace gl {
+namespace gl
+{
 
 inline Error FramebufferAttachmentObject::getAttachmentRenderTarget(
-    const FramebufferAttachment::Target& target,
-    rx::FramebufferAttachmentRenderTarget** rtOut) const
+    const FramebufferAttachment::Target &target,
+    rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
     return getAttachmentImpl()->getAttachmentRenderTarget(target, rtOut);
 }

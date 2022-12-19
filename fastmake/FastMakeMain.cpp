@@ -1812,7 +1812,7 @@ void qjsBuild()
     //     qjsRebuild("G:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
 
     // 马铁的代码目录结构
-         //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
+         qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "chromium_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "curl_build.js", cmd, kRebuildOptAll);
@@ -1823,7 +1823,7 @@ void qjsBuild()
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "v857_build.js", cmd, kRebuildOptAll);
-         qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptNotCompileOnlyLink);
+         //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptNotCompileOnlyLink);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
 }
 

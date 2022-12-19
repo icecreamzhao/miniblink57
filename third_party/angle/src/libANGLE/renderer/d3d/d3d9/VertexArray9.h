@@ -12,12 +12,14 @@
 #include "libANGLE/renderer/VertexArrayImpl.h"
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
-namespace rx {
+namespace rx
+{
 class Renderer9;
 
-class VertexArray9 : public VertexArrayImpl {
-public:
-    VertexArray9(const gl::VertexArray::Data& data)
+class VertexArray9 : public VertexArrayImpl
+{
+  public:
+    VertexArray9(const gl::VertexArray::Data &data)
         : VertexArrayImpl(data)
     {
     }

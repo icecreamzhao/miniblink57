@@ -13,9 +13,9 @@
 class TIntermNode;
 class TSymbolTable;
 
-void RemoveDynamicIndexing(TIntermNode* root,
-    unsigned int* temporaryIndex,
-    const TSymbolTable& symbolTable,
-    int shaderVersion);
+void RemoveDynamicIndexing(TIntermNode *root,
+                           unsigned int *temporaryIndex,
+                           const TSymbolTable &symbolTable,
+                           int shaderVersion);
 
-#endif // COMPILER_TRANSLATOR_REMOVEDYNAMICINDEXING_H_
+#endif  // COMPILER_TRANSLATOR_REMOVEDYNAMICINDEXING_H_

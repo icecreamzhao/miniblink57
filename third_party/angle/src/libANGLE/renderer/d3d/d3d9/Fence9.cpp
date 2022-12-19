@@ -7,15 +7,16 @@
 // Fence9.cpp: Defines the rx::FenceNV9 class.
 
 #include "libANGLE/renderer/d3d/d3d9/Fence9.h"
-#include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 #include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
+#include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
-namespace rx {
+namespace rx
+{
 
-FenceNV9::FenceNV9(Renderer9* renderer)
-    : FenceNVImpl()
-    , mRenderer(renderer)
-    , mQuery(NULL)
+FenceNV9::FenceNV9(Renderer9 *renderer)
+    : FenceNVImpl(),
+      mRenderer(renderer),
+      mQuery(NULL)
 {
 }
 
@@ -26,15 +27,18 @@ FenceNV9::~FenceNV9()
 
 gl::Error FenceNV9::set(GLenum condition)
 {
-    if (!mQuery) {
+    if (!mQuery)
+    {
         gl::Error error = mRenderer->allocateEventQuery(&mQuery);
-        if (error.isError()) {
+        if (error.isError())
+        {
             return error;
         }
     }
 
     HRESULT result = mQuery->Issue(D3DISSUE_END);
-    if (FAILED(result)) {
+    if (FAILED(result))
+    {
         ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY);
         SafeRelease(mQuery);
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to end event query, result: 0x%X.", result);
@@ -43,7 +47,7 @@ gl::Error FenceNV9::set(GLenum condition)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error FenceNV9::test(GLboolean* outFinished)
+gl::Error FenceNV9::test(GLboolean *outFinished)
 {
     return testHelper(true, outFinished);
 }
@@ -51,9 +55,11 @@ gl::Error FenceNV9::test(GLboolean* outFinished)
 gl::Error FenceNV9::finish()
 {
     GLboolean finished = GL_FALSE;
-    while (finished != GL_TRUE) {
+    while (finished != GL_TRUE)
+    {
         gl::Error error = testHelper(true, &finished);
-        if (error.isError()) {
+        if (error.isError())
+        {
             return error;
         }
 
@@ -63,17 +69,20 @@ gl::Error FenceNV9::finish()
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error FenceNV9::testHelper(bool flushCommandBuffer, GLboolean* outFinished)
+gl::Error FenceNV9::testHelper(bool flushCommandBuffer, GLboolean *outFinished)
 {
     ASSERT(mQuery);
 
     DWORD getDataFlags = (flushCommandBuffer ? D3DGETDATA_FLUSH : 0);
     HRESULT result = mQuery->GetData(NULL, 0, getDataFlags);
 
-    if (d3d9::isDeviceLostError(result)) {
+    if (d3d9::isDeviceLostError(result))
+    {
         mRenderer->notifyDeviceLost();
         return gl::Error(GL_OUT_OF_MEMORY, "Device was lost while querying result of an event query.");
-    } else if (FAILED(result)) {
+    }
+    else if (FAILED(result))
+    {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to get query data, result: 0x%X.", result);
     }
 

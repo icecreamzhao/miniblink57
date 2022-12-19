@@ -12,20 +12,20 @@
 #include "libANGLE/renderer/BufferImpl.h"
 #include "libANGLE/renderer/Renderer.h"
 
-namespace gl {
+namespace gl
+{
 
-Buffer::Buffer(rx::BufferImpl* impl, GLuint id)
-    : RefCountObject(id)
-    , mBuffer(impl)
-    , mLabel()
-    , mUsage(GL_STATIC_DRAW)
-    , mSize(0)
-    , mAccessFlags(0)
-    , mAccess(GL_WRITE_ONLY_OES)
-    , mMapped(GL_FALSE)
-    , mMapPointer(NULL)
-    , mMapOffset(0)
-    , mMapLength(0)
+Buffer::Buffer(rx::BufferImpl *impl, GLuint id)
+    : RefCountObject(id),
+      mBuffer(impl),
+      mUsage(GL_STATIC_DRAW),
+      mSize(0),
+      mAccessFlags(0),
+      mAccess(GL_WRITE_ONLY_OES),
+      mMapped(GL_FALSE),
+      mMapPointer(NULL),
+      mMapOffset(0),
+      mMapLength(0)
 {
 }
 
@@ -34,20 +34,11 @@ Buffer::~Buffer()
     SafeDelete(mBuffer);
 }
 
-void Buffer::setLabel(const std::string& label)
-{
-    mLabel = label;
-}
-
-const std::string& Buffer::getLabel() const
-{
-    return mLabel;
-}
-
-Error Buffer::bufferData(const void* data, GLsizeiptr size, GLenum usage)
+Error Buffer::bufferData(const void *data, GLsizeiptr size, GLenum usage)
 {
     gl::Error error = mBuffer->setData(data, size, usage);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -58,10 +49,11 @@ Error Buffer::bufferData(const void* data, GLsizeiptr size, GLenum usage)
     return error;
 }
 
-Error Buffer::bufferSubData(const void* data, GLsizeiptr size, GLintptr offset)
+Error Buffer::bufferSubData(const void *data, GLsizeiptr size, GLintptr offset)
 {
     gl::Error error = mBuffer->setSubData(data, size, offset);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -73,7 +65,8 @@ Error Buffer::bufferSubData(const void* data, GLsizeiptr size, GLintptr offset)
 Error Buffer::copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
 {
     gl::Error error = mBuffer->copySubData(source->getImplementation(), sourceOffset, destOffset, size);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 
@@ -87,7 +80,8 @@ Error Buffer::map(GLenum access)
     ASSERT(!mMapped);
 
     Error error = mBuffer->map(access, &mMapPointer);
-    if (error.isError()) {
+    if (error.isError())
+    {
         mMapPointer = NULL;
         return error;
     }
@@ -110,7 +104,8 @@ Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
     ASSERT(offset + length <= mSize);
 
     Error error = mBuffer->mapRange(offset, length, access, &mMapPointer);
-    if (error.isError()) {
+    if (error.isError())
+    {
         mMapPointer = NULL;
         return error;
     }
@@ -126,19 +121,21 @@ Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
     // no update for ES3 and the GL_READ_ONLY and GL_READ_WRITE enums don't exist for ES,
     // we cannot properly set GL_BUFFER_ACCESS_OES when glMapBufferRange is called.
 
-    if ((access & GL_MAP_WRITE_BIT) > 0) {
+    if ((access & GL_MAP_WRITE_BIT) > 0)
+    {
         mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(length));
     }
 
     return error;
 }
 
-Error Buffer::unmap(GLboolean* result)
+Error Buffer::unmap(GLboolean *result)
 {
     ASSERT(mMapped);
 
     Error error = mBuffer->unmap(result);
-    if (error.isError()) {
+    if (error.isError())
+    {
         *result = GL_FALSE;
         return error;
     }
@@ -164,17 +161,19 @@ void Buffer::onPixelUnpack()
 }
 
 Error Buffer::getIndexRange(GLenum type,
-    size_t offset,
-    size_t count,
-    bool primitiveRestartEnabled,
-    IndexRange* outRange) const
+                            size_t offset,
+                            size_t count,
+                            bool primitiveRestartEnabled,
+                            IndexRange *outRange) const
 {
-    if (mIndexRangeCache.findRange(type, offset, count, primitiveRestartEnabled, outRange)) {
+    if (mIndexRangeCache.findRange(type, offset, count, primitiveRestartEnabled, outRange))
+    {
         return gl::Error(GL_NO_ERROR);
     }
 
     Error error = mBuffer->getIndexRange(type, offset, count, primitiveRestartEnabled, outRange);
-    if (error.isError()) {
+    if (error.isError())
+    {
         return error;
     }
 

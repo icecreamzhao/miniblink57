@@ -8,7 +8,8 @@
 
 #include "common/mathutil.h"
 
-namespace gl {
+namespace gl
+{
 
 const static unsigned g_mantissa[2048] = {
     0x00000000,
@@ -2201,3 +2202,4 @@ float float16ToFloat32(unsigned short h)
     return bitCast<float>(i32);
 }
 }
+

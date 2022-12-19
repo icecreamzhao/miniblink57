@@ -131,6 +131,12 @@ void CRYPTO_poly1305_init(poly1305_state *state, const uint8_t key[32]) {
   st->leftover = 0;
 }
 
+static __inline__ __m128i __DEFAULT_FN_ATTRS
+_mm_load_si128(__m128i const* __p)
+{
+    return *__p;
+}
+
 static void poly1305_first_block(poly1305_state_internal *st,
                                  const uint8_t *m) {
   const xmmi MMASK = _mm_load_si128((const xmmi *)poly1305_x64_sse2_message_mask);

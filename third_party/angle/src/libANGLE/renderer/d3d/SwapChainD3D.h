@@ -10,8 +10,8 @@
 #ifndef LIBANGLE_RENDERER_D3D_SWAPCHAIND3D_H_
 #define LIBANGLE_RENDERER_D3D_SWAPCHAIND3D_H_
 
-#include <EGL/egl.h>
 #include <GLES2/gl2.h>
+#include <EGL/egl.h>
 
 #include "common/angleutils.h"
 #include "common/platform.h"
@@ -23,16 +23,15 @@
 #define ANGLE_FORCE_VSYNC_OFF 0
 #endif
 
-namespace rx {
+namespace rx
+{
 class RenderTargetD3D;
 
-class SwapChainD3D : angle::NonCopyable {
-public:
+class SwapChainD3D : angle::NonCopyable
+{
+  public:
     SwapChainD3D(rx::NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat)
-        : mNativeWindow(nativeWindow)
-        , mOffscreenRenderTargetFormat(backBufferFormat)
-        , mDepthBufferFormat(depthBufferFormat)
-        , mShareHandle(shareHandle)
+        : mNativeWindow(nativeWindow), mOffscreenRenderTargetFormat(backBufferFormat), mDepthBufferFormat(depthBufferFormat), mShareHandle(shareHandle)
     {
     }
 
@@ -43,17 +42,17 @@ public:
     virtual EGLint swapRect(EGLint x, EGLint y, EGLint width, EGLint height) = 0;
     virtual void recreate() = 0;
 
-    virtual RenderTargetD3D* getColorRenderTarget() = 0;
-    virtual RenderTargetD3D* getDepthStencilRenderTarget() = 0;
+    virtual RenderTargetD3D *getColorRenderTarget() = 0;
+    virtual RenderTargetD3D *getDepthStencilRenderTarget() = 0;
 
     GLenum GetRenderTargetInternalFormat() const { return mOffscreenRenderTargetFormat; }
     GLenum GetDepthBufferInternalFormat() const { return mDepthBufferFormat; }
 
     HANDLE getShareHandle() { return mShareHandle; }
-    virtual void* getKeyedMutex() = 0;
+    virtual void *getKeyedMutex() = 0;
 
-protected:
-    rx::NativeWindow mNativeWindow; // Handler for the Window that the surface is created for.
+  protected:
+    rx::NativeWindow mNativeWindow;  // Handler for the Window that the surface is created for.
     const GLenum mOffscreenRenderTargetFormat;
     const GLenum mDepthBufferFormat;
 

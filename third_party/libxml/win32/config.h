@@ -8,8 +8,8 @@
 
 #if defined(_WIN32_WCE)
 #undef HAVE_ERRNO_H
-#include "wincecompat.h"
 #include <windows.h>
+#include "wincecompat.h"
 #else
 #define HAVE_SYS_STAT_H
 #define HAVE__STAT
@@ -17,8 +17,8 @@
 #define HAVE_STDLIB_H
 #define HAVE_TIME_H
 #define HAVE_FCNTL_H
-#include <direct.h>
 #include <io.h>
+#include <direct.h>
 #endif
 
 #include <libxml/xmlversion.h>
@@ -50,7 +50,7 @@
    function. */
 #ifndef isinf
 #define isinf(d) ((_fpclass(d) == _FPCLASS_PINF) ? 1 \
-                                                 : ((_fpclass(d) == _FPCLASS_NINF) ? -1 : 0))
+	: ((_fpclass(d) == _FPCLASS_NINF) ? -1 : 0))
 #endif
 /* _isnan(x) returns nonzero if (x == NaN) and zero otherwise. */
 #ifndef isnan
@@ -58,10 +58,9 @@
 #endif
 #else /* _MSC_VER */
 #ifndef isinf
-static int isinf(double d)
-{
+static int isinf (double d) {
     int expon = 0;
-    double val = frexp(d, &expon);
+    double val = frexp (d, &expon);
     if (expon == 1025) {
         if (val == 0.5) {
             return 1;
@@ -76,10 +75,9 @@ static int isinf(double d)
 }
 #endif
 #ifndef isnan
-static int isnan(double d)
-{
+static int isnan (double d) {
     int expon = 0;
-    double val = frexp(d, &expon);
+    double val = frexp (d, &expon);
     if (expon == 1025) {
         if (val == 0.5) {
             return 0;
@@ -96,13 +94,15 @@ static int isnan(double d)
 #endif /* _MSC_VER */
 
 #if defined(_MSC_VER)
-#define mkdir(p, m) _mkdir(p)
-//#define snprintf _snprintf
+#define mkdir(p,m) _mkdir(p)
+#if _MSC_VER < 1900
+#define snprintf _snprintf
+#endif
 #if _MSC_VER < 1500
-#define vsnprintf(b, c, f, a) _vsnprintf(b, c, f, a)
+#define vsnprintf(b,c,f,a) _vsnprintf(b,c,f,a)
 #endif
 #elif defined(__MINGW32__)
-#define mkdir(p, m) _mkdir(p)
+#define mkdir(p,m) _mkdir(p)
 #endif
 
 /* Threading API to use should be specified here for compatibility reasons.
@@ -123,3 +123,4 @@ static int isnan(double d)
 #endif
 
 #endif /* __LIBXML_WIN32_CONFIG__ */
+

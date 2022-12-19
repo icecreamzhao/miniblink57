@@ -18,43 +18,46 @@
 class TInfoSinkBase;
 class TScopeBracket;
 
-namespace sh {
+namespace sh
+{
 
 // This helper class assists structure and interface block definitions in determining
 // how to pack std140 structs within HLSL's packing rules.
-class Std140PaddingHelper {
-public:
-    explicit Std140PaddingHelper(const std::map<TString, int>& structElementIndexes,
-        unsigned int* uniqueCounter);
-    Std140PaddingHelper(const Std140PaddingHelper& other);
-    Std140PaddingHelper& operator=(const Std140PaddingHelper& other);
+class Std140PaddingHelper
+{
+  public:
+    explicit Std140PaddingHelper(const std::map<TString, int> &structElementIndexes,
+                                 unsigned int *uniqueCounter);
+    Std140PaddingHelper(const Std140PaddingHelper &other);
+    Std140PaddingHelper &operator=(const Std140PaddingHelper &other);
 
     int elementIndex() const { return mElementIndex; }
-    int prePadding(const TType& type);
-    TString prePaddingString(const TType& type);
-    TString postPaddingString(const TType& type, bool useHLSLRowMajorPacking);
+    int prePadding(const TType &type);
+    TString prePaddingString(const TType &type);
+    TString postPaddingString(const TType &type, bool useHLSLRowMajorPacking);
 
-private:
+  private:
     TString next();
 
-    unsigned* mPaddingCounter;
+    unsigned *mPaddingCounter;
     int mElementIndex;
-    const std::map<TString, int>* mStructElementIndexes;
+    const std::map<TString, int> *mStructElementIndexes;
 };
 
-class StructureHLSL : angle::NonCopyable {
-public:
+class StructureHLSL : angle::NonCopyable
+{
+  public:
     StructureHLSL();
 
-    void addConstructor(const TType& type, const TString& name, const TIntermSequence* parameters);
+    void addConstructor(const TType &type, const TString &name, const TIntermSequence *parameters);
     std::string structsHeader() const;
 
-    TString defineQualified(const TStructure& structure, bool useHLSLRowMajorPacking, bool useStd140Packing);
-    static TString defineNameless(const TStructure& structure);
+    TString defineQualified(const TStructure &structure, bool useHLSLRowMajorPacking, bool useStd140Packing);
+    static TString defineNameless(const TStructure &structure);
 
     Std140PaddingHelper getPaddingHelper();
 
-private:
+  private:
     unsigned mUniquePaddingCounter;
 
     std::map<TString, int> mStd140StructElementIndexes;
@@ -68,9 +71,9 @@ private:
     typedef std::vector<TString> StructDeclarations;
     StructDeclarations mStructDeclarations;
 
-    void storeStd140ElementIndex(const TStructure& structure, bool useHLSLRowMajorPacking);
-    static TString define(const TStructure& structure, bool useHLSLRowMajorPacking,
-        bool useStd140Packing, Std140PaddingHelper* padHelper);
+    void storeStd140ElementIndex(const TStructure &structure, bool useHLSLRowMajorPacking);
+    static TString define(const TStructure &structure, bool useHLSLRowMajorPacking,
+                         bool useStd140Packing, Std140PaddingHelper *padHelper);
 };
 
 }

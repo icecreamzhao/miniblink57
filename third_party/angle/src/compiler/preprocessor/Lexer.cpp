@@ -6,10 +6,11 @@
 
 #include "Lexer.h"
 
-namespace pp {
+namespace pp
+{
 
 Lexer::~Lexer()
 {
 }
 
-} // namespace pp
+}  // namespace pp

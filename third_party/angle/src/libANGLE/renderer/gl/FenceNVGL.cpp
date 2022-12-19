@@ -11,11 +11,13 @@
 #include "common/debug.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 
-namespace rx {
 
-FenceNVGL::FenceNVGL(const FunctionsGL* functions)
-    : FenceNVImpl()
-    , mFunctions(functions)
+namespace rx
+{
+
+FenceNVGL::FenceNVGL(const FunctionsGL *functions)
+    : FenceNVImpl(),
+      mFunctions(functions)
 {
     mFunctions->genFencesNV(1, &mFence);
 }
@@ -33,7 +35,7 @@ gl::Error FenceNVGL::set(GLenum condition)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error FenceNVGL::test(GLboolean* outFinished)
+gl::Error FenceNVGL::test(GLboolean *outFinished)
 {
     ASSERT(outFinished);
     *outFinished = mFunctions->testFenceNV(mFence);

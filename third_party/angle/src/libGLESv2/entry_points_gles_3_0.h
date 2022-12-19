@@ -12,7 +12,8 @@
 #include <GLES3/gl3.h>
 #include <export.h>
 
-namespace gl {
+namespace gl
+{
 
 ANGLE_EXPORT void GL_APIENTRY ReadBuffer(GLenum mode);
 ANGLE_EXPORT void GL_APIENTRY DrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid* indices);
@@ -61,7 +62,7 @@ ANGLE_EXPORT void GL_APIENTRY VertexAttribI4ui(GLuint index, GLuint x, GLuint y,
 ANGLE_EXPORT void GL_APIENTRY VertexAttribI4iv(GLuint index, const GLint* v);
 ANGLE_EXPORT void GL_APIENTRY VertexAttribI4uiv(GLuint index, const GLuint* v);
 ANGLE_EXPORT void GL_APIENTRY GetUniformuiv(GLuint program, GLint location, GLuint* params);
-ANGLE_EXPORT GLint GL_APIENTRY GetFragDataLocation(GLuint program, const GLchar* name);
+ANGLE_EXPORT GLint GL_APIENTRY GetFragDataLocation(GLuint program, const GLchar *name);
 ANGLE_EXPORT void GL_APIENTRY Uniform1ui(GLint location, GLuint v0);
 ANGLE_EXPORT void GL_APIENTRY Uniform2ui(GLint location, GLuint v0, GLuint v1);
 ANGLE_EXPORT void GL_APIENTRY Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2);
@@ -74,7 +75,7 @@ ANGLE_EXPORT void GL_APIENTRY ClearBufferiv(GLenum buffer, GLint drawbuffer, con
 ANGLE_EXPORT void GL_APIENTRY ClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint* value);
 ANGLE_EXPORT void GL_APIENTRY ClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat* value);
 ANGLE_EXPORT void GL_APIENTRY ClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
-ANGLE_EXPORT const GLubyte* GL_APIENTRY GetStringi(GLenum name, GLuint index);
+ANGLE_EXPORT const GLubyte *GL_APIENTRY GetStringi(GLenum name, GLuint index);
 ANGLE_EXPORT void GL_APIENTRY CopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
 ANGLE_EXPORT void GL_APIENTRY GetUniformIndices(GLuint program, GLsizei uniformCount, const GLchar* const* uniformNames, GLuint* uniformIndices);
 ANGLE_EXPORT void GL_APIENTRY GetActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params);

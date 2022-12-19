@@ -11,27 +11,29 @@
 
 #include "libANGLE/renderer/SurfaceImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 class RendererGL;
 
-class SurfaceGL : public SurfaceImpl {
-public:
-    SurfaceGL(RendererGL* renderer);
+class SurfaceGL : public SurfaceImpl
+{
+  public:
+    SurfaceGL(RendererGL *renderer);
     ~SurfaceGL() override;
 
-    gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target& target,
-        FramebufferAttachmentRenderTarget** rtOut) override
+    gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
+                                        FramebufferAttachmentRenderTarget **rtOut) override
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Not supported on OpenGL");
     }
 
-    FramebufferImpl* createDefaultFramebuffer(const gl::Framebuffer::Data& data) override;
+    FramebufferImpl *createDefaultFramebuffer(const gl::Framebuffer::Data &data) override;
 
     virtual egl::Error makeCurrent() = 0;
 
-private:
-    RendererGL* mRenderer;
+  private:
+    RendererGL *mRenderer;
 };
 
 }

@@ -7,15 +7,13 @@
 #ifndef COMPILER_TRANSLATOR_DEPGRAPH_DEPENDENCYGRAPHOUTPUT_H_
 #define COMPILER_TRANSLATOR_DEPGRAPH_DEPENDENCYGRAPHOUTPUT_H_
 
-#include "compiler/translator/InfoSink.h"
 #include "compiler/translator/depgraph/DependencyGraph.h"
+#include "compiler/translator/InfoSink.h"
 
-class TDependencyGraphOutput : public TDependencyGraphTraverser {
-public:
-    TDependencyGraphOutput(TInfoSinkBase& sink)
-        : mSink(sink)
-    {
-    }
+class TDependencyGraphOutput : public TDependencyGraphTraverser
+{
+  public:
+    TDependencyGraphOutput(TInfoSinkBase& sink) : mSink(sink) {}
     void visitSymbol(TGraphSymbol* symbol) override;
     void visitArgument(TGraphArgument* parameter) override;
     void visitFunctionCall(TGraphFunctionCall* functionCall) override;
@@ -24,11 +22,10 @@ public:
     void visitLogicalOp(TGraphLogicalOp* logicalOp) override;
 
     void outputAllSpanningTrees(TDependencyGraph& graph);
-
-private:
+  private:
     void outputIndentation();
 
     TInfoSinkBase& mSink;
 };
 
-#endif // COMPILER_TRANSLATOR_DEPGRAPH_DEPENDENCYGRAPHOUTPUT_H_
+#endif  // COMPILER_TRANSLATOR_DEPGRAPH_DEPENDENCYGRAPHOUTPUT_H_

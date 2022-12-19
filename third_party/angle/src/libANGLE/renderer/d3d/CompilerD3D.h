@@ -12,17 +12,19 @@
 #include "libANGLE/renderer/CompilerImpl.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 
-namespace rx {
+namespace rx
+{
 
-class CompilerD3D : public CompilerImpl {
-public:
-    CompilerD3D(ShShaderOutput translatorOutputType);
-    ~CompilerD3D() override { }
+class CompilerD3D : public CompilerImpl
+{
+  public:
+    CompilerD3D(RendererClass rendererClass);
+    ~CompilerD3D() override {}
 
     gl::Error release() override { return gl::Error(GL_NO_ERROR); }
     ShShaderOutput getTranslatorOutputType() const override { return mTranslatorOutputType; }
 
-private:
+  private:
     ShShaderOutput mTranslatorOutputType;
 };
 

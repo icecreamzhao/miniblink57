@@ -15,26 +15,28 @@
 #include "Token.h"
 #include "Tokenizer.h"
 
-namespace pp {
+namespace pp
+{
 
-struct PreprocessorImpl {
-    Diagnostics* diagnostics;
+struct PreprocessorImpl
+{
+    Diagnostics *diagnostics;
     MacroSet macroSet;
     Tokenizer tokenizer;
     DirectiveParser directiveParser;
     MacroExpander macroExpander;
 
-    PreprocessorImpl(Diagnostics* diag, DirectiveHandler* directiveHandler)
-        : diagnostics(diag)
-        , tokenizer(diag)
-        , directiveParser(&tokenizer, &macroSet, diag, directiveHandler)
-        , macroExpander(&directiveParser, &macroSet, diag, false)
+    PreprocessorImpl(Diagnostics *diag, DirectiveHandler *directiveHandler)
+        : diagnostics(diag),
+          tokenizer(diag),
+          directiveParser(&tokenizer, &macroSet, diag, directiveHandler),
+          macroExpander(&directiveParser, &macroSet, diag, false)
     {
     }
 };
 
-Preprocessor::Preprocessor(Diagnostics* diagnostics,
-    DirectiveHandler* directiveHandler)
+Preprocessor::Preprocessor(Diagnostics *diagnostics,
+                           DirectiveHandler *directiveHandler)
 {
     mImpl = new PreprocessorImpl(diagnostics, directiveHandler);
 }
@@ -45,8 +47,8 @@ Preprocessor::~Preprocessor()
 }
 
 bool Preprocessor::init(size_t count,
-    const char* const string[],
-    const int length[])
+                        const char * const string[],
+                        const int length[])
 {
     static const int kDefaultGLSLVersion = 100;
 
@@ -59,32 +61,34 @@ bool Preprocessor::init(size_t count,
     return mImpl->tokenizer.init(count, string, length);
 }
 
-void Preprocessor::predefineMacro(const char* name, int value)
+void Preprocessor::predefineMacro(const char *name, int value)
 {
     PredefineMacro(&mImpl->macroSet, name, value);
 }
 
-void Preprocessor::lex(Token* token)
+void Preprocessor::lex(Token *token)
 {
     bool validToken = false;
-    while (!validToken) {
+    while (!validToken)
+    {
         mImpl->macroExpander.lex(token);
-        switch (token->type) {
-        // We should not be returning internal preprocessing tokens.
-        // Convert preprocessing tokens to compiler tokens or report
-        // diagnostics.
-        case Token::PP_HASH:
+        switch (token->type)
+        {
+          // We should not be returning internal preprocessing tokens.
+          // Convert preprocessing tokens to compiler tokens or report
+          // diagnostics.
+          case Token::PP_HASH:
             assert(false);
             break;
-        case Token::PP_NUMBER:
+          case Token::PP_NUMBER:
             mImpl->diagnostics->report(Diagnostics::PP_INVALID_NUMBER,
-                token->location, token->text);
+                                       token->location, token->text);
             break;
-        case Token::PP_OTHER:
+          case Token::PP_OTHER:
             mImpl->diagnostics->report(Diagnostics::PP_INVALID_CHARACTER,
-                token->location, token->text);
+                                       token->location, token->text);
             break;
-        default:
+          default:
             validToken = true;
             break;
         }
@@ -96,4 +100,4 @@ void Preprocessor::setMaxTokenSize(size_t maxTokenSize)
     mImpl->tokenizer.setMaxTokenSize(maxTokenSize);
 }
 
-} // namespace pp
+}  // namespace pp

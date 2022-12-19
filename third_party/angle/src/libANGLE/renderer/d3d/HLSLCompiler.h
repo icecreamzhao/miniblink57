@@ -5,27 +5,30 @@
 
 #include "common/angleutils.h"
 #include "common/platform.h"
-#include "libANGLE/Error.h"
 
-#include <string>
 #include <vector>
+#include <string>
 
-namespace gl {
+namespace gl
+{
 class InfoLog;
 }
 
-namespace rx {
+namespace rx
+{
 
-struct CompileConfig {
+struct CompileConfig
+{
     UINT flags;
     std::string name;
 
     CompileConfig();
-    CompileConfig(UINT flags, const std::string& name);
+    CompileConfig(UINT flags, const std::string &name);
 };
 
-class HLSLCompiler : angle::NonCopyable {
-public:
+class HLSLCompiler : angle::NonCopyable
+{
+  public:
     HLSLCompiler();
     ~HLSLCompiler();
 
@@ -33,13 +36,13 @@ public:
 
     // Attempt to compile a HLSL shader using the supplied configurations, may output a NULL compiled blob
     // even if no GL errors are returned.
-    gl::Error compileToBinary(gl::InfoLog& infoLog, const std::string& hlsl, const std::string& profile,
-        const std::vector<CompileConfig>& configs, const D3D_SHADER_MACRO* overrideMacros,
-        ID3DBlob** outCompiledBlob, std::string* outDebugInfo);
+    gl::Error compileToBinary(gl::InfoLog &infoLog, const std::string &hlsl, const std::string &profile,
+                              const std::vector<CompileConfig> &configs, const D3D_SHADER_MACRO *overrideMacros,
+                              ID3DBlob **outCompiledBlob, std::string *outDebugInfo);
 
-    gl::Error disassembleBinary(ID3DBlob* shaderBinary, std::string* disassemblyOut);
+    gl::Error disassembleBinary(ID3DBlob *shaderBinary, std::string *disassemblyOut);
 
-private:
+  private:
     gl::Error initialize();
 
     bool mInitialized;

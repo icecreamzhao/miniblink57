@@ -15,17 +15,34 @@
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
 
-namespace rx {
+namespace rx
+{
 
 ImageD3D::ImageD3D()
-    : mWidth(0)
-    , mHeight(0)
-    , mDepth(0)
-    , mInternalFormat(GL_NONE)
-    , mRenderable(false)
-    , mTarget(GL_NONE)
-    , mDirty(false)
+    : mWidth(0),
+      mHeight(0),
+      mDepth(0),
+      mInternalFormat(GL_NONE),
+      mRenderable(false),
+      mTarget(GL_NONE),
+      mDirty(false)
 {
 }
 
-} // namespace rx
+gl::Error ImageD3D::copy(const gl::Offset &destOffset, const gl::Rectangle &sourceArea, const gl::Framebuffer *source)
+{
+    const gl::FramebufferAttachment *srcAttachment = source->getReadColorbuffer();
+    ASSERT(srcAttachment);
+
+    RenderTargetD3D *renderTarget = NULL;
+    gl::Error error = srcAttachment->getRenderTarget(&renderTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ASSERT(renderTarget);
+    return copy(destOffset, sourceArea, renderTarget);
+}
+
+}

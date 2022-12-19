@@ -17,61 +17,65 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
 
-namespace rx {
+namespace rx
+{
 struct Renderer11DeviceCaps;
 
-namespace d3d11 {
+namespace d3d11
+{
 
-    typedef std::map<std::pair<GLenum, GLenum>, ColorCopyFunction> FastCopyFunctionMap;
-    typedef bool (*NativeMipmapGenerationSupportFunction)(D3D_FEATURE_LEVEL);
+typedef std::map<std::pair<GLenum, GLenum>, ColorCopyFunction> FastCopyFunctionMap;
+typedef bool (*NativeMipmapGenerationSupportFunction)(D3D_FEATURE_LEVEL);
 
-    struct DXGIFormat {
-        DXGIFormat();
+struct DXGIFormat
+{
+    DXGIFormat();
 
-        GLuint pixelBytes;
-        GLuint blockWidth;
-        GLuint blockHeight;
+    GLuint pixelBytes;
+    GLuint blockWidth;
+    GLuint blockHeight;
 
-        GLuint redBits;
-        GLuint greenBits;
-        GLuint blueBits;
-        GLuint alphaBits;
-        GLuint sharedBits;
+    GLuint redBits;
+    GLuint greenBits;
+    GLuint blueBits;
+    GLuint alphaBits;
+    GLuint sharedBits;
 
-        GLuint depthBits;
-        GLuint depthOffset;
-        GLuint stencilBits;
-        GLuint stencilOffset;
+    GLuint depthBits;
+    GLuint depthOffset;
+    GLuint stencilBits;
+    GLuint stencilOffset;
 
-        GLenum internalFormat;
-        GLenum componentType;
+    GLenum internalFormat;
+    GLenum componentType;
 
-        MipGenerationFunction mipGenerationFunction;
-        ColorReadFunction colorReadFunction;
+    MipGenerationFunction mipGenerationFunction;
+    ColorReadFunction colorReadFunction;
 
-        FastCopyFunctionMap fastCopyFunctions;
+    FastCopyFunctionMap fastCopyFunctions;
 
-        NativeMipmapGenerationSupportFunction nativeMipmapSupport;
+    NativeMipmapGenerationSupportFunction nativeMipmapSupport;
 
-        ColorCopyFunction getFastCopyFunction(GLenum format, GLenum type) const;
-    };
-    const DXGIFormat& GetDXGIFormatInfo(DXGI_FORMAT format);
+    ColorCopyFunction getFastCopyFunction(GLenum format, GLenum type) const;
+};
+const DXGIFormat &GetDXGIFormatInfo(DXGI_FORMAT format);
 
-    struct VertexFormat {
-        VertexFormat();
-        VertexFormat(VertexConversionType conversionType,
-            DXGI_FORMAT nativeFormat,
-            VertexCopyFunction copyFunction);
+struct VertexFormat
+{
+    VertexFormat();
+    VertexFormat(VertexConversionType conversionType,
+                 DXGI_FORMAT nativeFormat,
+                 VertexCopyFunction copyFunction);
 
-        VertexConversionType conversionType;
-        DXGI_FORMAT nativeFormat;
-        VertexCopyFunction copyFunction;
-    };
-    const VertexFormat& GetVertexFormatInfo(gl::VertexFormatType vertexFormatType,
-        D3D_FEATURE_LEVEL featureLevel);
+    VertexConversionType conversionType;
+    DXGI_FORMAT nativeFormat;
+    VertexCopyFunction copyFunction;
+};
+const VertexFormat &GetVertexFormatInfo(gl::VertexFormatType vertexFormatType,
+                                        D3D_FEATURE_LEVEL featureLevel);
 
-} // namespace d3d11
+}  // namespace d3d11
 
-} // namespace rx
+}  // namespace rx
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_FORMATUTILS11_H_

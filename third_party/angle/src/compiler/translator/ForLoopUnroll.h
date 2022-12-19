@@ -15,37 +15,37 @@
 //   2) kForLoopWithSamplerArrayIndex: unroll where a sampler array index
 //      is also the loop integer index, and reject and fail a compile
 //      where a sampler array index is also the loop float index.
-class ForLoopUnrollMarker : public TIntermTraverser {
-public:
-    enum UnrollCondition {
+class ForLoopUnrollMarker : public TIntermTraverser
+{
+  public:
+    enum UnrollCondition
+    {
         kIntegerIndex,
         kSamplerArrayIndex
     };
 
-    ForLoopUnrollMarker(UnrollCondition condition, bool hasRunLoopValidation)
-        : TIntermTraverser(true, false, false)
-        , mUnrollCondition(condition)
-        , mSamplerArrayIndexIsFloatLoopIndex(false)
-        , mVisitSamplerArrayIndexNodeInsideLoop(false)
-        , mHasRunLoopValidation(hasRunLoopValidation)
+    ForLoopUnrollMarker(UnrollCondition condition)
+        : TIntermTraverser(true, false, false),
+          mUnrollCondition(condition),
+          mSamplerArrayIndexIsFloatLoopIndex(false),
+          mVisitSamplerArrayIndexNodeInsideLoop(false)
     {
     }
 
-    bool visitBinary(Visit, TIntermBinary* node) override;
-    bool visitLoop(Visit, TIntermLoop* node) override;
-    void visitSymbol(TIntermSymbol* node) override;
+    bool visitBinary(Visit, TIntermBinary *node) override;
+    bool visitLoop(Visit, TIntermLoop *node) override;
+    void visitSymbol(TIntermSymbol *node) override;
 
     bool samplerArrayIndexIsFloatLoopIndex() const
     {
         return mSamplerArrayIndexIsFloatLoopIndex;
     }
 
-private:
+  private:
     UnrollCondition mUnrollCondition;
     TLoopStack mLoopStack;
     bool mSamplerArrayIndexIsFloatLoopIndex;
     bool mVisitSamplerArrayIndexNodeInsideLoop;
-    bool mHasRunLoopValidation;
 };
 
 #endif // COMPILER_TRANSLATOR_FORLOOPUNROLL_H_

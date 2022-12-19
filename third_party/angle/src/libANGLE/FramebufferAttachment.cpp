@@ -17,29 +17,30 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
 
-namespace gl {
+namespace gl
+{
 
 ////// FramebufferAttachment::Target Implementation //////
 
 FramebufferAttachment::Target::Target()
-    : mBinding(GL_NONE)
-    , mTextureIndex(ImageIndex::MakeInvalid())
+    : mBinding(GL_NONE),
+      mTextureIndex(ImageIndex::MakeInvalid())
 {
 }
 
-FramebufferAttachment::Target::Target(GLenum binding, const ImageIndex& imageIndex)
-    : mBinding(binding)
-    , mTextureIndex(imageIndex)
+FramebufferAttachment::Target::Target(GLenum binding, const ImageIndex &imageIndex)
+    : mBinding(binding),
+      mTextureIndex(imageIndex)
 {
 }
 
-FramebufferAttachment::Target::Target(const Target& other)
-    : mBinding(other.mBinding)
-    , mTextureIndex(other.mTextureIndex)
+FramebufferAttachment::Target::Target(const Target &other)
+    : mBinding(other.mBinding),
+      mTextureIndex(other.mTextureIndex)
 {
 }
 
-FramebufferAttachment::Target& FramebufferAttachment::Target::operator=(const Target& other)
+FramebufferAttachment::Target &FramebufferAttachment::Target::operator=(const Target &other)
 {
     this->mBinding = other.mBinding;
     this->mTextureIndex = other.mTextureIndex;
@@ -49,27 +50,26 @@ FramebufferAttachment::Target& FramebufferAttachment::Target::operator=(const Ta
 ////// FramebufferAttachment Implementation //////
 
 FramebufferAttachment::FramebufferAttachment()
-    : mType(GL_NONE)
-    , mResource(nullptr)
+    : mType(GL_NONE), mResource(nullptr)
 {
 }
 
 FramebufferAttachment::FramebufferAttachment(GLenum type,
-    GLenum binding,
-    const ImageIndex& textureIndex,
-    FramebufferAttachmentObject* resource)
+                                             GLenum binding,
+                                             const ImageIndex &textureIndex,
+                                             FramebufferAttachmentObject *resource)
     : mResource(nullptr)
 {
     attach(type, binding, textureIndex, resource);
 }
 
-FramebufferAttachment::FramebufferAttachment(const FramebufferAttachment& other)
+FramebufferAttachment::FramebufferAttachment(const FramebufferAttachment &other)
     : mResource(nullptr)
 {
     attach(other.mType, other.mTarget.binding(), other.mTarget.textureIndex(), other.mResource);
 }
 
-FramebufferAttachment& FramebufferAttachment::operator=(const FramebufferAttachment& other)
+FramebufferAttachment &FramebufferAttachment::operator=(const FramebufferAttachment &other)
 {
     attach(other.mType, other.mTarget.binding(), other.mTarget.textureIndex(), other.mResource);
     return *this;
@@ -83,7 +83,8 @@ FramebufferAttachment::~FramebufferAttachment()
 void FramebufferAttachment::detach()
 {
     mType = GL_NONE;
-    if (mResource != nullptr) {
+    if (mResource != nullptr)
+    {
         mResource->onDetach();
         mResource = nullptr;
     }
@@ -93,17 +94,19 @@ void FramebufferAttachment::detach()
 }
 
 void FramebufferAttachment::attach(GLenum type,
-    GLenum binding,
-    const ImageIndex& textureIndex,
-    FramebufferAttachmentObject* resource)
+                                   GLenum binding,
+                                   const ImageIndex &textureIndex,
+                                   FramebufferAttachmentObject *resource)
 {
     mType = type;
     mTarget = Target(binding, textureIndex);
 
-    if (resource) {
+    if (resource)
+    {
         resource->onAttach();
     }
-    if (mResource != nullptr) {
+    if (mResource != nullptr)
+    {
         mResource->onDetach();
     }
     mResource = resource;
@@ -154,7 +157,7 @@ GLuint FramebufferAttachment::id() const
     return mResource->getId();
 }
 
-const ImageIndex& FramebufferAttachment::getTextureImageIndex() const
+const ImageIndex &FramebufferAttachment::getTextureImageIndex() const
 {
     ASSERT(type() == GL_TEXTURE);
     return mTarget.textureIndex();
@@ -164,7 +167,7 @@ GLenum FramebufferAttachment::cubeMapFace() const
 {
     ASSERT(mType == GL_TEXTURE);
 
-    const auto& index = mTarget.textureIndex();
+    const auto &index = mTarget.textureIndex();
     return IsCubeMapTextureTarget(index.type) ? index.type : GL_NONE;
 }
 
@@ -178,25 +181,26 @@ GLint FramebufferAttachment::layer() const
 {
     ASSERT(mType == GL_TEXTURE);
 
-    const auto& index = mTarget.textureIndex();
+    const auto &index = mTarget.textureIndex();
 
-    if (index.type == GL_TEXTURE_2D_ARRAY || index.type == GL_TEXTURE_3D) {
+    if (index.type == GL_TEXTURE_2D_ARRAY || index.type == GL_TEXTURE_3D)
+    {
         return index.layerIndex;
     }
     return 0;
 }
 
-Texture* FramebufferAttachment::getTexture() const
+Texture *FramebufferAttachment::getTexture() const
 {
     return rx::GetAs<Texture>(mResource);
 }
 
-Renderbuffer* FramebufferAttachment::getRenderbuffer() const
+Renderbuffer *FramebufferAttachment::getRenderbuffer() const
 {
     return rx::GetAs<Renderbuffer>(mResource);
 }
 
-const egl::Surface* FramebufferAttachment::getSurface() const
+const egl::Surface *FramebufferAttachment::getSurface() const
 {
     return rx::GetAs<egl::Surface>(mResource);
 }

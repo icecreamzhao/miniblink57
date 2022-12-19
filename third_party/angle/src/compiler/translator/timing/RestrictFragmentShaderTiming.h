@@ -12,27 +12,28 @@
 
 class TInfoSinkBase;
 
-class RestrictFragmentShaderTiming : TDependencyGraphTraverser {
-public:
-    RestrictFragmentShaderTiming(TInfoSinkBase& sink);
-    void enforceRestrictions(const TDependencyGraph& graph);
+class RestrictFragmentShaderTiming : TDependencyGraphTraverser
+{
+  public:
+    RestrictFragmentShaderTiming(TInfoSinkBase &sink);
+    void enforceRestrictions(const TDependencyGraph &graph);
     int numErrors() const { return mNumErrors; }
 
-    void visitArgument(TGraphArgument* parameter) override;
-    void visitSelection(TGraphSelection* selection) override;
-    void visitLoop(TGraphLoop* loop) override;
-    void visitLogicalOp(TGraphLogicalOp* logicalOp) override;
+    void visitArgument(TGraphArgument *parameter) override;
+    void visitSelection(TGraphSelection *selection) override;
+    void visitLoop(TGraphLoop *loop) override;
+    void visitLogicalOp(TGraphLogicalOp *logicalOp) override;
 
-private:
-    void beginError(const TIntermNode* node);
-    void validateUserDefinedFunctionCallUsage(const TDependencyGraph& graph);
-    bool isSamplingOp(const TIntermAggregate* intermFunctionCall) const;
+  private:
+    void beginError(const TIntermNode *node);
+    void validateUserDefinedFunctionCallUsage(const TDependencyGraph &graph);
+    bool isSamplingOp(const TIntermAggregate *intermFunctionCall) const;
 
-    TInfoSinkBase& mSink;
+    TInfoSinkBase &mSink;
     int mNumErrors;
 
     typedef std::set<TString> StringSet;
     StringSet mSamplingOps;
 };
 
-#endif // COMPILER_TRANSLATOR_TIMING_RESTRICTFRAGMENTSHADERTIMING_H_
+#endif  // COMPILER_TRANSLATOR_TIMING_RESTRICTFRAGMENTSHADERTIMING_H_

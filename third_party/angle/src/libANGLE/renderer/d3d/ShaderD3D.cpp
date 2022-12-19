@@ -15,29 +15,31 @@
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 
 // Definitions local to the translation unit
-namespace {
-
-const char* GetShaderTypeString(GLenum type)
+namespace
 {
-    switch (type) {
-    case GL_VERTEX_SHADER:
-        return "VERTEX";
 
-    case GL_FRAGMENT_SHADER:
-        return "FRAGMENT";
+const char *GetShaderTypeString(GLenum type)
+{
+    switch (type)
+    {
+        case GL_VERTEX_SHADER:
+            return "VERTEX";
 
-    default:
-        UNREACHABLE();
-        return "";
+        case GL_FRAGMENT_SHADER:
+            return "FRAGMENT";
+
+        default:
+            UNREACHABLE();
+            return "";
     }
 }
 
-} // anonymous namespace
+}  // anonymous namespace
 
-namespace rx {
+namespace rx
+{
 
-ShaderD3D::ShaderD3D(const gl::Shader::Data& data)
-    : ShaderImpl(data)
+ShaderD3D::ShaderD3D(const gl::Shader::Data &data) : ShaderImpl(data)
 {
     uncompile();
 }
@@ -48,7 +50,8 @@ ShaderD3D::~ShaderD3D()
 
 std::string ShaderD3D::getDebugInfo() const
 {
-    return mDebugInfo + std::string("\n// ") + GetShaderTypeString(mData.getShaderType()) + " SHADER END\n";
+    return mDebugInfo + std::string("\n// ") + GetShaderTypeString(mData.getShaderType()) +
+           " SHADER END\n";
 }
 
 // initialize/clean up previous state
@@ -74,32 +77,36 @@ void ShaderD3D::uncompile()
     mDebugInfo.clear();
 }
 
-void ShaderD3D::generateWorkarounds(D3DCompilerWorkarounds* workarounds) const
+void ShaderD3D::generateWorkarounds(D3DCompilerWorkarounds *workarounds) const
 {
-    if (mUsesDiscardRewriting) {
+    if (mUsesDiscardRewriting)
+    {
         // ANGLE issue 486:
         // Work-around a D3D9 compiler bug that presents itself when using conditional discard, by disabling optimization
         workarounds->skipOptimization = true;
-    } else if (mUsesNestedBreak) {
+    }
+    else if (mUsesNestedBreak)
+    {
         // ANGLE issue 603:
         // Work-around a D3D9 compiler bug that presents itself when using break in a nested loop, by maximizing optimization
         // We want to keep the use of ANGLE_D3D_WORKAROUND_MAX_OPTIMIZATION minimal to prevent hangs, so usesDiscard takes precedence
         workarounds->useMaxOptimization = true;
     }
 
-    if (mRequiresIEEEStrictCompiling) {
+    if (mRequiresIEEEStrictCompiling)
+    {
         // IEEE Strictness for D3D compiler needs to be enabled for NaNs to work.
         workarounds->enableIEEEStrictness = true;
     }
 }
 
-unsigned int ShaderD3D::getUniformRegister(const std::string& uniformName) const
+unsigned int ShaderD3D::getUniformRegister(const std::string &uniformName) const
 {
     ASSERT(mUniformRegisterMap.count(uniformName) > 0);
     return mUniformRegisterMap.find(uniformName)->second;
 }
 
-unsigned int ShaderD3D::getInterfaceBlockRegister(const std::string& blockName) const
+unsigned int ShaderD3D::getInterfaceBlockRegister(const std::string &blockName) const
 {
     ASSERT(mInterfaceBlockRegisterMap.count(blockName) > 0);
     return mInterfaceBlockRegisterMap.find(blockName)->second;
@@ -110,17 +117,18 @@ ShShaderOutput ShaderD3D::getCompilerOutputType() const
     return mCompilerOutputType;
 }
 
-int ShaderD3D::prepareSourceAndReturnOptions(std::stringstream* shaderSourceStream,
-    std::string* sourcePath)
+int ShaderD3D::prepareSourceAndReturnOptions(std::stringstream *shaderSourceStream,
+                                             std::string *sourcePath)
 {
     uncompile();
 
     int additionalOptions = 0;
 
-    const std::string& source = mData.getSource();
+    const std::string &source = mData.getSource();
 
 #if !defined(ANGLE_ENABLE_WINDOWS_STORE)
-    if (gl::DebugAnnotationsActive()) {
+    if (gl::DebugAnnotationsActive())
+    {
         *sourcePath = getTempPath();
         writeFile(sourcePath->c_str(), source.c_str(), source.length());
         additionalOptions |= SH_LINE_DIRECTIVES | SH_SOURCE_PATH;
@@ -131,33 +139,38 @@ int ShaderD3D::prepareSourceAndReturnOptions(std::stringstream* shaderSourceStre
     return additionalOptions;
 }
 
-bool ShaderD3D::postTranslateCompile(gl::Compiler* compiler, std::string* infoLog)
+bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLog)
 {
     // TODO(jmadill): We shouldn't need to cache this.
     mCompilerOutputType = compiler->getShaderOutputType();
 
-    const std::string& translatedSource = mData.getTranslatedSource();
+    const std::string &translatedSource = mData.getTranslatedSource();
 
     mUsesMultipleRenderTargets = translatedSource.find("GL_USES_MRT") != std::string::npos;
-    mUsesFragColor = translatedSource.find("GL_USES_FRAG_COLOR") != std::string::npos;
-    mUsesFragData = translatedSource.find("GL_USES_FRAG_DATA") != std::string::npos;
-    mUsesFragCoord = translatedSource.find("GL_USES_FRAG_COORD") != std::string::npos;
-    mUsesFrontFacing = translatedSource.find("GL_USES_FRONT_FACING") != std::string::npos;
-    mUsesPointSize = translatedSource.find("GL_USES_POINT_SIZE") != std::string::npos;
-    mUsesPointCoord = translatedSource.find("GL_USES_POINT_COORD") != std::string::npos;
-    mUsesDepthRange = translatedSource.find("GL_USES_DEPTH_RANGE") != std::string::npos;
+    mUsesFragColor             = translatedSource.find("GL_USES_FRAG_COLOR") != std::string::npos;
+    mUsesFragData              = translatedSource.find("GL_USES_FRAG_DATA") != std::string::npos;
+    mUsesFragCoord             = translatedSource.find("GL_USES_FRAG_COORD") != std::string::npos;
+    mUsesFrontFacing           = translatedSource.find("GL_USES_FRONT_FACING") != std::string::npos;
+    mUsesPointSize             = translatedSource.find("GL_USES_POINT_SIZE") != std::string::npos;
+    mUsesPointCoord            = translatedSource.find("GL_USES_POINT_COORD") != std::string::npos;
+    mUsesDepthRange            = translatedSource.find("GL_USES_DEPTH_RANGE") != std::string::npos;
     mUsesFragDepth = translatedSource.find("GL_USES_FRAG_DEPTH") != std::string::npos;
-    mUsesDiscardRewriting = translatedSource.find("ANGLE_USES_DISCARD_REWRITING") != std::string::npos;
-    mUsesNestedBreak = translatedSource.find("ANGLE_USES_NESTED_BREAK") != std::string::npos;
+    mUsesDiscardRewriting =
+        translatedSource.find("ANGLE_USES_DISCARD_REWRITING") != std::string::npos;
+    mUsesNestedBreak  = translatedSource.find("ANGLE_USES_NESTED_BREAK") != std::string::npos;
     mUsesDeferredInit = translatedSource.find("ANGLE_USES_DEFERRED_INIT") != std::string::npos;
-    mRequiresIEEEStrictCompiling = translatedSource.find("ANGLE_REQUIRES_IEEE_STRICT_COMPILING") != std::string::npos;
+    mRequiresIEEEStrictCompiling =
+        translatedSource.find("ANGLE_REQUIRES_IEEE_STRICT_COMPILING") != std::string::npos;
 
     ShHandle compilerHandle = compiler->getCompilerHandle(mData.getShaderType());
 
-    for (const sh::Uniform& uniform : mData.getUniforms()) {
-        if (uniform.staticUse && !uniform.isBuiltIn()) {
+    for (const sh::Uniform &uniform : mData.getUniforms())
+    {
+        if (uniform.staticUse && !uniform.isBuiltIn())
+        {
             unsigned int index = static_cast<unsigned int>(-1);
-            bool getUniformRegisterResult = ShGetUniformRegister(compilerHandle, uniform.name, &index);
+            bool getUniformRegisterResult =
+                ShGetUniformRegister(compilerHandle, uniform.name, &index);
             UNUSED_ASSERTION_VARIABLE(getUniformRegisterResult);
             ASSERT(getUniformRegisterResult);
 
@@ -165,10 +178,13 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler* compiler, std::string* infoLo
         }
     }
 
-    for (const sh::InterfaceBlock& interfaceBlock : mData.getInterfaceBlocks()) {
-        if (interfaceBlock.staticUse) {
+    for (const sh::InterfaceBlock &interfaceBlock : mData.getInterfaceBlocks())
+    {
+        if (interfaceBlock.staticUse)
+        {
             unsigned int index = static_cast<unsigned int>(-1);
-            bool blockRegisterResult = ShGetInterfaceBlockRegister(compilerHandle, interfaceBlock.name, &index);
+            bool blockRegisterResult =
+                ShGetInterfaceBlockRegister(compilerHandle, interfaceBlock.name, &index);
             UNUSED_ASSERTION_VARIABLE(blockRegisterResult);
             ASSERT(blockRegisterResult);
 
@@ -176,11 +192,16 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler* compiler, std::string* infoLo
         }
     }
 
-    mDebugInfo += std::string("// ") + GetShaderTypeString(mData.getShaderType()) + " SHADER BEGIN\n";
-    mDebugInfo += "\n// GLSL BEGIN\n\n" + mData.getSource() + "\n\n// GLSL END\n\n\n";
+#if ANGLE_SHADER_DEBUG_INFO == ANGLE_ENABLED
+    mDebugInfo +=
+        std::string("// ") + GetShaderTypeString(mData->getShaderType()) + " SHADER BEGIN\n";
+    mDebugInfo += "\n// GLSL BEGIN\n\n" + source + "\n\n// GLSL END\n\n\n";
     mDebugInfo += "// INITIAL HLSL BEGIN\n\n" + translatedSource + "\n// INITIAL HLSL END\n\n\n";
     // Successive steps will append more info
+#else
+    mDebugInfo += translatedSource;
+#endif
     return true;
 }
 
-} // namespace rx
+}  // namespace rx

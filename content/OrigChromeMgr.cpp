@@ -29,12 +29,6 @@
 #include "ui/gl/gl_surface.h"
 #include <shlwapi.h>
 
-#if _DEBUG
-#pragma comment(lib, "M:\\chromium\\chromium.bb\\src\\out\\Debug\\ffmpeg.dll.lib")
-#else
-#pragma comment(lib, "M:\\chromium\\chromium.bb\\src\\out\\release\\ffmpeg.dll.lib")
-#endif
-
 namespace content {
 
 OrigChromeMgr* OrigChromeMgr::m_inst = nullptr;

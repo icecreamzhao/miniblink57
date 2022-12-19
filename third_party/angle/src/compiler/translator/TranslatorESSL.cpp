@@ -6,30 +6,31 @@
 
 #include "compiler/translator/TranslatorESSL.h"
 
-#include "angle_gl.h"
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/EmulatePrecision.h"
-#include "compiler/translator/OutputESSL.h"
 #include "compiler/translator/RecordConstantPrecision.h"
+#include "compiler/translator/OutputESSL.h"
+#include "angle_gl.h"
 
 TranslatorESSL::TranslatorESSL(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_ESSL_OUTPUT)
 {
 }
 
-void TranslatorESSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator* emu, int compileOptions)
+void TranslatorESSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu, int compileOptions)
 {
-    if (compileOptions & SH_EMULATE_BUILT_IN_FUNCTIONS) {
+    if (compileOptions & SH_EMULATE_BUILT_IN_FUNCTIONS)
+    {
         InitBuiltInFunctionEmulatorForGLSLWorkarounds(emu, getShaderType());
     }
 }
 
-void TranslatorESSL::translate(TIntermNode* root, int)
-{
+void TranslatorESSL::translate(TIntermNode *root, int) {
     TInfoSinkBase& sink = getInfoSink().obj;
 
     int shaderVer = getShaderVersion();
-    if (shaderVer > 100) {
+    if (shaderVer > 100)
+    {
         sink << "#version " << shaderVer << " es\n";
     }
 
@@ -40,7 +41,8 @@ void TranslatorESSL::translate(TIntermNode* root, int)
 
     bool precisionEmulation = getResources().WEBGL_debug_shader_precision && getPragma().debugShaderPrecision;
 
-    if (precisionEmulation) {
+    if (precisionEmulation)
+    {
         EmulatePrecision emulatePrecision(getSymbolTable(), shaderVer);
         root->traverse(&emulatePrecision);
         emulatePrecision.updateTree();
@@ -50,15 +52,19 @@ void TranslatorESSL::translate(TIntermNode* root, int)
     RecordConstantPrecision(root, getTemporaryIndex());
 
     // Write emulated built-in functions if needed.
-    if (!getBuiltInFunctionEmulator().IsOutputEmpty()) {
+    if (!getBuiltInFunctionEmulator().IsOutputEmpty())
+    {
         sink << "// BEGIN: Generated code for built-in function emulation\n\n";
-        if (getShaderType() == GL_FRAGMENT_SHADER) {
+        if (getShaderType() == GL_FRAGMENT_SHADER)
+        {
             sink << "#if defined(GL_FRAGMENT_PRECISION_HIGH)\n"
                  << "#define webgl_emu_precision highp\n"
                  << "#else\n"
                  << "#define webgl_emu_precision mediump\n"
                  << "#endif\n\n";
-        } else {
+        }
+        else
+        {
             sink << "#define webgl_emu_precision highp\n";
         }
 
@@ -71,12 +77,11 @@ void TranslatorESSL::translate(TIntermNode* root, int)
 
     // Write translated shader.
     TOutputESSL outputESSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
-        getSymbolTable(), shaderVer, precisionEmulation);
+                           getSymbolTable(), shaderVer, precisionEmulation);
     root->traverse(&outputESSL);
 }
 
-void TranslatorESSL::writeExtensionBehavior()
-{
+void TranslatorESSL::writeExtensionBehavior() {
     TInfoSinkBase& sink = getInfoSink().obj;
     const TExtensionBehavior& extBehavior = getExtensionBehavior();
     for (TExtensionBehavior::const_iterator iter = extBehavior.begin();

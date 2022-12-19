@@ -17,18 +17,21 @@
 #include <cstddef>
 #include <stdint.h>
 
-namespace gl {
+namespace gl
+{
 
-struct Type {
+struct Type
+{
     Type();
 
     GLuint bytes;
     GLuint bytesShift; // Bit shift by this value to effectively divide/multiply by "bytes" in a more optimal way
     bool specialInterpretation;
 };
-const Type& GetTypeInfo(GLenum type);
+const Type &GetTypeInfo(GLenum type);
 
-struct InternalFormat {
+struct InternalFormat
+{
     InternalFormat();
 
     GLuint redBits;
@@ -57,37 +60,38 @@ struct InternalFormat {
     GLenum componentType;
     GLenum colorEncoding;
 
-    typedef bool (*SupportCheckFunction)(GLuint, const Extensions&);
+    typedef bool (*SupportCheckFunction)(GLuint, const Extensions &);
     SupportCheckFunction textureSupport;
     SupportCheckFunction renderSupport;
     SupportCheckFunction filterSupport;
 
     GLuint computeRowPitch(GLenum formatType, GLsizei width, GLint alignment, GLint rowLength) const;
     GLuint computeDepthPitch(GLenum formatType,
-        GLsizei width,
-        GLsizei height,
-        GLint alignment,
-        GLint rowLength,
-        GLint imageHeight) const;
+                             GLsizei width,
+                             GLsizei height,
+                             GLint alignment,
+                             GLint rowLength,
+                             GLint imageHeight) const;
     GLuint computeBlockSize(GLenum formatType, GLsizei width, GLsizei height) const;
     GLuint computeSkipPixels(GLint rowPitch,
-        GLint depthPitch,
-        GLint skipImages,
-        GLint skipRows,
-        GLint skipPixels) const;
+                             GLint depthPitch,
+                             GLint skipImages,
+                             GLint skipRows,
+                             GLint skipPixels) const;
 };
-const InternalFormat& GetInternalFormatInfo(GLenum internalFormat);
+const InternalFormat &GetInternalFormatInfo(GLenum internalFormat);
 
 GLenum GetSizedInternalFormat(GLenum internalFormat, GLenum type);
 
 typedef std::set<GLenum> FormatSet;
-const FormatSet& GetAllSizedInternalFormats();
+const FormatSet &GetAllSizedInternalFormats();
 
 // From the ESSL 3.00.4 spec:
 // Vertex shader inputs can only be float, floating-point vectors, matrices, signed and unsigned
 // integers and integer vectors. Vertex shader inputs cannot be arrays or structures.
 
-enum AttributeType {
+enum AttributeType
+{
     ATTRIBUTE_FLOAT,
     ATTRIBUTE_VEC2,
     ATTRIBUTE_VEC3,
@@ -113,7 +117,8 @@ enum AttributeType {
 
 AttributeType GetAttributeType(GLenum enumValue);
 
-enum VertexFormatType {
+enum VertexFormatType
+{
     VERTEX_FORMAT_INVALID,
     VERTEX_FORMAT_SBYTE1,
     VERTEX_FORMAT_SBYTE1_NORM,
@@ -209,7 +214,8 @@ enum VertexFormatType {
 
 typedef std::vector<gl::VertexFormatType> InputLayout;
 
-struct VertexFormat : angle::NonCopyable {
+struct VertexFormat : angle::NonCopyable
+{
     VertexFormat(GLenum typeIn, GLboolean normalizedIn, GLuint componentsIn, bool pureIntegerIn);
 
     GLenum type;
@@ -219,10 +225,10 @@ struct VertexFormat : angle::NonCopyable {
 };
 
 VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint components, bool pureInteger);
-VertexFormatType GetVertexFormatType(const VertexAttribute& attrib);
-VertexFormatType GetVertexFormatType(const VertexAttribute& attrib, GLenum currentValueType);
-const VertexFormat& GetVertexFormatFromType(VertexFormatType vertexFormatType);
+VertexFormatType GetVertexFormatType(const VertexAttribute &attrib);
+VertexFormatType GetVertexFormatType(const VertexAttribute &attrib, GLenum currentValueType);
+const VertexFormat &GetVertexFormatFromType(VertexFormatType vertexFormatType);
 
-} // namespace gl
+}  // namespace gl
 
 #endif // LIBANGLE_FORMATUTILS_H_

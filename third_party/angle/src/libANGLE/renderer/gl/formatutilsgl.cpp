@@ -14,116 +14,109 @@
 #include "common/string_utils.h"
 #include "libANGLE/formatutils.h"
 
-namespace rx {
+namespace rx
+{
 
-namespace nativegl {
+namespace nativegl
+{
 
-    SupportRequirement::SupportRequirement()
-        : version(std::numeric_limits<GLuint>::max(), std::numeric_limits<GLuint>::max())
-        , versionExtensions()
-        , requiredExtensions()
-    {
-    }
+SupportRequirement::SupportRequirement()
+    : version(std::numeric_limits<GLuint>::max(), std::numeric_limits<GLuint>::max()),
+      versionExtensions(),
+      requiredExtensions()
+{
+}
 
-    InternalFormat::InternalFormat()
-        : texture()
-        , filter()
-        , renderbuffer()
-        , framebufferAttachment()
-    {
-    }
+InternalFormat::InternalFormat()
+    : texture(),
+      filter(),
+      renderbuffer(),
+      framebufferAttachment()
+{
+}
 
-    // supported = version || vertexExt
-    static inline SupportRequirement VersionOrExts(GLuint major, GLuint minor, const std::string& versionExt)
-    {
-        SupportRequirement requirement;
-        requirement.version.major = major;
-        requirement.version.minor = minor;
-        angle::SplitStringAlongWhitespace(versionExt, &requirement.versionExtensions);
-        return requirement;
-    }
+static inline SupportRequirement VersionOrExts(GLuint major, GLuint minor, const std::string &versionExt)
+{
+    SupportRequirement requirement;
+    requirement.version.major = major;
+    requirement.version.minor = minor;
+    angle::SplitStringAlongWhitespace(versionExt, &requirement.versionExtensions);
+    return requirement;
+}
 
-    // supported = (version || vertexExt) && requiredExt
-    static inline SupportRequirement VersionOrExtsAndExts(GLuint major,
-        GLuint minor,
-        const std::string& versionExt,
-        const std::string& requiredExt)
-    {
-        SupportRequirement requirement;
-        requirement.version.major = major;
-        requirement.version.minor = minor;
-        angle::SplitStringAlongWhitespace(versionExt, &requirement.versionExtensions);
-        angle::SplitStringAlongWhitespace(requiredExt, &requirement.requiredExtensions);
-        return requirement;
-    }
+static inline SupportRequirement VersionAndExts(GLuint major, GLuint minor, const std::string &requiredExt)
+{
+    SupportRequirement requirement;
+    requirement.version.major = major;
+    requirement.version.minor = minor;
+    angle::SplitStringAlongWhitespace(requiredExt, &requirement.requiredExtensions);
+    return requirement;
+}
 
-    // supported = version
-    static inline SupportRequirement VersionOnly(GLuint major, GLuint minor)
-    {
-        SupportRequirement requirement;
-        requirement.version.major = major;
-        requirement.version.minor = minor;
-        return requirement;
-    }
+static inline SupportRequirement VersionOnly(GLuint major, GLuint minor)
+{
+    SupportRequirement requirement;
+    requirement.version.major = major;
+    requirement.version.minor = minor;
+    return requirement;
+}
 
-    // supported = ext
-    static inline SupportRequirement ExtsOnly(const std::string& ext)
-    {
-        SupportRequirement requirement;
-        requirement.version.major = 0;
-        requirement.version.minor = 0;
-        angle::SplitStringAlongWhitespace(ext, &requirement.requiredExtensions);
-        return requirement;
-    }
+static inline SupportRequirement ExtsOnly(const std::string &ext)
+{
+    SupportRequirement requirement;
+    requirement.version.major = 0;
+    requirement.version.minor = 0;
+    angle::SplitStringAlongWhitespace(ext, &requirement.requiredExtensions);
+    return requirement;
+}
 
-    // supported = true
-    static inline SupportRequirement Always()
-    {
-        SupportRequirement requirement;
-        requirement.version.major = 0;
-        requirement.version.minor = 0;
-        return requirement;
-    }
+static inline SupportRequirement Always()
+{
+    SupportRequirement requirement;
+    requirement.version.major = 0;
+    requirement.version.minor = 0;
+    return requirement;
+}
 
-    // supported = false
-    static inline SupportRequirement Never()
-    {
-        SupportRequirement requirement;
-        requirement.version.major = std::numeric_limits<GLuint>::max();
-        requirement.version.minor = std::numeric_limits<GLuint>::max();
-        return requirement;
-    }
+static inline SupportRequirement Never()
+{
+    SupportRequirement requirement;
+    requirement.version.major = std::numeric_limits<GLuint>::max();
+    requirement.version.minor = std::numeric_limits<GLuint>::max();
+    return requirement;
+}
 
-    struct InternalFormatInfo {
-        InternalFormat glesInfo;
-        InternalFormat glInfo;
-    };
+struct InternalFormatInfo
+{
+    InternalFormat glesInfo;
+    InternalFormat glInfo;
+};
 
-    typedef std::pair<GLenum, InternalFormatInfo> InternalFormatInfoPair;
-    typedef std::map<GLenum, InternalFormatInfo> InternalFormatInfoMap;
+typedef std::pair<GLenum, InternalFormatInfo> InternalFormatInfoPair;
+typedef std::map<GLenum, InternalFormatInfo> InternalFormatInfoMap;
 
-    // A helper function to insert data into the format map with fewer characters.
-    static inline void InsertFormatMapping(InternalFormatInfoMap* map, GLenum internalFormat,
-        const SupportRequirement& desktopTexture, const SupportRequirement& desktopFilter, const SupportRequirement& desktopRender,
-        const SupportRequirement& esTexture, const SupportRequirement& esFilter, const SupportRequirement& esRender)
-    {
-        InternalFormatInfo formatInfo;
-        formatInfo.glInfo.texture = desktopTexture;
-        formatInfo.glInfo.filter = desktopFilter;
-        formatInfo.glInfo.renderbuffer = desktopRender;
-        formatInfo.glInfo.framebufferAttachment = desktopRender;
-        formatInfo.glesInfo.texture = esTexture;
-        formatInfo.glesInfo.filter = esTexture;
-        formatInfo.glesInfo.renderbuffer = esFilter;
-        formatInfo.glesInfo.framebufferAttachment = esRender;
-        map->insert(std::make_pair(internalFormat, formatInfo));
-    }
+// A helper function to insert data into the format map with fewer characters.
+static inline void InsertFormatMapping(InternalFormatInfoMap *map, GLenum internalFormat,
+                                       const SupportRequirement &desktopTexture, const SupportRequirement &desktopFilter, const SupportRequirement &desktopRender,
+                                       const SupportRequirement &esTexture, const SupportRequirement &esFilter, const SupportRequirement &esRender)
+{
+    InternalFormatInfo formatInfo;
+    formatInfo.glInfo.texture = desktopTexture;
+    formatInfo.glInfo.filter = desktopFilter;
+    formatInfo.glInfo.renderbuffer = desktopRender;
+    formatInfo.glInfo.framebufferAttachment = desktopRender;
+    formatInfo.glesInfo.texture = esTexture;
+    formatInfo.glesInfo.filter = esTexture;
+    formatInfo.glesInfo.renderbuffer = esFilter;
+    formatInfo.glesInfo.framebufferAttachment = esRender;
+    map->insert(std::make_pair(internalFormat, formatInfo));
+}
 
-    static InternalFormatInfoMap BuildInternalFormatInfoMap()
-    {
-        InternalFormatInfoMap map;
+static InternalFormatInfoMap BuildInternalFormatInfoMap()
+{
+    InternalFormatInfoMap map;
 
-        // clang-format off
+    // clang-format off
     //                       | Format              | OpenGL texture support                          | Filter  | OpenGL render support                        | OpenGL ES texture support                 | Filter  | OpenGL ES render support                 |
     InsertFormatMapping(&map, GL_R8,                VersionOrExts(3, 0, "GL_ARB_texture_rg"),         Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg"),      VersionOrExts(3, 0, "GL_EXT_texture_rg"),   Always(), VersionOrExts(3, 0, "GL_EXT_texture_rg")  );
     InsertFormatMapping(&map, GL_R8_SNORM,          VersionOnly(3, 1),                                Always(), Never(),                                       VersionOnly(3, 0),                          Always(), Never()                                   );
@@ -185,17 +178,17 @@ namespace nativegl {
     InsertFormatMapping(&map, GL_BGRA_EXT,          VersionOrExts(1, 2, "GL_EXT_bgra"),               Always(), VersionOrExts(1, 2, "GL_EXT_bgra"),            ExtsOnly("GL_EXT_texture_format_BGRA8888"), Always(), ExtsOnly("GL_EXT_texture_format_BGRA8888"));
 
     // Floating point formats
-    //                       | Format              | OpenGL texture support                                       | Filter  | OpenGL render support                                                                  | OpenGL ES texture support                                         | Filter                                                 | OpenGL ES render support                                                        |
-    InsertFormatMapping(&map, GL_R11F_G11F_B10F,    VersionOrExts(3, 0, "GL_EXT_packed_float"),                    Always(), VersionOrExts(3, 0, "GL_EXT_packed_float GL_ARB_color_buffer_float"),                    VersionOnly(3, 0),                                                  Always(),                                                ExtsOnly("GL_EXT_color_buffer_float")                                            );
-    InsertFormatMapping(&map, GL_RGB9_E5,           VersionOrExts(3, 0, "GL_EXT_texture_shared_exponent"),         Always(), VersionOrExts(3, 0, "GL_EXT_texture_shared_exponent GL_ARB_color_buffer_float"),         VersionOnly(3, 0),                                                  Always(),                                                Never()                                                                          );
-    InsertFormatMapping(&map, GL_R16F,              VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExtsAndExts(3, 0, "GL_EXT_texture_rg", "GL_EXT_color_buffer_half_float"));
-    InsertFormatMapping(&map, GL_RG16F,             VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExtsAndExts(3, 0, "GL_EXT_texture_rg", "GL_EXT_color_buffer_half_float"));
-    InsertFormatMapping(&map, GL_RGB16F,            VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), ExtsOnly("GL_EXT_color_buffer_half_float")                                       );
-    InsertFormatMapping(&map, GL_RGBA16F,           VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), ExtsOnly("GL_EXT_color_buffer_half_float")                                       );
-    InsertFormatMapping(&map, GL_R32F,              VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float"), Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg"),      VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      ExtsOnly("GL_EXT_color_buffer_float")                                            );
-    InsertFormatMapping(&map, GL_RG32F,             VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float"), Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg"),      VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      ExtsOnly("GL_EXT_color_buffer_float")                                            );
-    InsertFormatMapping(&map, GL_RGB32F,            VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_float"),                        VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      Never()                                                                          );
-    InsertFormatMapping(&map, GL_RGBA32F,           VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_float"),                        VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      ExtsOnly("GL_EXT_color_buffer_float")                                            );
+    //                       | Format              | OpenGL texture support                                       | Filter  | OpenGL render support                                                                  | OpenGL ES texture support                                         | Filter                                                 | OpenGL ES render support                                         |
+    InsertFormatMapping(&map, GL_R11F_G11F_B10F,    VersionOrExts(3, 0, "GL_EXT_packed_float"),                    Always(), VersionOrExts(3, 0, "GL_EXT_packed_float GL_ARB_color_buffer_float"),                    VersionOnly(3, 0),                                                  Always(),                                                VersionAndExts(3, 0, "GL_EXT_color_buffer_float")                 );
+    InsertFormatMapping(&map, GL_RGB9_E5,           VersionOrExts(3, 0, "GL_EXT_texture_shared_exponent"),         Always(), VersionOrExts(3, 0, "GL_EXT_texture_shared_exponent GL_ARB_color_buffer_float"),         VersionOnly(3, 0),                                                  Always(),                                                VersionAndExts(3, 0, "GL_EXT_color_buffer_float")                 );
+    InsertFormatMapping(&map, GL_R16F,              VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"));
+    InsertFormatMapping(&map, GL_RG16F,             VersionOrExts(3, 0, "GL_ARB_texture_rg ARB_texture_float"),    Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"), VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExts(3, 0, "GL_OES_texture_half_float GL_EXT_texture_rg"));
+    InsertFormatMapping(&map, GL_RGB16F,            VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExts(3, 0, "GL_OES_texture_half_float")                  );
+    InsertFormatMapping(&map, GL_RGBA16F,           VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float"),                   VersionOrExts(3, 0, "GL_OES_texture_half_float_linear"), VersionOrExts(3, 0, "GL_OES_texture_half_float")                  );
+    InsertFormatMapping(&map, GL_R32F,              VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float"), Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg"),      VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg")     );
+    InsertFormatMapping(&map, GL_RG32F,             VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float"), Always(), VersionOrExts(3, 0, "GL_ARB_texture_rg GL_ARB_texture_float GL_ARB_color_buffer_float"), VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg"),      VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      VersionOrExts(3, 0, "GL_OES_texture_float GL_EXT_texture_rg")     );
+    InsertFormatMapping(&map, GL_RGB32F,            VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_float"),                        VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      VersionOrExts(3, 0, "GL_OES_texture_float")                       );
+    InsertFormatMapping(&map, GL_RGBA32F,           VersionOrExts(3, 0, "GL_ARB_texture_float"),                   Always(), VersionOrExts(3, 0, "GL_ARB_texture_float GL_ARB_color_buffer_float"),                   VersionOrExts(3, 0, "GL_OES_texture_float"),                        VersionOrExts(3, 0, "GL_OES_texture_float_linear"),      VersionOrExts(3, 0, "GL_OES_texture_float")                       );
 
     // Depth stencil formats
     //                       | Format                  | OpenGL texture support                            | Filter                                     | OpenGL render support                             | OpenGL ES texture support                  | Filter                                     | OpenGL ES render support                                              |
@@ -247,244 +240,272 @@ namespace nativegl {
     // From GL_ETC1_RGB8_OES
     InsertFormatMapping(&map, GL_ETC1_RGB8_OES,                   VersionOrExts(4, 3, "GL_ARB_ES3_compatibility"), Always(), Never(), VersionOrExts(3, 0, "GL_ETC1_RGB8_OES"),       Always(), Never());
 
-        // clang-format on
+    // clang-format on
 
-        return map;
+    return map;
+}
+
+static const InternalFormatInfoMap &GetInternalFormatMap()
+{
+    static const InternalFormatInfoMap formatMap = BuildInternalFormatInfoMap();
+    return formatMap;
+}
+
+const InternalFormat &GetInternalFormatInfo(GLenum internalFormat, StandardGL standard)
+{
+    const InternalFormatInfoMap &formatMap = GetInternalFormatMap();
+    InternalFormatInfoMap::const_iterator iter = formatMap.find(internalFormat);
+    if (iter != formatMap.end())
+    {
+        const InternalFormatInfo &info = iter->second;
+        switch (standard)
+        {
+          case STANDARD_GL_ES:      return info.glesInfo;
+          case STANDARD_GL_DESKTOP: return info.glInfo;
+          default: UNREACHABLE();   break;
+        }
     }
 
-    static const InternalFormatInfoMap& GetInternalFormatMap()
-    {
-        static const InternalFormatInfoMap formatMap = BuildInternalFormatInfoMap();
-        return formatMap;
-    }
+    static const InternalFormat defaultInternalFormat;
+    return defaultInternalFormat;
+}
 
-    const InternalFormat& GetInternalFormatInfo(GLenum internalFormat, StandardGL standard)
+static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
+                                      const WorkaroundsGL &workarounds,
+                                      GLenum internalFormat,
+                                      GLenum sizedInternalFormat)
+{
+    GLenum result = internalFormat;
+
+    if (functions->standard == STANDARD_GL_DESKTOP)
     {
-        const InternalFormatInfoMap& formatMap = GetInternalFormatMap();
-        InternalFormatInfoMap::const_iterator iter = formatMap.find(internalFormat);
-        if (iter != formatMap.end()) {
-            const InternalFormatInfo& info = iter->second;
-            switch (standard) {
-            case STANDARD_GL_ES:
-                return info.glesInfo;
-            case STANDARD_GL_DESKTOP:
-                return info.glInfo;
-            default:
-                UNREACHABLE();
-                break;
-            }
+        // Use sized internal formats whenever possible to guarantee the requested precision.
+        // On Desktop GL, passing an internal format of GL_RGBA will generate a GL_RGBA8 texture
+        // even if the provided type is GL_FLOAT.
+        result = sizedInternalFormat;
+
+        const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedInternalFormat);
+
+        if (workarounds.avoid1BitAlphaTextureFormats && formatInfo.alphaBits == 1)
+        {
+            // Use an 8-bit format instead
+            result = GL_RGBA8;
         }
 
-        static const InternalFormat defaultInternalFormat;
-        return defaultInternalFormat;
-    }
-
-    static GLenum GetNativeInternalFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat,
-        GLenum sizedInternalFormat)
-    {
-        GLenum result = internalFormat;
-
-        if (functions->standard == STANDARD_GL_DESKTOP) {
-            // Use sized internal formats whenever possible to guarantee the requested precision.
-            // On Desktop GL, passing an internal format of GL_RGBA will generate a GL_RGBA8 texture
-            // even if the provided type is GL_FLOAT.
-            result = sizedInternalFormat;
-
-            const gl::InternalFormat& formatInfo = gl::GetInternalFormatInfo(sizedInternalFormat);
-
-            if (workarounds.avoid1BitAlphaTextureFormats && formatInfo.alphaBits == 1) {
-                // Use an 8-bit format instead
-                result = GL_RGBA8;
-            }
-
-            if (workarounds.rgba4IsNotSupportedForColorRendering && sizedInternalFormat == GL_RGBA4) {
-                // Use an 8-bit format instead
-                result = GL_RGBA8;
-            }
-
-            if (sizedInternalFormat == GL_RGB565 && !functions->isAtLeastGL(gl::Version(4, 1)) && !functions->hasGLExtension("GL_ARB_ES2_compatibility")) {
-                // GL_RGB565 is required for basic ES2 functionality but was not added to desktop GL
-                // until 4.1.
-                // Work around this by using an 8-bit format instead.
-                result = GL_RGB8;
-            }
-
-            if (sizedInternalFormat == GL_BGRA8_EXT) {
-                // GLES accepts GL_BGRA as an internal format but desktop GL only accepts it as a type.
-                // Update the internal format to GL_RGBA.
-                result = GL_RGBA8;
-            }
-
-            if ((functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0) {
-                // Work around deprecated luminance alpha formats in the OpenGL core profile by backing
-                // them with R or RG textures.
-                if (formatInfo.format == GL_LUMINANCE || formatInfo.format == GL_ALPHA) {
-                    result = gl::GetSizedInternalFormat(GL_RED, formatInfo.type);
-                }
-
-                if (formatInfo.format == GL_LUMINANCE_ALPHA) {
-                    result = gl::GetSizedInternalFormat(GL_RG, formatInfo.type);
-                }
-            }
+        if (workarounds.rgba4IsNotSupportedForColorRendering && sizedInternalFormat == GL_RGBA4)
+        {
+            // Use an 8-bit format instead
+            result = GL_RGBA8;
         }
 
-        return result;
-    }
-
-    static GLenum GetNativeFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum format)
-    {
-        GLenum result = format;
-
-        if (functions->standard == STANDARD_GL_DESKTOP) {
-            // The ES SRGB extensions require that the provided format is GL_SRGB or SRGB_ALPHA but
-            // the desktop GL extensions only accept GL_RGB or GL_RGBA.  Convert them.
-            if (format == GL_SRGB) {
-                result = GL_RGB;
-            }
-
-            if (format == GL_SRGB_ALPHA) {
-                result = GL_RGBA;
-            }
-
-            if ((functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0) {
-                // Work around deprecated luminance alpha formats in the OpenGL core profile by backing
-                // them with R or RG textures.
-                if (format == GL_LUMINANCE || format == GL_ALPHA) {
-                    result = GL_RED;
-                }
-
-                if (format == GL_LUMINANCE_ALPHA) {
-                    result = GL_RG;
-                }
-            }
+        if (sizedInternalFormat == GL_RGB565 && !functions->isAtLeastGL(gl::Version(4, 1)) &&
+            !functions->hasGLExtension("GL_ARB_ES2_compatibility"))
+        {
+            // GL_RGB565 is required for basic ES2 functionality but was not added to desktop GL
+            // until 4.1.
+            // Work around this by using an 8-bit format instead.
+            result = GL_RGB8;
         }
 
-        return result;
-    }
-
-    static GLenum GetNativeCompressedFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum format)
-    {
-        GLenum result = format;
-
-        if (functions->standard == STANDARD_GL_DESKTOP) {
-            if (format == GL_ETC1_RGB8_OES) {
-                // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
-                // format is forwards compatible so just use the ETC2 format.
-                result = GL_COMPRESSED_RGB8_ETC2;
-            }
+        if (sizedInternalFormat == GL_BGRA8_EXT)
+        {
+            // GLES accepts GL_BGRA as an internal format but desktop GL only accepts it as a type.
+            // Update the internal format to GL_RGBA.
+            result = GL_RGBA8;
         }
 
-        if (functions->isAtLeastGLES(gl::Version(3, 0))) {
-            if (format == GL_ETC1_RGB8_OES) {
-                // Pass GL_COMPRESSED_RGB8_ETC2 as the target format in ES3 and higher because it
-                // becomes a core format.
-                result = GL_COMPRESSED_RGB8_ETC2;
+        if ((functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0)
+        {
+            // Work around deprecated luminance alpha formats in the OpenGL core profile by backing
+            // them with R or RG textures.
+            if (formatInfo.format == GL_LUMINANCE || formatInfo.format == GL_ALPHA)
+            {
+                result = gl::GetSizedInternalFormat(GL_RED, formatInfo.type);
+            }
+
+            if (formatInfo.format == GL_LUMINANCE_ALPHA)
+            {
+                result = gl::GetSizedInternalFormat(GL_RG, formatInfo.type);
             }
         }
-
-        return result;
+    }
+    else if (functions->isAtLeastGLES(gl::Version(3, 0)))
+    {
+        result = sizedInternalFormat;
     }
 
-    static GLenum GetNativeType(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum type)
-    {
-        GLenum result = type;
+    return result;
+}
 
-        if (functions->standard == STANDARD_GL_DESKTOP) {
-            if (type == GL_HALF_FLOAT_OES) {
-                // The enums differ for the OES half float extensions and desktop GL spec. Update it.
-                result = GL_HALF_FLOAT;
-            }
+static GLenum GetNativeFormat(const FunctionsGL *functions,
+                              const WorkaroundsGL &workarounds,
+                              GLenum format)
+{
+    GLenum result = format;
+
+    if (functions->standard == STANDARD_GL_DESKTOP)
+    {
+        // The ES SRGB extensions require that the provided format is GL_SRGB or SRGB_ALPHA but
+        // the desktop GL extensions only accept GL_RGB or GL_RGBA.  Convert them.
+        if (format == GL_SRGB)
+        {
+            result = GL_RGB;
         }
 
-        if (functions->isAtLeastGLES(gl::Version(3, 0))) {
-            if (type == GL_HALF_FLOAT_OES) {
-                // The enums differ for the OES half float extensions and ES 3 spec. Update it.
-                result = GL_HALF_FLOAT;
-            }
+        if (format == GL_SRGB_ALPHA)
+        {
+            result = GL_RGBA;
         }
 
-        return result;
+        if ((functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0)
+        {
+            // Work around deprecated luminance alpha formats in the OpenGL core profile by backing
+            // them with R or RG textures.
+            if (format == GL_LUMINANCE || format == GL_ALPHA)
+            {
+                result = GL_RED;
+            }
+
+            if (format == GL_LUMINANCE_ALPHA)
+            {
+                result = GL_RG;
+            }
+        }
     }
 
-    TexImageFormat GetTexImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat,
-        GLenum format,
-        GLenum type)
+    return result;
+}
+
+static GLenum GetNativeCompressedFormat(const FunctionsGL *functions,
+                                        const WorkaroundsGL &workarounds,
+                                        GLenum format)
+{
+    GLenum result = format;
+
+    if (functions->standard == STANDARD_GL_DESKTOP)
     {
-        TexImageFormat result;
-        result.internalFormat = GetNativeInternalFormat(
-            functions, workarounds, internalFormat, gl::GetSizedInternalFormat(internalFormat, type));
-        result.format = GetNativeFormat(functions, workarounds, format);
-        result.type = GetNativeType(functions, workarounds, type);
-        return result;
+        if (format == GL_ETC1_RGB8_OES)
+        {
+            // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
+            // format is forwards compatible so just use the ETC2 format.
+            result = GL_COMPRESSED_RGB8_ETC2;
+        }
     }
 
-    TexSubImageFormat GetTexSubImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum format,
-        GLenum type)
+    if (functions->isAtLeastGLES(gl::Version(3, 0)))
     {
-        TexSubImageFormat result;
-        result.format = GetNativeFormat(functions, workarounds, format);
-        result.type = GetNativeType(functions, workarounds, type);
-        return result;
+        if (format == GL_ETC1_RGB8_OES)
+        {
+            // Pass GL_COMPRESSED_RGB8_ETC2 as the target format in ES3 and higher because it
+            // becomes a core format.
+            result = GL_COMPRESSED_RGB8_ETC2;
+        }
     }
 
-    CompressedTexImageFormat GetCompressedTexImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat)
+    return result;
+}
+
+static GLenum GetNativeType(const FunctionsGL *functions,
+                            const WorkaroundsGL &workarounds,
+                            GLenum type)
+{
+    GLenum result = type;
+
+    if (functions->standard == STANDARD_GL_DESKTOP)
     {
-        CompressedTexImageFormat result;
-        result.internalFormat = GetNativeCompressedFormat(functions, workarounds, internalFormat);
-        return result;
+        if (type == GL_HALF_FLOAT_OES)
+        {
+            // The enums differ for the OES half float extensions and desktop GL spec. Update it.
+            result = GL_HALF_FLOAT;
+        }
     }
 
-    CompressedTexSubImageFormat GetCompressedSubTexImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum format)
+    if (functions->isAtLeastGLES(gl::Version(3, 0)))
     {
-        CompressedTexSubImageFormat result;
-        result.format = GetNativeCompressedFormat(functions, workarounds, format);
-        return result;
+        if (type == GL_HALF_FLOAT_OES)
+        {
+            // The enums differ for the OES half float extensions and ES 3 spec. Update it.
+            result = GL_HALF_FLOAT;
+        }
     }
 
-    CopyTexImageImageFormat GetCopyTexImageImageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat,
-        GLenum framebufferType)
-    {
-        CopyTexImageImageFormat result;
-        result.internalFormat = GetNativeInternalFormat(functions, workarounds, internalFormat,
-            gl::GetSizedInternalFormat(internalFormat, framebufferType));
-        return result;
-    }
+    return result;
+}
 
-    TexStorageFormat GetTexStorageFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat)
-    {
-        TexStorageFormat result;
-        result.internalFormat = GetNativeInternalFormat(functions, workarounds, internalFormat, internalFormat);
-        return result;
-    }
+TexImageFormat GetTexImageFormat(const FunctionsGL *functions,
+                                 const WorkaroundsGL &workarounds,
+                                 GLenum internalFormat,
+                                 GLenum format,
+                                 GLenum type)
+{
+    TexImageFormat result;
+    result.internalFormat = GetNativeInternalFormat(
+        functions, workarounds, internalFormat, gl::GetSizedInternalFormat(internalFormat, type));
+    result.format = GetNativeFormat(functions, workarounds, format);
+    result.type   = GetNativeType(functions, workarounds, type);
+    return result;
+}
 
-    RenderbufferFormat GetRenderbufferFormat(const FunctionsGL* functions,
-        const WorkaroundsGL& workarounds,
-        GLenum internalFormat)
-    {
-        RenderbufferFormat result;
-        result.internalFormat = GetNativeInternalFormat(functions, workarounds, internalFormat, internalFormat);
-        return result;
-    }
+TexSubImageFormat GetTexSubImageFormat(const FunctionsGL *functions,
+                                       const WorkaroundsGL &workarounds,
+                                       GLenum format,
+                                       GLenum type)
+{
+    TexSubImageFormat result;
+    result.format = GetNativeFormat(functions, workarounds, format);
+    result.type   = GetNativeType(functions, workarounds, type);
+    return result;
+}
+
+CompressedTexImageFormat GetCompressedTexImageFormat(const FunctionsGL *functions,
+                                                     const WorkaroundsGL &workarounds,
+                                                     GLenum internalFormat)
+{
+    CompressedTexImageFormat result;
+    result.internalFormat = GetNativeCompressedFormat(functions, workarounds, internalFormat);
+    return result;
+}
+
+CompressedTexSubImageFormat GetCompressedSubTexImageFormat(const FunctionsGL *functions,
+                                                           const WorkaroundsGL &workarounds,
+                                                           GLenum format)
+{
+    CompressedTexSubImageFormat result;
+    result.format = GetNativeCompressedFormat(functions, workarounds, format);
+    return result;
+}
+
+CopyTexImageImageFormat GetCopyTexImageImageFormat(const FunctionsGL *functions,
+                                                   const WorkaroundsGL &workarounds,
+                                                   GLenum internalFormat,
+                                                   GLenum framebufferType)
+{
+    CopyTexImageImageFormat result;
+    result.internalFormat =
+        GetNativeInternalFormat(functions, workarounds, internalFormat,
+                                gl::GetSizedInternalFormat(internalFormat, framebufferType));
+    return result;
+}
+
+TexStorageFormat GetTexStorageFormat(const FunctionsGL *functions,
+                                     const WorkaroundsGL &workarounds,
+                                     GLenum internalFormat)
+{
+    TexStorageFormat result;
+    result.internalFormat =
+        GetNativeInternalFormat(functions, workarounds, internalFormat, internalFormat);
+    return result;
+}
+
+RenderbufferFormat GetRenderbufferFormat(const FunctionsGL *functions,
+                                         const WorkaroundsGL &workarounds,
+                                         GLenum internalFormat)
+{
+    RenderbufferFormat result;
+    result.internalFormat =
+        GetNativeInternalFormat(functions, workarounds, internalFormat, internalFormat);
+    return result;
+}
 }
 
 }

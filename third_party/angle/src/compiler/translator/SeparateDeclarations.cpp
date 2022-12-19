@@ -17,18 +17,19 @@
 
 #include "compiler/translator/IntermNode.h"
 
-namespace {
+namespace
+{
 
-class SeparateDeclarationsTraverser : private TIntermTraverser {
-public:
-    static void apply(TIntermNode* root);
-
-private:
+class SeparateDeclarationsTraverser : private TIntermTraverser
+{
+  public:
+    static void apply(TIntermNode *root);
+  private:
     SeparateDeclarationsTraverser();
-    bool visitAggregate(Visit, TIntermAggregate* node) override;
+    bool visitAggregate(Visit, TIntermAggregate *node) override;
 };
 
-void SeparateDeclarationsTraverser::apply(TIntermNode* root)
+void SeparateDeclarationsTraverser::apply(TIntermNode *root)
 {
     SeparateDeclarationsTraverser separateDecl;
     root->traverse(&separateDecl);
@@ -40,17 +41,20 @@ SeparateDeclarationsTraverser::SeparateDeclarationsTraverser()
 {
 }
 
-bool SeparateDeclarationsTraverser::visitAggregate(Visit, TIntermAggregate* node)
+bool SeparateDeclarationsTraverser::visitAggregate(Visit, TIntermAggregate *node)
 {
-    if (node->getOp() == EOpDeclaration) {
-        TIntermSequence* sequence = node->getSequence();
-        if (sequence->size() > 1) {
-            TIntermAggregate* parentAgg = getParentNode()->getAsAggregate();
+    if (node->getOp() == EOpDeclaration)
+    {
+        TIntermSequence *sequence = node->getSequence();
+        if (sequence->size() > 1)
+        {
+            TIntermAggregate *parentAgg = getParentNode()->getAsAggregate();
             ASSERT(parentAgg != nullptr);
 
             TIntermSequence replacementDeclarations;
-            for (size_t ii = 0; ii < sequence->size(); ++ii) {
-                TIntermAggregate* replacementDeclaration = new TIntermAggregate;
+            for (size_t ii = 0; ii < sequence->size(); ++ii)
+            {
+                TIntermAggregate *replacementDeclaration = new TIntermAggregate;
 
                 replacementDeclaration->setOp(EOpDeclaration);
                 replacementDeclaration->getSequence()->push_back(sequence->at(ii));
@@ -67,7 +71,7 @@ bool SeparateDeclarationsTraverser::visitAggregate(Visit, TIntermAggregate* node
 
 } // namespace
 
-void SeparateDeclarations(TIntermNode* root)
+void SeparateDeclarations(TIntermNode *root)
 {
     SeparateDeclarationsTraverser::apply(root);
 }

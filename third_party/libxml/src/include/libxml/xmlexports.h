@@ -49,112 +49,110 @@
 #define XMLCDECL
 
 // weolar
-#define LIBXML_STATIC
+#define LIBXML_STATIC 
 
 /** DOC_DISABLE */
 
 /* Windows platform with MS compiler */
 #if defined(_WIN32) && defined(_MSC_VER)
-#undef XMLPUBFUN
-#undef XMLPUBVAR
-#undef XMLCALL
-#undef XMLCDECL
-#if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
-#define XMLPUBFUN __declspec(dllexport)
-#define XMLPUBVAR __declspec(dllexport)
-#else
-#define XMLPUBFUN
-#if !defined(LIBXML_STATIC)
-#define XMLPUBVAR __declspec(dllimport) extern
-#else
-#define XMLPUBVAR extern
-#endif
-#endif
-#if defined(LIBXML_FASTCALL)
-#define XMLCALL __fastcall
-#else
-#define XMLCALL __cdecl
-#endif
-#define XMLCDECL __cdecl
-#if !defined _REENTRANT
-#define _REENTRANT
-#endif
+  #undef XMLPUBFUN
+  #undef XMLPUBVAR
+  #undef XMLCALL
+  #undef XMLCDECL
+  #if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
+    #define XMLPUBFUN __declspec(dllexport)
+    #define XMLPUBVAR __declspec(dllexport)
+  #else
+    #define XMLPUBFUN
+    #if !defined(LIBXML_STATIC)
+      #define XMLPUBVAR __declspec(dllimport) extern
+    #else
+      #define XMLPUBVAR extern
+    #endif
+  #endif
+  #if defined(LIBXML_FASTCALL)
+    #define XMLCALL __fastcall
+  #else
+    #define XMLCALL __cdecl
+  #endif
+  #define XMLCDECL __cdecl
+  #if !defined _REENTRANT
+    #define _REENTRANT
+  #endif
 #endif
 
 /* Windows platform with Borland compiler */
 #if defined(_WIN32) && defined(__BORLANDC__)
-#undef XMLPUBFUN
-#undef XMLPUBVAR
-#undef XMLCALL
-#undef XMLCDECL
-#if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
-#pragma message("5555555555555555555555")
-#define XMLPUBFUN __declspec(dllexport)
-#define XMLPUBVAR __declspec(dllexport) extern
-#else
-#define XMLPUBFUN
-#if !defined(LIBXML_STATIC)
-#define XMLPUBVAR __declspec(dllimport) extern
-#else
-#define XMLPUBVAR extern
-#endif
-#endif
-#define XMLCALL __cdecl
-#define XMLCDECL __cdecl
-#if !defined _REENTRANT
-#define _REENTRANT
-#endif
+  #undef XMLPUBFUN
+  #undef XMLPUBVAR
+  #undef XMLCALL
+  #undef XMLCDECL
+  #if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
+    #define XMLPUBFUN __declspec(dllexport)
+    #define XMLPUBVAR __declspec(dllexport) extern
+  #else
+    #define XMLPUBFUN
+    #if !defined(LIBXML_STATIC)
+      #define XMLPUBVAR __declspec(dllimport) extern
+    #else
+      #define XMLPUBVAR extern
+    #endif
+  #endif
+  #define XMLCALL __cdecl
+  #define XMLCDECL __cdecl
+  #if !defined _REENTRANT
+    #define _REENTRANT
+  #endif
 #endif
 
 /* Windows platform with GNU compiler (Mingw) */
 #if defined(_WIN32) && defined(__MINGW32__)
-#undef XMLPUBFUN
-#undef XMLPUBVAR
-#undef XMLCALL
-#undef XMLCDECL
-/*
+  #undef XMLPUBFUN
+  #undef XMLPUBVAR
+  #undef XMLCALL
+  #undef XMLCDECL
+  /*
    * if defined(IN_LIBXML) this raises problems on mingw with msys
    * _imp__xmlFree listed as missing. Try to workaround the problem
    * by also making that declaration when compiling client code.
    */
-#if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
-# define XMLPUBFUN __declspec(dllexport)
-# define XMLPUBVAR __declspec(dllexport)
-#else
-# define XMLPUBFUN
-# if !defined(LIBXML_STATIC)
-#  define XMLPUBVAR __declspec(dllimport) extern
-# else
-#  define XMLPUBVAR extern
+  #if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
+    #define XMLPUBFUN __declspec(dllexport)
+    #define XMLPUBVAR __declspec(dllexport)
+  #else
+    #define XMLPUBFUN
+    #if !defined(LIBXML_STATIC)
+      #define XMLPUBVAR __declspec(dllimport) extern
+    #else
+      #define XMLPUBVAR extern
+    #endif
+  #endif
+  #define XMLCALL __cdecl
+  #define XMLCDECL __cdecl
+  #if !defined _REENTRANT
+    #define _REENTRANT
+  #endif
 #endif
-#endif
-
-#define XMLCALL __cdecl
-#define XMLCDECL __cdecl
-#if !defined _REENTRANT
-#define _REENTRANT
-#endif
-#endif // _WIN32
 
 /* Cygwin platform, GNU compiler */
 #if defined(_WIN32) && defined(__CYGWIN__)
-#undef XMLPUBFUN
-#undef XMLPUBVAR
-#undef XMLCALL
-#undef XMLCDECL
-#if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
-#define XMLPUBFUN __declspec(dllexport)
-#define XMLPUBVAR __declspec(dllexport)
-#else
-#define XMLPUBFUN
-#if !defined(LIBXML_STATIC)
-#define XMLPUBVAR __declspec(dllimport) extern
-#else
-#define XMLPUBVAR
-#endif
-#endif
-#define XMLCALL __cdecl
-#define XMLCDECL __cdecl
+  #undef XMLPUBFUN
+  #undef XMLPUBVAR
+  #undef XMLCALL
+  #undef XMLCDECL
+  #if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
+    #define XMLPUBFUN __declspec(dllexport)
+    #define XMLPUBVAR __declspec(dllexport)
+  #else
+    #define XMLPUBFUN
+    #if !defined(LIBXML_STATIC)
+      #define XMLPUBVAR __declspec(dllimport) extern
+    #else
+      #define XMLPUBVAR
+    #endif
+  #endif
+  #define XMLCALL __cdecl
+  #define XMLCDECL __cdecl
 #endif
 
 /* Compatibility */
@@ -163,3 +161,5 @@
 #endif
 
 #endif /* __XML_EXPORTS_H__ */
+
+

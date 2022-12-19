@@ -12,8 +12,9 @@
 
 class TInfoSink;
 
-class TDiagnostics : public pp::Diagnostics, angle::NonCopyable {
-public:
+class TDiagnostics : public pp::Diagnostics, angle::NonCopyable
+{
+  public:
     TDiagnostics(TInfoSink& infoSink);
     ~TDiagnostics() override;
 
@@ -23,18 +24,18 @@ public:
     int numWarnings() const { return mNumWarnings; }
 
     void writeInfo(Severity severity,
-        const pp::SourceLocation& loc,
-        const std::string& reason,
-        const std::string& token,
-        const std::string& extra);
+                   const pp::SourceLocation& loc,
+                   const std::string& reason,
+                   const std::string& token,
+                   const std::string& extra);
 
-protected:
-    void print(ID id, const pp::SourceLocation& loc, const std::string& text) override;
+  protected:
+    void print(ID id, const pp::SourceLocation &loc, const std::string &text) override;
 
-private:
+  private:
     TInfoSink& mInfoSink;
     int mNumErrors;
     int mNumWarnings;
 };
 
-#endif // COMPILER_TRANSLATOR_DIAGNOSTICS_H_
+#endif  // COMPILER_TRANSLATOR_DIAGNOSTICS_H_

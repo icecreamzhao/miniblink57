@@ -31,23 +31,27 @@
    version 2.2 of Bison.  */
 
 #ifndef YY_YY_GLSLANG_TAB_H_INCLUDED
-#define YY_YY_GLSLANG_TAB_H_INCLUDED
+# define YY_YY_GLSLANG_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-#define YYDEBUG 0
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
 
+
 #define YYLTYPE TSourceLoc
 #define YYLTYPE_IS_DECLARED 1
 
+
+
 /* Token type.  */
 #ifndef YYTOKENTYPE
-#define YYTOKENTYPE
-enum yytokentype {
+# define YYTOKENTYPE
+  enum yytokentype
+  {
     INVARIANT = 258,
     HIGH_PRECISION = 259,
     MEDIUM_PRECISION = 260,
@@ -173,17 +177,19 @@ enum yytokentype {
     CARET = 380,
     AMPERSAND = 381,
     QUESTION = 382
-};
+  };
 #endif
 
 /* Value type.  */
-#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
-union YYSTYPE {
+union YYSTYPE
+{
+
 
     struct {
         union {
-            TString* string;
+            TString *string;
             float f;
             int i;
             unsigned int u;
@@ -212,26 +218,31 @@ union YYSTYPE {
             TFieldList* fieldList;
         };
     } interm;
+
+
 };
 
 typedef union YYSTYPE YYSTYPE;
-#define YYSTYPE_IS_TRIVIAL 1
-#define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if !defined YYLTYPE && !defined YYLTYPE_IS_DECLARED
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
 typedef struct YYLTYPE YYLTYPE;
-struct YYLTYPE {
-    int first_line;
-    int first_column;
-    int last_line;
-    int last_column;
+struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
 };
-#define YYLTYPE_IS_DECLARED 1
-#define YYLTYPE_IS_TRIVIAL 1
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
 #endif
 
-int yyparse(TParseContext* context, void* scanner);
+
+
+int yyparse (TParseContext* context, void *scanner);
 
 #endif /* !YY_YY_GLSLANG_TAB_H_INCLUDED  */

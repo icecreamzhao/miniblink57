@@ -8,7 +8,8 @@
 
 #include "libANGLE/renderer/SurfaceImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 SurfaceImpl::SurfaceImpl()
 {

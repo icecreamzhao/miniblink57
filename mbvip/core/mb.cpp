@@ -213,8 +213,10 @@ mbWebView MB_CALL_TYPE mbCreateWebCustomWindow(HWND parent, DWORD style, DWORD s
     return (int)result->getId();
 }
 
+
 mbWebView MB_CALL_TYPE mbCreateWebViewBindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height)
 {
+#ifdef OS_LINUX
     checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* result = new mb::MbWebView();
     result->bindGTKWindow(rootWindow, drawingArea, style, styleEx, width, height);
@@ -223,7 +225,11 @@ mbWebView MB_CALL_TYPE mbCreateWebViewBindGTKWindow(void* rootWindow, void* draw
         });
 
     return (int)result->getId();
+#else
+    return NULL;
+#endif
 }
+
 
 mbWebView MB_CALL_TYPE mbCreateWebView()
 {

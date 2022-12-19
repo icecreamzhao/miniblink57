@@ -15,25 +15,23 @@
 
 #include <GLES2/gl2.h>
 
-namespace rx {
+namespace rx
+{
 
-class QueryImpl : angle::NonCopyable {
-public:
+class QueryImpl : angle::NonCopyable
+{
+  public:
     explicit QueryImpl(GLenum type) { mType = type; }
     virtual ~QueryImpl() { }
 
     virtual gl::Error begin() = 0;
     virtual gl::Error end() = 0;
-    virtual gl::Error queryCounter() = 0;
-    virtual gl::Error getResult(GLint* params) = 0;
-    virtual gl::Error getResult(GLuint* params) = 0;
-    virtual gl::Error getResult(GLint64* params) = 0;
-    virtual gl::Error getResult(GLuint64* params) = 0;
-    virtual gl::Error isResultAvailable(bool* available) = 0;
+    virtual gl::Error getResult(GLuint *params) = 0;
+    virtual gl::Error isResultAvailable(GLuint *available) = 0;
 
-    GLenum getType() const { return mType; }
+    GLenum getType() const { return mType;  }
 
-private:
+  private:
     GLenum mType;
 };
 

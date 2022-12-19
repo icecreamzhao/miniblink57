@@ -507,6 +507,7 @@ void MbWebView::createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD
     m_isWebWindowMode = true; // TODO
 }
 
+#ifdef OS_LINUX
 void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height)
 {
     const WCHAR* szClassName = u16("MtMbWebWindow");
@@ -547,6 +548,7 @@ void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, 
 
     m_isWebWindowMode = true; // TODO
 }
+#endif
 
 void MbWebView::createWkeWebWindowInUiThread(mbWindowType type, HWND parent, int x, int y, int width, int height)
 {

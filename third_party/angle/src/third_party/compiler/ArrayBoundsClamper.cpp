@@ -43,22 +43,24 @@ namespace {
 class ArrayBoundsClamperMarker : public TIntermTraverser {
 public:
     ArrayBoundsClamperMarker()
-        : TIntermTraverser(true, false, false)
-        , mNeedsClamp(false)
-    {
-    }
+        : TIntermTraverser(true, false, false),
+          mNeedsClamp(false)
+   {
+   }
 
-    bool visitBinary(Visit visit, TIntermBinary* node) override
-    {
-        if (node->getOp() == EOpIndexIndirect) {
-            TIntermTyped* left = node->getLeft();
-            if (left->isArray() || left->isVector() || left->isMatrix()) {
-                node->setAddIndexClamp();
-                mNeedsClamp = true;
-            }
-        }
-        return true;
-    }
+    bool visitBinary(Visit visit, TIntermBinary *node) override
+   {
+       if (node->getOp() == EOpIndexIndirect)
+       {
+           TIntermTyped* left = node->getLeft();
+           if (left->isArray() || left->isVector() || left->isMatrix())
+           {
+               node->setAddIndexClamp();
+               mNeedsClamp = true;
+           }
+       }
+       return true;
+   }
 
     bool GetNeedsClamp() { return mNeedsClamp; }
 
@@ -66,7 +68,7 @@ private:
     bool mNeedsClamp;
 };
 
-} // anonymous namespace
+}  // anonymous namespace
 
 ArrayBoundsClamper::ArrayBoundsClamper()
     : mClampingStrategy(SH_CLAMP_WITH_CLAMP_INTRINSIC)
@@ -85,17 +87,20 @@ void ArrayBoundsClamper::MarkIndirectArrayBoundsForClamping(TIntermNode* root)
 
     ArrayBoundsClamperMarker clamper;
     root->traverse(&clamper);
-    if (clamper.GetNeedsClamp()) {
+    if (clamper.GetNeedsClamp())
+    {
         SetArrayBoundsClampDefinitionNeeded();
     }
 }
 
 void ArrayBoundsClamper::OutputClampingFunctionDefinition(TInfoSinkBase& out) const
 {
-    if (!mArrayBoundsClampDefinitionNeeded) {
+    if (!mArrayBoundsClampDefinitionNeeded)
+    {
         return;
     }
-    if (mClampingStrategy != SH_CLAMP_WITH_USER_DEFINED_INT_CLAMP_FUNCTION) {
+    if (mClampingStrategy != SH_CLAMP_WITH_USER_DEFINED_INT_CLAMP_FUNCTION)
+    {
         return;
     }
     out << kIntClampBegin << kIntClampDefinition << kIntClampEnd;

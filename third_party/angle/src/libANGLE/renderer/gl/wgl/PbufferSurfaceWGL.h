@@ -13,22 +13,24 @@
 
 #include <GL/wglext.h>
 
-namespace rx {
+namespace rx
+{
 
 class FunctionsWGL;
 
-class PbufferSurfaceWGL : public SurfaceGL {
-public:
-    PbufferSurfaceWGL(RendererGL* renderer,
-        EGLint width,
-        EGLint height,
-        EGLenum textureFormat,
-        EGLenum textureTarget,
-        bool largest,
-        int pixelFormat,
-        HDC deviceContext,
-        HGLRC wglContext,
-        const FunctionsWGL* functions);
+class PbufferSurfaceWGL : public SurfaceGL
+{
+  public:
+    PbufferSurfaceWGL(RendererGL *renderer,
+                      EGLint width,
+                      EGLint height,
+                      EGLenum textureFormat,
+                      EGLenum textureTarget,
+                      bool largest,
+                      int pixelFormat,
+                      HDC deviceContext,
+                      HGLRC wglContext,
+                      const FunctionsWGL *functions);
     ~PbufferSurfaceWGL() override;
 
     egl::Error initialize() override;
@@ -36,8 +38,8 @@ public:
 
     egl::Error swap() override;
     egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) override;
-    egl::Error querySurfacePointerANGLE(EGLint attribute, void** value) override;
-    egl::Error bindTexImage(gl::Texture* texture, EGLint buffer) override;
+    egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) override;
+    egl::Error bindTexImage(EGLint buffer) override;
     egl::Error releaseTexImage(EGLint buffer) override;
     void setSwapInterval(EGLint interval) override;
 
@@ -47,7 +49,7 @@ public:
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
-private:
+  private:
     EGLint mWidth;
     EGLint mHeight;
     bool mLargest;
@@ -63,7 +65,7 @@ private:
     HPBUFFERARB mPbuffer;
     HDC mPbufferDeviceContext;
 
-    const FunctionsWGL* mFunctionsWGL;
+    const FunctionsWGL *mFunctionsWGL;
 };
 
 }

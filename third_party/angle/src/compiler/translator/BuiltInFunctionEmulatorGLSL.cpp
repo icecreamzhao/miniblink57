@@ -4,14 +4,14 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "angle_gl.h"
 #include "compiler/translator/BuiltInFunctionEmulator.h"
+#include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/Cache.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/VersionGLSL.h"
 
-void InitBuiltInFunctionEmulatorForGLSLWorkarounds(BuiltInFunctionEmulator* emu, sh::GLenum shaderType)
+void InitBuiltInFunctionEmulatorForGLSLWorkarounds(BuiltInFunctionEmulator *emu, sh::GLenum shaderType)
 {
     // we use macros here instead of function definitions to work around more GLSL
     // compiler bugs, in particular on NVIDIA hardware on Mac OSX. Macros are
@@ -19,12 +19,13 @@ void InitBuiltInFunctionEmulatorForGLSLWorkarounds(BuiltInFunctionEmulator* emu,
     // evaluated. This is unlikely to show up in real shaders, but is something to
     // consider.
 
-    const TType* float1 = TCache::getType(EbtFloat);
-    const TType* float2 = TCache::getType(EbtFloat, 2);
-    const TType* float3 = TCache::getType(EbtFloat, 3);
-    const TType* float4 = TCache::getType(EbtFloat, 4);
+    const TType *float1 = TCache::getType(EbtFloat);
+    const TType *float2 = TCache::getType(EbtFloat, 2);
+    const TType *float3 = TCache::getType(EbtFloat, 3);
+    const TType *float4 = TCache::getType(EbtFloat, 4);
 
-    if (shaderType == GL_FRAGMENT_SHADER) {
+    if (shaderType == GL_FRAGMENT_SHADER)
+    {
         emu->addEmulatedFunction(EOpCos, float1, "webgl_emu_precision float webgl_cos_emu(webgl_emu_precision float a) { return cos(a); }");
         emu->addEmulatedFunction(EOpCos, float2, "webgl_emu_precision vec2 webgl_cos_emu(webgl_emu_precision vec2 a) { return cos(a); }");
         emu->addEmulatedFunction(EOpCos, float3, "webgl_emu_precision vec3 webgl_cos_emu(webgl_emu_precision vec3 a) { return cos(a); }");
@@ -38,14 +39,15 @@ void InitBuiltInFunctionEmulatorForGLSLWorkarounds(BuiltInFunctionEmulator* emu,
 }
 
 // Emulate built-in functions missing from GLSL 1.30 and higher
-void InitBuiltInFunctionEmulatorForGLSLMissingFunctions(BuiltInFunctionEmulator* emu, sh::GLenum shaderType,
-    int targetGLSLVersion)
+void InitBuiltInFunctionEmulatorForGLSLMissingFunctions(BuiltInFunctionEmulator *emu, sh::GLenum shaderType,
+                                                        int targetGLSLVersion)
 {
     // Emulate packSnorm2x16, packHalf2x16, unpackSnorm2x16, and unpackHalf2x16 (GLSL 4.20)
     // by using floatBitsToInt, floatBitsToUint, intBitsToFloat, and uintBitsToFloat (GLSL 3.30).
-    if (targetGLSLVersion >= GLSL_VERSION_330 && targetGLSLVersion < GLSL_VERSION_420) {
-        const TType* float2 = TCache::getType(EbtFloat, 2);
-        const TType* uint1 = TCache::getType(EbtUInt);
+    if (targetGLSLVersion >= GLSL_VERSION_330 && targetGLSLVersion < GLSL_VERSION_420)
+    {
+        const TType *float2 = TCache::getType(EbtFloat, 2);
+        const TType *uint1 = TCache::getType(EbtUInt);
 
         // clang-format off
         emu->addEmulatedFunction(EOpPackSnorm2x16, float2,

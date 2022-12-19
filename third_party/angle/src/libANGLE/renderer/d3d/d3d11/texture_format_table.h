@@ -13,53 +13,40 @@
 #include <map>
 
 #include "common/platform.h"
-#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 
-namespace rx {
+namespace rx
+{
 
-namespace d3d11 {
+namespace d3d11
+{
 
-    struct LoadImageFunctionInfo {
-        LoadImageFunctionInfo()
-            : loadFunction(nullptr)
-            , requiresConversion(false)
-        {
-        }
-        LoadImageFunctionInfo(LoadImageFunction loadFunction, bool requiresConversion)
-            : loadFunction(loadFunction)
-            , requiresConversion(requiresConversion)
-        {
-        }
+struct TextureFormat
+{
+    TextureFormat();
 
-        LoadImageFunction loadFunction;
-        bool requiresConversion;
-    };
+    DXGI_FORMAT texFormat;
+    DXGI_FORMAT srvFormat;
+    DXGI_FORMAT rtvFormat;
+    DXGI_FORMAT dsvFormat;
+    DXGI_FORMAT renderFormat;
 
-    struct TextureFormat {
-        TextureFormat();
+    DXGI_FORMAT swizzleTexFormat;
+    DXGI_FORMAT swizzleSRVFormat;
+    DXGI_FORMAT swizzleRTVFormat;
 
-        DXGI_FORMAT texFormat;
-        DXGI_FORMAT srvFormat;
-        DXGI_FORMAT rtvFormat;
-        DXGI_FORMAT dsvFormat;
-        DXGI_FORMAT renderFormat;
+    InitializeTextureDataFunction dataInitializerFunction;
+    typedef std::map<GLenum, LoadImageFunction> LoadFunctionMap;
 
-        DXGI_FORMAT swizzleTexFormat;
-        DXGI_FORMAT swizzleSRVFormat;
-        DXGI_FORMAT swizzleRTVFormat;
+    LoadFunctionMap loadFunctions;
+};
 
-        InitializeTextureDataFunction dataInitializerFunction;
-        typedef std::map<GLenum, LoadImageFunctionInfo> LoadFunctionMap;
+const TextureFormat &GetTextureFormatInfo(GLenum internalformat,
+                                          const Renderer11DeviceCaps &renderer11DeviceCaps);
 
-        LoadFunctionMap loadFunctions;
-    };
+}  // namespace d3d11
 
-    const TextureFormat& GetTextureFormatInfo(GLenum internalformat,
-        const Renderer11DeviceCaps& renderer11DeviceCaps);
+}  // namespace rx
 
-} // namespace d3d11
-
-} // namespace rx
-
-#endif // LIBANGLE_RENDERER_D3D_D3D11_TEXTUREFORMATTABLE_H_
+#endif  // LIBANGLE_RENDERER_D3D_D3D11_TEXTUREFORMATTABLE_H_

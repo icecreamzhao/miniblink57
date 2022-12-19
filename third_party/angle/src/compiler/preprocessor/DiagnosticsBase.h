@@ -9,19 +9,23 @@
 
 #include <string>
 
-namespace pp {
+namespace pp
+{
 
 struct SourceLocation;
 
 // Base class for reporting diagnostic messages.
 // Derived classes are responsible for formatting and printing the messages.
-class Diagnostics {
-public:
-    enum Severity {
+class Diagnostics
+{
+  public:
+    enum Severity
+    {
         PP_ERROR,
         PP_WARNING
     };
-    enum ID {
+    enum ID
+    {
         PP_ERROR_BEGIN,
         PP_INTERNAL_ERROR,
         PP_OUT_OF_MEMORY,
@@ -73,18 +77,17 @@ public:
 
     virtual ~Diagnostics();
 
-    void report(ID id, const SourceLocation& loc, const std::string& text);
+    void report(ID id, const SourceLocation &loc, const std::string &text);
 
-protected:
+  protected:
     Severity severity(ID id);
     std::string message(ID id);
 
     virtual void print(ID id,
-        const SourceLocation& loc,
-        const std::string& text)
-        = 0;
+                       const SourceLocation &loc,
+                       const std::string &text) = 0;
 };
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_DIAGNOSTICSBASE_H_
+#endif  // COMPILER_PREPROCESSOR_DIAGNOSTICSBASE_H_

@@ -14,6 +14,6 @@
 
 class TIntermNode;
 
-void SeparateExpressionsReturningArrays(TIntermNode* root, unsigned int* temporaryIndex);
+void SeparateExpressionsReturningArrays(TIntermNode *root, unsigned int *temporaryIndex);
 
 #endif // COMPILER_TRANSLATOR_SEPARATEEXPRESSIONSRETURNINGARRAYS_H_

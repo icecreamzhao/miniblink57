@@ -12,45 +12,50 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 
-namespace gl {
+namespace gl
+{
 class VertexDataManager;
 class Program;
 }
 
-namespace rx {
+namespace rx
+{
 
-class VertexDeclarationCache {
-public:
+class VertexDeclarationCache
+{
+  public:
     VertexDeclarationCache();
     ~VertexDeclarationCache();
 
-    gl::Error applyDeclaration(IDirect3DDevice9* device,
-        const std::vector<TranslatedAttribute>& attributes,
-        gl::Program* program,
-        GLsizei instances,
-        GLsizei* repeatDraw);
+    gl::Error applyDeclaration(IDirect3DDevice9 *device,
+                               const std::vector<TranslatedAttribute> &attributes,
+                               gl::Program *program,
+                               GLsizei instances,
+                               GLsizei *repeatDraw);
 
     void markStateDirty();
 
-private:
+  private:
     UINT mMaxLru;
 
     enum { NUM_VERTEX_DECL_CACHE_ENTRIES = 32 };
 
-    struct VBData {
+    struct VBData
+    {
         unsigned int serial;
         unsigned int stride;
         unsigned int offset;
     };
 
     VBData mAppliedVBs[gl::MAX_VERTEX_ATTRIBS];
-    IDirect3DVertexDeclaration9* mLastSetVDecl;
+    IDirect3DVertexDeclaration9 *mLastSetVDecl;
     bool mInstancingEnabled;
 
-    struct VertexDeclCacheEntry {
+    struct VertexDeclCacheEntry
+    {
         D3DVERTEXELEMENT9 cachedElements[gl::MAX_VERTEX_ATTRIBS + 1];
         UINT lruCount;
-        IDirect3DVertexDeclaration9* vertexDeclaration;
+        IDirect3DVertexDeclaration9 *vertexDeclaration;
     } mVertexDeclCache[NUM_VERTEX_DECL_CACHE_ENTRIES];
 };
 

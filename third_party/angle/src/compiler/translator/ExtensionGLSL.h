@@ -16,18 +16,19 @@
 
 // Traverses the intermediate tree to determine which GLSL extensions are required
 // to support the shader.
-class TExtensionGLSL : public TIntermTraverser {
-public:
+class TExtensionGLSL : public TIntermTraverser
+{
+  public:
     TExtensionGLSL(ShShaderOutput output);
 
-    const std::set<std::string>& getEnabledExtensions() const;
-    const std::set<std::string>& getRequiredExtensions() const;
+    const std::set<std::string> &getEnabledExtensions() const;
+    const std::set<std::string> &getRequiredExtensions() const;
 
-    bool visitUnary(Visit visit, TIntermUnary* node) override;
-    bool visitAggregate(Visit visit, TIntermAggregate* node) override;
+    bool visitUnary(Visit visit, TIntermUnary *node) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
 
-private:
-    void checkOperator(TIntermOperator* node);
+  private:
+    void checkOperator(TIntermOperator *node);
 
     int mTargetVersion;
 
@@ -35,4 +36,4 @@ private:
     std::set<std::string> mRequiredExtensions;
 };
 
-#endif // COMPILER_TRANSLATOR_EXTENSIONGLSL_H_
+#endif  // COMPILER_TRANSLATOR_EXTENSIONGLSL_H_

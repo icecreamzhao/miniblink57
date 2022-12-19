@@ -11,40 +11,36 @@
 #define LIBANGLE_DEVICE_H_
 
 #include "common/angleutils.h"
-#include "libANGLE/Display.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/Display.h"
 
-namespace rx {
+namespace rx
+{
 class DeviceImpl;
 }
 
-namespace egl {
-class Device final : angle::NonCopyable {
-public:
+namespace egl
+{
+class Device final : angle::NonCopyable
+{
+  public:
+    Device(Display *display, rx::DeviceImpl *impl);
     virtual ~Device();
 
-    Error getDevice(EGLAttrib* value);
-    Display* getOwningDisplay() { return mOwningDisplay; };
+    Error getDevice(EGLAttrib *value);
+    Display *getDisplay() { return mDisplay; };
     EGLint getType();
 
-    const DeviceExtensions& getExtensions() const;
-    const std::string& getExtensionString() const;
+    const DeviceExtensions &getExtensions() const;
+    const std::string &getExtensionString() const;
 
-    rx::DeviceImpl* getImplementation() { return mImplementation; }
+    rx::DeviceImpl *getImplementation() { return mImplementation; }
 
-    static egl::Error CreateDevice(void* devicePointer, EGLint deviceType, Device** outDevice);
-    static egl::Error CreateDevice(Display* owningDisplay,
-        rx::DeviceImpl* impl,
-        Device** outDevice);
-
-    static bool IsValidDevice(Device* device);
-
-private:
-    Device(Display* owningDisplay, rx::DeviceImpl* impl);
+  private:
     void initDeviceExtensions();
 
-    Display* mOwningDisplay;
-    rx::DeviceImpl* mImplementation;
+    Display *mDisplay;
+    rx::DeviceImpl *mImplementation;
 
     DeviceExtensions mDeviceExtensions;
     std::string mDeviceExtensionString;
@@ -52,4 +48,4 @@ private:
 
 }
 
-#endif // LIBANGLE_DEVICE_H_
+#endif   // LIBANGLE_DEVICE_H_

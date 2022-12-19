@@ -11,16 +11,18 @@
 
 #include "pp_utils.h"
 
-namespace pp {
+namespace pp
+{
 
 class Diagnostics;
 class DirectiveHandler;
 struct PreprocessorImpl;
 struct Token;
 
-class Preprocessor {
-public:
-    Preprocessor(Diagnostics* diagnostics, DirectiveHandler* directiveHandler);
+class Preprocessor
+{
+  public:
+    Preprocessor(Diagnostics *diagnostics, DirectiveHandler *directiveHandler);
     ~Preprocessor();
 
     // count: specifies the number of elements in the string and length arrays.
@@ -32,21 +34,21 @@ public:
     // Each element in the length array may contain the length of the
     // corresponding string or a value less than 0 to indicate that the string
     // is null terminated.
-    bool init(size_t count, const char* const string[], const int length[]);
+    bool init(size_t count, const char * const string[], const int length[]);
     // Adds a pre-defined macro.
-    void predefineMacro(const char* name, int value);
+    void predefineMacro(const char *name, int value);
 
-    void lex(Token* token);
+    void lex(Token *token);
 
     // Set maximum preprocessor token size
     void setMaxTokenSize(size_t maxTokenSize);
 
-private:
+  private:
     PP_DISALLOW_COPY_AND_ASSIGN(Preprocessor);
 
-    PreprocessorImpl* mImpl;
+    PreprocessorImpl *mImpl;
 };
 
-} // namespace pp
+}  // namespace pp
 
-#endif // COMPILER_PREPROCESSOR_PREPROCESSOR_H_
+#endif  // COMPILER_PREPROCESSOR_PREPROCESSOR_H_

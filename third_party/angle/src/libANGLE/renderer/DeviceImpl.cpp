@@ -8,7 +8,8 @@
 
 #include "libANGLE/renderer/DeviceImpl.h"
 
-namespace rx {
+namespace rx
+{
 
 DeviceImpl::DeviceImpl()
 {

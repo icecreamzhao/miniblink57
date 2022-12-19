@@ -12,11 +12,13 @@
 #include "common/debug.h"
 #include "compiler/translator/Cache.h"
 
-namespace {
+namespace
+{
 
-class TScopedAllocator : angle::NonCopyable {
-public:
-    TScopedAllocator(TPoolAllocator* allocator)
+class TScopedAllocator : angle::NonCopyable
+{
+  public:
+    TScopedAllocator(TPoolAllocator *allocator)
         : mPreviousAllocator(GetGlobalPoolAllocator())
     {
         SetGlobalPoolAllocator(allocator);
@@ -26,26 +28,29 @@ public:
         SetGlobalPoolAllocator(mPreviousAllocator);
     }
 
-private:
-    TPoolAllocator* mPreviousAllocator;
+  private:
+    TPoolAllocator *mPreviousAllocator;
 };
 
-} // namespace
+}  // namespace
 
 TCache::TypeKey::TypeKey(TBasicType basicType,
-    TPrecision precision,
-    TQualifier qualifier,
-    unsigned char primarySize,
-    unsigned char secondarySize)
+                         TPrecision precision,
+                         TQualifier qualifier,
+                         unsigned char primarySize,
+                         unsigned char secondarySize)
 {
     static_assert(sizeof(components) <= sizeof(value),
-        "TypeKey::value is too small");
+                  "TypeKey::value is too small");
 
     const size_t MaxEnumValue = std::numeric_limits<EnumComponentType>::max();
     UNUSED_ASSERTION_VARIABLE(MaxEnumValue);
 
     // TODO: change to static_assert() once we deprecate MSVC 2013 support
-    ASSERT(MaxEnumValue >= EbtLast && MaxEnumValue >= EbpLast && MaxEnumValue >= EvqLast && "TypeKey::EnumComponentType is too small");
+    ASSERT(MaxEnumValue >= EbtLast &&
+           MaxEnumValue >= EbpLast &&
+           MaxEnumValue >= EvqLast &&
+           "TypeKey::EnumComponentType is too small");
 
     value = 0;
     components.basicType = static_cast<EnumComponentType>(basicType);
@@ -55,11 +60,12 @@ TCache::TypeKey::TypeKey(TBasicType basicType,
     components.secondarySize = secondarySize;
 }
 
-TCache* TCache::sCache = nullptr;
+TCache *TCache::sCache = nullptr;
 
 void TCache::initialize()
 {
-    if (sCache == nullptr) {
+    if (sCache == nullptr)
+    {
         sCache = new TCache();
     }
 }
@@ -69,23 +75,24 @@ void TCache::destroy()
     SafeDelete(sCache);
 }
 
-const TType* TCache::getType(TBasicType basicType,
-    TPrecision precision,
-    TQualifier qualifier,
-    unsigned char primarySize,
-    unsigned char secondarySize)
+const TType *TCache::getType(TBasicType basicType,
+                             TPrecision precision,
+                             TQualifier qualifier,
+                             unsigned char primarySize,
+                             unsigned char secondarySize)
 {
     TypeKey key(basicType, precision, qualifier,
-        primarySize, secondarySize);
+                primarySize, secondarySize);
     auto it = sCache->mTypes.find(key);
-    if (it != sCache->mTypes.end()) {
+    if (it != sCache->mTypes.end())
+    {
         return it->second;
     }
 
     TScopedAllocator scopedAllocator(&sCache->mAllocator);
 
-    TType* type = new TType(basicType, precision, qualifier,
-        primarySize, secondarySize);
+    TType *type = new TType(basicType, precision, qualifier,
+                            primarySize, secondarySize);
     type->realize();
     sCache->mTypes.insert(std::make_pair(key, type));
 

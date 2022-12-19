@@ -6,34 +6,32 @@
 
 #include "compiler/translator/InfoSink.h"
 
-void TInfoSinkBase::prefix(TPrefixType p)
-{
-    switch (p) {
-    case EPrefixNone:
-        break;
-    case EPrefixWarning:
-        sink.append("WARNING: ");
-        break;
-    case EPrefixError:
-        sink.append("ERROR: ");
-        break;
-    case EPrefixInternalError:
-        sink.append("INTERNAL ERROR: ");
-        break;
-    case EPrefixUnimplemented:
-        sink.append("UNIMPLEMENTED: ");
-        break;
-    case EPrefixNote:
-        sink.append("NOTE: ");
-        break;
-    default:
-        sink.append("UNKOWN ERROR: ");
-        break;
+void TInfoSinkBase::prefix(TPrefixType p) {
+    switch(p) {
+        case EPrefixNone:
+            break;
+        case EPrefixWarning:
+            sink.append("WARNING: ");
+            break;
+        case EPrefixError:
+            sink.append("ERROR: ");
+            break;
+        case EPrefixInternalError:
+            sink.append("INTERNAL ERROR: ");
+            break;
+        case EPrefixUnimplemented:
+            sink.append("UNIMPLEMENTED: ");
+            break;
+        case EPrefixNote:
+            sink.append("NOTE: ");
+            break;
+        default:
+            sink.append("UNKOWN ERROR: ");
+            break;
     }
 }
 
-void TInfoSinkBase::location(int file, int line)
-{
+void TInfoSinkBase::location(int file, int line) {
     TPersistStringStream stream;
     if (line)
         stream << file << ":" << line;
@@ -44,13 +42,11 @@ void TInfoSinkBase::location(int file, int line)
     sink.append(stream.str());
 }
 
-void TInfoSinkBase::location(const TSourceLoc& loc)
-{
+void TInfoSinkBase::location(const TSourceLoc& loc) {
     location(loc.first_file, loc.first_line);
 }
 
-void TInfoSinkBase::message(TPrefixType p, const TSourceLoc& loc, const char* m)
-{
+void TInfoSinkBase::message(TPrefixType p, const TSourceLoc& loc, const char* m) {
     prefix(p);
     location(loc);
     sink.append(m);
