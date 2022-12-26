@@ -34,6 +34,7 @@
 #include "wtf/text/CString.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/StringBuilder.h"
+#include "wtf/text/WTFStringUtil.h"
 #include <memory>
 //#include <unicode/ucnv.h>
 //#include <unicode/ucnv_cb.h>
@@ -46,7 +47,6 @@ ICUConverterWrapper::~ICUConverterWrapper()
 {
     //   if (converter)
     //     ucnv_close(converter);
-    DebugBreak();
 }
 
 static UConverter*& cachedConverterICU()
@@ -371,21 +371,23 @@ int TextCodecICU::decodeToBuffer(UChar* target,
 //   UConverterToUCallback m_savedAction;
 // };
 
-void MByteToWChar(LPCSTR lpcszStr, DWORD cbMultiByte, Vector<UChar>& out, UINT codePage)
-{
-#if defined(WIN32) 
-    DWORD dwMinSize;
-    dwMinSize = MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, NULL, 0);
+// void MByteToWChar(LPCSTR lpcszStr, DWORD cbMultiByte, std::vector<UChar>* out, UINT codePage)
+// {
+// #if defined(WIN32) 
+//     DWORD dwMinSize;
+//     dwMinSize = MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, NULL, 0);
+// 
+//     out.resize(dwMinSize);
+// 
+//     // Convert headers from ASCII to Unicode.
+//     MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, out.data(), dwMinSize);
+// #else
+//     * (int*)1 = 1;
+//     printf("TextCodecICU.cpp, MByteToWChar\n");
+// #endif
+// }
 
-    out.resize(dwMinSize);
-
-    // Convert headers from ASCII to Unicode.
-    MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, out.data(), dwMinSize);
-#else
-    * (int*)1 = 1;
-    printf("TextCodecICU.cpp, MByteToWChar\n");
-#endif
-}
+void MByteToWChar(const char* lpcszStr, size_t cbMultiByte, std::vector<UChar>* out, UINT codePage);
 
 // void WCharToMByte(LPCWSTR lpWideCharStr, DWORD cchWideChar, Vector<char>& out, UINT codePage)
 // {
@@ -409,12 +411,12 @@ String TextCodecICU::decode(const char* bytes,
     bool stopOnError,
     bool& sawError)
 {
-    Vector<UChar> resultBuffer;
+    std::vector<UChar> resultBuffer;
     if (strcasecmp(m_encoding.name(), "gb2312") && strcasecmp(m_encoding.name(), "GBK"))
         return String();
 
-    WTF::MByteToWChar(bytes, length, resultBuffer, CP_ACP);
-    return String(resultBuffer);
+    WTF::MByteToWChar(bytes, length, &resultBuffer, CP_ACP);
+    return String(resultBuffer.data(), resultBuffer.size());
 
     // Get a converter for the passed-in encoding.
     //   if (!m_converterICU) {
