@@ -8,8 +8,6 @@
 #ifndef common_Util_h
 #define common_Util_h
 
-HMODULE g_hModule = NULL;
-
 namespace common {
 
 inline bool readFile(const wchar_t* path, std::vector<char>* buffer)

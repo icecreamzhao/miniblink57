@@ -123,6 +123,14 @@ var json = [{
 //			"${srcPath}/ui/gfx/linux_font_delegate.cc",
 //			"${srcPath}/ui/gfx/font_render_params.cc",
 //			"${srcPath}/ui/gfx/font_render_params_linux.cc",
+			"${srcPath}/third_party/WebKit/Source/core/paint/FrameSetPainter.cpp",
+			"${srcPath}/third_party/WebKit/Source/core/paint/GridPainter.cpp",
+			"${srcPath}/third_party/WebKit/Source/core/paint/HTMLCanvasPainter.cpp",
+			"${srcPath}/third_party/WebKit/Source/core/paint/HTMLCanvasPaintInvalidator.cpp",
+			"${srcPath}/third_party/WebKit/Source/core/paint/ImagePainter.cpp",
+			"${srcPath}/third_party/WebKit/Source/core/paint/InlineFlowBoxPainter.cpp",
+			"${srcPath}/third_party/WebKit/Source/core/paint/InlinePainter.cpp",
+			"${srcPath}/third_party/WebKit/Source/core/paint/InlineTextBoxPainter.cpp"
 		],
 		"src":[
 			"${srcPath}/linux/testmain.cpp",

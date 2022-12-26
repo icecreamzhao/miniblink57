@@ -1,6 +1,5 @@
 
 #include "mbvip/common/StringUtil.h"
-#include "mbvip/common/Util.h"
 
 #include <string>
 #include <string.h>
@@ -12,7 +11,7 @@
 #endif
 #include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
-extern HMODULE g_hModule;
+HMODULE g_hModule;
 
 namespace common {
 

@@ -20,7 +20,6 @@ int runQjsTest(const char* rootPath, const char* buf, size_t inputLen);
 void qjsRebuild(const std::string& jsonPath, const std::string& jsonName, const std::string& cmd, RebuildOpt opt);
 
 static const int kMaxThreadNum = 8;
-HMODULE g_hModule;
 
 const char* blackCmdForC[] = {"-std=c++11", "-std=c++14", nullptr};
 
@@ -1812,7 +1811,7 @@ void qjsBuild()
     //     qjsRebuild("G:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
 
     // 马铁的代码目录结构
-         qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
+         //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "chromium_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "curl_build.js", cmd, kRebuildOptAll);
@@ -1823,7 +1822,7 @@ void qjsBuild()
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "v857_build.js", cmd, kRebuildOptAll);
-         //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptNotCompileOnlyLink);
+         qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
          //qjsRebuild("D:\\LiteView\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
 }
 

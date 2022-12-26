@@ -26,8 +26,6 @@
 
 void* __libc_stack_end;
 
-extern HMODULE g_hModule;
-
 namespace base {
 namespace win {
 
