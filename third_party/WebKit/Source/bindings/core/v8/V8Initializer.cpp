@@ -219,11 +219,14 @@ static void promiseRejectHandler(v8::PromiseRejectMessage data,
         rejectedPromises.handlerAdded(data);
         return;
     }
+
+    // Ignore reject/resolve after resolved.
 #if V8_MAJOR_VERSION >= 7
-    ASSERT(data.GetEvent() == v8::kPromiseRejectWithNoHandler || data.GetEvent() == v8::kPromiseRejectAfterResolved);
-#else
-    ASSERT(data.GetEvent() == v8::kPromiseRejectWithNoHandler);
+    if (data.GetEvent() == v8::kPromiseRejectAfterResolved || data.GetEvent() == v8::kPromiseResolveAfterResolved)
+        return;
 #endif
+    ASSERT(data.GetEvent() == v8::kPromiseRejectWithNoHandler);
+
     v8::Local<v8::Promise> promise = data.GetPromise();
     v8::Isolate* isolate = promise->GetIsolate();
     ExecutionContext* context = scriptState->getExecutionContext();
