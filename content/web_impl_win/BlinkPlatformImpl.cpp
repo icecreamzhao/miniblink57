@@ -69,6 +69,7 @@
 #include "base/time/time.h"
 #if defined(OS_LINUX)
 #include "third_party/skia/include/ports/SkFontMgr_custom.h"
+#include <signal.h>
 #endif
 #include <crtdbg.h>
 #include <iosfwd>
@@ -306,7 +307,21 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
 //     pSetThreadStackGuarantee(&stackSizeInBytes);
 
     //HookByHotpatch(L"C:\\Windows\\SysWOW64\\kernel32.dll", (LPCSTR)"CreateFileW", ((PROC)(HookCreateFileW)), (PROC*)&s_CreateFileW);
-    
+#if defined(OS_LINUX)
+    // for node\openssl\openssl\crypto\bio\socket.c
+    sigset_t set;
+    sigemptyset(&set);
+    sigaddset(&set, SIGPIPE);
+    sigprocmask(SIG_BLOCK, &set, NULL);
+
+    struct sigaction sa;
+    sa.sa_handler = SIG_IGN;
+    sa.sa_flags = 0;
+    if (sigemptyset(&sa.sa_mask) == -1 || sigaction(SIGPIPE, &sa, 0) == -1) {
+
+    }
+#endif
+
     ::CoInitializeEx(nullptr, 0); // COINIT_MULTITHREADED
     ::OleInitialize(nullptr);
 
