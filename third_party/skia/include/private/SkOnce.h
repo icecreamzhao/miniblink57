@@ -19,7 +19,8 @@
 
 class SkOnce {
 public:
-    constexpr SkOnce() = default;
+    //constexpr SkOnce() = default;
+    inline SkOnce();
 
     template <typename Fn, typename... Args>
     void operator()(Fn&& fn, Args&&... args)
@@ -47,7 +48,14 @@ private:
     enum State : uint8_t { NotStarted,
         Claimed,
         Done };
-    std::atomic<uint8_t> fState { NotStarted };
+    //std::atomic<uint8_t> fState { NotStarted };
+    std::atomic<uint8_t> fState;
 };
+
+SkOnce::SkOnce()
+    : fState(NotStarted)
+{
+
+}
 
 #endif // SkOnce_DEFINED
