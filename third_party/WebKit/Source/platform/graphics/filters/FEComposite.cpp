@@ -213,12 +213,10 @@ sk_sp<SkImageFilter> FEComposite::createImageFilterInternal(
     SkImageFilter::CropRect cropRect = getCropRect();
 
     if (m_type == FECOMPOSITE_OPERATOR_ARITHMETIC) {
-        //     return SkXfermodeImageFilter::MakeArithmetic(
-        //         SkFloatToScalar(m_k1), SkFloatToScalar(m_k2), SkFloatToScalar(m_k3),
-        //         SkFloatToScalar(m_k4), requiresPMColorValidation, std::move(background),
-        //         std::move(foreground), &cropRect);
-        DebugBreak();
-        return nullptr;
+        return SkXfermodeImageFilter::MakeArithmetic(
+            SkFloatToScalar(m_k1), SkFloatToScalar(m_k2), SkFloatToScalar(m_k3),
+            SkFloatToScalar(m_k4), requiresPMColorValidation, std::move(background),
+            std::move(foreground), &cropRect);
     }
 
     return SkXfermodeImageFilter::Make(toBlendMode(m_type), std::move(background),
