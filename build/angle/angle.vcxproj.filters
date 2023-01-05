@@ -965,9 +965,6 @@
     <ClCompile Include="..\..\third_party\angle\src\common\angleutils.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\common\debug.cpp">
-      <Filter>src\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\common\event_tracer.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
@@ -1070,9 +1067,6 @@
     <ClCompile Include="..\..\third_party\angle\src\compiler\translator\CodeGen.cpp">
       <Filter>src\compiler\translator</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\compiler\translator\Compiler.cpp">
-      <Filter>src\compiler\translator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\compiler\translator\Diagnostics.cpp">
       <Filter>src\compiler\translator</Filter>
     </ClCompile>
@@ -1140,9 +1134,6 @@
       <Filter>src\compiler\translator</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\compiler\translator\OutputHLSL.cpp">
-      <Filter>src\compiler\translator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\compiler\translator\parseConst.cpp">
       <Filter>src\compiler\translator</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\compiler\translator\ParseContext.cpp">
@@ -1463,9 +1454,6 @@
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\Caps.cpp">
       <Filter>src\libANGLE</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\libANGLE\Config.cpp">
-      <Filter>src\libANGLE</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\Context.cpp">
       <Filter>src\libANGLE</Filter>
     </ClCompile>
@@ -1496,16 +1484,10 @@
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\HandleAllocator.cpp">
       <Filter>src\libANGLE</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\libANGLE\Image.cpp">
-      <Filter>src\libANGLE</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\ImageIndex.cpp">
       <Filter>src\libANGLE</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\IndexRangeCache.cpp">
-      <Filter>src\libANGLE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\libANGLE\Platform.cpp">
       <Filter>src\libANGLE</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\Program.cpp">
@@ -1515,9 +1497,6 @@
       <Filter>src\libANGLE</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\queryconversions.cpp">
-      <Filter>src\libANGLE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\libANGLE\RefCountObject.cpp">
       <Filter>src\libANGLE</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\libANGLE\Renderbuffer.cpp">
@@ -1597,12 +1576,6 @@
     </ClCompile>
     <ClCompile Include="..\..\third_party\angle\src\third_party\murmurhash\MurmurHash3.cpp">
       <Filter>src\third_party\murmurhash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\third_party\systeminfo\SystemInfo.cpp">
-      <Filter>src\third_party\systeminfo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\angle\src\libANGLE\CompilerLib.cpp">
-      <Filter>src\libANGLE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
