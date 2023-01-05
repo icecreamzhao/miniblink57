@@ -101,9 +101,6 @@
     <ClCompile Include="..\..\wkexe\vip\wkexe_linux.cpp">
       <Filter>src\vip</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\wkexe\vip\wkexe_linux_exp.cpp">
-      <Filter>src\vip</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\quickjs-vs\cutils.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
