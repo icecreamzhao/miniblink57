@@ -219,6 +219,7 @@
     <ClInclude Include="..\..\third_party\skia\include\effects\Sk2DPathEffect.h" />
     <ClInclude Include="..\..\third_party\skia\include\effects\SkAlphaThresholdFilter.h" />
     <ClInclude Include="..\..\third_party\skia\include\effects\SkArcToPathEffect.h" />
+    <ClInclude Include="..\..\third_party\skia\include\effects\SkArithmeticImageFilter.h" />
     <ClInclude Include="..\..\third_party\skia\include\effects\SkArithmeticMode.h" />
     <ClInclude Include="..\..\third_party\skia\include\effects\SkBitmapSource.h" />
     <ClInclude Include="..\..\third_party\skia\include\effects\SkBlurDrawLooper.h" />
@@ -825,6 +826,7 @@
     <ClCompile Include="..\..\third_party\skia\src\effects\Sk2DPathEffect.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\effects\SkAlphaThresholdFilter.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\effects\SkArcToPathEffect.cpp" />
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticImageFilter.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticMode.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticMode_gpu.cpp" />
     <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurDrawLooper.cpp" />
