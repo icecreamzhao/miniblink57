@@ -110,11 +110,21 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\quickjs-vs\cutils.c" />
-    <ClCompile Include="..\..\quickjs-vs\libregexp.c" />
-    <ClCompile Include="..\..\quickjs-vs\libunicode.c" />
-    <ClCompile Include="..\..\quickjs-vs\quickjs-libc.c" />
-    <ClCompile Include="..\..\quickjs-vs\quickjs.c" />
+    <ClCompile Include="..\..\quickjs-vs\cutils.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\quickjs-vs\libregexp.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\quickjs-vs\libunicode.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\quickjs-vs\quickjs-libc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\quickjs-vs\quickjs.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\wkexe\vip\Cmdline.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
