@@ -20,8 +20,8 @@
 #include <set>
 #include <TlHelp32.h>
 #include <xmmintrin.h>
-#include "quickjs/quickjs.h"
-#include "quickjs/quickjs-libc.h"
+#include "quickjs-vs/quickjs.h"
+#include "quickjs-vs/quickjs-libc.h"
 
 // #define VLD_FORCE_ENABLE 1
 // #include "C:\\Program Files (x86)\\Visual Leak Detector\\include\\vld.h"
