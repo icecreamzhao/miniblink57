@@ -71,12 +71,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\base\thread.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\base\algorithmvc6.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\electron\browser\api\ApiWebContents.cpp">
       <Filter>src\browser\api</Filter>
     </ClCompile>
@@ -167,9 +161,6 @@
     <ClCompile Include="..\..\electron\common\PlatformUtilWin.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\base\win\shell.cc">
-      <Filter>base\win</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\base\files\file_path.cc">
       <Filter>base\files</Filter>
     </ClCompile>
@@ -203,12 +194,6 @@
     <ClCompile Include="..\..\electron\browser\api\ApiDialag.cpp">
       <Filter>src\browser\api</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\base\windowsvc6.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\base\ostreamvc6.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\electron\common\api\ApiAsar.cpp">
       <Filter>src\common\api</Filter>
     </ClCompile>
@@ -222,15 +207,6 @@
       <Filter>base\files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\base\files\file_win.cc">
-      <Filter>base\files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\base\platform_file_win.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\base\platform_file.cc">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\base\files\scoped_platform_file_closer.cc">
       <Filter>base\files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\base\files\scoped_file.cc">
@@ -252,9 +228,6 @@
       <Filter>base\time</Filter>
     </ClCompile>
     <ClCompile Include="..\..\base\json\json_reader.cc">
-      <Filter>base\json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\base\json\json_util.cc">
       <Filter>base\json</Filter>
     </ClCompile>
     <ClCompile Include="..\..\base\json\json_writer.cc">
@@ -367,9 +340,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\base\thread.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\electron\Electron.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -478,9 +448,6 @@
     <ClInclude Include="..\..\base\win\scoped_co_mem.h">
       <Filter>base\win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\base\win\shell.h">
-      <Filter>base\win</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\base\files\file_path.h">
       <Filter>base\files</Filter>
     </ClInclude>
@@ -510,9 +477,6 @@
     </ClInclude>
     <ClInclude Include="..\..\base\files\file.h">
       <Filter>base\files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\base\platform_file.h">
-      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\base\files\scoped_file.h">
       <Filter>base\files</Filter>
