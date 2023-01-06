@@ -6,6 +6,8 @@
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
 #include "../../../mbvip/core/mb.h"
+#include "CWndSimple.h"
+#include "CWndBrowser.h"
 
 
 #define MAX_LOADSTRING 100
@@ -20,7 +22,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
-void createTransMb()
+void createWndTrans()
 {
     mbWebView window = mbCreateWebWindow(MB_WINDOW_TYPE_TRANSPARENT, NULL, 0, 0, 536, 358);
 
@@ -30,6 +32,11 @@ void createTransMb()
     mbShowWindow(window, TRUE);
 }
 
+void createWndBrowser()
+{
+    CWndBrowser* rootWin = new CWndBrowser();
+    rootWin->createWnd();
+}
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -50,7 +57,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     TCHAR szMbPath[MAX_PATH];
     ::GetModuleFileName(NULL, szMbPath, MAX_PATH);
     ::PathRemoveFileSpec(szMbPath);
-    ::PathAppendW(szMbPath, L"..\\..\\miniblink.dll");
+    //::PathAppendW(szMbPath, L"..\\..\\miniblink.dll");
+    ::PathAppendW(szMbPath, L"..\\..\\..\\out\\Windows_Debug_Win32\\miniblink.dll");
+
 	if (!::PathFileExists(szMbPath)) {
 		::MessageBoxW(NULL, szMbPath, L"miniblink.dll没找到，请放到下面路径：", MB_OK);
 		return 0;
@@ -61,9 +70,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     //settings.mask = MB_ENABLE_NODEJS;
     mbSetMbMainDllPath(szMbPath);
     mbInit(&settings);
-    // mbInit 提示 mbCreateWebViewBindGTKWindow 不存在  这个提示应该不影响后续运行  只是提示这个api不存在。 其实就跟以前49版本，我注释掉了这些api接口，就提示这个接口不存在
-    createTransMb(); // 显示mb窗口
 
+    // 显示mb窗口
+    createWndTrans(); 
+    createWndSimple();
+    createWndBrowser();
 
     // 显示win32窗口
     //// 执行应用程序初始化:   

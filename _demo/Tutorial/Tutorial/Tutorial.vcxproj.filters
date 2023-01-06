@@ -27,9 +27,24 @@
     <ClInclude Include="Tutorial.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CWndSimple.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWndBrowser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HideWndHelp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CWndSimple.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CWndBrowser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
