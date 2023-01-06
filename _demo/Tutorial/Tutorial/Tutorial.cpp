@@ -3,6 +3,10 @@
 
 #include "framework.h"
 #include "Tutorial.h"
+#include <shlwapi.h>
+#pragma comment(lib, "shlwapi.lib")
+#include "../../../mbvip/core/mb.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -15,6 +19,18 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 主窗口类名
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+
+void createTransMb()
+{
+    mbWebView window = mbCreateWebWindow(MB_WINDOW_TYPE_TRANSPARENT, NULL, 0, 0, 536, 358);
+
+    const char* url = "http://baidu.com";// GetInterfaceLibraryInfo()->getQiYouWebBaseUrl() + "/user";
+    mbLoadURL(window, url);
+    mbMoveToCenter(window);
+    mbShowWindow(window, TRUE);
+}
+
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -31,11 +47,30 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDC_TUTORIAL, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // 执行应用程序初始化:
-    if (!InitInstance (hInstance, nCmdShow))
-    {
-        return FALSE;
-    }
+    TCHAR szMbPath[MAX_PATH];
+    ::GetModuleFileName(NULL, szMbPath, MAX_PATH);
+    ::PathRemoveFileSpec(szMbPath);
+    ::PathAppendW(szMbPath, L"..\\..\\miniblink.dll");
+	if (!::PathFileExists(szMbPath)) {
+		::MessageBoxW(NULL, szMbPath, L"miniblink.dll没找到，请放到下面路径：", MB_OK);
+		return 0;
+	}
+
+    mbSettings settings;
+    memset(&settings, 0, sizeof(settings));
+    //settings.mask = MB_ENABLE_NODEJS;
+    mbSetMbMainDllPath(szMbPath);
+    mbInit(&settings);
+    // mbInit 提示 mbCreateWebViewBindGTKWindow 不存在  这个提示应该不影响后续运行  只是提示这个api不存在。 其实就跟以前49版本，我注释掉了这些api接口，就提示这个接口不存在
+    createTransMb(); // 显示mb窗口
+
+
+    // 显示win32窗口
+    //// 执行应用程序初始化:   
+    //if (!InitInstance (hInstance, nCmdShow))
+    //{
+    //    return FALSE;
+    //}
 
 	MSG msg;
 
@@ -45,6 +80,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+
+    mbUninit();
 
 	return (int) msg.wParam;
 }
@@ -71,7 +108,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
     //wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_TUTORIAL);
-    wcex.lpszMenuName   = L"";
+    wcex.lpszMenuName   = NULL;
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
