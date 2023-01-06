@@ -14,6 +14,8 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/win/registry.h"
 
+#pragma warning(disable : 4996)
+
 // #if !defined(__clang__) && _MSC_FULL_VER < 190023918
 // #error VS 2015 Update 2 or higher is required
 // #endif
