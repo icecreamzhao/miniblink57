@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30711.63
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MiniBlink", "blink\blink.vcxproj", "{D4CF74E8-8AE3-4534-92BE-10503E556E87}"
 EndProject
@@ -22,8 +22,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fastmake", "fastmake\fastmake.vcxproj", "{94A5A47D-9E58-4D7D-B7D4-F1463FC123F8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "node", "node\node.vcxproj", "{416F8F99-1338-4514-A44C-28CCEB5FD710}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "electron", "electron\electron.vcxproj", "{419D9B69-AC50-49EA-9188-40FB63BE1C90}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcurl", "libcurl\libcurl.vcxproj", "{A0E351C3-1C05-431A-B7B4-4B6B66A210B6}"
 EndProject
@@ -212,21 +210,6 @@ Global
 		{416F8F99-1338-4514-A44C-28CCEB5FD710}.Release|Win32.Build.0 = Release|Win32
 		{416F8F99-1338-4514-A44C-28CCEB5FD710}.Release|x64.ActiveCfg = Release|x64
 		{416F8F99-1338-4514-A44C-28CCEB5FD710}.Release|x64.Build.0 = Release|x64
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Debug|Win32.ActiveCfg = Debug|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Debug|Win32.Build.0 = Debug|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Debug|x64.ActiveCfg = Debug|x64
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Debug|x64.Build.0 = Debug|x64
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release_NoNode|Win32.ActiveCfg = Release_vc6|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release_NoNode|Win32.Build.0 = Release_vc6|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release_NoNode|x64.ActiveCfg = Release|x64
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release_NoNode|x64.Build.0 = Release|x64
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release_vc6|Win32.ActiveCfg = Release_vc6|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release_vc6|Win32.Build.0 = Release_vc6|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release_vc6|x64.ActiveCfg = Release_vc6|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release|Win32.ActiveCfg = Release|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release|Win32.Build.0 = Release|Win32
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release|x64.ActiveCfg = Release|x64
-		{419D9B69-AC50-49EA-9188-40FB63BE1C90}.Release|x64.Build.0 = Release|x64
 		{A0E351C3-1C05-431A-B7B4-4B6B66A210B6}.Debug|Win32.ActiveCfg = Debug|Win32
 		{A0E351C3-1C05-431A-B7B4-4B6B66A210B6}.Debug|Win32.Build.0 = Debug|Win32
 		{A0E351C3-1C05-431A-B7B4-4B6B66A210B6}.Debug|x64.ActiveCfg = Debug|x64
