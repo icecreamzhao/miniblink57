@@ -378,35 +378,34 @@ mbWebView createWndSimple()
     mbOnDocumentReady(view, handleDocumentReady, (void*)view);
     mbOnLoadingFinish(view, handleLoadingFinish, (void*)view);
     mbOnCreateView(view, handleCreateView, (void*)view);
-    ::mbResize(view, 840, 680);
+    //::mbResize(view, 840, 680);
+    ::mbResize(view, 800, 600); // 设置mb窗口的大小
 
     mbSetNavigationToNewWindowEnable(view, true);
     mbSetCspCheckEnable(view, false);
 
-         mbLoadHtmlWithBaseUrl(view,
-             "<html><head><style></style><script type=\"text/javascript\">"
-             "window.onNativeRunjs = function(response) {"
-             "    console.log('onNativeRunjs:' + response);"
-             "    return 'onNativeRunjs ret'"
-             "};"
-             "function onNativeResponse(customMsg, response) {"
-             "    console.log('mbQuery:' + response);"
-             "};"
-             "console.log('test');"
-             "window.mbQuery(0x123456, \"I am in js context\", onNativeResponse);"
-             "</script></head>"
-             "<body>"
-             "test js bind"
-             ""
-             "</body>"
-             "</html>",
-             "test_js.htm");
+    // 下面这段代码效果相当于mbLoadURL，是直接把html文件的代码加载了
+	//mbLoadHtmlWithBaseUrl(view,
+	//    "<html><head><style></style><script type=\"text/javascript\">"
+	//    "window.onNativeRunjs = function(response) {"
+	//    "    console.log('onNativeRunjs:' + response);"
+	//    "    return 'onNativeRunjs ret'"
+	//    "};"
+	//    "function onNativeResponse(customMsg, response) {"
+	//    "    console.log('mbQuery:' + response);"
+	//    "};"
+	//    "console.log('test');"
+	//    "window.mbQuery(0x123456, \"I am in js context\", onNativeResponse);"
+	//    "</script></head>"
+	//    "<body>"
+	//    "test js bind"
+	//    ""
+	//    "</body>"
+	//    "</html>",
+	//    "test_js.htm");
 
-        //::mbLoadURL(view, "file:///G:/test/web_test/qianbahang/test/1.htm");
-    //::mbLoadURL(view, "BAIDU.COM");
-    //::mbLoadURL(view, "http://baidu.com");
-    //const char* url = "http://miniblink.net";
-    //mbLoadURL(view, url);
+    //::mbLoadURL(view, "file:///G:/test/web_test/qianbahang/test/1.htm");
+    ::mbLoadURL(view, "http://baidu.com");
     mbOnJsQuery(view, onJsQuery, (void*)1);
 
     mbMoveToCenter(view);
