@@ -1,0 +1,49 @@
+@keyframes rotary
+{
+    0% {
+        transform:rotate(0deg);
+    }
+    25% {
+        transform:rotate(90deg);
+    }
+    50% {
+        transform:rotate(180deg);
+    }
+    75% {
+        transform:rotate(270deg);
+    }
+    100% {
+        transform:rotate(360deg);
+    }
+
+}
+.picList{overflow: hidden;clear: both}
+.SoundBox{width:380px;height:164px;background:#fff;float:left;margin:0px 20px 20px 0px;}
+.SoundBox.last{margin-right:0px}
+.SoundBox .SoundContent{width:340px;height:164px;margin:0 auto;line-height:60px;position:relative;}
+.SoundBox .SoundContent .SoundTitle{width:340px;height:60px;border-bottom:1px solid #f5f5f5;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;font-weight: bolder}
+.SoundBox .SoundContent .SoundTitle a{color:#444;}
+.SoundBox .SoundContent .SoundTitle a:hover{color:#6B74E6;}
+.SoundBox .SoundContent .SoundPlayer{margin-top:20px;width:340px;height:64px;}
+.SoundBox .SoundContent .SoundPlayer .SoundDiskBox{cursor:pointer;width:64px;height:64px;float:left;}
+.SoundBox .SoundContent .SoundPlayer .SoundDiskBox .SoundPlayerBg{animation:rotary 3s linear infinite;-webkit-animation:rotary 3s linear infinite;animation-play-state:paused;width:64px;height:64px;background:url("../../images/sound/default-1281.png") no-repeat center;background-size:64px;border-radius:50%;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+.SoundBox .SoundContent .SoundPlayer .SoundDiskBox .SoundPlayerBtn{cursor:pointer;width:32px;height:32px;border-radius:50%;top:50%;left:50%;margin-left:-16px;margin-top:-16px;}
+.SoundBox .SoundContent .SoundPlayer .SoundDiskBox.StartPlay .SoundPlayerBtn{background:#fff url("../../images/sound/button-play.png") no-repeat center;background-size:12px 16px;}
+.SoundBox .SoundContent .SoundPlayer .SoundDiskBox.PausePlay .SoundPlayerBtn{background:#fff url("../../images/sound/button-pause.png") no-repeat center;background-size:14px 14px;}
+.SoundBox .SoundContent .SoundPlayer .SoundDiskBox.PausePlay .SoundPlayerBg{animation-play-state:running;}
+
+.SoundBox .SoundContent .SoundPlayer .DurationBox{float:right;width:260px;height:64px;line-height:64px;margin-left:10px;font-size:14px;}
+.SoundBox .SoundContent .SoundPlayer .DurationBox .SoundStartTime,.SoundBox .SoundContent .SoundPlayer .DurationBox .SoundEndTime{width:36px;}
+.SoundBox .SoundContent .SoundPlayer .SoundWave{cursor:pointer;width:164px;height:24px;margin:20px 10px 0 10px;background:#bfbfbf;}
+.SoundBox .SoundContent .SoundPlayer .SoundWave .progressBar{position: absolute;left: 0;z-index: 3;width: 100%;height: 100%;background: url(../../images/sound/audio.png) no-repeat -180px -30px;}
+.SoundBox .SoundContent .SoundPlayer .SoundWave .move-color{position: absolute;top: 0;left: 0;z-index: 2;display: block;width: 0;height: 24px;background-color:#28DD8E;}
+
+.SoundBox .SoundContent .buttons{position:absolute;height:60px;right:0px;top:-60px;font-size:14px;}
+.SoundBox .SoundContent .buttons a{color:#fff;}
+.SoundBox .SoundContent .buttons .downBtn{display:block;float:left;background:#28DD8E;width:100px;height:32px;line-height:32px;text-align:center;border-radius:40px;margin:14px 10px 0px 0px;}
+.SoundBox .SoundContent .buttons .downFormatBtn{display:block;float:left;width:60px;height:32px;line-height:32px;text-align:center;border-radius:40px;margin:14px 10px 0px 0px;}
+.SoundBox .SoundContent .buttons .downBtn1{background:#28DD8E;}
+.SoundBox .SoundContent .buttons .downBtn2{background:#6B74E6;}
+.SoundBox .SoundContent .buttons .favBtn{display:block;float:left;background:#D8D8D8 url("../../images/sound/shape-star.png") no-repeat center;width:32px;height:32px;border-radius:50%;margin-top:14px;}
+.SoundBox .SoundContent .buttons .favBtn.on{background: #7371ef url("../../images/sound/shape-star.png") no-repeat center;width:32px;height:32px;border-radius:50%;}
+
