@@ -288,7 +288,8 @@ jsValue WKE_CALL_TYPE onShellExec(jsExecState es, void* param)
     }
     else {
         //system(path.c_str());
-        WinExec(path.c_str(), SW_SHOW);
+        //WinExec(path.c_str(), SW_SHOW);                               // path  Explorer C:\\Program Files
+        ShellExecuteA(NULL, "open", path.c_str(), NULL, NULL, SW_SHOW); // path  C:\\Program Files
     }
 
     path += "\n";
