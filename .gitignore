@@ -29,3 +29,5 @@ bin-release/
 /build/skia/*.user
 /build/wolfssl/*.user
 /build/zlib/*.user
+/_demo/Tutorial/.vs
+/_demo/Tutorial/Tutorial/Debug
