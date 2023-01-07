@@ -127,17 +127,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
     <ClInclude Include="CWndBrowser.h" />
+    <ClInclude Include="CWndChart.h" />
     <ClInclude Include="CWndSimple.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="HideWndHelp.h" />
+    <ClInclude Include="RenderGDI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="wke.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="CWndBrowser.cpp" />
+    <ClCompile Include="CWndChart.cpp" />
     <ClCompile Include="CWndSimple.cpp" />
+    <ClCompile Include="CWndWkeBrowser.cpp" />
     <ClCompile Include="Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
