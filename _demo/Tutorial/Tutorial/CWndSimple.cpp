@@ -34,12 +34,16 @@ LRESULT WINAPI testWindowProc(
 
         PAINTSTRUCT ps = { 0 };
         HDC hdc = ::BeginPaint(hWnd, &ps);
-
-        RECT rcClip = ps.rcPaint;
+        // TODO: 在此处添加使用 hdc 的任何绘图代码...
 
         RECT rcClient;
         ::GetClientRect(hWnd, &rcClient);
 
+        HBRUSH hbr = (HBRUSH)::GetStockObject(GRAY_BRUSH); // 绘制背景色
+        ::FillRect(hdc, &rcClient, hbr);
+
+
+        RECT rcClip = ps.rcPaint;
         RECT rcInvalid = rcClient;
         if (rcClip.right != rcClip.left && rcClip.bottom != rcClip.top)
             ::IntersectRect(&rcInvalid, &rcClip, &rcClient);
@@ -240,8 +244,10 @@ BOOL regWndClass(LPCTSTR lpcsClassName, DWORD dwStyle)
     wndclass.cbWndExtra = 200;
     wndclass.hInstance = ::GetModuleHandle(NULL);
     wndclass.hIcon = NULL;
+    //wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     //wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
     wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    //wndclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
     wndclass.lpszMenuName = NULL;
     wndclass.lpszClassName = lpcsClassName;
 
@@ -315,6 +321,15 @@ void MB_CALL_TYPE onRunJs(mbWebView webView, void* param, mbJsExecState es, mbJs
     OutputDebugStringA("\n");
 }
 
+void MB_CALL_TYPE onJsQuery(mbWebView webView, void* param, mbJsExecState es, int64_t queryId, int customMsg, const utf8* request)
+{
+    OutputDebugStringA("onJsQuery:");
+    OutputDebugStringA(request);
+    OutputDebugStringA("\n");
+
+    mbResponseQuery(webView, queryId, customMsg, "I am response");
+}
+
 void MB_CALL_TYPE handleDocumentReady(mbWebView webView, void* param, mbWebFrameHandle frameId)
 {
     OutputDebugStringA("HandleDocumentReady\n");
@@ -350,15 +365,6 @@ mbWebView MB_CALL_TYPE handleCreateView(mbWebView webView, void* param, mbNaviga
     return view;
 }
 
-void MB_CALL_TYPE onJsQuery(mbWebView webView, void* param, mbJsExecState es, int64_t queryId, int customMsg, const utf8* request)
-{
-    OutputDebugStringA("onJsQuery:");
-    OutputDebugStringA(request);
-    OutputDebugStringA("\n");
-
-    mbResponseQuery(webView, queryId, customMsg, "I am response");
-}
-
 
 mbWebView createWndSimple()
 {
@@ -374,33 +380,36 @@ mbWebView createWndSimple()
     mbOnCreateView(view, handleCreateView, (void*)view);
     mbSetNavigationToNewWindowEnable(view, true);
     mbSetCspCheckEnable(view, false);
-    mbMoveToCenter(view);
 
-    //     mbLoadHtmlWithBaseUrl(view,
-    //         "<html><head><style></style><script type=\"text/javascript\">"
-    //         "window.onNativeRunjs = function(response) {"
-    //         "    console.log('onNativeRunjs:' + response);"
-    //         "    return 'onNativeRunjs ret'"
-    //         "};"
-    //         "function onNativeResponse(customMsg, response) {"
-    //         "    console.log('mbQuery:' + response);"
-    //         "};"
-    //         "console.log('test');"
-    //         "window.mbQuery(0x123456, \"I am in js context\", onNativeResponse);"
-    //         "</script></head>"
-    //         "<body>"
-    //         "test js bind"
-    //         ""
-    //         "</body>"
-    //         "</html>",
-    //         "test_js.htm");
+         mbLoadHtmlWithBaseUrl(view,
+             "<html><head><style></style><script type=\"text/javascript\">"
+             "window.onNativeRunjs = function(response) {"
+             "    console.log('onNativeRunjs:' + response);"
+             "    return 'onNativeRunjs ret'"
+             "};"
+             "function onNativeResponse(customMsg, response) {"
+             "    console.log('mbQuery:' + response);"
+             "};"
+             "console.log('test');"
+             "window.mbQuery(0x123456, \"I am in js context\", onNativeResponse);"
+             "</script></head>"
+             "<body>"
+             "test js bind"
+             ""
+             "</body>"
+             "</html>",
+             "test_js.htm");
 
         //::mbLoadURL(view, "file:///G:/test/web_test/qianbahang/test/1.htm");
-    ::mbLoadURL(view, "BAIDU.COM");
-
+    //::mbLoadURL(view, "BAIDU.COM");
+    //::mbLoadURL(view, "http://baidu.com");
+    //const char* url = "http://miniblink.net";
+    //mbLoadURL(view, url);
     mbOnJsQuery(view, onJsQuery, (void*)1);
 
+    mbMoveToCenter(view);
     mbShowWindow(view, TRUE);
-
+    //::ShowWindow(hWnd, SW_SHOW);
+    //::UpdateWindow(hWnd);
     return view;
 }

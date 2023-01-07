@@ -72,9 +72,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     mbInit(&settings);
 
     // 显示mb窗口
-    createWndTrans(); 
+    //createWndTrans(); 
     createWndSimple();
-    createWndBrowser();
+    //createWndBrowser();
 
     // 显示win32窗口
     //// 执行应用程序初始化:   
@@ -173,7 +173,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 在此处添加使用 hdc 的任何绘图代码...
-            EndPaint(hWnd, &ps);
+
+			RECT rcClient;
+			::GetClientRect(hWnd, &rcClient);
+
+			HBRUSH hbr = (HBRUSH)::GetStockObject(GRAY_BRUSH); // 绘制背景色
+			::FillRect(hdc, &rcClient, hbr);
+
+			EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
