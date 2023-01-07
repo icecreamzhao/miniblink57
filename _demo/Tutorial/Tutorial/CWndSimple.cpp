@@ -378,6 +378,8 @@ mbWebView createWndSimple()
     mbOnDocumentReady(view, handleDocumentReady, (void*)view);
     mbOnLoadingFinish(view, handleLoadingFinish, (void*)view);
     mbOnCreateView(view, handleCreateView, (void*)view);
+    ::mbResize(view, 840, 680);
+
     mbSetNavigationToNewWindowEnable(view, true);
     mbSetCspCheckEnable(view, false);
 

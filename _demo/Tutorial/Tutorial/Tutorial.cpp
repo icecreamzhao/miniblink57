@@ -160,9 +160,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		return 0;
 	}
 
-    // 这个是wke窗口，跟mb窗口不兼容，不能调用mbInit，不然不能初始化wke
-    createWndChart();
-    return 0;
+    //// 这个是wke窗口，跟mb窗口不兼容，不能调用mbInit，不然不能初始化wke
+    //createWndChart();
+    //return 0;
 
     mbSettings settings;
     memset(&settings, 0, sizeof(settings));
@@ -172,7 +172,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // 显示mb窗口
     //createWndTrans(); 
-    //createWndSimple();
+    createWndSimple();
     //createWndBrowser();
 
     // 显示win32窗口
