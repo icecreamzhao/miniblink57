@@ -127,6 +127,17 @@ void createWndTrans()
     mbShowWindow(window, TRUE);
 }
 
+void createWndMusicPlay()
+{
+    mbWebView window = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, NULL, 0, 0, 800, 600);
+
+    //mbLoadURL(window, "file:///E:/blinkUI/_demo/Tutorial/resources/webMusicPlay/ViewMp3Index.html");
+    mbLoadURL(window, "file:///E:\\blinkUI\\_demo\\Tutorial\\resources\\webMusicPlay\\Mp3Player.html");
+    mbMoveToCenter(window);
+    mbShowWindow(window, TRUE);
+}
+
+
 void createWndBrowser()
 {
     CWndBrowser* rootWin = new CWndBrowser();
@@ -172,8 +183,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // 显示mb窗口
     //createWndTrans(); 
-    createWndSimple();
+    //createWndSimple();
     //createWndBrowser();
+    createWndMusicPlay();
 
     // 显示win32窗口
     //// 执行应用程序初始化:   
