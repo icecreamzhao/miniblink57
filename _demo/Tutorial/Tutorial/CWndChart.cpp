@@ -286,6 +286,10 @@ jsValue WKE_CALL_TYPE onShellExec(jsExecState es, void* param)
     else if ("wkeBrowser" == path) {
         wkeBrowserMain(nullptr, nullptr, nullptr, TRUE);
     }
+    else {
+        //system(path.c_str());
+        WinExec(path.c_str(), SW_SHOW);
+    }
 
     path += "\n";
     OutputDebugStringA(path.c_str());
