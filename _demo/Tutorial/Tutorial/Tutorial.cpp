@@ -132,7 +132,8 @@ void createWndMusicPlay()
     mbWebView window = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, NULL, 0, 0, 800, 600);
 
     //mbLoadURL(window, "file:///E:/blinkUI/_demo/Tutorial/resources/webMusicPlay/ViewMp3Index.html");
-    mbLoadURL(window, "file:///E:\\blinkUI\\_demo\\Tutorial\\resources\\webMusicPlay\\Mp3Player.html");
+    //mbLoadURL(window, "file:///E:\\blinkUI\\_demo\\Tutorial\\resources\\webMusicPlay\\Mp3Player.html");
+    mbLoadURL(window, "file:///..\\resources\\webMusicPlay\\Mp3Player.html");
     mbMoveToCenter(window);
     mbShowWindow(window, TRUE);
 }
