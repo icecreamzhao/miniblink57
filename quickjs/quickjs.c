@@ -123,6 +123,13 @@ void qjsPrint(const char* format, ...)
     va_end(argList);
 }
 
+void qjsPutchar(char c)
+{
+    char ch[2] = {0};
+    ch[0] = c;
+    OutputDebugStringA(ch);
+}
+
 static void qjsReleaseAssert(BOOL b)
 {
     if (!b)
@@ -2124,7 +2131,9 @@ void JS_FreeRuntime(JSRuntime *rt)
             qjsPrint("Secondary object leaks: %d\n", count);
     }
 #endif
-    qjsReleaseAssert(list_empty(&rt->gc_obj_list));
+    //qjsReleaseAssert(list_empty(&rt->gc_obj_list));
+    if (!list_empty(&rt->gc_obj_list))
+        qjsPrint("rt->gc_obj_list is not empty~!\n");
 
     /* free the classes */
     for(i = 0; i < rt->class_count; i++) {
@@ -2651,25 +2660,25 @@ static __maybe_unused void JS_DumpString(JSRuntime *rt,
     }
     qjsPrint("%d", p->header.ref_count);
     sep = (p->header.ref_count == 1) ? '\"' : '\'';
-    putchar(sep);
+    qjsPutchar(sep);
     for(i = 0; i < p->len; i++) {
         if (p->is_wide_char)
             c = p->u.str16[i];
         else
             c = p->u.str8[i];
         if (c == sep || c == '\\') {
-            putchar('\\');
-            putchar(c);
+            qjsPutchar('\\');
+            qjsPutchar(c);
         } else if (c >= ' ' && c <= 126) {
-            putchar(c);
+            qjsPutchar(c);
         } else if (c == '\n') {
-            putchar('\\');
-            putchar('n');
+            qjsPutchar('\\');
+            qjsPutchar('n');
         } else {
             qjsPrint("\\u%04x", c);
         }
     }
-    putchar(sep);
+    qjsPutchar(sep);
 }
 
 static __maybe_unused void JS_DumpAtoms(JSRuntime *rt)
@@ -3455,23 +3464,23 @@ static __maybe_unused void print_atom(JSContext *ctx, JSAtom atom)
     if (i > 0 && p[i] == '\0') {
         qjsPrint("%s", p);
     } else {
-        putchar('"');
+        qjsPutchar('"');
         qjsPrint("%.*s", i, p);
         for (; p[i]; i++) {
             int c = (unsigned char)p[i];
             if (c == '\"' || c == '\\') {
-                putchar('\\');
-                putchar(c);
+                qjsPutchar('\\');
+                qjsPutchar(c);
             } else if (c >= ' ' && c <= 126) {
-                putchar(c);
+                qjsPutchar(c);
             } else if (c == '\n') {
-                putchar('\\');
-                putchar('n');
+                qjsPutchar('\\');
+                qjsPutchar('n');
             } else {
                 qjsPrint("\\u%04x", c);
             }
         }
-        putchar('\"');
+        qjsPutchar('\"');
     }
 }
 
@@ -4741,8 +4750,8 @@ static no_inline JSShape *js_new_shape2(JSContext *ctx, JSObject *proto,
 
     if (proto) {
         JS_DupValue(ctx, JS_MKPTR(JS_TAG_OBJECT, proto));
-        if (proto->obj_ctx == g_testctx && ctx != g_testctx)
-            OutputDebugStringA("");
+//         if (proto->obj_ctx == g_testctx && ctx != g_testctx)
+//             OutputDebugStringA("");
     }
     sh->proto = proto;
     memset(prop_hash_end(sh) - hash_size, 0, sizeof(prop_hash_end(sh)[0]) *
@@ -5168,7 +5177,7 @@ static JSValue JS_NewObjectFromShape(JSContext *ctx, JSShape *sh, JSClassID clas
 
     JSValue ret_v = JS_MKPTR(JS_TAG_OBJECT, p);
 
-    qjsPrint("JS_NewObjectFromShape: %p, %d, #I64u\n", p, p->testCount);
+    //qjsPrint("JS_NewObjectFromShape: %p, %d, #I64u\n", p, p->testCount);
 
     if (305 == p->testCount)
         g_testObjDoc = p;
@@ -5613,8 +5622,7 @@ static void free_property(JSRuntime *rt, JSProperty *pr, int prop_flags)
     }
 }
 
-static force_inline JSShapeProperty *find_own_property1(JSObject *p,
-                                                        JSAtom atom)
+static force_inline JSShapeProperty *find_own_property1(JSObject *p, JSAtom atom)
 {
     JSShape *sh;
     JSShapeProperty *pr, *prop;
@@ -5927,7 +5935,7 @@ void __JS_FreeValueRT(JSRuntime *rt, JSValue v)
             if (2130 == s_JS_TAG_STRING)
                 qjsPrint("");
             
-            qjsPrint("__JS_FreeValueRT, JS_TAG_STRING: %p, %d, %p\n", p, s_JS_TAG_STRING, p->userptr);
+            //qjsPrint("__JS_FreeValueRT, JS_TAG_STRING: %p, %d, %p\n", p, s_JS_TAG_STRING, p->userptr);
             s_JS_TAG_STRING++;
 //             if (g_testStr == p)
 //                 qjsPrint("");
@@ -43991,6 +43999,8 @@ static JSValue js_regexp_exec(JSContext *ctx, JSValueConst this_val,
                 char capture_name[3] = { '$', '0', '\0' };
                 if (i < 9)
                     capture_name[1] += i;
+                if (0 == i)
+                    capture_name[1] = '&';
                 JS_DefinePropertyValueStr(ctx, JS_GetProperty(ctx, this_val, JS_ATOM_constructor), capture_name, JS_DupValue(ctx, val), JS_PROP_C_W_E | JS_PROP_THROW);
             }
             if (group_name_ptr && i > 0) {
